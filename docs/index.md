@@ -74,3 +74,14 @@ val periodReader: JsReader<User> = run {
 ```
 
 ## JsWriter
+```kotlin
+val userWriter = objectWriter<User> {
+    write(from = User::name, to = "name", using = BasePrimitiveWriter.string)
+    writeOptional(from = User::role, to = "role", using = BasePrimitiveWriter.string)
+    writeTraversable(from = User::phones, to = "phones", using = BasePrimitiveWriter.string)
+}
+...
+val user = User(...)
+val output: JsValue = userWriter.write(user)
+val json = output.toString()
+```
