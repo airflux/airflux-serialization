@@ -1,11 +1,10 @@
 package io.github.airflux.reader
 
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.value.JsObject
-import io.github.airflux.value.JsString
+import io.github.airflux.value.JsNull
+import io.github.airflux.value.JsValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -13,76 +12,93 @@ import kotlin.test.assertTrue
 class JsReaderTest {
 
     companion object {
-        const val ATTRIBUTE_NAME_ID = "id"
-        const val ATTRIBUTE_NAME_IDENTIFIER = "identifier"
-        const val ID_VALUE = "10"
-        const val IDENTIFIER_VALUE = "100"
-
-        val stringReader = JsReader { input -> input.readAsString() }
+        private val ID_PATH = JsPath("id")
+        private val IDENTIFIER_PATH = JsPath("identifier")
+        private const val ID_VALUE = "10"
+        private const val IDENTIFIER_VALUE = "100"
     }
 
     @Test
     fun `Testing 'map' function of the JsReader class`() {
-        val json = JsObject(ATTRIBUTE_NAME_ID to JsString(ID_VALUE))
-        val transformedReader = JsReader.required(JsPath(ATTRIBUTE_NAME_ID), stringReader)
-            .map { value -> value.toInt() }
+        val reader = JsReader {
+            JsResult.Success(path = ID_PATH, value = ID_VALUE)
+        }
+        val transformedReader = reader.map { value -> value.toInt() }
 
-        val result = transformedReader.read(json)
+        val result = transformedReader.read(JsNull)
 
         result as JsResult.Success
+        assertEquals(ID_PATH, result.path)
         assertEquals(ID_VALUE.toInt(), result.value)
-        assertEquals(JsPath.root / ATTRIBUTE_NAME_ID, result.path)
     }
 
     @Test
     fun `Testing 'or' function of the JsReader class (first reader)`() {
-        val json = JsObject(ATTRIBUTE_NAME_ID to JsString(ID_VALUE))
-        val idReader = JsReader.required(JsPath(ATTRIBUTE_NAME_ID), stringReader)
-        val identifierReader = JsReader.required(JsPath(ATTRIBUTE_NAME_IDENTIFIER), stringReader)
+        val idReader = JsReader {
+            JsResult.Success(path = ID_PATH, value = ID_VALUE)
+        }
+        val identifierReader = JsReader<String> {
+            JsResult.Failure(path = IDENTIFIER_PATH, error = JsError.PathMissing)
+        }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(json)
+        val result = composeReader.read(JsNull)
 
         result as JsResult.Success
+        assertEquals(ID_PATH, result.path)
         assertEquals(ID_VALUE, result.value)
-        assertEquals(JsPath.root / ATTRIBUTE_NAME_ID, result.path)
     }
 
     @Test
     fun `Testing 'or' function of the JsReader class (second reader)`() {
-        val json = JsObject(ATTRIBUTE_NAME_IDENTIFIER to JsString(IDENTIFIER_VALUE))
-        val idReader = JsReader.required(JsPath(ATTRIBUTE_NAME_ID), stringReader)
-        val identifierReader = JsReader.required(JsPath(ATTRIBUTE_NAME_IDENTIFIER), stringReader)
+        val idReader = JsReader<String> {
+            JsResult.Failure(path = ID_PATH, error = JsError.PathMissing)
+        }
+        val identifierReader = JsReader {
+            JsResult.Success(path = IDENTIFIER_PATH, value = IDENTIFIER_VALUE)
+        }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(json)
+        val result = composeReader.read(JsNull)
 
         result as JsResult.Success
+        assertEquals(IDENTIFIER_PATH, result.path)
         assertEquals(IDENTIFIER_VALUE, result.value)
-        assertEquals(JsPath.root / ATTRIBUTE_NAME_IDENTIFIER, result.path)
     }
 
     @Test
     fun `Testing 'or' function of the JsReader class (failure both reader)`() {
-        val json = JsObject()
-        val idReader = JsReader.required(JsPath(ATTRIBUTE_NAME_ID), stringReader)
-        val identifierReader = JsReader.required(JsPath(ATTRIBUTE_NAME_IDENTIFIER), stringReader)
+        val idReader = JsReader {
+            JsResult.Failure(path = ID_PATH, error = JsError.PathMissing)
+        }
+        val identifierReader = JsReader {
+            JsResult.Failure(
+                path = IDENTIFIER_PATH,
+                error = JsError.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+            )
+        }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(json)
+        val result = composeReader.read(JsNull)
 
         result as JsResult.Failure
         val failures = result.errors
         assertEquals(2, failures.size)
 
-        val idFailure = failures[0]
-        assertEquals(JsPath(ATTRIBUTE_NAME_ID), idFailure.first)
-        val idErrors = idFailure.second
-        assertTrue(idErrors[0] is JsError.PathMissing)
+        failures[0].also { (pathError, errors) ->
+            assertEquals(ID_PATH, pathError)
 
-        val identifierFailure = failures[1]
-        assertEquals(JsPath(ATTRIBUTE_NAME_IDENTIFIER), identifierFailure.first)
-        val identifierErrors = identifierFailure.second
-        assertTrue(identifierErrors[0] is JsError.PathMissing)
+            assertEquals(1, errors.size)
+            assertTrue(errors[0] is JsError.PathMissing)
+        }
+
+        failures[1].also { (pathError, errors) ->
+            assertEquals(IDENTIFIER_PATH, pathError)
+
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsError.InvalidType
+            assertEquals(JsValue.Type.OBJECT, error.expected)
+            assertEquals(JsValue.Type.STRING, error.actual)
+        }
     }
 }
