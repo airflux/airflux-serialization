@@ -1,9 +1,7 @@
 package io.github.airflux.reader
 
-import io.github.airflux.dsl.ValidatorDsl.validation
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.validator.JsValidator
 import io.github.airflux.value.JsValue
 
 @Suppress("unused")
@@ -52,9 +50,3 @@ interface JsReader<T> {
         }
     }
 }
-
-infix fun <T, E : JsError.Validation.Reason> JsReader<T>.validation(validator: JsValidator<T, E>): JsReader<T> =
-    JsReader { input ->
-        this@validation.read(input)
-            .validation(validator)
-    }
