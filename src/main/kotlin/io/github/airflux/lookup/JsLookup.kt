@@ -13,7 +13,8 @@ sealed class JsLookup {
 
         data class PathMissing(override val path: JsPath) : Undefined()
 
-        data class InvalidType(override val path: JsPath, val expected: JsValue.Type, val actual: JsValue.Type) : Undefined()
+        data class InvalidType(override val path: JsPath, val expected: JsValue.Type, val actual: JsValue.Type) :
+            Undefined()
     }
 }
 

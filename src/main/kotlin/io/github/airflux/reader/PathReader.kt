@@ -10,7 +10,6 @@ import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
-import io.github.airflux.value.extension.seek
 
 /*
  Basic reads functions.
@@ -32,19 +31,31 @@ interface PathReader {
      * Reads a required field at [JsPath].
      *
      * - If any node in [JsPath] is not found then returns [JsError.PathMissing]
+     * - If any node does not match path element type, then returning [JsError.InvalidType]
      * - If the entire path is found then applies [reader]
      */
     fun <T : Any> required(path: JsPath, reader: JsReader<T>): JsReader<T> = JsReader { input ->
-        input.seek(path)
-            .flatMap { reader.read(it) }
-            .repath(path)
+        when (val result = input.lookup(path)) {
+            is JsLookup.Defined ->
+                reader.read(result.value).repath(path)
+
+            is JsLookup.Undefined.PathMissing ->
+                JsResult.Failure(path = path, error = JsError.PathMissing)
+
+            is JsLookup.Undefined.InvalidType ->
+                JsResult.Failure(
+                    path = result.path,
+                    error = JsError.InvalidType(expected = result.expected, actual = result.actual)
+                )
+        }
     }
 
     /**
-     * Reads a optional or nullable field at [JsPath].
+     * Reads required field at [JsPath] or return default if a field is not found.
      *
      * - If any node in [JsPath] is not found then returns [defaultValue]
      * - If the last node in [JsPath] is found with value 'null' then returns [defaultValue]
+     * - If any node does not match path element type, then returning [JsError.InvalidType]
      * - If the entire path is found then applies [reader]
      */
     fun <T : Any> orDefault(path: JsPath, reader: JsReader<T>, defaultValue: () -> T): JsReader<T> =
@@ -52,28 +63,36 @@ interface PathReader {
             .map { value -> value ?: defaultValue() }
 
     /**
-     * Reads a optional or nullable field at [JsPath].
+     * Reads nullable field at [JsPath].
      *
      * - If any node in [JsPath] is not found then returns [null]
      * - If the last node in [JsPath] is found with value 'null' then returns [null]
+     * - If any node does not match path element type, then returning [JsError.InvalidType]
      * - If the entire path is found then applies [reader]
      */
     fun <T> nullable(path: JsPath, reader: JsReader<T>): JsReader<T?> = JsReader { input ->
         when (val lookup = input.lookup(path)) {
             is JsLookup.Defined -> when (val node = lookup.value) {
-                is JsNull -> JsResult.Success(value = null)
-                else -> reader.read(node)
+                is JsNull -> JsResult.Success(path = path, value = null)
+                else -> reader.read(node).repath(path)
             }
 
-            is JsLookup.Undefined -> JsResult.Success(value = null)
-        }.repath(path)
+            is JsLookup.Undefined.PathMissing -> JsResult.Success(path = path, value = null)
+
+            is JsLookup.Undefined.InvalidType ->
+                JsResult.Failure(
+                    path = lookup.path,
+                    error = JsError.InvalidType(expected = lookup.expected, actual = lookup.actual)
+                )
+        }
     }
 
     /**
-     * Reads a optional or nullable field at [JsPath].
+     * Reads nullable field at [JsPath] or return default if a field is not found.
      *
      * - If any node in [JsPath] is not found then returns [defaultValue]
      * - If the last node in [JsPath] is found with value 'null' then returns [null]
+     * - If any node does not match path element type, then returning [JsError.InvalidType]
      * - If the entire path is found then applies [reader]
      */
     fun <T> nullableOrDefault(
@@ -83,18 +102,26 @@ interface PathReader {
     ): JsReader<T?> = JsReader { input ->
         when (val lookup = input.lookup(path)) {
             is JsLookup.Defined -> when (val node = lookup.value) {
-                is JsNull -> JsResult.Success(value = null)
-                else -> reader.read(node)
+                is JsNull -> JsResult.Success(path = path, value = null)
+                else -> reader.read(node).repath(path)
             }
 
-            is JsLookup.Undefined -> JsResult.Success(value = defaultValue())
-        }.repath(path)
+            is JsLookup.Undefined.PathMissing ->
+                JsResult.Success(path = path, value = defaultValue())
+
+            is JsLookup.Undefined.InvalidType ->
+                JsResult.Failure(
+                    path = lookup.path,
+                    error = JsError.InvalidType(expected = lookup.expected, actual = lookup.actual)
+                )
+        }
     }
 
     /**
      * Reads a required and not nullable field which represent as array at [JsPath].
      *
      * - If any node in [JsPath] is not found then returns [JsError.PathMissing]
+     * - If any node does not match path element type, then returning [JsError.InvalidType]
      * - If the entire path is found then applies [reader]
      */
     fun <T, C : Collection<T>> traversable(
@@ -102,9 +129,19 @@ interface PathReader {
         reader: JsReader<T>,
         factory: CollectionBuilderFactory<T, C>
     ): JsReader<C> = JsReader { input ->
-        input.seek(path)
-            .flatMap { readCollection(it, reader, factory) }
-            .repath(path)
+        when (val result = input.lookup(path)) {
+            is JsLookup.Defined ->
+                readCollection(result.value, reader, factory).repath(path)
+
+            is JsLookup.Undefined.PathMissing ->
+                JsResult.Failure(path = path, error = JsError.PathMissing)
+
+            is JsLookup.Undefined.InvalidType ->
+                JsResult.Failure(
+                    path = result.path,
+                    error = JsError.InvalidType(expected = result.expected, actual = result.actual)
+                )
+        }
     }
 
     private fun <T, C : Collection<T>> readCollection(

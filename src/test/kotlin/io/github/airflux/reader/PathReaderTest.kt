@@ -45,7 +45,7 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "phones" / 0, result.path)
             assertEquals(FIRST_PHONE_VALUE, result.value)
         }
 
@@ -58,20 +58,47 @@ class PathReaderTest {
                     ),
                 )
             )
+            val path = "user" / "rules" / 1
+            val pathReader: JsReader<String> = JsReader.required(path = path, reader = stringReader)
+
+            val result = pathReader.read(json)
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "rules" / 1, pathError)
+
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsError.PathMissing)
+                }
+        }
+
+        @Test
+        fun `Testing 'required' function (an attribute is not found, invalid type)`() {
+            val json: JsValue = JsObject(
+                "user" to JsObject(
+                    "phones" to JsString(FIRST_PHONE_VALUE)
+                )
+            )
             val path = "user" / "phones" / 1
             val pathReader: JsReader<String> = JsReader.required(path = path, reader = stringReader)
 
             val result = pathReader.read(json)
 
             result as JsResult.Failure
-            val reasons = result.errors
-            assertEquals(1, reasons.size)
+            assertEquals(1, result.errors.size)
 
-            reasons[0].also { (pathError, errors) ->
-                assertEquals(path, pathError)
-                assertEquals(1, errors.size)
-                assertTrue(errors[0] is JsError.PathMissing)
-            }
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "phones", pathError)
+
+                    assertEquals(1, errors.size)
+                    val error = errors[0] as JsError.InvalidType
+                    assertEquals(JsValue.Type.ARRAY, error.expected)
+                    assertEquals(JsValue.Type.STRING, error.actual)
+                }
         }
     }
 
@@ -94,12 +121,12 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "phones" / 0, result.path)
             assertEquals(FIRST_PHONE_VALUE, result.value)
         }
 
         @Test
-        fun `Testing 'orDefault' function (an attribute is found, returning default value)`() {
+        fun `Testing 'orDefault' function (an attribute is not found, returning default value)`() {
             val json: JsValue = JsObject(
                 "user" to JsObject(
                     "phones" to JsArray(
@@ -107,14 +134,14 @@ class PathReaderTest {
                     )
                 )
             )
-            val path = "user" / "phones" / 1
+            val path = "user" / "roles" / 1
             val pathReader: JsReader<String> =
                 JsReader.orDefault(path = path, reader = stringReader, defaultValue = { "default" })
 
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "roles" / 1, result.path)
             assertEquals("default", result.value)
         }
     }
@@ -137,7 +164,7 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "phones" / 0, result.path)
             assertEquals(FIRST_PHONE_VALUE, result.value)
         }
 
@@ -154,7 +181,7 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "role", result.path)
             assertNull(result.value)
         }
 
@@ -167,19 +194,45 @@ class PathReaderTest {
                     )
                 )
             )
-            val path = "user" / "phones" / 1
+            val path = "user" / "roles" / 1
             val pathReader: JsReader<String?> = JsReader.nullable(path = path, reader = stringReader)
 
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "roles" / 1, result.path)
             assertNull(result.value)
+        }
+
+        @Test
+        fun `Testing 'nullable' function (an attribute is not found, invalid type)`() {
+            val json: JsValue = JsObject(
+                "user" to JsObject(
+                    "phones" to JsString(FIRST_PHONE_VALUE)
+                )
+            )
+            val path = "user" / "phones" / 1
+            val pathReader: JsReader<String?> = JsReader.nullable(path = path, reader = stringReader)
+
+            val result = pathReader.read(json)
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "phones", pathError)
+
+                    assertEquals(1, errors.size)
+                    val error = errors[0] as JsError.InvalidType
+                    assertEquals(JsValue.Type.ARRAY, error.expected)
+                    assertEquals(JsValue.Type.STRING, error.actual)
+                }
         }
     }
 
     @Nested
-    inner class OptionalOrDefault {
+    inner class NullableOrDefault {
 
         @Test
         fun `Testing 'nullableOrDefault' function (an attribute is found)`() {
@@ -197,7 +250,7 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "phones" / 0, result.path)
             assertEquals(FIRST_PHONE_VALUE, result.value)
         }
 
@@ -215,7 +268,7 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "role", result.path)
             assertNull(result.value)
         }
 
@@ -228,15 +281,42 @@ class PathReaderTest {
                     )
                 )
             )
-            val path = "user" / "role"
+            val path = "user" / "roles" / 0
             val pathReader: JsReader<String?> =
                 JsReader.nullableOrDefault(path = path, reader = stringReader, defaultValue = { "default" })
 
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "roles" / 0, result.path)
             assertEquals("default", result.value)
+        }
+
+        @Test
+        fun `Testing 'nullableOrDefault' function (an attribute is not found, invalid type)`() {
+            val json: JsValue = JsObject(
+                "user" to JsObject(
+                    "phones" to JsString(FIRST_PHONE_VALUE)
+                )
+            )
+            val path = "user" / "phones" / 1
+            val pathReader: JsReader<String?> =
+                JsReader.nullableOrDefault(path = path, reader = stringReader, defaultValue = { "default" })
+
+            val result = pathReader.read(json)
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "phones", pathError)
+
+                    assertEquals(1, errors.size)
+                    val error = errors[0] as JsError.InvalidType
+                    assertEquals(JsValue.Type.ARRAY, error.expected)
+                    assertEquals(JsValue.Type.STRING, error.actual)
+                }
         }
     }
 
@@ -262,8 +342,68 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "phones", result.path)
             assertEquals(listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
+        }
+
+        @Test
+        fun `Testing 'traversable' function (an attribute is not found)`() {
+            val json: JsValue = JsObject(
+                "user" to JsObject(
+                    "phones" to JsArray(
+                        JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
+                    )
+                )
+            )
+            val path = "user" / "details" / "roles"
+            val pathReader: JsReader<List<String>> = JsReader.traversable(
+                path = path,
+                reader = stringReader,
+                factory = CollectionBuilderFactory.listFactory()
+            )
+
+            val result = pathReader.read(json)
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "details" / "roles", pathError)
+
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsError.PathMissing)
+                }
+        }
+
+        @Test
+        fun `Testing 'traversable' function (an attribute is not found, invalid type)`() {
+            val json: JsValue = JsObject(
+                "user" to JsObject(
+                    "phones" to JsString(FIRST_PHONE_VALUE)
+                )
+            )
+            val path = "user" / "phones" / 0
+            val pathReader: JsReader<List<String>> = JsReader.traversable(
+                path = path,
+                reader = stringReader,
+                factory = CollectionBuilderFactory.listFactory()
+            )
+
+            val result = pathReader.read(json)
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "phones", pathError)
+
+                    assertEquals(1, errors.size)
+                    val error = errors[0] as JsError.InvalidType
+                    assertEquals(JsValue.Type.ARRAY, error.expected)
+                    assertEquals(JsValue.Type.STRING, error.actual)
+                }
         }
 
         @Test
@@ -283,7 +423,7 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals("user" / "phones", result.path)
             assertEquals(listOf(), result.value)
         }
 
@@ -304,14 +444,14 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Failure
-            val reasons = result.errors
-            assertEquals(1, reasons.size)
+            assertEquals(1, result.errors.size)
 
-            reasons[0].also { (pathError, errors) ->
-                assertEquals(path, pathError)
-                assertEquals(1, errors.size)
-                assertTrue(errors[0] is JsError.InvalidType)
-            }
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "role", pathError)
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsError.InvalidType)
+                }
         }
 
         @Test
@@ -323,7 +463,7 @@ class PathReaderTest {
                         JsNumber.valueOf(10),
                         JsBoolean.True,
                         JsString(SECOND_PHONE_VALUE),
-                    ),
+                    )
                 )
             )
             val path = "user" / "phones"
@@ -336,18 +476,19 @@ class PathReaderTest {
             val result = pathReader.read(json)
 
             result as JsResult.Failure
-            val reasons = result.errors
-            assertEquals(2, reasons.size)
+            assertEquals(2, result.errors.size)
 
-            reasons[0].also { (pathError, errors) ->
-                assertEquals(path / 1, pathError)
-                assertEquals(1, errors.size)
-            }
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "phones" / 1, pathError)
+                    assertEquals(1, errors.size)
+                }
 
-            reasons[1].also { (pathError, errors) ->
-                assertEquals(path / 2, pathError)
-                assertEquals(1, errors.size)
-            }
+            result.errors[1]
+                .also { (pathError, errors) ->
+                    assertEquals("user" / "phones" / 2, pathError)
+                    assertEquals(1, errors.size)
+                }
         }
     }
 }

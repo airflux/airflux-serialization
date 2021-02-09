@@ -6,9 +6,7 @@ class JsPath private constructor(val elements: List<PathElement>) {
 
     companion object {
 
-        val root = JsPath(elements = emptyList())
-
-        operator fun invoke(): JsPath = root
+        operator fun invoke(): JsPath = JsPath(elements = emptyList())
 
         operator fun invoke(key: String): JsPath = JsPath(elements = listOf(KeyPathElement(key)))
 
@@ -22,7 +20,11 @@ class JsPath private constructor(val elements: List<PathElement>) {
 
     operator fun div(child: String): JsPath = JsPath(elements + KeyPathElement(child))
 
+    operator fun div(child: KeyPathElement): JsPath = JsPath(elements + child)
+
     operator fun div(idx: Int): JsPath = JsPath(elements + IdxPathElement(idx))
+
+    operator fun div(idx: IdxPathElement): JsPath = JsPath(elements + idx)
 
     override fun toString(): String = buildString {
         append("#")

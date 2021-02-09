@@ -22,7 +22,7 @@ class JsResultTest {
             val result = original.map { it.toInt() }
 
             result as JsResult.Success
-            assertEquals(path, result.path)
+            assertEquals(JsPath("id"), result.path)
             assertEquals(originalValue.toInt(), result.value)
         }
 
@@ -98,7 +98,7 @@ class JsResultTest {
 
                 assertEquals(1, original.errors.size)
                 val (path, errors) = original.errors[0]
-                assertEquals(JsPath.root, path)
+                assertEquals(JsPath(), path)
                 assertTrue(errors.isEmpty())
             }
 
@@ -109,7 +109,7 @@ class JsResultTest {
 
                 assertEquals(1, original.errors.size)
                 val (path, errors) = original.errors[0]
-                assertEquals(JsPath.root, path)
+                assertEquals(JsPath(), path)
                 assertEquals(1, errors.size)
                 val error = errors[0]
                 assertTrue(error is JsError.PathMissing)
@@ -117,13 +117,13 @@ class JsResultTest {
 
             @Test
             fun `Testing the constructor of the Failure class with path and one error description`() {
-                val path = JsPath.root / "user"
+                val path = JsPath("user")
 
                 val original = JsResult.Failure(path, JsError.PathMissing)
 
                 assertEquals(1, original.errors.size)
                 val (pathError, errors) = original.errors[0]
-                assertEquals(path, pathError)
+                assertEquals(JsPath("user"), pathError)
                 assertEquals(1, errors.size)
                 val error = errors[0]
                 assertTrue(error is JsError.PathMissing)
@@ -131,13 +131,13 @@ class JsResultTest {
 
             @Test
             fun `Testing the constructor of the Failure class with path and errors description`() {
-                val path = JsPath.root / "user"
+                val path = JsPath("user")
 
                 val original = JsResult.Failure(path, listOf(JsError.PathMissing))
 
                 assertEquals(1, original.errors.size)
                 val (pathError, errors) = original.errors[0]
-                assertEquals(path, pathError)
+                assertEquals(JsPath("user"), pathError)
                 assertEquals(1, errors.size)
                 assertTrue(errors[0] is JsError.PathMissing)
             }
@@ -153,7 +153,7 @@ class JsResultTest {
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
             val (pathError, errors) = result.errors[0]
-            assertEquals(path, pathError)
+            assertEquals(JsPath("name"), pathError)
             assertEquals(1, errors.size)
             assertTrue(errors[0] is JsError.PathMissing)
         }
@@ -168,7 +168,7 @@ class JsResultTest {
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
             val (pathError, errors) = result.errors[0]
-            assertEquals(path, pathError)
+            assertEquals(JsPath("name"), pathError)
             assertEquals(1, errors.size)
             assertTrue(errors[0] is JsError.PathMissing)
         }
