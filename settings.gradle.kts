@@ -6,3 +6,7 @@ pluginManagement {
         jcenter()
     }
 }
+
+includeBuild("core")
+includeBuild("dsl")
+includeBuild("jackson-parser")
