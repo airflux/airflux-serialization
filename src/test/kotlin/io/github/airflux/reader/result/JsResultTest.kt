@@ -35,7 +35,7 @@ class JsResultTest {
             val result = original.flatMap { JsResult.Success(it.toInt()) }
 
             result as JsResult.Success
-            assertEquals(JsPath(), result.path)
+            assertEquals(JsPath.empty, result.path)
             assertEquals(originalValue.toInt(), result.value)
         }
 
@@ -98,7 +98,7 @@ class JsResultTest {
 
                 assertEquals(1, original.errors.size)
                 val (path, errors) = original.errors[0]
-                assertEquals(JsPath(), path)
+                assertEquals(JsPath.empty, path)
                 assertTrue(errors.isEmpty())
             }
 
@@ -109,7 +109,7 @@ class JsResultTest {
 
                 assertEquals(1, original.errors.size)
                 val (path, errors) = original.errors[0]
-                assertEquals(JsPath(), path)
+                assertEquals(JsPath.empty, path)
                 assertEquals(1, errors.size)
                 val error = errors[0]
                 assertTrue(error is JsError.PathMissing)

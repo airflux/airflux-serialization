@@ -41,7 +41,7 @@ class JsPathTest {
 
         @Test
         fun `Testing the constructor of the JsPath class without parameters`() {
-            val path = JsPath()
+            val path = JsPath.empty
 
             assertTrue(path.elements.isEmpty())
         }
@@ -67,7 +67,7 @@ class JsPathTest {
 
     @Test
     fun `Testing 'toString' function of the JsPath class`() {
-        ObjectContract.checkToString(JsPath(), "#")
+        ObjectContract.checkToString(JsPath.empty, "#")
         ObjectContract.checkToString("user" / "name", "#/user/name")
     }
 

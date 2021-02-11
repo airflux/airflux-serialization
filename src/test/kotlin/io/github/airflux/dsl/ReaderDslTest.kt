@@ -30,7 +30,7 @@ class ReaderDslTest {
         val result = ReaderDsl.read(from = json, using = stringReader)
 
         result as JsResult.Success
-        assertEquals(JsPath(), result.path)
+        assertEquals(JsPath.empty, result.path)
         assertEquals(USER_NAME_VALUE, result.value)
     }
 

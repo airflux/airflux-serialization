@@ -36,7 +36,7 @@ class ReadAsExtensionTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -67,7 +67,7 @@ class ReadAsExtensionTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -101,7 +101,7 @@ class ReadAsExtensionTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType

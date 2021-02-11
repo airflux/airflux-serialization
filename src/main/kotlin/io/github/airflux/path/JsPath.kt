@@ -6,7 +6,7 @@ class JsPath private constructor(val elements: List<PathElement>) {
 
     companion object {
 
-        operator fun invoke(): JsPath = JsPath(elements = emptyList())
+        val empty = JsPath(elements = emptyList())
 
         operator fun invoke(key: String): JsPath = JsPath(elements = listOf(KeyPathElement(key)))
 

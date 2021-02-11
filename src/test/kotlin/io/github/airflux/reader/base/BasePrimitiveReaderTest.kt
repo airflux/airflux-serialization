@@ -29,7 +29,7 @@ class BasePrimitiveReaderTest {
 
             result as JsResult.Success
             assertEquals(value, result.value)
-            assertEquals(JsPath(), result.path)
+            assertEquals(JsPath.empty, result.path)
         }
 
         @Test
@@ -42,7 +42,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -64,7 +64,7 @@ class BasePrimitiveReaderTest {
 
             result as JsResult.Success
             assertEquals(value, result.value)
-            assertEquals(JsPath(), result.path)
+            assertEquals(JsPath.empty, result.path)
         }
 
         @Test
@@ -77,7 +77,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -103,7 +103,7 @@ class BasePrimitiveReaderTest {
 
                     result as JsResult.Success
                     assertEquals(value, result.value)
-                    assertEquals(JsPath(), result.path)
+                    assertEquals(JsPath.empty, result.path)
                 }
             }
 
@@ -117,7 +117,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -135,7 +135,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -153,7 +153,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -179,7 +179,7 @@ class BasePrimitiveReaderTest {
 
                     result as JsResult.Success
                     assertEquals(value, result.value)
-                    assertEquals(JsPath(), result.path)
+                    assertEquals(JsPath.empty, result.path)
                 }
             }
 
@@ -193,7 +193,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -211,7 +211,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -229,7 +229,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -255,7 +255,7 @@ class BasePrimitiveReaderTest {
 
                     result as JsResult.Success
                     assertEquals(value, result.value)
-                    assertEquals(JsPath(), result.path)
+                    assertEquals(JsPath.empty, result.path)
                 }
             }
 
@@ -269,7 +269,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -287,7 +287,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -305,7 +305,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -331,7 +331,7 @@ class BasePrimitiveReaderTest {
 
                     result as JsResult.Success
                     assertEquals(value, result.value)
-                    assertEquals(JsPath(), result.path)
+                    assertEquals(JsPath.empty, result.path)
                 }
             }
 
@@ -345,7 +345,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType
@@ -363,7 +363,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidNumber
@@ -389,7 +389,7 @@ class BasePrimitiveReaderTest {
 
                     result as JsResult.Success
                     assertEquals(value, result.value)
-                    assertEquals(JsPath(), result.path)
+                    assertEquals(JsPath.empty, result.path)
                 }
             }
 
@@ -403,7 +403,7 @@ class BasePrimitiveReaderTest {
             assertEquals(1, result.errors.size)
 
             val (path, errors) = result.errors[0]
-            assertEquals(JsPath(), path)
+            assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
             val error = errors[0] as JsError.InvalidType

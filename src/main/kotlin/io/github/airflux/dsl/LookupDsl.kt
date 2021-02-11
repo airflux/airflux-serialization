@@ -10,10 +10,10 @@ import io.github.airflux.value.JsValue
 object LookupDsl {
 
     operator fun JsValue.div(name: String): JsLookup =
-        lookupAttribute(from = this, byName = name, previousPath = JsPath())
+        lookupAttribute(from = this, byName = name, previousPath = JsPath.empty)
 
     operator fun JsValue.div(idx: Int): JsLookup =
-        lookupElement(from = this, byIndex = idx, previousPath = JsPath())
+        lookupElement(from = this, byIndex = idx, previousPath = JsPath.empty)
 
     operator fun JsLookup.div(name: String): JsLookup = when (this) {
         is JsLookup.Defined -> lookupAttribute(from = this.value, byName = name, previousPath = path)

@@ -34,16 +34,16 @@ sealed class JsResult<out T> {
 
     abstract infix fun repath(path: JsPath): JsResult<T>
 
-    class Success<T>(val value: T, val path: JsPath = JsPath()) : JsResult<T>() {
+    class Success<T>(val value: T, val path: JsPath = JsPath.empty) : JsResult<T>() {
 
         override fun repath(path: JsPath): JsResult<T> = Success(value, path + this.path)
     }
 
     class Failure(val errors: List<Pair<JsPath, List<JsError>>>) : JsResult<Nothing>() {
 
-        constructor() : this(JsPath(), emptyList())
+        constructor() : this(JsPath.empty, emptyList())
 
-        constructor(error: JsError) : this(JsPath(), listOf(error))
+        constructor(error: JsError) : this(JsPath.empty, listOf(error))
 
         constructor(path: JsPath, error: JsError) : this(path, listOf(error))
 
