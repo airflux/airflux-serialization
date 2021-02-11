@@ -9,7 +9,7 @@ sealed class JsError {
 
     data class InvalidType(val expected: JsValue.Type, val actual: JsValue.Type) : JsError()
 
-    data class InvalidNumber(val value: String, val type: KClass<*>) : JsError()
+    data class ValueCast(val value: String, val type: KClass<*>) : JsError()
 
     abstract class Validation : JsError()
 }

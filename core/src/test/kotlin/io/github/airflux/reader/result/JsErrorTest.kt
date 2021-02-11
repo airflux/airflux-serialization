@@ -18,9 +18,9 @@ class JsErrorTest {
     @Test
     fun `Testing 'equals contract' of the NumberFormat class`() {
         ObjectContract.checkEqualsContract(
-            JsError.InvalidNumber(value = "abc", type = Int::class),
-            JsError.InvalidNumber(value = "abc", type = Int::class),
-            JsError.InvalidNumber(value = "", type = Int::class),
+            JsError.ValueCast(value = "abc", type = Int::class),
+            JsError.ValueCast(value = "abc", type = Int::class),
+            JsError.ValueCast(value = "", type = Int::class),
         )
     }
 }

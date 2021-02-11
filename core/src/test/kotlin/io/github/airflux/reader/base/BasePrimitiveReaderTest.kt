@@ -138,7 +138,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals(Long.MAX_VALUE.toString(), error.value)
             assertEquals(Byte::class, error.type)
         }
@@ -156,7 +156,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Byte::class, error.type)
         }
@@ -214,7 +214,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals(Long.MAX_VALUE.toString(), error.value)
             assertEquals(Short::class, error.type)
         }
@@ -232,7 +232,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Short::class, error.type)
         }
@@ -290,7 +290,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals(Long.MAX_VALUE.toString(), error.value)
             assertEquals(Int::class, error.type)
         }
@@ -308,7 +308,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Int::class, error.type)
         }
@@ -366,7 +366,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidNumber
+            val error = errors[0] as JsError.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Long::class, error.type)
         }

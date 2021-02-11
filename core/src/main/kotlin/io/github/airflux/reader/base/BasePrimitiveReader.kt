@@ -28,7 +28,7 @@ object BasePrimitiveReader {
             try {
                 JsResult.Success(text.toByte())
             } catch (expected: NumberFormatException) {
-                JsResult.Failure(error = JsError.InvalidNumber(value = text, type = Byte::class))
+                JsResult.Failure(error = JsError.ValueCast(value = text, type = Byte::class))
             }
         }
     }
@@ -41,7 +41,7 @@ object BasePrimitiveReader {
             try {
                 JsResult.Success(text.toShort())
             } catch (expected: NumberFormatException) {
-                JsResult.Failure(error = JsError.InvalidNumber(value = text, type = Short::class))
+                JsResult.Failure(error = JsError.ValueCast(value = text, type = Short::class))
             }
         }
     }
@@ -54,7 +54,7 @@ object BasePrimitiveReader {
             try {
                 JsResult.Success(text.toInt())
             } catch (expected: NumberFormatException) {
-                JsResult.Failure(error = JsError.InvalidNumber(value = text, type = Int::class))
+                JsResult.Failure(error = JsError.ValueCast(value = text, type = Int::class))
             }
         }
     }
@@ -67,7 +67,7 @@ object BasePrimitiveReader {
             try {
                 JsResult.Success(text.toLong())
             } catch (expected: NumberFormatException) {
-                JsResult.Failure(error = JsError.InvalidNumber(value = text, type = Long::class))
+                JsResult.Failure(error = JsError.ValueCast(value = text, type = Long::class))
             }
         }
     }
