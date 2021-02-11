@@ -59,9 +59,7 @@ class ValidatorDslTest {
             val (pathError, errors) = result.errors[0]
             assertEquals(path, pathError)
             assertEquals(1, errors.size)
-
-            val validationError = errors[0] as JsError.Validation
-            assertTrue(validationError.reason is ValidationErrors.Strings.IsEmpty)
+            assertTrue(errors[0] is ValidationErrors.Strings.IsEmpty)
         }
 
         @Test
@@ -111,9 +109,7 @@ class ValidatorDslTest {
             val (pathError, errors) = validated.errors[0]
             assertEquals(path, pathError)
             assertEquals(1, errors.size)
-
-            val validationError = errors[0] as JsError.Validation
-            assertTrue(validationError.reason is ValidationErrors.Strings.IsEmpty)
+            assertTrue(errors[0] is ValidationErrors.Strings.IsEmpty)
         }
 
         @Test

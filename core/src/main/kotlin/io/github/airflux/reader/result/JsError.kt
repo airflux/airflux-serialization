@@ -11,7 +11,5 @@ sealed class JsError {
 
     data class InvalidNumber(val value: String, val type: KClass<*>) : JsError()
 
-    data class Validation(val reason: Reason) : JsError() {
-        interface Reason
-    }
+    abstract class Validation : JsError()
 }

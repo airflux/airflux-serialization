@@ -10,7 +10,7 @@ object BaseNumberValidators {
     fun <T, E> min(error: (expected: T, actual: T) -> E): (T) -> JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation.Reason =
+              E : JsError.Validation =
         { expected ->
             JsValidator { value ->
                 if (value < expected)
@@ -23,7 +23,7 @@ object BaseNumberValidators {
     fun <T, E> max(error: (expected: T, actual: T) -> E): (T) -> JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation.Reason =
+              E : JsError.Validation =
         { expected ->
             JsValidator { value ->
                 if (value > expected)

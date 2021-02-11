@@ -1,6 +1,6 @@
 package io.github.airflux.reader.result
 
-sealed class ValidationErrors : JsError.Validation.Reason {
+sealed class ValidationErrors : JsError.Validation() {
 
     object Numbers {
         class Min(val expected: Int, val actual: Int) : ValidationErrors()

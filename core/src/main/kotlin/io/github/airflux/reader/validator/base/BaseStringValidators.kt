@@ -8,7 +8,7 @@ import io.github.airflux.reader.validator.JsValidator
 object BaseStringValidators {
 
     fun <E> minLength(error: (expected: Int, actual: Int) -> E): (Int) -> JsValidator<String, E>
-        where E : JsError.Validation.Reason =
+        where E : JsError.Validation =
         { expected ->
             JsValidator { value ->
                 if (value.length < expected)
@@ -19,7 +19,7 @@ object BaseStringValidators {
         }
 
     fun <E> maxLength(error: (expected: Int, actual: Int) -> E): (Int) -> JsValidator<String, E>
-        where E : JsError.Validation.Reason =
+        where E : JsError.Validation =
         { expected ->
             JsValidator { value ->
                 if (value.length > expected)
@@ -30,7 +30,7 @@ object BaseStringValidators {
         }
 
     fun <E> isNotEmpty(error: () -> E)
-        where E : JsError.Validation.Reason =
+        where E : JsError.Validation =
         JsValidator<String, E> { value ->
             if (value.isEmpty())
                 JsValidationResult.Failure(error())
@@ -39,7 +39,7 @@ object BaseStringValidators {
         }
 
     fun <E> isNotBlank(error: () -> E)
-        where E : JsError.Validation.Reason =
+        where E : JsError.Validation =
         JsValidator<String, E> { value ->
             if (value.isBlank())
                 JsValidationResult.Failure(error())
@@ -48,7 +48,7 @@ object BaseStringValidators {
         }
 
     fun <E> pattern(error: (value: String, pattern: Regex) -> E): (Regex) -> JsValidator<String, E>
-        where E : JsError.Validation.Reason =
+        where E : JsError.Validation =
         { pattern ->
             JsValidator { value ->
                 if (pattern.matches(value))
@@ -59,7 +59,7 @@ object BaseStringValidators {
         }
 
     fun <E> isA(error: (value: String) -> E): ((value: String) -> Boolean) -> JsValidator<String, E>
-        where E : JsError.Validation.Reason =
+        where E : JsError.Validation =
         { predicate ->
             JsValidator { value ->
                 if (predicate(value))

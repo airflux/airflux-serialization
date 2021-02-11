@@ -3,10 +3,10 @@ package io.github.airflux.reader.validator
 import io.github.airflux.reader.result.JsError
 
 @Suppress("unused")
-interface JsValidator<in T, out E : JsError.Validation.Reason> {
+interface JsValidator<in T, out E : JsError.Validation> {
 
     companion object {
-        operator fun <T, E : JsError.Validation.Reason> invoke(block: (T) -> JsValidationResult<E>) =
+        operator fun <T, E : JsError.Validation> invoke(block: (T) -> JsValidationResult<E>) =
             object : JsValidator<T, E> {
                 override fun validation(value: T): JsValidationResult<E> = block(value)
             }
