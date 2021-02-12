@@ -1,4 +1,4 @@
-package io.github.com.airflux.parser
+package io.github.airflux.parser
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
