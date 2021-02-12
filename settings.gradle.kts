@@ -1,5 +1,5 @@
 rootProject.name = "airflux"
 
-includeBuild("core")
+includeBuild("airflux-core")
 includeBuild("dsl")
 includeBuild("jackson-parser")
