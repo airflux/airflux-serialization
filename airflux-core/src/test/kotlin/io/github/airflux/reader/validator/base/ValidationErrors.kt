@@ -1,4 +1,6 @@
-package io.github.airflux.reader.result
+package io.github.airflux.reader.validator.base
+
+import io.github.airflux.reader.result.JsError
 
 sealed class ValidationErrors : JsError.Validation() {
 
@@ -10,7 +12,7 @@ sealed class ValidationErrors : JsError.Validation() {
     object Arrays {
         class MinItems(val expected: Int, val actual: Int) : ValidationErrors()
         class MaxItems(val expected: Int, val actual: Int) : ValidationErrors()
-        class Unique(val index: Int, val value: String) : ValidationErrors()
+        class Unique<T>(val index: Int, val value: T) : ValidationErrors()
     }
 
     object Strings {

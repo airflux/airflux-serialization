@@ -1,6 +1,5 @@
 package io.github.airflux.reader.validator.base
 
-import io.github.airflux.reader.result.ValidationErrors
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 import org.junit.jupiter.api.Nested
