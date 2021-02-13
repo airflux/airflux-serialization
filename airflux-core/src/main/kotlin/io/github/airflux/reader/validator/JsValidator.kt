@@ -24,10 +24,13 @@ interface JsValidator<in T, out E : JsError.Validation> {
         }
     }
 
-    infix fun and(other: JsValidator<@UnsafeVariance T, @UnsafeVariance E>): JsValidator<T, E> = JsValidator { value ->
-        when (val result = validation(value)) {
-            is JsValidationResult.Success -> other.validation(value)
-            is JsValidationResult.Failure -> result
+    infix fun and(other: JsValidator<@UnsafeVariance T, @UnsafeVariance E>): JsValidator<T, E> {
+        val self = this
+        return JsValidator { value ->
+            when (val result = self.validation(value)) {
+                is JsValidationResult.Success -> other.validation(value)
+                is JsValidationResult.Failure -> result
+            }
         }
     }
 }

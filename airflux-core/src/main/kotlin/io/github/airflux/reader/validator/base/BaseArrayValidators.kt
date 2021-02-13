@@ -35,7 +35,6 @@ object BaseArrayValidators {
                 val key = keySelector(item)
                 if (!unique.add(key))
                     return@JsValidator JsValidationResult.Failure(error(index, key))
-
             }
             JsValidationResult.Success
         }
