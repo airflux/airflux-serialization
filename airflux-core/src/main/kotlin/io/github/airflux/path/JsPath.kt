@@ -2,7 +2,7 @@ package io.github.airflux.path
 
 import io.github.airflux.reader.result.JsError
 
-class JsPath private constructor(val elements: List<PathElement>) {
+class JsPath internal constructor(val elements: List<PathElement>) {
 
     companion object {
 
@@ -20,11 +20,7 @@ class JsPath private constructor(val elements: List<PathElement>) {
 
     operator fun div(child: String): JsPath = JsPath(elements + KeyPathElement(child))
 
-    operator fun div(child: KeyPathElement): JsPath = JsPath(elements + child)
-
     operator fun div(idx: Int): JsPath = JsPath(elements + IdxPathElement(idx))
-
-    operator fun div(idx: IdxPathElement): JsPath = JsPath(elements + idx)
 
     override fun toString(): String = buildString {
         append("#")
