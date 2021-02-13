@@ -7,29 +7,25 @@ import io.github.airflux.reader.validator.JsValidator
 @Suppress("unused")
 object BaseNumberValidators {
 
-    fun <T, E> min(error: (expected: T, actual: T) -> E): (T) -> JsValidator<T, E>
+    fun <T, E> min(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
               E : JsError.Validation =
-        { expected ->
-            JsValidator { value ->
-                if (value < expected)
-                    JsValidationResult.Failure(error(expected, value))
-                else
-                    JsValidationResult.Success
-            }
+        JsValidator { value ->
+            if (value < expected)
+                JsValidationResult.Failure(error(expected, value))
+            else
+                JsValidationResult.Success
         }
 
-    fun <T, E> max(error: (expected: T, actual: T) -> E): (T) -> JsValidator<T, E>
+    fun <T, E> max(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
               E : JsError.Validation =
-        { expected ->
-            JsValidator { value ->
-                if (value > expected)
-                    JsValidationResult.Failure(error(expected, value))
-                else
-                    JsValidationResult.Success
-            }
+        JsValidator { value ->
+            if (value > expected)
+                JsValidationResult.Failure(error(expected, value))
+            else
+                JsValidationResult.Success
         }
 }

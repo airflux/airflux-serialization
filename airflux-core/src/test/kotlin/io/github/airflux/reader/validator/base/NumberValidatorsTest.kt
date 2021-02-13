@@ -1,5 +1,6 @@
 package io.github.airflux.reader.validator.base
 
+import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.ValidationErrors
 import io.github.airflux.reader.validator.JsValidationResult
 import org.junit.jupiter.api.Nested
@@ -9,13 +10,21 @@ import kotlin.test.assertEquals
 class NumberValidatorsTest {
 
     companion object {
-        val minBasicValidator = BaseNumberValidators.min<Int, ValidationErrors> { expectedValue, actualValue ->
-            ValidationErrors.Numbers.Min(expected = expectedValue, actual = actualValue)
-        }
+        fun minBasicValidator(value: Int) =
+            BaseNumberValidators.min<Int, JsError.Validation>(
+                expected = value,
+                error = { expectedValue, actualValue ->
+                    ValidationErrors.Numbers.Min(expected = expectedValue, actual = actualValue)
+                }
+            )
 
-        val maxBasicValidator = BaseNumberValidators.max<Int, ValidationErrors> { expectedValue, actualValue ->
-            ValidationErrors.Numbers.Max(expected = expectedValue, actual = actualValue)
-        }
+        fun maxBasicValidator(value: Int) =
+            BaseNumberValidators.max<Int, JsError.Validation>(
+                expected = value,
+                error = { expectedValue, actualValue ->
+                    ValidationErrors.Numbers.Max(expected = expectedValue, actual = actualValue)
+                }
+            )
     }
 
     @Nested
