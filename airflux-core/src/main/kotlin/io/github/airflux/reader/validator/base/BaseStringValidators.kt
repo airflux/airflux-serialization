@@ -7,65 +7,57 @@ import io.github.airflux.reader.validator.JsValidator
 @Suppress("unused")
 object BaseStringValidators {
 
-    fun <E> minLength(error: (expected: Int, actual: Int) -> E): (Int) -> JsValidator<String, E>
+    fun <E> minLength(expected: Int, error: (expected: Int, actual: Int) -> E): JsValidator<String, E>
         where E : JsError.Validation =
-        { expected ->
-            JsValidator { value ->
-                if (value.length < expected)
-                    JsValidationResult.Failure(error(expected, value.length))
-                else
-                    JsValidationResult.Success
-            }
+        JsValidator { value ->
+            if (value.length < expected)
+                JsValidationResult.Failure(error(expected, value.length))
+            else
+                JsValidationResult.Success
         }
 
-    fun <E> maxLength(error: (expected: Int, actual: Int) -> E): (Int) -> JsValidator<String, E>
+    fun <E> maxLength(expected: Int, error: (expected: Int, actual: Int) -> E): JsValidator<String, E>
         where E : JsError.Validation =
-        { expected ->
-            JsValidator { value ->
-                if (value.length > expected)
-                    JsValidationResult.Failure(error(expected, value.length))
-                else
-                    JsValidationResult.Success
-            }
+        JsValidator { value ->
+            if (value.length > expected)
+                JsValidationResult.Failure(error(expected, value.length))
+            else
+                JsValidationResult.Success
         }
 
-    fun <E> isNotEmpty(error: () -> E)
+    fun <E> isNotEmpty(error: () -> E): JsValidator<String, E>
         where E : JsError.Validation =
-        JsValidator<String, E> { value ->
+        JsValidator { value ->
             if (value.isEmpty())
                 JsValidationResult.Failure(error())
             else
                 JsValidationResult.Success
         }
 
-    fun <E> isNotBlank(error: () -> E)
+    fun <E> isNotBlank(error: () -> E): JsValidator<String, E>
         where E : JsError.Validation =
-        JsValidator<String, E> { value ->
+        JsValidator { value ->
             if (value.isBlank())
                 JsValidationResult.Failure(error())
             else
                 JsValidationResult.Success
         }
 
-    fun <E> pattern(error: (value: String, pattern: Regex) -> E): (Regex) -> JsValidator<String, E>
+    fun <E> pattern(pattern: Regex, error: (value: String, pattern: Regex) -> E): JsValidator<String, E>
         where E : JsError.Validation =
-        { pattern ->
-            JsValidator { value ->
-                if (pattern.matches(value))
-                    JsValidationResult.Success
-                else
-                    JsValidationResult.Failure(error(value, pattern))
-            }
+        JsValidator { value ->
+            if (pattern.matches(value))
+                JsValidationResult.Success
+            else
+                JsValidationResult.Failure(error(value, pattern))
         }
 
-    fun <E> isA(error: (value: String) -> E): ((value: String) -> Boolean) -> JsValidator<String, E>
+    fun <E> isA(predicate: (String) -> Boolean, error: (value: String) -> E): JsValidator<String, E>
         where E : JsError.Validation =
-        { predicate ->
-            JsValidator { value ->
-                if (predicate(value))
-                    JsValidationResult.Success
-                else
-                    JsValidationResult.Failure(error(value))
-            }
+        JsValidator { value ->
+            if (predicate(value))
+                JsValidationResult.Success
+            else
+                JsValidationResult.Failure(error(value))
         }
 }

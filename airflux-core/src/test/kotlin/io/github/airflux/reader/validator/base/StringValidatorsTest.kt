@@ -10,15 +10,21 @@ import kotlin.test.assertTrue
 class StringValidatorsTest {
 
     companion object {
-        val minLengthBasicValidator =
-            BaseStringValidators.minLength<ValidationErrors> { expectedValue, actualValue ->
-                ValidationErrors.Strings.MinLength(expected = expectedValue, actual = actualValue)
-            }
+        fun minLengthBasicValidator(value: Int) =
+            BaseStringValidators.minLength<ValidationErrors>(
+                expected = value,
+                error = { expectedValue, actualValue ->
+                    ValidationErrors.Strings.MinLength(expected = expectedValue, actual = actualValue)
+                }
+            )
 
-        val maxLengthBasicValidator =
-            BaseStringValidators.maxLength<ValidationErrors> { expectedValue, actualValue ->
-                ValidationErrors.Strings.MaxLength(expected = expectedValue, actual = actualValue)
-            }
+        fun maxLengthBasicValidator(value: Int) =
+            BaseStringValidators.maxLength<ValidationErrors>(
+                expected = value,
+                error = { expectedValue, actualValue ->
+                    ValidationErrors.Strings.MaxLength(expected = expectedValue, actual = actualValue)
+                }
+            )
 
         val isNotEmptyValidator: JsValidator<String, ValidationErrors> =
             BaseStringValidators.isNotEmpty { ValidationErrors.Strings.IsEmpty }
@@ -26,13 +32,17 @@ class StringValidatorsTest {
         val isNotBlankValidator: JsValidator<String, ValidationErrors> =
             BaseStringValidators.isNotBlank { ValidationErrors.Strings.IsBlank }
 
-        val patternBasicValidator = BaseStringValidators.pattern<ValidationErrors> { value, regexp ->
-            ValidationErrors.Strings.Pattern(value = value, regex = regexp)
-        }
+        fun patternBasicValidator(pattern: Regex) =
+            BaseStringValidators.pattern<ValidationErrors>(
+                pattern = pattern,
+                error = { value, regexp -> ValidationErrors.Strings.Pattern(value = value, regex = regexp) }
+            )
 
-        val isABasicValidator = BaseStringValidators.isA<ValidationErrors> { value ->
-            ValidationErrors.Strings.IsA(value = value)
-        }
+        fun isABasicValidator(predicate: (String) -> Boolean) =
+            BaseStringValidators.isA<ValidationErrors>(
+                predicate = predicate,
+                error = { value -> ValidationErrors.Strings.IsA(value = value) }
+            )
     }
 
     @Nested
