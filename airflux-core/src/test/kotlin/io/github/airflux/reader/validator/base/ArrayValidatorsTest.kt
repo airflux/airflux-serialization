@@ -9,20 +9,35 @@ import kotlin.test.assertEquals
 class ArrayValidatorsTest {
 
     companion object {
-        val minItemsBasicValidator =
-            BaseArrayValidators.minItems<String, List<String>, ValidationErrors> { expectedValue, actualValue ->
-                ValidationErrors.Arrays.MinItems(expected = expectedValue, actual = actualValue)
-            }
+        fun minItemsBasicValidator(value: Int) =
+            BaseArrayValidators.minItems<String, List<String>, ValidationErrors>(
+                expected = value,
+                error = { expectedValue, actualValue ->
+                    ValidationErrors.Arrays.MinItems(
+                        expected = expectedValue,
+                        actual = actualValue
+                    )
+                }
+            )
 
-        val maxItemsBasicValidator =
-            BaseArrayValidators.maxItems<String, List<String>, ValidationErrors> { expectedValue, actualValue ->
-                ValidationErrors.Arrays.MaxItems(expected = expectedValue, actual = actualValue)
-            }
+        fun maxItemsBasicValidator(value: Int) =
+            BaseArrayValidators.maxItems<String, List<String>, ValidationErrors>(
+                expected = value,
+                error = { expectedValue, actualValue ->
+                    ValidationErrors.Arrays.MaxItems(
+                        expected = expectedValue,
+                        actual = actualValue
+                    )
+                }
+            )
 
-        val isUniqueBasicValidator =
-            BaseArrayValidators.isUnique<String, String, ValidationErrors> { index, value ->
-                ValidationErrors.Arrays.Unique(index = index, value = value)
-            }
+        fun <T, K> isUniqueBasicValidator(keySelector: (T) -> K) =
+            BaseArrayValidators.isUnique<T, K, ValidationErrors>(
+                keySelector = keySelector,
+                error = { index, value ->
+                    ValidationErrors.Arrays.Unique(index = index, value = value)
+                }
+            )
     }
 
     @Nested
@@ -127,7 +142,7 @@ class ArrayValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection is empty)`() {
-            val validator = isUniqueBasicValidator { it }
+            val validator = isUniqueBasicValidator<String, String> { it }
 
             val result = validator.validation(emptyList())
 
@@ -136,7 +151,7 @@ class ArrayValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection contains only unique values)`() {
-            val validator = isUniqueBasicValidator { it }
+            val validator = isUniqueBasicValidator<String, String> { it }
 
             val result = validator.validation(listOf("A", "B"))
 
@@ -145,12 +160,12 @@ class ArrayValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection contains duplicates)`() {
-            val validator = isUniqueBasicValidator { it }
+            val validator = isUniqueBasicValidator<String, String> { it }
 
             val result = validator.validation(listOf("A", "B", "A", "C"))
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Arrays.Unique
+            val reason = result.reason as ValidationErrors.Arrays.Unique<*>
             assertEquals(2, reason.index)
             assertEquals("A", reason.value)
         }
