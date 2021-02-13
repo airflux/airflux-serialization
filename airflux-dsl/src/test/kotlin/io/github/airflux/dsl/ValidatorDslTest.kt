@@ -1,12 +1,12 @@
 package io.github.airflux.dsl
 
+import io.github.airflux.common.ValidationErrors
 import io.github.airflux.dsl.ValidatorDsl.validation
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.ValidationErrors
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 import io.github.airflux.value.JsNull
