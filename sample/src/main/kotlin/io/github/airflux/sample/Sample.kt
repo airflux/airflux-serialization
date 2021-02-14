@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.dsl.ReaderDsl.read
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.sample.dto.Response
+import io.github.airflux.sample.dto.model.Value
 import io.github.airflux.sample.dto.reader.RequestReader
+import io.github.airflux.sample.dto.writer.ResponseWriter
 import io.github.airflux.value.JsValue
+import java.math.BigDecimal
 
 fun main() {
     val mapper = ObjectMapper().apply {
@@ -21,6 +25,11 @@ fun main() {
             println(errors)
         }
     }
+
+    val value = Value(amount = BigDecimal("125.52"), currency = "USD")
+    val response = Response(value= value)
+    val output: JsValue = ResponseWriter.write(response)
+    println(output.toString())
 }
 
 const val jsonOfTender = """{
