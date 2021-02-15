@@ -7,7 +7,6 @@ import io.github.airflux.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.dsl.PathDsl.div
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.CollectionBuilderFactory
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsResult
@@ -142,7 +141,10 @@ class ReaderDslTest {
             "name" to JsString(USER_NAME_VALUE)
         )
         val pathReader: JsReader<String?> =
-            ReaderDsl.readNullableOrDefault(byName = "name", using = stringReader, defaultValue = { DEFAULT_USER_NAME_VALUE })
+            ReaderDsl.readNullableOrDefault(
+                byName = "name",
+                using = stringReader,
+                defaultValue = { DEFAULT_USER_NAME_VALUE })
 
         val result = pathReader.read(json)
 
@@ -172,82 +174,94 @@ class ReaderDslTest {
     }
 
     @Test
-    fun `Testing of a read a traversable attribute by name as the list`() {
-        val json: JsValue = JsObject(
-            "phones" to JsArray(
-                JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
-            )
+    fun `Testing of a read a traversable attribute as a list`() {
+        val json: JsValue = JsArray(
+            JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
         )
-        val pathReader: JsReader<List<String>> = ReaderDsl.readTraversable(byName = "phones", using = stringReader)
+        val pathReader: JsReader<List<String>> = ReaderDsl.list(using = stringReader)
 
         val result = pathReader.read(json)
 
         result as JsResult.Success
-        assertEquals(JsPath("phones"), result.path)
+        assertEquals(JsPath.empty, result.path)
         assertEquals(listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
     }
 
     @Test
-    fun `Testing of a read a traversable attribute by path as the list`() {
-        val json: JsValue = JsObject(
-            "user" to JsObject(
-                "phones" to JsArray(
-                    JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
-                )
-            )
+    fun `Testing of a read a traversable attribute as a set`() {
+        val json: JsValue = JsArray(
+            JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
         )
-        val path = "user" / "phones"
-        val pathReader: JsReader<List<String>> = ReaderDsl.readTraversable(byPath = path, using = stringReader)
+        val pathReader: JsReader<Set<String>> = ReaderDsl.set(using = stringReader)
 
         val result = pathReader.read(json)
 
         result as JsResult.Success
-        assertEquals(path, result.path)
-        assertEquals(listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
-    }
-
-    @Test
-    fun `Testing of a read a traversable attribute by name as the set`() {
-        val json: JsValue = JsObject(
-            "phones" to JsArray(
-                JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
-            )
-        )
-        val pathReader: JsReader<Set<String>> =
-            ReaderDsl.readTraversable(
-                factory = CollectionBuilderFactory.setFactory(),
-                byName = "phones",
-                using = stringReader
-            )
-
-        val result = pathReader.read(json)
-
-        result as JsResult.Success
-        assertEquals(JsPath("phones"), result.path)
+        assertEquals(JsPath.empty, result.path)
         assertEquals(setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
     }
-
-    @Test
-    fun `Testing of a read a traversable attribute by path as the set`() {
-        val json: JsValue = JsObject(
-            "user" to JsObject(
-                "phones" to JsArray(
-                    JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
-                )
-            )
-        )
-        val path = "user" / "phones"
-        val pathReader: JsReader<Set<String>> =
-            ReaderDsl.readTraversable(
-                factory = CollectionBuilderFactory.setFactory(),
-                byPath = path,
-                using = stringReader
-            )
-
-        val result = pathReader.read(json)
-
-        result as JsResult.Success
-        assertEquals(path, result.path)
-        assertEquals(setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
-    }
+//
+//    @Test
+//    fun `Testing of a read a traversable attribute by path as the list`() {
+//        val json: JsValue = JsObject(
+//            "user" to JsObject(
+//                "phones" to JsArray(
+//                    JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
+//                )
+//            )
+//        )
+//        val path = "user" / "phones"
+//        val pathReader: JsReader<List<String>> = ReaderDsl.readTraversable(byPath = path, using = stringReader)
+//
+//        val result = pathReader.read(json)
+//
+//        result as JsResult.Success
+//        assertEquals(path, result.path)
+//        assertEquals(listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
+//    }
+//
+//    @Test
+//    fun `Testing of a read a traversable attribute by name as the set`() {
+//        val json: JsValue = JsObject(
+//            "phones" to JsArray(
+//                JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
+//            )
+//        )
+//        val pathReader: JsReader<Set<String>> =
+//            ReaderDsl.readTraversable(
+//                factory = CollectionBuilderFactory.setFactory(),
+//                byName = "phones",
+//                using = stringReader
+//            )
+//
+//        val result = pathReader.read(json)
+//
+//        result as JsResult.Success
+//        assertEquals(JsPath("phones"), result.path)
+//        assertEquals(setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
+//    }
+//
+//    @Test
+//    fun `Testing of a read a traversable attribute by path as the set`() {
+//        val json: JsValue = JsObject(
+//            "user" to JsObject(
+//                "phones" to JsArray(
+//                    JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE)
+//                )
+//            )
+//        )
+//        val path = "user" / "phones"
+//        val pathReader: JsReader<Set<String>> =
+//            ReaderDsl.readTraversable(
+//                factory = CollectionBuilderFactory.setFactory(),
+//                byPath = path,
+//                using = stringReader
+//            )
+//
+//        val result = pathReader.read(json)
+//
+//        result as JsResult.Success
+//        assertEquals(path, result.path)
+//        assertEquals(setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
+//    }
 }

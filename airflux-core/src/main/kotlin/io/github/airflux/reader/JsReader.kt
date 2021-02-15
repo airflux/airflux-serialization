@@ -7,7 +7,9 @@ import io.github.airflux.value.JsValue
 @Suppress("unused")
 interface JsReader<T> {
 
-    companion object : PathReader {
+    companion object : PathReader,
+                       TraversableReader {
+
         operator fun <T> invoke(block: (JsValue) -> JsResult<T>) =
             object : JsReader<T> {
                 override fun read(input: JsValue): JsResult<T> = block(input)

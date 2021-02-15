@@ -91,33 +91,9 @@ object ReaderDsl {
     fun <T> readNullableOrDefault(byPath: JsPath, using: JsReader<T>, defaultValue: () -> T): JsReader<T?> =
         JsReader.nullableOrDefault(byPath, using, defaultValue)
 
-    /**
-     * Reads a required and not nullable field which represent as array at an attribute name [byName].
-     *
-     * - If node by attribute name [byName] is not found then returns [JsError.PathMissing]
-     * - If the entire path is found then applies [reader]
-     */
-    fun <T : Any> readTraversable(byName: String, using: JsReader<T>): JsReader<List<T>> =
-        readTraversable(JsPath(byName), using)
+    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> =
+        JsReader { input -> JsReader.traversable(input, using, CollectionBuilderFactory.listFactory()) }
 
-    /**
-     * Reads a required and not nullable field which represent as array at [JsPath].
-     *
-     * - If any node in [JsPath] is not found then returns [JsError.PathMissing]
-     * - If the entire path is found then applies [reader]
-     */
-    fun <T : Any> readTraversable(byPath: JsPath, using: JsReader<T>): JsReader<List<T>> =
-        JsReader.traversable(byPath, using, CollectionBuilderFactory.listFactory())
-
-    fun <T : Any, C : Collection<T>> readTraversable(
-        factory: CollectionBuilderFactory<T, C>,
-        byName: String,
-        using: JsReader<T>
-    ): JsReader<C> = readTraversable(factory, JsPath(byName), using)
-
-    fun <T : Any, C : Collection<T>> readTraversable(
-        factory: CollectionBuilderFactory<T, C>,
-        byPath: JsPath,
-        using: JsReader<T>
-    ): JsReader<C> = JsReader.traversable(byPath, using, factory)
+    fun <T : Any> set(using: JsReader<T>): JsReader<Set<T>> =
+        JsReader { input -> JsReader.traversable(input, using, CollectionBuilderFactory.setFactory()) }
 }

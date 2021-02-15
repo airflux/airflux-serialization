@@ -50,10 +50,12 @@ val firstLotValuePath = "tender" / "lots" / 0 / "value"
 
 
 ## JsReader
-Example 1
+
+### Reader for a 'Value' type.
 ```kotlin
 val ValueReader: JsReader<Value> = run {
     val amountAttributeReader = readRequired(byName = "amount", using = BasePrimitiveReader.bigDecimal)
+        .validation(min(BigDecimal("0.01")))
     val currencyAttributeReader = readRequired(byName = "currency", using = BasePrimitiveReader.string)
         .validation(isNotBlank())
 
@@ -67,7 +69,8 @@ val ValueReader: JsReader<Value> = run {
     }
 }
 ```
-Example 2
+
+### Reader for a 'Lot' type.
 ```kotlin
 val LotReader: JsReader<Lot> = run {
     val idAttributeReader = readRequired(byName = "id", using = BasePrimitiveReader.string)
@@ -88,13 +91,48 @@ val LotReader: JsReader<Lot> = run {
 }
 ```
 
+### Reader for a 'Tender' type.
+```kotlin
+val TenderReader: JsReader<Tender> = run {
+    val idAttributeReader = readRequired(byName = "id", using = BasePrimitiveReader.string)
+        .validation(isNotBlank())
+    val titleAttributeReader: JsReader<String> = readRequired(byName = "title", using = BasePrimitiveReader.string)
+        .validation(isNotBlank())
+    val valueAttributeReader = readNullable(byName = "value", using = ValueReader)
+    val lotsAttributeReader = readOrDefault(byName = "lots", using = list(LotReader), defaultValue = ::emptyList)
+        .validation(isUnique { lot -> lot.id })
+
+    ReaderDsl.reader { input ->
+        JsResult.Success(
+            Tender(
+                id = read(from = input, using = idAttributeReader).onFailure { return@reader it },
+                title = read(from = input, using = titleAttributeReader).onFailure { return@reader it },
+                value = read(from = input, using = valueAttributeReader).onFailure { return@reader it },
+                lots = read(from = input, using = lotsAttributeReader).onFailure { return@reader it }
+            )
+        )
+    }
+}
+```
+### Reader for a 'Request' type.
+```kotlin
+val RequestReader: JsReader<Request> = run {
+    val tenderAttributeReader = readRequired(byName = "tender", using = TenderReader)
+
+    reader { input ->
+        val tender = read(from = input, using = tenderAttributeReader).onFailure { return@reader it }
+        JsResult.Success(Request(tender = tender))
+    }
+}
+```
+
 ## JsWriter
 ```kotlin
 val ValueWriter: JsWriter<Value> = objectWriter {
     writeRequired(from = Value::amount, to = "amount", using = DecimalWriter)
     writeRequired(from = Value::currency, to = "currency", using = BasePrimitiveWriter.string)
 }
-...
+
 val value = Value(amount = BigDecimal(125.52), currency = "USD")
 val output: JsValue = ValueWriter.write(value)
 val json = output.toString()
