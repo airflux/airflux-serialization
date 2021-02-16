@@ -7,6 +7,12 @@ sealed class ValidationErrors : JsError.Validation() {
     object Numbers {
         class Min(val expected: Int, val actual: Int) : ValidationErrors()
         class Max(val expected: Int, val actual: Int) : ValidationErrors()
+        class Eq(val expected: Int, val actual: Int) : ValidationErrors()
+        class Ne(val expected: Int, val actual: Int) : ValidationErrors()
+        class Gt(val expected: Int, val actual: Int) : ValidationErrors()
+        class Ge(val expected: Int, val actual: Int) : ValidationErrors()
+        class Lt(val expected: Int, val actual: Int) : ValidationErrors()
+        class Le(val expected: Int, val actual: Int) : ValidationErrors()
     }
 
     object Arrays {
