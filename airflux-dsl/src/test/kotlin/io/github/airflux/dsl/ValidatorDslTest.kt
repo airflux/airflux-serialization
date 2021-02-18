@@ -4,6 +4,7 @@ import io.github.airflux.common.ValidationErrors
 import io.github.airflux.dsl.ValidatorDsl.validation
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
+import io.github.airflux.reader.RequiredPathReader
 import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
@@ -37,7 +38,9 @@ class ValidatorDslTest {
         fun `Testing of the extension-function 'validation' for JsReader`() {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsString("user"))
-            val reader = JsReader.required(path = path, stringReader).validation(isNotEmpty)
+            val reader = JsReader { input ->
+                RequiredPathReader.required(from = input, path = path, stringReader)
+            }.validation(isNotEmpty)
 
             val result = reader.read(json)
 
@@ -50,7 +53,9 @@ class ValidatorDslTest {
         fun `Testing of the extension-function 'validation' for JsReader (error of validation)`() {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsString(""))
-            val reader = JsReader.required(path = path, stringReader).validation(isNotEmpty)
+            val reader = JsReader { input ->
+                RequiredPathReader.required(from = input, path = path, stringReader)
+            }.validation(isNotEmpty)
 
             val result = reader.read(json)
 
@@ -66,7 +71,9 @@ class ValidatorDslTest {
         fun `Testing of the extension-function 'validation' for JsReader (result is failure)`() {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsNull)
-            val reader = JsReader.required(path = path, stringReader).validation(isNotEmpty)
+            val reader = JsReader { input ->
+                RequiredPathReader.required(from = input, path = path, stringReader)
+            }.validation(isNotEmpty)
 
             val result = reader.read(json)
 

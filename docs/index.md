@@ -53,76 +53,68 @@ val firstLotValuePath = "tender" / "lots" / 0 / "value"
 
 ### Reader for a 'Value' type.
 ```kotlin
-val ValueReader: JsReader<Value> = run {
-    val amountAttributeReader = readRequired(byName = "amount", using = BasePrimitiveReader.bigDecimal)
-        .validation(min(BigDecimal("0.01")))
-    val currencyAttributeReader = readRequired(byName = "currency", using = BasePrimitiveReader.string)
-        .validation(isNotBlank())
-
-    reader { input ->
-        JsResult.Success(
-            Value(
-                amount = read(from = input, using = amountAttributeReader).onFailure { return@reader it },
-                currency = read(from = input, using = currencyAttributeReader).onFailure { return@reader it }
-            )
+val ValueReader: JsReader<Value> = reader { input ->
+    JsResult.Success(
+        Value(
+            amount = required(from = input, path = JsPath("amount"), using = BasePrimitiveReader.bigDecimal)
+                .validation(min(BigDecimal("0.01")))
+                .onFailure { return@reader it },
+            currency = required(from = input, path = JsPath("currency"), using = BasePrimitiveReader.string)
+                .validation(isNotBlank())
+                .onFailure { return@reader it }
         )
-    }
+    )
 }
 ```
 
 ### Reader for a 'Lot' type.
 ```kotlin
-val LotReader: JsReader<Lot> = run {
-    val idAttributeReader = readRequired(byName = "id", using = BasePrimitiveReader.string)
-        .validation(isNotBlank())
-    val statusAttributeReader = readRequired(byName = "status", using = BasePrimitiveReader.string)
-        .validation(isNotBlank())
-    val valueAttributeReader = readRequired(byName = "value", using = ValueReader)
+val LotReader: JsReader<Lot> = reader { input ->
+    JsResult.fx {
+        val (id) = required(from = input, path = JsPath("id"), BasePrimitiveReader.string)
+            .validation(isNotBlank())
+        val (status) = required(from = input, path = JsPath("status"), using = BasePrimitiveReader.string)
+            .validation(isNotBlank())
+        val (value) = required(from = input, path = JsPath("value"), using = ValueReader)
 
-    reader { input ->
-        JsResult.fx {
-            val (id) = read(from = input, using = idAttributeReader)
-            val (status) = read(from = input, using = statusAttributeReader)
-            val (value) = read(from = input, using = valueAttributeReader)
-
-            Lot(id = id, status = status, value = value)
-        }
+        Lot(id = id, status = status, value = value)
     }
 }
+```
+
+### Reader for a 'Lots' type.
+```kotlin
+val LotsReader = list(LotReader)
+    .validation(ArrayValidator.isUnique { lot -> lot.id })
 ```
 
 ### Reader for a 'Tender' type.
 ```kotlin
-val TenderReader: JsReader<Tender> = run {
-    val idAttributeReader = readRequired(byName = "id", using = BasePrimitiveReader.string)
-        .validation(isNotBlank())
-    val titleAttributeReader: JsReader<String> = readRequired(byName = "title", using = BasePrimitiveReader.string)
-        .validation(isNotBlank())
-    val valueAttributeReader = readNullable(byName = "value", using = ValueReader)
-    val lotsAttributeReader = readOrDefault(byName = "lots", using = list(LotReader), defaultValue = ::emptyList)
-        .validation(isUnique { lot -> lot.id })
-
-    ReaderDsl.reader { input ->
-        JsResult.Success(
-            Tender(
-                id = read(from = input, using = idAttributeReader).onFailure { return@reader it },
-                title = read(from = input, using = titleAttributeReader).onFailure { return@reader it },
-                value = read(from = input, using = valueAttributeReader).onFailure { return@reader it },
-                lots = read(from = input, using = lotsAttributeReader).onFailure { return@reader it }
-            )
+val TenderReader: JsReader<Tender> = reader { input ->
+    JsResult.Success(
+        Tender(
+            id = required(from = input, path = JsPath("id"), using = BasePrimitiveReader.string)
+                .validation(isNotBlank())
+                .onFailure { return@reader it },
+            title = required(from = input, path = JsPath("title"), using = BasePrimitiveReader.string)
+                .validation(isNotBlank())
+                .onFailure { return@reader it },
+            value = required(from = input, path = JsPath("value"), using = ValueReader)
+                .onFailure { return@reader it },
+            lots = required(from = input, path = JsPath("lots"), using = LotsReader)
+                .onFailure { return@reader it }
         )
-    }
+    )
 }
 ```
 ### Reader for a 'Request' type.
 ```kotlin
-val RequestReader: JsReader<Request> = run {
-    val tenderAttributeReader = readRequired(byName = "tender", using = TenderReader)
-
-    reader { input ->
-        val tender = read(from = input, using = tenderAttributeReader).onFailure { return@reader it }
-        JsResult.Success(Request(tender = tender))
-    }
+val RequestReader: JsReader<Request> = reader { input ->
+    JsResult.Success(
+        Request(
+            tender = required(from = input, path = JsPath("tender"), using = TenderReader)
+                .onFailure { return@reader it })
+    )
 }
 ```
 

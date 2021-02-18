@@ -27,7 +27,7 @@ fun main() {
     }
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")
-    val response = Response(value= value)
+    val response = Response(value = value)
     val output: JsValue = ResponseWriter.write(response)
     println(output.toString())
 }
