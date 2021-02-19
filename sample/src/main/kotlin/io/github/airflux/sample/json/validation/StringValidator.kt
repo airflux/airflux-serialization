@@ -2,22 +2,22 @@ package io.github.airflux.sample.json.validation
 
 import io.github.airflux.reader.validator.JsValidator
 import io.github.airflux.reader.validator.base.BaseStringValidators
-import io.github.airflux.sample.json.error.ValidationErrors
+import io.github.airflux.sample.json.error.JsonErrors
 
 object StringValidator {
 
-    fun minLength(value: Int): JsValidator<String, ValidationErrors.Strings> =
+    fun minLength(value: Int): JsValidator<String, JsonErrors.Validation.Strings> =
         BaseStringValidators.minLength(
             expected = value,
-            error = { expected, actual -> ValidationErrors.Strings.MinLength(expected, actual) }
+            error = { expected, actual -> JsonErrors.Validation.Strings.MinLength(expected, actual) }
         )
 
-    fun maxLength(value: Int): JsValidator<String, ValidationErrors.Strings> =
+    fun maxLength(value: Int): JsValidator<String, JsonErrors.Validation.Strings> =
         BaseStringValidators.maxLength(
             expected = value,
-            error = { expected, actual -> ValidationErrors.Strings.MaxLength(expected, actual) }
+            error = { expected, actual -> JsonErrors.Validation.Strings.MaxLength(expected, actual) }
         )
 
-    fun isNotBlank(): JsValidator<String, ValidationErrors.Strings.IsEmpty> =
-        BaseStringValidators.isNotBlank { ValidationErrors.Strings.IsEmpty }
+    val isNotBlank: JsValidator<String, JsonErrors.Validation.Strings> =
+        BaseStringValidators.isNotBlank { JsonErrors.Validation.Strings.IsEmpty }
 }

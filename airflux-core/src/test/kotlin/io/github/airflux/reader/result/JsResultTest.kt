@@ -1,5 +1,6 @@
 package io.github.airflux.reader.result
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.path.JsPath
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
@@ -104,48 +105,48 @@ class JsResultTest {
             @Test
             fun `Testing the constructor of the Failure class with only error description`() {
 
-                val original = JsResult.Failure(JsError.PathMissing)
+                val original = JsResult.Failure(JsonErrors.PathMissing)
 
                 assertEquals(1, original.errors.size)
                 val (path, errors) = original.errors[0]
                 assertEquals(JsPath.empty, path)
                 assertEquals(1, errors.size)
                 val error = errors[0]
-                assertTrue(error is JsError.PathMissing)
+                assertTrue(error is JsonErrors.PathMissing)
             }
 
             @Test
             fun `Testing the constructor of the Failure class with path and one error description`() {
                 val path = JsPath("user")
 
-                val original = JsResult.Failure(path, JsError.PathMissing)
+                val original = JsResult.Failure(path, JsonErrors.PathMissing)
 
                 assertEquals(1, original.errors.size)
                 val (pathError, errors) = original.errors[0]
                 assertEquals(JsPath("user"), pathError)
                 assertEquals(1, errors.size)
                 val error = errors[0]
-                assertTrue(error is JsError.PathMissing)
+                assertTrue(error is JsonErrors.PathMissing)
             }
 
             @Test
             fun `Testing the constructor of the Failure class with path and errors description`() {
                 val path = JsPath("user")
 
-                val original = JsResult.Failure(path, listOf(JsError.PathMissing))
+                val original = JsResult.Failure(path, listOf(JsonErrors.PathMissing))
 
                 assertEquals(1, original.errors.size)
                 val (pathError, errors) = original.errors[0]
                 assertEquals(JsPath("user"), pathError)
                 assertEquals(1, errors.size)
-                assertTrue(errors[0] is JsError.PathMissing)
+                assertTrue(errors[0] is JsonErrors.PathMissing)
             }
         }
 
         @Test
         fun `Testing 'map' function of the Failure class`() {
             val path = JsPath("name")
-            val original: JsResult<String> = JsResult.Failure(path = path, error = JsError.PathMissing)
+            val original: JsResult<String> = JsResult.Failure(path = path, error = JsonErrors.PathMissing)
 
             val result = original.map { it.toInt() }
 
@@ -154,13 +155,13 @@ class JsResultTest {
             val (pathError, errors) = result.errors[0]
             assertEquals(JsPath("name"), pathError)
             assertEquals(1, errors.size)
-            assertTrue(errors[0] is JsError.PathMissing)
+            assertTrue(errors[0] is JsonErrors.PathMissing)
         }
 
         @Test
         fun `Testing 'flatMap' function of the Failure class`() {
             val path = JsPath("name")
-            val original: JsResult<String> = JsResult.Failure(path = path, error = JsError.PathMissing)
+            val original: JsResult<String> = JsResult.Failure(path = path, error = JsonErrors.PathMissing)
 
             val result = original.flatMap { JsResult.Success(it.toInt()) }
 
@@ -169,7 +170,7 @@ class JsResultTest {
             val (pathError, errors) = result.errors[0]
             assertEquals(JsPath("name"), pathError)
             assertEquals(1, errors.size)
-            assertTrue(errors[0] is JsError.PathMissing)
+            assertTrue(errors[0] is JsonErrors.PathMissing)
         }
 
         @Test

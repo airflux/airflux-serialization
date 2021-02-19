@@ -1,7 +1,7 @@
 package io.github.airflux.reader
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsValue
@@ -38,7 +38,7 @@ class JsReaderTest {
             JsResult.Success(path = ID_PATH, value = ID_VALUE)
         }
         val identifierReader = JsReader<String> {
-            JsResult.Failure(path = IDENTIFIER_PATH, error = JsError.PathMissing)
+            JsResult.Failure(path = IDENTIFIER_PATH, error = JsonErrors.PathMissing)
         }
         val composeReader = idReader or identifierReader
 
@@ -52,7 +52,7 @@ class JsReaderTest {
     @Test
     fun `Testing 'or' function of the JsReader class (second reader)`() {
         val idReader = JsReader<String> {
-            JsResult.Failure(path = ID_PATH, error = JsError.PathMissing)
+            JsResult.Failure(path = ID_PATH, error = JsonErrors.PathMissing)
         }
         val identifierReader = JsReader {
             JsResult.Success(path = IDENTIFIER_PATH, value = IDENTIFIER_VALUE)
@@ -69,12 +69,12 @@ class JsReaderTest {
     @Test
     fun `Testing 'or' function of the JsReader class (failure both reader)`() {
         val idReader = JsReader {
-            JsResult.Failure(path = ID_PATH, error = JsError.PathMissing)
+            JsResult.Failure(path = ID_PATH, error = JsonErrors.PathMissing)
         }
         val identifierReader = JsReader {
             JsResult.Failure(
                 path = IDENTIFIER_PATH,
-                error = JsError.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+                error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
             )
         }
         val composeReader = idReader or identifierReader
@@ -89,14 +89,14 @@ class JsReaderTest {
             assertEquals(ID_PATH, pathError)
 
             assertEquals(1, errors.size)
-            assertTrue(errors[0] is JsError.PathMissing)
+            assertTrue(errors[0] is JsonErrors.PathMissing)
         }
 
         failures[1].also { (pathError, errors) ->
             assertEquals(IDENTIFIER_PATH, pathError)
 
             assertEquals(1, errors.size)
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.OBJECT, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }

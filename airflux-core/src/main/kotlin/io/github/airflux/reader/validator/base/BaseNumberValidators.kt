@@ -13,7 +13,7 @@ object BaseNumberValidators {
     fun <T, E> min(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value < expected)
                 JsValidationResult.Failure(error(expected, value))
@@ -27,7 +27,7 @@ object BaseNumberValidators {
     fun <T, E> max(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value > expected)
                 JsValidationResult.Failure(error(expected, value))
@@ -41,7 +41,7 @@ object BaseNumberValidators {
     fun <T, E> eq(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value == expected)
                 JsValidationResult.Success
@@ -55,7 +55,7 @@ object BaseNumberValidators {
     fun <T, E> ne(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value != expected)
                 JsValidationResult.Success
@@ -69,7 +69,7 @@ object BaseNumberValidators {
     fun <T, E> gt(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value > expected)
                 JsValidationResult.Success
@@ -83,7 +83,7 @@ object BaseNumberValidators {
     fun <T, E> ge(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value >= expected)
                 JsValidationResult.Success
@@ -97,7 +97,7 @@ object BaseNumberValidators {
     fun <T, E> lt(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value < expected)
                 JsValidationResult.Success
@@ -111,7 +111,7 @@ object BaseNumberValidators {
     fun <T, E> le(expected: T, error: (expected: T, actual: T) -> E): JsValidator<T, E>
         where T : Number,
               T : Comparable<T>,
-              E : JsError.Validation =
+              E : JsError =
         JsValidator { value ->
             if (value <= expected)
                 JsValidationResult.Success

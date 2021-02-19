@@ -15,25 +15,41 @@ interface RequiredPathReader {
 
     companion object {
 
-        fun <T : Any> required(from: JsLookup, using: JsReader<T>): JsResult<T> =
+        fun <T : Any> required(
+            from: JsLookup,
+            using: JsReader<T>,
+            errorPathMissing: () -> JsError,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T> =
             when (from) {
                 is JsLookup.Defined -> using.read(from.value).repath(from.path)
 
                 is JsLookup.Undefined.PathMissing ->
-                    JsResult.Failure(path = from.path, error = JsError.PathMissing)
+                    JsResult.Failure(path = from.path, error = errorPathMissing())
 
                 is JsLookup.Undefined.InvalidType ->
-                    JsResult.Failure(path = from.path, error = JsError.InvalidType(from.expected, from.actual))
+                    JsResult.Failure(path = from.path, error = errorInvalidType(from.expected, from.actual))
             }
 
         /**
          * Reads a required field at [JsPath].
          *
-         * - If any node in [JsPath] is not found then returns error [JsError.PathMissing]
-         * - If any node does not match path element type, then returning error [JsError.InvalidType]
+         * - If any node in [JsPath] is not found then returns error [errorPathMissing]
+         * - If any node does not match path element type, then returning error [errorInvalidType]
          * - If the entire path is found then applies [reader]
          */
-        fun <T : Any> required(from: JsValue, path: JsPath, using: JsReader<T>): JsResult<T> =
-            required(from = from.lookup(path), using = using)
+        fun <T : Any> required(
+            from: JsValue,
+            path: JsPath,
+            using: JsReader<T>,
+            errorPathMissing: () -> JsError,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T> =
+            required(
+                from = from.lookup(path),
+                using = using,
+                errorPathMissing = errorPathMissing,
+                errorInvalidType = errorInvalidType
+            )
     }
 }

@@ -8,7 +8,7 @@ import io.github.airflux.reader.validator.JsValidator
 object BaseStringValidators {
 
     fun <E> minLength(expected: Int, error: (expected: Int, actual: Int) -> E): JsValidator<String, E>
-        where E : JsError.Validation =
+        where E : JsError =
         JsValidator { value ->
             if (value.length < expected)
                 JsValidationResult.Failure(error(expected, value.length))
@@ -17,7 +17,7 @@ object BaseStringValidators {
         }
 
     fun <E> maxLength(expected: Int, error: (expected: Int, actual: Int) -> E): JsValidator<String, E>
-        where E : JsError.Validation =
+        where E : JsError =
         JsValidator { value ->
             if (value.length > expected)
                 JsValidationResult.Failure(error(expected, value.length))
@@ -26,7 +26,7 @@ object BaseStringValidators {
         }
 
     fun <E> isNotEmpty(error: () -> E): JsValidator<String, E>
-        where E : JsError.Validation =
+        where E : JsError =
         JsValidator { value ->
             if (value.isEmpty())
                 JsValidationResult.Failure(error())
@@ -35,7 +35,7 @@ object BaseStringValidators {
         }
 
     fun <E> isNotBlank(error: () -> E): JsValidator<String, E>
-        where E : JsError.Validation =
+        where E : JsError =
         JsValidator { value ->
             if (value.isBlank())
                 JsValidationResult.Failure(error())
@@ -44,7 +44,7 @@ object BaseStringValidators {
         }
 
     fun <E> pattern(pattern: Regex, error: (value: String, pattern: Regex) -> E): JsValidator<String, E>
-        where E : JsError.Validation =
+        where E : JsError =
         JsValidator { value ->
             if (pattern.matches(value))
                 JsValidationResult.Success
@@ -52,8 +52,8 @@ object BaseStringValidators {
                 JsValidationResult.Failure(error(value, pattern))
         }
 
-    fun <E> isA(predicate: (String) -> Boolean, error: (value: String) -> E): JsValidator<String, E>
-        where E : JsError.Validation =
+    fun <E> isA(predicate: (String) -> Boolean, error: (value: String) -> JsError): JsValidator<String, JsError>
+        where E : JsError =
         JsValidator { value ->
             if (predicate(value))
                 JsValidationResult.Success

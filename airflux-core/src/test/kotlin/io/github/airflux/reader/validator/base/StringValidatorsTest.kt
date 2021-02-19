@@ -1,5 +1,6 @@
 package io.github.airflux.reader.validator.base
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 import org.junit.jupiter.api.Nested
@@ -10,38 +11,39 @@ import kotlin.test.assertTrue
 class StringValidatorsTest {
 
     companion object {
-        fun minLengthBasicValidator(value: Int) =
-            BaseStringValidators.minLength<ValidationErrors>(
+
+        private fun minLengthBasicValidator(value: Int) =
+            BaseStringValidators.minLength<JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Strings.MinLength(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Strings.MinLength(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun maxLengthBasicValidator(value: Int) =
-            BaseStringValidators.maxLength<ValidationErrors>(
+        private fun maxLengthBasicValidator(value: Int) =
+            BaseStringValidators.maxLength<JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Strings.MaxLength(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Strings.MaxLength(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        val isNotEmptyValidator: JsValidator<String, ValidationErrors> =
-            BaseStringValidators.isNotEmpty { ValidationErrors.Strings.IsEmpty }
+        private val isNotEmptyValidator: JsValidator<String, JsonErrors.Validation> =
+            BaseStringValidators.isNotEmpty { JsonErrors.Validation.Strings.IsEmpty }
 
-        val isNotBlankValidator: JsValidator<String, ValidationErrors> =
-            BaseStringValidators.isNotBlank { ValidationErrors.Strings.IsBlank }
+        private val isNotBlankValidator: JsValidator<String, JsonErrors.Validation> =
+            BaseStringValidators.isNotBlank { JsonErrors.Validation.Strings.IsBlank }
 
-        fun patternBasicValidator(pattern: Regex) =
-            BaseStringValidators.pattern<ValidationErrors>(
+        private fun patternBasicValidator(pattern: Regex) =
+            BaseStringValidators.pattern<JsonErrors.Validation>(
                 pattern = pattern,
-                error = { value, regexp -> ValidationErrors.Strings.Pattern(value = value, regex = regexp) }
+                error = { value, regexp -> JsonErrors.Validation.Strings.Pattern(value = value, regex = regexp) }
             )
 
-        fun isABasicValidator(predicate: (String) -> Boolean) =
-            BaseStringValidators.isA<ValidationErrors>(
+        private fun isABasicValidator(predicate: (String) -> Boolean) =
+            BaseStringValidators.isA<JsonErrors.Validation>(
                 predicate = predicate,
-                error = { value -> ValidationErrors.Strings.IsA(value = value) }
+                error = { value -> JsonErrors.Validation.Strings.IsA(value = value) }
             )
     }
 
@@ -56,7 +58,7 @@ class StringValidatorsTest {
             val result = validator.validation("")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.MinLength
+            val reason = result.reason as JsonErrors.Validation.Strings.MinLength
             assertEquals(minimum, reason.expected)
             assertEquals(0, reason.actual)
         }
@@ -69,7 +71,7 @@ class StringValidatorsTest {
             val result = validator.validation(" ")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.MinLength
+            val reason = result.reason as JsonErrors.Validation.Strings.MinLength
             assertEquals(minimum, reason.expected)
             assertEquals(1, reason.actual)
         }
@@ -102,7 +104,7 @@ class StringValidatorsTest {
             val result = validator.validation("a")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.MinLength
+            val reason = result.reason as JsonErrors.Validation.Strings.MinLength
             assertEquals(minimum, reason.expected)
             assertEquals(1, reason.actual)
         }
@@ -169,7 +171,7 @@ class StringValidatorsTest {
             val result = validator.validation("   ")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.MaxLength
+            val reason = result.reason as JsonErrors.Validation.Strings.MaxLength
             assertEquals(maximum, reason.expected)
             assertEquals(3, reason.actual)
         }
@@ -202,7 +204,7 @@ class StringValidatorsTest {
             val result = validator.validation("abc")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.MaxLength
+            val reason = result.reason as JsonErrors.Validation.Strings.MaxLength
             assertEquals(maximum, reason.expected)
             assertEquals(3, reason.actual)
         }
@@ -216,7 +218,7 @@ class StringValidatorsTest {
             val result = isNotEmptyValidator.validation("")
 
             result as JsValidationResult.Failure
-            assertTrue(result.reason is ValidationErrors.Strings.IsEmpty)
+            assertTrue(result.reason is JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
@@ -243,7 +245,7 @@ class StringValidatorsTest {
             val result = isNotBlankValidator.validation("")
 
             result as JsValidationResult.Failure
-            assertTrue(result.reason is ValidationErrors.Strings.IsBlank)
+            assertTrue(result.reason is JsonErrors.Validation.Strings.IsBlank)
         }
 
         @Test
@@ -252,7 +254,7 @@ class StringValidatorsTest {
             val result = isNotBlankValidator.validation(" ")
 
             result as JsValidationResult.Failure
-            assertTrue(result.reason is ValidationErrors.Strings.IsBlank)
+            assertTrue(result.reason is JsonErrors.Validation.Strings.IsBlank)
         }
 
         @Test
@@ -274,7 +276,7 @@ class StringValidatorsTest {
             val result = validator.validation("")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.Pattern
+            val reason = result.reason as JsonErrors.Validation.Strings.Pattern
             assertEquals(regex.pattern, reason.regex.pattern)
             assertEquals("", reason.value)
         }
@@ -291,7 +293,7 @@ class StringValidatorsTest {
             val result = validator.validation("aab")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.Pattern
+            val reason = result.reason as JsonErrors.Validation.Strings.Pattern
             assertEquals(regex.pattern, reason.regex.pattern)
             assertEquals("aab", reason.value)
         }
@@ -315,7 +317,7 @@ class StringValidatorsTest {
             val result = validator.validation("abc")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.IsA
+            val reason = result.reason as JsonErrors.Validation.Strings.IsA
             assertEquals("abc", reason.value)
         }
 
@@ -324,7 +326,7 @@ class StringValidatorsTest {
             val result = validator.validation("")
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Strings.IsA
+            val reason = result.reason as JsonErrors.Validation.Strings.IsA
             assertEquals("", reason.value)
         }
     }

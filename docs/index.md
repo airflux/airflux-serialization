@@ -51,19 +51,58 @@ val firstLotValuePath = "tender" / "lots" / 0 / "value"
 
 ## JsReader
 
+### Define errors builder.
+```kotlin
+object ErrorBuilder {
+    val PathMissing: () -> JsError = { JsonErrors.PathMissing }
+    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError = JsonErrors::InvalidType
+}
+```
+
+### Define base readers.
+#### Define readers for primitive types.
+```kotlin
+object PrimitiveReader : BasePrimitiveReader {
+    val stringReader = BasePrimitiveReader.string(ErrorBuilder.InvalidType)
+    val bigDecimalReader = BasePrimitiveReader.bigDecimal(ErrorBuilder.InvalidType)
+}
+```
+#### Define path-readers.
+```kotlin
+object PathReaders {
+
+    fun <T : Any> required(from: JsValue, path: JsPath, using: JsReader<T>): JsResult<T> =
+        RequiredPathReader.required(from, path, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+
+    fun <T : Any> nullable(from: JsValue, path: JsPath, using: JsReader<T>): JsResult<T?> =
+        NullablePathReader.nullable(from, path, using, ErrorBuilder.InvalidType)
+}
+```
+#### Define traversable-readers.
+```kotlin
+object TraversableReaders {
+    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = TraversableReader.list(using, ErrorBuilder.InvalidType)
+}
+```
+
 ### Reader for a 'Value' type.
 ```kotlin
-val ValueReader: JsReader<Value> = reader { input ->
-    JsResult.Success(
-        Value(
-            amount = required(from = input, path = JsPath("amount"), using = BasePrimitiveReader.bigDecimal)
-                .validation(min(BigDecimal("0.01")))
-                .onFailure { return@reader it },
-            currency = required(from = input, path = JsPath("currency"), using = BasePrimitiveReader.string)
-                .validation(isNotBlank())
-                .onFailure { return@reader it }
+val ValueReader: JsReader<Value> = run {
+    val amountMoreZero = gt(BigDecimal("0.01"))
+
+    reader { input ->
+        JsResult.Success(
+            Value(
+                amount = required(from = input, path = JsPath("amount"), using = bigDecimalReader)
+                    .validation(amountMoreZero)
+                    .onFailure { return@reader it },
+
+                currency = required(from = input, path = JsPath("currency"), using = stringReader)
+                    .validation(isNotBlank)
+                    .onFailure { return@reader it }
+            )
         )
-    )
+    }
 }
 ```
 
@@ -71,10 +110,10 @@ val ValueReader: JsReader<Value> = reader { input ->
 ```kotlin
 val LotReader: JsReader<Lot> = reader { input ->
     JsResult.fx {
-        val (id) = required(from = input, path = JsPath("id"), BasePrimitiveReader.string)
-            .validation(isNotBlank())
-        val (status) = required(from = input, path = JsPath("status"), using = BasePrimitiveReader.string)
-            .validation(isNotBlank())
+        val (id) = required(from = input, path = JsPath("id"), using = stringReader)
+            .validation(isNotBlank)
+        val (status) = required(from = input, path = JsPath("status"), using = stringReader)
+            .validation(isNotBlank)
         val (value) = required(from = input, path = JsPath("value"), using = ValueReader)
 
         Lot(id = id, status = status, value = value)
@@ -85,7 +124,7 @@ val LotReader: JsReader<Lot> = reader { input ->
 ### Reader for a 'Lots' type.
 ```kotlin
 val LotsReader = list(LotReader)
-    .validation(ArrayValidator.isUnique { lot -> lot.id })
+    .validation(isUnique { lot -> lot.id })
 ```
 
 ### Reader for a 'Tender' type.
@@ -93,13 +132,13 @@ val LotsReader = list(LotReader)
 val TenderReader: JsReader<Tender> = reader { input ->
     JsResult.Success(
         Tender(
-            id = required(from = input, path = JsPath("id"), using = BasePrimitiveReader.string)
-                .validation(isNotBlank())
+            id = required(from = input, path = JsPath("id"), using = stringReader)
+                .validation(isNotBlank)
                 .onFailure { return@reader it },
-            title = required(from = input, path = JsPath("title"), using = BasePrimitiveReader.string)
-                .validation(isNotBlank())
+            title = required(from = input, path = JsPath("title"), using = stringReader)
+                .validation(isNotBlank)
                 .onFailure { return@reader it },
-            value = required(from = input, path = JsPath("value"), using = ValueReader)
+            value = nullable(from = input, path = JsPath("value"), using = ValueReader)
                 .onFailure { return@reader it },
             lots = required(from = input, path = JsPath("lots"), using = LotsReader)
                 .onFailure { return@reader it }

@@ -12,23 +12,23 @@ interface TraversableReader {
     companion object {
 
         /**
-         * Build of reader for read a node which represent as array.
-         *
-         * - If node does not match array type, then returning error.
-         * - If node match array type, then applies [using]
-         */
-        fun <T : Any, C> traversable(using: JsReader<T>, factory: CollectionBuilderFactory<T, C>): JsReader<C>
-            where C : Collection<T> =
-            JsReader { from -> readCollection(from = from, using = using, factory = factory) }
-
-        /**
          * Build of reader for read a node as list.
          *
          * - If node does not match array type, then returning error.
          * - If node match array type, then applies [using]
          */
-        fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> =
-            traversable(using = using, factory = CollectionBuilderFactory.listFactory())
+        fun <T : Any> list(
+            using: JsReader<T>,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsReader<List<T>> =
+            JsReader { input ->
+                traversable(
+                    from = input,
+                    using = using,
+                    factory = CollectionBuilderFactory.listFactory(),
+                    errorInvalidType = errorInvalidType
+                )
+            }
 
         /**
          * Build of reader for read a node as set.
@@ -36,13 +36,30 @@ interface TraversableReader {
          * - If node does not match array type, then returning error.
          * - If node match array type, then applies [using]
          */
-        fun <T : Any> set(using: JsReader<T>): JsReader<Set<T>> =
-            traversable(using = using, factory = CollectionBuilderFactory.setFactory())
+        fun <T : Any> set(
+            using: JsReader<T>,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsReader<Set<T>> =
+            JsReader { input ->
+                traversable(
+                    from = input,
+                    using = using,
+                    factory = CollectionBuilderFactory.setFactory(),
+                    errorInvalidType = errorInvalidType
+                )
+            }
 
-        private fun <T : Any, C> readCollection(
+        /**
+         * Reads a node which represent as array.
+         *
+         * - If node does not match array type, then returning error.
+         * - If node match array type, then applies [using]
+         */
+        fun <T : Any, C> traversable(
             from: JsValue,
             using: JsReader<T>,
-            factory: CollectionBuilderFactory<T, C>
+            factory: CollectionBuilderFactory<T, C>,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
         ): JsResult<C>
             where C : Collection<T> =
             when (from) {
@@ -71,7 +88,7 @@ interface TraversableReader {
                         .map { it.result() }
                 }
 
-                else -> JsResult.Failure(error = JsError.InvalidType(JsValue.Type.ARRAY, from.type))
+                else -> JsResult.Failure(error = errorInvalidType(JsValue.Type.ARRAY, from.type))
             }
     }
 }

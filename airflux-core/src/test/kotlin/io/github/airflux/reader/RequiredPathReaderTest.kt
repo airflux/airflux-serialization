@@ -1,10 +1,10 @@
 package io.github.airflux.reader
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.RequiredPathReader.Companion.required
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -17,7 +17,8 @@ import kotlin.test.assertTrue
 class RequiredPathReaderTest {
 
     companion object {
-        val stringReader: JsReader<String> = JsReader { input -> JsResult.Success((input as JsString).underlying) }
+        private val stringReader: JsReader<String> =
+            JsReader { input -> JsResult.Success((input as JsString).underlying) }
     }
 
     @Nested
@@ -27,7 +28,12 @@ class RequiredPathReaderTest {
         fun `Testing 'required' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String> = required(from = from, using = stringReader)
+            val result: JsResult<String> = required(
+                from = from,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
 
             result as JsResult.Success
             assertEquals(JsPath.empty / "name", result.path)
@@ -38,7 +44,12 @@ class RequiredPathReaderTest {
         fun `Testing 'required' function (an attribute is not found)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String> = required(from = from, using = stringReader)
+            val result: JsResult<String> = required(
+                from = from,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -47,7 +58,7 @@ class RequiredPathReaderTest {
                     assertEquals(JsPath.empty / "name", pathError)
 
                     assertEquals(1, errors.size)
-                    assertTrue(errors[0] is JsError.PathMissing)
+                    assertTrue(errors[0] is JsonErrors.PathMissing)
                 }
         }
 
@@ -59,7 +70,12 @@ class RequiredPathReaderTest {
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String> = required(from = from, using = stringReader)
+            val result: JsResult<String> = required(
+                from = from,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -68,7 +84,7 @@ class RequiredPathReaderTest {
                     assertEquals(JsPath.empty / "name", pathError)
 
                     assertEquals(1, errors.size)
-                    val error = errors[0] as JsError.InvalidType
+                    val error = errors[0] as JsonErrors.InvalidType
                     assertEquals(JsValue.Type.ARRAY, error.expected)
                     assertEquals(JsValue.Type.STRING, error.actual)
                 }
@@ -85,7 +101,13 @@ class RequiredPathReaderTest {
             )
             val path = JsPath.empty / "name"
 
-            val result: JsResult<String> = required(from = json, path = path, using = stringReader)
+            val result: JsResult<String> = required(
+                from = json,
+                path = path,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
 
             result as JsResult.Success
             assertEquals(JsPath.empty / "name", result.path)
@@ -99,7 +121,13 @@ class RequiredPathReaderTest {
             )
             val path = JsPath.empty / "role"
 
-            val result: JsResult<String> = required(from = json, path = path, using = stringReader)
+            val result: JsResult<String> = required(
+                from = json,
+                path = path,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -108,7 +136,7 @@ class RequiredPathReaderTest {
                     assertEquals(JsPath.empty / "role", pathError)
 
                     assertEquals(1, errors.size)
-                    assertTrue(errors[0] is JsError.PathMissing)
+                    assertTrue(errors[0] is JsonErrors.PathMissing)
                 }
         }
 
@@ -117,7 +145,13 @@ class RequiredPathReaderTest {
             val json: JsValue = JsString(USER_NAME_VALUE)
             val path = JsPath.empty / "name"
 
-            val result: JsResult<String> = required(from = json, path = path, using = stringReader)
+            val result: JsResult<String> = required(
+                from = json,
+                path = path,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -126,7 +160,7 @@ class RequiredPathReaderTest {
                     assertEquals(JsPath.empty, pathError)
 
                     assertEquals(1, errors.size)
-                    val error = errors[0] as JsError.InvalidType
+                    val error = errors[0] as JsonErrors.InvalidType
                     assertEquals(JsValue.Type.OBJECT, error.expected)
                     assertEquals(JsValue.Type.STRING, error.actual)
                 }

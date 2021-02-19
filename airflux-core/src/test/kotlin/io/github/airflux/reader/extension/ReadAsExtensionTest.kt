@@ -1,7 +1,7 @@
 package io.github.airflux.reader.extension
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
@@ -20,7 +20,7 @@ class ReadAsExtensionTest {
         fun `Testing extension-function 'readAsBoolean'`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsBoolean()
+            val result = json.readAsBoolean(JsonErrors::InvalidType)
 
             result as JsResult.Success
             assertEquals(true, result.value)
@@ -30,7 +30,7 @@ class ReadAsExtensionTest {
         fun `Testing extension-function 'readAsBoolean' (invalid type)`() {
             val json = JsString("abc")
 
-            val result = json.readAsBoolean()
+            val result = json.readAsBoolean(JsonErrors::InvalidType)
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -39,7 +39,7 @@ class ReadAsExtensionTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.BOOLEAN, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }
@@ -51,7 +51,7 @@ class ReadAsExtensionTest {
         fun `Testing extension-function 'readAsString'`() {
             val json: JsValue = JsString("abc")
 
-            val result = json.readAsString()
+            val result = json.readAsString(JsonErrors::InvalidType)
 
             result as JsResult.Success
             assertEquals("abc", result.value)
@@ -61,7 +61,7 @@ class ReadAsExtensionTest {
         fun `Testing extension-function 'readAsString' (invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsString()
+            val result = json.readAsString(JsonErrors::InvalidType)
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -70,7 +70,7 @@ class ReadAsExtensionTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.STRING, error.expected)
             assertEquals(JsValue.Type.BOOLEAN, error.actual)
         }
@@ -85,7 +85,7 @@ class ReadAsExtensionTest {
         fun `Testing extension-function 'readAsNumber'`() {
             val json: JsValue = JsNumber.valueOf(Int.MAX_VALUE)
 
-            val result = json.readAsNumber(transformer)
+            val result = json.readAsNumber(JsonErrors::InvalidType, transformer)
 
             result as JsResult.Success
             assertEquals(Int.MAX_VALUE, result.value)
@@ -95,7 +95,7 @@ class ReadAsExtensionTest {
         fun `Testing extension-function 'readAsNumber' invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsNumber(transformer)
+            val result = json.readAsNumber(JsonErrors::InvalidType, transformer)
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -104,7 +104,7 @@ class ReadAsExtensionTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.NUMBER, error.expected)
             assertEquals(JsValue.Type.BOOLEAN, error.actual)
         }

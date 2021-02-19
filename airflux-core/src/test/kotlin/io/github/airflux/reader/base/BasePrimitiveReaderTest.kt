@@ -1,7 +1,7 @@
 package io.github.airflux.reader.base
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
@@ -18,7 +18,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class BooleanReader {
-        val reader = BasePrimitiveReader.boolean
+        val reader = BasePrimitiveReader.boolean(JsonErrors::InvalidType)
 
         @Test
         fun `Testing reader for 'Boolean' type`() {
@@ -45,7 +45,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.BOOLEAN, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }
@@ -53,7 +53,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class StringReader {
-        val reader = BasePrimitiveReader.string
+        val reader = BasePrimitiveReader.string(JsonErrors::InvalidType)
 
         @Test
         fun `Testing reader for 'String' type`() {
@@ -80,7 +80,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.STRING, error.expected)
             assertEquals(JsValue.Type.BOOLEAN, error.actual)
         }
@@ -88,7 +88,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class ByteReader {
-        val reader = BasePrimitiveReader.byte
+        val reader = BasePrimitiveReader.byte(JsonErrors::InvalidType, JsonErrors::ValueCast)
 
         @TestFactory
         fun `Testing reader for 'Byte' type`(): Collection<DynamicTest> =
@@ -120,7 +120,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.NUMBER, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }
@@ -138,7 +138,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals(Long.MAX_VALUE.toString(), error.value)
             assertEquals(Byte::class, error.type)
         }
@@ -156,7 +156,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Byte::class, error.type)
         }
@@ -164,7 +164,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class ShortReader {
-        val reader = BasePrimitiveReader.short
+        val reader = BasePrimitiveReader.short(JsonErrors::InvalidType, JsonErrors::ValueCast)
 
         @TestFactory
         fun `Testing reader for 'Short' type`(): Collection<DynamicTest> =
@@ -196,7 +196,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.NUMBER, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }
@@ -214,7 +214,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals(Long.MAX_VALUE.toString(), error.value)
             assertEquals(Short::class, error.type)
         }
@@ -232,7 +232,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Short::class, error.type)
         }
@@ -240,7 +240,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class IntReader {
-        val reader = BasePrimitiveReader.int
+        val reader = BasePrimitiveReader.int(JsonErrors::InvalidType, JsonErrors::ValueCast)
 
         @TestFactory
         fun `Testing reader for 'Int' type`(): Collection<DynamicTest> =
@@ -272,7 +272,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.NUMBER, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }
@@ -290,7 +290,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals(Long.MAX_VALUE.toString(), error.value)
             assertEquals(Int::class, error.type)
         }
@@ -308,7 +308,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Int::class, error.type)
         }
@@ -316,7 +316,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class LongReader {
-        val reader = BasePrimitiveReader.long
+        val reader = BasePrimitiveReader.long(JsonErrors::InvalidType, JsonErrors::ValueCast)
 
         @TestFactory
         fun `Testing reader for 'Long' type`(): Collection<DynamicTest> =
@@ -348,7 +348,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.NUMBER, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }
@@ -366,7 +366,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.ValueCast
+            val error = errors[0] as JsonErrors.ValueCast
             assertEquals("10.5", error.value)
             assertEquals(Long::class, error.type)
         }
@@ -374,7 +374,7 @@ class BasePrimitiveReaderTest {
 
     @Nested
     inner class BigDecimalReader {
-        val reader = BasePrimitiveReader.bigDecimal
+        val reader = BasePrimitiveReader.bigDecimal(JsonErrors::InvalidType)
 
         @TestFactory
         fun `Testing reader for 'BigDecimal' type`(): Collection<DynamicTest> =
@@ -406,7 +406,7 @@ class BasePrimitiveReaderTest {
             assertEquals(JsPath.empty, path)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.NUMBER, error.expected)
             assertEquals(JsValue.Type.STRING, error.actual)
         }

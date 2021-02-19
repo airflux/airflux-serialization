@@ -1,12 +1,9 @@
-package io.github.airflux.dsl
+package io.github.airflux.reader.validator.extension
 
-import io.github.airflux.common.ValidationErrors
-import io.github.airflux.dsl.ValidatorDsl.validation
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.RequiredPathReader
-import io.github.airflux.reader.extension.readAsString
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
@@ -19,16 +16,24 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ValidatorDslTest {
+class JsValidatorExtensionTest {
 
     companion object {
-        private val isNotEmpty = JsValidator<String, ValidationErrors> {
+        private val isNotEmpty = JsValidator<String, JsonErrors.Validation> {
             if (it.isNotEmpty())
                 JsValidationResult.Success
             else
-                JsValidationResult.Failure(ValidationErrors.Strings.IsEmpty)
+                JsValidationResult.Failure(JsonErrors.Validation.Strings.IsEmpty)
         }
-        private val stringReader = JsReader { input -> input.readAsString() }
+
+        val stringReader: JsReader<String> = JsReader { input ->
+            when (input) {
+                is JsString -> JsResult.Success(input.underlying)
+                else -> JsResult.Failure(
+                    error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
+                )
+            }
+        }
     }
 
     @Nested
@@ -39,7 +44,13 @@ class ValidatorDslTest {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsString("user"))
             val reader = JsReader { input ->
-                RequiredPathReader.required(from = input, path = path, stringReader)
+                RequiredPathReader.required(
+                    from = input,
+                    path = path,
+                    using = stringReader,
+                    errorPathMissing = { JsonErrors.PathMissing },
+                    errorInvalidType = JsonErrors::InvalidType
+                )
             }.validation(isNotEmpty)
 
             val result = reader.read(json)
@@ -54,7 +65,13 @@ class ValidatorDslTest {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsString(""))
             val reader = JsReader { input ->
-                RequiredPathReader.required(from = input, path = path, stringReader)
+                RequiredPathReader.required(
+                    from = input,
+                    path = path,
+                    using = stringReader,
+                    errorPathMissing = { JsonErrors.PathMissing },
+                    errorInvalidType = JsonErrors::InvalidType
+                )
             }.validation(isNotEmpty)
 
             val result = reader.read(json)
@@ -64,7 +81,7 @@ class ValidatorDslTest {
             val (pathError, errors) = result.errors[0]
             assertEquals(path, pathError)
             assertEquals(1, errors.size)
-            assertTrue(errors[0] is ValidationErrors.Strings.IsEmpty)
+            assertTrue(errors[0] is JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
@@ -72,7 +89,13 @@ class ValidatorDslTest {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsNull)
             val reader = JsReader { input ->
-                RequiredPathReader.required(from = input, path = path, stringReader)
+                RequiredPathReader.required(
+                    from = input,
+                    path = path,
+                    using = stringReader,
+                    errorPathMissing = { JsonErrors.PathMissing },
+                    errorInvalidType = JsonErrors::InvalidType
+                )
             }.validation(isNotEmpty)
 
             val result = reader.read(json)
@@ -83,7 +106,7 @@ class ValidatorDslTest {
             assertEquals(path, pathError)
             assertEquals(1, errors.size)
 
-            val error = errors[0] as JsError.InvalidType
+            val error = errors[0] as JsonErrors.InvalidType
             assertEquals(JsValue.Type.STRING, error.expected)
             assertEquals(JsValue.Type.NULL, error.actual)
         }
@@ -116,13 +139,13 @@ class ValidatorDslTest {
             val (pathError, errors) = validated.errors[0]
             assertEquals(path, pathError)
             assertEquals(1, errors.size)
-            assertTrue(errors[0] is ValidationErrors.Strings.IsEmpty)
+            assertTrue(errors[0] is JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
         fun `Testing of the extension-function 'validation' for JsResult (result is failure)`() {
             val path = JsPath("user")
-            val result: JsResult<String> = JsResult.Failure(path = path, error = JsError.PathMissing)
+            val result: JsResult<String> = JsResult.Failure(path = path, error = JsonErrors.PathMissing)
 
             val validated = result.validation(isNotEmpty)
 
@@ -132,7 +155,7 @@ class ValidatorDslTest {
             assertEquals(path, pathError)
             assertEquals(1, errors.size)
 
-            assertTrue(errors[0] is JsError.PathMissing)
+            assertTrue(errors[0] is JsonErrors.PathMissing)
         }
     }
 }

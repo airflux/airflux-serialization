@@ -16,7 +16,11 @@ interface NullablePathReader {
 
     companion object {
 
-        fun <T : Any> nullable(from: JsLookup, using: JsReader<T>): JsResult<T?> =
+        fun <T : Any> nullable(
+            from: JsLookup,
+            using: JsReader<T>,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T?> =
             when (from) {
                 is JsLookup.Defined -> when (from.value) {
                     is JsNull -> JsResult.Success(path = from.path, value = null)
@@ -26,7 +30,7 @@ interface NullablePathReader {
                 is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = null)
 
                 is JsLookup.Undefined.InvalidType ->
-                    JsResult.Failure(path = from.path, error = JsError.InvalidType(from.expected, from.actual))
+                    JsResult.Failure(path = from.path, error = errorInvalidType(from.expected, from.actual))
             }
 
         /**
@@ -34,10 +38,15 @@ interface NullablePathReader {
          *
          * - If any node in [JsPath] is not found then returns 'null'
          * - If the last node in [JsPath] is found with value 'null' then returns 'null'
-         * - If any node does not match path element type, then returning error [JsError.InvalidType]
+         * - If any node does not match path element type, then returning error [errorInvalidType]
          * - If the entire path is found then applies [reader]
          */
-        fun <T : Any> nullable(from: JsValue, path: JsPath, using: JsReader<T>): JsResult<T?> =
-            nullable(from = from.lookup(path), using = using)
+        fun <T : Any> nullable(
+            from: JsValue,
+            path: JsPath,
+            using: JsReader<T>,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T?> =
+            nullable(from = from.lookup(path), using = using, errorInvalidType = errorInvalidType)
     }
 }

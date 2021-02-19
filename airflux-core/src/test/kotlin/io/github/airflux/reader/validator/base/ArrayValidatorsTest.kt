@@ -1,5 +1,6 @@
 package io.github.airflux.reader.validator.base
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.validator.JsValidationResult
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
@@ -8,22 +9,22 @@ import kotlin.test.assertEquals
 class ArrayValidatorsTest {
 
     companion object {
-        fun minItemsBasicValidator(value: Int) =
-            BaseArrayValidators.minItems<String, List<String>, ValidationErrors>(
+        private fun minItemsBasicValidator(value: Int) =
+            BaseArrayValidators.minItems<String, List<String>, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Arrays.MinItems(
+                    JsonErrors.Validation.Arrays.MinItems(
                         expected = expectedValue,
                         actual = actualValue
                     )
                 }
             )
 
-        fun maxItemsBasicValidator(value: Int) =
-            BaseArrayValidators.maxItems<String, List<String>, ValidationErrors>(
+        private fun maxItemsBasicValidator(value: Int) =
+            BaseArrayValidators.maxItems<String, List<String>, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Arrays.MaxItems(
+                    JsonErrors.Validation.Arrays.MaxItems(
                         expected = expectedValue,
                         actual = actualValue
                     )
@@ -31,10 +32,10 @@ class ArrayValidatorsTest {
             )
 
         fun <T, K> isUniqueBasicValidator(keySelector: (T) -> K) =
-            BaseArrayValidators.isUnique<T, K, ValidationErrors>(
+            BaseArrayValidators.isUnique<T, K, JsonErrors.Validation>(
                 keySelector = keySelector,
                 error = { index, value ->
-                    ValidationErrors.Arrays.Unique(index = index, value = value)
+                    JsonErrors.Validation.Arrays.Unique(index = index, value = value)
                 }
             )
     }
@@ -50,7 +51,7 @@ class ArrayValidatorsTest {
             val result = validator.validation(emptyList())
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Arrays.MinItems
+            val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
             assertEquals(minimum, reason.expected)
             assertEquals(0, reason.actual)
         }
@@ -63,7 +64,7 @@ class ArrayValidatorsTest {
             val result = validator.validation(listOf("A"))
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Arrays.MinItems
+            val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
             assertEquals(minimum, reason.expected)
             assertEquals(1, reason.actual)
         }
@@ -130,7 +131,7 @@ class ArrayValidatorsTest {
             val result = validator.validation(listOf("A", "B", "C"))
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Arrays.MaxItems
+            val reason = result.reason as JsonErrors.Validation.Arrays.MaxItems
             assertEquals(maximum, reason.expected)
             assertEquals(3, reason.actual)
         }
@@ -164,7 +165,7 @@ class ArrayValidatorsTest {
             val result = validator.validation(listOf("A", "B", "A", "C"))
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Arrays.Unique<*>
+            val reason = result.reason as JsonErrors.Validation.Arrays.Unique<*>
             assertEquals(2, reason.index)
             assertEquals("A", reason.value)
         }

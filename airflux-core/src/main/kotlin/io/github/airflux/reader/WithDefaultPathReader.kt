@@ -16,7 +16,12 @@ interface WithDefaultPathReader {
 
     companion object {
 
-        fun <T : Any> withDefault(from: JsLookup, using: JsReader<T>, defaultValue: () -> T): JsResult<T> =
+        fun <T : Any> withDefault(
+            from: JsLookup,
+            using: JsReader<T>,
+            defaultValue: () -> T,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T> =
             when (from) {
                 is JsLookup.Defined -> when (from.value) {
                     is JsNull -> JsResult.Success(path = from.path, value = defaultValue())
@@ -26,7 +31,7 @@ interface WithDefaultPathReader {
                 is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = defaultValue())
 
                 is JsLookup.Undefined.InvalidType ->
-                    JsResult.Failure(path = from.path, error = JsError.InvalidType(from.expected, from.actual))
+                    JsResult.Failure(path = from.path, error = errorInvalidType(from.expected, from.actual))
             }
 
         /**
@@ -34,10 +39,21 @@ interface WithDefaultPathReader {
          *
          * - If any node in [JsPath] is not found then returns [defaultValue]
          * - If the last node in [JsPath] is found with value 'null' then returns [defaultValue]
-         * - If any node does not match path element type, then returning error [JsError.InvalidType]
+         * - If any node does not match path element type, then returning error [errorInvalidType]
          * - If the entire path is found then applies [reader]
          */
-        fun <T : Any> withDefault(from: JsValue, path: JsPath, using: JsReader<T>, defaultValue: () -> T): JsResult<T> =
-            withDefault(from = from.lookup(path), using = using, defaultValue = defaultValue)
+        fun <T : Any> withDefault(
+            from: JsValue,
+            path: JsPath,
+            using: JsReader<T>,
+            defaultValue: () -> T,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T> =
+            withDefault(
+                from = from.lookup(path),
+                using = using,
+                defaultValue = defaultValue,
+                errorInvalidType = errorInvalidType
+            )
     }
 }

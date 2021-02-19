@@ -1,9 +1,9 @@
 package io.github.airflux.dsl
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
-import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
@@ -13,7 +13,14 @@ import kotlin.test.assertEquals
 class ReaderDslTest {
 
     companion object {
-        private val stringReader = JsReader { input -> input.readAsString() }
+        private val stringReader: JsReader<String> = JsReader { input ->
+            when (input) {
+                is JsString -> JsResult.Success(input.underlying)
+                else -> JsResult.Failure(
+                    error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
+                )
+            }
+        }
     }
 
     @Test

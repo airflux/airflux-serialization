@@ -1,6 +1,6 @@
 package io.github.airflux.reader.validator.base
 
-import io.github.airflux.reader.result.JsError
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.validator.JsValidationResult
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
@@ -10,67 +10,67 @@ class NumberValidatorsTest {
 
     companion object {
 
-        fun minBasicValidator(value: Int) =
-            BaseNumberValidators.min<Int, JsError.Validation>(
+        private fun minBasicValidator(value: Int) =
+            BaseNumberValidators.min<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Min(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Min(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun maxBasicValidator(value: Int) =
-            BaseNumberValidators.max<Int, JsError.Validation>(
+        private fun maxBasicValidator(value: Int) =
+            BaseNumberValidators.max<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Max(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Max(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun eqBasicValidator(value: Int) =
-            BaseNumberValidators.eq<Int, JsError.Validation>(
+        private fun eqBasicValidator(value: Int) =
+            BaseNumberValidators.eq<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Eq(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Eq(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun neBasicValidator(value: Int) =
-            BaseNumberValidators.ne<Int, JsError.Validation>(
+        private fun neBasicValidator(value: Int) =
+            BaseNumberValidators.ne<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Ne(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Ne(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun gtBasicValidator(value: Int) =
-            BaseNumberValidators.gt<Int, JsError.Validation>(
+        private fun gtBasicValidator(value: Int) =
+            BaseNumberValidators.gt<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Gt(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Gt(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun ltBasicValidator(value: Int) =
-            BaseNumberValidators.lt<Int, JsError.Validation>(
+        private fun ltBasicValidator(value: Int) =
+            BaseNumberValidators.lt<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Lt(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Lt(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun geBasicValidator(value: Int) =
-            BaseNumberValidators.ge<Int, JsError.Validation>(
+        private fun geBasicValidator(value: Int) =
+            BaseNumberValidators.ge<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Ge(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Ge(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        fun leBasicValidator(value: Int) =
-            BaseNumberValidators.le<Int, JsError.Validation>(
+        private fun leBasicValidator(value: Int) =
+            BaseNumberValidators.le<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
-                    ValidationErrors.Numbers.Le(expected = expectedValue, actual = actualValue)
+                    JsonErrors.Validation.Numbers.Le(expected = expectedValue, actual = actualValue)
                 }
             )
     }
@@ -87,7 +87,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Min
+            val reason = result.reason as JsonErrors.Validation.Numbers.Min
             assertEquals(minimum, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -149,7 +149,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Max
+            val reason = result.reason as JsonErrors.Validation.Numbers.Max
             assertEquals(maximum, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -167,7 +167,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Eq
+            val reason = result.reason as JsonErrors.Validation.Numbers.Eq
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -192,7 +192,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Eq
+            val reason = result.reason as JsonErrors.Validation.Numbers.Eq
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -221,7 +221,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Ne
+            val reason = result.reason as JsonErrors.Validation.Numbers.Ne
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -250,7 +250,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Gt
+            val reason = result.reason as JsonErrors.Validation.Numbers.Gt
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -264,7 +264,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Gt
+            val reason = result.reason as JsonErrors.Validation.Numbers.Gt
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -293,7 +293,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Ge
+            val reason = result.reason as JsonErrors.Validation.Numbers.Ge
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -344,7 +344,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Lt
+            val reason = result.reason as JsonErrors.Validation.Numbers.Lt
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -358,7 +358,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Lt
+            val reason = result.reason as JsonErrors.Validation.Numbers.Lt
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }
@@ -398,7 +398,7 @@ class NumberValidatorsTest {
             val result = validator.validation(actual)
 
             result as JsValidationResult.Failure
-            val reason = result.reason as ValidationErrors.Numbers.Le
+            val reason = result.reason as JsonErrors.Validation.Numbers.Le
             assertEquals(expected, reason.expected)
             assertEquals(actual, reason.actual)
         }

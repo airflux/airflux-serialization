@@ -1,7 +1,7 @@
 package io.github.airflux.path
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.ObjectContract
-import io.github.airflux.reader.result.JsError
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,7 +20,7 @@ class JsPathTest {
         fun `Testing 'repath' function in companion object`() {
             val pathOfUser = JsPath("user")
             val pathOfId = JsPath("id")
-            val failures = listOf(Pair(pathOfId, listOf(JsError.PathMissing)))
+            val failures = listOf(Pair(pathOfId, listOf(JsonErrors.PathMissing)))
 
             val result = JsPath.repath(failures, pathOfUser)
 
@@ -31,7 +31,7 @@ class JsPathTest {
             val errors = failure.second
             assertEquals(1, errors.size)
             val error = errors[0]
-            assertTrue(error is JsError.PathMissing)
+            assertTrue(error is JsonErrors.PathMissing)
         }
     }
 

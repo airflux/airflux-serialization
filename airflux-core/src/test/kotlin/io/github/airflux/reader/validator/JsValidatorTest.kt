@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 
 class JsValidatorTest {
 
-    private sealed class ValidationErrors : JsError.Validation() {
+    private sealed class ValidationErrors : JsError {
         object Error : ValidationErrors()
     }
 
