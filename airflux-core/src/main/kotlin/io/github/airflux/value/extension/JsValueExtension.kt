@@ -40,3 +40,11 @@ fun JsValue.lookup(path: JsPath): JsLookup {
 
     return JsLookup.Defined(path = path, value = currentValue)
 }
+
+fun JsValue.lookup(name: String): JsLookup =
+    if (this is JsObject)
+        this[name]
+            ?.let { value -> JsLookup.Defined(path = JsPath(name), value = value) }
+            ?: JsLookup.Undefined.PathMissing(path = JsPath(name))
+    else
+        JsLookup.Undefined.InvalidType(path = JsPath.empty, expected = JsValue.Type.OBJECT, actual = this.type)

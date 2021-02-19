@@ -7,7 +7,7 @@ import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.fx.fx
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Lot
-import io.github.airflux.sample.dto.reader.base.PathReaders.required
+import io.github.airflux.sample.dto.reader.base.PathReaders
 import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.base.TraversableReaders.list
 import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
@@ -15,11 +15,11 @@ import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
 val LotReader: JsReader<Lot> = reader { input ->
     JsResult.fx {
-        val (id) = required(from = input, path = JsPath("id"), using = stringReader)
+        val (id) = PathReaders.required(from = input, byName = "id", using = stringReader)
             .validation(isNotBlank)
-        val (status) = required(from = input, path = JsPath("status"), using = stringReader)
+        val (status) = PathReaders.required(from = input, byPath = JsPath("status"), using = stringReader)
             .validation(isNotBlank)
-        val (value) = required(from = input, path = JsPath("value"), using = ValueReader)
+        val (value) = PathReaders.required(from = input, byPath = JsPath("value"), using = ValueReader)
 
         Lot(id = id, status = status, value = value)
     }

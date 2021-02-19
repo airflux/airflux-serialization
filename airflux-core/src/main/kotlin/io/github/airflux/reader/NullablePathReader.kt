@@ -48,5 +48,13 @@ interface NullablePathReader {
             errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
         ): JsResult<T?> =
             nullable(from = from.lookup(path), using = using, errorInvalidType = errorInvalidType)
+
+        fun <T : Any> nullable(
+            from: JsValue,
+            name: String,
+            using: JsReader<T>,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T?> =
+            nullable(from = from.lookup(name), using = using, errorInvalidType = errorInvalidType)
     }
 }

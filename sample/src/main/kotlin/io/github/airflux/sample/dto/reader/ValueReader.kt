@@ -19,11 +19,11 @@ val ValueReader: JsReader<Value> = run {
     reader { input ->
         JsResult.Success(
             Value(
-                amount = required(from = input, path = JsPath("amount"), using = bigDecimalReader)
+                amount = required(from = input, byPath = JsPath("amount"), using = bigDecimalReader)
                     .validation(amountMoreZero)
                     .onFailure { return@reader it },
 
-                currency = required(from = input, path = JsPath("currency"), using = stringReader)
+                currency = required(from = input, byPath = JsPath("currency"), using = stringReader)
                     .validation(isNotBlank)
                     .onFailure { return@reader it }
             )

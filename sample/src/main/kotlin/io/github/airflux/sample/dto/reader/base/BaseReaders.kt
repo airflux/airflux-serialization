@@ -23,11 +23,17 @@ object PrimitiveReader : BasePrimitiveReader {
 
 object PathReaders {
 
-    fun <T : Any> required(from: JsValue, path: JsPath, using: JsReader<T>): JsResult<T> =
-        RequiredPathReader.required(from, path, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+    fun <T : Any> required(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T> =
+        RequiredPathReader.required(from, byPath, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
 
-    fun <T : Any> nullable(from: JsValue, path: JsPath, using: JsReader<T>): JsResult<T?> =
-        NullablePathReader.nullable(from, path, using, ErrorBuilder.InvalidType)
+    fun <T : Any> required(from: JsValue, byName: String, using: JsReader<T>): JsResult<T> =
+        RequiredPathReader.required(from, byName, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+
+    fun <T : Any> nullable(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T?> =
+        NullablePathReader.nullable(from, byPath, using, ErrorBuilder.InvalidType)
+
+    fun <T : Any> nullable(from: JsValue, byName: String, using: JsReader<T>): JsResult<T?> =
+        NullablePathReader.nullable(from, byName, using, ErrorBuilder.InvalidType)
 }
 
 object TraversableReaders {

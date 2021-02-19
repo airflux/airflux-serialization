@@ -51,5 +51,19 @@ interface RequiredPathReader {
                 errorPathMissing = errorPathMissing,
                 errorInvalidType = errorInvalidType
             )
+
+        fun <T : Any> required(
+            from: JsValue,
+            name: String,
+            using: JsReader<T>,
+            errorPathMissing: () -> JsError,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T> =
+            required(
+                from = from.lookup(name),
+                using = using,
+                errorPathMissing = errorPathMissing,
+                errorInvalidType = errorInvalidType
+            )
     }
 }

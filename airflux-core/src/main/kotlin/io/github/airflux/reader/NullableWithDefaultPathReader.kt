@@ -55,5 +55,19 @@ interface NullableWithDefaultPathReader {
                 defaultValue = defaultValue,
                 errorInvalidType = errorInvalidType
             )
+
+        fun <T : Any> nullableWithDefault(
+            from: JsValue,
+            name: String,
+            using: JsReader<T>,
+            defaultValue: () -> T,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T?> =
+            nullableWithDefault(
+                from = from.lookup(name),
+                using = using,
+                defaultValue = defaultValue,
+                errorInvalidType = errorInvalidType
+            )
     }
 }

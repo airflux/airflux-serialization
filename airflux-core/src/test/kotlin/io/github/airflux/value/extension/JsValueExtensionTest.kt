@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 class JsValueExtensionTest {
 
     @Nested
-    inner class Lookup {
+    inner class LookupByPath {
 
         @Test
         fun `testing 'lookup' function (an attribute by name is found)`() {
@@ -111,6 +111,51 @@ class JsValueExtensionTest {
             assertEquals(JsPath.empty, result.path)
             assertEquals(JsValue.Type.ARRAY, result.expected)
             assertEquals(JsValue.Type.OBJECT, result.actual)
+        }
+    }
+
+    @Nested
+    inner class LookupByName {
+
+        @Test
+        fun `testing 'lookup' function (an attribute by name is found)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result = json.lookup("name")
+
+            result as JsLookup.Defined
+            assertEquals(JsPath.empty / "name", result.path)
+            result.value as JsString
+            val value = result.value as JsString
+            assertEquals(USER_NAME_VALUE, value.underlying)
+        }
+
+        @Test
+        fun `testing 'lookup' function (an attribute by name is not found)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result = json.lookup("role")
+
+            result as JsLookup.Undefined.PathMissing
+            assertEquals(JsPath.empty / "role", result.path)
+        }
+
+        @Test
+        fun `testing 'lookup' function (an attribute by name is not found, node is invalid type)`() {
+            val json: JsValue = JsArray(
+                JsString(FIRST_PHONE_VALUE)
+            )
+
+            val result = json.lookup("name")
+
+            result as JsLookup.Undefined.InvalidType
+            assertEquals(JsPath.empty, result.path)
+            assertEquals(JsValue.Type.OBJECT, result.expected)
+            assertEquals(JsValue.Type.ARRAY, result.actual)
         }
     }
 }

@@ -105,7 +105,7 @@ class NullableWithDefaultPathReaderTest {
     }
 
     @Nested
-    inner class FromJsValue {
+    inner class FromJsValueByPath {
 
         @Test
         fun `Testing 'withDefault' function (an attribute is found)`() {
@@ -175,6 +175,93 @@ class NullableWithDefaultPathReaderTest {
             val result: JsResult<String?> = nullableWithDefault(
                 from = json,
                 path = path,
+                using = stringReader,
+                defaultValue = defaultValue,
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals(JsPath.empty, pathError)
+
+                    assertEquals(1, errors.size)
+                    val error = errors[0] as JsonErrors.InvalidType
+                    assertEquals(JsValue.Type.OBJECT, error.expected)
+                    assertEquals(JsValue.Type.STRING, error.actual)
+                }
+        }
+    }
+
+    @Nested
+    inner class FromJsValueByName {
+
+        @Test
+        fun `Testing 'withDefault' function (an attribute is found)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result: JsResult<String?> = nullableWithDefault(
+                from = json,
+                name = "name",
+                using = stringReader,
+                defaultValue = defaultValue,
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Success
+            assertEquals(JsPath.empty / "name", result.path)
+            assertEquals(USER_NAME_VALUE, result.value)
+        }
+
+        @Test
+        fun `Testing 'withDefault' function (an attribute is found with value 'null', returning default value)`() {
+            val json: JsValue = JsObject(
+                "role" to JsNull
+            )
+
+            val result: JsResult<String?> = nullableWithDefault(
+                from = json,
+                name = "role",
+                using = stringReader,
+                defaultValue = defaultValue,
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Success
+            assertEquals(JsPath.empty / "role", result.path)
+            assertNull(result.value)
+        }
+
+        @Test
+        fun `Testing 'withDefault' function (an attribute is not found, returning default value)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result: JsResult<String?> = nullableWithDefault(
+                from = json,
+                name = "role",
+                using = stringReader,
+                defaultValue = defaultValue,
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Success
+            assertEquals(JsPath.empty / "role", result.path)
+            assertEquals(DEFAULT_VALUE, result.value)
+        }
+
+        @Test
+        fun `Testing 'withDefault' function (an attribute is not found, invalid type)`() {
+            val json: JsValue = JsString(USER_NAME_VALUE)
+
+            val result: JsResult<String?> = nullableWithDefault(
+                from = json,
+                name = "name",
                 using = stringReader,
                 defaultValue = defaultValue,
                 errorInvalidType = JsonErrors::InvalidType

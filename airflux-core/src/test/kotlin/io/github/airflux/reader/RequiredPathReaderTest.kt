@@ -92,7 +92,7 @@ class RequiredPathReaderTest {
     }
 
     @Nested
-    inner class FromJsValue {
+    inner class FromJsValueByPath {
 
         @Test
         fun `Testing 'required' function (an attribute is found)`() {
@@ -148,6 +148,79 @@ class RequiredPathReaderTest {
             val result: JsResult<String> = required(
                 from = json,
                 path = path,
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals(JsPath.empty, pathError)
+
+                    assertEquals(1, errors.size)
+                    val error = errors[0] as JsonErrors.InvalidType
+                    assertEquals(JsValue.Type.OBJECT, error.expected)
+                    assertEquals(JsValue.Type.STRING, error.actual)
+                }
+        }
+    }
+
+    @Nested
+    inner class FromJsValueByName {
+
+        @Test
+        fun `Testing 'required' function (an attribute is found)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result: JsResult<String> = required(
+                from = json,
+                name = "name",
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Success
+            assertEquals(JsPath.empty / "name", result.path)
+            assertEquals(USER_NAME_VALUE, result.value)
+        }
+
+        @Test
+        fun `Testing 'required' function (an attribute is not found)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result: JsResult<String> = required(
+                from = json,
+                name = "role",
+                using = stringReader,
+                errorPathMissing = { JsonErrors.PathMissing },
+                errorInvalidType = JsonErrors::InvalidType
+            )
+
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals(JsPath.empty / "role", pathError)
+
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsonErrors.PathMissing)
+                }
+        }
+
+        @Test
+        fun `Testing 'required' function (an attribute is not found, invalid type)`() {
+            val json: JsValue = JsString(USER_NAME_VALUE)
+
+            val result: JsResult<String> = required(
+                from = json,
+                name = "name",
                 using = stringReader,
                 errorPathMissing = { JsonErrors.PathMissing },
                 errorInvalidType = JsonErrors::InvalidType

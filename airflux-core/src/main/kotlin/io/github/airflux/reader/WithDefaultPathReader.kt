@@ -55,5 +55,19 @@ interface WithDefaultPathReader {
                 defaultValue = defaultValue,
                 errorInvalidType = errorInvalidType
             )
+
+        fun <T : Any> withDefault(
+            from: JsValue,
+            name: String,
+            using: JsReader<T>,
+            defaultValue: () -> T,
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        ): JsResult<T> =
+            withDefault(
+                from = from.lookup(name),
+                using = using,
+                defaultValue = defaultValue,
+                errorInvalidType = errorInvalidType
+            )
     }
 }
