@@ -14,30 +14,30 @@ sealed class JsonErrors : JsError {
 
     sealed class Validation : JsonErrors() {
 
-        object Numbers {
-            data class Min(val expected: Int, val actual: Int) : Validation()
-            data class Max(val expected: Int, val actual: Int) : Validation()
-            data class Eq(val expected: Int, val actual: Int) : Validation()
-            data class Ne(val expected: Int, val actual: Int) : Validation()
-            data class Gt(val expected: Int, val actual: Int) : Validation()
-            data class Ge(val expected: Int, val actual: Int) : Validation()
-            data class Lt(val expected: Int, val actual: Int) : Validation()
-            data class Le(val expected: Int, val actual: Int) : Validation()
+        sealed class Numbers : Validation() {
+            data class Min(val expected: Int, val actual: Int) : Numbers()
+            data class Max(val expected: Int, val actual: Int) : Numbers()
+            data class Eq(val expected: Int, val actual: Int) : Numbers()
+            data class Ne(val expected: Int, val actual: Int) : Numbers()
+            data class Gt(val expected: Int, val actual: Int) : Numbers()
+            data class Ge(val expected: Int, val actual: Int) : Numbers()
+            data class Lt(val expected: Int, val actual: Int) : Numbers()
+            data class Le(val expected: Int, val actual: Int) : Numbers()
         }
 
-        object Arrays {
-            data class MinItems(val expected: Int, val actual: Int) : Validation()
-            data class MaxItems(val expected: Int, val actual: Int) : Validation()
-            data class Unique<T>(val index: Int, val value: T) : Validation()
+        sealed class Arrays : Validation() {
+            data class MinItems(val expected: Int, val actual: Int) : Arrays()
+            data class MaxItems(val expected: Int, val actual: Int) : Arrays()
+            data class Unique<T>(val index: Int, val value: T) : Arrays()
         }
 
-        object Strings {
-            data class MinLength(val expected: Int, val actual: Int) : Validation()
-            data class MaxLength(val expected: Int, val actual: Int) : Validation()
-            data class Pattern(val value: String, val regex: Regex) : Validation()
-            data class IsA(val value: String) : Validation()
-            object IsEmpty : Validation()
-            object IsBlank : Validation()
+        sealed class Strings : Validation() {
+            data class MinLength(val expected: Int, val actual: Int) : Strings()
+            data class MaxLength(val expected: Int, val actual: Int) : Strings()
+            data class Pattern(val value: String, val regex: Regex) : Strings()
+            data class IsA(val value: String) : Strings()
+            object IsEmpty : Strings()
+            object IsBlank : Strings()
         }
     }
 }
