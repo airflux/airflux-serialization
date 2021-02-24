@@ -5,8 +5,6 @@ import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.TraversableReader.Companion.list
-import io.github.airflux.reader.TraversableReader.Companion.set
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
@@ -17,7 +15,7 @@ import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TraversableReaderTest {
+class CollectionFieldReaderTest {
 
     companion object {
         private val stringReader: JsReader<String> = JsReader { input ->
@@ -34,9 +32,10 @@ class TraversableReaderTest {
     inner class ListReader {
 
         @Test
-        fun `Testing 'list' function`() {
+        fun `Testing 'readAsList' function`() {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
-            val reader: JsReader<List<String>> = list(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<List<String>> =
+                readAsList(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<List<String>> = reader.read(json)
 
@@ -46,9 +45,10 @@ class TraversableReaderTest {
         }
 
         @Test
-        fun `Testing 'list' function (an attribute is not collection)`() {
+        fun `Testing 'readAsList' function (an attribute is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
-            val reader: JsReader<List<String>> = list(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<List<String>> =
+                readAsList(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<List<String>> = reader.read(json)
 
@@ -66,14 +66,15 @@ class TraversableReaderTest {
         }
 
         @Test
-        fun `Testing 'list' function (collection with inconsistent content)`() {
+        fun `Testing 'readAsList' function (collection with inconsistent content)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE),
                 JsNumber.valueOf(10),
                 JsBoolean.True,
                 JsString(SECOND_PHONE_VALUE)
             )
-            val reader: JsReader<List<String>> = list(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<List<String>> =
+                readAsList(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<List<String>> = reader.read(json)
 
@@ -94,10 +95,11 @@ class TraversableReaderTest {
         }
 
         @Test
-        fun `Testing 'list' function (array is empty)`() {
+        fun `Testing 'readAsList' function (array is empty)`() {
             val json: JsValue = JsArray<JsString>()
 
-            val reader: JsReader<List<String>> = list(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<List<String>> =
+                readAsList(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<List<String>> = reader.read(json)
 
@@ -111,9 +113,10 @@ class TraversableReaderTest {
     inner class SetReader {
 
         @Test
-        fun `Testing 'set' function`() {
+        fun `Testing 'readAsSet' function`() {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
-            val reader: JsReader<Set<String>> = set(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<Set<String>> =
+                readAsSet(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<Set<String>> = reader.read(json)
 
@@ -123,9 +126,10 @@ class TraversableReaderTest {
         }
 
         @Test
-        fun `Testing 'set' function (an attribute is not collection)`() {
+        fun `Testing 'readAsSet' function (an attribute is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
-            val reader: JsReader<Set<String>> = set(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<Set<String>> =
+                readAsSet(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<Set<String>> = reader.read(json)
 
@@ -143,14 +147,15 @@ class TraversableReaderTest {
         }
 
         @Test
-        fun `Testing 'set' function (collection with inconsistent content)`() {
+        fun `Testing 'readAsSet' function (collection with inconsistent content)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE),
                 JsNumber.valueOf(10),
                 JsBoolean.True,
                 JsString(SECOND_PHONE_VALUE)
             )
-            val reader: JsReader<Set<String>> = set(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<Set<String>> =
+                readAsSet(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<Set<String>> = reader.read(json)
 
@@ -171,9 +176,10 @@ class TraversableReaderTest {
         }
 
         @Test
-        fun `Testing 'set' function (array is empty)`() {
+        fun `Testing 'readAsSet' function (array is empty)`() {
             val json: JsValue = JsArray<JsString>()
-            val reader: JsReader<Set<String>> = set(using = stringReader, errorInvalidType = JsonErrors::InvalidType)
+            val reader: JsReader<Set<String>> =
+                readAsSet(using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             val result: JsResult<Set<String>> = reader.read(json)
 

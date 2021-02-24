@@ -3,7 +3,7 @@ package io.github.airflux.reader.validator.extension
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
-import io.github.airflux.reader.RequiredPathReader
+import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
@@ -44,12 +44,12 @@ class JsValidatorExtensionTest {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsString("user"))
             val reader = JsReader { input ->
-                RequiredPathReader.required(
+                readRequired(
                     from = input,
                     path = path,
                     using = stringReader,
-                    errorPathMissing = { JsonErrors.PathMissing },
-                    errorInvalidType = JsonErrors::InvalidType
+                    pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
             }.validation(isNotEmpty)
 
@@ -65,12 +65,12 @@ class JsValidatorExtensionTest {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsString(""))
             val reader = JsReader { input ->
-                RequiredPathReader.required(
+                readRequired(
                     from = input,
                     path = path,
                     using = stringReader,
-                    errorPathMissing = { JsonErrors.PathMissing },
-                    errorInvalidType = JsonErrors::InvalidType
+                    pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
             }.validation(isNotEmpty)
 
@@ -89,12 +89,12 @@ class JsValidatorExtensionTest {
             val path = JsPath("name")
             val json: JsValue = JsObject("name" to JsNull)
             val reader = JsReader { input ->
-                RequiredPathReader.required(
+                readRequired(
                     from = input,
                     path = path,
                     using = stringReader,
-                    errorPathMissing = { JsonErrors.PathMissing },
-                    errorInvalidType = JsonErrors::InvalidType
+                    pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
             }.validation(isNotEmpty)
 

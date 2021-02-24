@@ -5,7 +5,6 @@ import io.github.airflux.common.TestData.DEFAULT_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.NullableWithDefaultPathReader.Companion.nullableWithDefault
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -16,7 +15,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class NullableWithDefaultPathReaderTest {
+class NullableWithDefaultFieldReaderTest {
 
     companion object {
         private val stringReader: JsReader<String> =
@@ -28,14 +27,14 @@ class NullableWithDefaultPathReaderTest {
     inner class FromJsLookup {
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is found)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -44,14 +43,14 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is found with value 'null', returning default value)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is found with value 'null', returning default value)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -60,14 +59,14 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is not found, returning default value)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is not found, returning default value)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -76,18 +75,18 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is not found, invalid type)`() {
             val from: JsLookup = JsLookup.Undefined.InvalidType(
                 path = JsPath.empty / "name",
                 expected = JsValue.Type.ARRAY,
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Failure
@@ -108,18 +107,18 @@ class NullableWithDefaultPathReaderTest {
     inner class FromJsValueByPath {
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is found)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
             val path = JsPath.empty / "name"
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 path = path,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -128,18 +127,18 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is found with value 'null', returning default value)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is found with value 'null', returning default value)`() {
             val json: JsValue = JsObject(
                 "role" to JsNull
             )
             val path = JsPath.empty / "role"
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 path = path,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -148,18 +147,18 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is not found, returning default value)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is not found, returning default value)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
             val path = JsPath.empty / "role"
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 path = path,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -168,16 +167,16 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
             val path = JsPath.empty / "name"
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 path = path,
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Failure
@@ -199,17 +198,17 @@ class NullableWithDefaultPathReaderTest {
     inner class FromJsValueByName {
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is found)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 name = "name",
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -218,17 +217,17 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is found with value 'null', returning default value)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is found with value 'null', returning default value)`() {
             val json: JsValue = JsObject(
                 "role" to JsNull
             )
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 name = "role",
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -237,17 +236,17 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is not found, returning default value)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is not found, returning default value)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 name = "role",
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Success
@@ -256,15 +255,15 @@ class NullableWithDefaultPathReaderTest {
         }
 
         @Test
-        fun `Testing 'withDefault' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullableWithDefault' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String?> = nullableWithDefault(
+            val result: JsResult<String?> = readNullableWithDefault(
                 from = json,
                 name = "name",
                 using = stringReader,
                 defaultValue = defaultValue,
-                errorInvalidType = JsonErrors::InvalidType
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
             result as JsResult.Failure
