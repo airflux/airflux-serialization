@@ -1,8 +1,7 @@
-package io.github.airflux.dsl
+package io.github.airflux.lookup.extension
 
 import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
-import io.github.airflux.dsl.LookupDsl.div
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
 import io.github.airflux.value.JsArray
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LookupDslTest {
+class JsLookupExtensionTest {
 
     @Nested
     inner class JsValueExtension {

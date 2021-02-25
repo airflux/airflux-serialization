@@ -48,3 +48,11 @@ fun JsValue.lookup(name: String): JsLookup =
             ?: JsLookup.Undefined.PathMissing(path = JsPath(name))
     else
         JsLookup.Undefined.InvalidType(path = JsPath.empty, expected = JsValue.Type.OBJECT, actual = this.type)
+
+fun JsValue.lookup(idx: Int): JsLookup =
+    if (this is JsArray<*>)
+        this[idx]
+            ?.let { value -> JsLookup.Defined(path = JsPath(idx), value = value) }
+            ?: JsLookup.Undefined.PathMissing(path = JsPath(idx))
+    else
+        JsLookup.Undefined.InvalidType(path = JsPath.empty, expected = JsValue.Type.ARRAY, actual = this.type)

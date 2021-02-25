@@ -158,4 +158,49 @@ class JsValueExtensionTest {
             assertEquals(JsValue.Type.ARRAY, result.actual)
         }
     }
+
+    @Nested
+    inner class LookupByIndex {
+
+        @Test
+        fun `testing 'lookup' function (an attribute by idx is found)`() {
+            val json: JsValue = JsArray(
+                JsString(FIRST_PHONE_VALUE)
+            )
+
+            val result = json.lookup(0)
+
+            result as JsLookup.Defined
+            assertEquals(JsPath.empty / 0, result.path)
+            result.value as JsString
+            val value = result.value as JsString
+            assertEquals(FIRST_PHONE_VALUE, value.underlying)
+        }
+
+        @Test
+        fun `testing 'lookup' function (an attribute by idx is not found)`() {
+            val json: JsValue = JsArray(
+                JsString(FIRST_PHONE_VALUE)
+            )
+
+            val result = json.lookup(1)
+
+            result as JsLookup.Undefined.PathMissing
+            assertEquals(JsPath.empty / 1, result.path)
+        }
+
+        @Test
+        fun `testing 'lookup' function (node is invalid type)`() {
+            val json: JsValue = JsObject(
+                "name" to JsString(USER_NAME_VALUE)
+            )
+
+            val result = json.lookup(0)
+
+            result as JsLookup.Undefined.InvalidType
+            assertEquals(JsPath.empty, result.path)
+            assertEquals(JsValue.Type.ARRAY, result.expected)
+            assertEquals(JsValue.Type.OBJECT, result.actual)
+        }
+    }
 }
