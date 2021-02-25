@@ -1,12 +1,11 @@
-package io.github.airflux.dsl
+package io.github.airflux.path.extension
 
-import io.github.airflux.dsl.PathDsl.div
 import io.github.airflux.path.IdxPathElement
 import io.github.airflux.path.KeyPathElement
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class PathDslTest {
+class JsPathExtensionTest {
 
     @Test
     fun twoKeyPathElement() {
