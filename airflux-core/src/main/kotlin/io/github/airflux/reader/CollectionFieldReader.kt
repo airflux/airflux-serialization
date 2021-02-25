@@ -7,45 +7,33 @@ import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsValue
 
 /**
- * Build of reader for read a node as list.
+ * Read a node as list.
  *
  * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
 fun <T : Any> readAsList(
+    from: JsValue,
     using: JsReader<T>,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsReader<List<T>> =
-    JsReader { input ->
-        readAsCollection(
-            from = input,
-            using = using,
-            factory = CollectionBuilderFactory.listFactory(),
-            invalidTypeErrorBuilder = invalidTypeErrorBuilder
-        )
-    }
+): JsResult<List<T>> =
+    readAsCollection(from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
 
 /**
- * Build of reader for read a node as set.
+ * Read a node as set.
  *
  * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
 fun <T : Any> readAsSet(
+    from: JsValue,
     using: JsReader<T>,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsReader<Set<T>> =
-    JsReader { input ->
-        readAsCollection(
-            from = input,
-            using = using,
-            factory = CollectionBuilderFactory.setFactory(),
-            invalidTypeErrorBuilder = invalidTypeErrorBuilder
-        )
-    }
+): JsResult<Set<T>> =
+    readAsCollection(from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
 
 /**
- * Reads a node which represent as array.
+ * Read a node which represent as array.
  *
  * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
  * - If node match array type, then applies [using]

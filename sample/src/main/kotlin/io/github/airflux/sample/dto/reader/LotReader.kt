@@ -9,7 +9,7 @@ import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Lot
 import io.github.airflux.sample.dto.reader.base.PathReaders.readRequired
 import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
-import io.github.airflux.sample.dto.reader.base.CollectionReaders.readAsList
+import io.github.airflux.sample.dto.reader.base.CollectionReaders.list
 import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
@@ -25,5 +25,5 @@ val LotReader: JsReader<Lot> = reader { input ->
     }
 }
 
-val LotsReader = readAsList(LotReader)
+val LotsReader = list(LotReader)
     .validation(isUnique { lot -> lot.id })

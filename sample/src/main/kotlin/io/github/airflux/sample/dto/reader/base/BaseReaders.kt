@@ -37,6 +37,7 @@ object PathReaders {
 }
 
 object CollectionReaders {
-    fun <T : Any> readAsList(using: JsReader<T>): JsReader<List<T>> =
-        readAsList(using, ErrorBuilder.InvalidType)
+    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { input ->
+        readAsList(input, using, ErrorBuilder.InvalidType)
+    }
 }
