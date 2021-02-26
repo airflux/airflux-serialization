@@ -25,7 +25,7 @@ fun <T : Any> readOptionalWithDefault(
 /**
  * Reads nullable field at [path].
  *
- * - If any node in [path] is not found then returns 'null'
+ * - If any node in [path] is not found then returns [defaultValue]
  * - If any node does not match path element type, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
@@ -46,7 +46,7 @@ fun <T : Any> readOptionalWithDefault(
 /**
  * Reads nullable field by [name].
  *
- * - If node is not found then returns 'null'
+ * - If node is not found then returns [defaultValue]
  * - If node is not object, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
