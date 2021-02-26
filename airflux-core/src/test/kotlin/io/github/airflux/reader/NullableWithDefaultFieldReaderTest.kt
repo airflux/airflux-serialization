@@ -27,10 +27,10 @@ class NullableWithDefaultFieldReaderTest {
     inner class FromJsLookup {
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is found)`() {
+        fun `Testing 'readNullable' function with default (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -43,10 +43,10 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is found with value 'null', returning default value)`() {
+        fun `Testing 'readNullable' function with default (an attribute is found with value 'null', returning default value)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -59,10 +59,10 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is not found, returning default value)`() {
+        fun `Testing 'readNullable' function with default (an attribute is not found, returning default value)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -75,14 +75,14 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullable' function with default (an attribute is not found, invalid type)`() {
             val from: JsLookup = JsLookup.Undefined.InvalidType(
                 path = JsPath.empty / "name",
                 expected = JsValue.Type.ARRAY,
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -107,13 +107,13 @@ class NullableWithDefaultFieldReaderTest {
     inner class FromJsValueByPath {
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is found)`() {
+        fun `Testing 'readNullable' function with default (an attribute is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
             val path = JsPath.empty / "name"
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 path = path,
                 using = stringReader,
@@ -127,13 +127,13 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is found with value 'null', returning default value)`() {
+        fun `Testing 'readNullable' function with default (an attribute is found with value 'null', returning default value)`() {
             val json: JsValue = JsObject(
                 "role" to JsNull
             )
             val path = JsPath.empty / "role"
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 path = path,
                 using = stringReader,
@@ -147,13 +147,13 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is not found, returning default value)`() {
+        fun `Testing 'readNullable' function with default (an attribute is not found, returning default value)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
             val path = JsPath.empty / "role"
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 path = path,
                 using = stringReader,
@@ -167,11 +167,11 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullable' function with default (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
             val path = JsPath.empty / "name"
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 path = path,
                 using = stringReader,
@@ -198,12 +198,12 @@ class NullableWithDefaultFieldReaderTest {
     inner class FromJsValueByName {
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is found)`() {
+        fun `Testing 'readNullable' function with default (an attribute is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -217,12 +217,12 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is found with value 'null', returning default value)`() {
+        fun `Testing 'readNullable' function with default (an attribute is found with value 'null', returning default value)`() {
             val json: JsValue = JsObject(
                 "role" to JsNull
             )
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 name = "role",
                 using = stringReader,
@@ -236,12 +236,12 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is not found, returning default value)`() {
+        fun `Testing 'readNullable' function with default (an attribute is not found, returning default value)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 name = "role",
                 using = stringReader,
@@ -255,10 +255,10 @@ class NullableWithDefaultFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullableWithDefault' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullable' function with default (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String?> = readNullableWithDefault(
+            val result: JsResult<String?> = readNullable(
                 from = json,
                 name = "name",
                 using = stringReader,

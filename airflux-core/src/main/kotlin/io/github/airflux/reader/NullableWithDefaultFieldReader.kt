@@ -8,7 +8,7 @@ import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
 
-fun <T : Any> readNullableWithDefault(
+fun <T : Any> readNullable(
     from: JsLookup,
     using: JsReader<T>,
     defaultValue: () -> T,
@@ -34,14 +34,14 @@ fun <T : Any> readNullableWithDefault(
  * - If any node does not match path element type, then returning [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
-fun <T : Any> readNullableWithDefault(
+fun <T : Any> readNullable(
     from: JsValue,
     path: JsPath,
     using: JsReader<T>,
     defaultValue: () -> T,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
-    readNullableWithDefault(
+    readNullable(
         from = from.lookup(path),
         using = using,
         defaultValue = defaultValue,
@@ -56,14 +56,14 @@ fun <T : Any> readNullableWithDefault(
  * - If node is not object, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
-fun <T : Any> readNullableWithDefault(
+fun <T : Any> readNullable(
     from: JsValue,
     name: String,
     using: JsReader<T>,
     defaultValue: () -> T,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
-    readNullableWithDefault(
+    readNullable(
         from = from.lookup(name),
         using = using,
         defaultValue = defaultValue,
