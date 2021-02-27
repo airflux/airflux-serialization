@@ -36,10 +36,8 @@ class JsString(val underlying: String) : JsValue() {
 
     override fun toString(): String = """"$underlying""""
 
-    override fun equals(other: Any?): Boolean = if (this !== other)
-        other is JsString && this.underlying == other.underlying
-    else
-        true
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is JsString && this.underlying == other.underlying)
 
     override fun hashCode(): Int = underlying.hashCode()
 }
@@ -67,10 +65,8 @@ class JsNumber private constructor(val underlying: String) : JsValue() {
 
     override fun toString(): String = underlying
 
-    override fun equals(other: Any?): Boolean = if (this !== other)
-        other is JsNumber && this.underlying == other.underlying
-    else
-        true
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is JsNumber && this.underlying == other.underlying)
 
     override fun hashCode(): Int = underlying.hashCode()
 }
@@ -89,10 +85,8 @@ class JsArray<T : JsValue>(val underlying: List<T> = emptyList()) : JsValue() {
 
     override fun toString(): String = underlying.joinToString(prefix = "[", postfix = "]")
 
-    override fun equals(other: Any?): Boolean = if (this !== other)
-        other is JsArray<*> && this.underlying == other.underlying
-    else
-        true
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is JsArray<*> && this.underlying == other.underlying)
 
     override fun hashCode(): Int = underlying.hashCode()
 }
@@ -113,10 +107,8 @@ class JsObject(val underlying: Map<String, JsValue> = emptyMap()) : JsValue() {
     override fun toString(): String = underlying.map { (name, value) -> """"$name": $value""" }
         .joinToString(prefix = "{", postfix = "}")
 
-    override fun equals(other: Any?): Boolean = if (this !== other)
-        other is JsObject && this.underlying.keys == other.underlying.keys
-    else
-        true
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is JsObject && this.underlying.keys == other.underlying.keys)
 
     override fun hashCode(): Int = underlying.keys.hashCode()
 }

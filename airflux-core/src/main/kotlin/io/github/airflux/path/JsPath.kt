@@ -39,10 +39,9 @@ class JsPath internal constructor(val elements: List<PathElement>) {
         elements.forEach { element -> append(element) }
     }
 
-    override fun equals(other: Any?): Boolean = if (this !== other)
-        other is JsPath && this.elements == other.elements
-    else
-        true
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is JsPath && this.elements == other.elements)
+
 
     override fun hashCode(): Int = elements.hashCode()
 }
