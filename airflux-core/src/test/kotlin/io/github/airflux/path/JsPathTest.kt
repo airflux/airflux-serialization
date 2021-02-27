@@ -68,6 +68,56 @@ class JsPathTest {
                 assertSame(path, target)
             }
         }
+
+        @Nested
+        inner class OperatorDivForKey {
+
+            @Test
+            fun `Testing operator 'div' (target path is not empty)`() {
+                val target = JsPath.empty / "user"
+
+                val path = target / "id"
+
+                assertEquals(
+                    expected = listOf(KeyPathElement("user"), KeyPathElement("id")),
+                    actual = path.elements
+                )
+            }
+
+            @Test
+            fun `Testing operator 'div' (target path is empty)`() {
+                val target = JsPath.empty
+
+                val path = target / "user"
+
+                assertEquals(expected = listOf(KeyPathElement("user")), actual = path.elements)
+            }
+        }
+
+        @Nested
+        inner class OperatorDivForIdx {
+
+            @Test
+            fun `Testing operator 'div' (target path is not empty)`() {
+                val target = JsPath.empty / "user"
+
+                val path = target / 0
+
+                assertEquals(
+                    expected = listOf(KeyPathElement("user"), IdxPathElement(0)),
+                    actual = path.elements
+                )
+            }
+
+            @Test
+            fun `Testing operator 'div' (target path is empty)`() {
+                val target = JsPath.empty
+
+                val path = target / 0
+
+                assertEquals(expected = listOf(IdxPathElement(0)), actual = path.elements)
+            }
+        }
     }
 
     @Nested
