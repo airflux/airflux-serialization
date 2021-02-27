@@ -4,6 +4,8 @@ import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
+import io.github.airflux.common.assertAsFailure
+import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsArray
@@ -13,7 +15,6 @@ import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class CollectionFieldReaderTest {
 
@@ -38,9 +39,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
 
         @Test
@@ -50,17 +49,11 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty, pathError)
-
-                    assertEquals(1, errors.size)
-                    val error = errors[0] as JsonErrors.InvalidType
-                    assertEquals(JsValue.Type.ARRAY, error.expected)
-                    assertEquals(JsValue.Type.STRING, error.actual)
-                }
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+                )
+            )
         }
 
         @Test
@@ -75,20 +68,14 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Failure
-            assertEquals(2, result.errors.size)
-
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / 1, pathError)
-                    assertEquals(1, errors.size)
-                }
-
-            result.errors[1]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / 2, pathError)
-                    assertEquals(1, errors.size)
-                }
+            result.assertAsFailure(
+                JsPath.empty / 1 to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
+                ),
+                JsPath.empty / 2 to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                )
+            )
         }
 
         @Test
@@ -98,9 +85,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(listOf(), result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = emptyList())
         }
     }
 
@@ -114,9 +99,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE), result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
 
         @Test
@@ -126,17 +109,11 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty, pathError)
-
-                    assertEquals(1, errors.size)
-                    val error = errors[0] as JsonErrors.InvalidType
-                    assertEquals(JsValue.Type.ARRAY, error.expected)
-                    assertEquals(JsValue.Type.STRING, error.actual)
-                }
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+                )
+            )
         }
 
         @Test
@@ -151,20 +128,15 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Failure
-            assertEquals(2, result.errors.size)
 
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / 1, pathError)
-                    assertEquals(1, errors.size)
-                }
-
-            result.errors[1]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / 2, pathError)
-                    assertEquals(1, errors.size)
-                }
+            result.assertAsFailure(
+                JsPath.empty / 1 to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
+                ),
+                JsPath.empty / 2 to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                )
+            )
         }
 
         @Test
@@ -174,9 +146,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(setOf(), result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = emptySet())
         }
     }
 }

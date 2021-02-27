@@ -1,8 +1,9 @@
 package io.github.airflux.reader.base
 
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.common.assertAsFailure
+import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
 import io.github.airflux.value.JsString
@@ -12,9 +13,13 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import java.math.BigDecimal
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class BasePrimitiveReaderTest {
+
+    companion object {
+        private const val TITLE_MIN_VALUE = "min value"
+        private const val TITLE_MAX_VALUE = "max value"
+    }
 
     @Nested
     inner class BooleanReader {
@@ -27,9 +32,7 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Success
-            assertEquals(value, result.value)
-            assertEquals(JsPath.empty, result.path)
+            result.assertAsSuccess(path = JsPath.empty, value = value)
         }
 
         @Test
@@ -38,16 +41,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.BOOLEAN, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
+                )
+            )
         }
     }
 
@@ -62,9 +60,7 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Success
-            assertEquals(value, result.value)
-            assertEquals(JsPath.empty, result.path)
+            result.assertAsSuccess(path = JsPath.empty, value = value)
         }
 
         @Test
@@ -73,16 +69,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.STRING, error.expected)
-            assertEquals(JsValue.Type.BOOLEAN, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                )
+            )
         }
     }
 
@@ -93,17 +84,15 @@ class BasePrimitiveReaderTest {
         @TestFactory
         fun `Testing reader for 'Byte' type`(): Collection<DynamicTest> =
             listOf(
-                "min value" to Byte.MIN_VALUE,
-                "max value" to Byte.MAX_VALUE
+                TITLE_MIN_VALUE to Byte.MIN_VALUE,
+                TITLE_MAX_VALUE to Byte.MAX_VALUE
             ).map { (displayName: String, value: Byte) ->
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
                     val result = reader.read(input)
 
-                    result as JsResult.Success
-                    assertEquals(value, result.value)
-                    assertEquals(JsPath.empty, result.path)
+                    result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
             }
 
@@ -113,16 +102,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.NUMBER, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                )
+            )
         }
 
         @Test
@@ -131,16 +115,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals(Long.MAX_VALUE.toString(), error.value)
-            assertEquals(Byte::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Byte::class)
+                )
+            )
         }
 
         @Test
@@ -149,16 +128,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals("10.5", error.value)
-            assertEquals(Byte::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = "10.5", type = Byte::class)
+                )
+            )
         }
     }
 
@@ -169,17 +143,15 @@ class BasePrimitiveReaderTest {
         @TestFactory
         fun `Testing reader for 'Short' type`(): Collection<DynamicTest> =
             listOf(
-                "min value" to Short.MIN_VALUE,
-                "max value" to Short.MAX_VALUE
+                TITLE_MIN_VALUE to Short.MIN_VALUE,
+                TITLE_MAX_VALUE to Short.MAX_VALUE
             ).map { (displayName: String, value: Short) ->
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
                     val result = reader.read(input)
 
-                    result as JsResult.Success
-                    assertEquals(value, result.value)
-                    assertEquals(JsPath.empty, result.path)
+                    result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
             }
 
@@ -189,16 +161,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.NUMBER, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                )
+            )
         }
 
         @Test
@@ -207,16 +174,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals(Long.MAX_VALUE.toString(), error.value)
-            assertEquals(Short::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Short::class)
+                )
+            )
         }
 
         @Test
@@ -225,16 +187,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals("10.5", error.value)
-            assertEquals(Short::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = "10.5", type = Short::class)
+                )
+            )
         }
     }
 
@@ -245,17 +202,15 @@ class BasePrimitiveReaderTest {
         @TestFactory
         fun `Testing reader for 'Int' type`(): Collection<DynamicTest> =
             listOf(
-                "min value" to Int.MIN_VALUE,
-                "max value" to Int.MAX_VALUE
+                TITLE_MIN_VALUE to Int.MIN_VALUE,
+                TITLE_MAX_VALUE to Int.MAX_VALUE
             ).map { (displayName: String, value: Int) ->
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
                     val result = reader.read(input)
 
-                    result as JsResult.Success
-                    assertEquals(value, result.value)
-                    assertEquals(JsPath.empty, result.path)
+                    result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
             }
 
@@ -265,16 +220,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.NUMBER, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                )
+            )
         }
 
         @Test
@@ -283,16 +233,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals(Long.MAX_VALUE.toString(), error.value)
-            assertEquals(Int::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
+                )
+            )
         }
 
         @Test
@@ -301,16 +246,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals("10.5", error.value)
-            assertEquals(Int::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = "10.5", type = Int::class)
+                )
+            )
         }
     }
 
@@ -321,17 +261,15 @@ class BasePrimitiveReaderTest {
         @TestFactory
         fun `Testing reader for 'Long' type`(): Collection<DynamicTest> =
             listOf(
-                "min value" to Long.MIN_VALUE,
-                "max value" to Long.MAX_VALUE
+                TITLE_MIN_VALUE to Long.MIN_VALUE,
+                TITLE_MAX_VALUE to Long.MAX_VALUE
             ).map { (displayName: String, value: Long) ->
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
                     val result = reader.read(input)
 
-                    result as JsResult.Success
-                    assertEquals(value, result.value)
-                    assertEquals(JsPath.empty, result.path)
+                    result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
             }
 
@@ -341,16 +279,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.NUMBER, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                )
+            )
         }
 
         @Test
@@ -359,16 +292,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.ValueCast
-            assertEquals("10.5", error.value)
-            assertEquals(Long::class, error.type)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.ValueCast(value = "10.5", type = Long::class)
+                )
+            )
         }
     }
 
@@ -379,17 +307,17 @@ class BasePrimitiveReaderTest {
         @TestFactory
         fun `Testing reader for 'BigDecimal' type`(): Collection<DynamicTest> =
             listOf(
-                "min value" to BigDecimal.valueOf(Long.MIN_VALUE),
-                "max value" to BigDecimal.valueOf(Long.MAX_VALUE)
+                TITLE_MIN_VALUE to BigDecimal.valueOf(Long.MIN_VALUE),
+                TITLE_MAX_VALUE to BigDecimal.valueOf(Long.MAX_VALUE)
             ).map { (displayName: String, value: BigDecimal) ->
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value.toPlainString())!!
 
                     val result = reader.read(input)
 
-                    result as JsResult.Success
-                    assertEquals(value, result.value)
-                    assertEquals(JsPath.empty, result.path)
+                    result.assertAsSuccess(path = JsPath.empty, value = value)
+
+                    result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
             }
 
@@ -399,16 +327,11 @@ class BasePrimitiveReaderTest {
 
             val result = reader.read(input)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.NUMBER, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                )
+            )
         }
     }
 }

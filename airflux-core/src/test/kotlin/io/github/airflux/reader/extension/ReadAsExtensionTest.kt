@@ -1,6 +1,8 @@
 package io.github.airflux.reader.extension
 
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.common.assertAsFailure
+import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsBoolean
@@ -9,7 +11,6 @@ import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class ReadAsExtensionTest {
 
@@ -22,8 +23,7 @@ class ReadAsExtensionTest {
 
             val result = json.readAsBoolean(JsonErrors::InvalidType)
 
-            result as JsResult.Success
-            assertEquals(true, result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = true)
         }
 
         @Test
@@ -32,16 +32,11 @@ class ReadAsExtensionTest {
 
             val result = json.readAsBoolean(JsonErrors::InvalidType)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.BOOLEAN, error.expected)
-            assertEquals(JsValue.Type.STRING, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
+                )
+            )
         }
     }
 
@@ -53,8 +48,7 @@ class ReadAsExtensionTest {
 
             val result = json.readAsString(JsonErrors::InvalidType)
 
-            result as JsResult.Success
-            assertEquals("abc", result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = "abc")
         }
 
         @Test
@@ -63,16 +57,11 @@ class ReadAsExtensionTest {
 
             val result = json.readAsString(JsonErrors::InvalidType)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.STRING, error.expected)
-            assertEquals(JsValue.Type.BOOLEAN, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                )
+            )
         }
     }
 
@@ -87,8 +76,7 @@ class ReadAsExtensionTest {
 
             val result = json.readAsNumber(JsonErrors::InvalidType, transformer)
 
-            result as JsResult.Success
-            assertEquals(Int.MAX_VALUE, result.value)
+            result.assertAsSuccess(path = JsPath.empty, value = Int.MAX_VALUE)
         }
 
         @Test
@@ -97,16 +85,11 @@ class ReadAsExtensionTest {
 
             val result = json.readAsNumber(JsonErrors::InvalidType, transformer)
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-
-            val (path, errors) = result.errors[0]
-            assertEquals(JsPath.empty, path)
-            assertEquals(1, errors.size)
-
-            val error = errors[0] as JsonErrors.InvalidType
-            assertEquals(JsValue.Type.NUMBER, error.expected)
-            assertEquals(JsValue.Type.BOOLEAN, error.actual)
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
+                )
+            )
         }
     }
 }

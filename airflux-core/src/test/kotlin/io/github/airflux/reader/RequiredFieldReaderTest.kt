@@ -2,6 +2,8 @@ package io.github.airflux.reader
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.USER_NAME_VALUE
+import io.github.airflux.common.assertAsFailure
+import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.result.JsResult
@@ -10,8 +12,6 @@ import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class RequiredFieldReaderTest {
 
@@ -34,9 +34,7 @@ class RequiredFieldReaderTest {
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty / "name", result.path)
-            assertEquals(USER_NAME_VALUE, result.value)
+            result.assertAsSuccess(path = JsPath.empty / "name", value = USER_NAME_VALUE)
         }
 
         @Test
@@ -50,15 +48,9 @@ class RequiredFieldReaderTest {
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / "name", pathError)
-
-                    assertEquals(1, errors.size)
-                    assertTrue(errors[0] is JsonErrors.PathMissing)
-                }
+            result.assertAsFailure(
+                JsPath.empty / "name" to listOf(JsonErrors.PathMissing)
+            )
         }
 
         @Test
@@ -76,17 +68,11 @@ class RequiredFieldReaderTest {
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / "name", pathError)
-
-                    assertEquals(1, errors.size)
-                    val error = errors[0] as JsonErrors.InvalidType
-                    assertEquals(JsValue.Type.ARRAY, error.expected)
-                    assertEquals(JsValue.Type.STRING, error.actual)
-                }
+            result.assertAsFailure(
+                JsPath.empty / "name" to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+                )
+            )
         }
     }
 
@@ -98,19 +84,16 @@ class RequiredFieldReaderTest {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
-            val path = JsPath.empty / "name"
 
             val result: JsResult<String> = readRequired(
                 from = json,
-                path = path,
+                path = JsPath.empty / "name",
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty / "name", result.path)
-            assertEquals(USER_NAME_VALUE, result.value)
+            result.assertAsSuccess(path = JsPath.empty / "name", value = USER_NAME_VALUE)
         }
 
         @Test
@@ -118,51 +101,37 @@ class RequiredFieldReaderTest {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
-            val path = JsPath.empty / "role"
 
             val result: JsResult<String> = readRequired(
                 from = json,
-                path = path,
+                path = JsPath.empty / "role",
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / "role", pathError)
-
-                    assertEquals(1, errors.size)
-                    assertTrue(errors[0] is JsonErrors.PathMissing)
-                }
+            result.assertAsFailure(
+                JsPath.empty / "role" to listOf(JsonErrors.PathMissing)
+            )
         }
 
         @Test
         fun `Testing 'readRequired' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
-            val path = JsPath.empty / "name"
 
             val result: JsResult<String> = readRequired(
                 from = json,
-                path = path,
+                path = JsPath.empty / "name",
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty, pathError)
-
-                    assertEquals(1, errors.size)
-                    val error = errors[0] as JsonErrors.InvalidType
-                    assertEquals(JsValue.Type.OBJECT, error.expected)
-                    assertEquals(JsValue.Type.STRING, error.actual)
-                }
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+                )
+            )
         }
     }
 
@@ -183,9 +152,7 @@ class RequiredFieldReaderTest {
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty / "name", result.path)
-            assertEquals(USER_NAME_VALUE, result.value)
+            result.assertAsSuccess(path = JsPath.empty / "name", value = USER_NAME_VALUE)
         }
 
         @Test
@@ -202,15 +169,9 @@ class RequiredFieldReaderTest {
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty / "role", pathError)
-
-                    assertEquals(1, errors.size)
-                    assertTrue(errors[0] is JsonErrors.PathMissing)
-                }
+            result.assertAsFailure(
+                JsPath.empty / "role" to listOf(JsonErrors.PathMissing)
+            )
         }
 
         @Test
@@ -225,17 +186,11 @@ class RequiredFieldReaderTest {
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Failure
-            assertEquals(1, result.errors.size)
-            result.errors[0]
-                .also { (pathError, errors) ->
-                    assertEquals(JsPath.empty, pathError)
-
-                    assertEquals(1, errors.size)
-                    val error = errors[0] as JsonErrors.InvalidType
-                    assertEquals(JsValue.Type.OBJECT, error.expected)
-                    assertEquals(JsValue.Type.STRING, error.actual)
-                }
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+                )
+            )
         }
     }
 }

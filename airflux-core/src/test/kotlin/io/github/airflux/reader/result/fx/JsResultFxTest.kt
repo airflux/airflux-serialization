@@ -1,5 +1,7 @@
 package io.github.airflux.reader.result.fx
 
+import io.github.airflux.common.assertAsSuccess
+import io.github.airflux.path.JsPath
 import io.github.airflux.reader.result.JsResult
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,8 +35,6 @@ class JsResultFxTest {
             value * 2
         }
 
-
-        result as JsResult.Success
-        assertEquals(RESULT_VALUE, result.value)
+        result.assertAsSuccess(path = JsPath.empty , value = RESULT_VALUE)
     }
 }
