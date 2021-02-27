@@ -22,7 +22,13 @@ class JsPath internal constructor(val elements: List<PathElement>) {
             errors.map { (oldPath, errors) -> path + oldPath to errors }
     }
 
-    operator fun plus(other: JsPath): JsPath = JsPath(elements + other.elements)
+    operator fun plus(other: JsPath): JsPath {
+        return when {
+            other.elements.isEmpty() -> this
+            this.elements.isEmpty() -> other
+            else -> JsPath(elements + other.elements)
+        }
+    }
 
     operator fun div(child: String): JsPath = JsPath(elements + KeyPathElement(child))
 
