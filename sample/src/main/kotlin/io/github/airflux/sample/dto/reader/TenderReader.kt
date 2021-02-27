@@ -25,9 +25,9 @@ val TenderReader: JsReader<Tender> = run {
                 title = readNullable(from = input, byName = "title", using = stringReader)
                     .validation(titleIsNotEmpty)
                     .onFailure { return@reader it },
-                value = readNullable(from = input, byPath = JsPath("value"), using = ValueReader)
+                value = readNullable(from = input, byPath = JsPath.empty / "value", using = ValueReader)
                     .onFailure { return@reader it },
-                lots = readRequired(from = input, byPath = JsPath("lots"), using = LotsReader)
+                lots = readRequired(from = input, byPath = JsPath.empty / "lots", using = LotsReader)
                     .onFailure { return@reader it }
             )
         )

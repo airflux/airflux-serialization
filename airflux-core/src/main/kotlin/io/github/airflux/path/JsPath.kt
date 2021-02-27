@@ -8,9 +8,9 @@ class JsPath internal constructor(val elements: List<PathElement>) {
 
         val empty = JsPath(elements = emptyList())
 
-        operator fun invoke(key: String): JsPath = JsPath(elements = listOf(KeyPathElement(key)))
+        internal operator fun invoke(key: String): JsPath = JsPath(elements = listOf(KeyPathElement(key)))
 
-        operator fun invoke(idx: Int): JsPath = JsPath(elements = listOf(IdxPathElement(idx)))
+        internal operator fun invoke(idx: Int): JsPath = JsPath(elements = listOf(IdxPathElement(idx)))
 
         infix operator fun String.div(child: String): JsPath =
             JsPath(elements = listOf(KeyPathElement(this), KeyPathElement(child)))

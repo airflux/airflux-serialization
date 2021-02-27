@@ -10,7 +10,7 @@ import io.github.airflux.sample.dto.reader.base.PathReaders.readRequired
 val RequestReader: JsReader<Request> = reader { input ->
     JsResult.Success(
         Request(
-            tender = readRequired(from = input, byPath = JsPath("tender"), using = TenderReader)
+            tender = readRequired(from = input, byPath = JsPath.empty / "tender", using = TenderReader)
                 .onFailure { return@reader it })
     )
 }
