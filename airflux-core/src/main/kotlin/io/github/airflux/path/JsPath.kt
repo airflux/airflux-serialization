@@ -12,6 +12,12 @@ class JsPath internal constructor(val elements: List<PathElement>) {
 
         operator fun invoke(idx: Int): JsPath = JsPath(elements = listOf(IdxPathElement(idx)))
 
+        infix operator fun String.div(child: String): JsPath =
+            JsPath(elements = listOf(KeyPathElement(this), KeyPathElement(child)))
+
+        infix operator fun String.div(idx: Int): JsPath =
+            JsPath(elements = listOf(KeyPathElement(this), IdxPathElement(idx)))
+
         fun repath(errors: List<Pair<JsPath, List<JsError>>>, path: JsPath): List<Pair<JsPath, List<JsError>>> =
             errors.map { (oldPath, errors) -> path + oldPath to errors }
     }

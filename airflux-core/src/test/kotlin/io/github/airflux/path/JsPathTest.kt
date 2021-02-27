@@ -2,6 +2,7 @@ package io.github.airflux.path
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.ObjectContract
+import io.github.airflux.path.JsPath.Companion.div
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -77,5 +78,31 @@ class JsPathTest {
             JsPath.empty / "user" / "name",
             JsPath.empty / "user" / "phones"
         )
+    }
+
+    @Test
+    fun `Create a path by two text elements`() {
+        val path = "user" / "name"
+
+        assertEquals(expected = 2, actual = path.elements.size)
+
+        val firstElement = path.elements[0] as KeyPathElement
+        assertEquals(expected = "user", actual = firstElement.key)
+
+        val secondElement = path.elements[1] as KeyPathElement
+        assertEquals(expected = "name", actual = secondElement.key)
+    }
+
+    @Test
+    fun `Create a path by text element and index element`() {
+        val path = "phones" / 0
+
+        assertEquals(expected = 2, actual = path.elements.size)
+
+        val firstElement = path.elements[0] as KeyPathElement
+        assertEquals(expected = "phones", actual = firstElement.key)
+
+        val secondElement = path.elements[1] as IdxPathElement
+        assertEquals(expected = 0, actual = secondElement.idx)
     }
 }
