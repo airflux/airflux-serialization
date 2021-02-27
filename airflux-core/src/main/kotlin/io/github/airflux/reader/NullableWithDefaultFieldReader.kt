@@ -11,7 +11,7 @@ import io.github.airflux.value.extension.lookup
 fun <T : Any> readNullable(
     from: JsLookup,
     using: JsReader<T>,
-    defaultValue: () -> T,
+    defaultValue: () -> T?,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
     when (from) {
@@ -38,7 +38,7 @@ fun <T : Any> readNullable(
     from: JsValue,
     path: JsPath,
     using: JsReader<T>,
-    defaultValue: () -> T,
+    defaultValue: () -> T?,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
     readNullable(
@@ -60,7 +60,7 @@ fun <T : Any> readNullable(
     from: JsValue,
     name: String,
     using: JsReader<T>,
-    defaultValue: () -> T,
+    defaultValue: () -> T?,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
     readNullable(

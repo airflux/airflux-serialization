@@ -30,10 +30,10 @@ object PathReaders {
         readRequired(from, byName, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
 
     fun <T : Any> readNullable(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T?> =
-        readNullable(from, byPath, using, ErrorBuilder.InvalidType)
+        readNullable(from, byPath, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
 
     fun <T : Any> readNullable(from: JsValue, byName: String, using: JsReader<T>): JsResult<T?> =
-        readNullable(from, byName, using, ErrorBuilder.InvalidType)
+        readNullable(from, byName, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
 }
 
 object CollectionReaders {

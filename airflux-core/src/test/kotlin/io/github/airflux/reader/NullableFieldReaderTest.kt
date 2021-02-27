@@ -4,6 +4,7 @@ import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class NullableFieldReaderTest {
 
@@ -28,8 +30,12 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String?> =
-                readNullable(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+            val result: JsResult<String?> = readNullable(
+                from = from,
+                using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
+            )
 
             result as JsResult.Success
             assertEquals(JsPath.empty / "name", result.path)
@@ -40,8 +46,12 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is found with value 'null')`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
-            val result: JsResult<String?> =
-                readNullable(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+            val result: JsResult<String?> = readNullable(
+                from = from,
+                using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
+            )
 
             result as JsResult.Success
             assertEquals(JsPath.empty / "name", result.path)
@@ -49,15 +59,25 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found, returning value 'null')`() {
+        fun `Testing 'readNullable' function (an attribute is not found)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String?> =
-                readNullable(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+            val result: JsResult<String?> = readNullable(
+                from = from,
+                using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
+            )
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty / "name", result.path)
-            assertNull(result.value)
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals(JsPath.empty / "name", pathError)
+
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsonErrors.PathMissing)
+                }
         }
 
         @Test
@@ -68,8 +88,12 @@ class NullableFieldReaderTest {
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String?> =
-                readNullable(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+            val result: JsResult<String?> = readNullable(
+                from = from,
+                using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
+                invalidTypeErrorBuilder = JsonErrors::InvalidType
+            )
 
             result as JsResult.Failure
             assertEquals(1, result.errors.size)
@@ -99,6 +123,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = path,
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -118,6 +143,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = path,
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -127,7 +153,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found, returning value 'null')`() {
+        fun `Testing 'readNullable' function (an attribute is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -137,12 +163,19 @@ class NullableFieldReaderTest {
                 from = json,
                 path = path,
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty / "role", result.path)
-            assertNull(result.value)
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals(JsPath.empty / "role", pathError)
+
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsonErrors.PathMissing)
+                }
         }
 
         @Test
@@ -154,6 +187,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = path,
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -185,6 +219,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -203,6 +238,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -212,7 +248,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found, returning value 'null')`() {
+        fun `Testing 'readNullable' function (an attribute is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -221,12 +257,19 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "role",
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
-            result as JsResult.Success
-            assertEquals(JsPath.empty / "role", result.path)
-            assertNull(result.value)
+            result as JsResult.Failure
+            assertEquals(1, result.errors.size)
+            result.errors[0]
+                .also { (pathError, errors) ->
+                    assertEquals(JsPath.empty / "role", pathError)
+
+                    assertEquals(1, errors.size)
+                    assertTrue(errors[0] is JsonErrors.PathMissing)
+                }
         }
 
         @Test
@@ -237,6 +280,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 

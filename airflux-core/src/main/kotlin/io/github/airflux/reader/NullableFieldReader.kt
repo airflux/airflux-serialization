@@ -11,6 +11,7 @@ import io.github.airflux.value.extension.lookup
 fun <T : Any> readNullable(
     from: JsLookup,
     using: JsReader<T>,
+    pathMissingErrorBuilder: () -> JsError,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
     when (from) {
@@ -19,7 +20,8 @@ fun <T : Any> readNullable(
             else -> using.read(from.value).repath(from.path)
         }
 
-        is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = null)
+        is JsLookup.Undefined.PathMissing ->
+            JsResult.Failure(path = from.path, error = pathMissingErrorBuilder())
 
         is JsLookup.Undefined.InvalidType ->
             JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder(from.expected, from.actual))
@@ -37,9 +39,15 @@ fun <T : Any> readNullable(
     from: JsValue,
     path: JsPath,
     using: JsReader<T>,
+    pathMissingErrorBuilder: () -> JsError,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
-    readNullable(from = from.lookup(path), using = using, invalidTypeErrorBuilder = invalidTypeErrorBuilder)
+    readNullable(
+        from = from.lookup(path),
+        using = using,
+        pathMissingErrorBuilder = pathMissingErrorBuilder,
+        invalidTypeErrorBuilder = invalidTypeErrorBuilder
+    )
 
 /**
  * Reads nullable field by [name].
@@ -53,6 +61,12 @@ fun <T : Any> readNullable(
     from: JsValue,
     name: String,
     using: JsReader<T>,
+    pathMissingErrorBuilder: () -> JsError,
     invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ): JsResult<T?> =
-    readNullable(from = from.lookup(name), using = using, invalidTypeErrorBuilder = invalidTypeErrorBuilder)
+    readNullable(
+        from = from.lookup(name),
+        using = using,
+        pathMissingErrorBuilder = pathMissingErrorBuilder,
+        invalidTypeErrorBuilder = invalidTypeErrorBuilder
+    )
