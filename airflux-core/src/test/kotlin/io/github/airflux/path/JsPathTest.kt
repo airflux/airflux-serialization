@@ -6,6 +6,7 @@ import io.github.airflux.path.JsPath.Companion.div
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class JsPathTest {
@@ -33,6 +34,39 @@ class JsPathTest {
             assertEquals(1, errors.size)
             val error = errors[0]
             assertTrue(error is JsonErrors.PathMissing)
+        }
+
+        @Nested
+        inner class OperatorPlus {
+
+            @Test
+            fun `Testing operator 'plus'`() {
+                val target = JsPath.empty / "user"
+                val other = JsPath.empty / "id"
+
+                val path = target + other
+                assertEquals(listOf(KeyPathElement("user"), KeyPathElement("id")), path.elements)
+            }
+
+            @Test
+            fun `Testing operator 'plus' (target path is empty)`() {
+                val target = JsPath.empty
+                val other = JsPath.empty / "user"
+
+                val path = target + other
+
+                assertSame(path, other)
+            }
+
+            @Test
+            fun `Testing operator 'plus' (other path is empty)`() {
+                val target = JsPath.empty / "user"
+                val other = JsPath.empty
+
+                val path = target + other
+
+                assertSame(path, target)
+            }
         }
     }
 
