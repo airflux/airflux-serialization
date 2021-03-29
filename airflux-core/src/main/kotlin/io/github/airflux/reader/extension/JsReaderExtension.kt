@@ -20,9 +20,9 @@ fun JsValue.readAsString(errorInvalidType: (expected: JsValue.Type, actual: JsVa
 
 fun <T : Number> JsValue.readAsNumber(
     errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError,
-    transformer: (String) -> JsResult<T>
+    reader: (String) -> JsResult<T>
 ) = when (this) {
-    is JsNumber -> transformer(this.underlying)
+    is JsNumber -> reader(this.underlying)
     else -> JsResult.Failure(error = errorInvalidType(JsValue.Type.NUMBER, this.type))
 }
 
