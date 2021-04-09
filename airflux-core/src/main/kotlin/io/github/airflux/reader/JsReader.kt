@@ -5,15 +5,7 @@ import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
 
 @Suppress("unused")
-interface JsReader<T> {
-
-    companion object {
-
-        operator fun <T> invoke(block: (JsValue) -> JsResult<T>) =
-            object : JsReader<T> {
-                override fun read(input: JsValue): JsResult<T> = block(input)
-            }
-    }
+fun interface JsReader<T> {
 
     /**
      * Convert the [JsValue] into a T
