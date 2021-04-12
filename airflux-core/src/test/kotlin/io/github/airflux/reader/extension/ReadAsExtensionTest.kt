@@ -7,6 +7,7 @@ import io.github.airflux.path.JsPath
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
+import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
 import org.junit.jupiter.api.Nested
@@ -88,6 +89,39 @@ class ReadAsExtensionTest {
             result.assertAsFailure(
                 JsPath.empty to listOf(
                     JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
+                )
+            )
+        }
+    }
+
+    data class User(val name: String)
+
+    @Nested
+    inner class ReadAsObject {
+
+        private val reader = { input: JsObject ->
+            val userName = input.underlying["name"] as JsString
+            JsResult.Success(User(name = userName.underlying))
+        }
+
+        @Test
+        fun `Testing extension-function 'readAsObject'`() {
+            val json: JsValue = JsObject("name" to JsString("user-name"))
+
+            val result = json.readAsObject(JsonErrors::InvalidType, reader)
+
+            result.assertAsSuccess(path = JsPath.empty, value = User(name = "user-name"))
+        }
+
+        @Test
+        fun `Testing extension-function 'readAsObject' invalid type)`() {
+            val json: JsValue = JsBoolean.valueOf(true)
+
+            val result = json.readAsObject(JsonErrors::InvalidType, reader)
+
+            result.assertAsFailure(
+                JsPath.empty to listOf(
+                    JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.BOOLEAN)
                 )
             )
         }
