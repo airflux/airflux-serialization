@@ -5,7 +5,7 @@ import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 
 @Suppress("unused")
-object BaseNumberValidators {
+object BaseOrderValidators {
 
     /**
      * Validation of a value, if a value less than a [expected] value then [error], otherwise success.

@@ -1,13 +1,13 @@
 package io.github.airflux.sample.json.validation
 
 import io.github.airflux.reader.validator.JsValidator
-import io.github.airflux.reader.validator.base.BaseNumberValidators
+import io.github.airflux.reader.validator.base.BaseOrderValidators
 import io.github.airflux.sample.json.error.JsonErrors
 
-object NumberValidator {
+object OrderValidator {
 
     fun <T : Comparable<T>> min(value: T): JsValidator<T, JsonErrors.Validation.Numbers> =
-        BaseNumberValidators.min(
+        BaseOrderValidators.min(
             expected = value,
             error = { expected: T, actual: T ->
                 JsonErrors.Validation.Numbers.Min(expected = expected, actual = actual)
@@ -15,7 +15,7 @@ object NumberValidator {
         )
 
     fun <T : Comparable<T>> max(value: T): JsValidator<T, JsonErrors.Validation.Numbers> =
-        BaseNumberValidators.max(
+        BaseOrderValidators.max(
             expected = value,
             error = { expected: T, actual: T ->
                 JsonErrors.Validation.Numbers.Max(expected = expected, actual = actual)
@@ -23,7 +23,7 @@ object NumberValidator {
         )
 
     fun <T : Comparable<T>> gt(value: T): JsValidator<T, JsonErrors.Validation.Numbers> =
-        BaseNumberValidators.gt(
+        BaseOrderValidators.gt(
             expected = value,
             error = { expected: T, actual: T -> JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual) }
         )

@@ -8,7 +8,7 @@ import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Value
 import io.github.airflux.sample.dto.reader.simple.base.PathReaders.readRequired
 import io.github.airflux.sample.dto.reader.simple.base.PrimitiveReader.stringReader
-import io.github.airflux.sample.json.validation.NumberValidator.gt
+import io.github.airflux.sample.json.validation.OrderValidator.gt
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 import java.math.BigDecimal
 

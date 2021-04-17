@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class NumberValidatorsTest {
+class OrderValidatorsTest {
 
     companion object {
 
         private fun minBasicValidator(value: Int) =
-            BaseNumberValidators.min<Int, JsonErrors.Validation>(
+            BaseOrderValidators.min<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Min(expected = expectedValue, actual = actualValue)
@@ -19,7 +19,7 @@ class NumberValidatorsTest {
             )
 
         private fun maxBasicValidator(value: Int) =
-            BaseNumberValidators.max<Int, JsonErrors.Validation>(
+            BaseOrderValidators.max<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Max(expected = expectedValue, actual = actualValue)
@@ -27,7 +27,7 @@ class NumberValidatorsTest {
             )
 
         private fun eqBasicValidator(value: Int) =
-            BaseNumberValidators.eq<Int, JsonErrors.Validation>(
+            BaseOrderValidators.eq<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Eq(expected = expectedValue, actual = actualValue)
@@ -35,7 +35,7 @@ class NumberValidatorsTest {
             )
 
         private fun neBasicValidator(value: Int) =
-            BaseNumberValidators.ne<Int, JsonErrors.Validation>(
+            BaseOrderValidators.ne<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Ne(expected = expectedValue, actual = actualValue)
@@ -43,7 +43,7 @@ class NumberValidatorsTest {
             )
 
         private fun gtBasicValidator(value: Int) =
-            BaseNumberValidators.gt<Int, JsonErrors.Validation>(
+            BaseOrderValidators.gt<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Gt(expected = expectedValue, actual = actualValue)
@@ -51,7 +51,7 @@ class NumberValidatorsTest {
             )
 
         private fun ltBasicValidator(value: Int) =
-            BaseNumberValidators.lt<Int, JsonErrors.Validation>(
+            BaseOrderValidators.lt<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Lt(expected = expectedValue, actual = actualValue)
@@ -59,7 +59,7 @@ class NumberValidatorsTest {
             )
 
         private fun geBasicValidator(value: Int) =
-            BaseNumberValidators.ge<Int, JsonErrors.Validation>(
+            BaseOrderValidators.ge<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Ge(expected = expectedValue, actual = actualValue)
@@ -67,7 +67,7 @@ class NumberValidatorsTest {
             )
 
         private fun leBasicValidator(value: Int) =
-            BaseNumberValidators.le<Int, JsonErrors.Validation>(
+            BaseOrderValidators.le<Int, JsonErrors.Validation>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Le(expected = expectedValue, actual = actualValue)
