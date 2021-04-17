@@ -34,10 +34,7 @@ Data classes
 data class Request(val tender: Tender)
 data class Tender(val id: String, val title: String, val value: Value?, val lots: List<Lot>)
 data class Lot(val id: String, val status: LotStatus, val value: Value)
-data class Value(val amount: Amount, val currency: String)
-data class Amount(val value: BigDecimal) : Comparable<Amount> {
-    override fun compareTo(other: Amount): Int = value.compareTo(other.value)
-}
+data class Value(val amount: BigDecimal, val currency: String)
 ```
 
 ## JsPath
