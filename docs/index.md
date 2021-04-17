@@ -30,10 +30,14 @@ JSON sample
 
 Data classes
 ```kotlin
+
 data class Request(val tender: Tender)
 data class Tender(val id: String, val title: String, val value: Value?, val lots: List<Lot>)
-data class Lot(val id: String, val status: String, val value: Value)
-data class Value(val amount: BigDecimal, val currency: String)
+data class Lot(val id: String, val status: LotStatus, val value: Value)
+data class Value(val amount: Amount, val currency: String)
+data class Amount(val value: BigDecimal) : Comparable<Amount> {
+    override fun compareTo(other: Amount): Int = value.compareTo(other.value)
+}
 ```
 
 ## JsPath
@@ -48,10 +52,10 @@ Indexed path
 val firstLotValuePath = "tender" / "lots" / 0 / "value"
 ```
 
-
 ## JsReader
 
-### Define errors builder.
+### Example 1
+#### Define errors builder.
 ```kotlin
 object ErrorBuilder {
     val PathMissing: () -> JsError = { JsonErrors.PathMissing }
@@ -59,15 +63,16 @@ object ErrorBuilder {
 }
 ```
 
-### Define base readers.
-#### Define readers for primitive types.
+#### Define base readers.
+- Define readers for primitive types.
 ```kotlin
 object PrimitiveReader : BasePrimitiveReader {
     val stringReader = BasePrimitiveReader.string(ErrorBuilder.InvalidType)
     val bigDecimalReader = BasePrimitiveReader.bigDecimal(ErrorBuilder.InvalidType)
 }
 ```
-#### Define path-readers.
+
+- Define path-readers.
 ```kotlin
 object PathReaders {
 
@@ -77,14 +82,15 @@ object PathReaders {
     fun <T : Any> readRequired(from: JsValue, byName: String, using: JsReader<T>): JsResult<T> =
         readRequired(from, byName, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
 
-    fun <T : Any> readNullable(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T?> =
-        readNullable(from, byPath, using, ErrorBuilder.InvalidType)
+    fun <T : Any> readOptional(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T?> =
+        readOptional(from, byPath, using, ErrorBuilder.InvalidType)
 
-    fun <T : Any> readNullable(from: JsValue, byName: String, using: JsReader<T>): JsResult<T?> =
-        readNullable(from, byName, using, ErrorBuilder.InvalidType)
+    fun <T : Any> readOptional(from: JsValue, byName: String, using: JsReader<T>): JsResult<T?> =
+        readOptional(from, byName, using, ErrorBuilder.InvalidType)
 }
 ```
-#### Define collection readers.
+
+- Define collection readers.
 ```kotlin
 object CollectionReaders {
     fun <T : Any> readAsList(using: JsReader<T>): JsReader<List<T>> =
@@ -92,19 +98,44 @@ object CollectionReaders {
 }
 ```
 
-### Reader for a 'Value' type.
+- Define reader of enum.
+```kotlin
+object EnumReader {
+    inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
+        JsReader { input ->
+            stringReader.read(input)
+                .validation(StringValidator.isNotBlank)
+                .flatMap { text ->
+                    try {
+                        JsResult.Success(enumValueOf<T>(text.toUpperCase()))
+                    } catch (ignored: Exception) {
+                        JsResult.Failure(JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString()))
+                    }
+                }
+        }
+}
+```
+
+#### Define domain readers.
+
+- Define reader for a 'Amount' type.
+```kotlin
+val AmountReader = PrimitiveReader.bigDecimalReader
+```
+
+- Define reader for a 'Value' type.
 ```kotlin
 val ValueReader: JsReader<Value> = run {
-    val amountMoreZero = gt(BigDecimal("0.01"))
+    val amountMoreZero = gt(BigDecimal.ZERO)
 
     reader { input ->
         JsResult.Success(
             Value(
-                amount = readRequired(from = input, byPath = JsPath("amount"), using = bigDecimalReader)
+                amount = readRequired(from = input, byPath = JsPath.empty / "amount", using = AmountReader)
                     .validation(amountMoreZero)
                     .onFailure { return@reader it },
 
-                currency = readRequired(from = input, byPath = JsPath("currency"), using = stringReader)
+                currency = readRequired(from = input, byPath = JsPath.empty / "currency", using = stringReader)
                     .validation(isNotBlank)
                     .onFailure { return@reader it }
             )
@@ -113,62 +144,231 @@ val ValueReader: JsReader<Value> = run {
 }
 ```
 
-### Reader for a 'Lot' type.
+- Define reader for a 'LotStatus' type.
+```kotlin
+val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
+```
+
+- Define reader for a 'Lot' type.
 ```kotlin
 val LotReader: JsReader<Lot> = reader { input ->
     JsResult.fx {
         val (id) = readRequired(from = input, byName = "id", using = stringReader)
             .validation(isNotBlank)
-        val (status) = readRequired(from = input, byPath = JsPath("status"), using = stringReader)
-            .validation(isNotBlank)
-        val (value) = readRequired(from = input, byPath = JsPath("value"), using = ValueReader)
+        val (status) = readRequired(from = input, byPath = JsPath.empty / "status", using = LotStatusReader)
+        val (value) = readRequired(from = input, byPath = JsPath.empty / "value", using = ValueReader)
 
         Lot(id = id, status = status, value = value)
     }
 }
 ```
 
-### Reader for a 'Lots' type.
+- Define reader for a 'Lots' type.
 ```kotlin
-val LotsReader = readAsList(LotReader)
+val LotsReader = CollectionReader.list(LotReader)
     .validation(isUnique { lot -> lot.id })
 ```
 
-### Reader for a 'Tender' type.
+- Define reader for a 'Tender' type.
 ```kotlin
 val TenderReader: JsReader<Tender> = run {
+
     val titleIsNotEmpty = applyIfNotNull(isNotBlank)
+
     reader { input ->
         JsResult.Success(
             Tender(
                 id = readRequired(from = input, byName = "id", using = stringReader)
                     .validation(isNotBlank)
                     .onFailure { return@reader it },
-                title = readNullable(from = input, byName = "title", using = stringReader)
+                title = readOptional(from = input, byName = "title", using = stringReader)
                     .validation(titleIsNotEmpty)
                     .onFailure { return@reader it },
-                value = readNullable(from = input, byPath = JsPath("value"), using = ValueReader)
+                value = readOptional(from = input, byPath = JsPath.empty / "value", using = ValueReader)
                     .onFailure { return@reader it },
-                lots = readRequired(from = input, byPath = JsPath("lots"), using = LotsReader)
+                lots = readRequired(from = input, byPath = JsPath.empty / "lots", using = LotsReader)
                     .onFailure { return@reader it }
             )
         )
     }
 }
 ```
-### Reader for a 'Request' type.
+
+- Define reader for a 'Request' type.
 ```kotlin
 val RequestReader: JsReader<Request> = reader { input ->
     JsResult.Success(
         Request(
-            tender = readRequired(from = input, byPath = JsPath("tender"), using = TenderReader)
+            tender = readRequired(from = input, byPath = JsPath.empty / "tender", using = TenderReader)
                 .onFailure { return@reader it })
     )
 }
 ```
 
+### Example 2
+
+#### Define errors builder.
+```kotlin
+object ErrorBuilder {
+    val PathMissing: () -> JsError = { JsonErrors.PathMissing }
+    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError = JsonErrors::InvalidType
+}
+```
+
+#### Define base readers.
+- Define readers for primitive types.
+```kotlin
+object PrimitiveReader : BasePrimitiveReader {
+    val stringReader = BasePrimitiveReader.string(ErrorBuilder.InvalidType)
+    val bigDecimalReader = BasePrimitiveReader.bigDecimal(ErrorBuilder.InvalidType)
+}
+```
+
+- Define collection readers.
+```kotlin
+object CollectionReaders {
+    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { input ->
+        readAsList(input, using, ErrorBuilder.InvalidType)
+    }
+}
+```
+
+- Define reader of enum.
+```kotlin
+object EnumReader {
+    inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
+        JsReader { input ->
+            stringReader.read(input)
+                .validation(StringValidator.isNotBlank)
+                .flatMap { text ->
+                    try {
+                        JsResult.Success(enumValueOf<T>(text.toUpperCase()))
+                    } catch (ignored: Exception) {
+                        JsResult.Failure(JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString()))
+                    }
+                }
+        }
+}
+```
+
+- Define default config for object reader.
+```kotlin
+val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
+    .apply {
+        failFast = true
+    }
+    .build()
+```
+
+- Define default validations for object reader.
+```kotlin
+val DefaultObjectValidations = ObjectValidations.Builder()
+    .apply {
+        isNotEmpty = true
+    }
+```
+
+- Define object reader builder.
+```kotlin
+val reader = ObjectReader(ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+inline fun <T> simpleBuilder(crossinline builder: (ObjectValuesMap) -> T): (ObjectValuesMap) -> JsResult<T> =
+    { JsResult.Success(builder(it)) }
+```
+
+#### Define domain readers.
+
+- Define reader for a 'Amount' type.
+```kotlin
+private val amountMoreZero = NumberValidator.gt(BigDecimal.ZERO)
+val AmountReader = bigDecimalReader.validation(amountMoreZero)
+```
+
+- Define reader for a 'Currency' type.
+```kotlin
+val CurrencyReader: JsReader<String> = stringReader.validation(isNotBlank)
+```
+
+- Define reader for a 'Value' type.
+```kotlin
+val ValueReader: JsReader<Value> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+    val amount = attribute(name = "amount", reader = AmountReader).required()
+    val currency = attribute(name = "currency", reader = CurrencyReader).required()
+
+    typeBuilder = simpleBuilder { values ->
+        Value(
+            amount = values[amount],
+            currency = values[currency]
+        )
+    }
+}
+```
+
+- Define reader for a 'LotStatus' type.
+```kotlin
+val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
+```
+
+- Define reader for a 'Lot' type.
+```kotlin
+val LotReader: JsReader<Lot> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+    val id = attribute(name = "id", reader = stringReader).required()
+    val status = attribute(name = "status", reader = LotStatusReader).required()
+    val value = attribute(name = "value", reader = ValueReader).required()
+
+    typeBuilder = simpleBuilder { values ->
+        Lot(
+            id = values[id],
+            status = values[status],
+            value = values[value]
+        )
+    }
+}
+```
+
+- Define reader for a 'Lots' type.
+```kotlin
+val LotsReader = CollectionReader.list(LotReader)
+    .validation(isUnique { lot -> lot.id })
+```
+
+- Define reader for a 'Title' type.
+```kotlin
+val TitleReader: JsReader<String> = stringReader.validation(isNotBlank)
+```
+
+- Define reader for a 'Tender' type.
+```kotlin
+val TenderReader: JsReader<Tender> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+    val id = attribute(name = "id", reader = stringReader).required().validation(isNotBlank)
+    val title = attribute(name = "title", reader = TitleReader).optional()
+    val value = attribute(name = "value", reader = ValueReader).optional()
+    val lots = attribute(name = "lots", reader = LotsReader).required()
+
+    typeBuilder = simpleBuilder { values ->
+        Tender(
+            id = values[id],
+            title = values[title],
+            value = values[value],
+            lots = values[lots],
+        )
+    }
+}
+```
+
+- Define reader for a 'Request' type.
+```kotlin
+val RequestReader: JsReader<Request> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+    val tender = attribute(name = "tender", reader = TenderReader).required()
+
+    typeBuilder = simpleBuilder { values ->
+        Request(tender = values[tender])
+    }
+}
+```
+
 ## JsWriter
 ```kotlin
+val DecimalWriter = BasePrimitiveWriter.bigDecimal()
 val ValueWriter: JsWriter<Value> = objectWriter {
     writeRequired(from = Value::amount, to = "amount", using = DecimalWriter)
     writeRequired(from = Value::currency, to = "currency", using = BasePrimitiveWriter.string)

@@ -12,6 +12,8 @@ sealed class JsonErrors : JsError {
 
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 
+    data class EnumCast(val expected: String, val actual: String) : JsonErrors()
+
     sealed class Validation : JsonErrors() {
 
         sealed class Numbers : Validation() {
@@ -33,6 +35,13 @@ sealed class JsonErrors : JsError {
             class IsA(val value: String) : Strings()
             object IsEmpty : Strings()
             object IsBlank : Strings()
+        }
+
+        sealed class Object : Validation() {
+            object IsEmpty : Validation.Object()
+            class AdditionalProperties(val names: List<String>) : Validation.Object()
+            class MinProperties(val expected: Int, val actual: Int) : Validation.Object()
+            class MaxProperties(val expected: Int, val actual: Int) : Validation.Object()
         }
     }
 }

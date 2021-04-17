@@ -6,7 +6,7 @@ import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.Response
 import io.github.airflux.sample.dto.model.Value
-import io.github.airflux.sample.dto.reader.RequestReader
+import io.github.airflux.sample.dto.reader.simple.RequestReader
 import io.github.airflux.sample.dto.writer.ResponseWriter
 import io.github.airflux.value.JsValue
 import java.math.BigDecimal
