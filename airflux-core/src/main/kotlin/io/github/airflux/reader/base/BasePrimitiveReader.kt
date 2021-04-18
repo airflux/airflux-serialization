@@ -5,7 +5,8 @@ import io.github.airflux.reader.extension.readAsBoolean
 import io.github.airflux.reader.extension.readAsNumber
 import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsError
-import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.asFailure
+import io.github.airflux.reader.result.asSuccess
 import io.github.airflux.value.JsValue
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -37,9 +38,9 @@ interface BasePrimitiveReader {
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
-                        JsResult.Success(text.toByte())
+                        text.toByte().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        JsResult.Failure(error = errorValueCast(text, Byte::class))
+                        errorValueCast(text, Byte::class).asFailure()
                     }
                 }
             }
@@ -54,9 +55,9 @@ interface BasePrimitiveReader {
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
-                        JsResult.Success(text.toShort())
+                        text.toShort().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        JsResult.Failure(error = errorValueCast(text, Short::class))
+                        errorValueCast(text, Short::class).asFailure()
                     }
                 }
             }
@@ -71,9 +72,9 @@ interface BasePrimitiveReader {
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
-                        JsResult.Success(text.toInt())
+                        text.toInt().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        JsResult.Failure(error = errorValueCast(text, Int::class))
+                        errorValueCast(text, Int::class).asFailure()
                     }
                 }
             }
@@ -88,9 +89,9 @@ interface BasePrimitiveReader {
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
-                        JsResult.Success(text.toLong())
+                        text.toLong().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        JsResult.Failure(error = errorValueCast(text, Long::class))
+                        errorValueCast(text, Long::class).asFailure()
                     }
                 }
             }
@@ -101,7 +102,7 @@ interface BasePrimitiveReader {
         fun bigDecimal(errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError): JsReader<BigDecimal> =
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
-                    JsResult.Success(BigDecimal(text))
+                    BigDecimal(text).asSuccess()
                 }
             }
     }

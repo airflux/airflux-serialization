@@ -5,6 +5,7 @@ import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.extension.readAsObject
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.asFailure
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 
@@ -104,7 +105,7 @@ class ObjectReader(
         ): JsResult<R> {
             val preValidationErrors = preValidation(configuration, input, validation, attributes)
             if (preValidationErrors.isNotEmpty())
-                return JsResult.Failure(path = JsPath.empty, errors = preValidationErrors)
+                return preValidationErrors.asFailure()
 
             val parseErrors = mutableListOf<JsResult.Failure>()
             val objectValuesMap = ObjectValuesMap.Builder()
@@ -120,7 +121,7 @@ class ObjectReader(
             if (parseErrors.isEmpty()) {
                 val postValidationErrors = postValidation(configuration, input, validation, attributes, objectValuesMap)
                 if (postValidationErrors.isNotEmpty())
-                    return JsResult.Failure(path = JsPath.empty, errors = postValidationErrors)
+                    return postValidationErrors.asFailure()
             }
 
             return if (parseErrors.isEmpty())

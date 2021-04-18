@@ -53,3 +53,12 @@ sealed class JsResult<out T> {
             Failure(errors = errors.map { (oldPath, errors) -> path + oldPath to errors })
     }
 }
+
+fun <T> T.asSuccess(path: JsPath = JsPath.empty): JsResult<T> =
+    JsResult.Success(value = this, path = path)
+
+fun <E : JsError> E.asFailure(path: JsPath = JsPath.empty): JsResult<Nothing> =
+    JsResult.Failure(path = path, error = this)
+
+fun <E : JsError> List<E>.asFailure(path: JsPath = JsPath.empty): JsResult<Nothing> =
+    JsResult.Failure(path = path, errors = this)
