@@ -32,10 +32,10 @@ class JsReaderTest {
 
     @Test
     fun `Testing 'or' function of the JsReader class (first reader)`() {
-        val idReader = JsReader {
+        val idReader = JsReader<String, JsonErrors> {
             JsResult.Success(path = ID_PATH, value = ID_VALUE)
         }
-        val identifierReader = JsReader<String> {
+        val identifierReader = JsReader<String, JsonErrors> {
             JsResult.Failure(path = IDENTIFIER_PATH, error = JsonErrors.PathMissing)
         }
         val composeReader = idReader or identifierReader
@@ -47,10 +47,10 @@ class JsReaderTest {
 
     @Test
     fun `Testing 'or' function of the JsReader class (second reader)`() {
-        val idReader = JsReader<String> {
+        val idReader = JsReader<String, JsonErrors> {
             JsResult.Failure(path = ID_PATH, error = JsonErrors.PathMissing)
         }
-        val identifierReader = JsReader {
+        val identifierReader = JsReader<String, JsonErrors> {
             JsResult.Success(path = IDENTIFIER_PATH, value = IDENTIFIER_VALUE)
         }
         val composeReader = idReader or identifierReader
@@ -62,10 +62,10 @@ class JsReaderTest {
 
     @Test
     fun `Testing 'or' function of the JsReader class (failure both reader)`() {
-        val idReader = JsReader {
+        val idReader = JsReader<String, JsonErrors> {
             JsResult.Failure(path = ID_PATH, error = JsonErrors.PathMissing)
         }
-        val identifierReader = JsReader {
+        val identifierReader = JsReader<String, JsonErrors> {
             JsResult.Failure(
                 path = IDENTIFIER_PATH,
                 error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)

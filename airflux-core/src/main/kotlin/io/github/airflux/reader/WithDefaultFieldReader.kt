@@ -8,12 +8,12 @@ import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
 
-fun <T : Any> readWithDefault(
+fun <T : Any, E : JsError> readWithDefault(
     from: JsLookup,
-    using: JsReader<T>,
+    using: JsReader<T, E>,
     defaultValue: () -> T,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<T> =
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<T, E> =
     when (from) {
         is JsLookup.Defined -> when (from.value) {
             is JsNull -> JsResult.Success(path = from.path, value = defaultValue())
@@ -34,13 +34,13 @@ fun <T : Any> readWithDefault(
  * - If any node does not match path element type, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
-fun <T : Any> readWithDefault(
+fun <T : Any, E : JsError> readWithDefault(
     from: JsValue,
     path: JsPath,
-    using: JsReader<T>,
+    using: JsReader<T, E>,
     defaultValue: () -> T,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<T> =
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<T, E> =
     readWithDefault(
         from = from.lookup(path),
         using = using,
@@ -56,13 +56,13 @@ fun <T : Any> readWithDefault(
  * - If node is not object, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
-fun <T : Any> readWithDefault(
+fun <T : Any, E : JsError> readWithDefault(
     from: JsValue,
     name: String,
-    using: JsReader<T>,
+    using: JsReader<T, E>,
     defaultValue: () -> T,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<T> =
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<T, E> =
     readWithDefault(
         from = from.lookup(name),
         using = using,

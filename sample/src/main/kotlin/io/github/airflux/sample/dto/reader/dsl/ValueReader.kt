@@ -6,8 +6,9 @@ import io.github.airflux.sample.dto.reader.dsl.base.DefaultObjectReaderConfig
 import io.github.airflux.sample.dto.reader.dsl.base.DefaultObjectValidations
 import io.github.airflux.sample.dto.reader.dsl.base.reader
 import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
+import io.github.airflux.sample.json.error.JsonErrors
 
-val ValueReader: JsReader<Value> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+val ValueReader: JsReader<Value, JsonErrors> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
     val amount = attribute(name = "amount", reader = AmountReader).required()
     val currency = attribute(name = "currency", reader = CurrencyReader).required()
 

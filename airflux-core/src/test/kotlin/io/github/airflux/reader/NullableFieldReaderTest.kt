@@ -17,7 +17,7 @@ import kotlin.test.Test
 class NullableFieldReaderTest {
 
     companion object {
-        private val stringReader: JsReader<String> =
+        private val stringReader: JsReader<String, JsonErrors> =
             JsReader { input -> JsResult.Success((input as JsString).underlying) }
     }
 
@@ -28,7 +28,7 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -42,7 +42,7 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is found with value 'null')`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -56,7 +56,7 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is not found)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -76,7 +76,7 @@ class NullableFieldReaderTest {
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -100,7 +100,7 @@ class NullableFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -117,7 +117,7 @@ class NullableFieldReaderTest {
                 "name" to JsNull
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -134,7 +134,7 @@ class NullableFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
@@ -151,7 +151,7 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -176,7 +176,7 @@ class NullableFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -193,7 +193,7 @@ class NullableFieldReaderTest {
                 "name" to JsNull
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -210,7 +210,7 @@ class NullableFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 name = "role",
                 using = stringReader,
@@ -227,7 +227,7 @@ class NullableFieldReaderTest {
         fun `Testing 'readNullable' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String?> = readNullable(
+            val result: JsResult<String?, JsonErrors> = readNullable(
                 from = json,
                 name = "name",
                 using = stringReader,

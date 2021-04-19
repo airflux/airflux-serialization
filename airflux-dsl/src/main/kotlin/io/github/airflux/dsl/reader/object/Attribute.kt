@@ -14,10 +14,10 @@ import io.github.airflux.reader.validator.base.applyIfPresent
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue
 
-sealed class Attribute<T : Any> {
+sealed class Attribute<T : Any, E: JsError> {
 
     abstract val name: Name
-    protected var validator: JsValidator<T, JsError>? = null
+    protected var validator: JsValidator<T, E>? = null
         set(value) {
             if (field == null) field = value else throw IllegalStateException("Reassigned validator.")
         }
@@ -40,18 +40,18 @@ sealed class Attribute<T : Any> {
         }
     }
 
-    class Required<T : Any>(
+    class Required<T : Any, E: JsError>(
         override val name: Name,
-        private val reader: JsReader<T>,
-        private val pathMissingErrorBuilder: () -> JsError,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+        private val reader: JsReader<T, E>,
+        private val pathMissingErrorBuilder: () -> E,
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+    ) : Attribute<T, E>() {
 
-        fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
+        fun read(input: JsValue): JsResult<T, E> = validation(encode(input), validator)
 
-        fun <E : JsError> validation(validator: JsValidator<T, E>): Required<T> = apply { this.validator = validator }
+        fun validation(validator: JsValidator<T, E>): Required<T, E> = apply { this.validator = validator }
 
-        private fun encode(input: JsValue): JsResult<T> {
+        private fun encode(input: JsValue): JsResult<T, E> {
             val simpleName = name.simpleName
             return if (simpleName != null)
                 readRequired(input, simpleName, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
@@ -59,23 +59,23 @@ sealed class Attribute<T : Any> {
                 readRequired(input, name.value, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
         }
 
-        private fun validation(result: JsResult<T>, validator: JsValidator<T, JsError>?): JsResult<T> =
+        private fun validation(result: JsResult<T, E>, validator: JsValidator<T, E>?): JsResult<T, E> =
             if (validator == null) result else result.validation(validator)
     }
 
-    class Defaultable<T : Any>(
+    class Defaultable<T : Any, E: JsError>(
         override val name: Name,
-        private val reader: JsReader<T>,
+        private val reader: JsReader<T, E>,
         private val default: () -> T,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+    ) : Attribute<T, E>() {
 
-        fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
+        fun read(input: JsValue): JsResult<T, E> = validation(encode(input), validator)
 
-        fun <E : JsError> validation(validator: JsValidator<T, E>): Defaultable<T> =
+        fun validation(validator: JsValidator<T, E>): Defaultable<T, E> =
             apply { this.validator = validator }
 
-        private fun encode(input: JsValue): JsResult<T> {
+        private fun encode(input: JsValue): JsResult<T, E> {
             val simpleName = name.simpleName
             return if (simpleName != null)
                 readWithDefault(input, simpleName, reader, default, invalidTypeErrorBuilder)
@@ -83,21 +83,21 @@ sealed class Attribute<T : Any> {
                 readWithDefault(input, name.value, reader, default, invalidTypeErrorBuilder)
         }
 
-        private fun validation(result: JsResult<T>, validator: JsValidator<T, JsError>?): JsResult<T> =
+        private fun validation(result: JsResult<T, E>, validator: JsValidator<T, E>?): JsResult<T, E> =
             if (validator == null) result else result.validation(validator)
     }
 
-    class Optional<T : Any>(
+    class Optional<T : Any, E: JsError>(
         override val name: Name,
-        private val reader: JsReader<T>,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+        private val reader: JsReader<T, E>,
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+    ) : Attribute<T, E>() {
 
-        fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
+        fun read(input: JsValue): JsResult<T?, E> = validation(encode(input), validator)
 
-        fun <E : JsError> validation(validator: JsValidator<T, E>): Optional<T> = apply { this.validator = validator }
+        fun validation(validator: JsValidator<T, E>): Optional<T, E> = apply { this.validator = validator }
 
-        private fun encode(input: JsValue): JsResult<T?> {
+        private fun encode(input: JsValue): JsResult<T?, E> {
             val simpleName = name.simpleName
             return if (simpleName != null)
                 readOptional(input, simpleName, reader, invalidTypeErrorBuilder)
@@ -105,23 +105,23 @@ sealed class Attribute<T : Any> {
                 readOptional(input, name.value, reader, invalidTypeErrorBuilder)
         }
 
-        private fun validation(result: JsResult<T?>, validator: JsValidator<T, JsError>?): JsResult<T?> =
+        private fun validation(result: JsResult<T?, E>, validator: JsValidator<T, E>?): JsResult<T?, E> =
             if (validator == null) result else result.validation(applyIfPresent(validator))
     }
 
-    class OptionalWithDefault<T : Any>(
+    class OptionalWithDefault<T : Any, E: JsError>(
         override val name: Name,
-        private val reader: JsReader<T>,
+        private val reader: JsReader<T, E>,
         private val default: () -> T,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+    ) : Attribute<T, E>() {
 
-        fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
+        fun read(input: JsValue): JsResult<T, E> = validation(encode(input), validator)
 
-        fun <E : JsError> validation(validator: JsValidator<T, E>): OptionalWithDefault<T> =
+        fun validation(validator: JsValidator<T, E>): OptionalWithDefault<T, E> =
             apply { this.validator = validator }
 
-        private fun encode(input: JsValue): JsResult<T> {
+        private fun encode(input: JsValue): JsResult<T, E> {
             val simpleName = name.simpleName
             return if (simpleName != null)
                 readOptional(input, simpleName, reader, default, invalidTypeErrorBuilder)
@@ -129,22 +129,22 @@ sealed class Attribute<T : Any> {
                 readOptional(input, name.value, reader, default, invalidTypeErrorBuilder)
         }
 
-        private fun validation(result: JsResult<T>, validator: JsValidator<T, JsError>?): JsResult<T> =
+        private fun validation(result: JsResult<T, E>, validator: JsValidator<T, E>?): JsResult<T, E> =
             if (validator == null) result else result.validation(validator)
     }
 
-    class Nullable<T : Any>(
+    class Nullable<T : Any, E: JsError>(
         override val name: Name,
-        private val reader: JsReader<T>,
-        private val pathMissingErrorBuilder: () -> JsError,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+        private val reader: JsReader<T, E>,
+        private val pathMissingErrorBuilder: () -> E,
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+    ) : Attribute<T, E>() {
 
-        fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
+        fun read(input: JsValue): JsResult<T?, E> = validation(encode(input), validator)
 
-        fun <E : JsError> validation(validator: JsValidator<T, E>): Nullable<T> = apply { this.validator = validator }
+        fun validation(validator: JsValidator<T, E>): Nullable<T, E> = apply { this.validator = validator }
 
-        private fun encode(input: JsValue): JsResult<T?> {
+        private fun encode(input: JsValue): JsResult<T?, E> {
             val simpleName = name.simpleName
             return if (simpleName != null)
                 readNullable(input, simpleName, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
@@ -152,23 +152,23 @@ sealed class Attribute<T : Any> {
                 readNullable(input, name.value, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
         }
 
-        private fun validation(result: JsResult<T?>, validator: JsValidator<T, JsError>?): JsResult<T?> =
+        private fun validation(result: JsResult<T?, E>, validator: JsValidator<T, E>?): JsResult<T?, E> =
             if (validator == null) result else result.validation(applyIfPresent(validator))
     }
 
-    class NullableWithDefault<T : Any>(
+    class NullableWithDefault<T : Any, E: JsError>(
         override val name: Name,
-        private val reader: JsReader<T>,
+        private val reader: JsReader<T, E>,
         private val default: () -> T,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+    ) : Attribute<T, E>() {
 
-        fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
+        fun read(input: JsValue): JsResult<T?, E> = validation(encode(input), validator)
 
-        fun <E : JsError> validation(validator: JsValidator<T, E>): NullableWithDefault<T> =
+        fun validation(validator: JsValidator<T, E>): NullableWithDefault<T, E> =
             apply { this.validator = validator }
 
-        private fun encode(input: JsValue): JsResult<T?> {
+        private fun encode(input: JsValue): JsResult<T?, E> {
             val simpleName = name.simpleName
             return if (simpleName != null)
                 readNullable(input, simpleName, reader, default, invalidTypeErrorBuilder)
@@ -176,7 +176,7 @@ sealed class Attribute<T : Any> {
                 readNullable(input, name.value, reader, default, invalidTypeErrorBuilder)
         }
 
-        private fun validation(result: JsResult<T?>, validator: JsValidator<T, JsError>?): JsResult<T?> =
+        private fun validation(result: JsResult<T?, E>, validator: JsValidator<T, E>?): JsResult<T?, E> =
             if (validator == null) result else result.validation(applyIfPresent(validator))
     }
 }

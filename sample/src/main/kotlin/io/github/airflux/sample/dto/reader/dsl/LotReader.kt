@@ -11,11 +11,12 @@ import io.github.airflux.sample.dto.reader.dsl.base.EnumReader
 import io.github.airflux.sample.dto.reader.dsl.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.dsl.base.reader
 import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
+import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
 
-val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
+val LotStatusReader = EnumReader.readAsEnum<LotStatus>()
 
-val LotReader: JsReader<Lot> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+val LotReader: JsReader<Lot, JsonErrors> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
     val id = attribute(name = "id", reader = stringReader).required()
     val status = attribute(name = "status", reader = LotStatusReader).required()
     val value = attribute(name = "value", reader = ValueReader).required()

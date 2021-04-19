@@ -17,8 +17,8 @@ import io.github.airflux.sample.json.validation.`object`.isNotEmpty
 import io.github.airflux.value.JsValue
 
 object ErrorBuilder {
-    val PathMissing: () -> JsError = { JsonErrors.PathMissing }
-    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError = JsonErrors::InvalidType
+    val PathMissing: () -> JsonErrors = { JsonErrors.PathMissing }
+    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsonErrors = JsonErrors::InvalidType
 }
 
 object PrimitiveReader {
@@ -27,13 +27,13 @@ object PrimitiveReader {
 }
 
 object CollectionReader {
-    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { input ->
+    fun <T : Any> list(using: JsReader<T, JsonErrors>): JsReader<List<T>, JsonErrors> = JsReader { input ->
         readAsList(input, using, ErrorBuilder.InvalidType)
     }
 }
 
 object EnumReader {
-    inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
+    inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T, JsonErrors> =
         JsReader { input ->
             PrimitiveReader.stringReader.read(input)
                 .validation(StringValidator.isNotBlank)
@@ -53,12 +53,12 @@ val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
     }
     .build()
 
-val DefaultObjectValidations = ObjectValidations.Builder()
+val DefaultObjectValidations = ObjectValidations.Builder<JsonErrors>()
     .apply {
         isNotEmpty = true
     }
 
 val reader = ObjectReader(ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
 
-inline fun <T> simpleBuilder(crossinline builder: (values: ObjectValuesMap) -> T): (ObjectValuesMap) -> JsResult<T> =
+inline fun <T, E : JsError> simpleBuilder(crossinline builder: (values: ObjectValuesMap<E>) -> T): (ObjectValuesMap<E>) -> JsResult<T, E> =
     { JsResult.Success(builder(it)) }

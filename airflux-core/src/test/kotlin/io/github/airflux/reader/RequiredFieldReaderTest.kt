@@ -16,7 +16,7 @@ import kotlin.test.Test
 class RequiredFieldReaderTest {
 
     companion object {
-        private val stringReader: JsReader<String> =
+        private val stringReader: JsReader<String, JsonErrors> =
             JsReader { input -> JsResult.Success((input as JsString).underlying) }
     }
 
@@ -27,7 +27,7 @@ class RequiredFieldReaderTest {
         fun `Testing 'readRequired' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -41,7 +41,7 @@ class RequiredFieldReaderTest {
         fun `Testing 'readRequired' function (an attribute is not found)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -61,7 +61,7 @@ class RequiredFieldReaderTest {
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = from,
                 using = stringReader,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -85,7 +85,7 @@ class RequiredFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -102,7 +102,7 @@ class RequiredFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
@@ -119,7 +119,7 @@ class RequiredFieldReaderTest {
         fun `Testing 'readRequired' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -144,7 +144,7 @@ class RequiredFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -161,7 +161,7 @@ class RequiredFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = json,
                 name = "role",
                 using = stringReader,
@@ -178,7 +178,7 @@ class RequiredFieldReaderTest {
         fun `Testing 'readRequired' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String> = readRequired(
+            val result: JsResult<String, JsonErrors> = readRequired(
                 from = json,
                 name = "name",
                 using = stringReader,

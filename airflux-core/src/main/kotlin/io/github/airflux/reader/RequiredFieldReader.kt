@@ -7,12 +7,12 @@ import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
 
-fun <T : Any> readRequired(
+fun <T : Any, E : JsError> readRequired(
     from: JsLookup,
-    using: JsReader<T>,
-    pathMissingErrorBuilder: () -> JsError,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<T> =
+    using: JsReader<T, E>,
+    pathMissingErrorBuilder: () -> E,
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<T, E> =
     when (from) {
         is JsLookup.Defined -> using.read(from.value).repath(from.path)
 
@@ -30,13 +30,13 @@ fun <T : Any> readRequired(
  * - If any node does not match path element type, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
-fun <T : Any> readRequired(
+fun <T : Any, E : JsError> readRequired(
     from: JsValue,
     path: JsPath,
-    using: JsReader<T>,
-    pathMissingErrorBuilder: () -> JsError,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<T> =
+    using: JsReader<T, E>,
+    pathMissingErrorBuilder: () -> E,
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<T, E> =
     readRequired(
         from = from.lookup(path),
         using = using,
@@ -51,13 +51,13 @@ fun <T : Any> readRequired(
  * - If node is not object, then returning error [invalidTypeErrorBuilder]
  * - If the entire path is found then applies [reader]
  */
-fun <T : Any> readRequired(
+fun <T : Any, E : JsError> readRequired(
     from: JsValue,
     name: String,
-    using: JsReader<T>,
-    pathMissingErrorBuilder: () -> JsError,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<T> =
+    using: JsReader<T, E>,
+    pathMissingErrorBuilder: () -> E,
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<T, E> =
     readRequired(
         from = from.lookup(name),
         using = using,

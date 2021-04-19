@@ -18,7 +18,8 @@ class JsResultTest {
         @Test
         fun `Testing 'map' function of the Success class`() {
             val originalValue = "10"
-            val original: JsResult<String> = JsResult.Success(path = JsPath.empty / "id", value = originalValue)
+            val original: JsResult<String, JsonErrors> =
+                JsResult.Success(path = JsPath.empty / "id", value = originalValue)
             val result = original.map { it.toInt() }
 
             result.assertAsSuccess(path = JsPath.empty / "id", value = originalValue.toInt())
@@ -27,7 +28,8 @@ class JsResultTest {
         @Test
         fun `Testing 'flatMap' function of the Success class`() {
             val originalValue = "10"
-            val original: JsResult<String> = JsResult.Success(path = JsPath.empty / "id", value = originalValue)
+            val original: JsResult<String, JsonErrors> =
+                JsResult.Success(path = JsPath.empty / "id", value = originalValue)
 
             val result = original.flatMap { JsResult.Success(it.toInt()) }
 
@@ -38,7 +40,7 @@ class JsResultTest {
         fun `Testing 'orElse' function of the Success class`() {
             val originalValue = "10"
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Success(originalValue)
+            val original: JsResult<String, JsonErrors> = JsResult.Success(originalValue)
 
             val result = original.orElse { elseValue }
 
@@ -49,7 +51,7 @@ class JsResultTest {
         fun `Testing 'getOrElse' function of the Success class`() {
             val originalValue = "10"
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Success(originalValue)
+            val original: JsResult<String, JsonErrors> = JsResult.Success(originalValue)
 
             val result = original.getOrElse(elseValue)
 
@@ -60,8 +62,8 @@ class JsResultTest {
         fun `Testing 'onFailure' function of the Success class`() {
             val originalValue = "10"
 
-            val original: JsResult<String> = JsResult.Success(originalValue)
-            val error: JsResult.Failure? = getErrorOrNull(original)
+            val original: JsResult<String, JsonErrors> = JsResult.Success(originalValue)
+            val error: JsResult.Failure<JsonErrors>? = getErrorOrNull(original)
 
             assertNull(error)
         }
@@ -71,7 +73,7 @@ class JsResultTest {
             val pathOfId = JsPath("id")
             val pathOfUser = JsPath("user")
             val originalValue = "10"
-            val original: JsResult<String> = JsResult.Success(originalValue)
+            val original: JsResult<String, JsonErrors> = JsResult.Success(originalValue)
 
             val result = original.repath(pathOfId).repath(pathOfUser)
 
@@ -87,7 +89,7 @@ class JsResultTest {
 
             @Test
             fun `Testing the constructor of the Failure class without parameters`() {
-                val original = JsResult.Failure()
+                val original: JsResult<String, JsonErrors> = JsResult.Failure()
 
                 original.assertAsFailure(
                     JsPath.empty to emptyList()
@@ -125,7 +127,7 @@ class JsResultTest {
 
         @Test
         fun `Testing 'map' function of the Failure class`() {
-            val original: JsResult<String> =
+            val original: JsResult<String, JsonErrors> =
                 JsResult.Failure(path = JsPath.empty / "name", error = JsonErrors.PathMissing)
 
             val result = original.map { it.toInt() }
@@ -137,7 +139,7 @@ class JsResultTest {
 
         @Test
         fun `Testing 'flatMap' function of the Failure class`() {
-            val original: JsResult<String> =
+            val original: JsResult<String, JsonErrors> =
                 JsResult.Failure(path = JsPath.empty / "name", error = JsonErrors.PathMissing)
 
             val result = original.flatMap { JsResult.Success(it.toInt()) }
@@ -150,7 +152,7 @@ class JsResultTest {
         @Test
         fun `Testing 'orElse' function of the Failure class`() {
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Failure()
+            val original: JsResult<String, JsonErrors> = JsResult.Failure()
 
             val result = original.orElse { elseValue }
 
@@ -160,7 +162,7 @@ class JsResultTest {
         @Test
         fun `Testing 'getOrElse' function of the Failure class`() {
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Failure()
+            val original: JsResult<String, JsonErrors> = JsResult.Failure()
 
             val result = original.getOrElse(elseValue)
 
@@ -169,9 +171,9 @@ class JsResultTest {
 
         @Test
         fun `Testing 'onFailure' function of the Failure class`() {
-            val original: JsResult<String> = JsResult.Failure()
+            val original: JsResult<String, JsonErrors> = JsResult.Failure()
 
-            val error: JsResult.Failure? = getErrorOrNull(original)
+            val error: JsResult.Failure<JsonErrors>? = getErrorOrNull(original)
 
             assertNotNull(error)
         }
@@ -180,7 +182,7 @@ class JsResultTest {
         fun `Testing 'repath' function of the Failure class`() {
             val pathOfUser = JsPath.empty / "user"
             val pathOfId = JsPath.empty / "id"
-            val original: JsResult<String> = JsResult.Failure()
+            val original: JsResult<String, JsonErrors> = JsResult.Failure()
 
             val result = original.repath(pathOfId).repath(pathOfUser)
 
@@ -190,7 +192,7 @@ class JsResultTest {
         }
     }
 
-    fun <T> getErrorOrNull(result: JsResult<T>): JsResult.Failure? {
+    fun <T, E : JsError> getErrorOrNull(result: JsResult<T, E>): JsResult.Failure<E>? {
         result.onFailure { return it }
         return null
     }

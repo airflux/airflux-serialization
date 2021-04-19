@@ -10,9 +10,10 @@ import io.github.airflux.sample.dto.model.Tender
 import io.github.airflux.sample.dto.reader.simple.base.PathReaders.readOptional
 import io.github.airflux.sample.dto.reader.simple.base.PathReaders.readRequired
 import io.github.airflux.sample.dto.reader.simple.base.PrimitiveReader.stringReader
+import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
-val TenderReader: JsReader<Tender> = run {
+val TenderReader: JsReader<Tender, JsonErrors> = run {
 
     val titleIsNotEmpty = applyIfNotNull(isNotBlank)
 

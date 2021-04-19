@@ -7,9 +7,10 @@ import io.github.airflux.sample.dto.reader.dsl.base.DefaultObjectValidations
 import io.github.airflux.sample.dto.reader.dsl.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.dsl.base.reader
 import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
+import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
-val TenderReader: JsReader<Tender> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+val TenderReader: JsReader<Tender, JsonErrors> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
     val id = attribute(name = "id", reader = stringReader).required().validation(isNotBlank)
     val title = attribute(name = "title", reader = TitleReader).optional()
     val value = attribute(name = "value", reader = ValueReader).optional()

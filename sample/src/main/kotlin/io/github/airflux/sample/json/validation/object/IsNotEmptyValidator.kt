@@ -10,7 +10,7 @@ import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
-var ObjectValidations.Builder.isNotEmpty: Boolean
+var ObjectValidations.Builder<JsonErrors>.isNotEmpty: Boolean
     get() = IsNotEmptyValidator.NAME in after
     set(value) {
         if (value)
@@ -19,28 +19,28 @@ var ObjectValidations.Builder.isNotEmpty: Boolean
             after.remove(IsNotEmptyValidator.NAME)
     }
 
-class IsNotEmptyValidator private constructor() : ObjectValidator.After {
+class IsNotEmptyValidator private constructor() : ObjectValidator.After<JsonErrors> {
 
     override fun validation(
         configuration: ObjectReaderConfiguration,
         input: JsObject,
-        attributes: List<Attribute<*>>,
-        objectValuesMap: ObjectValuesMap
-    ): List<JsError> =
+        attributes: List<Attribute<*, JsonErrors>>,
+        objectValuesMap: ObjectValuesMap<JsonErrors>
+    ): List<JsonErrors> =
         if (objectValuesMap.isEmpty)
             listOf(JsonErrors.Validation.Object.IsEmpty)
         else
             emptyList()
 
-    class Builder : ObjectValidator.After.Builder {
+    class Builder : ObjectValidator.After.Builder<JsonErrors> {
 
         override val key: String
             get() = NAME
 
         override fun build(
             configuration: ObjectReaderConfiguration,
-            attributes: List<Attribute<*>>
-        ): ObjectValidator.After = validator
+            attributes: List<Attribute<*, JsonErrors>>
+        ): ObjectValidator.After<JsonErrors> = validator
     }
 
     companion object {

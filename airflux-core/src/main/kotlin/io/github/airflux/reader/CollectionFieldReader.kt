@@ -12,11 +12,11 @@ import io.github.airflux.value.JsValue
  * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
-fun <T : Any> readAsList(
+fun <T : Any, E : JsError> readAsList(
     from: JsValue,
-    using: JsReader<T>,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<List<T>> =
+    using: JsReader<T, E>,
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<List<T>, E> =
     readAsCollection(from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
 
 /**
@@ -25,11 +25,11 @@ fun <T : Any> readAsList(
  * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
-fun <T : Any> readAsSet(
+fun <T : Any, E : JsError> readAsSet(
     from: JsValue,
-    using: JsReader<T>,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<Set<T>> =
+    using: JsReader<T, E>,
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<Set<T>, E> =
     readAsCollection(from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
 
 /**
@@ -38,27 +38,27 @@ fun <T : Any> readAsSet(
  * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
-fun <T : Any, C> readAsCollection(
+fun <T : Any, E : JsError, C> readAsCollection(
     from: JsValue,
-    using: JsReader<T>,
+    using: JsReader<T, E>,
     factory: CollectionBuilderFactory<T, C>,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-): JsResult<C>
+    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
+): JsResult<C, E>
     where C : Collection<T> =
     when (from) {
         is JsArray<*> -> {
             val values = factory.newBuilder(from.underlying.size)
             from.underlying
                 .withIndex()
-                .fold(JsResult.Success(values)) { acc: JsResult<CollectionBuilder<T, C>>, (idx, elem) ->
+                .fold(JsResult.Success(values)) { acc: JsResult<CollectionBuilder<T, C>, E>, (idx, elem) ->
                     when (val result = using.read(elem)) {
                         is JsResult.Success<T> -> {
                             when (acc) {
                                 is JsResult.Success<*> -> acc.also { values += result.value }
-                                is JsResult.Failure -> acc as JsResult<CollectionBuilder<T, C>>
+                                is JsResult.Failure -> acc as JsResult<CollectionBuilder<T, C>, E>
                             }
                         }
-                        is JsResult.Failure -> when (acc) {
+                        is JsResult.Failure<E> -> when (acc) {
                             is JsResult.Success<*> -> result.repath(JsPath(idx))
                             is JsResult.Failure -> {
                                 val accErr = acc.errors

@@ -5,12 +5,12 @@ import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
 
 @Suppress("unused")
-fun interface JsReader<T> {
+fun interface JsReader<T, E: JsError> {
 
     /**
      * Convert the [JsValue] into a T
      */
-    infix fun read(input: JsValue): JsResult<T>
+    infix fun read(input: JsValue): JsResult<T, E>
 
     /**
      * Create a new [JsReader] which maps the value produced by this [JsReader].
@@ -20,7 +20,7 @@ fun interface JsReader<T> {
      * if successful
      * @return A new [JsReader] with the updated behavior.
      */
-    infix fun <R> map(transform: (T) -> R): JsReader<R> =
+    infix fun <R> map(transform: (T) -> R): JsReader<R, E> =
         JsReader { input -> read(input).map(transform) }
 
     /**
@@ -31,7 +31,7 @@ fun interface JsReader<T> {
      * @param other the [JsReader] to run if this one gets a [JsError]
      * @return A new [JsReader] with the updated behavior.
      */
-    infix fun or(other: JsReader<T>): JsReader<T> = JsReader { input ->
+    infix fun or(other: JsReader<T, E>): JsReader<T, E> = JsReader { input ->
         when (val result = read(input)) {
             is JsResult.Success -> result
             is JsResult.Failure -> when (val alternative = other.read(input)) {

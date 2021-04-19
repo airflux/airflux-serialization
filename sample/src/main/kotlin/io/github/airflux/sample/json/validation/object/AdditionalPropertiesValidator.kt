@@ -11,7 +11,7 @@ import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
-var ObjectValidations.Builder.additionalProperties: Boolean
+var ObjectValidations.Builder<JsonErrors>.additionalProperties: Boolean
     get() = AdditionalPropertiesValidator.NAME in before
     set(value) {
         if (value)
@@ -20,13 +20,14 @@ var ObjectValidations.Builder.additionalProperties: Boolean
             before.remove(AdditionalPropertiesValidator.NAME)
     }
 
-class AdditionalPropertiesValidator private constructor(private val names: Set<String>) : ObjectValidator.Before {
+class AdditionalPropertiesValidator private constructor(private val names: Set<String>) :
+    ObjectValidator.Before<JsonErrors> {
 
     override fun validation(
         configuration: ObjectReaderConfiguration,
         input: JsObject,
-        attributes: List<Attribute<*>>
-    ): List<JsError> {
+        attributes: List<Attribute<*, JsonErrors>>
+    ): List<JsonErrors> {
         val unknownProperties = mutableListOf<String>()
         input.underlying
             .forEach { (name, _) ->
@@ -42,15 +43,15 @@ class AdditionalPropertiesValidator private constructor(private val names: Set<S
             emptyList()
     }
 
-    class Builder : ObjectValidator.Before.Builder {
+    class Builder : ObjectValidator.Before.Builder<JsonErrors> {
 
         override val key: String
             get() = NAME
 
         override fun build(
             configuration: ObjectReaderConfiguration,
-            attributes: List<Attribute<*>>
-        ): ObjectValidator.Before =
+            attributes: List<Attribute<*, JsonErrors>>
+        ): ObjectValidator.Before<JsonErrors> =
             mutableSetOf<String>()
                 .apply {
                     attributes.forEach { attribute ->

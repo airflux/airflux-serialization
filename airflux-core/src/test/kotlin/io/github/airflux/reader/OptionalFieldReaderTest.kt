@@ -17,7 +17,7 @@ import kotlin.test.Test
 class OptionalFieldReaderTest {
 
     companion object {
-        private val stringReader: JsReader<String> =
+        private val stringReader: JsReader<String, JsonErrors> =
             JsReader { input ->
                 when (input) {
                     is JsString -> JsResult.Success(input.underlying)
@@ -35,7 +35,7 @@ class OptionalFieldReaderTest {
         fun `Testing 'readOptional' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String?> =
+            val result: JsResult<String?, JsonErrors> =
                 readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsSuccess(path = JsPath.empty / "name", value = USER_NAME_VALUE)
@@ -45,7 +45,7 @@ class OptionalFieldReaderTest {
         fun `Testing 'readOptional' function (an attribute is found with value 'null')`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
-            val result: JsResult<String?> =
+            val result: JsResult<String?, JsonErrors> =
                 readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsFailure(
@@ -59,7 +59,7 @@ class OptionalFieldReaderTest {
         fun `Testing 'readOptional' function (an attribute is not found, returning value 'null')`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String?> =
+            val result: JsResult<String?, JsonErrors> =
                 readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsSuccess(path = JsPath.empty / "name", value = null)
@@ -73,7 +73,7 @@ class OptionalFieldReaderTest {
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String?> =
+            val result: JsResult<String?, JsonErrors> =
                 readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsFailure(
@@ -93,7 +93,7 @@ class OptionalFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -109,7 +109,7 @@ class OptionalFieldReaderTest {
                 "name" to JsNull
             )
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -129,7 +129,7 @@ class OptionalFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
@@ -143,7 +143,7 @@ class OptionalFieldReaderTest {
         fun `Testing 'readOptional' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -167,7 +167,7 @@ class OptionalFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -183,7 +183,7 @@ class OptionalFieldReaderTest {
                 "name" to JsNull
             )
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -203,7 +203,7 @@ class OptionalFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 name = "role",
                 using = stringReader,
@@ -217,7 +217,7 @@ class OptionalFieldReaderTest {
         fun `Testing 'readOptional' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String?> = readOptional(
+            val result: JsResult<String?, JsonErrors> = readOptional(
                 from = json,
                 name = "name",
                 using = stringReader,

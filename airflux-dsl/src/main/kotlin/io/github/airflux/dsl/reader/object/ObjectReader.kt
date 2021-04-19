@@ -9,27 +9,30 @@ import io.github.airflux.reader.result.asFailure
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 
-class ObjectReader(
-    private val pathMissingErrorBuilder: () -> JsError,
-    private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+class ObjectReader<E : JsError>(
+    private val pathMissingErrorBuilder: () -> E,
+    private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
 ) {
 
     operator fun <T> invoke(
         configuration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
-        validations: ObjectValidations.Builder = ObjectValidations.Builder.Default,
-        init: ObjectReader.Builder<T>.() -> Unit
-    ): JsReader<T> = Builder<T>(configuration, validations).apply(init).build()
+        validations: ObjectValidations.Builder<E> = ObjectValidations.Builder(),
+        init: Builder<T, E>.() -> Unit
+    ): JsReader<T, E> =
+        Builder<T, E>(configuration, validations, pathMissingErrorBuilder, invalidTypeErrorBuilder).apply(init).build()
 
     @ObjectReaderMarker
-    inner class Builder<R>(
+    class Builder<R, E : JsError>(
         initialConfiguration: ObjectReaderConfiguration,
-        initialValidation: ObjectValidations.Builder
+        initialValidation: ObjectValidations.Builder<E>,
+        private val pathMissingErrorBuilder: () -> E,
+        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
     ) {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
-        private val validations: ObjectValidations.Builder = ObjectValidations.Builder(initialValidation)
-        private val attributes = mutableListOf<Attribute<*>>()
-        var typeBuilder: ((ObjectValuesMap) -> JsResult<R>)? = null
+        private val validations: ObjectValidations.Builder<E> = ObjectValidations.Builder(initialValidation)
+        private val attributes = mutableListOf<Attribute<*, E>>()
+        var typeBuilder: ((ObjectValuesMap<E>) -> JsResult<R, E>)? = null
             set(value) {
                 if (field == null) field = value else throw IllegalStateException("Reassigned type builder.")
             }
@@ -38,17 +41,29 @@ class ObjectReader(
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
         }
 
-        fun validation(init: ObjectValidations.Builder.() -> Unit) {
+        fun validation(init: ObjectValidations.Builder<E>.() -> Unit) {
             validations.apply(init)
         }
 
-        fun <T : Any> attribute(name: String, reader: JsReader<T>): AttributeBinder<T> =
-            AttributeBinder(Attribute.Name.of(JsPath.empty / name), reader)
+        fun <T : Any> attribute(name: String, reader: JsReader<T, E>): AttributeBinder<T, E> =
+            AttributeBinder(
+                Attribute.Name.of(JsPath.empty / name),
+                reader,
+                ::registration,
+                pathMissingErrorBuilder,
+                invalidTypeErrorBuilder
+            )
 
-        fun <T : Any> attribute(path: JsPath, reader: JsReader<T>): AttributeBinder<T> =
-            AttributeBinder(Attribute.Name.of(path), reader)
+        fun <T : Any> attribute(path: JsPath, reader: JsReader<T, E>): AttributeBinder<T, E> =
+            AttributeBinder(
+                Attribute.Name.of(path),
+                reader,
+                ::registration,
+                pathMissingErrorBuilder,
+                invalidTypeErrorBuilder
+            )
 
-        fun build(): JsReader<R> {
+        fun build(): JsReader<R, E> {
             val validations = validations.build(configuration, attributes)
             val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
             return JsReader { input ->
@@ -58,37 +73,40 @@ class ObjectReader(
             }
         }
 
-        private fun <T : Any> registration(attribute: Attribute<T>) {
+        private fun <T : Any> registration(attribute: Attribute<T, E>) {
             attributes.add(attribute)
         }
 
         @Suppress("unused")
-        inner class AttributeBinder<T : Any>(
+        class AttributeBinder<T : Any, E : JsError>(
             private val name: Attribute.Name,
-            private val reader: JsReader<T>,
+            private val reader: JsReader<T, E>,
+            private val registration: (Attribute<T, E>) -> Unit,
+            private val pathMissingErrorBuilder: () -> E,
+            private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> E
         ) {
 
-            fun required(): Attribute.Required<T> =
+            fun required(): Attribute.Required<T, E> =
                 Attribute.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun defaultable(default: () -> T): Attribute.Defaultable<T> =
+            fun defaultable(default: () -> T): Attribute.Defaultable<T, E> =
                 Attribute.Defaultable(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(): Attribute.Optional<T> =
+            fun optional(): Attribute.Optional<T, E> =
                 Attribute.Optional(name, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(default: () -> T): Attribute.OptionalWithDefault<T> =
+            fun optional(default: () -> T): Attribute.OptionalWithDefault<T, E> =
                 Attribute.OptionalWithDefault(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(): Attribute.Nullable<T> =
+            fun nullable(): Attribute.Nullable<T, E> =
                 Attribute.Nullable(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(default: () -> T): Attribute.NullableWithDefault<T> =
+            fun nullable(default: () -> T): Attribute.NullableWithDefault<T, E> =
                 Attribute.NullableWithDefault(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
         }
@@ -96,21 +114,21 @@ class ObjectReader(
 
     companion object {
 
-        internal fun <R> read(
+        internal fun <R, E : JsError> read(
             configuration: ObjectReaderConfiguration,
-            validation: ObjectValidations,
-            attributes: List<Attribute<*>>,
-            typeBuilder: (ObjectValuesMap) -> JsResult<R>,
+            validation: ObjectValidations<E>,
+            attributes: List<Attribute<*, E>>,
+            typeBuilder: (ObjectValuesMap<E>) -> JsResult<R, E>,
             input: JsObject
-        ): JsResult<R> {
+        ): JsResult<R, E> {
             val preValidationErrors = preValidation(configuration, input, validation, attributes)
             if (preValidationErrors.isNotEmpty())
                 return preValidationErrors.asFailure()
 
-            val parseErrors = mutableListOf<JsResult.Failure>()
-            val objectValuesMap = ObjectValuesMap.Builder()
+            val parseErrors = mutableListOf<JsResult.Failure<E>>()
+            val objectValuesMap = ObjectValuesMap.Builder<E>()
                 .apply {
-                    attributes.forEach { attr: Attribute<*> ->
+                    attributes.forEach { attr: Attribute<*, E> ->
                         readValue(attr, input)
                             ?.also { parseErrors.add(it) }
                         if (configuration.failFast && parseErrors.isNotEmpty()) return@apply
@@ -130,12 +148,12 @@ class ObjectReader(
                 JsResult.Failure(parseErrors.fold(mutableListOf()) { acc, failure -> acc.apply { addAll(failure.errors) } })
         }
 
-        internal fun preValidation(
+        internal fun <E : JsError> preValidation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            validation: ObjectValidations,
-            attributes: List<Attribute<*>>
-        ): List<JsError> = mutableListOf<JsError>()
+            validation: ObjectValidations<E>,
+            attributes: List<Attribute<*, E>>
+        ): List<E> = mutableListOf<E>()
             .apply {
                 validation.before
                     .forEach { validator ->
@@ -145,13 +163,13 @@ class ObjectReader(
                     }
             }
 
-        internal fun postValidation(
+        internal fun <E : JsError> postValidation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            validation: ObjectValidations,
-            attributes: List<Attribute<*>>,
-            objectValuesMap: ObjectValuesMap
-        ): List<JsError> = mutableListOf<JsError>()
+            validation: ObjectValidations<E>,
+            attributes: List<Attribute<*, E>>,
+            objectValuesMap: ObjectValuesMap<E>
+        ): List<E> = mutableListOf<E>()
             .apply {
                 validation.after
                     .forEach { validator ->

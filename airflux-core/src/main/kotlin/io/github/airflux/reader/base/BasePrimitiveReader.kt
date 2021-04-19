@@ -5,7 +5,7 @@ import io.github.airflux.reader.extension.readAsBoolean
 import io.github.airflux.reader.extension.readAsNumber
 import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.JsError
-import io.github.airflux.reader.result.asFailure
+import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.asSuccess
 import io.github.airflux.value.JsValue
 import java.math.BigDecimal
@@ -19,28 +19,32 @@ interface BasePrimitiveReader {
         /**
          * Reader for primitive [Boolean] type.
          */
-        fun boolean(errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError): JsReader<Boolean> =
+        fun <E : JsError> boolean(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E
+        ): JsReader<Boolean, E> =
             JsReader { input -> input.readAsBoolean(errorInvalidType) }
 
         /**
          * Reader for primitive [String] type.
          */
-        fun string(errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError): JsReader<String> =
+        fun <E : JsError> string(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E
+        ): JsReader<String, E> =
             JsReader { input -> input.readAsString(errorInvalidType) }
 
         /**
          * Reader for primitive [Byte] type.
          */
-        fun byte(
-            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError,
-            errorValueCast: (value: String, type: KClass<*>) -> JsError
-        ): JsReader<Byte> =
+        fun <E : JsError> byte(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E,
+            errorValueCast: (value: String, type: KClass<*>) -> E
+        ): JsReader<Byte, E> =
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
                         text.toByte().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        errorValueCast(text, Byte::class).asFailure()
+                        JsResult.Failure<E>(errorValueCast(text, Byte::class))
                     }
                 }
             }
@@ -48,16 +52,16 @@ interface BasePrimitiveReader {
         /**
          * Reader for primitive [Short] type.
          */
-        fun short(
-            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError,
-            errorValueCast: (value: String, type: KClass<*>) -> JsError
-        ): JsReader<Short> =
+        fun <E : JsError> short(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E,
+            errorValueCast: (value: String, type: KClass<*>) -> E
+        ): JsReader<Short, E> =
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
                         text.toShort().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        errorValueCast(text, Short::class).asFailure()
+                        JsResult.Failure<E>(errorValueCast(text, Short::class))
                     }
                 }
             }
@@ -65,16 +69,16 @@ interface BasePrimitiveReader {
         /**
          * Reader for primitive [Int] type.
          */
-        fun int(
-            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError,
-            errorValueCast: (value: String, type: KClass<*>) -> JsError
-        ): JsReader<Int> =
+        fun <E : JsError> int(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E,
+            errorValueCast: (value: String, type: KClass<*>) -> E
+        ): JsReader<Int, E> =
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
                         text.toInt().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        errorValueCast(text, Int::class).asFailure()
+                        JsResult.Failure<E>(errorValueCast(text, Int::class))
                     }
                 }
             }
@@ -82,16 +86,16 @@ interface BasePrimitiveReader {
         /**
          * Reader for primitive [Long] type.
          */
-        fun long(
-            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError,
-            errorValueCast: (value: String, type: KClass<*>) -> JsError
-        ): JsReader<Long> =
+        fun <E : JsError> long(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E,
+            errorValueCast: (value: String, type: KClass<*>) -> E
+        ): JsReader<Long, E> =
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     try {
                         text.toLong().asSuccess()
                     } catch (expected: NumberFormatException) {
-                        errorValueCast(text, Long::class).asFailure()
+                        JsResult.Failure<E>(errorValueCast(text, Long::class))
                     }
                 }
             }
@@ -99,7 +103,9 @@ interface BasePrimitiveReader {
         /**
          * Reader for [BigDecimal] type.
          */
-        fun bigDecimal(errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError): JsReader<BigDecimal> =
+        fun <E : JsError> bigDecimal(
+            errorInvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> E
+        ): JsReader<BigDecimal, E> =
             JsReader { input ->
                 input.readAsNumber(errorInvalidType) { text ->
                     BigDecimal(text).asSuccess()

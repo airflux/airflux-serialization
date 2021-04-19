@@ -18,7 +18,7 @@ class JsPath internal constructor(val elements: List<PathElement>) {
         infix operator fun String.div(idx: Int): JsPath =
             JsPath(elements = listOf(KeyPathElement(this), IdxPathElement(idx)))
 
-        fun repath(errors: List<Pair<JsPath, List<JsError>>>, path: JsPath): List<Pair<JsPath, List<JsError>>> =
+        fun <E : JsError> repath(errors: List<Pair<JsPath, List<E>>>, path: JsPath): List<Pair<JsPath, List<E>>> =
             errors.map { (oldPath, errors) -> path + oldPath to errors }
     }
 
@@ -41,7 +41,6 @@ class JsPath internal constructor(val elements: List<PathElement>) {
 
     override fun equals(other: Any?): Boolean =
         this === other || (other is JsPath && this.elements == other.elements)
-
 
     override fun hashCode(): Int = elements.hashCode()
 }

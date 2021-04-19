@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 class ReaderDslTest {
 
     companion object {
-        private val stringReader: JsReader<String> = JsReader { input ->
+        private val stringReader: JsReader<String, JsonErrors> = JsReader { input ->
             when (input) {
                 is JsString -> JsResult.Success(input.underlying)
                 else -> JsResult.Failure(

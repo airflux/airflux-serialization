@@ -18,7 +18,7 @@ class WithDefaultFieldReaderTest {
 
     companion object {
         private const val DEFAULT_VALUE = "Default value"
-        private val stringReader: JsReader<String> =
+        private val stringReader: JsReader<String, JsonErrors> =
             JsReader { input -> JsResult.Success((input as JsString).underlying) }
         private val defaultValue = { DEFAULT_VALUE }
     }
@@ -30,7 +30,7 @@ class WithDefaultFieldReaderTest {
         fun `Testing 'readWithDefault' function (an attribute is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -44,7 +44,7 @@ class WithDefaultFieldReaderTest {
         fun `Testing 'readWithDefault' function (an attribute is found with value 'null', returning default value)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -58,7 +58,7 @@ class WithDefaultFieldReaderTest {
         fun `Testing 'readWithDefault' function (an attribute is not found, returning default value)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -76,7 +76,7 @@ class WithDefaultFieldReaderTest {
                 actual = JsValue.Type.STRING
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
@@ -100,7 +100,7 @@ class WithDefaultFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -117,7 +117,7 @@ class WithDefaultFieldReaderTest {
                 "name" to JsNull
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -134,7 +134,7 @@ class WithDefaultFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
@@ -149,7 +149,7 @@ class WithDefaultFieldReaderTest {
         fun `Testing 'readWithDefault' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
@@ -174,7 +174,7 @@ class WithDefaultFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -191,7 +191,7 @@ class WithDefaultFieldReaderTest {
                 "name" to JsNull
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 name = "name",
                 using = stringReader,
@@ -208,7 +208,7 @@ class WithDefaultFieldReaderTest {
                 "name" to JsString(USER_NAME_VALUE)
             )
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 name = "role",
                 using = stringReader,
@@ -223,7 +223,7 @@ class WithDefaultFieldReaderTest {
         fun `Testing 'readWithDefault' function (an attribute is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<String> = readWithDefault(
+            val result: JsResult<String, JsonErrors> = readWithDefault(
                 from = json,
                 name = "name",
                 using = stringReader,

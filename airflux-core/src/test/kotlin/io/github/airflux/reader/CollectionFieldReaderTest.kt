@@ -19,7 +19,7 @@ import kotlin.test.Test
 class CollectionFieldReaderTest {
 
     companion object {
-        private val stringReader: JsReader<String> = JsReader { input ->
+        private val stringReader: JsReader<String, JsonErrors> = JsReader { input ->
             when (input) {
                 is JsString -> JsResult.Success(input.underlying)
                 else -> JsResult.Failure(
@@ -36,7 +36,7 @@ class CollectionFieldReaderTest {
         fun `Testing 'readAsList' function`() {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
-            val result: JsResult<List<String>> =
+            val result: JsResult<List<String>, JsonErrors> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsSuccess(path = JsPath.empty, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
@@ -46,7 +46,7 @@ class CollectionFieldReaderTest {
         fun `Testing 'readAsList' function (an attribute is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<List<String>> =
+            val result: JsResult<List<String>, JsonErrors> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsFailure(
@@ -65,7 +65,7 @@ class CollectionFieldReaderTest {
                 JsString(SECOND_PHONE_VALUE)
             )
 
-            val result: JsResult<List<String>> =
+            val result: JsResult<List<String>, JsonErrors> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsFailure(
@@ -82,7 +82,7 @@ class CollectionFieldReaderTest {
         fun `Testing 'readAsList' function (array is empty)`() {
             val json: JsValue = JsArray<JsString>()
 
-            val result: JsResult<List<String>> =
+            val result: JsResult<List<String>, JsonErrors> =
                 readAsList(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsSuccess(path = JsPath.empty, value = emptyList())
@@ -96,7 +96,7 @@ class CollectionFieldReaderTest {
         fun `Testing 'readAsSet' function`() {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
-            val result: JsResult<Set<String>> =
+            val result: JsResult<Set<String>, JsonErrors> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsSuccess(path = JsPath.empty, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
@@ -106,7 +106,7 @@ class CollectionFieldReaderTest {
         fun `Testing 'readAsSet' function (an attribute is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
-            val result: JsResult<Set<String>> =
+            val result: JsResult<Set<String>, JsonErrors> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsFailure(
@@ -125,7 +125,7 @@ class CollectionFieldReaderTest {
                 JsString(SECOND_PHONE_VALUE)
             )
 
-            val result: JsResult<Set<String>> =
+            val result: JsResult<Set<String>, JsonErrors> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
 
@@ -143,7 +143,7 @@ class CollectionFieldReaderTest {
         fun `Testing 'readAsSet' function (array is empty)`() {
             val json: JsValue = JsArray<JsString>()
 
-            val result: JsResult<Set<String>> =
+            val result: JsResult<Set<String>, JsonErrors> =
                 readAsSet(from = json, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
 
             result.assertAsSuccess(path = JsPath.empty, value = emptySet())

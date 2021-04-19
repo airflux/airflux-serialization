@@ -1,21 +1,26 @@
 package io.github.airflux.dsl.reader.`object`
 
-class ObjectValidations(val before: List<ObjectValidator.Before>, val after: List<ObjectValidator.After>) {
+import io.github.airflux.reader.result.JsError
+
+class ObjectValidations<E : JsError>(
+    val before: List<ObjectValidator.Before<E>>,
+    val after: List<ObjectValidator.After<E>>
+) {
 
     @ObjectReaderMarker
-    class Builder private constructor(
-        val before: Validators<ObjectValidator.Before.Builder>,
-        val after: Validators<ObjectValidator.After.Builder>
+    class Builder<E : JsError> private constructor(
+        val before: Validators<ObjectValidator.Before.Builder<E>>,
+        val after: Validators<ObjectValidator.After.Builder<E>>
     ) {
 
-        constructor(other: Builder = Default) : this(
-            before = Validators<ObjectValidator.Before.Builder>()
-                .apply { other.before.forEach { add(it) } },
-            after = Validators<ObjectValidator.After.Builder>()
-                .apply { other.after.forEach { add(it) } }
+        constructor(other: Builder<E>? = null) : this(
+            before = Validators<ObjectValidator.Before.Builder<E>>()
+                .apply { other?.before?.forEach { add(it) } },
+            after = Validators<ObjectValidator.After.Builder<E>>()
+                .apply { other?.after?.forEach { add(it) } }
         )
 
-        fun build(configuration: ObjectReaderConfiguration, attributes: List<Attribute<*>>): ObjectValidations =
+        fun build(configuration: ObjectReaderConfiguration, attributes: List<Attribute<*, E>>): ObjectValidations<E> =
             ObjectValidations(
                 before = before.map { validator -> validator.build(configuration, attributes) },
                 after = after.map { validator -> validator.build(configuration, attributes) }
@@ -42,8 +47,8 @@ class ObjectValidations(val before: List<ObjectValidator.Before>, val after: Lis
             override fun iterator(): Iterator<T> = items.values.iterator()
         }
 
-        companion object {
-            val Default = Builder(before = Validators(), after = Validators())
-        }
+//        companion object {
+//            val Default = Builder<E>(before = Validators(), after = Validators())
+//        }
     }
 }
