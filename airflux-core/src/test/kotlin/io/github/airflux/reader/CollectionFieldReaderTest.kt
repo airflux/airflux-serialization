@@ -43,7 +43,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsList' function (an attribute is not collection)`() {
+        fun `Testing 'readAsList' function (a property is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<List<String>> =
@@ -103,7 +103,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsSet' function (an attribute is not collection)`() {
+        fun `Testing 'readAsSet' function (a property is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<Set<String>> =

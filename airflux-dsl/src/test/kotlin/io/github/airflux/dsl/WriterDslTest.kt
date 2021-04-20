@@ -22,7 +22,7 @@ class WriterDslTest {
         inner class User(val name: String)
 
         @Test
-        fun `Testing of a write of a required attribute`() {
+        fun `Testing of a write of a required property`() {
             val value = User(name = USER_NAME_VALUE)
             val writer = objectWriter<User> {
                 writeRequired(from = User::name, to = "name", using = BasePrimitiveWriter.string)
@@ -37,7 +37,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a required attribute (an attribute name is the property name)`() {
+        fun `Testing of a write of a required property (an property name is a class property name)`() {
             val value = User(name = USER_NAME_VALUE)
             val writer = objectWriter<User> {
                 writeRequired(from = User::name, using = BasePrimitiveWriter.string)
@@ -58,7 +58,7 @@ class WriterDslTest {
         inner class User(val role: String?)
 
         @Test
-        fun `Testing of a write of an optional attribute`() {
+        fun `Testing of a write of an optional property`() {
             val value = User(role = USER_ROLE_VALUE)
             val writer = objectWriter<User> {
                 writeOptional(from = User::role, to = "other", using = BasePrimitiveWriter.string)
@@ -73,7 +73,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of an optional attribute (an attribute name is the property name)`() {
+        fun `Testing of a write of an optional property (a property name is a class property name)`() {
             val value = User(role = USER_ROLE_VALUE)
             val writer = objectWriter<User> {
                 writeOptional(from = User::role, using = BasePrimitiveWriter.string)
@@ -88,7 +88,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of an optional attribute (a value of an attribute is null)`() {
+        fun `Testing of a write of an optional property (a value of a property is null)`() {
             val value = User(role = null)
             val writer = objectWriter<User> {
                 writeOptional(from = User::role, to = "name", using = BasePrimitiveWriter.string)
@@ -107,7 +107,7 @@ class WriterDslTest {
         inner class User(val name: String?)
 
         @Test
-        fun `Testing of a write of a nullable attribute`() {
+        fun `Testing of a write of a nullable property`() {
             val value = User(name = USER_NAME_VALUE)
             val writer = objectWriter<User> {
                 writeNullable(from = User::name, to = "other", using = BasePrimitiveWriter.string)
@@ -122,7 +122,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a nullable attribute (an attribute name is the property name)`() {
+        fun `Testing of a write of a nullable property (a property name is a class property name)`() {
             val value = User(name = USER_NAME_VALUE)
             val writer = objectWriter<User> {
                 writeNullable(from = User::name, using = BasePrimitiveWriter.string)
@@ -137,7 +137,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a nullable attribute (a value of an attribute is null)`() {
+        fun `Testing of a write of a nullable property (a value of a property is null)`() {
             val value = User(name = null)
             val writer = objectWriter<User> {
                 writeNullable(from = User::name, to = "other", using = BasePrimitiveWriter.string)
@@ -157,7 +157,7 @@ class WriterDslTest {
         inner class User(val phones: List<String>)
 
         @Test
-        fun `Testing of a write of a traversable attribute`() {
+        fun `Testing of a write of a traversable property`() {
             val value = User(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
             val writer = objectWriter<User> {
                 writeTraversable(from = User::phones, to = "others", using = BasePrimitiveWriter.string)
@@ -177,7 +177,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a traversable attribute (an attribute name is the property name)`() {
+        fun `Testing of a write of a traversable property (a property name is a class property name)`() {
             val value = User(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
             val writer = objectWriter<User> {
                 writeTraversable(from = User::phones, using = BasePrimitiveWriter.string)
@@ -197,7 +197,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a traversable attribute (an attribute is empty)`() {
+        fun `Testing of a write of a traversable property (a property is empty)`() {
             val value = User(phones = emptyList())
             val writer = objectWriter<User> {
                 writeTraversable(from = User::phones, to = "others", using = BasePrimitiveWriter.string)
@@ -218,7 +218,7 @@ class WriterDslTest {
         inner class User(val phones: List<String>)
 
         @Test
-        fun `Testing of a write of a optional traversable attribute`() {
+        fun `Testing of a write of a optional traversable property`() {
             val value = User(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
             val writer = objectWriter<User> {
                 writeOptionalTraversable(from = User::phones, to = "others", using = BasePrimitiveWriter.string)
@@ -238,7 +238,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a optional traversable attribute (an attribute name is the property name)`() {
+        fun `Testing of a write of a optional traversable property (a property name is a class property name)`() {
             val value = User(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
             val writer = objectWriter<User> {
                 writeOptionalTraversable(from = User::phones, using = BasePrimitiveWriter.string)
@@ -258,7 +258,7 @@ class WriterDslTest {
         }
 
         @Test
-        fun `Testing of a write of a optional traversable attribute (an attribute is empty)`() {
+        fun `Testing of a write of a optional traversable property (a property is empty)`() {
             val value = User(phones = emptyList())
             val writer = objectWriter<User> {
                 writeOptionalTraversable(from = User::phones, to = "others", using = BasePrimitiveWriter.string)

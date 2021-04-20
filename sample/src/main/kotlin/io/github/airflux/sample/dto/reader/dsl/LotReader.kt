@@ -16,9 +16,9 @@ import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
 val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
 
 val LotReader: JsReader<Lot> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
-    val id = attribute(name = "id", reader = stringReader).required()
-    val status = attribute(name = "status", reader = LotStatusReader).required()
-    val value = attribute(name = "value", reader = ValueReader).required()
+    val id = property(name = "id", reader = stringReader).required()
+    val status = property(name = "status", reader = LotStatusReader).required()
+    val value = property(name = "value", reader = ValueReader).required()
 
     typeBuilder = simpleBuilder { values ->
         Lot(

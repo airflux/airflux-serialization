@@ -21,7 +21,7 @@ class WriterDsl2Test {
         inner class A(val name: String)
 
         @Test
-        fun `Testing of a write of a required attribute`() {
+        fun `Testing of a write of a required property`() {
             val value = A(name = USER_NAME_VALUE)
             val writer = objectWriter<A> { target ->
                 writeRequired(value = target.name, to = "name", using = BasePrimitiveWriter.string)
@@ -42,7 +42,7 @@ class WriterDsl2Test {
         inner class User(val name: String?)
 
         @Test
-        fun `Testing of a write of an optional attribute`() {
+        fun `Testing of a write of an optional property`() {
             val value = User(name = USER_NAME_VALUE)
             val writer = objectWriter<User> { target ->
                 writeOptional(value = target.name, to = "name", using = BasePrimitiveWriter.string)
@@ -57,7 +57,7 @@ class WriterDsl2Test {
         }
 
         @Test
-        fun `Testing of a write of an optional attribute (a value of an attribute is null)`() {
+        fun `Testing of a write of an optional property (a value of a property is null)`() {
             val value = User(name = null)
             val writer = objectWriter<User> { target ->
                 writeOptional(value = target.name, to = "name", using = BasePrimitiveWriter.string)
@@ -76,7 +76,7 @@ class WriterDsl2Test {
         inner class User(val name: String?)
 
         @Test
-        fun `Testing of a write of a nullable attribute`() {
+        fun `Testing of a write of a nullable property`() {
             val value = User(name = USER_NAME_VALUE)
             val writer = objectWriter<User> { target ->
                 writeNullable(value = target.name, to = "name", using = BasePrimitiveWriter.string)
@@ -91,7 +91,7 @@ class WriterDsl2Test {
         }
 
         @Test
-        fun `Testing of a write of a nullable attribute (a value of an attribute is null)`() {
+        fun `Testing of a write of a nullable property (a value of a property is null)`() {
             val value = User(name = null)
             val writer = objectWriter<User> { target ->
                 writeNullable(value = target.name, to = "name", using = BasePrimitiveWriter.string)
@@ -111,7 +111,7 @@ class WriterDsl2Test {
         inner class User(val phones: List<String>)
 
         @Test
-        fun `Testing of a write of a traversable attribute`() {
+        fun `Testing of a write of a traversable property`() {
             val value = User(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
             val writer = objectWriter<User> { target ->
                 writeTraversable(values = target.phones, to = "phones", using = BasePrimitiveWriter.string)
@@ -131,7 +131,7 @@ class WriterDsl2Test {
         }
 
         @Test
-        fun `Testing of a write of a traversable attribute (the attribute is empty)`() {
+        fun `Testing of a write of a traversable property (a property is empty)`() {
             val value = User(phones = emptyList())
             val writer = objectWriter<User> { target ->
                 writeTraversable(values = target.phones, to = "phones", using = BasePrimitiveWriter.string)

@@ -8,7 +8,7 @@ import io.github.airflux.sample.dto.reader.dsl.base.reader
 import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
 
 val RequestReader: JsReader<Request> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
-    val tender = attribute(name = "tender", reader = TenderReader).required()
+    val tender = property(name = "tender", reader = TenderReader).required()
 
     typeBuilder = simpleBuilder { values ->
         Request(tender = values[tender])

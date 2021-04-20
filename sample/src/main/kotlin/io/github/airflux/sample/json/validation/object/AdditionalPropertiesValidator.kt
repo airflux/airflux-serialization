@@ -1,6 +1,6 @@
 package io.github.airflux.sample.json.validation.`object`
 
-import io.github.airflux.dsl.reader.`object`.Attribute
+import io.github.airflux.dsl.reader.`object`.JsProperty
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValidations
 import io.github.airflux.dsl.reader.`object`.ObjectValidator
@@ -25,7 +25,7 @@ class AdditionalPropertiesValidator private constructor(private val names: Set<S
     override fun validation(
         configuration: ObjectReaderConfiguration,
         input: JsObject,
-        attributes: List<Attribute<*>>
+        properties: List<JsProperty<*>>
     ): List<JsError> {
         val unknownProperties = mutableListOf<String>()
         input.underlying
@@ -49,12 +49,12 @@ class AdditionalPropertiesValidator private constructor(private val names: Set<S
 
         override fun build(
             configuration: ObjectReaderConfiguration,
-            attributes: List<Attribute<*>>
+            properties: List<JsProperty<*>>
         ): ObjectValidator.Before =
             mutableSetOf<String>()
                 .apply {
-                    attributes.forEach { attribute ->
-                        attribute.name
+                    properties.forEach { property ->
+                        property.name
                             .value
                             .elements
                             .firstOrNull()

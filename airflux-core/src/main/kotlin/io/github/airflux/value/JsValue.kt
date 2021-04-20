@@ -95,7 +95,7 @@ class JsObject(val underlying: Map<String, JsValue> = emptyMap()) : JsValue() {
 
     companion object {
 
-        operator fun invoke(vararg attributes: Pair<String, JsValue>): JsObject = JsObject(attributes.toMap())
+        operator fun invoke(vararg properties: Pair<String, JsValue>): JsObject = JsObject(properties.toMap())
     }
 
     override val type: Type = Type.OBJECT

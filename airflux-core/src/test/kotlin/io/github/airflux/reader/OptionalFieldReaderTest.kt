@@ -32,7 +32,7 @@ class OptionalFieldReaderTest {
     inner class FromJsLookup {
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is found)`() {
+        fun `Testing 'readOptional' function (a property is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
             val result: JsResult<String?> =
@@ -42,7 +42,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is found with value 'null')`() {
+        fun `Testing 'readOptional' function (a property is found with value 'null')`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
             val result: JsResult<String?> =
@@ -56,7 +56,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is not found, returning value 'null')`() {
+        fun `Testing 'readOptional' function (a property is not found, returning value 'null')`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
             val result: JsResult<String?> =
@@ -66,7 +66,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readOptional' function (a property is not found, invalid type)`() {
             val from: JsLookup = JsLookup.Undefined.InvalidType(
                 path = JsPath.empty / "name",
                 expected = JsValue.Type.ARRAY,
@@ -88,7 +88,7 @@ class OptionalFieldReaderTest {
     inner class FromJsValueByPath {
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is found)`() {
+        fun `Testing 'readOptional' function (a property is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -104,7 +104,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is found with value 'null')`() {
+        fun `Testing 'readOptional' function (a property is found with value 'null')`() {
             val json: JsValue = JsObject(
                 "name" to JsNull
             )
@@ -124,7 +124,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is not found, returning value 'null')`() {
+        fun `Testing 'readOptional' function (a property is not found, returning value 'null')`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -140,7 +140,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readOptional' function (a property is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<String?> = readOptional(
@@ -162,7 +162,7 @@ class OptionalFieldReaderTest {
     inner class FromJsValueByName {
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is found)`() {
+        fun `Testing 'readOptional' function (a property is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -178,7 +178,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is found with value 'null')`() {
+        fun `Testing 'readOptional' function (a property is found with value 'null')`() {
             val json: JsValue = JsObject(
                 "name" to JsNull
             )
@@ -198,7 +198,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is not found, returning value 'null')`() {
+        fun `Testing 'readOptional' function (a property is not found, returning value 'null')`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -214,7 +214,7 @@ class OptionalFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readOptional' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readOptional' function (a property is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<String?> = readOptional(

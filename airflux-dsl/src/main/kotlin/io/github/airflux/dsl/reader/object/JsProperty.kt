@@ -14,7 +14,7 @@ import io.github.airflux.reader.validator.base.applyIfPresent
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue
 
-sealed class Attribute<T : Any> {
+sealed class JsProperty<T : Any> {
 
     abstract val name: Name
     protected var validator: JsValidator<T, JsError>? = null
@@ -36,7 +36,7 @@ sealed class Attribute<T : Any> {
                 if (path.elements.isNotEmpty())
                     Name(path)
                 else
-                    throw IllegalArgumentException("The path of an attribute is empty.")
+                    throw IllegalArgumentException("The path of an property is empty.")
         }
     }
 
@@ -45,7 +45,7 @@ sealed class Attribute<T : Any> {
         private val reader: JsReader<T>,
         private val pathMissingErrorBuilder: () -> JsError,
         private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+    ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
 
@@ -68,7 +68,7 @@ sealed class Attribute<T : Any> {
         private val reader: JsReader<T>,
         private val default: () -> T,
         private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+    ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
 
@@ -91,7 +91,7 @@ sealed class Attribute<T : Any> {
         override val name: Name,
         private val reader: JsReader<T>,
         private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+    ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
 
@@ -114,7 +114,7 @@ sealed class Attribute<T : Any> {
         private val reader: JsReader<T>,
         private val default: () -> T,
         private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+    ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
 
@@ -138,7 +138,7 @@ sealed class Attribute<T : Any> {
         private val reader: JsReader<T>,
         private val pathMissingErrorBuilder: () -> JsError,
         private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+    ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
 
@@ -161,7 +161,7 @@ sealed class Attribute<T : Any> {
         private val reader: JsReader<T>,
         private val default: () -> T,
         private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
-    ) : Attribute<T>() {
+    ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
 

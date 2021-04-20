@@ -18,7 +18,7 @@ class JsValueExtensionTest {
     inner class LookupByPath {
 
         @Test
-        fun `testing 'lookup' function (an attribute by name is found)`() {
+        fun `testing 'lookup' function (a property by name is found)`() {
             val json: JsValue = JsObject(
                 "user" to JsObject(
                     "name" to JsString(USER_NAME_VALUE)
@@ -36,7 +36,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by name is not found)`() {
+        fun `testing 'lookup' function (a property by name is not found)`() {
             val json: JsValue = JsObject(
                 "user" to JsObject(
                     "name" to JsString(USER_NAME_VALUE)
@@ -51,7 +51,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by name is not found, node is invalid type)`() {
+        fun `testing 'lookup' function (a property by name is not found, node is invalid type)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE)
             )
@@ -66,7 +66,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by index is found)`() {
+        fun `testing 'lookup' function (a property by index is found)`() {
             val json: JsValue = JsArray(
                 JsObject(
                     "value" to JsString(FIRST_PHONE_VALUE)
@@ -84,7 +84,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by index is not found)`() {
+        fun `testing 'lookup' function (a property by index is not found)`() {
             val json: JsValue = JsArray(
                 JsObject(
                     "value" to JsString(FIRST_PHONE_VALUE)
@@ -99,7 +99,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by index is not found, node is invalid type)`() {
+        fun `testing 'lookup' function (a property by index is not found, node is invalid type)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -118,7 +118,7 @@ class JsValueExtensionTest {
     inner class LookupByName {
 
         @Test
-        fun `testing 'lookup' function (an attribute by name is found)`() {
+        fun `testing 'lookup' function (a property by name is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -133,7 +133,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by name is not found)`() {
+        fun `testing 'lookup' function (a property by name is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -145,7 +145,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by name is not found, node is invalid type)`() {
+        fun `testing 'lookup' function (a property by name is not found, node is invalid type)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE)
             )
@@ -163,7 +163,7 @@ class JsValueExtensionTest {
     inner class LookupByIndex {
 
         @Test
-        fun `testing 'lookup' function (an attribute by idx is found)`() {
+        fun `testing 'lookup' function (a property by idx is found)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE)
             )
@@ -178,7 +178,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `testing 'lookup' function (an attribute by idx is not found)`() {
+        fun `testing 'lookup' function (a property by idx is not found)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE)
             )

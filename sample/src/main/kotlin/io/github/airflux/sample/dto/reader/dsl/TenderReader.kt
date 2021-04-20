@@ -10,10 +10,10 @@ import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
 val TenderReader: JsReader<Tender> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
-    val id = attribute(name = "id", reader = stringReader).required().validation(isNotBlank)
-    val title = attribute(name = "title", reader = TitleReader).optional()
-    val value = attribute(name = "value", reader = ValueReader).optional()
-    val lots = attribute(name = "lots", reader = LotsReader).required()
+    val id = property(name = "id", reader = stringReader).required().validation(isNotBlank)
+    val title = property(name = "title", reader = TitleReader).optional()
+    val value = property(name = "value", reader = ValueReader).optional()
+    val lots = property(name = "lots", reader = LotsReader).required()
 
     typeBuilder = simpleBuilder { values ->
         Tender(

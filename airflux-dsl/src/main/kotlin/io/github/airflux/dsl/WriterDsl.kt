@@ -3,11 +3,11 @@ package io.github.airflux.dsl
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 import io.github.airflux.writer.JsWriter
-import io.github.airflux.writer.extension.writeNullableAttribute
-import io.github.airflux.writer.extension.writeOptionalAttribute
-import io.github.airflux.writer.extension.writeOptionalTraversableAttribute
-import io.github.airflux.writer.extension.writeRequiredAttribute
-import io.github.airflux.writer.extension.writeTraversableAttribute
+import io.github.airflux.writer.extension.writeNullableProperty
+import io.github.airflux.writer.extension.writeOptionalProperty
+import io.github.airflux.writer.extension.writeOptionalTraversableProperty
+import io.github.airflux.writer.extension.writeRequiredProperty
+import io.github.airflux.writer.extension.writeTraversableProperty
 import kotlin.reflect.KProperty1
 
 @Suppress("unused")
@@ -53,18 +53,18 @@ object WriterDsl {
         val objectMap = mutableMapOf<String, (T) -> JsValue?>()
 
         override fun <R : Any> writeRequired(from: KProperty1<T, R>, to: String?, using: JsWriter<R>) {
-            val attributeName = to ?: from.name
-            objectMap[attributeName] = writeRequiredAttribute(from = from, using = using)
+            val propertyName = to ?: from.name
+            objectMap[propertyName] = writeRequiredProperty(from = from, using = using)
         }
 
         override fun <R : Any> writeOptional(from: KProperty1<T, R?>, to: String?, using: JsWriter<R>) {
-            val attributeName = to ?: from.name
-            objectMap[attributeName] = writeOptionalAttribute(from = from, using = using)
+            val propertyName = to ?: from.name
+            objectMap[propertyName] = writeOptionalProperty(from = from, using = using)
         }
 
         override fun <R : Any> writeNullable(from: KProperty1<T, R?>, to: String?, using: JsWriter<R>) {
-            val attributeName = to ?: from.name
-            objectMap[attributeName] = writeNullableAttribute(from = from, using = using)
+            val propertyName = to ?: from.name
+            objectMap[propertyName] = writeNullableProperty(from = from, using = using)
         }
 
         override fun <R : Any, C : Collection<R>> writeTraversable(
@@ -72,8 +72,8 @@ object WriterDsl {
             to: String?,
             using: JsWriter<R>
         ) {
-            val attributeName = to ?: from.name
-            objectMap[attributeName] = writeTraversableAttribute(from = from, using = using)
+            val propertyName = to ?: from.name
+            objectMap[propertyName] = writeTraversableProperty(from = from, using = using)
         }
 
         override fun <R : Any, C : Collection<R>> writeOptionalTraversable(
@@ -81,8 +81,8 @@ object WriterDsl {
             to: String?,
             using: JsWriter<R>
         ) {
-            val attributeName = to ?: from.name
-            objectMap[attributeName] = writeOptionalTraversableAttribute(from = from, using = using)
+            val propertyName = to ?: from.name
+            objectMap[propertyName] = writeOptionalTraversableProperty(from = from, using = using)
         }
     }
 }

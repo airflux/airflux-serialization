@@ -25,7 +25,7 @@ class NullableFieldReaderTest {
     inner class FromJsLookup {
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is found)`() {
+        fun `Testing 'readNullable' function (a property is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
             val result: JsResult<String?> = readNullable(
@@ -39,7 +39,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is found with value 'null')`() {
+        fun `Testing 'readNullable' function (a property is found with value 'null')`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
             val result: JsResult<String?> = readNullable(
@@ -53,7 +53,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found)`() {
+        fun `Testing 'readNullable' function (a property is not found)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
             val result: JsResult<String?> = readNullable(
@@ -69,7 +69,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullable' function (a property is not found, invalid type)`() {
             val from: JsLookup = JsLookup.Undefined.InvalidType(
                 path = JsPath.empty / "name",
                 expected = JsValue.Type.ARRAY,
@@ -95,7 +95,7 @@ class NullableFieldReaderTest {
     inner class FromJsValueByPath {
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is found)`() {
+        fun `Testing 'readNullable' function (a property is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -112,7 +112,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is found with value 'null')`() {
+        fun `Testing 'readNullable' function (a property is found with value 'null')`() {
             val json: JsValue = JsObject(
                 "name" to JsNull
             )
@@ -129,7 +129,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found)`() {
+        fun `Testing 'readNullable' function (a property is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -148,7 +148,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullable' function (a property is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<String?> = readNullable(
@@ -171,7 +171,7 @@ class NullableFieldReaderTest {
     inner class FromJsValueByName {
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is found)`() {
+        fun `Testing 'readNullable' function (a property is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -188,7 +188,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is found with value 'null')`() {
+        fun `Testing 'readNullable' function (a property is found with value 'null')`() {
             val json: JsValue = JsObject(
                 "name" to JsNull
             )
@@ -205,7 +205,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found)`() {
+        fun `Testing 'readNullable' function (a property is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -224,7 +224,7 @@ class NullableFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readNullable' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readNullable' function (a property is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<String?> = readNullable(

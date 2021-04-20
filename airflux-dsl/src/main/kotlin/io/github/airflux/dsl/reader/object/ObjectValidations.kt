@@ -15,10 +15,10 @@ class ObjectValidations(val before: List<ObjectValidator.Before>, val after: Lis
                 .apply { other.after.forEach { add(it) } }
         )
 
-        fun build(configuration: ObjectReaderConfiguration, attributes: List<Attribute<*>>): ObjectValidations =
+        fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): ObjectValidations =
             ObjectValidations(
-                before = before.map { validator -> validator.build(configuration, attributes) },
-                after = after.map { validator -> validator.build(configuration, attributes) }
+                before = before.map { validator -> validator.build(configuration, properties) },
+                after = after.map { validator -> validator.build(configuration, properties) }
             )
 
         class Validators<T : ObjectValidator.Identifier> : Iterable<T> {

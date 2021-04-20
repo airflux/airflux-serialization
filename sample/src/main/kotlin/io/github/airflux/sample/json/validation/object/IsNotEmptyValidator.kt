@@ -1,6 +1,6 @@
 package io.github.airflux.sample.json.validation.`object`
 
-import io.github.airflux.dsl.reader.`object`.Attribute
+import io.github.airflux.dsl.reader.`object`.JsProperty
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValidations
 import io.github.airflux.dsl.reader.`object`.ObjectValidator
@@ -24,7 +24,7 @@ class IsNotEmptyValidator private constructor() : ObjectValidator.After {
     override fun validation(
         configuration: ObjectReaderConfiguration,
         input: JsObject,
-        attributes: List<Attribute<*>>,
+        properties: List<JsProperty<*>>,
         objectValuesMap: ObjectValuesMap
     ): List<JsError> =
         if (objectValuesMap.isEmpty)
@@ -39,7 +39,7 @@ class IsNotEmptyValidator private constructor() : ObjectValidator.After {
 
         override fun build(
             configuration: ObjectReaderConfiguration,
-            attributes: List<Attribute<*>>
+            properties: List<JsProperty<*>>
         ): ObjectValidator.After = validator
     }
 

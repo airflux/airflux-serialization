@@ -10,7 +10,7 @@ import kotlin.test.assertTrue
 class JsObjectTest {
 
     @Test
-    fun `Testing JsObject class without attributes`() {
+    fun `Testing JsObject class without properties`() {
         val json = JsObject()
 
         assertTrue(json.underlying.isEmpty())

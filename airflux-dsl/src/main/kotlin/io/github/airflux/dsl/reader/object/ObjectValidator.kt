@@ -14,11 +14,11 @@ interface ObjectValidator {
         fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            attributes: List<Attribute<*>>
+            properties: List<JsProperty<*>>
         ): List<JsError>
 
         interface Builder : Identifier {
-            fun build(configuration: ObjectReaderConfiguration, attributes: List<Attribute<*>>): Before
+            fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): Before
         }
     }
 
@@ -27,12 +27,12 @@ interface ObjectValidator {
         fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            attributes: List<Attribute<*>>,
+            properties: List<JsProperty<*>>,
             objectValuesMap: ObjectValuesMap
         ): List<JsError>
 
         interface Builder : Identifier {
-            fun build(configuration: ObjectReaderConfiguration, attributes: List<Attribute<*>>): After
+            fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): After
         }
     }
 }

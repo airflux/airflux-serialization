@@ -24,7 +24,7 @@ class RequiredFieldReaderTest {
     inner class FromJsLookup {
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is found)`() {
+        fun `Testing 'readRequired' function (a property is found)`() {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
             val result: JsResult<String> = readRequired(
@@ -38,7 +38,7 @@ class RequiredFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is not found)`() {
+        fun `Testing 'readRequired' function (a property is not found)`() {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
             val result: JsResult<String> = readRequired(
@@ -54,7 +54,7 @@ class RequiredFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readRequired' function (a property is not found, invalid type)`() {
             val from: JsLookup = JsLookup.Undefined.InvalidType(
                 path = JsPath.empty / "name",
                 expected = JsValue.Type.ARRAY,
@@ -80,7 +80,7 @@ class RequiredFieldReaderTest {
     inner class FromJsValueByPath {
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is found)`() {
+        fun `Testing 'readRequired' function (a property is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -97,7 +97,7 @@ class RequiredFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is not found)`() {
+        fun `Testing 'readRequired' function (a property is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -116,7 +116,7 @@ class RequiredFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readRequired' function (a property is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<String> = readRequired(
@@ -139,7 +139,7 @@ class RequiredFieldReaderTest {
     inner class FromJsValueByName {
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is found)`() {
+        fun `Testing 'readRequired' function (a property is found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -156,7 +156,7 @@ class RequiredFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is not found)`() {
+        fun `Testing 'readRequired' function (a property is not found)`() {
             val json: JsValue = JsObject(
                 "name" to JsString(USER_NAME_VALUE)
             )
@@ -175,7 +175,7 @@ class RequiredFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readRequired' function (an attribute is not found, invalid type)`() {
+        fun `Testing 'readRequired' function (a property is not found, invalid type)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<String> = readRequired(

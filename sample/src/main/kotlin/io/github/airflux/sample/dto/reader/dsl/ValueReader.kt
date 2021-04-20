@@ -8,8 +8,8 @@ import io.github.airflux.sample.dto.reader.dsl.base.reader
 import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
 
 val ValueReader: JsReader<Value> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
-    val amount = attribute(name = "amount", reader = AmountReader).required()
-    val currency = attribute(name = "currency", reader = CurrencyReader).required()
+    val amount = property(name = "amount", reader = AmountReader).required()
+    val currency = property(name = "currency", reader = CurrencyReader).required()
 
     typeBuilder = simpleBuilder { values ->
         Value(

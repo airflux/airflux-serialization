@@ -16,14 +16,14 @@ import kotlin.test.assertTrue
 class JsWriterExtensionTest {
 
     @Nested
-    inner class WriteRequiredAttribute {
+    inner class WriteRequiredProperty {
 
         inner class A(val name: String)
 
-        private val writer = writeRequiredAttribute(from = A::name, using = BasePrimitiveWriter.string)
+        private val writer = writeRequiredProperty(from = A::name, using = BasePrimitiveWriter.string)
 
         @Test
-        fun `Testing of a write of a required attribute`() {
+        fun `Testing of a write of a required property`() {
             val value = A(name = USER_NAME_VALUE)
 
             val result = writer(value)
@@ -34,13 +34,13 @@ class JsWriterExtensionTest {
     }
 
     @Nested
-    inner class WriteOptionalAttribute {
+    inner class WriteOptionalProperty {
         inner class A(val name: String?)
 
-        private val writer = writeOptionalAttribute(from = A::name, using = BasePrimitiveWriter.string)
+        private val writer = writeOptionalProperty(from = A::name, using = BasePrimitiveWriter.string)
 
         @Test
-        fun `Testing of a write of an optional attribute`() {
+        fun `Testing of a write of an optional property`() {
             val value = A(name = USER_NAME_VALUE)
 
             val result = writer(value)
@@ -50,7 +50,7 @@ class JsWriterExtensionTest {
         }
 
         @Test
-        fun `Testing of a write of an optional attribute (a value of an attribute is null)`() {
+        fun `Testing of a write of an optional property (a value of a property is null)`() {
             val value = A(name = null)
 
             val result = writer(value)
@@ -60,13 +60,13 @@ class JsWriterExtensionTest {
     }
 
     @Nested
-    inner class WriteNullableAttribute {
+    inner class WriteNullableProperty {
         inner class A(val name: String?)
 
-        private val writer = writeNullableAttribute(from = A::name, using = BasePrimitiveWriter.string)
+        private val writer = writeNullableProperty(from = A::name, using = BasePrimitiveWriter.string)
 
         @Test
-        fun `Testing of a write of a nullable attribute`() {
+        fun `Testing of a write of a nullable property`() {
             val value = A(name = USER_NAME_VALUE)
 
             val result = writer(value)
@@ -76,7 +76,7 @@ class JsWriterExtensionTest {
         }
 
         @Test
-        fun `Testing of a write of a nullable attribute (a value of an attribute is null)`() {
+        fun `Testing of a write of a nullable property (a value of a property is null)`() {
             val value = A(name = null)
 
             val result = writer(value)
@@ -86,14 +86,14 @@ class JsWriterExtensionTest {
     }
 
     @Nested
-    inner class WriteTraversableAttribute {
+    inner class WriteTraversableProperty {
 
         inner class A(val phones: List<String>)
 
-        private val writer = writeTraversableAttribute(from = A::phones, using = BasePrimitiveWriter.string)
+        private val writer = writeTraversableProperty(from = A::phones, using = BasePrimitiveWriter.string)
 
         @Test
-        fun `Testing of a write of a traversable attribute`() {
+        fun `Testing of a write of a traversable property`() {
             val value = A(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
 
             val result = writer(value)
@@ -108,7 +108,7 @@ class JsWriterExtensionTest {
         }
 
         @Test
-        fun `Testing of a write of a traversable attribute (attribute is empty)`() {
+        fun `Testing of a write of a traversable property (a property is empty)`() {
             val value = A(phones = emptyList())
 
             val result = writer(value)
@@ -119,14 +119,14 @@ class JsWriterExtensionTest {
     }
 
     @Nested
-    inner class WriteOptionalTraversableAttribute {
+    inner class WriteOptionalTraversableProperty {
 
         inner class A(val phones: List<String>)
 
-        private val writer = writeOptionalTraversableAttribute(from = A::phones, using = BasePrimitiveWriter.string)
+        private val writer = writeOptionalTraversableProperty(from = A::phones, using = BasePrimitiveWriter.string)
 
         @Test
-        fun `Testing of a write of a optional traversable attribute`() {
+        fun `Testing of a write of a optional traversable property`() {
             val value = A(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
 
             val result = writer(value)
@@ -141,7 +141,7 @@ class JsWriterExtensionTest {
         }
 
         @Test
-        fun `Testing of a write of a optional traversable attribute (attribute is empty)`() {
+        fun `Testing of a write of a optional traversable property (a property is empty)`() {
             val value = A(phones = emptyList())
 
             val result = writer(value)
