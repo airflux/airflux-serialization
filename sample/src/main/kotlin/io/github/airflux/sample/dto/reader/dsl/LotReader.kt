@@ -5,8 +5,6 @@ import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Lot
 import io.github.airflux.sample.dto.model.LotStatus
 import io.github.airflux.sample.dto.reader.dsl.base.CollectionReader.list
-import io.github.airflux.sample.dto.reader.dsl.base.DefaultObjectReaderConfig
-import io.github.airflux.sample.dto.reader.dsl.base.DefaultObjectValidations
 import io.github.airflux.sample.dto.reader.dsl.base.EnumReader
 import io.github.airflux.sample.dto.reader.dsl.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.dsl.base.reader
@@ -15,7 +13,7 @@ import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
 
 val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
 
-val LotReader: JsReader<Lot> = reader(DefaultObjectReaderConfig, DefaultObjectValidations) {
+val LotReader = reader<Lot> {
     val id = property(name = "id", reader = stringReader).required()
     val status = property(name = "status", reader = LotStatusReader).required()
     val value = property(name = "value", reader = ValueReader).required()

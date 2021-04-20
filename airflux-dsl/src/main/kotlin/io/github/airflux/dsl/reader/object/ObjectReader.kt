@@ -10,24 +10,20 @@ import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 
 class ObjectReader(
+    private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
+    private val initialValidations: ObjectValidations.Builder = ObjectValidations.Builder.Default,
     private val pathMissingErrorBuilder: () -> JsError,
     private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
 ) {
 
-    operator fun <T> invoke(
-        configuration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
-        validations: ObjectValidations.Builder = ObjectValidations.Builder.Default,
-        init: ObjectReader.Builder<T>.() -> Unit
-    ): JsReader<T> = Builder<T>(configuration, validations).apply(init).build()
+    operator fun <T> invoke(init: ObjectReader.Builder<T>.() -> Unit): JsReader<T> =
+        Builder<T>().apply(init).build()
 
     @ObjectReaderMarker
-    inner class Builder<R>(
-        initialConfiguration: ObjectReaderConfiguration,
-        initialValidation: ObjectValidations.Builder
-    ) {
+    inner class Builder<R> {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
-        private val validations: ObjectValidations.Builder = ObjectValidations.Builder(initialValidation)
+        private val validations: ObjectValidations.Builder = ObjectValidations.Builder(initialValidations)
         private val properties = mutableListOf<JsProperty<*>>()
         var typeBuilder: ((ObjectValuesMap) -> JsResult<R>)? = null
             set(value) {

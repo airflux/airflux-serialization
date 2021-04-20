@@ -47,18 +47,23 @@ object EnumReader {
         }
 }
 
-val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
+private val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
     .apply {
         failFast = true
     }
     .build()
 
-val DefaultObjectValidations = ObjectValidations.Builder()
+private val DefaultObjectValidations = ObjectValidations.Builder()
     .apply {
         isNotEmpty = true
     }
 
-val reader = ObjectReader(ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+val reader = ObjectReader(
+    initialConfiguration = DefaultObjectReaderConfig,
+    initialValidations = DefaultObjectValidations,
+    pathMissingErrorBuilder = ErrorBuilder.PathMissing,
+    invalidTypeErrorBuilder = ErrorBuilder.InvalidType
+)
 
 inline fun <T> simpleBuilder(crossinline builder: (values: ObjectValuesMap) -> T): (ObjectValuesMap) -> JsResult<T> =
     { JsResult.Success(builder(it)) }
