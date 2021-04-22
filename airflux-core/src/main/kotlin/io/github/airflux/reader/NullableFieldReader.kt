@@ -2,7 +2,8 @@ package io.github.airflux.reader
 
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsValue
@@ -11,8 +12,8 @@ import io.github.airflux.value.extension.lookup
 fun <T : Any> readNullable(
     from: JsLookup,
     using: JsReader<T>,
-    pathMissingErrorBuilder: () -> JsError,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    pathMissingErrorBuilder: PathMissingErrorBuilder,
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> =
     when (from) {
         is JsLookup.Defined -> when (from.value) {
@@ -21,10 +22,10 @@ fun <T : Any> readNullable(
         }
 
         is JsLookup.Undefined.PathMissing ->
-            JsResult.Failure(path = from.path, error = pathMissingErrorBuilder())
+            JsResult.Failure(path = from.path, error = pathMissingErrorBuilder.build())
 
         is JsLookup.Undefined.InvalidType ->
-            JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder(from.expected, from.actual))
+            JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
     }
 
 /**
@@ -39,8 +40,8 @@ fun <T : Any> readNullable(
     from: JsValue,
     path: JsPath,
     using: JsReader<T>,
-    pathMissingErrorBuilder: () -> JsError,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    pathMissingErrorBuilder: PathMissingErrorBuilder,
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> =
     readNullable(
         from = from.lookup(path),
@@ -61,8 +62,8 @@ fun <T : Any> readNullable(
     from: JsValue,
     name: String,
     using: JsReader<T>,
-    pathMissingErrorBuilder: () -> JsError,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    pathMissingErrorBuilder: PathMissingErrorBuilder,
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> =
     readNullable(
         from = from.lookup(name),

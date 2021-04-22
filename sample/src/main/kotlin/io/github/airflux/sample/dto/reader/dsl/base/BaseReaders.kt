@@ -6,19 +6,21 @@ import io.github.airflux.dsl.reader.`object`.ObjectValidations
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.base.BasePrimitiveReader
+import io.github.airflux.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.readAsList
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.reader.simple.base.PrimitiveReader
 import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.sample.json.validation.StringValidator
 import io.github.airflux.sample.json.validation.`object`.isNotEmpty
-import io.github.airflux.value.JsValue
 
 object ErrorBuilder {
-    val PathMissing: () -> JsError = { JsonErrors.PathMissing }
-    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError = JsonErrors::InvalidType
+    val PathMissing = PathMissingErrorBuilder { JsonErrors.PathMissing }
+    val InvalidType = InvalidTypeErrorBuilder { expected, actual ->
+        JsonErrors.InvalidType(expected, actual)
+    }
 }
 
 object PrimitiveReader {

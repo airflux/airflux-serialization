@@ -1,7 +1,7 @@
 package io.github.airflux.reader
 
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsValue
@@ -15,7 +15,7 @@ import io.github.airflux.value.JsValue
 fun <T : Any> readAsList(
     from: JsValue,
     using: JsReader<T>,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<List<T>> =
     readAsCollection(from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
 
@@ -28,7 +28,7 @@ fun <T : Any> readAsList(
 fun <T : Any> readAsSet(
     from: JsValue,
     using: JsReader<T>,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<Set<T>> =
     readAsCollection(from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
 
@@ -42,7 +42,7 @@ fun <T : Any, C> readAsCollection(
     from: JsValue,
     using: JsReader<T>,
     factory: CollectionBuilderFactory<T, C>,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<C>
     where C : Collection<T> =
     when (from) {
@@ -71,5 +71,5 @@ fun <T : Any, C> readAsCollection(
                 .map { it.result() }
         }
 
-        else -> JsResult.Failure(error = invalidTypeErrorBuilder(JsValue.Type.ARRAY, from.type))
+        else -> JsResult.Failure(error = invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
     }

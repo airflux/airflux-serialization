@@ -2,18 +2,19 @@ package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
+import io.github.airflux.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.extension.readAsObject
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.asFailure
 import io.github.airflux.value.JsObject
-import io.github.airflux.value.JsValue
 
 class ObjectReader(
     private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
     private val initialValidations: ObjectValidations.Builder = ObjectValidations.Builder.Default,
-    private val pathMissingErrorBuilder: () -> JsError,
-    private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    private val pathMissingErrorBuilder: PathMissingErrorBuilder,
+    private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ) {
 
     operator fun <T> invoke(init: ObjectReader.Builder<T>.() -> Unit): JsReader<T> =

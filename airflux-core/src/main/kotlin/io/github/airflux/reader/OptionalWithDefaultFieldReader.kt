@@ -2,7 +2,7 @@ package io.github.airflux.reader
 
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
-import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
@@ -11,7 +11,7 @@ fun <T : Any> readOptional(
     from: JsLookup,
     using: JsReader<T>,
     defaultValue: () -> T,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> =
     when (from) {
         is JsLookup.Defined -> using.read(from.value).repath(from.path)
@@ -19,7 +19,7 @@ fun <T : Any> readOptional(
         is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = defaultValue())
 
         is JsLookup.Undefined.InvalidType ->
-            JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder(from.expected, from.actual))
+            JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
     }
 
 /**
@@ -34,7 +34,7 @@ fun <T : Any> readOptional(
     path: JsPath,
     using: JsReader<T>,
     defaultValue: () -> T,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> =
     readOptional(
         from = from.lookup(path),
@@ -55,7 +55,7 @@ fun <T : Any> readOptional(
     name: String,
     using: JsReader<T>,
     defaultValue: () -> T,
-    invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> =
     readOptional(
         from = from.lookup(name),

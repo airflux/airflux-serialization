@@ -6,7 +6,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=airflux_airflux&metric=coverage)](https://sonarcloud.io/dashboard?id=airflux_airflux)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=airflux_airflux&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=airflux_airflux)
 
-The library to parse, validate and generate data in the JSON (JavaScript Object Notation) format.
+The library to parsing, validate and generate data in the JSON (JavaScript Object Notation) format. The library doesn't use code generation, annotations or reflection.
 
 JSON sample
 ```json
@@ -55,8 +55,10 @@ val firstLotValuePath = "tender" / "lots" / 0 / "value"
 #### Define errors builder.
 ```kotlin
 object ErrorBuilder {
-    val PathMissing: () -> JsError = { JsonErrors.PathMissing }
-    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError = JsonErrors::InvalidType
+    val PathMissing = PathMissingErrorBuilder { JsonErrors.PathMissing }
+    val InvalidType = InvalidTypeErrorBuilder { expected, actual ->
+        JsonErrors.InvalidType(expected, actual)
+    }
 }
 ```
 
@@ -207,8 +209,10 @@ val RequestReader: JsReader<Request> = reader { input ->
 #### Define errors builder.
 ```kotlin
 object ErrorBuilder {
-    val PathMissing: () -> JsError = { JsonErrors.PathMissing }
-    val InvalidType: (expected: JsValue.Type, actual: JsValue.Type) -> JsError = JsonErrors::InvalidType
+    val PathMissing = PathMissingErrorBuilder { JsonErrors.PathMissing }
+    val InvalidType = InvalidTypeErrorBuilder { expected, actual ->
+        JsonErrors.InvalidType(expected, actual)
+    }
 }
 ```
 

@@ -3,6 +3,8 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.path.JsPath
 import io.github.airflux.path.KeyPathElement
 import io.github.airflux.reader.JsReader
+import io.github.airflux.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.readNullable
 import io.github.airflux.reader.readOptional
 import io.github.airflux.reader.readRequired
@@ -43,8 +45,8 @@ sealed class JsProperty<T : Any> {
     class Required<T : Any>(
         override val name: Name,
         private val reader: JsReader<T>,
-        private val pathMissingErrorBuilder: () -> JsError,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        private val pathMissingErrorBuilder: PathMissingErrorBuilder,
+        private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
@@ -67,7 +69,7 @@ sealed class JsProperty<T : Any> {
         override val name: Name,
         private val reader: JsReader<T>,
         private val default: () -> T,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
@@ -90,7 +92,7 @@ sealed class JsProperty<T : Any> {
     class Optional<T : Any>(
         override val name: Name,
         private val reader: JsReader<T>,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
@@ -113,7 +115,7 @@ sealed class JsProperty<T : Any> {
         override val name: Name,
         private val reader: JsReader<T>,
         private val default: () -> T,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
@@ -136,8 +138,8 @@ sealed class JsProperty<T : Any> {
     class Nullable<T : Any>(
         override val name: Name,
         private val reader: JsReader<T>,
-        private val pathMissingErrorBuilder: () -> JsError,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        private val pathMissingErrorBuilder: PathMissingErrorBuilder,
+        private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
@@ -160,7 +162,7 @@ sealed class JsProperty<T : Any> {
         override val name: Name,
         private val reader: JsReader<T>,
         private val default: () -> T,
-        private val invalidTypeErrorBuilder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError
+        private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : JsProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
