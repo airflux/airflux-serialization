@@ -8,14 +8,14 @@ import io.github.airflux.reader.result.fx.fx
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Lot
 import io.github.airflux.sample.dto.model.LotStatus
-import io.github.airflux.sample.dto.reader.simple.base.CollectionReader.list
-import io.github.airflux.sample.dto.reader.simple.base.EnumReader
-import io.github.airflux.sample.dto.reader.simple.base.PathReaders.readRequired
-import io.github.airflux.sample.dto.reader.simple.base.PrimitiveReader.stringReader
+import io.github.airflux.sample.dto.reader.base.CollectionReader.list
+import io.github.airflux.sample.dto.reader.base.EnumReader
+import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
+import io.github.airflux.sample.dto.reader.simple.base.readRequired
 import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
-val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
+val LotStatusReader = EnumReader.readAsEnum<LotStatus>()
 
 val LotReader: JsReader<Lot> = reader { input ->
     JsResult.fx {

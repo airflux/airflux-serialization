@@ -7,9 +7,9 @@ import io.github.airflux.reader.result.asSuccess
 import io.github.airflux.reader.validator.base.applyIfNotNull
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Tender
-import io.github.airflux.sample.dto.reader.simple.base.PathReaders.readOptional
-import io.github.airflux.sample.dto.reader.simple.base.PathReaders.readRequired
-import io.github.airflux.sample.dto.reader.simple.base.PrimitiveReader.stringReader
+import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
+import io.github.airflux.sample.dto.reader.simple.base.readOptional
+import io.github.airflux.sample.dto.reader.simple.base.readRequired
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
 val TenderReader: JsReader<Tender> = run {

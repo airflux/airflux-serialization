@@ -51,7 +51,7 @@ val firstLotValuePath = "tender" / "lots" / 0 / "value"
 
 ## JsReader
 
-### Example 1
+### Common
 #### Define errors builder.
 ```kotlin
 object ErrorBuilder {
@@ -62,8 +62,7 @@ object ErrorBuilder {
 }
 ```
 
-#### Define base readers.
-- Define readers for primitive types.
+#### Define readers for primitive types.
 ```kotlin
 object PrimitiveReader : BasePrimitiveReader {
     val stringReader = BasePrimitiveReader.string(ErrorBuilder.InvalidType)
@@ -71,25 +70,7 @@ object PrimitiveReader : BasePrimitiveReader {
 }
 ```
 
-- Define path-readers.
-```kotlin
-object PathReaders {
-
-    fun <T : Any> readRequired(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T> =
-        readRequired(from, byPath, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
-
-    fun <T : Any> readRequired(from: JsValue, byName: String, using: JsReader<T>): JsResult<T> =
-        readRequired(from, byName, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
-
-    fun <T : Any> readOptional(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T?> =
-        readOptional(from, byPath, using, ErrorBuilder.InvalidType)
-
-    fun <T : Any> readOptional(from: JsValue, byName: String, using: JsReader<T>): JsResult<T?> =
-        readOptional(from, byName, using, ErrorBuilder.InvalidType)
-}
-```
-
-- Define collection readers.
+#### Define collection readers.
 ```kotlin
 object CollectionReaders {
     fun <T : Any> readAsList(using: JsReader<T>): JsReader<List<T>> =
@@ -97,7 +78,7 @@ object CollectionReaders {
 }
 ```
 
-- Define reader of enum.
+#### Define reader of enum.
 ```kotlin
 object EnumReader {
     inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
@@ -113,6 +94,23 @@ object EnumReader {
                 }
         }
 }
+```
+
+### Example 1
+
+#### Define path-readers.
+```kotlin
+fun <T : Any> readRequired(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T> =
+    readRequired(from, byPath, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+
+fun <T : Any> readRequired(from: JsValue, byName: String, using: JsReader<T>): JsResult<T> =
+    readRequired(from, byName, using, ErrorBuilder.PathMissing, ErrorBuilder.InvalidType)
+
+fun <T : Any> readOptional(from: JsValue, byPath: JsPath, using: JsReader<T>): JsResult<T?> =
+    readOptional(from, byPath, using, ErrorBuilder.InvalidType)
+
+fun <T : Any> readOptional(from: JsValue, byName: String, using: JsReader<T>): JsResult<T?> =
+    readOptional(from, byName, using, ErrorBuilder.InvalidType)
 ```
 
 #### Define domain readers.
@@ -206,52 +204,7 @@ val RequestReader: JsReader<Request> = reader { input ->
 
 ### Example 2
 
-#### Define errors builder.
-```kotlin
-object ErrorBuilder {
-    val PathMissing = PathMissingErrorBuilder { JsonErrors.PathMissing }
-    val InvalidType = InvalidTypeErrorBuilder { expected, actual ->
-        JsonErrors.InvalidType(expected, actual)
-    }
-}
-```
-
 #### Define base readers.
-- Define readers for primitive types.
-```kotlin
-object PrimitiveReader : BasePrimitiveReader {
-    val stringReader = BasePrimitiveReader.string(ErrorBuilder.InvalidType)
-    val bigDecimalReader = BasePrimitiveReader.bigDecimal(ErrorBuilder.InvalidType)
-}
-```
-
-- Define collection readers.
-```kotlin
-object CollectionReaders {
-    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { input ->
-        readAsList(input, using, ErrorBuilder.InvalidType)
-    }
-}
-```
-
-- Define reader of enum.
-```kotlin
-object EnumReader {
-    inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
-        JsReader { input ->
-            stringReader.read(input)
-                .validation(StringValidator.isNotBlank)
-                .flatMap { text ->
-                    try {
-                        JsResult.Success(enumValueOf<T>(text.toUpperCase()))
-                    } catch (ignored: Exception) {
-                        JsResult.Failure(JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString()))
-                    }
-                }
-        }
-}
-```
-
 - Define default config for object reader.
 ```kotlin
 private val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()

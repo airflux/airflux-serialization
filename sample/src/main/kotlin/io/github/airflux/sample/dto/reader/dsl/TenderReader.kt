@@ -1,7 +1,7 @@
 package io.github.airflux.sample.dto.reader.dsl
 
 import io.github.airflux.sample.dto.model.Tender
-import io.github.airflux.sample.dto.reader.dsl.base.PrimitiveReader.stringReader
+import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.dsl.base.reader
 import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
