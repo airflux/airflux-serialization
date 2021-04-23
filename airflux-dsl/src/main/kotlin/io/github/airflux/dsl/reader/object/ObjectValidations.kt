@@ -8,18 +8,19 @@ class ObjectValidations(val before: List<ObjectValidator.Before>, val after: Lis
         val after: Validators<ObjectValidator.After.Builder>
     ) {
 
-        constructor(other: Builder = Default) : this(
-            before = Validators<ObjectValidator.Before.Builder>()
-                .apply { other.before.forEach { add(it) } },
-            after = Validators<ObjectValidator.After.Builder>()
-                .apply { other.after.forEach { add(it) } }
-        )
-
-        fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): ObjectValidations =
-            ObjectValidations(
-                before = before.map { validator -> validator.build(configuration, properties) },
-                after = after.map { validator -> validator.build(configuration, properties) }
+        constructor(other: Builder = Default) :
+            this(
+                before = Validators<ObjectValidator.Before.Builder>()
+                    .apply { other.before.forEach { add(it) } },
+                after = Validators<ObjectValidator.After.Builder>()
+                    .apply { other.after.forEach { add(it) } }
             )
+
+        fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): ObjectValidations {
+            val before = before.map { validator -> validator.build(configuration, properties) }
+            val after = after.map { validator -> validator.build(configuration, properties) }
+            return if (before.isEmpty() && after.isEmpty()) Empty else ObjectValidations(before, after)
+        }
 
         class Validators<T : ObjectValidator.Identifier> : Iterable<T> {
 
@@ -45,5 +46,9 @@ class ObjectValidations(val before: List<ObjectValidator.Before>, val after: Lis
         companion object {
             val Default = Builder(before = Validators(), after = Validators())
         }
+    }
+
+    companion object {
+        private val Empty = ObjectValidations(emptyList(), emptyList())
     }
 }
