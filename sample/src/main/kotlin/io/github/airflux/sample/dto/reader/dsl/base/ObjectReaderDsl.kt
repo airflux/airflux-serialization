@@ -2,7 +2,7 @@ package io.github.airflux.sample.dto.reader.dsl.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReader
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.ObjectValidations
+import io.github.airflux.dsl.reader.`object`.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.reader.base.ErrorBuilder
@@ -14,14 +14,14 @@ private val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
     }
     .build()
 
-private val DefaultObjectValidations = ObjectValidations.Builder()
+private val DefaultObjectValidatorBuilders = ObjectValidators.Builder()
     .apply {
         isNotEmpty = true
     }
 
 val reader = ObjectReader(
     initialConfiguration = DefaultObjectReaderConfig,
-    initialValidations = DefaultObjectValidations,
+    initialValidatorBuilders = DefaultObjectValidatorBuilders,
     pathMissingErrorBuilder = ErrorBuilder.PathMissing,
     invalidTypeErrorBuilder = ErrorBuilder.InvalidType
 )

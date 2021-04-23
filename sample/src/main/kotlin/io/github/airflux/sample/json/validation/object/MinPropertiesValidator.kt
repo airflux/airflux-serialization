@@ -2,7 +2,7 @@ package io.github.airflux.sample.json.validation.`object`
 
 import io.github.airflux.dsl.reader.`object`.JsProperty
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.ObjectValidations
+import io.github.airflux.dsl.reader.`object`.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValidator
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.reader.result.JsError
@@ -10,7 +10,7 @@ import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
-var ObjectValidations.Builder.minProperties: Int
+var ObjectValidators.Builder.minProperties: Int
     get() = after[MinPropertiesValidator.NAME]
         ?.let { (it as MinPropertiesValidator.Builder).value }
         ?: -1

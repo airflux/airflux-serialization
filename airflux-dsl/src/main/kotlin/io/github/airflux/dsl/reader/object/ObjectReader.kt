@@ -12,7 +12,7 @@ import io.github.airflux.value.JsObject
 
 class ObjectReader(
     private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
-    private val initialValidations: ObjectValidations.Builder = ObjectValidations.Builder.Default,
+    private val initialValidatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder.Default,
     private val pathMissingErrorBuilder: PathMissingErrorBuilder,
     private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ) {
@@ -23,7 +23,7 @@ class ObjectReader(
     inner class Builder<T> {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
-        private val validations: ObjectValidations.Builder = ObjectValidations.Builder(initialValidations)
+        private val validatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder(initialValidatorBuilders)
         private val properties = mutableListOf<JsProperty<*>>()
         var typeBuilder: ((ObjectValuesMap) -> JsResult<T>)? = null
             set(value) {
@@ -34,8 +34,8 @@ class ObjectReader(
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
         }
 
-        fun validation(init: ObjectValidations.Builder.() -> Unit) {
-            validations.apply(init)
+        fun validation(init: ObjectValidators.Builder.() -> Unit) {
+            validatorBuilders.apply(init)
         }
 
         fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P> =
@@ -45,11 +45,11 @@ class ObjectReader(
             PropertyBinder(JsProperty.Name.of(path), reader)
 
         fun build(): JsReader<T> {
-            val validations = validations.build(configuration, properties)
+            val validators = validatorBuilders.build(configuration, properties)
             val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
             return JsReader { input ->
                 input.readAsObject(invalidTypeErrorBuilder) {
-                    read(configuration, validations, properties, typeBuilder, it)
+                    read(configuration, validators, properties, typeBuilder, it)
                 }
             }
         }
@@ -91,7 +91,7 @@ class ObjectReader(
 
         internal fun <T> read(
             configuration: ObjectReaderConfiguration,
-            validation: ObjectValidations,
+            validation: ObjectValidators,
             properties: List<JsProperty<*>>,
             typeBuilder: (ObjectValuesMap) -> JsResult<T>,
             input: JsObject
@@ -126,7 +126,7 @@ class ObjectReader(
         internal fun preValidation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            validation: ObjectValidations,
+            validation: ObjectValidators,
             properties: List<JsProperty<*>>
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
@@ -141,7 +141,7 @@ class ObjectReader(
         internal fun postValidation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            validation: ObjectValidations,
+            validation: ObjectValidators,
             properties: List<JsProperty<*>>,
             objectValuesMap: ObjectValuesMap
         ): List<JsError> = mutableListOf<JsError>()

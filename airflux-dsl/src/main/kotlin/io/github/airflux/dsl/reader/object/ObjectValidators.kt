@@ -1,6 +1,6 @@
 package io.github.airflux.dsl.reader.`object`
 
-class ObjectValidations(val before: List<ObjectValidator.Before>, val after: List<ObjectValidator.After>) {
+class ObjectValidators(val before: List<ObjectValidator.Before>, val after: List<ObjectValidator.After>) {
 
     @ObjectReaderMarker
     class Builder private constructor(
@@ -16,10 +16,10 @@ class ObjectValidations(val before: List<ObjectValidator.Before>, val after: Lis
                     .apply { other.after.forEach { add(it) } }
             )
 
-        fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): ObjectValidations {
+        fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): ObjectValidators {
             val before = before.map { validator -> validator.build(configuration, properties) }
             val after = after.map { validator -> validator.build(configuration, properties) }
-            return if (before.isEmpty() && after.isEmpty()) Empty else ObjectValidations(before, after)
+            return if (before.isEmpty() && after.isEmpty()) Empty else ObjectValidators(before, after)
         }
 
         class Validators<T : ObjectValidator.Identifier> : Iterable<T> {
@@ -49,6 +49,6 @@ class ObjectValidations(val before: List<ObjectValidator.Before>, val after: Lis
     }
 
     companion object {
-        private val Empty = ObjectValidations(emptyList(), emptyList())
+        private val Empty = ObjectValidators(emptyList(), emptyList())
     }
 }

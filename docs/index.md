@@ -214,9 +214,9 @@ private val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
     .build()
 ```
 
-- Define default validations for object reader.
+- Define default validator builders for object reader.
 ```kotlin
-private val DefaultObjectValidations = ObjectValidations.Builder()
+private val DefaultObjectValidatorBuilders = ObjectValidators.Builder()
     .apply {
         isNotEmpty = true
     }
@@ -226,7 +226,7 @@ private val DefaultObjectValidations = ObjectValidations.Builder()
 ```kotlin
 val reader = ObjectReader(
     initialConfiguration = DefaultObjectReaderConfig,
-    initialValidations = DefaultObjectValidations,
+    initialValidatorBuilders = DefaultObjectValidatorBuilders,
     pathMissingErrorBuilder = ErrorBuilder.PathMissing,
     invalidTypeErrorBuilder = ErrorBuilder.InvalidType
 )
