@@ -1,12 +1,11 @@
 package io.github.airflux.sample
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.dsl.ReaderDsl.read
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.Response
 import io.github.airflux.sample.dto.model.Value
-import io.github.airflux.sample.dto.reader.simple.RequestReader
+import io.github.airflux.sample.dto.reader.dsl.RequestReader
 import io.github.airflux.sample.dto.writer.ResponseWriter
 import io.github.airflux.value.JsValue
 import java.math.BigDecimal
@@ -18,7 +17,7 @@ fun main() {
 
     val json = mapper.readValue(jsonOfTender, JsValue::class.java)
 
-    when (val result = read(from = json, using = RequestReader)) {
+    when (val result = RequestReader.read(json)) {
         is JsResult.Success -> println(result.value)
         is JsResult.Failure -> {
             val errors = result.errors

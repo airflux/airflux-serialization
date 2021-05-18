@@ -1,8 +1,10 @@
 package io.github.airflux.dsl.reader.`object`
 
+import io.github.airflux.dsl.AirfluxMarker
+
 class ObjectReaderConfiguration(val failFast: Boolean) {
 
-    @ObjectReaderMarker
+    @AirfluxMarker
     class Builder(base: ObjectReaderConfiguration = Default) {
 
         var failFast = base.failFast

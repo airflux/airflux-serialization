@@ -1,7 +1,6 @@
 package io.github.airflux.writer.extension
 
 import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
-import io.github.airflux.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsNull
@@ -15,18 +14,16 @@ import kotlin.test.assertTrue
 
 class JsWriterExtensionTest {
 
+    class User(val firstName: String, val phoneNumber: String? = null)
+
     @Nested
-    inner class WriteRequiredProperty {
-
-        inner class A(val name: String)
-
-        private val writer = writeRequiredProperty(from = A::name, using = BasePrimitiveWriter.string)
+    inner class WriteAsRequired {
 
         @Test
-        fun `Testing of a write of a required property`() {
-            val value = A(name = USER_NAME_VALUE)
+        fun `Testing writeAsRequired function`() {
+            val value = User(firstName = USER_NAME_VALUE)
 
-            val result = writer(value)
+            val result = writeAsRequired(value, User::firstName, BasePrimitiveWriter.string)
 
             result as JsString
             assertEquals(USER_NAME_VALUE, result.underlying)
@@ -34,119 +31,65 @@ class JsWriterExtensionTest {
     }
 
     @Nested
-    inner class WriteOptionalProperty {
-        inner class A(val name: String?)
-
-        private val writer = writeOptionalProperty(from = A::name, using = BasePrimitiveWriter.string)
+    inner class WriteAsOptional {
 
         @Test
-        fun `Testing of a write of an optional property`() {
-            val value = A(name = USER_NAME_VALUE)
+        fun `Testing writeAsOptional function`() {
+            val value = User(firstName = USER_NAME_VALUE, phoneNumber = FIRST_PHONE_VALUE)
 
-            val result = writer(value)
+            val result = writeAsOptional(value, User::phoneNumber, BasePrimitiveWriter.string)
 
             result as JsString
-            assertEquals(USER_NAME_VALUE, result.underlying)
+            assertEquals(FIRST_PHONE_VALUE, result.underlying)
         }
 
         @Test
-        fun `Testing of a write of an optional property (a value of a property is null)`() {
-            val value = A(name = null)
+        fun `Testing writeAsOptional function (a value of a property is null)`() {
+            val value = User(firstName = USER_NAME_VALUE)
 
-            val result = writer(value)
+            val result = writeAsOptional(value, User::phoneNumber, BasePrimitiveWriter.string)
 
             assertNull(result)
         }
     }
 
     @Nested
-    inner class WriteNullableProperty {
-        inner class A(val name: String?)
-
-        private val writer = writeNullableProperty(from = A::name, using = BasePrimitiveWriter.string)
+    inner class WriteAsNullable {
 
         @Test
-        fun `Testing of a write of a nullable property`() {
-            val value = A(name = USER_NAME_VALUE)
+        fun `Testing writeAsNullable function`() {
+            val value = User(firstName = USER_NAME_VALUE, phoneNumber = FIRST_PHONE_VALUE)
 
-            val result = writer(value)
+            val result = writeAsNullable(value, User::phoneNumber, BasePrimitiveWriter.string)
 
             result as JsString
-            assertEquals(USER_NAME_VALUE, result.underlying)
+            assertEquals(FIRST_PHONE_VALUE, result.underlying)
         }
 
         @Test
-        fun `Testing of a write of a nullable property (a value of a property is null)`() {
-            val value = A(name = null)
+        fun `Testing writeAsNullable function (a value of a property is null)`() {
+            val value = User(firstName = USER_NAME_VALUE)
 
-            val result = writer(value)
+            val result = writeAsNullable(value, User::phoneNumber, BasePrimitiveWriter.string)
 
             assertTrue(result is JsNull)
         }
     }
 
     @Nested
-    inner class WriteTraversableProperty {
+    inner class ArrayWriter {
 
-        inner class A(val phones: List<String>)
-
-        private val writer = writeTraversableProperty(from = A::phones, using = BasePrimitiveWriter.string)
-
+        @Suppress("UNCHECKED_CAST")
         @Test
-        fun `Testing of a write of a traversable property`() {
-            val value = A(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+        fun `Testing arrayWriter function`() {
+            val writer = arrayWriter(BasePrimitiveWriter.string)
+            val value = listOf("One", "Two")
 
-            val result = writer(value)
+            val result = writer.write(value)
 
-            result as JsArray<*>
-            assertEquals(2, result.underlying.size)
-
-            val firstPhoneNumber = result.underlying[0] as JsString
-            assertEquals(FIRST_PHONE_VALUE, firstPhoneNumber.underlying)
-            val secondPhoneNumber = result.underlying[1] as JsString
-            assertEquals(SECOND_PHONE_VALUE, secondPhoneNumber.underlying)
-        }
-
-        @Test
-        fun `Testing of a write of a traversable property (a property is empty)`() {
-            val value = A(phones = emptyList())
-
-            val result = writer(value)
-
-            result as JsArray<*>
-            assertEquals(0, result.underlying.size)
-        }
-    }
-
-    @Nested
-    inner class WriteOptionalTraversableProperty {
-
-        inner class A(val phones: List<String>)
-
-        private val writer = writeOptionalTraversableProperty(from = A::phones, using = BasePrimitiveWriter.string)
-
-        @Test
-        fun `Testing of a write of a optional traversable property`() {
-            val value = A(phones = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
-
-            val result = writer(value)
-
-            result as JsArray<*>
-            assertEquals(2, result.underlying.size)
-
-            val firstPhoneNumber = result.underlying[0] as JsString
-            assertEquals(FIRST_PHONE_VALUE, firstPhoneNumber.underlying)
-            val secondPhoneNumber = result.underlying[1] as JsString
-            assertEquals(SECOND_PHONE_VALUE, secondPhoneNumber.underlying)
-        }
-
-        @Test
-        fun `Testing of a write of a optional traversable property (a property is empty)`() {
-            val value = A(phones = emptyList())
-
-            val result = writer(value)
-
-            assertNull(result)
+            result as JsArray<JsString>
+            assertEquals("One", result.underlying[0].underlying)
+            assertEquals("Two", result.underlying[1].underlying)
         }
     }
 }

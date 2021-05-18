@@ -1,5 +1,6 @@
 package io.github.airflux.dsl.reader.`object`
 
+import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
@@ -19,7 +20,7 @@ class ObjectReader(
 
     operator fun <T> invoke(init: Builder<T>.() -> Unit): JsReader<T> = Builder<T>().apply(init).build()
 
-    @ObjectReaderMarker
+    @AirfluxMarker
     inner class Builder<T> {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration

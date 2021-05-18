@@ -1,8 +1,10 @@
 package io.github.airflux.dsl.reader.`object`
 
+import io.github.airflux.dsl.AirfluxMarker
+
 class ObjectValidators(val before: List<ObjectValidator.Before>, val after: List<ObjectValidator.After>) {
 
-    @ObjectReaderMarker
+    @AirfluxMarker
     class Builder private constructor(
         val before: Validators<ObjectValidator.Before.Builder>,
         val after: Validators<ObjectValidator.After.Builder>
