@@ -18,7 +18,10 @@ class ObjectValidators(val before: List<ObjectValidator.Before>, val after: List
                     .apply { other.after.forEach { add(it) } }
             )
 
-        internal fun build(configuration: ObjectReaderConfiguration, properties: List<JsProperty<*>>): ObjectValidators {
+        internal fun build(
+            configuration: ObjectReaderConfiguration,
+            properties: List<JsReaderProperty<*>>
+        ): ObjectValidators {
             val before = before.map { validator -> validator.build(configuration, properties) }
             val after = after.map { validator -> validator.build(configuration, properties) }
             return if (before.isEmpty() && after.isEmpty()) Empty else ObjectValidators(before, after)

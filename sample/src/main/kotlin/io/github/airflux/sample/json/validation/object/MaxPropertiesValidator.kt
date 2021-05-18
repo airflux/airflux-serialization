@@ -1,9 +1,9 @@
 package io.github.airflux.sample.json.validation.`object`
 
-import io.github.airflux.dsl.reader.`object`.JsProperty
+import io.github.airflux.dsl.reader.`object`.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValidator
+import io.github.airflux.dsl.reader.`object`.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.sample.json.error.JsonErrors
@@ -26,7 +26,7 @@ class MaxPropertiesValidator private constructor(val value: Int) : ObjectValidat
     override fun validation(
         configuration: ObjectReaderConfiguration,
         input: JsObject,
-        properties: List<JsProperty<*>>,
+        properties: List<JsReaderProperty<*>>,
         objectValuesMap: ObjectValuesMap
     ): List<JsError> =
         if (objectValuesMap.size > value)
@@ -41,7 +41,7 @@ class MaxPropertiesValidator private constructor(val value: Int) : ObjectValidat
 
         override fun build(
             configuration: ObjectReaderConfiguration,
-            properties: List<JsProperty<*>>
+            properties: List<JsReaderProperty<*>>
         ): ObjectValidator.After = MaxPropertiesValidator(value)
     }
 

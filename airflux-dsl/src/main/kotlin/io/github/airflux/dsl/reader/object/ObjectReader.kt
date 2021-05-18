@@ -25,7 +25,7 @@ class ObjectReader(
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
         private val validatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder(initialValidatorBuilders)
-        private val properties = mutableListOf<JsProperty<*>>()
+        private val properties = mutableListOf<JsReaderProperty<*>>()
 
         var typeBuilder: ((ObjectValuesMap) -> JsResult<T>)? = null
             set(value) {
@@ -41,10 +41,10 @@ class ObjectReader(
         }
 
         fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinder(JsProperty.Name.of(JsPath.empty / name), reader)
+            PropertyBinder(JsReaderProperty.Name.of(JsPath.empty / name), reader)
 
         fun <P : Any> property(path: JsPath, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinder(JsProperty.Name.of(path), reader)
+            PropertyBinder(JsReaderProperty.Name.of(path), reader)
 
         internal fun build(): JsReader<T> {
             val validators = validatorBuilders.build(configuration, properties)
@@ -56,35 +56,35 @@ class ObjectReader(
             }
         }
 
-        private fun <P : Any> registration(property: JsProperty<P>) {
+        private fun <P : Any> registration(property: JsReaderProperty<P>) {
             properties.add(property)
         }
 
         @Suppress("unused")
-        inner class PropertyBinder<P : Any>(private val name: JsProperty.Name, private val reader: JsReader<P>) {
+        inner class PropertyBinder<P : Any>(private val name: JsReaderProperty.Name, private val reader: JsReader<P>) {
 
-            fun required(): JsProperty.Required<P> =
-                JsProperty.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+            fun required(): JsReaderProperty.Required<P> =
+                JsReaderProperty.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun defaultable(default: () -> P): JsProperty.Defaultable<P> =
-                JsProperty.Defaultable(name, reader, default, invalidTypeErrorBuilder)
+            fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P> =
+                JsReaderProperty.Defaultable(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(): JsProperty.Optional<P> =
-                JsProperty.Optional(name, reader, invalidTypeErrorBuilder)
+            fun optional(): JsReaderProperty.Optional<P> =
+                JsReaderProperty.Optional(name, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(default: () -> P): JsProperty.OptionalWithDefault<P> =
-                JsProperty.OptionalWithDefault(name, reader, default, invalidTypeErrorBuilder)
+            fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P> =
+                JsReaderProperty.OptionalWithDefault(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(): JsProperty.Nullable<P> =
-                JsProperty.Nullable(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+            fun nullable(): JsReaderProperty.Nullable<P> =
+                JsReaderProperty.Nullable(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(default: () -> P): JsProperty.NullableWithDefault<P> =
-                JsProperty.NullableWithDefault(name, reader, default, invalidTypeErrorBuilder)
+            fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P> =
+                JsReaderProperty.NullableWithDefault(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
         }
     }
@@ -94,7 +94,7 @@ class ObjectReader(
         internal fun <T> read(
             configuration: ObjectReaderConfiguration,
             validation: ObjectValidators,
-            properties: List<JsProperty<*>>,
+            properties: List<JsReaderProperty<*>>,
             typeBuilder: (ObjectValuesMap) -> JsResult<T>,
             input: JsObject
         ): JsResult<T> {
@@ -129,7 +129,7 @@ class ObjectReader(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             validation: ObjectValidators,
-            properties: List<JsProperty<*>>
+            properties: List<JsReaderProperty<*>>
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
                 validation.before
@@ -144,7 +144,7 @@ class ObjectReader(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             validation: ObjectValidators,
-            properties: List<JsProperty<*>>,
+            properties: List<JsReaderProperty<*>>,
             objectValuesMap: ObjectValuesMap
         ): List<JsError> = mutableListOf<JsError>()
             .apply {

@@ -16,7 +16,7 @@ import io.github.airflux.reader.validator.base.applyIfPresent
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue
 
-sealed class JsProperty<T : Any> {
+sealed class JsReaderProperty<T : Any> {
 
     abstract val name: Name
     protected var validator: JsValidator<T, JsError>? = null
@@ -47,7 +47,7 @@ sealed class JsProperty<T : Any> {
         private val reader: JsReader<T>,
         private val pathMissingErrorBuilder: PathMissingErrorBuilder,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : JsProperty<T>() {
+    ) : JsReaderProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
 
@@ -70,7 +70,7 @@ sealed class JsProperty<T : Any> {
         private val reader: JsReader<T>,
         private val default: () -> T,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : JsProperty<T>() {
+    ) : JsReaderProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
 
@@ -93,7 +93,7 @@ sealed class JsProperty<T : Any> {
         override val name: Name,
         private val reader: JsReader<T>,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : JsProperty<T>() {
+    ) : JsReaderProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
 
@@ -116,7 +116,7 @@ sealed class JsProperty<T : Any> {
         private val reader: JsReader<T>,
         private val default: () -> T,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : JsProperty<T>() {
+    ) : JsReaderProperty<T>() {
 
         fun read(input: JsValue): JsResult<T> = validation(encode(input), validator)
 
@@ -140,7 +140,7 @@ sealed class JsProperty<T : Any> {
         private val reader: JsReader<T>,
         private val pathMissingErrorBuilder: PathMissingErrorBuilder,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : JsProperty<T>() {
+    ) : JsReaderProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
 
@@ -163,7 +163,7 @@ sealed class JsProperty<T : Any> {
         private val reader: JsReader<T>,
         private val default: () -> T,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : JsProperty<T>() {
+    ) : JsReaderProperty<T>() {
 
         fun read(input: JsValue): JsResult<T?> = validation(encode(input), validator)
 
