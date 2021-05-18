@@ -16,7 +16,7 @@ import io.github.airflux.writer.extension.writeAsOptional
 import io.github.airflux.writer.extension.writeAsRequired
 
 @Suppress("unused")
-sealed class JsProperty<T, P : Any> {
+sealed class JsWriterProperty<T, P : Any> {
 
     internal abstract val name: String
     internal abstract fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue?
@@ -25,14 +25,14 @@ sealed class JsProperty<T, P : Any> {
         override val name: String,
         private val getter: (T) -> P,
         private val writer: JsWriter<P>
-    ) : JsProperty<T, P>() {
+    ) : JsWriterProperty<T, P>() {
 
         override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? = { value: T ->
             writeAsRequired(value, getter, writer)
         }
     }
 
-    sealed class Optional<T, P : Any> : JsProperty<T, P>() {
+    sealed class Optional<T, P : Any> : JsWriterProperty<T, P>() {
 
         class Simple<T, P : Any>(
             override val name: String,
@@ -93,7 +93,7 @@ sealed class JsProperty<T, P : Any> {
         }
     }
 
-    sealed class Nullable<T, P : Any> : JsProperty<T, P>() {
+    sealed class Nullable<T, P : Any> : JsWriterProperty<T, P>() {
 
         class Simple<T, P : Any>(
             override val name: String,
@@ -145,7 +145,10 @@ sealed class JsProperty<T, P : Any> {
             internal fun <T, P : Any> buildConverter(getter: (T) -> P?, writer: JsWriter<P>): (T) -> JsValue? =
                 { value: T -> writeAsNullable(value, getter, writer) }
 
-            internal fun <T, P : Any> buildConverterIfEmptyResult(getter: (T) -> P?, writer: JsWriter<P>): (T) -> JsValue? =
+            internal fun <T, P : Any> buildConverterIfEmptyResult(
+                getter: (T) -> P?,
+                writer: JsWriter<P>
+            ): (T) -> JsValue? =
                 { value: T ->
                     val result = writeAsNullable(value, getter, writer)
                     if (result.isEmpty) JsNull else result
