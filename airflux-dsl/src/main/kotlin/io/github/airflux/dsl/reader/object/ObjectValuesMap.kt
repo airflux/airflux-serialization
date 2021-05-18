@@ -56,6 +56,6 @@ class ObjectValuesMap private constructor(private val results: Map<JsProperty<*>
             }
         }
 
-        fun build(): ObjectValuesMap = ObjectValuesMap(results)
+        internal fun build(): ObjectValuesMap = ObjectValuesMap(results)
     }
 }

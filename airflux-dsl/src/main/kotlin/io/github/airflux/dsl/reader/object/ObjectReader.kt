@@ -26,6 +26,7 @@ class ObjectReader(
         private var configuration: ObjectReaderConfiguration = initialConfiguration
         private val validatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder(initialValidatorBuilders)
         private val properties = mutableListOf<JsProperty<*>>()
+
         var typeBuilder: ((ObjectValuesMap) -> JsResult<T>)? = null
             set(value) {
                 if (field == null) field = value else throw IllegalStateException("Reassigned type builder.")
@@ -45,7 +46,7 @@ class ObjectReader(
         fun <P : Any> property(path: JsPath, reader: JsReader<P>): PropertyBinder<P> =
             PropertyBinder(JsProperty.Name.of(path), reader)
 
-        fun build(): JsReader<T> {
+        internal fun build(): JsReader<T> {
             val validators = validatorBuilders.build(configuration, properties)
             val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
             return JsReader { input ->
