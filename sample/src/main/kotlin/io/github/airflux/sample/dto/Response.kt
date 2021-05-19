@@ -1,7 +1,7 @@
 package io.github.airflux.sample.dto
 
-import io.github.airflux.sample.dto.model.Value
+import io.github.airflux.sample.dto.model.Tender
 
 data class Response(
-    val value: Value
+    val tender: Tender
 )

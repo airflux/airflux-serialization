@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.Response
+import io.github.airflux.sample.dto.model.Lot
+import io.github.airflux.sample.dto.model.LotStatus
+import io.github.airflux.sample.dto.model.Tender
 import io.github.airflux.sample.dto.model.Value
 import io.github.airflux.sample.dto.reader.dsl.RequestReader
 import io.github.airflux.sample.dto.writer.ResponseWriter
@@ -26,7 +29,9 @@ fun main() {
     }
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")
-    val response = Response(value = value)
+    val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
+    val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
+    val response = Response(tender = tender)
     val output: JsValue = ResponseWriter.write(response)
     println(output.toString())
 }

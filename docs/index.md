@@ -275,12 +275,58 @@ val ValueWriter: JsWriter<Value> = writer {
 }
 ```
 
+- Define writer for the 'LotStatus' type.
+
+```kotlin
+val LotStatus = JsWriter<LotStatus> { value ->
+    JsString(value.name)
+}
+```
+
+- Define writer for the 'Lot' type.
+
+```kotlin
+val LotWriter: JsWriter<Lot> = writer {
+    requiredProperty(name = "id", from = Lot::id, BasePrimitiveWriter.string)
+    requiredProperty(name = "status", from = Lot::status, writer = LotStatus)
+    requiredProperty(name = "value", from = Lot::value, writer = ValueWriter)
+}
+```
+
+- Define writer for the 'Lots' type.
+
+```kotlin
+val LotsWriter = arrayWriter(LotWriter)
+```
+
+- Define writer for the 'Tender' type.
+
+```kotlin
+val TenderWriter: JsWriter<Tender> = writer {
+    requiredProperty(name = "id", from = Tender::id, writer = BasePrimitiveWriter.string)
+    optionalProperty(name = "title", from = Tender::title, writer = BasePrimitiveWriter.string)
+    optionalProperty(name = "value", from = Tender::value, writer = ValueWriter)
+    optionalProperty(name = "lots", from = Tender::lots, writer = LotsWriter).skipIfEmpty()
+}
+```
+
+- Define writer for the 'Response' type.
+
+```kotlin
+val ResponseWriter: JsWriter<Response> = writer {
+    requiredProperty(name = "tender", from = Response::tender, writer = TenderWriter)
+}
+```
+
 ### Using
 
 ```kotlin
 fun main() {
-    val value = Value(amount = BigDecimal(125.52), currency = "USD")
-    val output: JsValue = ValueWriter.write(value)
+    val value = Value(amount = BigDecimal("125.52"), currency = "USD")
+    val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
+    val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
+    val response = Response(tender = tender)
+    val output: JsValue = ResponseWriter.write(response)
     val json = output.toString()
 }
 ```
