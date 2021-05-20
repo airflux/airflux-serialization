@@ -8,7 +8,7 @@ buildscript {
 
 
 plugins {
-    kotlin("jvm") version "1.4.30"
+    kotlin("jvm") version "1.5.0"
     `java-library`
 
     id("io.gitlab.arturbosch.detekt") version "1.13.1"
@@ -97,7 +97,7 @@ tasks {
     }
 
     jacoco {
-        toolVersion = "0.8.6"
+        toolVersion = "0.8.7"
         reportsDirectory.set(file("$buildDir/reports/jacoco"))
     }
 
