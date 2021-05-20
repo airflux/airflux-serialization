@@ -1,9 +1,5 @@
 package io.github.airflux.dsl.writer.`object`
 
-import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration.WriteProperty.OUTPUT_NULL_IF_ARRAY_IS_EMPTY
-import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration.WriteProperty.OUTPUT_NULL_IF_OBJECT_IS_EMPTY
-import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration.WriteProperty.SKIP_PROPERTY_IF_ARRAY_IS_EMPTY
-import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration.WriteProperty.SKIP_PROPERTY_IF_OBJECT_IS_EMPTY
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -57,7 +53,7 @@ sealed class JsWriterProperty<T, P : Any> {
             }
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? {
-                val skipIfEmpty: Boolean = skipIfEmpty ?: (SKIP_PROPERTY_IF_ARRAY_IS_EMPTY in configuration.properties)
+                val skipIfEmpty: Boolean = skipIfEmpty ?: configuration.skipPropertyIfArrayIsEmpty
                 return if (skipIfEmpty) buildConverterIfEmptyResult(getter, writer) else buildConverter(getter, writer)
             }
         }
@@ -75,7 +71,7 @@ sealed class JsWriterProperty<T, P : Any> {
             }
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? {
-                val skipIfEmpty = skipIfEmpty ?: (SKIP_PROPERTY_IF_OBJECT_IS_EMPTY in configuration.properties)
+                val skipIfEmpty = skipIfEmpty ?: configuration.skipPropertyIfObjectIsEmpty
                 return if (skipIfEmpty) buildConverterIfEmptyResult(getter, writer) else buildConverter(getter, writer)
             }
         }
@@ -118,7 +114,7 @@ sealed class JsWriterProperty<T, P : Any> {
             }
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? {
-                val nullIfEmpty: Boolean = nullIfEmpty ?: (OUTPUT_NULL_IF_ARRAY_IS_EMPTY in configuration.properties)
+                val nullIfEmpty: Boolean = nullIfEmpty ?: configuration.writeNullIfArrayIsEmpty
                 return if (nullIfEmpty) buildConverterIfEmptyResult(getter, writer) else buildConverter(getter, writer)
             }
         }
@@ -136,7 +132,7 @@ sealed class JsWriterProperty<T, P : Any> {
             }
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? {
-                val nullIfEmpty: Boolean = nullIfEmpty ?: (OUTPUT_NULL_IF_OBJECT_IS_EMPTY in configuration.properties)
+                val nullIfEmpty: Boolean = nullIfEmpty ?: configuration.writeNullIfObjectIsEmpty
                 return if (nullIfEmpty) buildConverterIfEmptyResult(getter, writer) else buildConverter(getter, writer)
             }
         }

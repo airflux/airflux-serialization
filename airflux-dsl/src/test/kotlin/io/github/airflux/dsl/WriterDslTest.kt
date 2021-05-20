@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 class WriterDslTest {
 
     companion object {
-        val objectWriter = ObjectWriter(ObjectWriterConfiguration())
+        val objectWriter = ObjectWriter(ObjectWriterConfiguration.Default)
     }
 
     @Nested

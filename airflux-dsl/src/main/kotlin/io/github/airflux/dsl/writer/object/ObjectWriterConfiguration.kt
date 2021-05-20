@@ -1,15 +1,38 @@
 package io.github.airflux.dsl.writer.`object`
 
+import io.github.airflux.dsl.AirfluxMarker
+
 class ObjectWriterConfiguration private constructor(
-    val properties: Set<WriteProperty> = emptySet()
+    val skipPropertyIfArrayIsEmpty: Boolean,
+    val skipPropertyIfObjectIsEmpty: Boolean,
+    val writeNullIfArrayIsEmpty: Boolean,
+    val writeNullIfObjectIsEmpty: Boolean
 ) {
 
-    constructor(vararg properties: WriteProperty) : this(properties.toSet())
+    @AirfluxMarker
+    class Builder(base: ObjectWriterConfiguration) {
 
-    enum class WriteProperty {
-        OUTPUT_NULL_IF_ARRAY_IS_EMPTY,
-        OUTPUT_NULL_IF_OBJECT_IS_EMPTY,
-        SKIP_PROPERTY_IF_ARRAY_IS_EMPTY,
-        SKIP_PROPERTY_IF_OBJECT_IS_EMPTY,
+        var skipPropertyIfArrayIsEmpty = base.skipPropertyIfArrayIsEmpty
+        var skipPropertyIfObjectIsEmpty = base.skipPropertyIfObjectIsEmpty
+        var writeNullIfArrayIsEmpty = base.writeNullIfArrayIsEmpty
+        var writeNullIfObjectIsEmpty = base.writeNullIfObjectIsEmpty
+
+        fun build(): ObjectWriterConfiguration = ObjectWriterConfiguration(
+            skipPropertyIfArrayIsEmpty = skipPropertyIfArrayIsEmpty,
+            skipPropertyIfObjectIsEmpty = skipPropertyIfObjectIsEmpty,
+            writeNullIfArrayIsEmpty = writeNullIfArrayIsEmpty,
+            writeNullIfObjectIsEmpty = writeNullIfObjectIsEmpty
+        )
+    }
+
+    companion object {
+        val Default = ObjectWriterConfiguration(
+            skipPropertyIfArrayIsEmpty = false,
+            skipPropertyIfObjectIsEmpty = false,
+            writeNullIfArrayIsEmpty = false,
+            writeNullIfObjectIsEmpty = false
+        )
+
+        fun build(block: Builder.() -> Unit): ObjectWriterConfiguration = Builder(Default).apply(block).build()
     }
 }

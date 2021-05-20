@@ -8,16 +8,13 @@ import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.reader.base.ErrorBuilder
 import io.github.airflux.sample.json.validation.`object`.isNotEmpty
 
-private val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
-    .apply {
-        failFast = true
-    }
-    .build()
+private val DefaultObjectReaderConfig = ObjectReaderConfiguration.build {
+    failFast = true
+}
 
-private val DefaultObjectValidatorBuilders = ObjectValidators.Builder()
-    .apply {
-        isNotEmpty = true
-    }
+private val DefaultObjectValidatorBuilders = ObjectValidators.builder {
+    isNotEmpty = true
+}
 
 val reader = ObjectReader(
     initialConfiguration = DefaultObjectReaderConfig,
