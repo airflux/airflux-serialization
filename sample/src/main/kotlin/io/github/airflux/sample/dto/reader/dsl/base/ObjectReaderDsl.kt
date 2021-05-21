@@ -2,7 +2,7 @@ package io.github.airflux.sample.dto.reader.dsl.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReader
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.ObjectValidators
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.reader.base.ErrorBuilder

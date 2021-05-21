@@ -1,8 +1,8 @@
 package io.github.airflux.sample.json.validation.`object`
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.ObjectValidator
-import io.github.airflux.dsl.reader.`object`.ObjectValidators
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.reader.result.JsError

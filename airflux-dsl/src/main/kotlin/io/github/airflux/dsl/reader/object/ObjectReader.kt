@@ -3,6 +3,7 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsReaderPropertyInstance
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder

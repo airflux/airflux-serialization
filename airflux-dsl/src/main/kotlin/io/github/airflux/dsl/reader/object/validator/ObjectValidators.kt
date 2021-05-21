@@ -1,6 +1,8 @@
-package io.github.airflux.dsl.reader.`object`
+package io.github.airflux.dsl.reader.`object`.validator
 
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.`object`.ObjectValidatorInstances
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 
 class ObjectValidators private constructor(
