@@ -42,7 +42,7 @@ sealed class JsReaderProperty<T : Any> {
         }
     }
 
-    class Required<T : Any>(
+    class Required<T : Any> internal constructor(
         override val name: Name,
         private val reader: JsReader<T>,
         private val pathMissingErrorBuilder: PathMissingErrorBuilder,
@@ -65,7 +65,7 @@ sealed class JsReaderProperty<T : Any> {
             if (validator == null) result else result.validation(validator)
     }
 
-    class Defaultable<T : Any>(
+    class Defaultable<T : Any> internal constructor(
         override val name: Name,
         private val reader: JsReader<T>,
         private val default: () -> T,
@@ -89,7 +89,7 @@ sealed class JsReaderProperty<T : Any> {
             if (validator == null) result else result.validation(validator)
     }
 
-    class Optional<T : Any>(
+    class Optional<T : Any> internal constructor(
         override val name: Name,
         private val reader: JsReader<T>,
         private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
@@ -111,7 +111,7 @@ sealed class JsReaderProperty<T : Any> {
             if (validator == null) result else result.validation(applyIfPresent(validator))
     }
 
-    class OptionalWithDefault<T : Any>(
+    class OptionalWithDefault<T : Any> internal constructor(
         override val name: Name,
         private val reader: JsReader<T>,
         private val default: () -> T,
@@ -135,7 +135,7 @@ sealed class JsReaderProperty<T : Any> {
             if (validator == null) result else result.validation(validator)
     }
 
-    class Nullable<T : Any>(
+    class Nullable<T : Any> internal constructor(
         override val name: Name,
         private val reader: JsReader<T>,
         private val pathMissingErrorBuilder: PathMissingErrorBuilder,
@@ -158,7 +158,7 @@ sealed class JsReaderProperty<T : Any> {
             if (validator == null) result else result.validation(applyIfPresent(validator))
     }
 
-    class NullableWithDefault<T : Any>(
+    class NullableWithDefault<T : Any> internal constructor(
         override val name: Name,
         private val reader: JsReader<T>,
         private val default: () -> T,

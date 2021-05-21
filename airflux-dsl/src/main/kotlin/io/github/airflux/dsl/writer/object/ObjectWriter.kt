@@ -15,7 +15,7 @@ class ObjectWriter(private val configuration: ObjectWriterConfiguration) {
         Builder<T>().apply(init).build(configuration)
 
     @AirfluxMarker
-    class Builder<T : Any> {
+    class Builder<T : Any> internal constructor(){
         private val properties = mutableListOf<JsWriterPropertyBuilder<T>>()
 
         fun <P : Any> requiredProperty(name: String, from: (T) -> P, writer: JsWriter<P>) {

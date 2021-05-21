@@ -10,14 +10,14 @@ class ObjectWriterConfiguration private constructor(
 ) {
 
     @AirfluxMarker
-    class Builder(base: ObjectWriterConfiguration) {
+    class Builder internal constructor(base: ObjectWriterConfiguration) {
 
         var skipPropertyIfArrayIsEmpty = base.skipPropertyIfArrayIsEmpty
         var skipPropertyIfObjectIsEmpty = base.skipPropertyIfObjectIsEmpty
         var writeNullIfArrayIsEmpty = base.writeNullIfArrayIsEmpty
         var writeNullIfObjectIsEmpty = base.writeNullIfObjectIsEmpty
 
-        fun build(): ObjectWriterConfiguration = ObjectWriterConfiguration(
+        internal fun build(): ObjectWriterConfiguration = ObjectWriterConfiguration(
             skipPropertyIfArrayIsEmpty = skipPropertyIfArrayIsEmpty,
             skipPropertyIfObjectIsEmpty = skipPropertyIfObjectIsEmpty,
             writeNullIfArrayIsEmpty = writeNullIfArrayIsEmpty,

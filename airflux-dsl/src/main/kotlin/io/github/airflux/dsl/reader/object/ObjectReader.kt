@@ -21,7 +21,7 @@ class ObjectReader(
     operator fun <T> invoke(init: Builder<T>.() -> Unit): JsReader<T> = Builder<T>().apply(init).build()
 
     @AirfluxMarker
-    inner class Builder<T> {
+    inner class Builder<T> internal constructor() {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
         private val validatorBuilders: ObjectValidators = ObjectValidators(initialValidatorBuilders)
@@ -61,7 +61,10 @@ class ObjectReader(
         }
 
         @Suppress("unused")
-        inner class PropertyBinder<P : Any>(private val name: JsReaderProperty.Name, private val reader: JsReader<P>) {
+        inner class PropertyBinder<P : Any> internal constructor(
+            private val name: JsReaderProperty.Name,
+            private val reader: JsReader<P>
+        ) {
 
             fun required(): JsReaderProperty.Required<P> =
                 JsReaderProperty.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)

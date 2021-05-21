@@ -32,7 +32,7 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
     val size: Int
         get() = results.size
 
-    class Builder {
+    class Builder internal constructor (){
         private val results: MutableMap<JsReaderProperty<*>, Any> = mutableMapOf()
 
         fun <T : Any> readValue(attr: JsReaderProperty<T>, input: JsObject): JsResult.Failure? {

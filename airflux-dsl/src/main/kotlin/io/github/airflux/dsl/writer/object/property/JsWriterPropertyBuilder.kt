@@ -94,7 +94,7 @@ internal abstract class JsWriterPropertyBuilder<T> {
 
     internal class Nullable {
 
-        class Simple<T, P : Any>(
+        internal class Simple<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsWriter<P>
@@ -104,7 +104,7 @@ internal abstract class JsWriterPropertyBuilder<T> {
                 buildConverter(getter, writer)
         }
 
-        class Array<T, P : Any>(
+        internal class Array<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsArrayWriter<P>
@@ -122,7 +122,7 @@ internal abstract class JsWriterPropertyBuilder<T> {
             }
         }
 
-        class Object<T, P : Any>(
+        internal class Object<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsObjectWriter<P>

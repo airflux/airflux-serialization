@@ -5,11 +5,11 @@ import io.github.airflux.dsl.AirfluxMarker
 class ObjectReaderConfiguration private constructor(val failFast: Boolean) {
 
     @AirfluxMarker
-    class Builder(base: ObjectReaderConfiguration) {
+    class Builder internal constructor(base: ObjectReaderConfiguration) {
 
         var failFast = base.failFast
 
-        fun build(): ObjectReaderConfiguration = ObjectReaderConfiguration(failFast = failFast)
+        internal fun build(): ObjectReaderConfiguration = ObjectReaderConfiguration(failFast = failFast)
     }
 
     companion object {
