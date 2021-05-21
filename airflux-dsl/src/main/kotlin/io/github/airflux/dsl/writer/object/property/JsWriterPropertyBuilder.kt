@@ -112,7 +112,7 @@ internal abstract class JsWriterPropertyBuilder<T> {
 
             private var nullIfEmpty: Boolean? = null
 
-            override fun nullIfEmpty() {
+            override fun writeNullIfEmpty() {
                 nullIfEmpty = true
             }
 
@@ -130,7 +130,7 @@ internal abstract class JsWriterPropertyBuilder<T> {
 
             private var nullIfEmpty: Boolean? = null
 
-            override fun nullIfEmpty() {
+            override fun writeNullIfEmpty() {
                 nullIfEmpty = true
             }
 

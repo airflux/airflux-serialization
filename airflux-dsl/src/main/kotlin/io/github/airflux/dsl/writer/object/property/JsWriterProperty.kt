@@ -24,11 +24,11 @@ sealed interface JsWriterProperty<T, P : Any> {
         sealed interface Simple<T, P : Any> : Nullable<T, P>
 
         sealed interface Array<T, P : Any> : Nullable<T, P> {
-            fun nullIfEmpty()
+            fun writeNullIfEmpty()
         }
 
         sealed interface Object<T, P : Any> : Nullable<T, P> {
-            fun nullIfEmpty()
+            fun writeNullIfEmpty()
         }
     }
 }
