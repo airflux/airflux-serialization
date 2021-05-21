@@ -1,6 +1,7 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 
 class ObjectValidators private constructor(
     val before: Validators<ObjectValidator.Before.Builder>,

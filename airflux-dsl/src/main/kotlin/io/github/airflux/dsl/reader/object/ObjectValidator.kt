@@ -1,5 +1,6 @@
 package io.github.airflux.dsl.reader.`object`
 
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 

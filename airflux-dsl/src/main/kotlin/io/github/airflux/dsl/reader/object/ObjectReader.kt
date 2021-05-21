@@ -1,6 +1,8 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsReaderPropertyInstance
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
@@ -67,27 +69,27 @@ class ObjectReader(
         ) {
 
             fun required(): JsReaderProperty.Required<P> =
-                JsReaderProperty.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P> =
-                JsReaderProperty.Defaultable(name, reader, default, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.Defaultable(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             fun optional(): JsReaderProperty.Optional<P> =
-                JsReaderProperty.Optional(name, reader, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.Optional(name, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P> =
-                JsReaderProperty.OptionalWithDefault(name, reader, default, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.OptionalWithDefault(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             fun nullable(): JsReaderProperty.Nullable<P> =
-                JsReaderProperty.Nullable(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.Nullable(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P> =
-                JsReaderProperty.NullableWithDefault(name, reader, default, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.NullableWithDefault(name, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
         }
     }
