@@ -1,5 +1,6 @@
-package io.github.airflux.dsl.writer.`object`
+package io.github.airflux.dsl.writer.`object`.property
 
+import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -11,68 +12,70 @@ import io.github.airflux.writer.extension.writeAsNullable
 import io.github.airflux.writer.extension.writeAsOptional
 import io.github.airflux.writer.extension.writeAsRequired
 
-@Suppress("unused")
-sealed class JsWriterProperty<T, P : Any> {
+internal abstract class JsWriterPropertyBuilder<T> {
 
-    internal abstract val name: String
-    internal abstract fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue?
+    abstract val name: String
+    abstract fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue?
 
-    class Required<T, P : Any>(
+    internal class Required<T, P : Any>(
         override val name: String,
         private val getter: (T) -> P,
         private val writer: JsWriter<P>
-    ) : JsWriterProperty<T, P>() {
+    ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Required<T, P> {
 
         override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? = { value: T ->
             writeAsRequired(value, getter, writer)
         }
     }
 
-    sealed class Optional<T, P : Any> : JsWriterProperty<T, P>() {
-
-        class Simple<T, P : Any>(
+    internal class Optional {
+        internal class Simple<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsWriter<P>
-        ) : Optional<T, P>() {
+        ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Optional.Simple<T, P> {
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? =
                 buildConverter(getter, writer)
         }
 
-        class Array<T, P : Any>(
+        internal class Array<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsArrayWriter<P>
-        ) : Optional<T, P>() {
-
+        ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Optional.Array<T, P> {
             private var skipIfEmpty: Boolean? = null
 
-            fun skipIfEmpty() {
+            override fun skipIfEmpty() {
                 skipIfEmpty = true
             }
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? {
                 val skipIfEmpty: Boolean = skipIfEmpty ?: configuration.skipPropertyIfArrayIsEmpty
-                return if (skipIfEmpty) buildConverterIfEmptyResult(getter, writer) else buildConverter(getter, writer)
+                return if (skipIfEmpty)
+                    buildConverterIfEmptyResult(getter, writer)
+                else
+                    buildConverter(getter, writer)
             }
         }
 
-        class Object<T, P : Any>(
+        internal class Object<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsObjectWriter<P>
-        ) : Optional<T, P>() {
-
+        ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Optional.Object<T, P> {
             private var skipIfEmpty: Boolean? = null
 
-            fun skipIfEmpty() {
+            override fun skipIfEmpty() {
                 skipIfEmpty = true
             }
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? {
                 val skipIfEmpty = skipIfEmpty ?: configuration.skipPropertyIfObjectIsEmpty
-                return if (skipIfEmpty) buildConverterIfEmptyResult(getter, writer) else buildConverter(getter, writer)
+                return if (skipIfEmpty)
+                    buildConverterIfEmptyResult(getter, writer)
+                else
+                    buildConverter(getter, writer)
             }
         }
 
@@ -89,13 +92,13 @@ sealed class JsWriterProperty<T, P : Any> {
         }
     }
 
-    sealed class Nullable<T, P : Any> : JsWriterProperty<T, P>() {
+    internal class Nullable {
 
         class Simple<T, P : Any>(
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsWriter<P>
-        ) : Nullable<T, P>() {
+        ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Nullable.Simple<T, P> {
 
             override fun buildConverter(configuration: ObjectWriterConfiguration): (T) -> JsValue? =
                 buildConverter(getter, writer)
@@ -105,11 +108,11 @@ sealed class JsWriterProperty<T, P : Any> {
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsArrayWriter<P>
-        ) : Nullable<T, P>() {
+        ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Nullable.Array<T, P> {
 
             private var nullIfEmpty: Boolean? = null
 
-            fun nullIfEmpty() {
+            override fun nullIfEmpty() {
                 nullIfEmpty = true
             }
 
@@ -123,11 +126,11 @@ sealed class JsWriterProperty<T, P : Any> {
             override val name: String,
             private val getter: (T) -> P?,
             private val writer: JsObjectWriter<P>
-        ) : Nullable<T, P>() {
+        ) : JsWriterPropertyBuilder<T>(), JsWriterProperty.Nullable.Object<T, P> {
 
             private var nullIfEmpty: Boolean? = null
 
-            fun nullIfEmpty() {
+            override fun nullIfEmpty() {
                 nullIfEmpty = true
             }
 
@@ -138,6 +141,7 @@ sealed class JsWriterProperty<T, P : Any> {
         }
 
         companion object {
+
             internal fun <T, P : Any> buildConverter(getter: (T) -> P?, writer: JsWriter<P>): (T) -> JsValue? =
                 { value: T -> writeAsNullable(value, getter, writer) }
 
