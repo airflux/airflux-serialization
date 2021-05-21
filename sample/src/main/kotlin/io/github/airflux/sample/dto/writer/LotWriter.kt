@@ -12,7 +12,7 @@ val LotStatus = JsWriter<LotStatus> { value ->
     JsString(value.name)
 }
 
-val LotWriter: JsWriter<Lot> = writer {
+val LotWriter = writer<Lot> {
     requiredProperty(name = "id", from = Lot::id, BasePrimitiveWriter.string)
     requiredProperty(name = "status", from = Lot::status, writer = LotStatus)
     requiredProperty(name = "value", from = Lot::value, writer = ValueWriter)

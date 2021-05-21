@@ -269,7 +269,7 @@ val DecimalWriter = BasePrimitiveWriter.bigDecimal()
 - Define writer for the 'Value' type.
 
 ```kotlin
-val ValueWriter: JsWriter<Value> = writer {
+val ValueWriter = writer<Value> {
     requiredProperty(name = "amount", from = Value::amount, writer = DecimalWriter)
     requiredProperty(name = "currency", from = Value::currency, writer = BasePrimitiveWriter.string)
 }
@@ -286,7 +286,7 @@ val LotStatus = JsWriter<LotStatus> { value ->
 - Define writer for the 'Lot' type.
 
 ```kotlin
-val LotWriter: JsWriter<Lot> = writer {
+val LotWriter = writer<Lot> {
     requiredProperty(name = "id", from = Lot::id, BasePrimitiveWriter.string)
     requiredProperty(name = "status", from = Lot::status, writer = LotStatus)
     requiredProperty(name = "value", from = Lot::value, writer = ValueWriter)
@@ -302,7 +302,7 @@ val LotsWriter = arrayWriter(LotWriter)
 - Define writer for the 'Tender' type.
 
 ```kotlin
-val TenderWriter: JsWriter<Tender> = writer {
+val TenderWriter = writer<Tender> {
     requiredProperty(name = "id", from = Tender::id, writer = BasePrimitiveWriter.string)
     optionalProperty(name = "title", from = Tender::title, writer = BasePrimitiveWriter.string)
     optionalProperty(name = "value", from = Tender::value, writer = ValueWriter)
@@ -313,7 +313,7 @@ val TenderWriter: JsWriter<Tender> = writer {
 - Define writer for the 'Response' type.
 
 ```kotlin
-val ResponseWriter: JsWriter<Response> = writer {
+val ResponseWriter = writer<Response> {
     requiredProperty(name = "tender", from = Response::tender, writer = TenderWriter)
 }
 ```
