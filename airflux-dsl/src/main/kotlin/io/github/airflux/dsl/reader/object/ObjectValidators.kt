@@ -3,62 +3,57 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.dsl.AirfluxMarker
 
 class ObjectValidators private constructor(
-    val before: List<ObjectValidator.Before>,
-    val after: List<ObjectValidator.After>
+    val before: Validators<ObjectValidator.Before.Builder>,
+    val after: Validators<ObjectValidator.After.Builder>
 ) {
 
+    internal constructor(other: ObjectValidators) : this(
+        before = Validators<ObjectValidator.Before.Builder>(other.before),
+        after = Validators<ObjectValidator.After.Builder>(other.after)
+    )
+
+    internal fun build(
+        configuration: ObjectReaderConfiguration,
+        properties: List<JsReaderProperty<*>>
+    ): ObjectValidatorInstances {
+        val before = before.map { validator -> validator.build(configuration, properties) }
+        val after = after.map { validator -> validator.build(configuration, properties) }
+        return if (before.isEmpty() && after.isEmpty()) Empty else ObjectValidatorInstances(before, after)
+    }
+
     @AirfluxMarker
-    class Builder private constructor(
-        val before: Validators<ObjectValidator.Before.Builder>,
-        val after: Validators<ObjectValidator.After.Builder>
-    ) {
+    class Builder internal constructor() {
+        val before = Validators<ObjectValidator.Before.Builder>()
+        val after = Validators<ObjectValidator.After.Builder>()
 
-        constructor(other: Builder = Default) :
-            this(
-                before = Validators<ObjectValidator.Before.Builder>()
-                    .apply { other.before.forEach { add(it) } },
-                after = Validators<ObjectValidator.After.Builder>()
-                    .apply { other.after.forEach { add(it) } }
-            )
+        internal fun build(): ObjectValidators = ObjectValidators(before, after)
+    }
 
-        internal fun build(
-            configuration: ObjectReaderConfiguration,
-            properties: List<JsReaderProperty<*>>
-        ): ObjectValidators {
-            val before = before.map { validator -> validator.build(configuration, properties) }
-            val after = after.map { validator -> validator.build(configuration, properties) }
-            return if (before.isEmpty() && after.isEmpty()) Empty else ObjectValidators(before, after)
+    class Validators<T : ObjectValidator.Identifier> internal constructor(other: Validators<T>? = null) : Iterable<T> {
+
+        private val items: MutableMap<String, T> = if (other != null) LinkedHashMap(other.items) else LinkedHashMap()
+
+        operator fun contains(name: String): Boolean = items.containsKey(name)
+
+        operator fun contains(validator: T): Boolean = items.containsKey(validator.key)
+
+        operator fun get(name: String): T? = items[name]
+
+        fun add(validator: T) {
+            items[validator.key] = validator
         }
 
-        class Validators<T : ObjectValidator.Identifier> : Iterable<T> {
-
-            private val items: MutableMap<String, T> = LinkedHashMap()
-
-            operator fun contains(name: String): Boolean = items.containsKey(name)
-
-            operator fun contains(validator: T): Boolean = items.containsKey(validator.key)
-
-            operator fun get(name: String): T? = items[name]
-
-            fun add(validator: T) {
-                items[validator.key] = validator
-            }
-
-            fun remove(name: String) {
-                items.remove(name)
-            }
-
-            override fun iterator(): Iterator<T> = items.values.iterator()
+        fun remove(name: String) {
+            items.remove(name)
         }
 
-        companion object {
-            val Default = Builder(before = Validators(), after = Validators())
-        }
+        override fun iterator(): Iterator<T> = items.values.iterator()
     }
 
     companion object {
-        private val Empty = ObjectValidators(emptyList(), emptyList())
+        val Default = ObjectValidators(before = Validators(), after = Validators())
+        private val Empty = ObjectValidatorInstances(emptyList(), emptyList())
 
-        fun builder(block: Builder.() -> Unit): Builder = Builder().apply(block)
+        fun build(init: Builder.() -> Unit): ObjectValidators = Builder().apply(init).build()
     }
 }

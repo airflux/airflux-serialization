@@ -12,13 +12,13 @@ private val DefaultObjectReaderConfig = ObjectReaderConfiguration.build {
     failFast = true
 }
 
-private val DefaultObjectValidatorBuilders = ObjectValidators.builder {
+private val DefaultObjectValidators = ObjectValidators.build {
     isNotEmpty = true
 }
 
 val reader = ObjectReader(
     initialConfiguration = DefaultObjectReaderConfig,
-    initialValidatorBuilders = DefaultObjectValidatorBuilders,
+    initialValidatorBuilders = DefaultObjectValidators,
     pathMissingErrorBuilder = ErrorBuilder.PathMissing,
     invalidTypeErrorBuilder = ErrorBuilder.InvalidType
 )

@@ -58,8 +58,6 @@ val firstLotValuePath = "tender" / "lots" / 0 / "value"
 
 ## JsReader
 
-### Common
-
 #### Define errors builder.
 
 ```kotlin
@@ -113,20 +111,17 @@ object EnumReader {
 - Define default config for object reader.
 
 ```kotlin
-private val DefaultObjectReaderConfig = ObjectReaderConfiguration.Builder()
-    .apply {
-        failFast = true
-    }
-    .build()
+private val DefaultObjectReaderConfig = ObjectReaderConfiguration.build {
+    failFast = true
+}
 ```
 
 - Define default validator builders for object reader.
 
 ```kotlin
-private val DefaultObjectValidatorBuilders = ObjectValidators.Builder()
-    .apply {
-        isNotEmpty = true
-    }
+private val DefaultObjectValidators = ObjectValidators.build {
+    isNotEmpty = true
+}
 ```
 
 - Define object reader builder.
@@ -134,7 +129,7 @@ private val DefaultObjectValidatorBuilders = ObjectValidators.Builder()
 ```kotlin
 val reader = ObjectReader(
     initialConfiguration = DefaultObjectReaderConfig,
-    initialValidatorBuilders = DefaultObjectValidatorBuilders,
+    initialValidatorBuilders = DefaultObjectValidators,
     pathMissingErrorBuilder = ErrorBuilder.PathMissing,
     invalidTypeErrorBuilder = ErrorBuilder.InvalidType
 )
@@ -176,7 +171,7 @@ val ValueReader = reader<Value> {
 - Define reader for the 'LotStatus' type.
 
 ```kotlin
-val LotStatusReader: JsReader<LotStatus> = EnumReader.readAsEnum<LotStatus>()
+val LotStatusReader = EnumReader.readAsEnum<LotStatus>()
 ```
 
 - Define reader for the 'Lot' type.
@@ -247,7 +242,9 @@ val RequestReader = reader<Request> {
 - Define default config for object writer.
 
 ```kotlin
-val DefaultObjectWriterConfiguration = ObjectWriterConfiguration()
+val DefaultObjectWriterConfiguration = ObjectWriterConfiguration.build {
+    skipPropertyIfArrayIsEmpty = true
+}
 ```
 
 - Define object writer builder.

@@ -13,7 +13,7 @@ import io.github.airflux.value.JsObject
 
 class ObjectReader(
     private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
-    private val initialValidatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder.Default,
+    private val initialValidatorBuilders: ObjectValidators = ObjectValidators.Default,
     private val pathMissingErrorBuilder: PathMissingErrorBuilder,
     private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ) {
@@ -24,7 +24,7 @@ class ObjectReader(
     inner class Builder<T> {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
-        private val validatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder(initialValidatorBuilders)
+        private val validatorBuilders: ObjectValidators = ObjectValidators(initialValidatorBuilders)
         private val properties = mutableListOf<JsReaderProperty<*>>()
 
         var typeBuilder: ((ObjectValuesMap) -> JsResult<T>)? = null
@@ -36,7 +36,7 @@ class ObjectReader(
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
         }
 
-        fun validation(init: ObjectValidators.Builder.() -> Unit) {
+        fun validation(init: ObjectValidators.() -> Unit) {
             validatorBuilders.apply(init)
         }
 
@@ -93,12 +93,12 @@ class ObjectReader(
 
         internal fun <T> read(
             configuration: ObjectReaderConfiguration,
-            validation: ObjectValidators,
+            validators: ObjectValidatorInstances,
             properties: List<JsReaderProperty<*>>,
             typeBuilder: (ObjectValuesMap) -> JsResult<T>,
             input: JsObject
         ): JsResult<T> {
-            val preValidationErrors = preValidation(configuration, input, validation, properties)
+            val preValidationErrors = preValidation(configuration, input, validators, properties)
             if (preValidationErrors.isNotEmpty())
                 return preValidationErrors.asFailure()
 
@@ -114,7 +114,7 @@ class ObjectReader(
                 .build()
 
             if (parseErrors.isEmpty()) {
-                val postValidationErrors = postValidation(configuration, input, validation, properties, objectValuesMap)
+                val postValidationErrors = postValidation(configuration, input, validators, properties, objectValuesMap)
                 if (postValidationErrors.isNotEmpty())
                     return postValidationErrors.asFailure()
             }
@@ -128,11 +128,11 @@ class ObjectReader(
         internal fun preValidation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            validation: ObjectValidators,
+            validators: ObjectValidatorInstances,
             properties: List<JsReaderProperty<*>>
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
-                validation.before
+                validators.before
                     .forEach { validator ->
                         val validationResult = validator.validation(configuration, input, properties)
                         addAll(validationResult)
@@ -143,12 +143,12 @@ class ObjectReader(
         internal fun postValidation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            validation: ObjectValidators,
+            validators: ObjectValidatorInstances,
             properties: List<JsReaderProperty<*>>,
             objectValuesMap: ObjectValuesMap
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
-                validation.after
+                validators.after
                     .forEach { validator ->
                         val validationResult = validator.validation(configuration, input, properties, objectValuesMap)
                         addAll(validationResult)
