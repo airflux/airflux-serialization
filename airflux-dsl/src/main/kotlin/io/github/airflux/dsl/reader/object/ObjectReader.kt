@@ -6,6 +6,7 @@ import io.github.airflux.dsl.reader.`object`.property.JsReaderPropertyInstance
 import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.extension.readAsObject
@@ -13,6 +14,10 @@ import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.asFailure
 import io.github.airflux.value.JsObject
+import io.github.airflux.value.JsValue
+
+fun <T : Any> JsValue.deserialization(reader: JsReader<T>, context: JsReaderContext? = null): JsResult<T> =
+    reader.read(this, context)
 
 class ObjectReader(
     private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
@@ -52,9 +57,9 @@ class ObjectReader(
         internal fun build(): JsReader<T> {
             val validators = validatorBuilders.build(configuration, properties)
             val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
-            return JsReader { input ->
+            return JsReader { input, context ->
                 input.readAsObject(invalidTypeErrorBuilder) {
-                    read(configuration, validators, properties, typeBuilder, it)
+                    read(configuration, validators, properties, typeBuilder, it, context)
                 }
             }
         }
@@ -70,7 +75,12 @@ class ObjectReader(
         ) {
 
             fun required(): JsReaderProperty.Required<P> =
-                JsReaderPropertyInstance.Required(name, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+                JsReaderPropertyInstance.Required(
+                    name,
+                    reader,
+                    pathMissingErrorBuilder,
+                    invalidTypeErrorBuilder
+                )
                     .also { registration(it) }
 
             fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P> =
@@ -102,9 +112,10 @@ class ObjectReader(
             validators: ObjectValidatorInstances,
             properties: List<JsReaderProperty<*>>,
             typeBuilder: (ObjectValuesMap) -> JsResult<T>,
-            input: JsObject
+            input: JsObject,
+            context: JsReaderContext?
         ): JsResult<T> {
-            val preValidationErrors = preValidation(configuration, input, validators, properties)
+            val preValidationErrors = preValidation(configuration, input, validators, properties, context)
             if (preValidationErrors.isNotEmpty())
                 return preValidationErrors.asFailure()
 
@@ -112,7 +123,7 @@ class ObjectReader(
             val objectValuesMap = ObjectValuesMap.Builder()
                 .apply {
                     properties.forEach { property ->
-                        readValue(property, input)
+                        readValue(property, input, context)
                             ?.also { parseErrors.add(it) }
                         if (configuration.failFast && parseErrors.isNotEmpty()) return@apply
                     }
@@ -120,7 +131,8 @@ class ObjectReader(
                 .build()
 
             if (parseErrors.isEmpty()) {
-                val postValidationErrors = postValidation(configuration, input, validators, properties, objectValuesMap)
+                val postValidationErrors =
+                    postValidation(configuration, input, validators, properties, objectValuesMap, context)
                 if (postValidationErrors.isNotEmpty())
                     return postValidationErrors.asFailure()
             }
@@ -135,12 +147,13 @@ class ObjectReader(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             validators: ObjectValidatorInstances,
-            properties: List<JsReaderProperty<*>>
+            properties: List<JsReaderProperty<*>>,
+            context: JsReaderContext?
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
                 validators.before
                     .forEach { validator ->
-                        val validationResult = validator.validation(configuration, input, properties)
+                        val validationResult = validator.validation(configuration, input, properties, context)
                         addAll(validationResult)
                         if (isNotEmpty() && configuration.failFast) return@forEach
                     }
@@ -151,12 +164,14 @@ class ObjectReader(
             input: JsObject,
             validators: ObjectValidatorInstances,
             properties: List<JsReaderProperty<*>>,
-            objectValuesMap: ObjectValuesMap
+            objectValuesMap: ObjectValuesMap,
+            context: JsReaderContext?
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
                 validators.after
                     .forEach { validator ->
-                        val validationResult = validator.validation(configuration, input, properties, objectValuesMap)
+                        val validationResult =
+                            validator.validation(configuration, input, properties, objectValuesMap, context)
                         addAll(validationResult)
                         if (isNotEmpty() && configuration.failFast) return@forEach
                     }

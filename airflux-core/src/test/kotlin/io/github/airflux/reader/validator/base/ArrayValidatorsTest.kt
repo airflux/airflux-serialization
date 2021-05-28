@@ -1,6 +1,7 @@
 package io.github.airflux.reader.validator.base
 
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.validator.JsValidationResult
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
@@ -9,6 +10,9 @@ import kotlin.test.assertEquals
 class ArrayValidatorsTest {
 
     companion object {
+
+        private val context = JsReaderContext()
+
         private fun minItemsBasicValidator(value: Int) =
             BaseArrayValidators.minItems<String, List<String>, JsonErrors.Validation>(
                 expected = value,
@@ -48,7 +52,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(emptyList())
+            val result = validator.validation(emptyList(), context)
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
@@ -61,7 +65,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(listOf("A"))
+            val result = validator.validation(listOf("A"), context)
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
@@ -74,7 +78,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(listOf("A", "B"))
+            val result = validator.validation(listOf("A", "B"), context)
 
             result as JsValidationResult.Success
         }
@@ -84,7 +88,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(listOf("A", "B", "C"))
+            val result = validator.validation(listOf("A", "B", "C"), context)
 
             result as JsValidationResult.Success
         }
@@ -98,7 +102,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(emptyList())
+            val result = validator.validation(emptyList(), context)
 
             result as JsValidationResult.Success
         }
@@ -108,7 +112,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(listOf("A"))
+            val result = validator.validation(listOf("A"), context)
 
             result as JsValidationResult.Success
         }
@@ -118,7 +122,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(listOf("A", "B"))
+            val result = validator.validation(listOf("A", "B"), context)
 
             result as JsValidationResult.Success
         }
@@ -128,7 +132,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(listOf("A", "B", "C"))
+            val result = validator.validation(listOf("A", "B", "C"), context)
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.MaxItems
@@ -144,7 +148,7 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection is empty)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(emptyList())
+            val result = validator.validation(emptyList(), context)
 
             result as JsValidationResult.Success
         }
@@ -153,7 +157,7 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection contains only unique values)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(listOf("A", "B"))
+            val result = validator.validation(listOf("A", "B"), context)
 
             result as JsValidationResult.Success
         }
@@ -162,7 +166,7 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection contains duplicates)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(listOf("A", "B", "A", "C"))
+            val result = validator.validation(listOf("A", "B", "A", "C"), context)
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.Unique<*>

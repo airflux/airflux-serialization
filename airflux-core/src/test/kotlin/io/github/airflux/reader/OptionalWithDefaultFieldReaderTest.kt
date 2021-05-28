@@ -7,6 +7,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -18,8 +19,9 @@ import kotlin.test.Test
 class OptionalWithDefaultFieldReaderTest {
 
     companion object {
+        private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 when (input) {
                     is JsString -> JsResult.Success(input.underlying)
                     else -> JsResult.Failure(
@@ -41,6 +43,7 @@ class OptionalWithDefaultFieldReaderTest {
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -55,6 +58,7 @@ class OptionalWithDefaultFieldReaderTest {
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -73,6 +77,7 @@ class OptionalWithDefaultFieldReaderTest {
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -91,6 +96,7 @@ class OptionalWithDefaultFieldReaderTest {
                 from = from,
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -116,6 +122,7 @@ class OptionalWithDefaultFieldReaderTest {
                 path = JsPath.empty / "name",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -133,6 +140,7 @@ class OptionalWithDefaultFieldReaderTest {
                 path = JsPath.empty / "name",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -154,6 +162,7 @@ class OptionalWithDefaultFieldReaderTest {
                 path = JsPath.empty / "role",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -169,6 +178,7 @@ class OptionalWithDefaultFieldReaderTest {
                 path = JsPath.empty / "name",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -194,6 +204,7 @@ class OptionalWithDefaultFieldReaderTest {
                 name = "name",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -211,6 +222,7 @@ class OptionalWithDefaultFieldReaderTest {
                 name = "name",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -232,6 +244,7 @@ class OptionalWithDefaultFieldReaderTest {
                 name = "role",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -247,6 +260,7 @@ class OptionalWithDefaultFieldReaderTest {
                 name = "name",
                 using = stringReader,
                 defaultValue = defaultValue,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 

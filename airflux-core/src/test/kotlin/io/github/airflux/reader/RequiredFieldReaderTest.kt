@@ -6,6 +6,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -16,8 +17,9 @@ import kotlin.test.Test
 class RequiredFieldReaderTest {
 
     companion object {
+        private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { input -> JsResult.Success((input as JsString).underlying) }
+            JsReader { input, _ -> JsResult.Success((input as JsString).underlying) }
     }
 
     @Nested
@@ -30,6 +32,7 @@ class RequiredFieldReaderTest {
             val result: JsResult<String> = readRequired(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -44,6 +47,7 @@ class RequiredFieldReaderTest {
             val result: JsResult<String> = readRequired(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -64,6 +68,7 @@ class RequiredFieldReaderTest {
             val result: JsResult<String> = readRequired(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -89,6 +94,7 @@ class RequiredFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -106,6 +112,7 @@ class RequiredFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -123,6 +130,7 @@ class RequiredFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -148,6 +156,7 @@ class RequiredFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -165,6 +174,7 @@ class RequiredFieldReaderTest {
                 from = json,
                 name = "role",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -182,6 +192,7 @@ class RequiredFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )

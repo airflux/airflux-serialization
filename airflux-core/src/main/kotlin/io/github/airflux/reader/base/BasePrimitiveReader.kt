@@ -19,13 +19,13 @@ interface BasePrimitiveReader {
          * Reader for primitive [Boolean] type.
          */
         fun boolean(invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsReader<Boolean> =
-            JsReader { input -> input.readAsBoolean(invalidTypeErrorBuilder) }
+            JsReader { input, _ -> input.readAsBoolean(invalidTypeErrorBuilder) }
 
         /**
          * Reader for primitive [String] type.
          */
         fun string(invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsReader<String> =
-            JsReader { input -> input.readAsString(invalidTypeErrorBuilder) }
+            JsReader { input, _ -> input.readAsString(invalidTypeErrorBuilder) }
 
         /**
          * Reader for primitive [Byte] type.
@@ -34,7 +34,7 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Byte> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 input.readAsNumber(invalidTypeErrorBuilder) { text ->
                     try {
                         text.toByte().asSuccess()
@@ -51,7 +51,7 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Short> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 input.readAsNumber(invalidTypeErrorBuilder) { text ->
                     try {
                         text.toShort().asSuccess()
@@ -68,7 +68,7 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Int> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 input.readAsNumber(invalidTypeErrorBuilder) { text ->
                     try {
                         text.toInt().asSuccess()
@@ -85,7 +85,7 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Long> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 input.readAsNumber(invalidTypeErrorBuilder) { text ->
                     try {
                         text.toLong().asSuccess()
@@ -99,7 +99,7 @@ interface BasePrimitiveReader {
          * Reader for [BigDecimal] type.
          */
         fun bigDecimal(invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsReader<BigDecimal> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 input.readAsNumber(invalidTypeErrorBuilder) { text ->
                     BigDecimal(text).asSuccess()
                 }

@@ -9,13 +9,15 @@ import io.github.airflux.writer.JsArrayWriter
 import io.github.airflux.writer.JsObjectWriter
 import io.github.airflux.writer.JsWriter
 
+fun <T : Any> T.serialization(writer: JsWriter<T>): JsValue = writer.write(this)
+
 class ObjectWriter(private val configuration: ObjectWriterConfiguration) {
 
     operator fun <T : Any> invoke(init: Builder<T>.() -> Unit): JsObjectWriter<T> =
         Builder<T>().apply(init).build(configuration)
 
     @AirfluxMarker
-    class Builder<T : Any> internal constructor(){
+    class Builder<T : Any> internal constructor() {
         private val properties = mutableListOf<JsWriterPropertyBuilder<T>>()
 
         fun <P : Any> requiredProperty(name: String, from: (T) -> P, writer: JsWriter<P>) {

@@ -2,6 +2,7 @@ package io.github.airflux.reader
 
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
@@ -12,12 +13,13 @@ fun <T : Any> readWithDefault(
     from: JsLookup,
     using: JsReader<T>,
     defaultValue: () -> T,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> =
     when (from) {
         is JsLookup.Defined -> when (from.value) {
             is JsNull -> JsResult.Success(path = from.path, value = defaultValue())
-            else -> using.read(from.value).repath(from.path)
+            else -> using.read(from.value, context).repath(from.path)
         }
 
         is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = defaultValue())
@@ -39,12 +41,14 @@ fun <T : Any> readWithDefault(
     path: JsPath,
     using: JsReader<T>,
     defaultValue: () -> T,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> =
     readWithDefault(
         from = from.lookup(path),
         using = using,
         defaultValue = defaultValue,
+        context = context,
         invalidTypeErrorBuilder = invalidTypeErrorBuilder
     )
 
@@ -61,11 +65,13 @@ fun <T : Any> readWithDefault(
     name: String,
     using: JsReader<T>,
     defaultValue: () -> T,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> =
     readWithDefault(
         from = from.lookup(name),
         using = using,
         defaultValue = defaultValue,
+        context = context,
         invalidTypeErrorBuilder = invalidTypeErrorBuilder
     )

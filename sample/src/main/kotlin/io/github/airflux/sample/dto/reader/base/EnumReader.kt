@@ -8,9 +8,9 @@ import io.github.airflux.sample.json.validation.StringValidator
 
 object EnumReader {
     inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
-        JsReader { input ->
-            PrimitiveReader.stringReader.read(input)
-                .validation(StringValidator.isNotBlank)
+        JsReader { input, context ->
+            PrimitiveReader.stringReader.read(input, context)
+                .validation(StringValidator.isNotBlank, context)
                 .flatMap { text ->
                     try {
                         JsResult.Success(enumValueOf(text.toUpperCase()))

@@ -2,6 +2,7 @@ package io.github.airflux.reader
 
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
@@ -10,10 +11,11 @@ import io.github.airflux.value.extension.lookup
 fun <T : Any> readOptional(
     from: JsLookup,
     using: JsReader<T>,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> =
     when (from) {
-        is JsLookup.Defined -> using.read(from.value).repath(from.path)
+        is JsLookup.Defined -> using.read(from.value, context).repath(from.path)
 
         is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = null)
 
@@ -32,9 +34,15 @@ fun <T : Any> readOptional(
     from: JsValue,
     path: JsPath,
     using: JsReader<T>,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> =
-    readOptional(from = from.lookup(path), using = using, invalidTypeErrorBuilder = invalidTypeErrorBuilder)
+    readOptional(
+        from = from.lookup(path),
+        using = using,
+        context = context,
+        invalidTypeErrorBuilder = invalidTypeErrorBuilder
+    )
 
 /**
  * Reads nullable field by [name].
@@ -47,6 +55,12 @@ fun <T : Any> readOptional(
     from: JsValue,
     name: String,
     using: JsReader<T>,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> =
-    readOptional(from = from.lookup(name), using = using, invalidTypeErrorBuilder = invalidTypeErrorBuilder)
+    readOptional(
+        from = from.lookup(name),
+        using = using,
+        context = context,
+        invalidTypeErrorBuilder = invalidTypeErrorBuilder
+    )

@@ -1,7 +1,10 @@
 package io.github.airflux.sample
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.airflux.dsl.reader.`object`.deserialization
+import io.github.airflux.dsl.writer.`object`.serialization
 import io.github.airflux.parser.AirFluxJsonModule
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.Response
 import io.github.airflux.sample.dto.model.Lot
@@ -20,7 +23,9 @@ fun main() {
 
     val json = mapper.readValue(jsonOfTender, JsValue::class.java)
 
-    when (val result = RequestReader.read(json)) {
+    val context = JsReaderContext()
+
+    when (val result = json.deserialization(RequestReader, context)) {
         is JsResult.Success -> println(result.value)
         is JsResult.Failure -> {
             val errors = result.errors
@@ -32,7 +37,7 @@ fun main() {
     val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
     val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
     val response = Response(tender = tender)
-    val output: JsValue = ResponseWriter.write(response)
+    val output: JsValue = response.serialization(ResponseWriter)
     println(output.toString())
 }
 

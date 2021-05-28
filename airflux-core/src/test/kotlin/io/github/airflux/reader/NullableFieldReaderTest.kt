@@ -6,6 +6,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -17,8 +18,9 @@ import kotlin.test.Test
 class NullableFieldReaderTest {
 
     companion object {
+        private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { input -> JsResult.Success((input as JsString).underlying) }
+            JsReader { input, _ -> JsResult.Success((input as JsString).underlying) }
     }
 
     @Nested
@@ -31,6 +33,7 @@ class NullableFieldReaderTest {
             val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -45,6 +48,7 @@ class NullableFieldReaderTest {
             val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -59,6 +63,7 @@ class NullableFieldReaderTest {
             val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -79,6 +84,7 @@ class NullableFieldReaderTest {
             val result: JsResult<String?> = readNullable(
                 from = from,
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -104,6 +110,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -121,6 +128,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -138,6 +146,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -155,6 +164,7 @@ class NullableFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -180,6 +190,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -197,6 +208,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -214,6 +226,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "role",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
@@ -231,6 +244,7 @@ class NullableFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 pathMissingErrorBuilder = { JsonErrors.PathMissing },
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )

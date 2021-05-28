@@ -6,6 +6,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -17,8 +18,9 @@ import kotlin.test.Test
 class OptionalFieldReaderTest {
 
     companion object {
+        private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { input ->
+            JsReader { input, _ ->
                 when (input) {
                     is JsString -> JsResult.Success(input.underlying)
                     else -> JsResult.Failure(
@@ -36,7 +38,12 @@ class OptionalFieldReaderTest {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsString(USER_NAME_VALUE))
 
             val result: JsResult<String?> =
-                readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readOptional(
+                    from = from,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsSuccess(path = JsPath.empty / "name", value = USER_NAME_VALUE)
         }
@@ -46,7 +53,12 @@ class OptionalFieldReaderTest {
             val from: JsLookup = JsLookup.Defined(path = JsPath.empty / "name", JsNull)
 
             val result: JsResult<String?> =
-                readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readOptional(
+                    from = from,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsFailure(
                 JsPath.empty / "name" to listOf(
@@ -60,7 +72,12 @@ class OptionalFieldReaderTest {
             val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsPath.empty / "name")
 
             val result: JsResult<String?> =
-                readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readOptional(
+                    from = from,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsSuccess(path = JsPath.empty / "name", value = null)
         }
@@ -74,7 +91,12 @@ class OptionalFieldReaderTest {
             )
 
             val result: JsResult<String?> =
-                readOptional(from = from, using = stringReader, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readOptional(
+                    from = from,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsFailure(
                 JsPath.empty / "name" to listOf(
@@ -97,6 +119,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -113,6 +136,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -133,6 +157,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "role",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -147,6 +172,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 path = JsPath.empty / "name",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -171,6 +197,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -187,6 +214,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -207,6 +235,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 name = "role",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 
@@ -221,6 +250,7 @@ class OptionalFieldReaderTest {
                 from = json,
                 name = "name",
                 using = stringReader,
+                context = context,
                 invalidTypeErrorBuilder = JsonErrors::InvalidType
             )
 

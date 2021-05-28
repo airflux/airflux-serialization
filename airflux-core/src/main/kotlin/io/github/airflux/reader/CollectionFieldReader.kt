@@ -1,6 +1,7 @@
 package io.github.airflux.reader
 
 import io.github.airflux.path.JsPath
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsArray
@@ -15,9 +16,10 @@ import io.github.airflux.value.JsValue
 fun <T : Any> readAsList(
     from: JsValue,
     using: JsReader<T>,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<List<T>> =
-    readAsCollection(from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
+    readAsCollection(from, using, CollectionBuilderFactory.listFactory(), context, invalidTypeErrorBuilder)
 
 /**
  * Read a node as set.
@@ -28,9 +30,10 @@ fun <T : Any> readAsList(
 fun <T : Any> readAsSet(
     from: JsValue,
     using: JsReader<T>,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<Set<T>> =
-    readAsCollection(from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
+    readAsCollection(from, using, CollectionBuilderFactory.setFactory(), context, invalidTypeErrorBuilder)
 
 /**
  * Read a node which represent as array.
@@ -42,6 +45,7 @@ fun <T : Any, C> readAsCollection(
     from: JsValue,
     using: JsReader<T>,
     factory: CollectionBuilderFactory<T, C>,
+    context: JsReaderContext?,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<C>
     where C : Collection<T> =
@@ -51,7 +55,7 @@ fun <T : Any, C> readAsCollection(
             from.underlying
                 .withIndex()
                 .fold(JsResult.Success(values)) { acc: JsResult<CollectionBuilder<T, C>>, (idx, elem) ->
-                    when (val result = using.read(elem)) {
+                    when (val result = using.read(elem, context)) {
                         is JsResult.Success<T> -> {
                             when (acc) {
                                 is JsResult.Success<*> -> acc.also { values += result.value }

@@ -4,7 +4,7 @@ import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.readAsList
 
 object CollectionReader {
-    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { input ->
-        readAsList(input, using, ErrorBuilder.InvalidType)
+    fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { input, context ->
+        readAsList(input, using, context, ErrorBuilder.InvalidType)
     }
 }

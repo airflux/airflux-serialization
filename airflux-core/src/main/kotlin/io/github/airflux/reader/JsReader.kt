@@ -1,5 +1,6 @@
 package io.github.airflux.reader
 
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
@@ -10,7 +11,7 @@ fun interface JsReader<T> {
     /**
      * Convert the [JsValue] into a T
      */
-    infix fun read(input: JsValue): JsResult<T>
+    fun read(input: JsValue, context: JsReaderContext?): JsResult<T>
 
     /**
      * Create a new [JsReader] which maps the value produced by this [JsReader].
@@ -21,7 +22,7 @@ fun interface JsReader<T> {
      * @return A new [JsReader] with the updated behavior.
      */
     infix fun <R> map(transform: (T) -> R): JsReader<R> =
-        JsReader { input -> read(input).map(transform) }
+        JsReader { input, context -> read(input, context).map(transform) }
 
     /**
      * Creates a new [JsReader], based on this one, which first executes this
@@ -31,10 +32,10 @@ fun interface JsReader<T> {
      * @param other the [JsReader] to run if this one gets a [JsError]
      * @return A new [JsReader] with the updated behavior.
      */
-    infix fun or(other: JsReader<T>): JsReader<T> = JsReader { input ->
-        when (val result = read(input)) {
+    infix fun or(other: JsReader<T>): JsReader<T> = JsReader { input, context ->
+        when (val result = read(input, context)) {
             is JsResult.Success -> result
-            is JsResult.Failure -> when (val alternative = other.read(input)) {
+            is JsResult.Failure -> when (val alternative = other.read(input, context)) {
                 is JsResult.Success -> alternative
                 is JsResult.Failure -> {
                     JsResult.Failure(errors = result.errors + alternative.errors)

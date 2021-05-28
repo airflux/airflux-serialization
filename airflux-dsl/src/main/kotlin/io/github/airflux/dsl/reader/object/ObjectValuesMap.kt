@@ -1,6 +1,7 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsObject
 
@@ -33,18 +34,22 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
     val size: Int
         get() = results.size
 
-    class Builder internal constructor (){
+    class Builder internal constructor() {
         private val results: MutableMap<JsReaderProperty<*>, Any> = mutableMapOf()
 
-        fun <T : Any> readValue(attr: JsReaderProperty<T>, input: JsObject): JsResult.Failure? {
+        fun <T : Any> readValue(
+            attr: JsReaderProperty<T>,
+            input: JsObject,
+            context: JsReaderContext?
+        ): JsResult.Failure? {
 
             val result: JsResult<T?> = when (attr) {
-                is JsReaderProperty.Required -> attr.read(input)
-                is JsReaderProperty.Defaultable -> attr.read(input)
-                is JsReaderProperty.Optional -> attr.read(input)
-                is JsReaderProperty.OptionalWithDefault -> attr.read(input)
-                is JsReaderProperty.Nullable -> attr.read(input)
-                is JsReaderProperty.NullableWithDefault -> attr.read(input)
+                is JsReaderProperty.Required -> attr.read(input, context)
+                is JsReaderProperty.Defaultable -> attr.read(input, context)
+                is JsReaderProperty.Optional -> attr.read(input, context)
+                is JsReaderProperty.OptionalWithDefault -> attr.read(input, context)
+                is JsReaderProperty.Nullable -> attr.read(input, context)
+                is JsReaderProperty.NullableWithDefault -> attr.read(input, context)
             }
 
             return when (result) {

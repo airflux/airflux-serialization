@@ -10,7 +10,7 @@ object BaseArrayValidators {
     fun <T, C, E> minItems(expected: Int, error: (expected: Int, actual: Int) -> E): JsValidator<C, E>
         where C : Collection<T>,
               E : JsError =
-        JsValidator { values ->
+        JsValidator { values, _ ->
             if (values.size < expected)
                 JsValidationResult.Failure(error(expected, values.size))
             else
@@ -20,7 +20,7 @@ object BaseArrayValidators {
     fun <T, C, E> maxItems(expected: Int, error: (expected: Int, actual: Int) -> E): JsValidator<C, E>
         where C : Collection<T>,
               E : JsError =
-        JsValidator { values ->
+        JsValidator { values, _ ->
             if (values.size > expected)
                 JsValidationResult.Failure(error(expected, values.size))
             else
@@ -29,7 +29,7 @@ object BaseArrayValidators {
 
     fun <T, K, E> isUnique(keySelector: (T) -> K, error: (index: Int, value: K) -> E): JsValidator<Collection<T>, E>
         where E : JsError =
-        JsValidator { values ->
+        JsValidator { values, _ ->
             val unique = mutableSetOf<K>()
             values.forEachIndexed { index, item ->
                 val key = keySelector(item)
