@@ -2,18 +2,24 @@ package io.github.airflux.sample.dto.reader.dsl.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReader
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.reader.base.ErrorBuilder
-import io.github.airflux.sample.json.validation.`object`.isNotEmpty
+import io.github.airflux.sample.json.validation.additionalProperties
+import io.github.airflux.sample.json.validation.isNotEmptyObjectValidator
+import io.github.airflux.sample.json.validation.maxProperties
+import io.github.airflux.sample.json.validation.minProperties
 
 private val DefaultObjectReaderConfig = ObjectReaderConfiguration.build {
     failFast = true
 }
 
 private val DefaultObjectValidators = ObjectValidators.build {
-    isNotEmpty = true
+    +additionalProperties
+    +minProperties(10)
+    +maxProperties(25)
+    +isNotEmptyObjectValidator
 }
 
 val reader = ObjectReader(

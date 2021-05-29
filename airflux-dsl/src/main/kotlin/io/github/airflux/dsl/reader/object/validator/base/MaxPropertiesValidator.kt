@@ -1,28 +1,24 @@
-package io.github.airflux.sample.json.validation.`object`
+package io.github.airflux.dsl.reader.`object`.validator.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
-import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.value.JsObject
 
-@Suppress("unused")
-var ObjectValidators.Builder.maxProperties: Int
-    get() = after[MaxPropertiesValidator.NAME]
-        ?.let { (it as MaxPropertiesValidator.Builder).value }
-        ?: -1
-    set(value) {
-        if (value > 0)
-            after.add(MaxPropertiesValidator.Builder(value))
-        else
-            after.remove(MaxPropertiesValidator.NAME)
+fun maxPropertiesValidator(
+    maxPropertiesErrorBuilder: MaxPropertiesValidator.ErrorBuilder
+): (Int) -> ObjectValidator.After.Builder =
+    { max: Int ->
+        MaxPropertiesValidator.Builder(max, maxPropertiesErrorBuilder)
     }
 
-class MaxPropertiesValidator private constructor(val value: Int) : ObjectValidator.After {
+class MaxPropertiesValidator private constructor(
+    private val value: Int,
+    private val errorBuilder: ErrorBuilder
+) : ObjectValidator.After {
 
     override fun validation(
         configuration: ObjectReaderConfiguration,
@@ -32,11 +28,14 @@ class MaxPropertiesValidator private constructor(val value: Int) : ObjectValidat
         context: JsReaderContext?
     ): List<JsError> =
         if (objectValuesMap.size > value)
-            listOf(JsonErrors.Validation.Object.MaxProperties(expected = value, actual = objectValuesMap.size))
+            listOf(errorBuilder.build(expected = value, actual = objectValuesMap.size))
         else
             emptyList()
 
-    class Builder(val value: Int) : ObjectValidator.After.Builder {
+    class Builder internal constructor(
+        private val value: Int,
+        private val errorBuilder: ErrorBuilder
+    ) : ObjectValidator.After.Builder {
 
         override val key: String
             get() = NAME
@@ -44,7 +43,11 @@ class MaxPropertiesValidator private constructor(val value: Int) : ObjectValidat
         override fun build(
             configuration: ObjectReaderConfiguration,
             properties: List<JsReaderProperty<*>>
-        ): ObjectValidator.After = MaxPropertiesValidator(value)
+        ): ObjectValidator.After = MaxPropertiesValidator(value, errorBuilder)
+    }
+
+    fun interface ErrorBuilder {
+        fun build(expected: Int, actual: Int): JsError
     }
 
     companion object {

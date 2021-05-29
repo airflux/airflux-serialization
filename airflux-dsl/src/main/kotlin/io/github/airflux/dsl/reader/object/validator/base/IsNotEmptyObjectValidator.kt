@@ -1,26 +1,19 @@
-package io.github.airflux.sample.json.validation.`object`
+package io.github.airflux.dsl.reader.`object`.validator.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
-import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.value.JsObject
 
-@Suppress("unused")
-var ObjectValidators.Builder.isNotEmpty: Boolean
-    get() = IsNotEmptyValidator.NAME in after
-    set(value) {
-        if (value)
-            after.add(IsNotEmptyValidator.Builder())
-        else
-            after.remove(IsNotEmptyValidator.NAME)
-    }
+fun isNotEmptyObjectValidator(
+    isNotEmptyObjectErrorBuilder: IsNotEmptyObjectValidator.ErrorBuilder
+): ObjectValidator.After.Builder =
+    IsNotEmptyObjectValidator.Builder(isNotEmptyObjectErrorBuilder)
 
-class IsNotEmptyValidator private constructor() : ObjectValidator.After {
+class IsNotEmptyObjectValidator private constructor(private val errorBuilder: ErrorBuilder) : ObjectValidator.After {
 
     override fun validation(
         configuration: ObjectReaderConfiguration,
@@ -30,11 +23,11 @@ class IsNotEmptyValidator private constructor() : ObjectValidator.After {
         context: JsReaderContext?
     ): List<JsError> =
         if (objectValuesMap.isEmpty)
-            listOf(JsonErrors.Validation.Object.IsEmpty)
+            listOf(errorBuilder.build())
         else
             emptyList()
 
-    class Builder : ObjectValidator.After.Builder {
+    class Builder internal constructor(private val errorBuilder: ErrorBuilder) : ObjectValidator.After.Builder {
 
         override val key: String
             get() = NAME
@@ -42,12 +35,14 @@ class IsNotEmptyValidator private constructor() : ObjectValidator.After {
         override fun build(
             configuration: ObjectReaderConfiguration,
             properties: List<JsReaderProperty<*>>
-        ): ObjectValidator.After = validator
+        ): ObjectValidator.After = lazy { IsNotEmptyObjectValidator(errorBuilder) }.value
+    }
+
+    fun interface ErrorBuilder {
+        fun build(): JsError
     }
 
     companion object {
         const val NAME: String = "IsNotEmptyValidator"
-
-        private val validator = IsNotEmptyValidator()
     }
 }

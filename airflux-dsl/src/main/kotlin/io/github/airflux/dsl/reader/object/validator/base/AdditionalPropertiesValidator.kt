@@ -1,27 +1,23 @@
-package io.github.airflux.sample.json.validation.`object`
+package io.github.airflux.dsl.reader.`object`.validator.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.path.IdxPathElement
 import io.github.airflux.path.KeyPathElement
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
-import io.github.airflux.sample.json.error.JsonErrors
 import io.github.airflux.value.JsObject
 
-@Suppress("unused")
-var ObjectValidators.Builder.additionalProperties: Boolean
-    get() = AdditionalPropertiesValidator.NAME in before
-    set(value) {
-        if (value)
-            before.add(AdditionalPropertiesValidator.Builder())
-        else
-            before.remove(AdditionalPropertiesValidator.NAME)
-    }
+fun additionalPropertiesValidator(
+    additionalPropertiesErrorBuilder: AdditionalPropertiesValidator.ErrorBuilder
+): ObjectValidator.Before.Builder =
+    AdditionalPropertiesValidator.Builder(additionalPropertiesErrorBuilder)
 
-class AdditionalPropertiesValidator private constructor(private val names: Set<String>) : ObjectValidator.Before {
+class AdditionalPropertiesValidator private constructor(
+    private val names: Set<String>,
+    private val errorBuilder: ErrorBuilder
+) : ObjectValidator.Before {
 
     override fun validation(
         configuration: ObjectReaderConfiguration,
@@ -39,12 +35,12 @@ class AdditionalPropertiesValidator private constructor(private val names: Set<S
             }
 
         return if (unknownProperties.isNotEmpty())
-            listOf(JsonErrors.Validation.Object.AdditionalProperties(unknownProperties))
+            listOf(errorBuilder.build(unknownProperties))
         else
             emptyList()
     }
 
-    class Builder : ObjectValidator.Before.Builder {
+    class Builder internal constructor(private val errorBuilder: ErrorBuilder) : ObjectValidator.Before.Builder {
 
         override val key: String
             get() = NAME
@@ -68,7 +64,11 @@ class AdditionalPropertiesValidator private constructor(private val names: Set<S
                             }
                     }
                 }
-                .let { AdditionalPropertiesValidator(it) }
+                .let { AdditionalPropertiesValidator(it, errorBuilder) }
+    }
+
+    fun interface ErrorBuilder {
+        fun build(properties: List<String>): JsError
     }
 
     companion object {

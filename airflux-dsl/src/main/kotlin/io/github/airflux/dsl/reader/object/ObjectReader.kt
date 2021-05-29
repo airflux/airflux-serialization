@@ -3,6 +3,7 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsReaderPropertyInstance
+import io.github.airflux.dsl.reader.`object`.validator.ObjectValidatorInstances
 import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
@@ -32,7 +33,7 @@ class ObjectReader(
     inner class Builder<T> internal constructor() {
 
         private var configuration: ObjectReaderConfiguration = initialConfiguration
-        private val validatorBuilders: ObjectValidators = ObjectValidators(initialValidatorBuilders)
+        private val validatorBuilders: ObjectValidators.Builder = ObjectValidators.Builder(initialValidatorBuilders)
         private val properties = mutableListOf<JsReaderProperty<*>>()
 
         var typeBuilder: ((ObjectValuesMap) -> JsResult<T>)? = null
@@ -44,7 +45,7 @@ class ObjectReader(
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
         }
 
-        fun validation(init: ObjectValidators.() -> Unit) {
+        fun validation(init: ObjectValidators.Builder.() -> Unit) {
             validatorBuilders.apply(init)
         }
 
@@ -55,7 +56,7 @@ class ObjectReader(
             PropertyBinder(JsReaderProperty.Name.of(path), reader)
 
         internal fun build(): JsReader<T> {
-            val validators = validatorBuilders.build(configuration, properties)
+            val validators = ObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
             val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
             return JsReader { input, context ->
                 input.readAsObject(invalidTypeErrorBuilder) {
