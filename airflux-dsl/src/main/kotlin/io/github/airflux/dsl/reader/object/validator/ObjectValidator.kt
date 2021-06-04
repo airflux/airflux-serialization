@@ -7,10 +7,18 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-interface ObjectValidator {
+sealed interface ObjectValidator {
+
+    interface Id<E : ObjectValidator>
 
     interface Identifier {
-        val key: String
+        val id: Id<*>
+    }
+
+    sealed interface Builder<T : ObjectValidator> {
+        val id: Id<*>
+
+        fun build(configuration: ObjectReaderConfiguration, properties: List<JsReaderProperty<*>>): T
     }
 
     interface Before : ObjectValidator {
@@ -22,9 +30,7 @@ interface ObjectValidator {
             context: JsReaderContext?
         ): List<JsError>
 
-        interface Builder : Identifier {
-            fun build(configuration: ObjectReaderConfiguration, properties: List<JsReaderProperty<*>>): Before
-        }
+        interface Builder : ObjectValidator.Builder<Before>
     }
 
     interface After : ObjectValidator {
@@ -37,8 +43,6 @@ interface ObjectValidator {
             context: JsReaderContext?
         ): List<JsError>
 
-        interface Builder : Identifier {
-            fun build(configuration: ObjectReaderConfiguration, properties: List<JsReaderProperty<*>>): After
-        }
+        interface Builder : ObjectValidator.Builder<After>
     }
 }

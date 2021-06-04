@@ -8,41 +8,35 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-fun isNotEmptyObjectValidator(
-    isNotEmptyObjectErrorBuilder: IsNotEmptyObjectValidator.ErrorBuilder
-): ObjectValidator.After.Builder =
-    IsNotEmptyObjectValidator.Builder(isNotEmptyObjectErrorBuilder)
+class IsNotEmptyObject(private val errorBuilder: ErrorBuilder) :
+    ObjectValidator.Identifier,
+    ObjectValidator.After.Builder {
 
-class IsNotEmptyObjectValidator private constructor(private val errorBuilder: ErrorBuilder) : ObjectValidator.After {
+    override val id = IsNotEmptyObject
 
-    override fun validation(
+    override fun build(
         configuration: ObjectReaderConfiguration,
-        input: JsObject,
-        properties: List<JsReaderProperty<*>>,
-        objectValuesMap: ObjectValuesMap,
-        context: JsReaderContext?
-    ): List<JsError> =
-        if (objectValuesMap.isEmpty)
-            listOf(errorBuilder.build())
-        else
-            emptyList()
+        properties: List<JsReaderProperty<*>>
+    ): ObjectValidator.After = lazy { Validator(errorBuilder) }.value
 
-    class Builder internal constructor(private val errorBuilder: ErrorBuilder) : ObjectValidator.After.Builder {
+    private class Validator(val errorBuilder: ErrorBuilder) : ObjectValidator.After {
 
-        override val key: String
-            get() = NAME
-
-        override fun build(
+        override fun validation(
             configuration: ObjectReaderConfiguration,
-            properties: List<JsReaderProperty<*>>
-        ): ObjectValidator.After = lazy { IsNotEmptyObjectValidator(errorBuilder) }.value
+            input: JsObject,
+            properties: List<JsReaderProperty<*>>,
+            objectValuesMap: ObjectValuesMap,
+            context: JsReaderContext?
+        ): List<JsError> =
+            if (objectValuesMap.isEmpty)
+                listOf(errorBuilder.build())
+            else
+                emptyList()
     }
 
     fun interface ErrorBuilder {
         fun build(): JsError
     }
 
-    companion object {
-        const val NAME: String = "IsNotEmptyValidator"
-    }
+    companion object Id : ObjectValidator.Id<Validator>
 }

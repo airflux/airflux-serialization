@@ -1,23 +1,23 @@
 package io.github.airflux.sample.json.validation
 
-import io.github.airflux.dsl.reader.`object`.validator.base.additionalPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.base.isNotEmptyObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.base.maxPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.base.minPropertiesValidator
+import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalProperties
+import io.github.airflux.dsl.reader.`object`.validator.base.IsNotEmptyObject
+import io.github.airflux.dsl.reader.`object`.validator.base.MaxProperties
+import io.github.airflux.dsl.reader.`object`.validator.base.MinProperties
 import io.github.airflux.sample.json.error.JsonErrors
 
-val additionalProperties = additionalPropertiesValidator { unknownProperties ->
+val additionalProperties = AdditionalProperties { unknownProperties ->
     JsonErrors.Validation.Object.AdditionalProperties(unknownProperties)
 }
 
-val minProperties = minPropertiesValidator { expected: Int, actual: Int ->
+val minProperties = MinProperties { expected: Int, actual: Int ->
     JsonErrors.Validation.Object.MinProperties(expected, actual)
 }
 
-val maxProperties = maxPropertiesValidator { expected: Int, actual: Int ->
+val maxProperties = MaxProperties { expected: Int, actual: Int ->
     JsonErrors.Validation.Object.MaxProperties(expected, actual)
 }
 
-val isNotEmptyObjectValidator = isNotEmptyObjectValidator {
+val isNotEmptyObject = IsNotEmptyObject {
     JsonErrors.Validation.Object.IsEmpty
 }

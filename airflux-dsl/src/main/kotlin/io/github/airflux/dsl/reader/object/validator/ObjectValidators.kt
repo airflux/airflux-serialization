@@ -14,29 +14,30 @@ class ObjectValidators private constructor(
 
         operator fun ObjectValidator.Before.Builder.unaryPlus() = before.add(this)
         operator fun ObjectValidator.After.Builder.unaryPlus() = after.add(this)
-        operator fun ObjectValidator.Before.Builder.unaryMinus() = before.remove(this.key)
-        operator fun ObjectValidator.After.Builder.unaryMinus() = after.remove(this.key)
+        operator fun ObjectValidator.Identifier.unaryMinus() {
+            if (!before.remove(this.id)) after.remove(this.id)
+        }
 
         internal fun build(): ObjectValidators = ObjectValidators(before, after)
     }
 
-    internal class Validators<T : ObjectValidator.Identifier>(other: Validators<T>? = null) : Iterable<T> {
+    internal class Validators<T>(other: Validators<T>? = null) : Iterable<T>
+        where T : ObjectValidator.Builder<*> {
 
-        private val items: MutableMap<String, T> = if (other != null) LinkedHashMap(other.items) else LinkedHashMap()
+        private val items: MutableMap<ObjectValidator.Id<*>, T> =
+            if (other != null) LinkedHashMap(other.items) else LinkedHashMap()
 
-        operator fun contains(name: String): Boolean = items.containsKey(name)
+        operator fun contains(id: ObjectValidator.Id<*>): Boolean = items.containsKey(id)
 
-        operator fun contains(validator: T): Boolean = items.containsKey(validator.key)
+        operator fun contains(validator: T): Boolean = items.containsKey(validator.id)
 
-        operator fun get(name: String): T? = items[name]
+        operator fun get(id: ObjectValidator.Id<*>): T? = items[id]
 
         fun add(validator: T) {
-            items[validator.key] = validator
+            items[validator.id] = validator
         }
 
-        fun remove(name: String) {
-            items.remove(name)
-        }
+        fun remove(id: ObjectValidator.Id<*>): Boolean = items.remove(id) != null
 
         override fun iterator(): Iterator<T> = items.values.iterator()
     }
