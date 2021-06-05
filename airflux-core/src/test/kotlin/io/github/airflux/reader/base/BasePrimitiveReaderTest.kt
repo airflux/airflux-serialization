@@ -32,7 +32,7 @@ class BasePrimitiveReaderTest {
             val value = true
             val input: JsValue = JsBoolean.valueOf(value)
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsSuccess(path = JsPath.empty, value = value)
         }
@@ -41,7 +41,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Boolean' type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -60,7 +60,7 @@ class BasePrimitiveReaderTest {
             val value = "abc"
             val input: JsValue = JsString(value)
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsSuccess(path = JsPath.empty, value = value)
         }
@@ -69,7 +69,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'String' type (reading from invalid node)`() {
             val input: JsValue = JsBoolean.valueOf(true)
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -92,7 +92,7 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(input, context)
+                    val result = reader.read(context, input)
 
                     result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
@@ -102,7 +102,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Byte' type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -115,7 +115,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Byte' type (reading a value that more the allowed range)`() {
             val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -128,7 +128,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Byte' type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -151,7 +151,7 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(input, context)
+                    val result = reader.read(context, input)
 
                     result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
@@ -161,7 +161,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Short' type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -174,7 +174,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Short' type (reading a value that more the allowed range)`() {
             val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -187,7 +187,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Short' type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -210,7 +210,7 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(input, context)
+                    val result = reader.read(context, input)
 
                     result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
@@ -220,7 +220,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Int' type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -233,7 +233,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Int' type (reading a value that more the allowed range)`() {
             val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -246,7 +246,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Int' type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -269,7 +269,7 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(input, context)
+                    val result = reader.read(context, input)
 
                     result.assertAsSuccess(path = JsPath.empty, value = value)
                 }
@@ -279,7 +279,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Long' type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -292,7 +292,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'Long' type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -315,7 +315,7 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value.toPlainString())!!
 
-                    val result = reader.read(input, context)
+                    val result = reader.read(context, input)
 
                     result.assertAsSuccess(path = JsPath.empty, value = value)
 
@@ -327,7 +327,7 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for 'BigDecimal' type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(input, context)
+            val result = reader.read(context, input)
 
             result.assertAsFailure(
                 JsPath.empty to listOf(

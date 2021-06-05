@@ -28,7 +28,7 @@ class JsValidatorExtensionTest {
                 JsValidationResult.Failure(JsonErrors.Validation.Strings.IsEmpty)
         }
 
-        val stringReader: JsReader<String> = JsReader { input, _ ->
+        val stringReader: JsReader<String> = JsReader { _, input ->
             when (input) {
                 is JsString -> JsResult.Success(input.underlying)
                 else -> JsResult.Failure(
@@ -44,7 +44,7 @@ class JsValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function 'validation' for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
-            val reader = JsReader { input, context ->
+            val reader = JsReader { context, input ->
                 readRequired(
                     from = input,
                     path = JsPath.empty / "name",
@@ -55,7 +55,7 @@ class JsValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(json, context)
+            val result = reader.read(context, json)
 
             result.assertAsSuccess(path = JsPath.empty / "name", value = "user")
         }
@@ -63,7 +63,7 @@ class JsValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function 'validation' for JsReader (error of validation)`() {
             val json: JsValue = JsObject("name" to JsString(""))
-            val reader = JsReader { input, context ->
+            val reader = JsReader { context, input ->
                 readRequired(
                     from = input,
                     path = JsPath.empty / "name",
@@ -74,7 +74,7 @@ class JsValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(json, context)
+            val result = reader.read(context, json)
 
             result.assertAsFailure(
                 JsPath.empty / "name" to listOf(JsonErrors.Validation.Strings.IsEmpty)
@@ -84,7 +84,7 @@ class JsValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function 'validation' for JsReader (result is failure)`() {
             val json: JsValue = JsObject("name" to JsNull)
-            val reader = JsReader { input, context ->
+            val reader = JsReader { context, input ->
                 readRequired(
                     from = input,
                     path = JsPath.empty / "name",
@@ -95,7 +95,7 @@ class JsValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(json, context)
+            val result = reader.read(context, json)
 
             result.assertAsFailure(
                 JsPath.empty / "name" to listOf(
@@ -112,7 +112,7 @@ class JsValidatorExtensionTest {
         fun `Testing of the extension-function 'validation' for JsResult`() {
             val result: JsResult<String> = JsResult.Success(path = JsPath.empty / "name", value = "user")
 
-            val validated = result.validation(isNotEmpty, context)
+            val validated = result.validation(isNotEmpty)
 
             validated.assertAsSuccess(path = JsPath.empty / "name", value = "user")
         }
@@ -121,7 +121,7 @@ class JsValidatorExtensionTest {
         fun `Testing of the extension-function 'validation' for JsResult (error of validation)`() {
             val result: JsResult<String> = JsResult.Success(path = JsPath.empty / "user", value = "")
 
-            val validated = result.validation(isNotEmpty, context)
+            val validated = result.validation(isNotEmpty)
 
             validated.assertAsFailure(
                 JsPath.empty / "user" to listOf(JsonErrors.Validation.Strings.IsEmpty)
@@ -133,7 +133,7 @@ class JsValidatorExtensionTest {
             val result: JsResult<String> =
                 JsResult.Failure(path = JsPath.empty / "user", error = JsonErrors.PathMissing)
 
-            val validated = result.validation(isNotEmpty, context)
+            val validated = result.validation(isNotEmpty)
 
             validated.assertAsFailure(
                 JsPath.empty / "user" to listOf(JsonErrors.PathMissing)

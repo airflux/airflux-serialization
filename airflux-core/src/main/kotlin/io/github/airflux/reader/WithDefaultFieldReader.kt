@@ -19,7 +19,7 @@ fun <T : Any> readWithDefault(
     when (from) {
         is JsLookup.Defined -> when (from.value) {
             is JsNull -> JsResult.Success(path = from.path, value = defaultValue())
-            else -> using.read(from.value, context).repath(from.path)
+            else -> using.read(context, from.value).repath(from.path)
         }
 
         is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = defaultValue())

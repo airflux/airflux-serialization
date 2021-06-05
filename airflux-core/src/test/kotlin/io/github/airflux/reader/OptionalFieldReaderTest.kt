@@ -20,7 +20,7 @@ class OptionalFieldReaderTest {
     companion object {
         private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { input, _ ->
+            JsReader { _, input ->
                 when (input) {
                     is JsString -> JsResult.Success(input.underlying)
                     else -> JsResult.Failure(

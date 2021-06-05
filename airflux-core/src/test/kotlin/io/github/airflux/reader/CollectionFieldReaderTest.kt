@@ -21,7 +21,7 @@ class CollectionFieldReaderTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val stringReader: JsReader<String> = JsReader { input, _ ->
+        private val stringReader: JsReader<String> = JsReader { _, input ->
             when (input) {
                 is JsString -> JsResult.Success(input.underlying)
                 else -> JsResult.Failure(
@@ -39,7 +39,12 @@ class CollectionFieldReaderTest {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
             val result: JsResult<List<String>> =
-                readAsList(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsList(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsSuccess(path = JsPath.empty, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
@@ -49,7 +54,12 @@ class CollectionFieldReaderTest {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<List<String>> =
-                readAsList(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsList(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -68,7 +78,12 @@ class CollectionFieldReaderTest {
             )
 
             val result: JsResult<List<String>> =
-                readAsList(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsList(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsFailure(
                 JsPath.empty / 1 to listOf(
@@ -85,7 +100,12 @@ class CollectionFieldReaderTest {
             val json: JsValue = JsArray<JsString>()
 
             val result: JsResult<List<String>> =
-                readAsList(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsList(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsSuccess(path = JsPath.empty, value = emptyList())
         }
@@ -99,7 +119,12 @@ class CollectionFieldReaderTest {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
             val result: JsResult<Set<String>> =
-                readAsSet(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsSet(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsSuccess(path = JsPath.empty, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
@@ -109,7 +134,12 @@ class CollectionFieldReaderTest {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<Set<String>> =
-                readAsSet(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsSet(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsFailure(
                 JsPath.empty to listOf(
@@ -128,7 +158,12 @@ class CollectionFieldReaderTest {
             )
 
             val result: JsResult<Set<String>> =
-                readAsSet(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsSet(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
 
             result.assertAsFailure(
@@ -146,7 +181,12 @@ class CollectionFieldReaderTest {
             val json: JsValue = JsArray<JsString>()
 
             val result: JsResult<Set<String>> =
-                readAsSet(from = json, using = stringReader, context = context, invalidTypeErrorBuilder = JsonErrors::InvalidType)
+                readAsSet(
+                    from = json,
+                    using = stringReader,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
             result.assertAsSuccess(path = JsPath.empty, value = emptySet())
         }

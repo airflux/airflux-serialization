@@ -21,7 +21,7 @@ class NullableWithDefaultFieldReaderTest {
     companion object {
         private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { input, _ -> JsResult.Success((input as JsString).underlying) }
+            JsReader { _, input -> JsResult.Success((input as JsString).underlying) }
         private val defaultValue = { DEFAULT_VALUE }
     }
 

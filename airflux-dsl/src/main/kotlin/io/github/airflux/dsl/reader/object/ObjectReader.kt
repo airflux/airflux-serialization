@@ -18,7 +18,7 @@ import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 
 fun <T : Any> JsValue.deserialization(reader: JsReader<T>, context: JsReaderContext? = null): JsResult<T> =
-    reader.read(this, context)
+    reader.read(context, this)
 
 class ObjectReader(
     private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
@@ -58,7 +58,7 @@ class ObjectReader(
         internal fun build(): JsReader<T> {
             val validators = ObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
             val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
-            return JsReader { input, context ->
+            return JsReader { context, input ->
                 input.readAsObject(invalidTypeErrorBuilder) {
                     read(configuration, validators, properties, typeBuilder, it, context)
                 }

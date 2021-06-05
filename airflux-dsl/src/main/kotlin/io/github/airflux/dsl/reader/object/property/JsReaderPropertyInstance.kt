@@ -48,7 +48,7 @@ internal sealed class JsReaderPropertyInstance<T : Any> {
             validator: JsValidator<T, JsError>?,
             context: JsReaderContext?
         ): JsResult<T> =
-            if (validator == null) result else result.validation(validator, context)
+            if (validator == null) result else result.validation(context, validator)
     }
 
     internal class Defaultable<T : Any> internal constructor(
@@ -77,7 +77,7 @@ internal sealed class JsReaderPropertyInstance<T : Any> {
             validator: JsValidator<T, JsError>?,
             context: JsReaderContext?
         ): JsResult<T> =
-            if (validator == null) result else result.validation(validator, context)
+            if (validator == null) result else result.validation(context, validator)
     }
 
     internal class Optional<T : Any> internal constructor(
@@ -105,7 +105,7 @@ internal sealed class JsReaderPropertyInstance<T : Any> {
             validator: JsValidator<T, JsError>?,
             context: JsReaderContext?
         ): JsResult<T?> =
-            if (validator == null) result else result.validation(applyIfPresent(validator), context)
+            if (validator == null) result else result.validation(context, applyIfPresent(validator))
     }
 
     internal class OptionalWithDefault<T : Any> internal constructor(
@@ -134,7 +134,7 @@ internal sealed class JsReaderPropertyInstance<T : Any> {
             validator: JsValidator<T, JsError>?,
             context: JsReaderContext?
         ): JsResult<T> =
-            if (validator == null) result else result.validation(validator, context)
+            if (validator == null) result else result.validation(context, validator)
     }
 
     internal class Nullable<T : Any> internal constructor(
@@ -163,7 +163,7 @@ internal sealed class JsReaderPropertyInstance<T : Any> {
             validator: JsValidator<T, JsError>?,
             context: JsReaderContext?
         ): JsResult<T?> =
-            if (validator == null) result else result.validation(applyIfPresent(validator), context)
+            if (validator == null) result else result.validation(context, applyIfPresent(validator))
     }
 
     internal class NullableWithDefault<T : Any>(
@@ -192,6 +192,6 @@ internal sealed class JsReaderPropertyInstance<T : Any> {
             validator: JsValidator<T, JsError>?,
             context: JsReaderContext?
         ): JsResult<T?> =
-            if (validator == null) result else result.validation(applyIfPresent(validator), context)
+            if (validator == null) result else result.validation(context, applyIfPresent(validator))
     }
 }

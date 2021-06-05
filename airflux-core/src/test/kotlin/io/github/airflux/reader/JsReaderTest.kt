@@ -27,7 +27,7 @@ class JsReaderTest {
         }
         val transformedReader = reader.map { value -> value.toInt() }
 
-        val result = transformedReader.read(JsNull, context)
+        val result = transformedReader.read(context, JsNull)
 
         result.assertAsSuccess(path = ID_PATH, value = ID_VALUE.toInt())
     }
@@ -42,7 +42,7 @@ class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(JsNull, context)
+        val result = composeReader.read(context, JsNull)
 
         result.assertAsSuccess(path = ID_PATH, value = ID_VALUE)
     }
@@ -57,7 +57,7 @@ class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(JsNull, context)
+        val result = composeReader.read(context, JsNull)
 
         result.assertAsSuccess(path = IDENTIFIER_PATH, value = IDENTIFIER_VALUE)
     }
@@ -75,7 +75,7 @@ class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(JsNull, context)
+        val result = composeReader.read(context, JsNull)
 
         result.assertAsFailure(
             ID_PATH to listOf(JsonErrors.PathMissing),
