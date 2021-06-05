@@ -43,7 +43,7 @@ class JsValidatorTest {
         }
 
         val composeValidator = leftValidator and rightValidator
-        val validationResult = composeValidator.validation(Unit, context)
+        val validationResult = composeValidator.validation(context, Unit)
         assertEquals(expected = left && right, actual = validationResult is JsValidationResult.Success)
         if (validationResult is JsValidationResult.Failure)
             assertTrue(validationResult.reason is ValidationErrors.Error)
@@ -75,7 +75,7 @@ class JsValidatorTest {
         }
 
         val composeValidator = leftValidator or rightValidator
-        val validationResult = composeValidator.validation(Unit, context)
+        val validationResult = composeValidator.validation(context, Unit)
 
         assertEquals(expected = left || right, actual = validationResult is JsValidationResult.Success)
         if (validationResult is JsValidationResult.Failure)

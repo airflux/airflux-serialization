@@ -21,7 +21,7 @@ class JsValidatorExtensionTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val isNotEmpty = JsValidator<String, JsonErrors.Validation> { value, _ ->
+        private val isNotEmpty = JsValidator<String, JsonErrors.Validation> { _, value ->
             if (value.isNotEmpty())
                 JsValidationResult.Success
             else

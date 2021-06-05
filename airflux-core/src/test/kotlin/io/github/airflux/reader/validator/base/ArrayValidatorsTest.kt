@@ -52,7 +52,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(emptyList(), context)
+            val result = validator.validation(context, emptyList())
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
@@ -65,7 +65,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(listOf("A"), context)
+            val result = validator.validation(context, listOf("A"))
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
@@ -78,7 +78,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(listOf("A", "B"), context)
+            val result = validator.validation(context, listOf("A", "B"))
 
             result as JsValidationResult.Success
         }
@@ -88,7 +88,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(listOf("A", "B", "C"), context)
+            val result = validator.validation(context, listOf("A", "B", "C"))
 
             result as JsValidationResult.Success
         }
@@ -102,7 +102,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(emptyList(), context)
+            val result = validator.validation(context, emptyList())
 
             result as JsValidationResult.Success
         }
@@ -112,7 +112,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(listOf("A"), context)
+            val result = validator.validation(context, listOf("A"))
 
             result as JsValidationResult.Success
         }
@@ -122,7 +122,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(listOf("A", "B"), context)
+            val result = validator.validation(context, listOf("A", "B"))
 
             result as JsValidationResult.Success
         }
@@ -132,7 +132,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(listOf("A", "B", "C"), context)
+            val result = validator.validation(context, listOf("A", "B", "C"))
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.MaxItems
@@ -148,7 +148,7 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection is empty)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(emptyList(), context)
+            val result = validator.validation(context, emptyList())
 
             result as JsValidationResult.Success
         }
@@ -157,7 +157,7 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection contains only unique values)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(listOf("A", "B"), context)
+            val result = validator.validation(context, listOf("A", "B"))
 
             result as JsValidationResult.Success
         }
@@ -166,7 +166,7 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection contains duplicates)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(listOf("A", "B", "A", "C"), context)
+            val result = validator.validation(context, listOf("A", "B", "A", "C"))
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Arrays.Unique<*>

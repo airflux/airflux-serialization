@@ -6,23 +6,23 @@ import io.github.airflux.reader.result.JsError
 @Suppress("unused")
 fun interface JsValidator<in T, out E : JsError> {
 
-    fun validation(value: T, context: JsReaderContext?): JsValidationResult<E>
+    fun validation(context: JsReaderContext?, value: T): JsValidationResult<E>
 
     infix fun or(other: JsValidator<@UnsafeVariance T, @UnsafeVariance E>): JsValidator<T, E> {
         val self = this
-        return JsValidator { value, context ->
-            when (val result = self.validation(value, context)) {
+        return JsValidator { context, value ->
+            when (val result = self.validation(context, value)) {
                 is JsValidationResult.Success -> result
-                is JsValidationResult.Failure -> other.validation(value, context)
+                is JsValidationResult.Failure -> other.validation(context, value)
             }
         }
     }
 
     infix fun and(other: JsValidator<@UnsafeVariance T, @UnsafeVariance E>): JsValidator<T, E> {
         val self = this
-        return JsValidator { value, context ->
-            when (val result = self.validation(value, context)) {
-                is JsValidationResult.Success -> other.validation(value, context)
+        return JsValidator { context, value ->
+            when (val result = self.validation(context, value)) {
+                is JsValidationResult.Success -> other.validation(context, value)
                 is JsValidationResult.Failure -> result
             }
         }

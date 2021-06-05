@@ -18,7 +18,7 @@ fun <T, E : JsError> JsResult<T>.validation(validator: JsValidator<T, E>): JsRes
 
 fun <T, E : JsError> JsResult<T>.validation(context: JsReaderContext?, validator: JsValidator<T, E>): JsResult<T> =
     when (this) {
-        is JsResult.Success -> when (val validated = validator.validation(this.value, context)) {
+        is JsResult.Success -> when (val validated = validator.validation(context, this.value)) {
             is JsValidationResult.Success -> this
             is JsValidationResult.Failure -> JsResult.Failure(path = this.path, error = validated.reason)
         }

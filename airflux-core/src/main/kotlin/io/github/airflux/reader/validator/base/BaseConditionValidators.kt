@@ -8,9 +8,9 @@ fun <T, E : JsError> applyIfPresent(validator: JsValidator<T, E>) = applyIfNotNu
 
 fun <T, E> applyIfNotNull(validator: JsValidator<T, E>)
     where E : JsError =
-    JsValidator<T?, E> { value, context ->
+    JsValidator<T?, E> { context, value ->
         if (value != null)
-            validator.validation(value, context)
+            validator.validation(context, value)
         else
             JsValidationResult.Success
     }

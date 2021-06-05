@@ -12,7 +12,7 @@ class ConditionValidatorsTest {
     companion object {
         private val context = JsReaderContext()
 
-        private val isNotEmpty: JsValidator<String, JsonErrors.Validation.Strings> = JsValidator { value, _ ->
+        private val isNotEmpty: JsValidator<String, JsonErrors.Validation.Strings> = JsValidator { _, value ->
             if (value.isNotEmpty())
                 JsValidationResult.Success
             else
@@ -24,14 +24,14 @@ class ConditionValidatorsTest {
 
     @Test
     fun `Testing basic validator of the 'applyIfNotNull' (value has string, target validator is apply)`() {
-        val result = validator.validation("Hello", context)
+        val result = validator.validation(context, "Hello")
 
         assertTrue(result is JsValidationResult.Success)
     }
 
     @Test
     fun `Testing basic validator of the 'applyIfNotNull' (value is empty string, target validator is apply)`() {
-        val result = validator.validation("", context)
+        val result = validator.validation(context, "")
 
         result as JsValidationResult.Failure
         assertTrue(result.reason is JsonErrors.Validation.Strings.IsEmpty)
@@ -39,7 +39,7 @@ class ConditionValidatorsTest {
 
     @Test
     fun `Testing basic validator of the 'applyIfNotNull' (value is null, target validator do not apply)`() {
-        val result = validator.validation(null, context)
+        val result = validator.validation(context, null)
 
         assertTrue(result is JsValidationResult.Success)
     }
