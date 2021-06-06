@@ -13,7 +13,7 @@ object EnumReader {
                 .validation(context, StringValidator.isNotBlank)
                 .flatMap { text ->
                     try {
-                        JsResult.Success(enumValueOf(text.uppercase()))
+                        JsResult.Success(enumValueOf(text.toUpperCase()))
                     } catch (ignored: Exception) {
                         JsResult.Failure(JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString()))
                     }
