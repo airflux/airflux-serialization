@@ -8,7 +8,7 @@ buildscript {
 
 
 plugins {
-    kotlin("jvm") version "1.4.30"
+    kotlin("jvm") version "1.5.10"
     `java-library`
 
     id("io.gitlab.arturbosch.detekt") version "1.13.1"
