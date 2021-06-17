@@ -2,6 +2,7 @@ package io.github.airflux.reader.validator.base
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 import org.junit.jupiter.api.Nested
@@ -14,6 +15,7 @@ class StringValidatorsTest {
     companion object {
 
         private val context = JsReaderContext()
+        private val path = JsResultPath.Root
 
         private fun minLengthBasicValidator(value: Int) =
             BaseStringValidators.minLength<JsonErrors.Validation>(
@@ -58,7 +60,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, "")
+            val result = validator.validation(context, path, "")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.MinLength
@@ -71,7 +73,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, " ")
+            val result = validator.validation(context, path, " ")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.MinLength
@@ -84,7 +86,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, "  ")
+            val result = validator.validation(context, path, "  ")
 
             result as JsValidationResult.Success
         }
@@ -94,7 +96,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, "   ")
+            val result = validator.validation(context, path, "   ")
 
             result as JsValidationResult.Success
         }
@@ -104,7 +106,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, "a")
+            val result = validator.validation(context, path, "a")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.MinLength
@@ -117,7 +119,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, "ab")
+            val result = validator.validation(context, path, "ab")
 
             result as JsValidationResult.Success
         }
@@ -127,7 +129,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val result = validator.validation(context, "abc")
+            val result = validator.validation(context, path, "abc")
 
             result as JsValidationResult.Success
         }
@@ -141,7 +143,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, "")
+            val result = validator.validation(context, path, "")
 
             result as JsValidationResult.Success
         }
@@ -151,7 +153,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, " ")
+            val result = validator.validation(context, path, " ")
 
             result as JsValidationResult.Success
         }
@@ -161,7 +163,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, "  ")
+            val result = validator.validation(context, path, "  ")
 
             result as JsValidationResult.Success
         }
@@ -171,7 +173,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, "   ")
+            val result = validator.validation(context, path, "   ")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.MaxLength
@@ -184,7 +186,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, "a")
+            val result = validator.validation(context, path, "a")
 
             result as JsValidationResult.Success
         }
@@ -194,7 +196,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, "ab")
+            val result = validator.validation(context, path, "ab")
 
             result as JsValidationResult.Success
         }
@@ -204,7 +206,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val result = validator.validation(context, "abc")
+            val result = validator.validation(context, path, "abc")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.MaxLength
@@ -218,7 +220,7 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isNotEmpty' (a value of a string is empty)`() {
-            val result = isNotEmptyValidator.validation(context, "")
+            val result = isNotEmptyValidator.validation(context, path, "")
 
             result as JsValidationResult.Failure
             assertTrue(result.reason is JsonErrors.Validation.Strings.IsEmpty)
@@ -226,14 +228,14 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isNotEmpty' (a value of a string is blank)`() {
-            val result = isNotEmptyValidator.validation(context, " ")
+            val result = isNotEmptyValidator.validation(context, path, " ")
 
             result as JsValidationResult.Success
         }
 
         @Test
         fun `Testing basic validator of the 'isNotEmpty' (a value of a string is not empty)`() {
-            val result = isNotEmptyValidator.validation(context, "abc")
+            val result = isNotEmptyValidator.validation(context, path, "abc")
 
             result as JsValidationResult.Success
         }
@@ -245,7 +247,7 @@ class StringValidatorsTest {
         @Test
         fun `Testing basic validator of the 'isNotBlank' (a value of a string is empty)`() {
 
-            val result = isNotBlankValidator.validation(context, "")
+            val result = isNotBlankValidator.validation(context, path, "")
 
             result as JsValidationResult.Failure
             assertTrue(result.reason is JsonErrors.Validation.Strings.IsBlank)
@@ -254,7 +256,7 @@ class StringValidatorsTest {
         @Test
         fun `Testing basic validator of the 'isNotBlank' (a value of a string is blank)`() {
 
-            val result = isNotBlankValidator.validation(context, " ")
+            val result = isNotBlankValidator.validation(context, path, " ")
 
             result as JsValidationResult.Failure
             assertTrue(result.reason is JsonErrors.Validation.Strings.IsBlank)
@@ -263,7 +265,7 @@ class StringValidatorsTest {
         @Test
         fun `Testing basic validator of the 'isNotBlank' (a value of a string is not blank)`() {
 
-            val result = isNotBlankValidator.validation(context, " a ")
+            val result = isNotBlankValidator.validation(context, path, " a ")
 
             result as JsValidationResult.Success
         }
@@ -276,7 +278,7 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'pattern' (a value of a string is empty)`() {
-            val result = validator.validation(context, "")
+            val result = validator.validation(context, path, "")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.Pattern
@@ -286,14 +288,14 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'pattern' (a value of a string is matching to the pattern)`() {
-            val result = validator.validation(context, "abc")
+            val result = validator.validation(context, path, "abc")
 
             result as JsValidationResult.Success
         }
 
         @Test
         fun `Testing basic validator of the 'pattern' (a value of a string is not matching to the pattern)`() {
-            val result = validator.validation(context, "aab")
+            val result = validator.validation(context, path, "aab")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.Pattern
@@ -310,14 +312,14 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isA' (a value of a string is a number)`() {
-            val result = validator.validation(context, "123")
+            val result = validator.validation(context, path, "123")
 
             result as JsValidationResult.Success
         }
 
         @Test
         fun `Testing basic validator of the 'isA' (a value of a string is not a number)`() {
-            val result = validator.validation(context, "abc")
+            val result = validator.validation(context, path, "abc")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.IsA
@@ -326,7 +328,7 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing basic validator of the 'isA' (a value of a string is not a number but an empty string)`() {
-            val result = validator.validation(context, "")
+            val result = validator.validation(context, path, "")
 
             result as JsValidationResult.Failure
             val reason = result.reason as JsonErrors.Validation.Strings.IsA

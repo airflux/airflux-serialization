@@ -1,6 +1,7 @@
 package io.github.airflux.reader.filter
 
 import io.github.airflux.reader.context.JsReaderContext
+import io.github.airflux.reader.result.JsResultPath
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
@@ -23,10 +24,10 @@ class JsPredicateTest {
         delimiter = ':'
     )
     fun `Testing of the logical operator 'and' of a validator`(actual: Int, expected: Boolean) {
-        val leftFilter = JsPredicate<Int> { _, value -> value > 10 }
-        val rightFilter = JsPredicate<Int> { _, value -> value < 20 }
+        val leftFilter = JsPredicate<Int> { _, _, value -> value > 10 }
+        val rightFilter = JsPredicate<Int> { _, _, value -> value < 20 }
         val composedFilter = leftFilter and rightFilter
-        assertEquals(expected, composedFilter.test(context, actual))
+        assertEquals(expected, composedFilter.test(context, JsResultPath.Root, actual))
     }
 
     @ParameterizedTest
@@ -41,9 +42,9 @@ class JsPredicateTest {
         delimiter = ':'
     )
     fun `Testing of the logical operator 'or' of a validator`(actual: Int, expected: Boolean) {
-        val leftFilter = JsPredicate<Int> { _, value -> value < 10 }
-        val rightFilter = JsPredicate<Int> { _, value -> value > 20 }
+        val leftFilter = JsPredicate<Int> { _, _, value -> value < 10 }
+        val rightFilter = JsPredicate<Int> { _, _, value -> value > 20 }
         val composedFilter = leftFilter or rightFilter
-        assertEquals(expected, composedFilter.test(context, actual))
+        assertEquals(expected, composedFilter.test(context, JsResultPath.Root, actual))
     }
 }

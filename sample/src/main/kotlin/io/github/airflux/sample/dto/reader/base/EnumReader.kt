@@ -8,14 +8,17 @@ import io.github.airflux.sample.json.validation.StringValidator
 
 object EnumReader {
     inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
-        JsReader { context, input ->
-            PrimitiveReader.stringReader.read(context, input)
+        JsReader { context, path, input ->
+            PrimitiveReader.stringReader.read(context, path, input)
                 .validation(context, StringValidator.isNotBlank)
-                .flatMap { text ->
+                .flatMap { text, p ->
                     try {
-                        JsResult.Success(enumValueOf(text.toUpperCase()))
+                        JsResult.Success(value = enumValueOf(text.toUpperCase()), path = p)
                     } catch (ignored: Exception) {
-                        JsResult.Failure(JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString()))
+                        JsResult.Failure(
+                            path = p,
+                            error = JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString())
+                        )
                     }
                 }
         }

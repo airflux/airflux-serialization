@@ -3,6 +3,8 @@ package io.github.airflux.reader.context
 class JsReaderContext {
     private val map = mutableMapOf<Element.Key<*>, Element>()
 
+    operator fun contains(key: Element.Key<*>) = map.contains(key)
+
     operator fun plus(element: Element): JsReaderContext {
         map[element.key] = element
         return this

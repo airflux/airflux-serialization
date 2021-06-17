@@ -1,7 +1,5 @@
 package io.github.airflux.reader.result
 
-import io.github.airflux.path.JsPath
-
 @Suppress("unused")
 sealed class JsResult<out T> {
 
@@ -12,8 +10,8 @@ sealed class JsResult<out T> {
         is Failure -> this
     }
 
-    fun <R> flatMap(transform: (T) -> JsResult<R>): JsResult<R> = when (this) {
-        is Success -> transform(value)
+    fun <R> flatMap(transform: (T, path: JsResultPath) -> JsResult<R>): JsResult<R> = when (this) {
+        is Success -> transform(value, this.path)
         is Failure -> this
     }
 
@@ -32,33 +30,21 @@ sealed class JsResult<out T> {
         is Failure -> defaultValue()
     }
 
-    abstract infix fun repath(path: JsPath): JsResult<T>
+    class Success<T>(val value: T, val path: JsResultPath) : JsResult<T>()
 
-    class Success<T>(val value: T, val path: JsPath = JsPath.empty) : JsResult<T>() {
+    class Failure(val errors: List<Pair<JsResultPath, List<JsError>>>) : JsResult<Nothing>() {
 
-        override fun repath(path: JsPath): JsResult<T> = Success(value, path + this.path)
-    }
+        constructor(path: JsResultPath, error: JsError) : this(path, listOf(error))
 
-    class Failure(val errors: List<Pair<JsPath, List<JsError>>>) : JsResult<Nothing>() {
-
-        constructor() : this(JsPath.empty, emptyList())
-
-        constructor(error: JsError) : this(JsPath.empty, listOf(error))
-
-        constructor(path: JsPath, error: JsError) : this(path, listOf(error))
-
-        constructor(path: JsPath, errors: List<JsError>) : this(listOf(Pair(path, errors)))
-
-        override fun repath(path: JsPath): JsResult<Nothing> =
-            Failure(errors = errors.map { (oldPath, errors) -> path + oldPath to errors })
+        constructor(path: JsResultPath, errors: List<JsError>) : this(listOf(Pair(path, errors)))
     }
 }
 
-fun <T> T.asSuccess(path: JsPath = JsPath.empty): JsResult<T> =
+fun <T> T.asSuccess(path: JsResultPath): JsResult<T> =
     JsResult.Success(value = this, path = path)
 
-fun <E : JsError> E.asFailure(path: JsPath = JsPath.empty): JsResult<Nothing> =
+fun <E : JsError> E.asFailure(path: JsResultPath): JsResult<Nothing> =
     JsResult.Failure(path = path, error = this)
 
-fun <E : JsError> List<E>.asFailure(path: JsPath = JsPath.empty): JsResult<Nothing> =
+fun <E : JsError> List<E>.asFailure(path: JsResultPath): JsResult<Nothing> =
     JsResult.Failure(path = path, errors = this)

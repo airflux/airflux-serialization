@@ -19,13 +19,13 @@ interface BasePrimitiveReader {
          * Reader for primitive [Boolean] type.
          */
         fun boolean(invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsReader<Boolean> =
-            JsReader { _, input -> input.readAsBoolean(invalidTypeErrorBuilder) }
+            JsReader { _, path, input -> input.readAsBoolean(path, invalidTypeErrorBuilder) }
 
         /**
          * Reader for primitive [String] type.
          */
         fun string(invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsReader<String> =
-            JsReader { _, input -> input.readAsString(invalidTypeErrorBuilder) }
+            JsReader { _, path, input -> input.readAsString(path, invalidTypeErrorBuilder) }
 
         /**
          * Reader for primitive [Byte] type.
@@ -34,12 +34,12 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Byte> =
-            JsReader { _, input ->
-                input.readAsNumber(invalidTypeErrorBuilder) { text ->
+            JsReader { _, path, input ->
+                input.readAsNumber(path, invalidTypeErrorBuilder) { p, text ->
                     try {
-                        text.toByte().asSuccess()
+                        text.toByte().asSuccess(path = p)
                     } catch (expected: NumberFormatException) {
-                        valueCastErrorBuilder.build(text, Byte::class).asFailure()
+                        valueCastErrorBuilder.build(text, Byte::class).asFailure(path = p)
                     }
                 }
             }
@@ -51,12 +51,12 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Short> =
-            JsReader { _, input ->
-                input.readAsNumber(invalidTypeErrorBuilder) { text ->
+            JsReader { _, path, input ->
+                input.readAsNumber(path, invalidTypeErrorBuilder) { p, text ->
                     try {
-                        text.toShort().asSuccess()
+                        text.toShort().asSuccess(path = p)
                     } catch (expected: NumberFormatException) {
-                        valueCastErrorBuilder.build(text, Short::class).asFailure()
+                        valueCastErrorBuilder.build(text, Short::class).asFailure(path = p)
                     }
                 }
             }
@@ -68,12 +68,12 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Int> =
-            JsReader { _, input ->
-                input.readAsNumber(invalidTypeErrorBuilder) { text ->
+            JsReader { _, path, input ->
+                input.readAsNumber(path, invalidTypeErrorBuilder) { p, text ->
                     try {
-                        text.toInt().asSuccess()
+                        text.toInt().asSuccess(path = p)
                     } catch (expected: NumberFormatException) {
-                        valueCastErrorBuilder.build(text, Int::class).asFailure()
+                        valueCastErrorBuilder.build(text, Int::class).asFailure(path = p)
                     }
                 }
             }
@@ -85,12 +85,12 @@ interface BasePrimitiveReader {
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
             valueCastErrorBuilder: ValueCastErrorBuilder
         ): JsReader<Long> =
-            JsReader { _, input ->
-                input.readAsNumber(invalidTypeErrorBuilder) { text ->
+            JsReader { _, path, input ->
+                input.readAsNumber(path, invalidTypeErrorBuilder) { p, text ->
                     try {
-                        text.toLong().asSuccess()
+                        text.toLong().asSuccess(path = p)
                     } catch (expected: NumberFormatException) {
-                        valueCastErrorBuilder.build(text, Long::class).asFailure()
+                        valueCastErrorBuilder.build(text, Long::class).asFailure(path = p)
                     }
                 }
             }
@@ -99,9 +99,9 @@ interface BasePrimitiveReader {
          * Reader for [BigDecimal] type.
          */
         fun bigDecimal(invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsReader<BigDecimal> =
-            JsReader { _, input ->
-                input.readAsNumber(invalidTypeErrorBuilder) { text ->
-                    BigDecimal(text).asSuccess()
+            JsReader { _, path, input ->
+                input.readAsNumber(path, invalidTypeErrorBuilder) { p, text ->
+                    BigDecimal(text).asSuccess(path = p)
                 }
             }
     }

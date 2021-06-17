@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.dsl.reader.`object`.deserialization
 import io.github.airflux.dsl.writer.`object`.serialization
 import io.github.airflux.parser.AirFluxJsonModule
-import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.sample.dto.Response
 import io.github.airflux.sample.dto.model.Lot
@@ -23,14 +22,9 @@ fun main() {
 
     val json = mapper.readValue(jsonOfTender, JsValue::class.java)
 
-    val context = JsReaderContext()
-
-    when (val result = json.deserialization(RequestReader, context)) {
+    when (val result = json.deserialization(reader = RequestReader)) {
         is JsResult.Success -> println(result.value)
-        is JsResult.Failure -> {
-            val errors = result.errors
-            println(errors)
-        }
+        is JsResult.Failure -> println(result.errors)
     }
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")

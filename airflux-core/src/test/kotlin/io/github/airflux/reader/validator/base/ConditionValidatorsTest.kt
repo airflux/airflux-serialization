@@ -1,7 +1,8 @@
-package io.github.airflux.reader.validator.base
+package io.github.airflux.reader.validator.base//
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 import kotlin.test.Test
@@ -11,8 +12,9 @@ class ConditionValidatorsTest {
 
     companion object {
         private val context = JsReaderContext()
+        private val path = JsResultPath.Root
 
-        private val isNotEmpty: JsValidator<String, JsonErrors.Validation.Strings> = JsValidator { _, value ->
+        private val isNotEmpty: JsValidator<String, JsonErrors.Validation.Strings> = JsValidator { _, _, value ->
             if (value.isNotEmpty())
                 JsValidationResult.Success
             else
@@ -24,14 +26,14 @@ class ConditionValidatorsTest {
 
     @Test
     fun `Testing basic validator of the 'applyIfNotNull' (value has string, target validator is apply)`() {
-        val result = validator.validation(context, "Hello")
+        val result = validator.validation(context, path, "Hello")
 
         assertTrue(result is JsValidationResult.Success)
     }
 
     @Test
     fun `Testing basic validator of the 'applyIfNotNull' (value is empty string, target validator is apply)`() {
-        val result = validator.validation(context, "")
+        val result = validator.validation(context, path, "")
 
         result as JsValidationResult.Failure
         assertTrue(result.reason is JsonErrors.Validation.Strings.IsEmpty)
@@ -39,7 +41,7 @@ class ConditionValidatorsTest {
 
     @Test
     fun `Testing basic validator of the 'applyIfNotNull' (value is null, target validator do not apply)`() {
-        val result = validator.validation(context, null)
+        val result = validator.validation(context, path, null)
 
         assertTrue(result is JsValidationResult.Success)
     }

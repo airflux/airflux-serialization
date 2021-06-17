@@ -5,6 +5,7 @@ import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.sample.dto.reader.base.ErrorBuilder
 import io.github.airflux.sample.json.validation.additionalProperties
 import io.github.airflux.sample.json.validation.isNotEmptyObject
@@ -36,5 +37,5 @@ val reader = ObjectReader(
     invalidTypeErrorBuilder = ErrorBuilder.InvalidType
 )
 
-inline fun <T> simpleBuilder(crossinline builder: (values: ObjectValuesMap) -> T): (ObjectValuesMap) -> JsResult<T> =
-    { JsResult.Success(builder(it)) }
+inline fun <T> simpleBuilder(crossinline builder: (ObjectValuesMap) -> T): (ObjectValuesMap, JsResultPath) -> JsResult<T> =
+    { v, p -> JsResult.Success(builder(v), p) }

@@ -21,9 +21,7 @@ class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
     ): ObjectValidator.Before = mutableSetOf<String>()
         .apply {
             properties.forEach { property ->
-                property.name
-                    .value
-                    .elements
+                property.propertyPath
                     .firstOrNull()
                     ?.let {
                         when (it) {

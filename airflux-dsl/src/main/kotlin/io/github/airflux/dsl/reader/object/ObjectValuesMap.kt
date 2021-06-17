@@ -3,6 +3,7 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsObject
 
 class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty<*>, Any>) {
@@ -38,24 +39,25 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
         private val results: MutableMap<JsReaderProperty<*>, Any> = mutableMapOf()
 
         fun <T : Any> readValue(
-            attr: JsReaderProperty<T>,
-            input: JsObject,
-            context: JsReaderContext?
+            context: JsReaderContext?,
+            path: JsResultPath,
+            property: JsReaderProperty<T>,
+            input: JsObject
         ): JsResult.Failure? {
 
-            val result: JsResult<T?> = when (attr) {
-                is JsReaderProperty.Required -> attr.read(input, context)
-                is JsReaderProperty.Defaultable -> attr.read(input, context)
-                is JsReaderProperty.Optional -> attr.read(input, context)
-                is JsReaderProperty.OptionalWithDefault -> attr.read(input, context)
-                is JsReaderProperty.Nullable -> attr.read(input, context)
-                is JsReaderProperty.NullableWithDefault -> attr.read(input, context)
+            val result: JsResult<T?> = when (property) {
+                is JsReaderProperty.Required -> property.read(context, path, input)
+                is JsReaderProperty.Defaultable -> property.read(context, path, input)
+                is JsReaderProperty.Optional -> property.read(context, path, input)
+                is JsReaderProperty.OptionalWithDefault -> property.read(context, path, input)
+                is JsReaderProperty.Nullable -> property.read(context, path, input)
+                is JsReaderProperty.NullableWithDefault -> property.read(context, path, input)
             }
 
             return when (result) {
                 is JsResult.Success -> {
                     val value = result.value
-                    if (value != null) results[attr] = value
+                    if (value != null) results[property] = value
                     null
                 }
                 is JsResult.Failure -> result

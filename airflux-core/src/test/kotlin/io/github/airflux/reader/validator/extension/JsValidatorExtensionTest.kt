@@ -8,12 +8,14 @@ import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.reader.validator.JsValidator
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
+import io.github.airflux.value.extension.lookup
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 
@@ -21,17 +23,18 @@ class JsValidatorExtensionTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val isNotEmpty = JsValidator<String, JsonErrors.Validation> { _, value ->
+        private val isNotEmpty = JsValidator<String, JsonErrors.Validation> { _, _, value ->
             if (value.isNotEmpty())
                 JsValidationResult.Success
             else
                 JsValidationResult.Failure(JsonErrors.Validation.Strings.IsEmpty)
         }
 
-        val stringReader: JsReader<String> = JsReader { _, input ->
+        val stringReader: JsReader<String> = JsReader { _, path, input ->
             when (input) {
-                is JsString -> JsResult.Success(input.underlying)
+                is JsString -> JsResult.Success(input.underlying, path)
                 else -> JsResult.Failure(
+                    path = path,
                     error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
                 )
             }
@@ -44,10 +47,10 @@ class JsValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function 'validation' for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
-            val reader = JsReader { context, input ->
+            val reader = JsReader { context, path, input ->
+                val result = input.lookup(path, JsPath.Root / "name")
                 readRequired(
-                    from = input,
-                    path = JsPath.empty / "name",
+                    from = result,
                     using = stringReader,
                     context = context,
                     pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -55,18 +58,18 @@ class JsValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, json)
+            val result = reader.read(context, JsResultPath.Root, json)
 
-            result.assertAsSuccess(path = JsPath.empty / "name", value = "user")
+            result.assertAsSuccess(path = JsResultPath.Root / "name", value = "user")
         }
 
         @Test
         fun `Testing of the extension-function 'validation' for JsReader (error of validation)`() {
             val json: JsValue = JsObject("name" to JsString(""))
-            val reader = JsReader { context, input ->
+            val reader = JsReader { context, path, input ->
+                val result = input.lookup(path, JsPath.Root / "name")
                 readRequired(
-                    from = input,
-                    path = JsPath.empty / "name",
+                    from = result,
                     using = stringReader,
                     context = context,
                     pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -74,20 +77,20 @@ class JsValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, json)
+            val result = reader.read(context, JsResultPath.Root, json)
 
             result.assertAsFailure(
-                JsPath.empty / "name" to listOf(JsonErrors.Validation.Strings.IsEmpty)
+                JsResultPath.Root / "name" to listOf(JsonErrors.Validation.Strings.IsEmpty)
             )
         }
 
         @Test
         fun `Testing of the extension-function 'validation' for JsReader (result is failure)`() {
             val json: JsValue = JsObject("name" to JsNull)
-            val reader = JsReader { context, input ->
+            val reader = JsReader { context, path, input ->
+                val result = input.lookup(path, JsPath.Root / "name")
                 readRequired(
-                    from = input,
-                    path = JsPath.empty / "name",
+                    from = result,
                     using = stringReader,
                     context = context,
                     pathMissingErrorBuilder = { JsonErrors.PathMissing },
@@ -95,10 +98,10 @@ class JsValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, json)
+            val result = reader.read(context, JsResultPath.Root, json)
 
             result.assertAsFailure(
-                JsPath.empty / "name" to listOf(
+                JsResultPath.Root / "name" to listOf(
                     JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
                 )
             )
@@ -110,33 +113,33 @@ class JsValidatorExtensionTest {
 
         @Test
         fun `Testing of the extension-function 'validation' for JsResult`() {
-            val result: JsResult<String> = JsResult.Success(path = JsPath.empty / "name", value = "user")
+            val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "user")
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsSuccess(path = JsPath.empty / "name", value = "user")
+            validated.assertAsSuccess(path = JsResultPath.Root / "name", value = "user")
         }
 
         @Test
         fun `Testing of the extension-function 'validation' for JsResult (error of validation)`() {
-            val result: JsResult<String> = JsResult.Success(path = JsPath.empty / "user", value = "")
+            val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "user", value = "")
 
             val validated = result.validation(isNotEmpty)
 
             validated.assertAsFailure(
-                JsPath.empty / "user" to listOf(JsonErrors.Validation.Strings.IsEmpty)
+                JsResultPath.Root / "user" to listOf(JsonErrors.Validation.Strings.IsEmpty)
             )
         }
 
         @Test
         fun `Testing of the extension-function 'validation' for JsResult (result is failure)`() {
             val result: JsResult<String> =
-                JsResult.Failure(path = JsPath.empty / "user", error = JsonErrors.PathMissing)
+                JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
 
             val validated = result.validation(isNotEmpty)
 
             validated.assertAsFailure(
-                JsPath.empty / "user" to listOf(JsonErrors.PathMissing)
+                JsResultPath.Root / "user" to listOf(JsonErrors.PathMissing)
             )
         }
     }

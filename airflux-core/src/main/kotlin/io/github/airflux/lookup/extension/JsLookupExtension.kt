@@ -4,13 +4,8 @@ import io.github.airflux.lookup.JsLookup
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
-import io.github.airflux.value.extension.lookup
 
 @Suppress("unused")
-
-operator fun JsValue.div(name: String): JsLookup = lookup(name)
-
-operator fun JsValue.div(idx: Int): JsLookup = lookup(idx)
 
 operator fun JsLookup.div(name: String): JsLookup = when (this) {
     is JsLookup.Defined -> lookup(byName = name)

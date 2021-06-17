@@ -1,9 +1,13 @@
 package io.github.airflux.value.extension
 
-import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.lookup.JsLookup
+import io.github.airflux.path.IdxPathElement
 import io.github.airflux.path.JsPath
+import io.github.airflux.path.JsPath.Identifiable.Companion.div
+import io.github.airflux.path.KeyPathElement
+import io.github.airflux.path.PathElement
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -14,193 +18,170 @@ import kotlin.test.assertEquals
 
 class JsValueExtensionTest {
 
+    @Test
+    fun `lookup in json by key`() {
+        val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
+
+        val value = json / "name"
+
+        value as JsLookup.Defined
+        assertEquals(USER_NAME_VALUE, (value.value as JsString).underlying)
+    }
+
+    @Test
+    fun `lookup in json by idx`() {
+        val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
+
+        val value = json / 0
+
+        value as JsLookup.Defined
+        assertEquals(USER_NAME_VALUE, (value.value as JsString).underlying)
+    }
+
     @Nested
-    inner class LookupByPath {
+    inner class LookupByPathElement {
 
-        @Test
-        fun `testing 'lookup' function (a property by name is found)`() {
-            val json: JsValue = JsObject(
-                "user" to JsObject(
-                    "name" to JsString(USER_NAME_VALUE)
-                )
-            )
-            val path: JsPath = JsPath.empty / "user" / "name"
+        @Nested
+        inner class KeyPathElement {
 
-            val result = json.lookup(path)
+            @Test
+            fun defined() {
+                val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
+                val pathElement: PathElement = KeyPathElement("name")
 
-            result as JsLookup.Defined
-            assertEquals(JsPath.empty / "user" / "name", result.path)
-            result.value as JsString
-            val value = result.value as JsString
-            assertEquals(USER_NAME_VALUE, value.underlying)
+                val result = json.lookup(JsResultPath.Root, pathElement)
+
+                result as JsLookup.Defined
+                assertEquals(JsResultPath.Root / "name", result.path)
+                result.value as JsString
+                val value = result.value as JsString
+                assertEquals(USER_NAME_VALUE, value.underlying)
+            }
+
+            @Test
+            fun `path missing`() {
+                val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
+                val pathElement: PathElement = KeyPathElement("user")
+
+                val result = json.lookup(JsResultPath.Root, pathElement)
+
+                result as JsLookup.Undefined.PathMissing
+                assertEquals(JsResultPath.Root / "user", result.path)
+            }
+
+            @Test
+            fun `invalid type`() {
+                val json: JsValue = JsString(USER_NAME_VALUE)
+                val pathElement: PathElement = KeyPathElement("user")
+
+                val result = json.lookup(JsResultPath.Root, pathElement)
+
+                result as JsLookup.Undefined.InvalidType
+                assertEquals(JsResultPath.Root, result.path)
+                assertEquals(JsValue.Type.OBJECT, result.expected)
+                assertEquals(JsValue.Type.STRING, result.actual)
+            }
         }
 
-        @Test
-        fun `testing 'lookup' function (a property by name is not found)`() {
-            val json: JsValue = JsObject(
-                "user" to JsObject(
-                    "name" to JsString(USER_NAME_VALUE)
-                )
-            )
-            val path: JsPath = JsPath.empty / "role" / "name"
+        @Nested
+        inner class IdxPathElement {
 
-            val result = json.lookup(path)
+            @Test
+            fun defined() {
+                val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
+                val pathElement: PathElement = IdxPathElement(0)
 
-            result as JsLookup.Undefined.PathMissing
-            assertEquals(JsPath.empty / "role" / "name", result.path)
-        }
+                val result = json.lookup(JsResultPath.Root, pathElement)
 
-        @Test
-        fun `testing 'lookup' function (a property by name is not found, node is invalid type)`() {
-            val json: JsValue = JsArray(
-                JsString(FIRST_PHONE_VALUE)
-            )
-            val path: JsPath = JsPath.empty / "phones" / 0 / "value"
+                result as JsLookup.Defined
+                assertEquals(JsResultPath.Root / 0, result.path)
+                result.value as JsString
+                val value = result.value as JsString
+                assertEquals(USER_NAME_VALUE, value.underlying)
+            }
 
-            val result = json.lookup(path)
+            @Test
+            fun `path missing`() {
+                val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
+                val pathElement: PathElement = IdxPathElement(1)
 
-            result as JsLookup.Undefined.InvalidType
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(JsValue.Type.OBJECT, result.expected)
-            assertEquals(JsValue.Type.ARRAY, result.actual)
-        }
+                val result = json.lookup(JsResultPath.Root, pathElement)
 
-        @Test
-        fun `testing 'lookup' function (a property by index is found)`() {
-            val json: JsValue = JsArray(
-                JsObject(
-                    "value" to JsString(FIRST_PHONE_VALUE)
-                )
-            )
-            val path: JsPath = JsPath.empty / 0 / "value"
+                result as JsLookup.Undefined.PathMissing
+                assertEquals(JsResultPath.Root / 1, result.path)
+            }
 
-            val result = json.lookup(path)
+            @Test
+            fun `invalid type`() {
+                val json: JsValue = JsString(USER_NAME_VALUE)
+                val pathElement: PathElement = IdxPathElement(0)
 
-            result as JsLookup.Defined
-            assertEquals(JsPath.empty / 0 / "value", result.path)
-            result.value as JsString
-            val value = result.value as JsString
-            assertEquals(FIRST_PHONE_VALUE, value.underlying)
-        }
+                val result = json.lookup(JsResultPath.Root, pathElement)
 
-        @Test
-        fun `testing 'lookup' function (a property by index is not found)`() {
-            val json: JsValue = JsArray(
-                JsObject(
-                    "value" to JsString(FIRST_PHONE_VALUE)
-                )
-            )
-            val path: JsPath = JsPath.empty / 1 / "value"
-
-            val result = json.lookup(path)
-
-            result as JsLookup.Undefined.PathMissing
-            assertEquals(JsPath.empty / 1 / "value", result.path)
-        }
-
-        @Test
-        fun `testing 'lookup' function (a property by index is not found, node is invalid type)`() {
-            val json: JsValue = JsObject(
-                "name" to JsString(USER_NAME_VALUE)
-            )
-            val path: JsPath = JsPath.empty / 0 / "name"
-
-            val result = json.lookup(path)
-
-            result as JsLookup.Undefined.InvalidType
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(JsValue.Type.ARRAY, result.expected)
-            assertEquals(JsValue.Type.OBJECT, result.actual)
+                result as JsLookup.Undefined.InvalidType
+                assertEquals(JsResultPath.Root, result.path)
+                assertEquals(JsValue.Type.ARRAY, result.expected)
+                assertEquals(JsValue.Type.STRING, result.actual)
+            }
         }
     }
 
     @Nested
-    inner class LookupByName {
+    inner class LookupByIdentifiable {
 
-        @Test
-        fun `testing 'lookup' function (a property by name is found)`() {
-            val json: JsValue = JsObject(
-                "name" to JsString(USER_NAME_VALUE)
-            )
+        @Nested
+        inner class Simple {
 
-            val result = json.lookup("name")
+            @Test
+            fun defined() {
+                val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
+                val attributePath = JsPath.Root / "name"
 
-            result as JsLookup.Defined
-            assertEquals(JsPath.empty / "name", result.path)
-            result.value as JsString
-            val value = result.value as JsString
-            assertEquals(USER_NAME_VALUE, value.underlying)
+                val result = json.lookup(JsResultPath.Root, attributePath)
+
+                result as JsLookup.Defined
+                assertEquals(JsResultPath.Root / "name", result.path)
+                result.value as JsString
+                val value = result.value as JsString
+                assertEquals(USER_NAME_VALUE, value.underlying)
+            }
         }
 
-        @Test
-        fun `testing 'lookup' function (a property by name is not found)`() {
-            val json: JsValue = JsObject(
-                "name" to JsString(USER_NAME_VALUE)
-            )
+        @Nested
+        inner class Composite {
 
-            val result = json.lookup("role")
+            @Test
+            fun defined() {
+                val json: JsValue = JsObject(
+                    "user" to JsObject(
+                        "name" to JsString(USER_NAME_VALUE)
+                    )
+                )
+                val attributePath = ("user" / "name") /*as JsLookupPath.Identifiable.Composite*/
 
-            result as JsLookup.Undefined.PathMissing
-            assertEquals(JsPath.empty / "role", result.path)
-        }
+                val result = json.lookup(JsResultPath.Root, attributePath)
 
-        @Test
-        fun `testing 'lookup' function (a property by name is not found, node is invalid type)`() {
-            val json: JsValue = JsArray(
-                JsString(FIRST_PHONE_VALUE)
-            )
+                result as JsLookup.Defined
+                assertEquals(JsResultPath.Root / "user" / "name", result.path)
+                result.value as JsString
+                val value = result.value as JsString
+                assertEquals(USER_NAME_VALUE, value.underlying)
+            }
 
-            val result = json.lookup("name")
+            @Test
+            fun undefined() {
+                val json: JsValue = JsObject(
+                    "user" to JsObject(
+                        "name" to JsString(USER_NAME_VALUE)
+                    )
+                )
+                val attributePath = ("user" / "phones" / 0) as JsPath.Identifiable.Composite
 
-            result as JsLookup.Undefined.InvalidType
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(JsValue.Type.OBJECT, result.expected)
-            assertEquals(JsValue.Type.ARRAY, result.actual)
-        }
-    }
+                val result = json.lookup(JsResultPath.Root, attributePath)
 
-    @Nested
-    inner class LookupByIndex {
-
-        @Test
-        fun `testing 'lookup' function (a property by idx is found)`() {
-            val json: JsValue = JsArray(
-                JsString(FIRST_PHONE_VALUE)
-            )
-
-            val result = json.lookup(0)
-
-            result as JsLookup.Defined
-            assertEquals(JsPath.empty / 0, result.path)
-            result.value as JsString
-            val value = result.value as JsString
-            assertEquals(FIRST_PHONE_VALUE, value.underlying)
-        }
-
-        @Test
-        fun `testing 'lookup' function (a property by idx is not found)`() {
-            val json: JsValue = JsArray(
-                JsString(FIRST_PHONE_VALUE)
-            )
-
-            val result = json.lookup(1)
-
-            result as JsLookup.Undefined.PathMissing
-            assertEquals(JsPath.empty / 1, result.path)
-        }
-
-        @Test
-        fun `testing 'lookup' function (node is invalid type)`() {
-            val json: JsValue = JsObject(
-                "name" to JsString(USER_NAME_VALUE)
-            )
-
-            val result = json.lookup(0)
-
-            result as JsLookup.Undefined.InvalidType
-            assertEquals(JsPath.empty, result.path)
-            assertEquals(JsValue.Type.ARRAY, result.expected)
-            assertEquals(JsValue.Type.OBJECT, result.actual)
+                result as JsLookup.Undefined
+                assertEquals(JsResultPath.Root / "user" / "phones", result.path)
+            }
         }
     }
 }

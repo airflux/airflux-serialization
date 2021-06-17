@@ -3,11 +3,12 @@ package io.github.airflux.lookup.extension
 import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.lookup.JsLookup
-import io.github.airflux.path.JsPath
+import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
+import io.github.airflux.value.extension.div
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -99,7 +100,7 @@ class JsLookupExtensionTest {
             @Test
             fun `Element by a key is found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsPath("user"),
+                    path = JsResultPath.Root / "user",
                     value = JsObject("name" to JsString(USER_NAME_VALUE))
                 )
 
@@ -113,7 +114,7 @@ class JsLookupExtensionTest {
             @Test
             fun `Element by a key is not found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsPath("user"),
+                    path = JsResultPath.Root / "user",
                     value = JsObject("name" to JsString(USER_NAME_VALUE))
                 )
 
@@ -126,7 +127,7 @@ class JsLookupExtensionTest {
             @Test
             fun `Element is invalid type`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsPath("user"),
+                    path = JsResultPath.Root / "user",
                     value = JsObject("name" to JsString(USER_NAME_VALUE))
                 )
 
@@ -140,7 +141,7 @@ class JsLookupExtensionTest {
 
             @Test
             fun `Element is undefined`() {
-                val undefined: JsLookup = JsLookup.Undefined.PathMissing(JsPath("user"))
+                val undefined: JsLookup = JsLookup.Undefined.PathMissing(JsResultPath.Root / "user")
 
                 val value = undefined / "phones"
 
@@ -154,7 +155,7 @@ class JsLookupExtensionTest {
             @Test
             fun `Element by an index is found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsPath("user"),
+                    path = JsResultPath.Root / "user",
                     value = JsObject("phones" to JsArray(JsString(FIRST_PHONE_VALUE)))
                 )
 
@@ -168,7 +169,7 @@ class JsLookupExtensionTest {
             @Test
             fun `Element by an index is not found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsPath("user"),
+                    path = JsResultPath.Root / "user",
                     value = JsObject("phones" to JsArray(JsString(FIRST_PHONE_VALUE)))
                 )
 
@@ -181,7 +182,7 @@ class JsLookupExtensionTest {
             @Test
             fun `Element is invalid type`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsPath("name"),
+                    path = JsResultPath.Root / "name",
                     value = JsString(USER_NAME_VALUE)
                 )
 
@@ -195,7 +196,7 @@ class JsLookupExtensionTest {
 
             @Test
             fun `Element is undefined`() {
-                val undefined: JsLookup = JsLookup.Undefined.PathMissing(JsPath("user"))
+                val undefined: JsLookup = JsLookup.Undefined.PathMissing(path = JsResultPath.Root / "user")
 
                 val value = undefined / 0
 

@@ -1,96 +1,57 @@
 package io.github.airflux.path
 
-import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.ObjectContract
-import io.github.airflux.path.JsPath.Companion.div
+import io.github.airflux.path.JsPath.Identifiable.Companion.div
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
 
 class JsPathTest {
-    companion object {
-        private const val KEY_PATH_ELEMENT_VALUE = "user"
-        private const val IDX_PATH_ELEMENT_VALUE = 10
-    }
 
     @Nested
     inner class CompanionObject {
-
-        @Test
-        fun `Testing 'repath' function in companion object`() {
-            val pathOfUser = JsPath("user")
-            val pathOfId = JsPath("id")
-            val failures = listOf(Pair(pathOfId, listOf(JsonErrors.PathMissing)))
-
-            val result = JsPath.repath(failures, pathOfUser)
-
-            assertEquals(1, result.size)
-            val failure = result[0]
-            assertEquals(JsPath.empty / "user" / "id", failure.first)
-
-            val errors = failure.second
-            assertEquals(1, errors.size)
-            val error = errors[0]
-            assertTrue(error is JsonErrors.PathMissing)
-        }
-
-        @Nested
-        inner class OperatorPlus {
-
-            @Test
-            fun `Testing operator 'plus'`() {
-                val target = JsPath.empty / "user"
-                val other = JsPath.empty / "id"
-
-                val path = target + other
-                assertEquals(listOf(KeyPathElement("user"), KeyPathElement("id")), path.elements)
-            }
-
-            @Test
-            fun `Testing operator 'plus' (target path is empty)`() {
-                val target = JsPath.empty
-                val other = JsPath.empty / "user"
-
-                val path = target + other
-
-                assertSame(path, other)
-            }
-
-            @Test
-            fun `Testing operator 'plus' (other path is empty)`() {
-                val target = JsPath.empty / "user"
-                val other = JsPath.empty
-
-                val path = target + other
-
-                assertSame(path, target)
-            }
-        }
 
         @Nested
         inner class OperatorDivForKey {
 
             @Test
-            fun `Testing operator 'div' (target path is not empty)`() {
-                val target = JsPath.empty / "user"
-
-                val path = target / "id"
-
-                assertEquals(
-                    expected = listOf(KeyPathElement("user"), KeyPathElement("id")),
-                    actual = path.elements
-                )
-            }
-
-            @Test
-            fun `Testing operator 'div' (target path is empty)`() {
-                val target = JsPath.empty
+            fun `Testing operator 'div' for Root`() {
+                val target = JsPath.Root
 
                 val path = target / "user"
 
-                assertEquals(expected = listOf(KeyPathElement("user")), actual = path.elements)
+                path as JsPath.Identifiable.Simple
+                assertContentEquals(expected = listOf(KeyPathElement("user")), actual = path)
+                assertEquals(expected = "#/user", actual = path.toString())
+            }
+
+            @Test
+            fun `Testing operator 'div' for Simple`() {
+                val target = (JsPath.Root / "user") as JsPath.Identifiable.Simple
+
+                val path = target / "id"
+
+                path as JsPath.Identifiable.Composite
+                assertContentEquals(expected = listOf(KeyPathElement("user"), KeyPathElement("id")), actual = path)
+                assertEquals(expected = "#/user/id", actual = path.toString())
+            }
+
+            @Test
+            fun `Testing operator 'div' for Composite`() {
+                val target = (JsPath.Root / "user" / "phones") as JsPath.Identifiable.Composite
+
+                val path = target / "work"
+
+                path as JsPath.Identifiable.Composite
+                assertContentEquals(
+                    expected = listOf(
+                        KeyPathElement("user"),
+                        KeyPathElement("phones"),
+                        KeyPathElement("work")
+                    ), actual = path
+                )
+                assertEquals(expected = "#/user/phones/work", actual = path.toString())
             }
         }
 
@@ -98,24 +59,42 @@ class JsPathTest {
         inner class OperatorDivForIdx {
 
             @Test
-            fun `Testing operator 'div' (target path is not empty)`() {
-                val target = JsPath.empty / "user"
+            fun `Testing operator 'div' for Root`() {
+                val target = JsPath.Root
 
                 val path = target / 0
 
-                assertEquals(
-                    expected = listOf(KeyPathElement("user"), IdxPathElement(0)),
-                    actual = path.elements
-                )
+                path as JsPath.Identifiable.Simple
+                assertContentEquals(expected = listOf(IdxPathElement(0)), actual = path)
+                assertEquals(expected = "#[0]", actual = path.toString())
             }
 
             @Test
-            fun `Testing operator 'div' (target path is empty)`() {
-                val target = JsPath.empty
+            fun `Testing operator 'div' for Simple`() {
+                val target = (JsPath.Root / "user") as JsPath.Identifiable.Simple
 
                 val path = target / 0
 
-                assertEquals(expected = listOf(IdxPathElement(0)), actual = path.elements)
+                path as JsPath.Identifiable.Composite
+                assertContentEquals(expected = listOf(KeyPathElement("user"), IdxPathElement(0)), actual = path)
+                assertEquals(expected = "#/user[0]", actual = path.toString())
+            }
+
+            @Test
+            fun `Testing operator 'div' for Composite`() {
+                val target = (JsPath.Root / "user" / "phones") as JsPath.Identifiable.Composite
+
+                val path = target / 0
+
+                path as JsPath.Identifiable.Composite
+                assertContentEquals(
+                    expected = listOf(
+                        KeyPathElement("user"),
+                        KeyPathElement("phones"),
+                        IdxPathElement(0)
+                    ), actual = path
+                )
+                assertEquals(expected = "#/user/phones[0]", actual = path.toString())
             }
         }
     }
@@ -124,43 +103,44 @@ class JsPathTest {
     inner class Constructors {
 
         @Test
-        fun `Testing the constructor of the JsPath class without parameters`() {
-            val path = JsPath.empty
+        fun `Testing the constructor of the JsLookupPath class with text parameter`() {
+            val path = JsPath.Root / "user"
 
-            assertTrue(path.elements.isEmpty())
+            path as JsPath.Identifiable.Simple
+            assertContentEquals(expected = listOf(KeyPathElement("user")), actual = path)
         }
 
         @Test
-        fun `Testing the constructor of the JsPath class with text parameter`() {
-            val path = JsPath(KEY_PATH_ELEMENT_VALUE)
+        fun `Testing the constructor of the JsLookupPath class with number parameter`() {
+            val path = JsPath.Root / 10
 
-            assertEquals(1, path.elements.size)
-            val element = path.elements[0] as KeyPathElement
-            assertEquals(KEY_PATH_ELEMENT_VALUE, element.key)
-        }
-
-        @Test
-        fun `Testing the constructor of the JsPath class with number parameter`() {
-            val path = JsPath(IDX_PATH_ELEMENT_VALUE)
-
-            assertEquals(1, path.elements.size)
-            val element = path.elements[0] as IdxPathElement
-            assertEquals(IDX_PATH_ELEMENT_VALUE, element.idx)
+            path as JsPath.Identifiable.Simple
+            assertContentEquals(expected = listOf(IdxPathElement(10)), actual = path)
         }
     }
 
     @Test
-    fun `Testing 'toString' function of the JsPath class`() {
-        ObjectContract.checkToString(JsPath.empty, "#")
-        ObjectContract.checkToString(JsPath.empty / "user" / "name", "#/user/name")
+    fun `Testing 'toString' function of the JsLookupPath class`() {
+        ObjectContract.checkToString(JsPath.Root, "#")
+        ObjectContract.checkToString(JsPath.Root / "user", "#/user")
+        ObjectContract.checkToString(JsPath.Root / "user" / "name", "#/user/name")
     }
 
     @Test
-    fun `Testing 'equals contract' of the JsPath class`() {
+    fun `Testing 'equals contract' of the JsLookupPath class (Simple)`() {
         ObjectContract.checkEqualsContract(
-            JsPath.empty / "user" / "name",
-            JsPath.empty / "user" / "name",
-            JsPath.empty / "user" / "phones"
+            JsPath.Root / "name",
+            JsPath.Root / "name",
+            JsPath.Root / "phones"
+        )
+    }
+
+    @Test
+    fun `Testing 'equals contract' of the JsLookupPath class (Composite)`() {
+        ObjectContract.checkEqualsContract(
+            JsPath.Root / "user" / "name",
+            JsPath.Root / "user" / "name",
+            JsPath.Root / "user" / "phones"
         )
     }
 
@@ -168,25 +148,17 @@ class JsPathTest {
     fun `Create a path by two text elements`() {
         val path = "user" / "name"
 
-        assertEquals(expected = 2, actual = path.elements.size)
-
-        val firstElement = path.elements[0] as KeyPathElement
-        assertEquals(expected = "user", actual = firstElement.key)
-
-        val secondElement = path.elements[1] as KeyPathElement
-        assertEquals(expected = "name", actual = secondElement.key)
+        path as JsPath.Identifiable.Composite
+        assertContentEquals(expected = listOf(KeyPathElement("user"), KeyPathElement("name")), actual = path)
+        assertEquals(expected = "#/user/name", actual = path.toString())
     }
 
     @Test
     fun `Create a path by text element and index element`() {
         val path = "phones" / 0
 
-        assertEquals(expected = 2, actual = path.elements.size)
-
-        val firstElement = path.elements[0] as KeyPathElement
-        assertEquals(expected = "phones", actual = firstElement.key)
-
-        val secondElement = path.elements[1] as IdxPathElement
-        assertEquals(expected = 0, actual = secondElement.idx)
+        path as JsPath.Identifiable.Composite
+        assertContentEquals(expected = listOf(KeyPathElement("phones"), IdxPathElement(0)), actual = path)
+        assertEquals(expected = "#/phones[0]", actual = path.toString())
     }
 }
