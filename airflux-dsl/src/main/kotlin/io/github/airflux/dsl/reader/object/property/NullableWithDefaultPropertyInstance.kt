@@ -17,7 +17,7 @@ import io.github.airflux.value.extension.lookup
 
 internal class NullableWithDefaultPropertyInstance<T : Any> private constructor(
     override val propertyPath: JsPath.Identifiable,
-    private val reader: JsReader<T?>
+    private var reader: JsReader<T?>
 ) : NullableWithDefaultProperty<T> {
 
     companion object {
@@ -37,20 +37,19 @@ internal class NullableWithDefaultPropertyInstance<T : Any> private constructor(
     override fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T?> =
         reader.read(context, path, input)
 
-    override fun <E : JsError> validation(validator: JsValidator<T?, E>): NullableWithDefaultPropertyInstance<T> =
-        NullableWithDefaultPropertyInstance(
-            propertyPath = this.propertyPath,
-            reader = { context, path, input ->
-                this.read(context, path, input).validation(context, validator)
-            }
-        )
+    override fun <E : JsError> validation(validator: JsValidator<T?, E>): NullableWithDefaultPropertyInstance<T> {
+        val previousReader = this.reader
+        reader = JsReader { context, path, input ->
+            previousReader.read(context, path, input).validation(context, validator)
+        }
+        return this
+    }
 
-    override fun filter(predicate: JsPredicate<T>): NullableWithDefaultPropertyInstance<T> =
-        NullableWithDefaultPropertyInstance(
-            propertyPath = this.propertyPath,
-            reader = { context, path, input ->
-                this.read(context, path, input)
-                    .filter(context, predicate)
-            }
-        )
+    override fun filter(predicate: JsPredicate<T>): NullableWithDefaultPropertyInstance<T> {
+        val previousReader = this.reader
+        reader = JsReader { context, path, input ->
+            previousReader.read(context, path, input).filter(context, predicate)
+        }
+        return this
+    }
 }

@@ -15,7 +15,7 @@ import io.github.airflux.value.extension.lookup
 
 internal class DefaultablePropertyInstance<T : Any> private constructor(
     override val propertyPath: JsPath.Identifiable,
-    private val reader: JsReader<T>
+    private var reader: JsReader<T>
 ) : DefaultableProperty<T> {
 
     companion object {
@@ -34,11 +34,11 @@ internal class DefaultablePropertyInstance<T : Any> private constructor(
     override fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T> =
         reader.read(context, path, input)
 
-    override fun <E : JsError> validation(validator: JsValidator<T, E>): DefaultablePropertyInstance<T> =
-        DefaultablePropertyInstance(
-            propertyPath = this.propertyPath,
-            reader = { context, path, input ->
-                this.read(context, path, input).validation(context, validator)
-            }
-        )
+    override fun <E : JsError> validation(validator: JsValidator<T, E>): DefaultablePropertyInstance<T> {
+        val previousReader = this.reader
+        reader = JsReader { context, path, input ->
+            previousReader.read(context, path, input).validation(context, validator)
+        }
+        return this
+    }
 }
