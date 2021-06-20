@@ -1,8 +1,19 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.property.DefaultableProperty
+import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsReaderPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.NullableProperty
+import io.github.airflux.dsl.reader.`object`.property.NullablePropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultProperty
+import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.OptionalProperty
+import io.github.airflux.dsl.reader.`object`.property.OptionalPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultProperty
+import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.RequiredProperty
+import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
 import io.github.airflux.dsl.reader.`object`.validator.ObjectValidatorInstances
 import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
 import io.github.airflux.path.JsPath
@@ -76,38 +87,28 @@ class ObjectReader(
             private val reader: JsReader<P>
         ) {
 
-            fun required(): JsReaderProperty.Required<P> =
-                JsReaderPropertyInstance.Required(
-                    attributePath,
-                    reader,
-                    pathMissingErrorBuilder,
-                    invalidTypeErrorBuilder
-                )
+            fun required(): RequiredProperty<P> =
+                RequiredPropertyInstance.of(attributePath, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P> =
-                JsReaderPropertyInstance.Defaultable(attributePath, reader, default, invalidTypeErrorBuilder)
+            fun defaultable(default: () -> P): DefaultableProperty<P> =
+                DefaultablePropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(): JsReaderProperty.Optional<P> =
-                JsReaderPropertyInstance.Optional(attributePath, reader, invalidTypeErrorBuilder)
+            fun optional(): OptionalProperty<P> =
+                OptionalPropertyInstance.of(attributePath, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P> =
-                JsReaderPropertyInstance.OptionalWithDefault(attributePath, reader, default, invalidTypeErrorBuilder)
+            fun optional(default: () -> P): OptionalWithDefaultProperty<P> =
+                OptionalWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(): JsReaderProperty.Nullable<P> =
-                JsReaderPropertyInstance.Nullable(
-                    attributePath,
-                    reader,
-                    pathMissingErrorBuilder,
-                    invalidTypeErrorBuilder
-                )
+            fun nullable(): NullableProperty<P> =
+                NullablePropertyInstance.of(attributePath, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P> =
-                JsReaderPropertyInstance.NullableWithDefault(attributePath, reader, default, invalidTypeErrorBuilder)
+            fun nullable(default: () -> P): NullableWithDefaultProperty<P> =
+                NullableWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
         }
     }

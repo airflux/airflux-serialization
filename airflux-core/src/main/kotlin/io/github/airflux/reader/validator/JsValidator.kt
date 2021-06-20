@@ -7,7 +7,6 @@ import io.github.airflux.reader.result.JsResultPath
 @Suppress("unused")
 fun interface JsValidator<in T, out E : JsError> {
 
-    //TODO remove path
     fun validation(context: JsReaderContext?, path: JsResultPath, value: T): JsValidationResult<E>
 
     infix fun or(other: JsValidator<@UnsafeVariance T, @UnsafeVariance E>): JsValidator<T, E> {
