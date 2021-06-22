@@ -9,7 +9,7 @@ import io.github.airflux.value.JsObject
 
 sealed interface JsObjectValidator {
 
-    interface Id<E : JsObjectValidator>
+    interface Id<T : JsObjectValidator>
 
     interface Identifier {
         val id: Id<*>
