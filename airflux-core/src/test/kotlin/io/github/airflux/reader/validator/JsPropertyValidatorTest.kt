@@ -31,18 +31,20 @@ class JsPropertyValidatorTest {
     )
     fun `Testing of the logical operator 'and' of a validator`(left: Boolean, right: Boolean) {
         val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
-            if (left) null else ValidationErrors.Error
+            if (left) emptyList() else listOf(ValidationErrors.Error)
         }
 
         val rightValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
-            if (right) null else ValidationErrors.Error
+            if (right) emptyList() else listOf(ValidationErrors.Error)
         }
 
         val composeValidator = leftValidator and rightValidator
         val error = composeValidator.validation(context, path, Unit)
-        assertEquals(expected = left && right, actual = error == null)
-        if (error != null)
-            assertTrue(error is ValidationErrors.Error)
+        assertEquals(expected = left && right, actual = error.isEmpty())
+        if (error.isNotEmpty()) {
+            assertEquals(1, error.size)
+            assertTrue(error[0] is ValidationErrors.Error)
+        }
     }
 
     @ParameterizedTest
@@ -58,23 +60,25 @@ class JsPropertyValidatorTest {
     fun `Testing of the logical operator 'or' of a validator`(left: Boolean, right: Boolean) {
         val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (left)
-                null
+                emptyList()
             else
-                ValidationErrors.Error
+                listOf(ValidationErrors.Error)
         }
 
         val rightValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (right)
-                null
+                emptyList()
             else
-                ValidationErrors.Error
+                listOf(ValidationErrors.Error)
         }
 
         val composeValidator = leftValidator or rightValidator
         val error = composeValidator.validation(context, path, Unit)
 
-        assertEquals(expected = left || right, actual = error == null)
-        if (error != null)
-            assertTrue(error is ValidationErrors.Error)
+        assertEquals(expected = left || right, actual = error.isEmpty())
+        if (error.isNotEmpty()) {
+            assertEquals(1, error.size)
+            assertTrue(error[0] is ValidationErrors.Error)
+        }
     }
 }

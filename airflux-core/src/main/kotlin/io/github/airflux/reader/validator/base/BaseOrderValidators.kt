@@ -13,7 +13,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value < expected) error(expected, value) else null
+            if (value < expected) listOf(error(expected, value)) else emptyList()
         }
 
     /**
@@ -23,7 +23,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value > expected) error(expected, value) else null
+            if (value > expected) listOf(error(expected, value)) else emptyList()
         }
 
     /**
@@ -33,7 +33,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value == expected) null else error(expected, value)
+            if (value == expected) emptyList() else listOf(error(expected, value))
         }
 
     /**
@@ -43,7 +43,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value != expected) null else error(expected, value)
+            if (value != expected) emptyList() else listOf(error(expected, value))
         }
 
     /**
@@ -53,7 +53,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value > expected) null else error(expected, value)
+            if (value > expected) emptyList() else listOf(error(expected, value))
         }
 
     /**
@@ -63,7 +63,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value >= expected) null else error(expected, value)
+            if (value >= expected) emptyList() else listOf(error(expected, value))
         }
 
     /**
@@ -73,7 +73,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value < expected) null else error(expected, value)
+            if (value < expected) emptyList() else listOf(error(expected, value))
         }
 
     /**
@@ -83,6 +83,6 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value <= expected) null else error(expected, value)
+            if (value <= expected) emptyList() else listOf(error(expected, value))
         }
 }

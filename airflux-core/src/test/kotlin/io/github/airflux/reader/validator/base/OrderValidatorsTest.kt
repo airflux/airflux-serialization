@@ -6,7 +6,7 @@ import io.github.airflux.reader.result.JsResultPath
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class OrderValidatorsTest {
 
@@ -89,9 +89,10 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = minBasicValidator(minimum)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Min
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Min
             assertEquals(minimum, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -102,9 +103,9 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = minBasicValidator(minimum)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -113,9 +114,9 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = minBasicValidator(minimum)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
     }
 
@@ -128,9 +129,9 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = maxBasicValidator(maximum)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -139,9 +140,9 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = maxBasicValidator(maximum)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -150,9 +151,10 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = maxBasicValidator(maximum)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Max
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Max
             assertEquals(maximum, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -167,9 +169,10 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = eqBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Eq
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Eq
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -180,9 +183,9 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = eqBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -191,9 +194,10 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = eqBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Eq
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Eq
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -208,9 +212,9 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = neBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -219,9 +223,10 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = neBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Ne
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Ne
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -232,9 +237,9 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = neBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
     }
 
@@ -247,9 +252,10 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = gtBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Gt
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Gt
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -260,9 +266,10 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = gtBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Gt
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Gt
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -273,9 +280,9 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = gtBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
     }
 
@@ -288,9 +295,10 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = geBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Ge
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Ge
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -301,9 +309,9 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = geBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -312,9 +320,9 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = geBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
     }
 
@@ -327,9 +335,9 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = ltBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -338,9 +346,10 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = ltBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Lt
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Lt
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -351,9 +360,10 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = ltBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Lt
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Lt
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }
@@ -368,9 +378,9 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = leBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -379,9 +389,9 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = leBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -390,9 +400,10 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = leBasicValidator(expected)
 
-            val error = validator.validation(context, path, actual)
+            val errors = validator.validation(context, path, actual)
 
-            error as JsonErrors.Validation.Numbers.Le
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Numbers.Le
             assertEquals(expected, error.expected)
             assertEquals(actual, error.actual)
         }

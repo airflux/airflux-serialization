@@ -21,8 +21,8 @@ fun <T, E : JsError> JsResult<T>.validation(
 ): JsResult<T> =
     when (this) {
         is JsResult.Success -> {
-            val error = validator.validation(context, this.path, this.value)
-            if (error != null) JsResult.Failure(path = this.path, error = error) else this
+            val errors = validator.validation(context, this.path, this.value)
+            if (errors.isNotEmpty()) JsResult.Failure(path = this.path, errors = errors) else this
         }
         is JsResult.Failure -> this
     }

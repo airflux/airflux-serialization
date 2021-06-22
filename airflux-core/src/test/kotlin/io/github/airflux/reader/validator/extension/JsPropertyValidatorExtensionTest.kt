@@ -23,7 +23,7 @@ class JsPropertyValidatorExtensionTest {
     companion object {
         private val context = JsReaderContext()
         private val isNotEmpty = JsPropertyValidator<String, JsonErrors.Validation> { _, _, value ->
-            if (value.isNotEmpty()) null else JsonErrors.Validation.Strings.IsEmpty
+            if (value.isNotEmpty()) emptyList() else listOf(JsonErrors.Validation.Strings.IsEmpty)
         }
 
         val stringReader: JsReader<String> = JsReader { _, path, input ->

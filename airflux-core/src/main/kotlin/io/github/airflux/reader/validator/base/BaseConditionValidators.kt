@@ -8,5 +8,5 @@ fun <T, E : JsError> applyIfPresent(validator: JsPropertyValidator<T, E>) = appl
 fun <T, E> applyIfNotNull(validator: JsPropertyValidator<T, E>)
     where E : JsError =
     JsPropertyValidator<T?, E> { context, path, value ->
-        if (value != null) validator.validation(context, path, value) else null
+        if (value != null) validator.validation(context, path, value) else emptyList()
     }

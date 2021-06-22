@@ -6,7 +6,7 @@ import io.github.airflux.reader.result.JsResultPath
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class ArrayValidatorsTest {
 
@@ -54,9 +54,10 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val error = validator.validation(context, path, emptyList())
+            val errors = validator.validation(context, path, emptyList())
 
-            error as JsonErrors.Validation.Arrays.MinItems
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Arrays.MinItems
             assertEquals(minimum, error.expected)
             assertEquals(0, error.actual)
         }
@@ -66,9 +67,10 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val error = validator.validation(context, path, listOf("A"))
+            val errors = validator.validation(context, path, listOf("A"))
 
-            error as JsonErrors.Validation.Arrays.MinItems
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Arrays.MinItems
             assertEquals(minimum, error.expected)
             assertEquals(1, error.actual)
         }
@@ -78,9 +80,9 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val error = validator.validation(context, path, listOf("A", "B"))
+            val errors = validator.validation(context, path, listOf("A", "B"))
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -88,9 +90,9 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val error = validator.validation(context, path, listOf("A", "B", "C"))
+            val errors = validator.validation(context, path, listOf("A", "B", "C"))
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
     }
 
@@ -102,9 +104,9 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val error = validator.validation(context, path, emptyList())
+            val errors = validator.validation(context, path, emptyList())
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -112,9 +114,9 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val error = validator.validation(context, path, listOf("A"))
+            val errors = validator.validation(context, path, listOf("A"))
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -122,9 +124,9 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val error = validator.validation(context, path, listOf("A", "B"))
+            val errors = validator.validation(context, path, listOf("A", "B"))
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
@@ -132,9 +134,10 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val error = validator.validation(context, path, listOf("A", "B", "C"))
+            val errors = validator.validation(context, path, listOf("A", "B", "C"))
 
-            error as JsonErrors.Validation.Arrays.MaxItems
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Arrays.MaxItems
             assertEquals(maximum, error.expected)
             assertEquals(3, error.actual)
         }
@@ -147,27 +150,28 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection is empty)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val error = validator.validation(context, path, emptyList())
+            val errors = validator.validation(context, path, emptyList())
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection contains only unique values)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val error = validator.validation(context, path, listOf("A", "B"))
+            val errors = validator.validation(context, path, listOf("A", "B"))
 
-            assertNull(error)
+            assertTrue(errors.isEmpty())
         }
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection contains duplicates)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val error = validator.validation(context, path, listOf("A", "B", "A", "C"))
+            val errors = validator.validation(context, path, listOf("A", "B", "A", "C"))
 
-            error as JsonErrors.Validation.Arrays.Unique<*>
+            assertEquals(1, errors.size)
+            val error = errors[0] as JsonErrors.Validation.Arrays.Unique<*>
             assertEquals(2, error.index)
             assertEquals("A", error.value)
         }

@@ -10,14 +10,14 @@ object BaseArrayValidators {
         where C : Collection<T>,
               E : JsError =
         JsPropertyValidator { _, _, values ->
-            if (values.size < expected) error(expected, values.size) else null
+            if (values.size < expected) listOf(error(expected, values.size)) else emptyList()
         }
 
     fun <T, C, E> maxItems(expected: Int, error: (expected: Int, actual: Int) -> E): JsPropertyValidator<C, E>
         where C : Collection<T>,
               E : JsError =
         JsPropertyValidator { _, _, values ->
-            if (values.size > expected) error(expected, values.size) else null
+            if (values.size > expected) listOf(error(expected, values.size)) else emptyList()
         }
 
     fun <T, K, E> isUnique(
@@ -29,8 +29,8 @@ object BaseArrayValidators {
             val unique = mutableSetOf<K>()
             values.forEachIndexed { index, item ->
                 val key = keySelector(item)
-                if (!unique.add(key)) return@JsPropertyValidator error(index, key)
+                if (!unique.add(key)) return@JsPropertyValidator listOf(error(index, key))
             }
-            null
+            emptyList()
         }
 }
