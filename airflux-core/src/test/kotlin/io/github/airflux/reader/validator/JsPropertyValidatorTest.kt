@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class JsValidatorTest {
+class JsPropertyValidatorTest {
 
     private sealed class ValidationErrors : JsError {
         object Error : ValidationErrors()
@@ -30,14 +30,14 @@ class JsValidatorTest {
         delimiter = ':'
     )
     fun `Testing of the logical operator 'and' of a validator`(left: Boolean, right: Boolean) {
-        val leftValidator = JsValidator<Unit, ValidationErrors> { _, _, _ ->
+        val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (left)
                 JsValidationResult.Success
             else
                 JsValidationResult.Failure(ValidationErrors.Error)
         }
 
-        val rightValidator = JsValidator<Unit, ValidationErrors> { _, _, _ ->
+        val rightValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (right)
                 JsValidationResult.Success
             else
@@ -62,14 +62,14 @@ class JsValidatorTest {
         delimiter = ':'
     )
     fun `Testing of the logical operator 'or' of a validator`(left: Boolean, right: Boolean) {
-        val leftValidator = JsValidator<Unit, ValidationErrors> { _, _, _ ->
+        val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (left)
                 JsValidationResult.Success
             else
                 JsValidationResult.Failure(ValidationErrors.Error)
         }
 
-        val rightValidator = JsValidator<Unit, ValidationErrors> { _, _, _ ->
+        val rightValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (right)
                 JsValidationResult.Success
             else

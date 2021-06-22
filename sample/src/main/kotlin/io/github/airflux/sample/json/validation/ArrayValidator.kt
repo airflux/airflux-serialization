@@ -1,6 +1,6 @@
 package io.github.airflux.sample.json.validation
 
-import io.github.airflux.reader.validator.JsValidator
+import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.base.BaseArrayValidators
 import io.github.airflux.sample.json.error.JsonErrors
 
@@ -18,7 +18,7 @@ object ArrayValidator {
             error = { expected, actual -> JsonErrors.Validation.Arrays.MaxItems(expected = expected, actual = actual) }
         )
 
-    fun <T, K> isUnique(keySelector: (T) -> K): JsValidator<List<T>, JsonErrors.Validation.Arrays> =
+    fun <T, K> isUnique(keySelector: (T) -> K): JsPropertyValidator<List<T>, JsonErrors.Validation.Arrays> =
         BaseArrayValidators.isUnique(
             keySelector = keySelector,
             error = { index, value: K -> JsonErrors.Validation.Arrays.Unique(index = index, value = value) }

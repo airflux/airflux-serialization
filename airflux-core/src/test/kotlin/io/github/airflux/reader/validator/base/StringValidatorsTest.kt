@@ -3,8 +3,8 @@ package io.github.airflux.reader.validator.base
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.JsValidationResult
-import io.github.airflux.reader.validator.JsValidator
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,10 +33,10 @@ class StringValidatorsTest {
                 }
             )
 
-        private val isNotEmptyValidator: JsValidator<String, JsonErrors.Validation> =
+        private val isNotEmptyValidator: JsPropertyValidator<String, JsonErrors.Validation> =
             BaseStringValidators.isNotEmpty { JsonErrors.Validation.Strings.IsEmpty }
 
-        private val isNotBlankValidator: JsValidator<String, JsonErrors.Validation> =
+        private val isNotBlankValidator: JsPropertyValidator<String, JsonErrors.Validation> =
             BaseStringValidators.isNotBlank { JsonErrors.Validation.Strings.IsBlank }
 
         private fun patternBasicValidator(pattern: Regex) =

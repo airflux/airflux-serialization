@@ -9,8 +9,8 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.JsValidationResult
-import io.github.airflux.reader.validator.JsValidator
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -19,11 +19,11 @@ import io.github.airflux.value.extension.lookup
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 
-class JsValidatorExtensionTest {
+class JsPropertyValidatorExtensionTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val isNotEmpty = JsValidator<String, JsonErrors.Validation> { _, _, value ->
+        private val isNotEmpty = JsPropertyValidator<String, JsonErrors.Validation> { _, _, value ->
             if (value.isNotEmpty())
                 JsValidationResult.Success
             else

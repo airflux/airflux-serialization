@@ -3,8 +3,8 @@ package io.github.airflux.reader.validator.base//
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.JsValidationResult
-import io.github.airflux.reader.validator.JsValidator
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -14,12 +14,13 @@ class ConditionValidatorsTest {
         private val context = JsReaderContext()
         private val path = JsResultPath.Root
 
-        private val isNotEmpty: JsValidator<String, JsonErrors.Validation.Strings> = JsValidator { _, _, value ->
-            if (value.isNotEmpty())
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(JsonErrors.Validation.Strings.IsEmpty)
-        }
+        private val isNotEmpty: JsPropertyValidator<String, JsonErrors.Validation.Strings> =
+            JsPropertyValidator { _, _, value ->
+                if (value.isNotEmpty())
+                    JsValidationResult.Success
+                else
+                    JsValidationResult.Failure(JsonErrors.Validation.Strings.IsEmpty)
+            }
 
         private val validator = applyIfNotNull(isNotEmpty)
     }
