@@ -2,7 +2,7 @@ package io.github.airflux.dsl.reader.`object`.validator.base
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.path.IdxPathElement
 import io.github.airflux.path.KeyPathElement
 import io.github.airflux.reader.context.JsReaderContext
@@ -10,15 +10,15 @@ import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
 class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
-    ObjectValidator.Identifier,
-    ObjectValidator.Before.Builder {
+    JsObjectValidator.Identifier,
+    JsObjectValidator.Before.Builder {
 
     override val id = AdditionalProperties
 
     override fun build(
         configuration: ObjectReaderConfiguration,
         properties: List<JsReaderProperty<*>>
-    ): ObjectValidator.Before = mutableSetOf<String>()
+    ): JsObjectValidator.Before = mutableSetOf<String>()
         .apply {
             properties.forEach { property ->
                 property.propertyPath
@@ -33,7 +33,7 @@ class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
         }
         .let { Validator(it, errorBuilder) }
 
-    private class Validator(val names: Set<String>, val errorBuilder: ErrorBuilder) : ObjectValidator.Before {
+    private class Validator(val names: Set<String>, val errorBuilder: ErrorBuilder) : JsObjectValidator.Before {
 
         override fun validation(
             configuration: ObjectReaderConfiguration,
@@ -61,5 +61,5 @@ class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
         fun build(properties: List<String>): JsError
     }
 
-    companion object Id : ObjectValidator.Id<Validator>
+    companion object Id : JsObjectValidator.Id<Validator>
 }

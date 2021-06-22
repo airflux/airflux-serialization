@@ -3,28 +3,28 @@ package io.github.airflux.dsl.reader.`object`.validator.base
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidator
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-class MaxProperties(private val errorBuilder: ErrorBuilder) : ObjectValidator.Identifier {
+class MaxProperties(private val errorBuilder: ErrorBuilder) : JsObjectValidator.Identifier {
 
     override val id = MaxProperties
 
-    operator fun invoke(min: Int): ObjectValidator.After.Builder = Builder(min)
+    operator fun invoke(min: Int): JsObjectValidator.After.Builder = Builder(min)
 
-    private inner class Builder(val max: Int) : ObjectValidator.After.Builder {
+    private inner class Builder(val max: Int) : JsObjectValidator.After.Builder {
 
-        override val id: ObjectValidator.Id<*> = MaxProperties
+        override val id: JsObjectValidator.Id<*> = MaxProperties
 
         override fun build(
             configuration: ObjectReaderConfiguration,
             properties: List<JsReaderProperty<*>>
-        ): ObjectValidator.After = Validator(max, errorBuilder)
+        ): JsObjectValidator.After = Validator(max, errorBuilder)
     }
 
-    private class Validator(val value: Int, val errorBuilder: ErrorBuilder) : ObjectValidator.After {
+    private class Validator(val value: Int, val errorBuilder: ErrorBuilder) : JsObjectValidator.After {
 
         override fun validation(
             configuration: ObjectReaderConfiguration,
@@ -43,5 +43,5 @@ class MaxProperties(private val errorBuilder: ErrorBuilder) : ObjectValidator.Id
         fun build(expected: Int, actual: Int): JsError
     }
 
-    companion object Id : ObjectValidator.Id<Validator>
+    companion object Id : JsObjectValidator.Id<Validator>
 }

@@ -3,7 +3,7 @@ package io.github.airflux.sample.dto.reader.dsl.base
 import io.github.airflux.dsl.reader.`object`.ObjectReader
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
-import io.github.airflux.dsl.reader.`object`.validator.ObjectValidators
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.sample.dto.reader.base.ErrorBuilder
@@ -16,7 +16,7 @@ private val DefaultObjectReaderConfig = ObjectReaderConfiguration.build {
     failFast = true
 }
 
-private val DefaultObjectValidators = ObjectValidators.build {
+private val DefaultObjectValidators = JsObjectValidators.build {
     +additionalProperties
     -additionalProperties
 
