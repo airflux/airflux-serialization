@@ -10,7 +10,6 @@ import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.reader.validator.JsValidationResult
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -24,10 +23,7 @@ class JsPropertyValidatorExtensionTest {
     companion object {
         private val context = JsReaderContext()
         private val isNotEmpty = JsPropertyValidator<String, JsonErrors.Validation> { _, _, value ->
-            if (value.isNotEmpty())
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(JsonErrors.Validation.Strings.IsEmpty)
+            if (value.isNotEmpty()) null else JsonErrors.Validation.Strings.IsEmpty
         }
 
         val stringReader: JsReader<String> = JsReader { _, path, input ->
@@ -79,9 +75,7 @@ class JsPropertyValidatorExtensionTest {
 
             val result = reader.read(context, JsResultPath.Root, json)
 
-            result.assertAsFailure(
-                JsResultPath.Root / "name" to listOf(JsonErrors.Validation.Strings.IsEmpty)
-            )
+            result.assertAsFailure(JsResultPath.Root / "name" to listOf(JsonErrors.Validation.Strings.IsEmpty))
         }
 
         @Test
@@ -126,9 +120,7 @@ class JsPropertyValidatorExtensionTest {
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsFailure(
-                JsResultPath.Root / "user" to listOf(JsonErrors.Validation.Strings.IsEmpty)
-            )
+            validated.assertAsFailure(JsResultPath.Root / "user" to listOf(JsonErrors.Validation.Strings.IsEmpty))
         }
 
         @Test
@@ -138,9 +130,7 @@ class JsPropertyValidatorExtensionTest {
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsFailure(
-                JsResultPath.Root / "user" to listOf(JsonErrors.PathMissing)
-            )
+            validated.assertAsFailure(JsResultPath.Root / "user" to listOf(JsonErrors.PathMissing))
         }
     }
 }

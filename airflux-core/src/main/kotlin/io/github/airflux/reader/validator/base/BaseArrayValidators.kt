@@ -2,7 +2,6 @@ package io.github.airflux.reader.validator.base
 
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.reader.validator.JsValidationResult
 
 @Suppress("unused")
 object BaseArrayValidators {
@@ -11,20 +10,14 @@ object BaseArrayValidators {
         where C : Collection<T>,
               E : JsError =
         JsPropertyValidator { _, _, values ->
-            if (values.size < expected)
-                JsValidationResult.Failure(error(expected, values.size))
-            else
-                JsValidationResult.Success
+            if (values.size < expected) error(expected, values.size) else null
         }
 
     fun <T, C, E> maxItems(expected: Int, error: (expected: Int, actual: Int) -> E): JsPropertyValidator<C, E>
         where C : Collection<T>,
               E : JsError =
         JsPropertyValidator { _, _, values ->
-            if (values.size > expected)
-                JsValidationResult.Failure(error(expected, values.size))
-            else
-                JsValidationResult.Success
+            if (values.size > expected) error(expected, values.size) else null
         }
 
     fun <T, K, E> isUnique(
@@ -36,9 +29,8 @@ object BaseArrayValidators {
             val unique = mutableSetOf<K>()
             values.forEachIndexed { index, item ->
                 val key = keySelector(item)
-                if (!unique.add(key))
-                    return@JsPropertyValidator JsValidationResult.Failure(error(index, key))
+                if (!unique.add(key)) return@JsPropertyValidator error(index, key)
             }
-            JsValidationResult.Success
+            null
         }
 }

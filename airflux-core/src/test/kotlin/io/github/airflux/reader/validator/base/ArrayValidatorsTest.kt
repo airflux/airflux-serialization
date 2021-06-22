@@ -3,10 +3,10 @@ package io.github.airflux.reader.validator.base
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResultPath
-import io.github.airflux.reader.validator.JsValidationResult
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class ArrayValidatorsTest {
 
@@ -54,12 +54,11 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(context, path, emptyList())
+            val error = validator.validation(context, path, emptyList())
 
-            result as JsValidationResult.Failure
-            val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
-            assertEquals(minimum, reason.expected)
-            assertEquals(0, reason.actual)
+            error as JsonErrors.Validation.Arrays.MinItems
+            assertEquals(minimum, error.expected)
+            assertEquals(0, error.actual)
         }
 
         @Test
@@ -67,12 +66,11 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(context, path, listOf("A"))
+            val error = validator.validation(context, path, listOf("A"))
 
-            result as JsValidationResult.Failure
-            val reason = result.reason as JsonErrors.Validation.Arrays.MinItems
-            assertEquals(minimum, reason.expected)
-            assertEquals(1, reason.actual)
+            error as JsonErrors.Validation.Arrays.MinItems
+            assertEquals(minimum, error.expected)
+            assertEquals(1, error.actual)
         }
 
         @Test
@@ -80,9 +78,9 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(context, path, listOf("A", "B"))
+            val error = validator.validation(context, path, listOf("A", "B"))
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
 
         @Test
@@ -90,9 +88,9 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val result = validator.validation(context, path, listOf("A", "B", "C"))
+            val error = validator.validation(context, path, listOf("A", "B", "C"))
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
     }
 
@@ -104,9 +102,9 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(context, path, emptyList())
+            val error = validator.validation(context, path, emptyList())
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
 
         @Test
@@ -114,9 +112,9 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(context, path, listOf("A"))
+            val error = validator.validation(context, path, listOf("A"))
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
 
         @Test
@@ -124,9 +122,9 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(context, path, listOf("A", "B"))
+            val error = validator.validation(context, path, listOf("A", "B"))
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
 
         @Test
@@ -134,12 +132,11 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val result = validator.validation(context, path, listOf("A", "B", "C"))
+            val error = validator.validation(context, path, listOf("A", "B", "C"))
 
-            result as JsValidationResult.Failure
-            val reason = result.reason as JsonErrors.Validation.Arrays.MaxItems
-            assertEquals(maximum, reason.expected)
-            assertEquals(3, reason.actual)
+            error as JsonErrors.Validation.Arrays.MaxItems
+            assertEquals(maximum, error.expected)
+            assertEquals(3, error.actual)
         }
     }
 
@@ -150,30 +147,29 @@ class ArrayValidatorsTest {
         fun `Testing basic validator of the 'isUnique' (a collection is empty)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(context, path, emptyList())
+            val error = validator.validation(context, path, emptyList())
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection contains only unique values)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(context, path, listOf("A", "B"))
+            val error = validator.validation(context, path, listOf("A", "B"))
 
-            result as JsValidationResult.Success
+            assertNull(error)
         }
 
         @Test
         fun `Testing basic validator of the 'isUnique' (a collection contains duplicates)`() {
             val validator = isUniqueBasicValidator<String, String> { it }
 
-            val result = validator.validation(context, path, listOf("A", "B", "A", "C"))
+            val error = validator.validation(context, path, listOf("A", "B", "A", "C"))
 
-            result as JsValidationResult.Failure
-            val reason = result.reason as JsonErrors.Validation.Arrays.Unique<*>
-            assertEquals(2, reason.index)
-            assertEquals("A", reason.value)
+            error as JsonErrors.Validation.Arrays.Unique<*>
+            assertEquals(2, error.index)
+            assertEquals("A", error.value)
         }
     }
 }

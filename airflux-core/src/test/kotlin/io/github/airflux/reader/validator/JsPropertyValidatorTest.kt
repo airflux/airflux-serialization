@@ -31,24 +31,18 @@ class JsPropertyValidatorTest {
     )
     fun `Testing of the logical operator 'and' of a validator`(left: Boolean, right: Boolean) {
         val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
-            if (left)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(ValidationErrors.Error)
+            if (left) null else ValidationErrors.Error
         }
 
         val rightValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
-            if (right)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(ValidationErrors.Error)
+            if (right) null else ValidationErrors.Error
         }
 
         val composeValidator = leftValidator and rightValidator
-        val validationResult = composeValidator.validation(context, path, Unit)
-        assertEquals(expected = left && right, actual = validationResult is JsValidationResult.Success)
-        if (validationResult is JsValidationResult.Failure)
-            assertTrue(validationResult.reason is ValidationErrors.Error)
+        val error = composeValidator.validation(context, path, Unit)
+        assertEquals(expected = left && right, actual = error == null)
+        if (error != null)
+            assertTrue(error is ValidationErrors.Error)
     }
 
     @ParameterizedTest
@@ -64,23 +58,23 @@ class JsPropertyValidatorTest {
     fun `Testing of the logical operator 'or' of a validator`(left: Boolean, right: Boolean) {
         val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (left)
-                JsValidationResult.Success
+                null
             else
-                JsValidationResult.Failure(ValidationErrors.Error)
+                ValidationErrors.Error
         }
 
         val rightValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (right)
-                JsValidationResult.Success
+                null
             else
-                JsValidationResult.Failure(ValidationErrors.Error)
+                ValidationErrors.Error
         }
 
         val composeValidator = leftValidator or rightValidator
-        val validationResult = composeValidator.validation(context, path, Unit)
+        val error = composeValidator.validation(context, path, Unit)
 
-        assertEquals(expected = left || right, actual = validationResult is JsValidationResult.Success)
-        if (validationResult is JsValidationResult.Failure)
-            assertTrue(validationResult.reason is ValidationErrors.Error)
+        assertEquals(expected = left || right, actual = error == null)
+        if (error != null)
+            assertTrue(error is ValidationErrors.Error)
     }
 }

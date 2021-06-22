@@ -5,7 +5,6 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.reader.validator.JsValidationResult
 
 infix fun <T, E : JsError> JsReader<T>.validation(validator: JsPropertyValidator<T, E>): JsReader<T> =
     JsReader { context, path, input ->
@@ -21,9 +20,9 @@ fun <T, E : JsError> JsResult<T>.validation(
     validator: JsPropertyValidator<T, E>
 ): JsResult<T> =
     when (this) {
-        is JsResult.Success -> when (val validated = validator.validation(context, this.path, this.value)) {
-            is JsValidationResult.Success -> this
-            is JsValidationResult.Failure -> JsResult.Failure(path = this.path, error = validated.reason)
+        is JsResult.Success -> {
+            val error = validator.validation(context, this.path, this.value)
+            if (error != null) JsResult.Failure(path = this.path, error = error) else this
         }
         is JsResult.Failure -> this
     }

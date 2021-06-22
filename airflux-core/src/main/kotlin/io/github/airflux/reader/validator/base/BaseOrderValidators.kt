@@ -2,7 +2,6 @@ package io.github.airflux.reader.validator.base
 
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.reader.validator.JsValidationResult
 
 @Suppress("unused")
 object BaseOrderValidators {
@@ -14,10 +13,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value < expected)
-                JsValidationResult.Failure(error(expected, value))
-            else
-                JsValidationResult.Success
+            if (value < expected) error(expected, value) else null
         }
 
     /**
@@ -27,10 +23,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value > expected)
-                JsValidationResult.Failure(error(expected, value))
-            else
-                JsValidationResult.Success
+            if (value > expected) error(expected, value) else null
         }
 
     /**
@@ -40,10 +33,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value == expected)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(error(expected, value))
+            if (value == expected) null else error(expected, value)
         }
 
     /**
@@ -53,10 +43,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value != expected)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(error(expected, value))
+            if (value != expected) null else error(expected, value)
         }
 
     /**
@@ -66,10 +53,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value > expected)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(error(expected, value))
+            if (value > expected) null else error(expected, value)
         }
 
     /**
@@ -79,10 +63,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value >= expected)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(error(expected, value))
+            if (value >= expected) null else error(expected, value)
         }
 
     /**
@@ -92,10 +73,7 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value < expected)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(error(expected, value))
+            if (value < expected) null else error(expected, value)
         }
 
     /**
@@ -105,9 +83,6 @@ object BaseOrderValidators {
         where T : Comparable<T>,
               E : JsError =
         JsPropertyValidator { _, _, value ->
-            if (value <= expected)
-                JsValidationResult.Success
-            else
-                JsValidationResult.Failure(error(expected, value))
+            if (value <= expected) null else error(expected, value)
         }
 }
