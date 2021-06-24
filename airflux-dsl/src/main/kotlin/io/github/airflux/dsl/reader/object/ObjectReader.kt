@@ -21,13 +21,13 @@ import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.error.PathMissingErrorBuilder
-import io.github.airflux.reader.extension.readAsObject
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.result.asFailure
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
+import io.github.airflux.value.extension.readAsObject
 
 fun <T : Any> JsValue.deserialization(context: JsReaderContext? = null, reader: JsReader<T>): JsResult<T> =
     reader.read(context, JsResultPath.Root, this)

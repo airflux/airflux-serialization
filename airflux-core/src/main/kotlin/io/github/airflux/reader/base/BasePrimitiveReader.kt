@@ -3,11 +3,11 @@ package io.github.airflux.reader.base
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.error.ValueCastErrorBuilder
-import io.github.airflux.reader.extension.readAsBoolean
-import io.github.airflux.reader.extension.readAsNumber
-import io.github.airflux.reader.extension.readAsString
 import io.github.airflux.reader.result.asFailure
 import io.github.airflux.reader.result.asSuccess
+import io.github.airflux.value.extension.readAsBoolean
+import io.github.airflux.value.extension.readAsNumber
+import io.github.airflux.value.extension.readAsString
 import java.math.BigDecimal
 
 @Suppress("unused")
