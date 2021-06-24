@@ -18,8 +18,12 @@ object ArrayValidator {
             error = { expected, actual -> JsonErrors.Validation.Arrays.MaxItems(expected = expected, actual = actual) }
         )
 
-    fun <T, K> isUnique(keySelector: (T) -> K): JsPropertyValidator<List<T>, JsonErrors.Validation.Arrays> =
+    fun <T, K> isUnique(
+        failFast: Boolean = true,
+        keySelector: (T) -> K
+    ): JsPropertyValidator<List<T>, JsonErrors.Validation.Arrays> =
         BaseArrayValidators.isUnique(
+            failFast = failFast,
             keySelector = keySelector,
             error = { index, value: K -> JsonErrors.Validation.Arrays.Unique(index = index, value = value) }
         )

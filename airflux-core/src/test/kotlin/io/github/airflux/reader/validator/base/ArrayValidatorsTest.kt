@@ -37,8 +37,9 @@ class ArrayValidatorsTest {
                 }
             )
 
-        fun <T, K> isUniqueBasicValidator(keySelector: (T) -> K) =
+        fun <T, K> isUniqueBasicValidator(failFast: Boolean, keySelector: (T) -> K) =
             BaseArrayValidators.isUnique<T, K, JsonErrors.Validation>(
+                failFast = failFast,
                 keySelector = keySelector,
                 error = { index, value ->
                     JsonErrors.Validation.Arrays.Unique(index = index, value = value)
@@ -146,34 +147,81 @@ class ArrayValidatorsTest {
     @Nested
     inner class IsUnique {
 
-        @Test
-        fun `Testing basic validator of the 'isUnique' (a collection is empty)`() {
-            val validator = isUniqueBasicValidator<String, String> { it }
+        @Nested
+        inner class FailFastIsTrue {
 
-            val errors = validator.validation(context, path, emptyList())
+            @Test
+            fun `Testing basic validator of the 'isUnique' (a collection is empty - failFast is true)`() {
+                val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
-            assertTrue(errors.isEmpty())
+                val errors = validator.validation(context, path, emptyList())
+
+                assertTrue(errors.isEmpty())
+            }
+
+            @Test
+            fun `Testing basic validator of the 'isUnique' (a collection contains only unique values - failFast is true)`() {
+                val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
+
+                val errors = validator.validation(context, path, listOf("A", "B"))
+
+                assertTrue(errors.isEmpty())
+            }
+
+            @Test
+            fun `Testing basic validator of the 'isUnique' (a collection contains duplicates - failFast is true)`() {
+                val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
+
+                val errors = validator.validation(context, path, listOf("A", "B", "A", "B", "C"))
+
+                assertEquals(1, errors.size)
+                val error = errors[0] as JsonErrors.Validation.Arrays.Unique<*>
+                assertEquals(2, error.index)
+                assertEquals("A", error.value)
+            }
         }
 
-        @Test
-        fun `Testing basic validator of the 'isUnique' (a collection contains only unique values)`() {
-            val validator = isUniqueBasicValidator<String, String> { it }
+        @Nested
+        inner class FailFastIsFalse {
 
-            val errors = validator.validation(context, path, listOf("A", "B"))
+            @Test
+            fun `Testing basic validator of the 'isUnique' (a collection is empty - failFast is false)`() {
+                val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
-            assertTrue(errors.isEmpty())
-        }
+                val errors = validator.validation(context, path, emptyList())
 
-        @Test
-        fun `Testing basic validator of the 'isUnique' (a collection contains duplicates)`() {
-            val validator = isUniqueBasicValidator<String, String> { it }
+                assertTrue(errors.isEmpty())
+            }
 
-            val errors = validator.validation(context, path, listOf("A", "B", "A", "C"))
+            @Test
+            fun `Testing basic validator of the 'isUnique' (a collection contains only unique values - failFast is false)`() {
+                val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Arrays.Unique<*>
-            assertEquals(2, error.index)
-            assertEquals("A", error.value)
+                val errors = validator.validation(context, path, listOf("A", "B"))
+
+                assertTrue(errors.isEmpty())
+            }
+
+            @Test
+            fun `Testing basic validator of the 'isUnique' (a collection contains duplicates - failFast is false)`() {
+                val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
+
+                val errors = validator.validation(context, path, listOf("A", "B", "A", "B", "C"))
+
+                assertEquals(2, errors.size)
+                errors[0].apply {
+                    this as JsonErrors.Validation.Arrays.Unique<*>
+                    assertEquals(2, index)
+                    assertEquals("A", value)
+
+                }
+
+                errors[1].apply {
+                    this as JsonErrors.Validation.Arrays.Unique<*>
+                    assertEquals(3, index)
+                    assertEquals("B", value)
+                }
+            }
         }
     }
 }
