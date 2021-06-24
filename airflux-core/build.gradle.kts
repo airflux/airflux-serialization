@@ -75,8 +75,7 @@ tasks {
 
     detekt {
         toolVersion = "1.17.1"
-        failFast = false
-        this.ignoreFailures = true
+        ignoreFailures = true
 
         input = files("src/main/kotlin", "src/test/kotlin")
         config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
