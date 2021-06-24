@@ -11,7 +11,7 @@ plugins {
     kotlin("jvm") version "1.5.10"
     `java-library`
 
-    id("io.gitlab.arturbosch.detekt") version "1.13.1"
+    id("io.gitlab.arturbosch.detekt") version "1.17.1"
     id("info.solidsoft.pitest") version "1.5.2"
     id("org.jetbrains.dokka") version "1.4.20"
     jacoco
@@ -28,8 +28,8 @@ val pitestJUnit5Version by extra { "0.12" }
 
 repositories {
 
-    jcenter()
-    jcenter {
+    mavenCentral()
+    mavenCentral {
         content {
             includeGroup("org.jetbrains.kotlinx")
         }
@@ -77,7 +77,7 @@ tasks {
         }
 
     detekt {
-        toolVersion = "1.13.1"
+        toolVersion = "1.17.1"
         failFast = false
         this.ignoreFailures = true
 

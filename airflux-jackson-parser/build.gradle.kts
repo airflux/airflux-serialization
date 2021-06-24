@@ -10,7 +10,7 @@ val jvmTargetVersion by extra { "1.8" }
 val jacksonVersion by extra { "2.12.1" }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
