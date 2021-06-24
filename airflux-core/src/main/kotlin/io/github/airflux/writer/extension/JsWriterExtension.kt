@@ -19,6 +19,5 @@ fun <T, P : Any> writeAsNullable(receiver: T, getter: (T) -> P?, using: JsWriter
 }
 
 fun <T : Any> arrayWriter(using: JsWriter<T>): JsArrayWriter<Collection<T>> = JsArrayWriter { value ->
-    value.map { item -> using.write(item) }
-        .let { JsArray(it) }
+    JsArray(underlying = value.map { item -> using.write(item) })
 }
