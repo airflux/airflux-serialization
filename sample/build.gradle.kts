@@ -122,9 +122,9 @@ tasks {
         classDirectories.setFrom(classFiles)
         executionData.setFrom(files("${buildDir}/jacoco/test.exec"))
         reports {
-            html.isEnabled = true
-            xml.isEnabled = false
-            csv.isEnabled = false
+            html.required.set(true)
+            xml.required.set(false)
+            csv.required.set(false)
         }
     }
 
