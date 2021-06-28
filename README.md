@@ -1,3 +1,5 @@
+<img src="docs/airflux.png" alt="Airflux logo" height="225" width="450" />
+
 # The AirFlux JSON library.
 
 ![CI](https://github.com/airflux/airflux/workflows/CI/badge.svg)
