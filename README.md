@@ -1,4 +1,4 @@
-<img src="docs/airflux.png" alt="Airflux logo" height="225" width="450" />
+<img src="docs/airflux.png" alt="Airflux logo" height="131" width="394" />
 
 # The AirFlux JSON library.
 
