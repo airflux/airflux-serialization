@@ -45,9 +45,9 @@ class JsString(val underlying: String) : JsValue() {
 class JsNumber private constructor(val underlying: String) : JsValue() {
 
     companion object {
-        private val integerNumberPattern = "^[+-]?[0-9]+\$".toRegex()
-        private val realNumberPattern = "^[+-]?[0-9]+[.][0-9]+$".toRegex()
-        private val pattern = "^[-]?[0-9]+([.][0-9]+)?$".toRegex()
+        private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
+        private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
+        private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
 
         fun valueOf(value: Byte) = JsNumber(value.toString())
         fun valueOf(value: Short) = JsNumber(value.toString())
