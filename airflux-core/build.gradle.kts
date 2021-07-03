@@ -1,12 +1,5 @@
 import java.net.URL
 
-buildscript {
-    dependencies {
-        classpath("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.5.2")
-    }
-}
-
-
 plugins {
     kotlin("jvm") version "1.5.20"
     `java-library`
