@@ -1,0 +1,1 @@
+const val AIRFLUX_VERSION = "0.0.1-SNAPSHOT"
