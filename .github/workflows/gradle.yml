@@ -13,7 +13,12 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USER }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      GPG_PRIVATE_PASSWORD: ${{ secrets.GPG_PRIVATE_PASSWORD }}
+      
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
