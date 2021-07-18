@@ -1,6 +1,6 @@
-const val AIRFLUX_VERSION = "0.0.1-SNAPSHOT"
-
 object Versions {
+    const val Project = "0.0.1-SNAPSHOT"
+
     const val Jackson = "2.12.1"
 
     object JUnit {

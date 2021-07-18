@@ -26,9 +26,7 @@ plugins {
 apply<info.solidsoft.gradle.pitest.PitestAggregatorPlugin>()
 
 val jvmTargetVersion by extra { "1.8" }
-
 val detectConfigPath = "$projectDir/config/detekt/detekt.yml"
-val isSnapshot = AIRFLUX_VERSION.contains("SNAPSHOT")
 
 allprojects {
     repositories {
@@ -43,7 +41,7 @@ val testReport = tasks.register<TestReport>("testReport") {
 }
 
 subprojects {
-    version = AIRFLUX_VERSION
+    version = Versions.Project
     group = "io.github.airflux"
 
     apply<KotlinPlatformJvmPlugin>()
