@@ -40,6 +40,7 @@ pitest {
     avoidCallsTo.set(mutableListOf("kotlin", "kotlin.jvm.internal", "kotlin.collections"))
     mainSourceSets.set(listOf(project.sourceSets.main.get()))
     timestampedReports.set(false)
+    exportLineCoverage.set(true)
 }
 
 tasks {
