@@ -2,8 +2,6 @@ plugins {
     kotlin("jvm")
 }
 
-val jacksonVersion by extra { "2.12.1" }
-
 dependencies {
     /* Kotlin */
     implementation(kotlin("stdlib-jdk8"))
@@ -11,8 +9,8 @@ dependencies {
     implementation(project(":airflux-core"))
 
     /* JSON */
-    implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion") {
+    implementation("com.fasterxml.jackson.core:jackson-core:${Versions.Jackson}")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${Versions.Jackson}") {
         exclude(group = "org.jetbrains.kotlin")
     }
 }

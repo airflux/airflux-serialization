@@ -4,10 +4,6 @@ plugins {
     jacoco
 }
 
-val junitJupiterVersion by extra { "5.7.0" }
-val junitPlatformVersion by extra { "1.7.0" }
-val pitestJUnit5Version by extra { "0.12" }
-
 dependencies {
     /* Kotlin */
     implementation(kotlin("stdlib-jdk8"))
@@ -16,21 +12,21 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 
     /* Junit */
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
-    testImplementation("org.junit.platform:junit-platform-engine:$junitPlatformVersion")
-    testImplementation("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${Versions.JUnit.Jupiter}")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.JUnit.Jupiter}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${Versions.JUnit.Jupiter}")
+    testImplementation("org.junit.platform:junit-platform-engine:${Versions.JUnit.Platform}")
+    testImplementation("org.junit.platform:junit-platform-launcher:${Versions.JUnit.Platform}")
 
     /* PITest */
-    testImplementation("org.pitest:pitest-junit5-plugin:$pitestJUnit5Version")
+    testImplementation("org.pitest:pitest-junit5-plugin:${Versions.PiTest.JUnit5}")
 }
 
 pitest {
     threads.set(4)
     testPlugin.set("junit5")
-    junit5PluginVersion.set("0.12")
-    pitestVersion.set("1.6.7")
+    junit5PluginVersion.set(Versions.PiTest.JUnit5)
+    pitestVersion.set(Versions.PiTest.CLI)
     mutators.set(mutableListOf("STRONGER"))
     outputFormats.set(listOf("XML", "HTML"))
     targetClasses.set(mutableListOf("io.github.airflux.*"))
