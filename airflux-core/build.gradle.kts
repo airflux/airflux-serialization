@@ -26,22 +26,21 @@ dependencies {
     testImplementation("org.pitest:pitest-junit5-plugin:$pitestJUnit5Version")
 }
 
+pitest {
+    threads.set(4)
+    testPlugin.set("junit5")
+    junit5PluginVersion.set("0.12")
+    pitestVersion.set("1.6.7")
+    mutators.set(mutableListOf("STRONGER"))
+    outputFormats.set(listOf("XML", "HTML"))
+    targetClasses.set(mutableListOf("io.github.airflux.*"))
+    targetTests.set(mutableListOf("io.github.airflux.*"))
+    avoidCallsTo.set(mutableListOf("kotlin", "kotlin.jvm.internal", "kotlin.collections"))
+    mainSourceSets.set(listOf(project.sourceSets.main.get()))
+    timestampedReports.set(false)
+}
+
 tasks {
-
-    pitest {
-        threads.set(4)
-        testPlugin.set("junit5")
-        junit5PluginVersion.set("0.12")
-        pitestVersion.set("1.6.7")
-        mutators.set(mutableListOf("STRONGER"))
-        outputFormats.set(listOf("XML", "HTML"))
-        targetClasses.set(mutableListOf("io.github.airflux.*"))
-        targetTests.set(mutableListOf("io.github.airflux.*"))
-        avoidCallsTo.set(mutableListOf("kotlin", "kotlin.jvm.internal", "kotlin.collections"))
-        mainSourceSets.set(listOf(project.sourceSets.main.get()))
-        timestampedReports.set(false)
-    }
-
     build {
         dependsOn(pitest)
     }
