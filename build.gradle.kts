@@ -1,4 +1,5 @@
 import info.solidsoft.gradle.pitest.PitestPlugin
+import info.solidsoft.gradle.pitest.PitestPluginExtension
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -58,6 +59,21 @@ subprojects {
     configure<JavaPluginExtension> {
         withSourcesJar()
         withJavadocJar()
+    }
+
+    configure<PitestPluginExtension> {
+        threads.set(4)
+        testPlugin.set("junit5")
+        junit5PluginVersion.set(Versions.PiTest.JUnit5)
+        pitestVersion.set(Versions.PiTest.CLI)
+        mutators.set(mutableListOf("STRONGER"))
+        outputFormats.set(listOf("XML", "HTML"))
+        targetClasses.set(mutableListOf("io.github.airflux.*"))
+        targetTests.set(mutableListOf("io.github.airflux.*"))
+        avoidCallsTo.set(mutableListOf("kotlin", "kotlin.jvm.internal", "kotlin.collections"))
+        mainSourceSets.set(listOf(project.sourceSets.main.get()))
+        timestampedReports.set(false)
+        exportLineCoverage.set(true)
     }
 
     tasks {
