@@ -1,7 +1,5 @@
 plugins {
     kotlin("jvm")
-
-    jacoco
 }
 
 dependencies {

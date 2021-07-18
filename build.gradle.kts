@@ -50,6 +50,7 @@ subprojects {
 
     apply<PitestPlugin>()
     apply<DetektPlugin>()
+    apply<JacocoPlugin>()
 
     apply<MavenPublishPlugin>()
     apply<SigningPlugin>()
