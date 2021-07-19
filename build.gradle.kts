@@ -95,7 +95,7 @@ subprojects {
     }
 
     detekt {
-        toolVersion = "1.17.1"
+        toolVersion = Versions.Detect.Tool
         ignoreFailures = true
 
         input = project.files("src/main/kotlin", "src/test/kotlin")
@@ -182,7 +182,7 @@ tasks {
 
             subproject.extensions.findByType<JacocoPluginExtension>()
                 ?.apply {
-                    toolVersion = "0.8.7"
+                    toolVersion = Versions.JaCoCo.Tool
                 }
 
             subproject.plugins.withType<JacocoPlugin>()
