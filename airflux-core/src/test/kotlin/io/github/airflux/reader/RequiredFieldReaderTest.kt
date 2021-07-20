@@ -21,7 +21,7 @@ class RequiredFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readRequired' function (a property is found)`() {
+    fun `Testing the readRequired function (a property is found)`() {
         val from: JsLookup = JsLookup.Defined(path = JsResultPath.Root / "name", JsString(USER_NAME_VALUE))
 
         val result: JsResult<String> = readRequired(
@@ -36,7 +36,7 @@ class RequiredFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readRequired' function (a property is not found)`() {
+    fun `Testing the readRequired function (a property is not found)`() {
         val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsResultPath.Root / "name")
 
         val result: JsResult<String> = readRequired(
@@ -53,7 +53,7 @@ class RequiredFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readRequired' function (a property is not found, invalid type)`() {
+    fun `Testing the readRequired function (a property is not found, invalid type)`() {
         val from: JsLookup = JsLookup.Undefined.InvalidType(
             path = JsResultPath.Root / "name",
             expected = JsValue.Type.ARRAY,

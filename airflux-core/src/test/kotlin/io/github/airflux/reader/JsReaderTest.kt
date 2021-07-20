@@ -20,7 +20,7 @@ class JsReaderTest {
     }
 
     @Test
-    fun `Testing 'map' function of the JsReader class`() {
+    fun `Testing the map function of the JsReader class`() {
         val reader = JsReader { _, path, _ ->
             JsResult.Success(path = path / "id", value = ID_VALUE)
         }
@@ -32,7 +32,7 @@ class JsReaderTest {
     }
 
     @Test
-    fun `Testing 'or' function of the JsReader class (first reader)`() {
+    fun `Testing the or function of the JsReader class (first reader)`() {
         val idReader = JsReader { _, path, _ ->
             JsResult.Success(path = path / "id", value = ID_VALUE)
         }
@@ -47,7 +47,7 @@ class JsReaderTest {
     }
 
     @Test
-    fun `Testing 'or' function of the JsReader class (second reader)`() {
+    fun `Testing the or function of the JsReader class (second reader)`() {
         val idReader = JsReader<String> { _, path, _ ->
             JsResult.Failure(path = path / "id", error = JsonErrors.PathMissing)
         }
@@ -62,7 +62,7 @@ class JsReaderTest {
     }
 
     @Test
-    fun `Testing 'or' function of the JsReader class (failure both reader)`() {
+    fun `Testing the or function of the JsReader class (failure both reader)`() {
         val idReader = JsReader { _, path, _ ->
             JsResult.Failure(path = path / "id", error = JsonErrors.PathMissing)
         }

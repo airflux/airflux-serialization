@@ -38,7 +38,7 @@ class JsPredicateExtensionTest {
     inner class Reader {
 
         @Test
-        fun `Testing of the extension-function 'filter' for JsReader`() {
+        fun `Testing of the extension-function the filter for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
             val reader = JsReader { context, path, input ->
                 val result = input.lookup(path, JsPath.Root / "name")
@@ -57,7 +57,7 @@ class JsPredicateExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'filter' for JsReader (filtered)`() {
+        fun `Testing of the extension-function the filter for JsReader (filtered)`() {
             val json: JsValue = JsObject("name" to JsString("  "))
             val reader = JsReader { context, path, input ->
                 val result = input.lookup(path, JsPath.Root / "name")
@@ -76,7 +76,7 @@ class JsPredicateExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'filter' for JsReader as failure`() {
+        fun `Testing of the extension-function the filter for JsReader as failure`() {
             val json: JsValue = JsObject("user" to JsString("  "))
             val reader = JsReader { context, path, input ->
                 val result = input.lookup(path, JsPath.Root / "name")
@@ -99,7 +99,7 @@ class JsPredicateExtensionTest {
     inner class Result {
 
         @Test
-        fun `Testing of the extension-function 'filter' for JsResult`() {
+        fun `Testing of the extension-function the filter for JsResult`() {
             val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "user")
 
             val validated = result.filter(isNotBlank)
@@ -108,7 +108,7 @@ class JsPredicateExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'filter' for JsResult (filtered)`() {
+        fun `Testing of the extension-function the filter for JsResult (filtered)`() {
             val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "  ")
 
             val validated = result.filter(isNotBlank)
@@ -117,7 +117,7 @@ class JsPredicateExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'filter' for JsResult as failure`() {
+        fun `Testing of the extension-function the filter for JsResult as failure`() {
             val error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
             val result: JsResult<String> = JsResult.Failure(path = JsResultPath.Root / "name", error = error)
 

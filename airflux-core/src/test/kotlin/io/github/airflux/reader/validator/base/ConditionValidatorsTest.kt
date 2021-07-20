@@ -23,14 +23,14 @@ class ConditionValidatorsTest {
     }
 
     @Test
-    fun `Testing basic validator of the 'applyIfNotNull' (value has string, target validator is apply)`() {
+    fun `Testing the basic validator of the applyIfNotNull (value has string, target validator is apply)`() {
         val errors = validator.validation(context, path, "Hello")
 
         assertTrue(errors.isEmpty())
     }
 
     @Test
-    fun `Testing basic validator of the 'applyIfNotNull' (value is empty string, target validator is apply)`() {
+    fun `Testing the basic validator of the applyIfNotNull (value is empty string, target validator is apply)`() {
         val error = validator.validation(context, path, "")
 
         assertEquals(1, error.size)
@@ -38,7 +38,7 @@ class ConditionValidatorsTest {
     }
 
     @Test
-    fun `Testing basic validator of the 'applyIfNotNull' (value is null, target validator do not apply)`() {
+    fun `Testing the basic validator of the applyIfNotNull (value is null, target validator do not apply)`() {
         val errors = validator.validation(context, path, null)
 
         assertTrue(errors.isEmpty())

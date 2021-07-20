@@ -23,7 +23,7 @@ class JsPredicateTest {
         ],
         delimiter = ':'
     )
-    fun `Testing of the logical operator 'and' of a validator`(actual: Int, expected: Boolean) {
+    fun `Testing of the logical operator the and of a validator`(actual: Int, expected: Boolean) {
         val leftFilter = JsPredicate<Int> { _, _, value -> value > 10 }
         val rightFilter = JsPredicate<Int> { _, _, value -> value < 20 }
         val composedFilter = leftFilter and rightFilter
@@ -41,7 +41,7 @@ class JsPredicateTest {
         ],
         delimiter = ':'
     )
-    fun `Testing of the logical operator 'or' of a validator`(actual: Int, expected: Boolean) {
+    fun `Testing of the logical operator the or of a validator`(actual: Int, expected: Boolean) {
         val leftFilter = JsPredicate<Int> { _, _, value -> value < 10 }
         val rightFilter = JsPredicate<Int> { _, _, value -> value > 20 }
         val composedFilter = leftFilter or rightFilter

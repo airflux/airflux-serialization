@@ -16,7 +16,7 @@ class JsPathTest {
         inner class OperatorDivForKey {
 
             @Test
-            fun `Testing operator 'div' for Root`() {
+            fun `Testing operator the div for Root`() {
                 val target = JsPath.Root
 
                 val path = target / "user"
@@ -27,7 +27,7 @@ class JsPathTest {
             }
 
             @Test
-            fun `Testing operator 'div' for Simple`() {
+            fun `Testing operator the div for Simple`() {
                 val target = (JsPath.Root / "user") as JsPath.Identifiable.Simple
 
                 val path = target / "id"
@@ -38,7 +38,7 @@ class JsPathTest {
             }
 
             @Test
-            fun `Testing operator 'div' for Composite`() {
+            fun `Testing operator the div for Composite`() {
                 val target = (JsPath.Root / "user" / "phones") as JsPath.Identifiable.Composite
 
                 val path = target / "work"
@@ -59,7 +59,7 @@ class JsPathTest {
         inner class OperatorDivForIdx {
 
             @Test
-            fun `Testing operator 'div' for Root`() {
+            fun `Testing operator the div for Root`() {
                 val target = JsPath.Root
 
                 val path = target / 0
@@ -70,7 +70,7 @@ class JsPathTest {
             }
 
             @Test
-            fun `Testing operator 'div' for Simple`() {
+            fun `Testing operator the div for Simple`() {
                 val target = (JsPath.Root / "user") as JsPath.Identifiable.Simple
 
                 val path = target / 0
@@ -81,7 +81,7 @@ class JsPathTest {
             }
 
             @Test
-            fun `Testing operator 'div' for Composite`() {
+            fun `Testing operator the div for Composite`() {
                 val target = (JsPath.Root / "user" / "phones") as JsPath.Identifiable.Composite
 
                 val path = target / 0
@@ -120,14 +120,14 @@ class JsPathTest {
     }
 
     @Test
-    fun `Testing 'toString' function of the JsLookupPath class`() {
+    fun `Testing the toString function of the JsLookupPath class`() {
         ObjectContract.checkToString(JsPath.Root, "#")
         ObjectContract.checkToString(JsPath.Root / "user", "#/user")
         ObjectContract.checkToString(JsPath.Root / "user" / "name", "#/user/name")
     }
 
     @Test
-    fun `Testing 'equals contract' of the JsLookupPath class (Simple)`() {
+    fun `Testing the equals contract of the JsLookupPath class (Simple)`() {
         ObjectContract.checkEqualsContract(
             JsPath.Root / "name",
             JsPath.Root / "name",
@@ -136,7 +136,7 @@ class JsPathTest {
     }
 
     @Test
-    fun `Testing 'equals contract' of the JsLookupPath class (Composite)`() {
+    fun `Testing the equals contract of the JsLookupPath class (Composite)`() {
         ObjectContract.checkEqualsContract(
             JsPath.Root / "user" / "name",
             JsPath.Root / "user" / "name",

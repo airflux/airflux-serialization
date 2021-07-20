@@ -51,7 +51,7 @@ class ArrayValidatorsTest {
     inner class MinItems {
 
         @Test
-        fun `Testing basic validator of the 'minItems' (a collection is empty)`() {
+        fun `Testing basic validator of the minItems (a collection is empty)`() {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
@@ -64,7 +64,7 @@ class ArrayValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minItems' (a number of elements is less than the minimum)`() {
+        fun `Testing basic validator of the minItems (a number of elements is less than the minimum)`() {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
@@ -77,7 +77,7 @@ class ArrayValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minItems' (a count of elements is equal to the minimum)`() {
+        fun `Testing basic validator of the minItems (a count of elements is equal to the minimum)`() {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
@@ -87,7 +87,7 @@ class ArrayValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minItems' (a count of elements is more than the minimum)`() {
+        fun `Testing basic validator of the minItems (a count of elements is more than the minimum)`() {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
@@ -101,7 +101,7 @@ class ArrayValidatorsTest {
     inner class MaxItems {
 
         @Test
-        fun `Testing basic validator of the 'maxItems' (a collection is empty)`() {
+        fun `Testing basic validator of the maxItems (a collection is empty)`() {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
@@ -111,7 +111,7 @@ class ArrayValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxItems' (a count of elements is less than the maximum)`() {
+        fun `Testing basic validator of the maxItems (a count of elements is less than the maximum)`() {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
@@ -121,7 +121,7 @@ class ArrayValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxItems' (a count of elements is equal to the maximum)`() {
+        fun `Testing basic validator of the maxItems (a count of elements is equal to the maximum)`() {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
@@ -131,7 +131,7 @@ class ArrayValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxItems' (a count of elements is more than the maximum)`() {
+        fun `Testing basic validator of the maxItems (a count of elements is more than the maximum)`() {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
@@ -151,7 +151,7 @@ class ArrayValidatorsTest {
         inner class FailFastIsTrue {
 
             @Test
-            fun `Testing basic validator of the 'isUnique' (a collection is empty - failFast is true)`() {
+            fun `Testing basic validator of the isUnique (a collection is empty - failFast is true)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
                 val errors = validator.validation(context, path, emptyList())
@@ -160,7 +160,7 @@ class ArrayValidatorsTest {
             }
 
             @Test
-            fun `Testing basic validator of the 'isUnique' (a collection contains only unique values - failFast is true)`() {
+            fun `Testing basic validator of the isUnique (a collection contains only unique values - failFast is true)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
                 val errors = validator.validation(context, path, listOf("A", "B"))
@@ -169,7 +169,7 @@ class ArrayValidatorsTest {
             }
 
             @Test
-            fun `Testing basic validator of the 'isUnique' (a collection contains duplicates - failFast is true)`() {
+            fun `Testing basic validator of the isUnique (a collection contains duplicates - failFast is true)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
                 val errors = validator.validation(context, path, listOf("A", "B", "A", "B", "C"))
@@ -185,7 +185,7 @@ class ArrayValidatorsTest {
         inner class FailFastIsFalse {
 
             @Test
-            fun `Testing basic validator of the 'isUnique' (a collection is empty - failFast is false)`() {
+            fun `Testing basic validator of the isUnique (a collection is empty - failFast is false)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
                 val errors = validator.validation(context, path, emptyList())
@@ -194,7 +194,7 @@ class ArrayValidatorsTest {
             }
 
             @Test
-            fun `Testing basic validator of the 'isUnique' (a collection contains only unique values - failFast is false)`() {
+            fun `Testing basic validator of the isUnique (a collection contains only unique values - failFast is false)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
                 val errors = validator.validation(context, path, listOf("A", "B"))
@@ -203,7 +203,7 @@ class ArrayValidatorsTest {
             }
 
             @Test
-            fun `Testing basic validator of the 'isUnique' (a collection contains duplicates - failFast is false)`() {
+            fun `Testing basic validator of the isUnique (a collection contains duplicates - failFast is false)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
                 val errors = validator.validation(context, path, listOf("A", "B", "A", "B", "C"))

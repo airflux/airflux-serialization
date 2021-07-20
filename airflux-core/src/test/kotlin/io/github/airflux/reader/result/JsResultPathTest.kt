@@ -7,7 +7,7 @@ import kotlin.test.assertNotEquals
 class JsResultPathTest {
 
     @Test
-    fun `Testing 'equals contract`() {
+    fun `Testing the equals contract`() {
         assertEquals(
             JsResultPath.Root,
             JsResultPath.Root
@@ -57,7 +57,7 @@ class JsResultPathTest {
     }
 
     @Test
-    fun `Testing 'hashCode contract`() {
+    fun `Testing the hashCode contract`() {
         assertEquals(
             JsResultPath.Root.hashCode(),
             JsResultPath.Root.hashCode()
@@ -106,7 +106,7 @@ class JsResultPathTest {
     }
 
     @Test
-    fun `Testing 'toString contract`() {
+    fun `Testing the toString contract`() {
         assertEquals("#", JsResultPath.Root.toString())
         assertEquals("#/user", (JsResultPath.Root / "user").toString())
         assertEquals("#/user/phones", (JsResultPath.Root / "user" / "phones").toString())
