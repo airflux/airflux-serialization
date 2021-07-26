@@ -39,7 +39,7 @@ class JsArrayTest {
     }
 
     @Test
-    fun `Testing 'toString' function of the JsArray class`() {
+    fun `Testing the toString function of the JsArray class`() {
         ObjectContract.checkToString(
             JsArray(
                 JsString(FIRST_PHONE_VALUE),
@@ -50,7 +50,7 @@ class JsArrayTest {
     }
 
     @Test
-    fun `Testing 'equals contract' of the JsString class`() {
+    fun `Testing the equals contract of the JsString class`() {
         ObjectContract.checkEqualsContract(
             JsArray(JsString(FIRST_PHONE_VALUE)),
             JsArray(JsString(FIRST_PHONE_VALUE)),

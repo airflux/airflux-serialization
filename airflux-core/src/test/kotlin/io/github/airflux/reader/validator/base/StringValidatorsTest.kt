@@ -55,7 +55,7 @@ class StringValidatorsTest {
     inner class MinLength {
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is empty)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is empty)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -68,7 +68,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is blank, and less the min allowed length)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is blank, and less the min allowed length)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -81,7 +81,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is blank, and equal the min allowed length)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is blank, and equal the min allowed length)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -91,7 +91,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is blank, and more the min allowed length)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is blank, and more the min allowed length)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -101,7 +101,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is less than the min allowed length)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is less than the min allowed length)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -114,7 +114,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is equal to the min allowed length)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is equal to the min allowed length)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -124,7 +124,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'minLength' (a value of a string is more than the min allowed length)`() {
+        fun `Testing the basic validator of the minLength (a value of a string is more than the min allowed length)`() {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
@@ -138,7 +138,7 @@ class StringValidatorsTest {
     inner class MaxLength {
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is empty)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is empty)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -148,7 +148,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is blank, and less the max allowed length)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is blank, and less the max allowed length)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -158,7 +158,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is blank, and equal the max allowed length)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is blank, and equal the max allowed length)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -168,7 +168,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is blank, and more the max allowed length)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is blank, and more the max allowed length)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -181,7 +181,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is less than the max allowed length)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is less than the max allowed length)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -191,7 +191,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is equal to the max allowed length)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is equal to the max allowed length)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -201,7 +201,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'maxLength' (a value of a string is more than the max allowed length)`() {
+        fun `Testing the basic validator of the maxLength (a value of a string is more than the max allowed length)`() {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
@@ -218,7 +218,7 @@ class StringValidatorsTest {
     inner class IsNotEmpty {
 
         @Test
-        fun `Testing basic validator of the 'isNotEmpty' (a value of a string is empty)`() {
+        fun `Testing the basic validator of the isNotEmpty (a value of a string is empty)`() {
             val errors = isNotEmptyValidator.validation(context, path, "")
 
             assertEquals(1, errors.size)
@@ -226,14 +226,14 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'isNotEmpty' (a value of a string is blank)`() {
+        fun `Testing the basic validator of the isNotEmpty (a value of a string is blank)`() {
             val errors = isNotEmptyValidator.validation(context, path, " ")
 
             assertTrue(errors.isEmpty())
         }
 
         @Test
-        fun `Testing basic validator of the 'isNotEmpty' (a value of a string is not empty)`() {
+        fun `Testing the basic validator of the isNotEmpty (a value of a string is not empty)`() {
             val errors = isNotEmptyValidator.validation(context, path, "abc")
 
             assertTrue(errors.isEmpty())
@@ -244,7 +244,7 @@ class StringValidatorsTest {
     inner class IsNotBlank {
 
         @Test
-        fun `Testing basic validator of the 'isNotBlank' (a value of a string is empty)`() {
+        fun `Testing the basic validator of the isNotBlank (a value of a string is empty)`() {
 
             val errors = isNotBlankValidator.validation(context, path, "")
 
@@ -253,7 +253,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'isNotBlank' (a value of a string is blank)`() {
+        fun `Testing the basic validator of the isNotBlank (a value of a string is blank)`() {
 
             val errors = isNotBlankValidator.validation(context, path, " ")
 
@@ -262,7 +262,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'isNotBlank' (a value of a string is not blank)`() {
+        fun `Testing the basic validator of the isNotBlank (a value of a string is not blank)`() {
 
             val errors = isNotBlankValidator.validation(context, path, " a ")
 
@@ -276,7 +276,7 @@ class StringValidatorsTest {
         private val validator = patternBasicValidator(regex)
 
         @Test
-        fun `Testing basic validator of the 'pattern' (a value of a string is empty)`() {
+        fun `Testing the basic validator of the pattern (a value of a string is empty)`() {
             val errors = validator.validation(context, path, "")
 
             assertEquals(1, errors.size)
@@ -286,14 +286,14 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'pattern' (a value of a string is matching to the pattern)`() {
+        fun `Testing the basic validator of the pattern (a value of a string is matching to the pattern)`() {
             val errors = validator.validation(context, path, "abc")
 
             assertTrue(errors.isEmpty())
         }
 
         @Test
-        fun `Testing basic validator of the 'pattern' (a value of a string is not matching to the pattern)`() {
+        fun `Testing the basic validator of the pattern (a value of a string is not matching to the pattern)`() {
             val errors = validator.validation(context, path, "aab")
 
             assertEquals(1, errors.size)
@@ -310,14 +310,14 @@ class StringValidatorsTest {
         private val validator = isABasicValidator(isDigital)
 
         @Test
-        fun `Testing basic validator of the 'isA' (a value of a string is a number)`() {
+        fun `Testing the basic validator of the isA (a value of a string is a number)`() {
             val errors = validator.validation(context, path, "123")
 
             assertTrue(errors.isEmpty())
         }
 
         @Test
-        fun `Testing basic validator of the 'isA' (a value of a string is not a number)`() {
+        fun `Testing the basic validator of the isA (a value of a string is not a number)`() {
             val errors = validator.validation(context, path, "abc")
 
             assertEquals(1, errors.size)
@@ -326,7 +326,7 @@ class StringValidatorsTest {
         }
 
         @Test
-        fun `Testing basic validator of the 'isA' (a value of a string is not a number but an empty string)`() {
+        fun `Testing the basic validator of the isA (a value of a string is not a number but an empty string)`() {
             val errors = validator.validation(context, path, "")
 
             assertEquals(1, errors.size)

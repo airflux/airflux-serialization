@@ -41,7 +41,7 @@ class JsPropertyValidatorExtensionTest {
     inner class Reader {
 
         @Test
-        fun `Testing of the extension-function 'validation' for JsReader`() {
+        fun `Testing of the extension-function the validation for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
             val reader = JsReader { context, path, input ->
                 val result = input.lookup(path, JsPath.Root / "name")
@@ -60,7 +60,7 @@ class JsPropertyValidatorExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'validation' for JsReader (error of validation)`() {
+        fun `Testing of the extension-function the validation for JsReader (error of validation)`() {
             val json: JsValue = JsObject("name" to JsString(""))
             val reader = JsReader { context, path, input ->
                 val result = input.lookup(path, JsPath.Root / "name")
@@ -79,7 +79,7 @@ class JsPropertyValidatorExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'validation' for JsReader (result is failure)`() {
+        fun `Testing of the extension-function the validation for JsReader (result is failure)`() {
             val json: JsValue = JsObject("name" to JsNull)
             val reader = JsReader { context, path, input ->
                 val result = input.lookup(path, JsPath.Root / "name")
@@ -106,7 +106,7 @@ class JsPropertyValidatorExtensionTest {
     inner class Result {
 
         @Test
-        fun `Testing of the extension-function 'validation' for JsResult`() {
+        fun `Testing of the extension-function the validation for JsResult`() {
             val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "user")
 
             val validated = result.validation(isNotEmpty)
@@ -115,7 +115,7 @@ class JsPropertyValidatorExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'validation' for JsResult (error of validation)`() {
+        fun `Testing of the extension-function the validation for JsResult (error of validation)`() {
             val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "user", value = "")
 
             val validated = result.validation(isNotEmpty)
@@ -124,7 +124,7 @@ class JsPropertyValidatorExtensionTest {
         }
 
         @Test
-        fun `Testing of the extension-function 'validation' for JsResult (result is failure)`() {
+        fun `Testing of the extension-function the validation for JsResult (result is failure)`() {
             val result: JsResult<String> =
                 JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
 

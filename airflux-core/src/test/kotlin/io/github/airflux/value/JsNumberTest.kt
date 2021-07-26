@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 class JsNumberTest {
 
     @Test
-    fun `Testing 'valueOf' function of the JsNumber class for Byte type`() {
+    fun `Testing the valueOf function of the JsNumber class for Byte type`() {
         val min: Byte = Byte.MIN_VALUE
         val max: Byte = Byte.MAX_VALUE
 
@@ -20,7 +20,7 @@ class JsNumberTest {
     }
 
     @Test
-    fun `Testing 'valueOf' function of the JsNumber class for Short type`() {
+    fun `Testing the valueOf function of the JsNumber class for Short type`() {
         val min: Short = Short.MIN_VALUE
         val max: Short = Short.MAX_VALUE
 
@@ -29,7 +29,7 @@ class JsNumberTest {
     }
 
     @Test
-    fun `Testing 'valueOf' function of the JsNumber class for Int type`() {
+    fun `Testing the valueOf function of the JsNumber class for Int type`() {
         val min: Int = Int.MIN_VALUE
         val max: Int = Int.MAX_VALUE
 
@@ -38,7 +38,7 @@ class JsNumberTest {
     }
 
     @Test
-    fun `Testing 'valueOf' function of the JsNumber class for Long type`() {
+    fun `Testing the valueOf function of the JsNumber class for Long type`() {
         val min: Long = Long.MIN_VALUE
         val max: Long = Long.MAX_VALUE
 
@@ -47,7 +47,7 @@ class JsNumberTest {
     }
 
     @TestFactory
-    fun `Testing 'valueOf' function of the JsNumber class for String type`() = listOf(
+    fun `Testing the valueOf function of the JsNumber class for String type`() = listOf(
         Triple("false", "false", null),
         Triple(".0", ".0", null),
         Triple("+.0", "+.0", null),
@@ -92,7 +92,7 @@ class JsNumberTest {
     }
 
     @TestFactory
-    fun `Testing 'toString' function of the JsNumber class`() = listOf(
+    fun `Testing the toString function of the JsNumber class`() = listOf(
         "1" to "1", "-1" to "-1",
         "1.5" to "1.5", "-1.5" to "-1.5",
         "1.50" to "1.50", "-1.50" to "-1.50"
@@ -104,7 +104,7 @@ class JsNumberTest {
     }
 
     @Test
-    fun `Testing 'equals contract' of the JsNumber class`() {
+    fun `Testing the equals contract of the JsNumber class`() {
         ObjectContract.checkEqualsContract(
             JsNumber.valueOf(10),
             JsNumber.valueOf(10),

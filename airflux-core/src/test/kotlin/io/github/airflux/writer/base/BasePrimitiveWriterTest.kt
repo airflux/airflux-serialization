@@ -14,7 +14,7 @@ class BasePrimitiveWriterTest {
 
     @ParameterizedTest
     @CsvSource(value = ["true", "false"])
-    fun `Testing writer for 'Boolean' type`(value: Boolean) {
+    fun `Testing the writer for the Boolean type`(value: Boolean) {
 
         val result = BasePrimitiveWriter.boolean.write(value)
 
@@ -23,7 +23,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'String' type`() {
+    fun `Testing the writer for String type`() {
         val value = "abc"
 
         val result = BasePrimitiveWriter.string.write(value)
@@ -33,7 +33,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'Byte' type`() {
+    fun `Testing the writer for the Byte type`() {
         val value: Byte = Byte.MAX_VALUE
 
         val result = BasePrimitiveWriter.byte.write(value)
@@ -43,7 +43,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'Short' type`() {
+    fun `Testing the writer for the Short type`() {
         val value: Short = Short.MAX_VALUE
 
         val result = BasePrimitiveWriter.short.write(value)
@@ -53,7 +53,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'Int' type`() {
+    fun `Testing the writer for the Int type`() {
         val value: Int = Int.MAX_VALUE
 
         val result = BasePrimitiveWriter.int.write(value)
@@ -63,7 +63,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'Long' type`() {
+    fun `Testing the writer for the Long type`() {
         val value: Long = Long.MAX_VALUE
 
         val result = BasePrimitiveWriter.long.write(value)
@@ -73,7 +73,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'BigDecimal' (default configuration)`() {
+    fun `Testing the writer for the BigDecimal type (default configuration)`() {
         val value = BigDecimal("10.50")
 
         val result = BasePrimitiveWriter.bigDecimal().write(value)
@@ -83,7 +83,7 @@ class BasePrimitiveWriterTest {
     }
 
     @Test
-    fun `Testing writer for 'BigDecimal' (stripTrailingZeros is true)`() {
+    fun `Testing the writer for the BigDecimal type (stripTrailingZeros is true)`() {
         val value = BigDecimal("10.50")
         val configuration = BigDecimalWriterConfiguration(stripTrailingZeros = true)
 

@@ -199,7 +199,7 @@ class JsValueExtensionTest {
     inner class ReadAsBoolean {
 
         @Test
-        fun `Testing extension-function 'readAsBoolean'`() {
+        fun `Testing the extension-function the readAsBoolean`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
             val result = json.readAsBoolean(currentPath, JsonErrors::InvalidType)
@@ -208,7 +208,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `Testing extension-function 'readAsBoolean' (invalid type)`() {
+        fun `Testing the extension-function the readAsBoolean (invalid type)`() {
             val json = JsString("abc")
 
             val result = json.readAsBoolean(currentPath, JsonErrors::InvalidType)
@@ -224,7 +224,7 @@ class JsValueExtensionTest {
     @Nested
     inner class ReadAsString {
         @Test
-        fun `Testing extension-function 'readAsString'`() {
+        fun `Testing the extension-function the readAsString`() {
             val json: JsValue = JsString("abc")
 
             val result = json.readAsString(currentPath, JsonErrors::InvalidType)
@@ -233,7 +233,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `Testing extension-function 'readAsString' (invalid type)`() {
+        fun `Testing the extension-function the readAsString (invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
             val result = json.readAsString(currentPath, JsonErrors::InvalidType)
@@ -252,7 +252,7 @@ class JsValueExtensionTest {
         private val transformer = { path: JsResultPath, text: String -> JsResult.Success(text.toInt(), path) }
 
         @Test
-        fun `Testing extension-function 'readAsNumber'`() {
+        fun `Testing the extension-function the readAsNumber`() {
             val json: JsValue = JsNumber.valueOf(Int.MAX_VALUE)
 
             val result = json.readAsNumber(currentPath, JsonErrors::InvalidType, transformer)
@@ -261,7 +261,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `Testing extension-function 'readAsNumber' invalid type)`() {
+        fun `Testing the extension-function the readAsNumber invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
             val result = json.readAsNumber(currentPath, JsonErrors::InvalidType, transformer)
@@ -283,7 +283,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `Testing extension-function 'readAsObject'`() {
+        fun `Testing the extension-function the readAsObject`() {
             val json: JsValue = JsObject("name" to JsString("user-name"))
 
             val result = json.readAsObject(currentPath, JsonErrors::InvalidType, reader)
@@ -292,7 +292,7 @@ class JsValueExtensionTest {
         }
 
         @Test
-        fun `Testing extension-function 'readAsObject' invalid type)`() {
+        fun `Testing the extension-function the readAsObject invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
             val result = json.readAsObject(currentPath, JsonErrors::InvalidType, reader)

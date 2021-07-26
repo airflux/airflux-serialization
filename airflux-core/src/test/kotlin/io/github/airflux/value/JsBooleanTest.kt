@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class JsBooleanTest {
 
     @Test
-    fun `Testing 'toString' function of the JsBoolean class`() {
+    fun `Testing the toString function of the JsBoolean class`() {
         ObjectContract.checkToString(JsBoolean.valueOf(true), "true")
         ObjectContract.checkToString(JsBoolean.valueOf(false), "false")
     }

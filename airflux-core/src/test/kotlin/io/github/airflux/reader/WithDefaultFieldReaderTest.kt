@@ -24,7 +24,7 @@ class WithDefaultFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readWithDefault' function (a property is found)`() {
+    fun `Testing the readWithDefault function (a property is found)`() {
         val from: JsLookup = JsLookup.Defined(path = JsResultPath.Root / "name", JsString(USER_NAME_VALUE))
 
         val result: JsResult<String> = readWithDefault(
@@ -39,7 +39,7 @@ class WithDefaultFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readWithDefault' function (a property is found with value 'null', returning default value)`() {
+    fun `Testing the readWithDefault function (a property is found with value the null, returning default value)`() {
         val from: JsLookup = JsLookup.Defined(path = JsResultPath.Root / "name", JsNull)
 
         val result: JsResult<String> = readWithDefault(
@@ -54,7 +54,7 @@ class WithDefaultFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readWithDefault' function (a property is not found, returning default value)`() {
+    fun `Testing the readWithDefault function (a property is not found, returning default value)`() {
         val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsResultPath.Root / "name")
 
         val result: JsResult<String> = readWithDefault(
@@ -69,7 +69,7 @@ class WithDefaultFieldReaderTest {
     }
 
     @Test
-    fun `Testing 'readWithDefault' function (a property is not found, invalid type)`() {
+    fun `Testing the readWithDefault function (a property is not found, invalid type)`() {
         val from: JsLookup = JsLookup.Undefined.InvalidType(
             path = JsResultPath.Root / "name",
             expected = JsValue.Type.ARRAY,

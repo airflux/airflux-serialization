@@ -38,7 +38,7 @@ class JsObjectTest {
     }
 
     @Test
-    fun `Testing 'toString' function of the JsObject class`() {
+    fun `Testing the toString function of the JsObject class`() {
         val userName = "user"
         val isActive = true
 
@@ -52,7 +52,7 @@ class JsObjectTest {
     }
 
     @Test
-    fun `Testing 'equals contract' of the JsObject class`() {
+    fun `Testing the equals contract of the JsObject class`() {
         val firstUserName = "user-1"
         val secondUserName = "user-2"
         val isActive = true

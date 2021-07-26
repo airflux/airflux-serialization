@@ -36,7 +36,7 @@ class CollectionFieldReaderTest {
     inner class ListReader {
 
         @Test
-        fun `Testing 'readAsList' function`() {
+        fun `Testing the readAsList function`() {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
             val result: JsResult<List<String>> =
@@ -52,7 +52,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsList' function (a property is not collection)`() {
+        fun `Testing the readAsList function (a property is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<List<String>> =
@@ -72,7 +72,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsList' function (collection with inconsistent content)`() {
+        fun `Testing the readAsList function (collection with inconsistent content)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE),
                 JsNumber.valueOf(10),
@@ -100,7 +100,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsList' function (array is empty)`() {
+        fun `Testing the readAsList function (array is empty)`() {
             val json: JsValue = JsArray<JsString>()
 
             val result: JsResult<List<String>> =
@@ -120,7 +120,7 @@ class CollectionFieldReaderTest {
     inner class SetReader {
 
         @Test
-        fun `Testing 'readAsSet' function`() {
+        fun `Testing the readAsSet function`() {
             val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
             val result: JsResult<Set<String>> =
@@ -136,7 +136,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsSet' function (a property is not collection)`() {
+        fun `Testing the readAsSet function (a property is not collection)`() {
             val json: JsValue = JsString(USER_NAME_VALUE)
 
             val result: JsResult<Set<String>> =
@@ -156,7 +156,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsSet' function (collection with inconsistent content)`() {
+        fun `Testing the readAsSet function (collection with inconsistent content)`() {
             val json: JsValue = JsArray(
                 JsString(FIRST_PHONE_VALUE),
                 JsNumber.valueOf(10),
@@ -185,7 +185,7 @@ class CollectionFieldReaderTest {
         }
 
         @Test
-        fun `Testing 'readAsSet' function (array is empty)`() {
+        fun `Testing the readAsSet function (array is empty)`() {
             val json: JsValue = JsArray<JsString>()
 
             val result: JsResult<Set<String>> =

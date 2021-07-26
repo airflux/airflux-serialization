@@ -29,7 +29,7 @@ class JsPropertyValidatorTest {
         ],
         delimiter = ':'
     )
-    fun `Testing of the logical operator 'and' of a validator`(left: Boolean, right: Boolean) {
+    fun `Testing of the logical operator the and of a validator`(left: Boolean, right: Boolean) {
         val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (left) emptyList() else listOf(ValidationErrors.Error)
         }
@@ -57,7 +57,7 @@ class JsPropertyValidatorTest {
         ],
         delimiter = ':'
     )
-    fun `Testing of the logical operator 'or' of a validator`(left: Boolean, right: Boolean) {
+    fun `Testing of the logical operator the or of a validator`(left: Boolean, right: Boolean) {
         val leftValidator = JsPropertyValidator<Unit, ValidationErrors> { _, _, _ ->
             if (left)
                 emptyList()
