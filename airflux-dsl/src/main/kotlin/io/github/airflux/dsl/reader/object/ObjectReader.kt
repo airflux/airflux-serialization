@@ -66,10 +66,10 @@ class ObjectReader(
         fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
             PropertyBinder(path, reader)
 
-        inline fun <T> build(crossinline builder: (ObjectValuesMap) -> T): TypeBuilder<T> =
+        fun build(builder: (ObjectValuesMap) -> T): TypeBuilder<T> =
             TypeBuilder { v, p -> JsResult.Success(builder(v), p) }
 
-        inline fun <T> build(crossinline builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+        fun build(builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
             TypeBuilder { v, p -> builder(v, p) }
 
         internal fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
