@@ -161,7 +161,7 @@ val ValueReader = reader<Value> {
     val amount = property(name = "amount", reader = AmountReader).required()
     val currency = property(name = "currency", reader = CurrencyReader).required()
 
-    typeBuilder = simpleBuilder { values ->
+    build { values ->
         Value(
             amount = values[amount],
             currency = values[currency]
@@ -184,7 +184,7 @@ val LotReader = reader<Lot> {
     val status = property(name = "status", reader = LotStatusReader).required()
     val value = property(name = "value", reader = ValueReader).required()
 
-    typeBuilder = simpleBuilder { values ->
+    build { values ->
         Lot(
             id = values[id],
             status = values[status],
@@ -216,7 +216,7 @@ val TenderReader = reader<Tender> {
     val value = property(name = "value", reader = ValueReader).optional()
     val lots = property(name = "lots", reader = LotsReader).required()
 
-    typeBuilder = simpleBuilder { values ->
+    build { values ->
         Tender(
             id = values[id],
             title = values[title],
@@ -233,7 +233,7 @@ val TenderReader = reader<Tender> {
 val RequestReader = reader<Request> {
     val tender = property(name = "tender", reader = TenderReader).required()
 
-    typeBuilder = simpleBuilder { values ->
+    build { values ->
         Request(tender = values[tender])
     }
 }

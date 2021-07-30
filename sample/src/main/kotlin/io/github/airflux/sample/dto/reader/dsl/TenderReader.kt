@@ -3,7 +3,6 @@ package io.github.airflux.sample.dto.reader.dsl
 import io.github.airflux.sample.dto.model.Tender
 import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.dsl.base.reader
-import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
 import io.github.airflux.sample.json.validation.StringValidator.isNotBlank
 
 val TenderReader = reader<Tender> {
@@ -12,7 +11,7 @@ val TenderReader = reader<Tender> {
     val value = property(name = "value", reader = ValueReader).optional()
     val lots = property(name = "lots", reader = LotsReader).required()
 
-    typeBuilder = simpleBuilder { values ->
+    build { values ->
         Tender(
             id = values[id],
             title = values[title],

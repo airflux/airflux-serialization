@@ -7,7 +7,6 @@ import io.github.airflux.sample.dto.reader.base.CollectionReader.list
 import io.github.airflux.sample.dto.reader.base.EnumReader
 import io.github.airflux.sample.dto.reader.base.PrimitiveReader.stringReader
 import io.github.airflux.sample.dto.reader.dsl.base.reader
-import io.github.airflux.sample.dto.reader.dsl.base.simpleBuilder
 import io.github.airflux.sample.json.validation.ArrayValidator.isUnique
 
 val LotStatusReader = EnumReader.readAsEnum<LotStatus>()
@@ -17,7 +16,7 @@ val LotReader = reader<Lot> {
     val status = property(name = "status", reader = LotStatusReader).required()
     val value = property(name = "value", reader = ValueReader).required()
 
-    typeBuilder = simpleBuilder { values ->
+    build { values ->
         Lot(
             id = values[id],
             status = values[status],

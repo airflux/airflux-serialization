@@ -39,7 +39,11 @@ class ObjectReader(
     private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ) {
 
-    operator fun <T> invoke(init: Builder<T>.() -> Unit): JsReader<T> = Builder<T>().apply(init).build()
+    operator fun <T> invoke(init: Builder<T>.() -> TypeBuilder<T>): JsReader<T> {
+        val builder = Builder<T>()
+        val typeBuilder = builder.init()
+        return builder.build(typeBuilder)
+    }
 
     @AirfluxMarker
     inner class Builder<T> internal constructor() {
@@ -47,11 +51,6 @@ class ObjectReader(
         private var configuration: ObjectReaderConfiguration = initialConfiguration
         private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder(initialValidatorBuilders)
         private val properties = mutableListOf<JsReaderProperty<*>>()
-
-        var typeBuilder: ((ObjectValuesMap, JsResultPath) -> JsResult<T>)? = null
-            set(value) {
-                if (field == null) field = value else throw IllegalStateException("Reassigned type builder.")
-            }
 
         fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
@@ -67,12 +66,17 @@ class ObjectReader(
         fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
             PropertyBinder(path, reader)
 
-        internal fun build(): JsReader<T> {
+        inline fun <T> build(crossinline builder: (ObjectValuesMap) -> T): TypeBuilder<T> =
+            TypeBuilder { v, p -> JsResult.Success(builder(v), p) }
+
+        inline fun <T> build(crossinline builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+            TypeBuilder { v, p -> builder(v, p) }
+
+        internal fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
             val validators = JsObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
-            val typeBuilder = typeBuilder ?: throw IllegalStateException("Builder for type is undefined.")
             return JsReader { context, path, input ->
-                input.readAsObject(path, invalidTypeErrorBuilder) { a, b ->
-                    read(configuration, validators, properties, typeBuilder, context, a, b)
+                input.readAsObject(path, invalidTypeErrorBuilder) { p, b ->
+                    read(configuration, validators, properties, typeBuilder, context, p, b)
                 }
             }
         }
