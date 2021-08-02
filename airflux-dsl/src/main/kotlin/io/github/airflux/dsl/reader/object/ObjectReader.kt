@@ -40,39 +40,62 @@ class ObjectReader(
 ) {
 
     operator fun <T> invoke(init: Builder<T>.() -> TypeBuilder<T>): JsReader<T> {
-        val builder = Builder<T>()
+        val builder = BuilderInstance<T>()
         val typeBuilder = builder.init()
         return builder.build(typeBuilder)
     }
 
     @AirfluxMarker
-    inner class Builder<T> internal constructor() {
+    interface Builder<T> {
+        fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit)
+        fun validation(init: JsObjectValidators.Builder.() -> Unit)
 
+        fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P>
+        fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P>
+
+        fun build(builder: (ObjectValuesMap) -> T): TypeBuilder<T>
+        fun build(builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T>
+    }
+
+    interface PropertyBinder<P : Any> {
+        fun required(): RequiredProperty<P>
+        fun defaultable(default: () -> P): DefaultableProperty<P>
+
+        fun optional(): OptionalProperty<P>
+        fun optional(default: () -> P): OptionalWithDefaultProperty<P>
+
+        fun nullable(): NullableProperty<P>
+        fun nullable(default: () -> P): NullableWithDefaultProperty<P>
+    }
+
+    fun interface TypeBuilder<T> : (ObjectValuesMap, JsResultPath) -> JsResult<T>
+
+    private inner class BuilderInstance<T> : Builder<T> {
         private var configuration: ObjectReaderConfiguration = initialConfiguration
         private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder(initialValidatorBuilders)
         private val properties = mutableListOf<JsReaderProperty<*>>()
 
-        fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {
+        override fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
         }
 
-        fun validation(init: JsObjectValidators.Builder.() -> Unit) {
+        override fun validation(init: JsObjectValidators.Builder.() -> Unit) {
             validatorBuilders.apply(init)
         }
 
-        fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinder(JsPath.Root / name, reader)
+        override fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P> =
+            PropertyBinderInstance(JsPath.Root / name, reader)
 
-        fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinder(path, reader)
+        override fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
+            PropertyBinderInstance(path, reader)
 
-        fun build(builder: (ObjectValuesMap) -> T): TypeBuilder<T> =
+        override fun build(builder: (ObjectValuesMap) -> T): TypeBuilder<T> =
             TypeBuilder { v, p -> JsResult.Success(builder(v), p) }
 
-        fun build(builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+        override fun build(builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
             TypeBuilder { v, p -> builder(v, p) }
 
-        internal fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
+        fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
             val validators = JsObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
             return JsReader { context, path, input ->
                 input.readAsObject(path, invalidTypeErrorBuilder) { p, b ->
@@ -81,39 +104,38 @@ class ObjectReader(
             }
         }
 
-        private fun <P : Any> registration(property: JsReaderProperty<P>) {
-            properties.add(property)
-        }
-
-        @Suppress("unused")
-        inner class PropertyBinder<P : Any> internal constructor(
+        private inner class PropertyBinderInstance<P : Any>(
             private val attributePath: JsPath.Identifiable,
             private val reader: JsReader<P>
-        ) {
+        ) : PropertyBinder<P> {
 
-            fun required(): RequiredProperty<P> =
+            override fun required(): RequiredProperty<P> =
                 RequiredPropertyInstance.of(attributePath, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun defaultable(default: () -> P): DefaultableProperty<P> =
+            override fun defaultable(default: () -> P): DefaultableProperty<P> =
                 DefaultablePropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(): OptionalProperty<P> =
+            override fun optional(): OptionalProperty<P> =
                 OptionalPropertyInstance.of(attributePath, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun optional(default: () -> P): OptionalWithDefaultProperty<P> =
+            override fun optional(default: () -> P): OptionalWithDefaultProperty<P> =
                 OptionalWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(): NullableProperty<P> =
+            override fun nullable(): NullableProperty<P> =
                 NullablePropertyInstance.of(attributePath, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun nullable(default: () -> P): NullableWithDefaultProperty<P> =
+            override fun nullable(default: () -> P): NullableWithDefaultProperty<P> =
                 NullableWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
+
+            fun <P : Any> registration(property: JsReaderProperty<P>) {
+                properties.add(property)
+            }
         }
     }
 
