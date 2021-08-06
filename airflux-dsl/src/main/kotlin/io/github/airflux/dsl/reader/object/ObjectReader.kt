@@ -155,10 +155,10 @@ class ObjectReader(
                 return preValidationErrors.asFailure(currentPath)
 
             val parseErrors = mutableListOf<JsResult.Failure>()
-            val objectValuesMap = ObjectValuesMap.Builder()
+            val objectValuesMap = ObjectValuesMap.Builder(context, currentPath, input)
                 .apply {
                     properties.forEach { property ->
-                        readValue(context, currentPath, property, input)
+                        tryAddValueBy(property)
                             ?.also { parseErrors.add(it) }
                         if (configuration.failFast && parseErrors.isNotEmpty()) return@apply
                     }

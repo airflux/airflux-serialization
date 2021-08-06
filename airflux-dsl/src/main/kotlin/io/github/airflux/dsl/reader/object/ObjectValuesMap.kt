@@ -41,15 +41,14 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
     val size: Int
         get() = results.size
 
-    class Builder internal constructor() {
+    class Builder internal constructor(
+        private val context: JsReaderContext?,
+        private val path: JsResultPath,
+        private val input: JsObject
+    ) {
         private val results: MutableMap<JsReaderProperty<*>, Any> = mutableMapOf()
 
-        fun <T : Any> readValue(
-            context: JsReaderContext?,
-            path: JsResultPath,
-            property: JsReaderProperty<T>,
-            input: JsObject
-        ): JsResult.Failure? {
+        fun <T : Any> tryAddValueBy(property : JsReaderProperty<T>): JsResult.Failure? {
 
             val result: JsResult<T?> = when (property) {
                 is RequiredProperty -> property.read(context, path, input)
