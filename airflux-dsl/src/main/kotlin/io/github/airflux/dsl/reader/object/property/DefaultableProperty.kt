@@ -7,7 +7,7 @@ import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.value.JsValue
 
-sealed interface DefaultableProperty<T : Any> : JsReaderProperty<T> {
+sealed interface DefaultableProperty<T : Any> : JsReaderProperty {
 
     fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T>
 

@@ -12,7 +12,7 @@ import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsObject
 
-class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty<*>, Any>) {
+class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty, Any>) {
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: RequiredProperty<T>): T = results[attr] as T
@@ -46,17 +46,17 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
         private val path: JsResultPath,
         private val input: JsObject
     ) {
-        private val results: MutableMap<JsReaderProperty<*>, Any> = mutableMapOf()
+        private val results: MutableMap<JsReaderProperty, Any> = mutableMapOf()
 
-        fun <T : Any> tryAddValueBy(property : JsReaderProperty<T>): JsResult.Failure? {
+        fun tryAddValueBy(property: JsReaderProperty): JsResult.Failure? {
 
-            val result: JsResult<T?> = when (property) {
-                is RequiredProperty -> property.read(context, path, input)
-                is DefaultableProperty -> property.read(context, path, input)
-                is OptionalProperty -> property.read(context, path, input)
-                is OptionalWithDefaultProperty -> property.read(context, path, input)
-                is NullableProperty -> property.read(context, path, input)
-                is NullableWithDefaultProperty -> property.read(context, path, input)
+            val result: JsResult<Any?> = when (property) {
+                is RequiredProperty<*> -> property.read(context, path, input)
+                is DefaultableProperty<*> -> property.read(context, path, input)
+                is OptionalProperty<*> -> property.read(context, path, input)
+                is OptionalWithDefaultProperty<*> -> property.read(context, path, input)
+                is NullableProperty<*> -> property.read(context, path, input)
+                is NullableWithDefaultProperty<*> -> property.read(context, path, input)
             }
 
             return when (result) {

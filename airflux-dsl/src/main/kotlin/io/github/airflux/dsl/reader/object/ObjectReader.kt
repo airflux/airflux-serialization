@@ -1,6 +1,7 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.ObjectReader.TypeBuilder
 import io.github.airflux.dsl.reader.`object`.property.DefaultableProperty
 import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
@@ -73,7 +74,7 @@ class ObjectReader(
     private inner class BuilderInstance<T> : Builder<T> {
         private var configuration: ObjectReaderConfiguration = initialConfiguration
         private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder(initialValidatorBuilders)
-        private val properties = mutableListOf<JsReaderProperty<*>>()
+        private val properties = mutableListOf<JsReaderProperty>()
 
         override fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {
             configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
@@ -133,7 +134,7 @@ class ObjectReader(
                 NullableWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            fun <P : Any> registration(property: JsReaderProperty<P>) {
+            fun registration(property: JsReaderProperty) {
                 properties.add(property)
             }
         }
@@ -144,7 +145,7 @@ class ObjectReader(
         internal fun <T> read(
             configuration: ObjectReaderConfiguration,
             validators: JsObjectValidatorInstances,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             typeBuilder: (ObjectValuesMap, JsResultPath) -> JsResult<T>,
             context: JsReaderContext?,
             currentPath: JsResultPath,
@@ -182,7 +183,7 @@ class ObjectReader(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             validators: JsObjectValidatorInstances,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             context: JsReaderContext?
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
@@ -198,7 +199,7 @@ class ObjectReader(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             validators: JsObjectValidatorInstances,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext?
         ): List<JsError> = mutableListOf<JsError>()

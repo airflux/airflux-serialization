@@ -17,7 +17,7 @@ class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
 
     override fun build(
         configuration: ObjectReaderConfiguration,
-        properties: List<JsReaderProperty<*>>
+        properties: List<JsReaderProperty>
     ): JsObjectValidator.Before = mutableSetOf<String>()
         .apply {
             properties.forEach { property ->
@@ -38,7 +38,7 @@ class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
         override fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             context: JsReaderContext?
         ): List<JsError> {
             val unknownProperties = mutableListOf<String>()

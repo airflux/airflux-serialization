@@ -12,7 +12,7 @@ internal class JsObjectValidatorInstances private constructor(
         fun of(
             validators: JsObjectValidators,
             configuration: ObjectReaderConfiguration,
-            properties: List<JsReaderProperty<*>>
+            properties: List<JsReaderProperty>
         ): JsObjectValidatorInstances {
             val before = validators.before
                 .map { validator -> validator.build(configuration, properties) }

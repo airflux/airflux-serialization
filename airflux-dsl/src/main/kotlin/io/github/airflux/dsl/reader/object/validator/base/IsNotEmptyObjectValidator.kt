@@ -16,7 +16,7 @@ class IsNotEmptyObject(private val errorBuilder: ErrorBuilder) :
 
     override fun build(
         configuration: ObjectReaderConfiguration,
-        properties: List<JsReaderProperty<*>>
+        properties: List<JsReaderProperty>
     ): JsObjectValidator.After = lazy { Validator(errorBuilder) }.value
 
     private class Validator(val errorBuilder: ErrorBuilder) : JsObjectValidator.After {
@@ -24,7 +24,7 @@ class IsNotEmptyObject(private val errorBuilder: ErrorBuilder) :
         override fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext?
         ): List<JsError> =

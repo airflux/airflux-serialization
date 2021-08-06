@@ -18,7 +18,7 @@ sealed interface JsObjectValidator {
     sealed interface Builder<T : JsObjectValidator> {
         val id: Id<*>
 
-        fun build(configuration: ObjectReaderConfiguration, properties: List<JsReaderProperty<*>>): T
+        fun build(configuration: ObjectReaderConfiguration, properties: List<JsReaderProperty>): T
     }
 
     interface Before : JsObjectValidator {
@@ -26,7 +26,7 @@ sealed interface JsObjectValidator {
         fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             context: JsReaderContext?
         ): List<JsError>
 
@@ -38,7 +38,7 @@ sealed interface JsObjectValidator {
         fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext?
         ): List<JsError>
@@ -46,3 +46,5 @@ sealed interface JsObjectValidator {
         interface Builder : JsObjectValidator.Builder<After>
     }
 }
+
+

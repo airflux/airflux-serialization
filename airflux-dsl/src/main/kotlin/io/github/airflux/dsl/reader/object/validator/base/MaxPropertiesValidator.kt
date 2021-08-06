@@ -20,7 +20,7 @@ class MaxProperties(private val errorBuilder: ErrorBuilder) : JsObjectValidator.
 
         override fun build(
             configuration: ObjectReaderConfiguration,
-            properties: List<JsReaderProperty<*>>
+            properties: List<JsReaderProperty>
         ): JsObjectValidator.After = Validator(max, errorBuilder)
     }
 
@@ -29,7 +29,7 @@ class MaxProperties(private val errorBuilder: ErrorBuilder) : JsObjectValidator.
         override fun validation(
             configuration: ObjectReaderConfiguration,
             input: JsObject,
-            properties: List<JsReaderProperty<*>>,
+            properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext?
         ): List<JsError> =
