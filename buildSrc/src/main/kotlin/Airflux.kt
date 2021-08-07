@@ -1,7 +1,7 @@
 object Versions {
     const val Project = "0.0.1-SNAPSHOT"
 
-    const val Jackson = "2.12.1"
+    const val Jackson = "2.12.4"
 
     object Detect {
         const val Tool = "1.17.1"
@@ -17,7 +17,7 @@ object Versions {
     }
 
     object PiTest {
-        const val JUnit5 = "0.12"
+        const val JUnit5 = "0.14"
         const val CLI = "1.6.7"
     }
 }
