@@ -2,24 +2,25 @@ package io.github.airflux.sample.dto.reader.base
 
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.json.error.JsonErrors
-import io.github.airflux.sample.json.validation.StringValidator
 
-object EnumReader {
-    inline fun <reified T : Enum<T>> readAsEnum(): JsReader<T> =
-        JsReader { context, path, input ->
-            PrimitiveReader.stringReader.read(context, path, input)
-                .validation(context, StringValidator.isNotBlank)
-                .flatMap { text, p ->
-                    try {
-                        JsResult.Success(value = enumValueOf(text.toUpperCase()), path = p)
-                    } catch (ignored: Exception) {
-                        JsResult.Failure(
-                            path = p,
-                            error = JsonErrors.EnumCast(actual = text, expected = enumValues<T>().joinToString())
-                        )
-                    }
-                }
+inline fun <reified T : Enum<T>> JsReader<String>.asEnum(): JsReader<T> =
+    JsReader { context, path, input ->
+        read(context, path, input)
+            .asEnum()
+    }
+
+inline fun <reified T : Enum<T>> JsResult<String>.asEnum(): JsResult<T> =
+    this.asEnum(enumValues()) { text -> enumValueOf(text.toUpperCase()) }
+
+fun <T : Enum<T>> JsResult<String>.asEnum(allowable: Array<T>, transform: (String) -> T): JsResult<T> =
+    flatMap { text, path ->
+        try {
+            JsResult.Success(transform(text), path)
+        } catch (ignored: Exception) {
+            JsResult.Failure(
+                path = path,
+                error = JsonErrors.EnumCast(actual = text, expected = allowable.joinToString())
+            )
         }
-}
+    }
