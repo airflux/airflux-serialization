@@ -16,7 +16,7 @@ class OrderValidatorsTest {
         private val path = JsResultPath.Root
 
         private fun minBasicValidator(value: Int) =
-            BaseOrderValidators.min<Int, JsonErrors.Validation>(
+            BaseOrderValidators.min(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Min(expected = expectedValue, actual = actualValue)
@@ -24,7 +24,7 @@ class OrderValidatorsTest {
             )
 
         private fun maxBasicValidator(value: Int) =
-            BaseOrderValidators.max<Int, JsonErrors.Validation>(
+            BaseOrderValidators.max(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Max(expected = expectedValue, actual = actualValue)
@@ -32,7 +32,7 @@ class OrderValidatorsTest {
             )
 
         private fun eqBasicValidator(value: Int) =
-            BaseOrderValidators.eq<Int, JsonErrors.Validation>(
+            BaseOrderValidators.eq(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Eq(expected = expectedValue, actual = actualValue)
@@ -40,7 +40,7 @@ class OrderValidatorsTest {
             )
 
         private fun neBasicValidator(value: Int) =
-            BaseOrderValidators.ne<Int, JsonErrors.Validation>(
+            BaseOrderValidators.ne(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Ne(expected = expectedValue, actual = actualValue)
@@ -48,7 +48,7 @@ class OrderValidatorsTest {
             )
 
         private fun gtBasicValidator(value: Int) =
-            BaseOrderValidators.gt<Int, JsonErrors.Validation>(
+            BaseOrderValidators.gt(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Gt(expected = expectedValue, actual = actualValue)
@@ -56,7 +56,7 @@ class OrderValidatorsTest {
             )
 
         private fun ltBasicValidator(value: Int) =
-            BaseOrderValidators.lt<Int, JsonErrors.Validation>(
+            BaseOrderValidators.lt(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Lt(expected = expectedValue, actual = actualValue)
@@ -64,7 +64,7 @@ class OrderValidatorsTest {
             )
 
         private fun geBasicValidator(value: Int) =
-            BaseOrderValidators.ge<Int, JsonErrors.Validation>(
+            BaseOrderValidators.ge(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Ge(expected = expectedValue, actual = actualValue)
@@ -72,7 +72,7 @@ class OrderValidatorsTest {
             )
 
         private fun leBasicValidator(value: Int) =
-            BaseOrderValidators.le<Int, JsonErrors.Validation>(
+            BaseOrderValidators.le(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Numbers.Le(expected = expectedValue, actual = actualValue)

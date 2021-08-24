@@ -6,28 +6,25 @@ import io.github.airflux.reader.validator.JsPropertyValidator
 @Suppress("unused")
 object BaseArrayValidators {
 
-    fun <T, C, E> minItems(expected: Int, error: (expected: Int, actual: Int) -> E): JsPropertyValidator<C, E>
-        where C : Collection<T>,
-              E : JsError =
+    fun <T, C> minItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsPropertyValidator<C>
+        where C : Collection<T> =
         JsPropertyValidator { _, _, values ->
             if (values.size < expected) listOf(error(expected, values.size)) else emptyList()
         }
 
-    fun <T, C, E> maxItems(expected: Int, error: (expected: Int, actual: Int) -> E): JsPropertyValidator<C, E>
-        where C : Collection<T>,
-              E : JsError =
+    fun <T, C> maxItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsPropertyValidator<C>
+        where C : Collection<T> =
         JsPropertyValidator { _, _, values ->
             if (values.size > expected) listOf(error(expected, values.size)) else emptyList()
         }
 
-    fun <T, K, E> isUnique(
+    fun <T, K> isUnique(
         failFast: Boolean,
         keySelector: (T) -> K,
-        error: (index: Int, value: K) -> E
-    ): JsPropertyValidator<Collection<T>, E>
-        where E : JsError =
+        error: (index: Int, value: K) -> JsError
+    ): JsPropertyValidator<Collection<T>> =
         JsPropertyValidator { _, _, values ->
-            val errors = mutableListOf<E>()
+            val errors = mutableListOf<JsError>()
             val unique = mutableSetOf<K>()
             values.forEachIndexed { index, item ->
                 val key = keySelector(item)

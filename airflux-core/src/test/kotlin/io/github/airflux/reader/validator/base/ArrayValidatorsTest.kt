@@ -16,7 +16,7 @@ class ArrayValidatorsTest {
         private val path = JsResultPath.Root
 
         private fun minItemsBasicValidator(value: Int) =
-            BaseArrayValidators.minItems<String, List<String>, JsonErrors.Validation>(
+            BaseArrayValidators.minItems<String, List<String>>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Arrays.MinItems(
@@ -27,7 +27,7 @@ class ArrayValidatorsTest {
             )
 
         private fun maxItemsBasicValidator(value: Int) =
-            BaseArrayValidators.maxItems<String, List<String>, JsonErrors.Validation>(
+            BaseArrayValidators.maxItems<String, List<String>>(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Arrays.MaxItems(
@@ -38,7 +38,7 @@ class ArrayValidatorsTest {
             )
 
         fun <T, K> isUniqueBasicValidator(failFast: Boolean, keySelector: (T) -> K) =
-            BaseArrayValidators.isUnique<T, K, JsonErrors.Validation>(
+            BaseArrayValidators.isUnique(
                 failFast = failFast,
                 keySelector = keySelector,
                 error = { index, value ->

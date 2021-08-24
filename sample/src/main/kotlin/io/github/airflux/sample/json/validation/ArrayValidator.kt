@@ -7,21 +7,18 @@ import io.github.airflux.sample.json.error.JsonErrors
 object ArrayValidator {
 
     fun <T, C : Collection<T>> minItems(value: Int) =
-        BaseArrayValidators.minItems<T, C, JsonErrors.Validation.Arrays>(
+        BaseArrayValidators.minItems<T, C>(
             expected = value,
             error = { expected, actual -> JsonErrors.Validation.Arrays.MinItems(expected = expected, actual = actual) }
         )
 
     fun <T, C : Collection<T>> maxItems(value: Int) =
-        BaseArrayValidators.maxItems<T, C, JsonErrors.Validation.Arrays>(
+        BaseArrayValidators.maxItems<T, C>(
             expected = value,
             error = { expected, actual -> JsonErrors.Validation.Arrays.MaxItems(expected = expected, actual = actual) }
         )
 
-    fun <T, K> isUnique(
-        failFast: Boolean = true,
-        keySelector: (T) -> K
-    ): JsPropertyValidator<List<T>, JsonErrors.Validation.Arrays> =
+    fun <T, K> isUnique(failFast: Boolean = true, keySelector: (T) -> K): JsPropertyValidator<List<T>> =
         BaseArrayValidators.isUnique(
             failFast = failFast,
             keySelector = keySelector,

@@ -14,7 +14,7 @@ class ConditionValidatorsTest {
         private val context = JsReaderContext()
         private val path = JsResultPath.Root
 
-        private val isNotEmpty: JsPropertyValidator<String, JsonErrors.Validation.Strings> =
+        private val isNotEmpty: JsPropertyValidator<String> =
             JsPropertyValidator { _, _, value ->
                 if (value.isNotEmpty()) emptyList() else listOf(JsonErrors.Validation.Strings.IsEmpty)
             }

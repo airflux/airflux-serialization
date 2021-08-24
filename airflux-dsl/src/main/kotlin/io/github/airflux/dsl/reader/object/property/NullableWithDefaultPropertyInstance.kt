@@ -7,7 +7,6 @@ import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.filter.JsPredicate
 import io.github.airflux.reader.filter.extension.filter
 import io.github.airflux.reader.readNullable
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
@@ -37,7 +36,7 @@ internal class NullableWithDefaultPropertyInstance<T : Any> private constructor(
     override fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T?> =
         reader.read(context, path, input)
 
-    override fun <E : JsError> validation(validator: JsPropertyValidator<T?, E>): NullableWithDefaultPropertyInstance<T> {
+    override fun validation(validator: JsPropertyValidator<T?>): NullableWithDefaultPropertyInstance<T> {
         val previousReader = this.reader
         reader = JsReader { context, path, input ->
             previousReader.read(context, path, input).validation(context, validator)

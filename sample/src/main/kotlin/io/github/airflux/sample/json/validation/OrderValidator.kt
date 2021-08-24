@@ -6,7 +6,7 @@ import io.github.airflux.sample.json.error.JsonErrors
 
 object OrderValidator {
 
-    fun <T : Comparable<T>> min(value: T): JsPropertyValidator<T, JsonErrors.Validation.Numbers> =
+    fun <T : Comparable<T>> min(value: T): JsPropertyValidator<T> =
         BaseOrderValidators.min(
             expected = value,
             error = { expected: T, actual: T ->
@@ -14,7 +14,7 @@ object OrderValidator {
             }
         )
 
-    fun <T : Comparable<T>> max(value: T): JsPropertyValidator<T, JsonErrors.Validation.Numbers> =
+    fun <T : Comparable<T>> max(value: T): JsPropertyValidator<T> =
         BaseOrderValidators.max(
             expected = value,
             error = { expected: T, actual: T ->
@@ -22,7 +22,7 @@ object OrderValidator {
             }
         )
 
-    fun <T : Comparable<T>> gt(value: T): JsPropertyValidator<T, JsonErrors.Validation.Numbers> =
+    fun <T : Comparable<T>> gt(value: T): JsPropertyValidator<T> =
         BaseOrderValidators.gt(
             expected = value,
             error = { expected: T, actual: T -> JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual) }

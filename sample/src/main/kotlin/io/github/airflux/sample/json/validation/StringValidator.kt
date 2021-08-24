@@ -6,18 +6,18 @@ import io.github.airflux.sample.json.error.JsonErrors
 
 object StringValidator {
 
-    fun minLength(value: Int): JsPropertyValidator<String, JsonErrors.Validation.Strings> =
+    fun minLength(value: Int): JsPropertyValidator<String> =
         BaseStringValidators.minLength(
             expected = value,
             error = { expected, actual -> JsonErrors.Validation.Strings.MinLength(expected, actual) }
         )
 
-    fun maxLength(value: Int): JsPropertyValidator<String, JsonErrors.Validation.Strings> =
+    fun maxLength(value: Int): JsPropertyValidator<String> =
         BaseStringValidators.maxLength(
             expected = value,
             error = { expected, actual -> JsonErrors.Validation.Strings.MaxLength(expected, actual) }
         )
 
-    val isNotBlank: JsPropertyValidator<String, JsonErrors.Validation.Strings> =
+    val isNotBlank: JsPropertyValidator<String> =
         BaseStringValidators.isNotBlank { JsonErrors.Validation.Strings.IsEmpty }
 }

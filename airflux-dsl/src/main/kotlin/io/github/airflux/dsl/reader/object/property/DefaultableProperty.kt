@@ -1,7 +1,6 @@
 package io.github.airflux.dsl.reader.`object`.property
 
 import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
@@ -11,5 +10,5 @@ sealed interface DefaultableProperty<T : Any> : JsReaderProperty {
 
     fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T>
 
-    fun <E : JsError> validation(validator: JsPropertyValidator<T, E>): DefaultableProperty<T>
+    fun validation(validator: JsPropertyValidator<T>): DefaultableProperty<T>
 }

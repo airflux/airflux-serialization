@@ -17,7 +17,7 @@ class StringValidatorsTest {
         private val path = JsResultPath.Root
 
         private fun minLengthBasicValidator(value: Int) =
-            BaseStringValidators.minLength<JsonErrors.Validation>(
+            BaseStringValidators.minLength(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Strings.MinLength(expected = expectedValue, actual = actualValue)
@@ -25,27 +25,27 @@ class StringValidatorsTest {
             )
 
         private fun maxLengthBasicValidator(value: Int) =
-            BaseStringValidators.maxLength<JsonErrors.Validation>(
+            BaseStringValidators.maxLength(
                 expected = value,
                 error = { expectedValue, actualValue ->
                     JsonErrors.Validation.Strings.MaxLength(expected = expectedValue, actual = actualValue)
                 }
             )
 
-        private val isNotEmptyValidator: JsPropertyValidator<String, JsonErrors.Validation> =
+        private val isNotEmptyValidator: JsPropertyValidator<String> =
             BaseStringValidators.isNotEmpty { JsonErrors.Validation.Strings.IsEmpty }
 
-        private val isNotBlankValidator: JsPropertyValidator<String, JsonErrors.Validation> =
+        private val isNotBlankValidator: JsPropertyValidator<String> =
             BaseStringValidators.isNotBlank { JsonErrors.Validation.Strings.IsBlank }
 
         private fun patternBasicValidator(pattern: Regex) =
-            BaseStringValidators.pattern<JsonErrors.Validation>(
+            BaseStringValidators.pattern(
                 pattern = pattern,
                 error = { value, regexp -> JsonErrors.Validation.Strings.Pattern(value = value, regex = regexp) }
             )
 
         private fun isABasicValidator(predicate: (String) -> Boolean) =
-            BaseStringValidators.isA<JsonErrors.Validation>(
+            BaseStringValidators.isA(
                 predicate = predicate,
                 error = { value -> JsonErrors.Validation.Strings.IsA(value = value) }
             )

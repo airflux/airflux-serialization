@@ -7,7 +7,6 @@ import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.filter.JsPredicate
 import io.github.airflux.reader.filter.extension.filter
 import io.github.airflux.reader.readOptional
-import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
@@ -35,7 +34,7 @@ internal class OptionalPropertyInstance<T : Any> private constructor(
     override fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T?> =
         reader.read(context, path, input)
 
-    override fun <E : JsError> validation(validator: JsPropertyValidator<T?, E>): OptionalPropertyInstance<T> {
+    override fun validation(validator: JsPropertyValidator<T?>): OptionalPropertyInstance<T> {
         val previousReader = this.reader
         reader = JsReader { context, path, input ->
             previousReader.read(context, path, input).validation(context, validator)

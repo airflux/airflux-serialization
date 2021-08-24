@@ -5,11 +5,11 @@ import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResultPath
 
 @Suppress("unused")
-fun interface JsPropertyValidator<in T, out E : JsError> {
+fun interface JsPropertyValidator<in T> {
 
-    fun validation(context: JsReaderContext?, path: JsResultPath, value: T): List<E>
+    fun validation(context: JsReaderContext?, path: JsResultPath, value: T): List<JsError>
 
-    infix fun or(other: JsPropertyValidator<@UnsafeVariance T, @UnsafeVariance E>): JsPropertyValidator<T, E> {
+    infix fun or(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
         return JsPropertyValidator { context, path, value ->
             val result = self.validation(context, path, value)
@@ -20,7 +20,7 @@ fun interface JsPropertyValidator<in T, out E : JsError> {
         }
     }
 
-    infix fun and(other: JsPropertyValidator<@UnsafeVariance T, @UnsafeVariance E>): JsPropertyValidator<T, E> {
+    infix fun and(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
         return JsPropertyValidator { context, path, value ->
             val result = self.validation(context, path, value)
