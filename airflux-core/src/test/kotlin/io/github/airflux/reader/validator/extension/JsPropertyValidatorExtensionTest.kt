@@ -21,7 +21,7 @@ import kotlin.test.Test
 class JsPropertyValidatorExtensionTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext.Empty
         private val isNotEmpty = JsPropertyValidator<String> { _, _, value ->
             if (value.isNotEmpty()) emptyList() else listOf(JsonErrors.Validation.Strings.IsEmpty)
         }

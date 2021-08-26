@@ -12,7 +12,7 @@ class OrderValidatorsTest {
 
     companion object {
 
-        private val context = JsReaderContext()
+        private val context = JsReaderContext.Empty
         private val path = JsResultPath.Root
 
         private fun minBasicValidator(value: Int) =

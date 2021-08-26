@@ -17,7 +17,7 @@ import kotlin.test.Test
 class OptionalWithDefaultFieldReaderTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext.Empty
         private val stringReader: JsReader<String> =
             JsReader { _, path, input ->
                 when (input) {

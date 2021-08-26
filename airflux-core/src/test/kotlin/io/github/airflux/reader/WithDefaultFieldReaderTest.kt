@@ -16,7 +16,7 @@ import kotlin.test.Test
 class WithDefaultFieldReaderTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext.Empty
         private const val DEFAULT_VALUE = "Default value"
         private val stringReader: JsReader<String> =
             JsReader { _, path, input -> JsResult.Success((input as JsString).underlying, path) }

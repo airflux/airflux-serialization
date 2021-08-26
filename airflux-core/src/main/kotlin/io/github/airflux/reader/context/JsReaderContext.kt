@@ -1,23 +1,42 @@
 package io.github.airflux.reader.context
 
-class JsReaderContext {
-    private val map = mutableMapOf<Element.Key<*>, Element>()
+sealed interface JsReaderContext {
+    operator fun <E : Element> plus(element: E): JsReaderContext
+    operator fun <E : Element> get(key: Key<E>): E?
+    operator fun <E : Element> contains(key: Key<E>): Boolean
 
-    operator fun contains(key: Element.Key<*>) = map.contains(key)
+    @Suppress("unused")
+    interface Key<E : Element>
 
-    operator fun plus(element: Element): JsReaderContext {
-        map[element.key] = element
-        return this
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    operator fun <E : Element> get(key: Element.Key<E>): E? = map[key]?.let { it as E }
-
-    sealed interface Element {
-
+    interface Element {
         val key: Key<*>
 
-        @Suppress("unused")
-        interface Key<E : Element>
+        operator fun <E : Element> plus(element: E): List<Element> = listOf(this, element)
+    }
+
+    object Empty : JsReaderContext {
+        override fun <E : Element> plus(element: E): JsReaderContext = JsReaderContextInstance(element)
+        override fun <E : Element> get(key: Key<E>): E? = null
+        override fun <E : Element> contains(key: Key<E>): Boolean = false
+    }
+
+    private class JsReaderContextInstance(private val elements: Map<Key<*>, Element>) : JsReaderContext {
+
+        constructor(element: Element) : this(mapOf(element.key to element))
+        constructor(elements: Collection<Element>) : this(elements.associateBy { it.key })
+
+        override fun <E : Element> plus(element: E): JsReaderContext =
+            JsReaderContextInstance(this.elements + (element.key to element))
+
+        override operator fun <E : Element> get(key: Key<E>): E? =
+            @Suppress("UNCHECKED_CAST")
+            elements[key]?.let { it as E }
+
+        override operator fun <E : Element> contains(key: Key<E>): Boolean = elements.contains(key)
+    }
+
+    companion object {
+        operator fun invoke(element: Element): JsReaderContext = JsReaderContextInstance(element)
+        operator fun invoke(elements: Collection<Element>): JsReaderContext = JsReaderContextInstance(elements)
     }
 }

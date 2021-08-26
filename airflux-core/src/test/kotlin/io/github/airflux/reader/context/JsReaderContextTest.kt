@@ -1,5 +1,6 @@
 package io.github.airflux.reader.context
 
+import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -7,27 +8,105 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class JsReaderContextTest {
+
     companion object {
-        private const val USER_ID = "user-1"
-        private val user = User(USER_ID)
-
-        private val emptyContext = JsReaderContext()
-        private val contextWithUser = JsReaderContext() + user
+        private val user = User()
+        private val order = Order()
     }
 
-    @Test
-    fun `Testing context wth user`() {
-        assertTrue(User.Key in contextWithUser)
-        assertEquals(USER_ID, contextWithUser[User.Key]!!.id)
+    @Nested
+    inner class Element {
+
+        @Test
+        fun `Testing method the plus for Element`() {
+
+            val elements = user + order
+
+            assertEquals(2, elements.size)
+            assertTrue(user in elements)
+            assertTrue(order in elements)
+        }
     }
 
-    @Test
-    fun `Testing empty context`() {
-        assertFalse(User.Key in emptyContext)
-        assertNull(emptyContext[User.Key])
+    @Nested
+    inner class EmptyContext {
+
+        @Test
+        fun `Testing method the plus`() {
+            val context = JsReaderContext.Empty + user
+
+            assertEquals(user, context[User.Key])
+        }
+
+        @Test
+        fun `Testing method the get`() {
+            assertNull(JsReaderContext.Empty[User.Key])
+        }
+
+        @Test
+        fun `Testing method the contains`() {
+            assertFalse(User.Key in JsReaderContext.Empty)
+        }
     }
 
-    class User(val id: String) : AbstractContextElement(Key) {
-        companion object Key : JsReaderContext.Element.Key<User>
+    @Nested
+    inner class NonEmptyContext {
+
+        @Test
+        fun `Testing constructor of JsReaderContextInstance with one element`() {
+
+            val context = JsReaderContext(user)
+
+
+            assertTrue(User.Key in context)
+            assertEquals(user, context[User.Key])
+        }
+
+        @Test
+        fun `Testing constructor of JsReaderContextInstance with two elements`() {
+
+            val context = JsReaderContext(listOf(user, order))
+
+            assertTrue(User.Key in context)
+            assertEquals(user, context[User.Key])
+
+            assertTrue(User.Key in context)
+            assertEquals(order, context[Order.Key])
+        }
+
+        @Test
+        fun `Testing method the plus`() {
+
+            val context = JsReaderContext(user) + order
+
+            assertEquals(user, context[User.Key])
+            assertEquals(order, context[Order.Key])
+        }
+
+        @Test
+        fun `Testing method the get`() {
+
+            val context = JsReaderContext(user)
+
+            assertEquals(user, context[User.Key])
+            assertNull(context[Order.Key])
+        }
+
+        @Test
+        fun `Testing method the contains`() {
+
+            val context = JsReaderContext(user)
+
+            assertTrue(User.Key in context)
+            assertFalse(Order.Key in context)
+        }
+    }
+
+    class User : JsReaderAbstractContextElement(Key) {
+        companion object Key : JsReaderContext.Key<User>
+    }
+
+    class Order : JsReaderAbstractContextElement(Key) {
+        companion object Key : JsReaderContext.Key<Order>
     }
 }

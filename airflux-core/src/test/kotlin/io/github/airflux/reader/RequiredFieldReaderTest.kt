@@ -15,7 +15,7 @@ import kotlin.test.Test
 class RequiredFieldReaderTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext.Empty
         private val stringReader: JsReader<String> =
             JsReader { _, path, input -> JsResult.Success((input as JsString).underlying, path) }
     }
