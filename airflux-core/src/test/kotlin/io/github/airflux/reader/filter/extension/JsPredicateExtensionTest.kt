@@ -108,6 +108,15 @@ class JsPredicateExtensionTest {
         }
 
         @Test
+        fun `Testing of the extension-function the filter for JsResult without value`() {
+            val result: JsResult<String?> = JsResult.Success(path = JsResultPath.Root / "name", value = null)
+
+            val validated = result.filter(isNotBlank)
+
+            validated.assertAsSuccess(path = JsResultPath.Root / "name", value = null)
+        }
+
+        @Test
         fun `Testing of the extension-function the filter for JsResult (filtered)`() {
             val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "  ")
 
