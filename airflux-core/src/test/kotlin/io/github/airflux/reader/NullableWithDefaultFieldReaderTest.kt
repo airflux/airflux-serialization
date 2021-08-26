@@ -17,7 +17,7 @@ import kotlin.test.Test
 class NullableWithDefaultFieldReaderTest {
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
             JsReader { _, path, input -> JsResult.Success((input as JsString).underlying, path) }
         private val defaultValue = { DEFAULT_VALUE }

@@ -39,7 +39,7 @@ class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             properties: List<JsReaderProperty>,
-            context: JsReaderContext?
+            context: JsReaderContext
         ): List<JsError> {
             val unknownProperties = mutableListOf<String>()
             input.underlying

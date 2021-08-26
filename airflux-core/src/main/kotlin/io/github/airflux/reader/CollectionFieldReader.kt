@@ -14,7 +14,7 @@ import io.github.airflux.value.JsValue
  * - If node match array type, then applies [using]
  */
 fun <T : Any> readAsList(
-    context: JsReaderContext?,
+    context: JsReaderContext,
     currentPath: JsResultPath,
     from: JsValue,
     using: JsReader<T>,
@@ -29,7 +29,7 @@ fun <T : Any> readAsList(
  * - If node match array type, then applies [using]
  */
 fun <T : Any> readAsSet(
-    context: JsReaderContext?,
+    context: JsReaderContext,
     currentPath: JsResultPath,
     from: JsValue,
     using: JsReader<T>,
@@ -44,7 +44,7 @@ fun <T : Any> readAsSet(
  * - If node match array type, then applies [using]
  */
 fun <T : Any, C> readAsCollection(
-    context: JsReaderContext?,
+    context: JsReaderContext,
     currentPath: JsResultPath,
     from: JsValue,
     using: JsReader<T>,

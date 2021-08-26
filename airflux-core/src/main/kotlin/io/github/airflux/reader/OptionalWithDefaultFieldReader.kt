@@ -13,7 +13,7 @@ import io.github.airflux.reader.result.JsResult
  * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then returning error [invalidTypeErrorBuilder]
  */
 fun <T : Any> readOptional(
-    context: JsReaderContext?,
+    context: JsReaderContext,
     from: JsLookup,
     using: JsReader<T>,
     defaultValue: () -> T,

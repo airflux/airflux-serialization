@@ -27,7 +27,7 @@ sealed interface JsObjectValidator {
             configuration: ObjectReaderConfiguration,
             input: JsObject,
             properties: List<JsReaderProperty>,
-            context: JsReaderContext?
+            context: JsReaderContext
         ): List<JsError>
 
         interface Builder : JsObjectValidator.Builder<Before>
@@ -40,7 +40,7 @@ sealed interface JsObjectValidator {
             input: JsObject,
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
-            context: JsReaderContext?
+            context: JsReaderContext
         ): List<JsError>
 
         interface Builder : JsObjectValidator.Builder<After>

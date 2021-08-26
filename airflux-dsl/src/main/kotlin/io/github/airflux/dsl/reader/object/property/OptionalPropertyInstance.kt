@@ -31,7 +31,7 @@ internal class OptionalPropertyInstance<T : Any> private constructor(
         }
     }
 
-    override fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T?> =
+    override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T?> =
         reader.read(context, path, input)
 
     override fun validation(validator: JsPropertyValidator<T?>): OptionalPropertyInstance<T> {

@@ -13,7 +13,7 @@ import kotlin.test.Test
 class JsReaderTest {
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
         private val currentPath = JsResultPath.Root / "user"
         private const val ID_VALUE = "10"
         private const val IDENTIFIER_VALUE = "100"

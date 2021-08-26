@@ -12,7 +12,7 @@ fun interface JsReader<T> {
     /**
      * Convert the [JsValue] into a T
      */
-    fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T>
+    fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T>
 
     /**
      * Create a new [JsReader] which maps the value produced by this [JsReader].

@@ -42,7 +42,7 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
         get() = results.size
 
     class Builder internal constructor(
-        private val context: JsReaderContext?,
+        private val context: JsReaderContext,
         private val path: JsResultPath,
         private val input: JsObject
     ) {

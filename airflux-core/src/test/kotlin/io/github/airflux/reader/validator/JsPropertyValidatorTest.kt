@@ -15,7 +15,7 @@ class JsPropertyValidatorTest {
     }
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
         private val path = JsResultPath.Root
     }
 

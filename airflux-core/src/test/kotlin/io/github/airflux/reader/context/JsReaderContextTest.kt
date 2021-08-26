@@ -29,28 +29,14 @@ class JsReaderContextTest {
     }
 
     @Nested
-    inner class EmptyContext {
-
+    inner class Constructor {
         @Test
-        fun `Testing method the plus`() {
-            val context = JsReaderContext.Empty + user
+        fun `Testing constructor of JsReaderContextInstance without elements`() {
 
-            assertEquals(user, context[User.Key])
+            val context = JsReaderContext()
+
+            assertTrue(context.isEmpty)
         }
-
-        @Test
-        fun `Testing method the get`() {
-            assertNull(JsReaderContext.Empty[User.Key])
-        }
-
-        @Test
-        fun `Testing method the contains`() {
-            assertFalse(User.Key in JsReaderContext.Empty)
-        }
-    }
-
-    @Nested
-    inner class NonEmptyContext {
 
         @Test
         fun `Testing constructor of JsReaderContextInstance with one element`() {
@@ -63,7 +49,7 @@ class JsReaderContextTest {
         }
 
         @Test
-        fun `Testing constructor of JsReaderContextInstance with two elements`() {
+        fun `Testing constructor of JsReaderContextInstance with collection elements`() {
 
             val context = JsReaderContext(listOf(user, order))
 
@@ -73,6 +59,49 @@ class JsReaderContextTest {
             assertTrue(User.Key in context)
             assertEquals(order, context[Order.Key])
         }
+    }
+
+    @Nested
+    inner class EmptyContext {
+
+        @Test
+        fun `Testing method the plus`() {
+            val context = JsReaderContext() + user
+
+            assertEquals(user, context[User.Key])
+        }
+
+        @Test
+        fun `Testing method the get`() {
+            val context = JsReaderContext()
+
+            assertNull(context[User.Key])
+        }
+
+        @Test
+        fun `Testing method the contains`() {
+            val context = JsReaderContext()
+
+            assertFalse(User.Key in context)
+        }
+
+        @Test
+        fun `Testing property the isEmpty`() {
+            val context = JsReaderContext()
+
+            assertTrue(context.isEmpty)
+        }
+
+        @Test
+        fun `Testing property the isNotEmpty`() {
+            val context = JsReaderContext()
+
+            assertFalse(context.isNotEmpty)
+        }
+    }
+
+    @Nested
+    inner class NonEmptyContext {
 
         @Test
         fun `Testing method the plus`() {
@@ -99,6 +128,20 @@ class JsReaderContextTest {
 
             assertTrue(User.Key in context)
             assertFalse(Order.Key in context)
+        }
+
+        @Test
+        fun `Testing property the isEmpty`() {
+            val context = JsReaderContext(user)
+
+            assertFalse(context.isEmpty)
+        }
+
+        @Test
+        fun `Testing property the isNotEmpty`() {
+            val context = JsReaderContext(user)
+
+            assertTrue(context.isNotEmpty)
         }
     }
 

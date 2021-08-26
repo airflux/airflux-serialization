@@ -6,7 +6,7 @@ import io.github.airflux.reader.result.JsResultPath
 @Suppress("unused")
 fun interface JsPredicate<T> {
 
-    fun test(context: JsReaderContext?, path: JsResultPath, value: T): Boolean
+    fun test(context: JsReaderContext, path: JsResultPath, value: T): Boolean
 
     infix fun or(other: JsPredicate<T>): JsPredicate<T> {
         val self = this

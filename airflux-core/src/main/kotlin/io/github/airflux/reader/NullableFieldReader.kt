@@ -16,7 +16,7 @@ import io.github.airflux.value.JsNull
  * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then returning error [invalidTypeErrorBuilder]
  */
 fun <T : Any> readNullable(
-    context: JsReaderContext?,
+    context: JsReaderContext,
     from: JsLookup,
     using: JsReader<T>,
     pathMissingErrorBuilder: PathMissingErrorBuilder,

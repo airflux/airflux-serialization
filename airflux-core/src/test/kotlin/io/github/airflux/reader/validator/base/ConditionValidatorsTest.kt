@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 class ConditionValidatorsTest {
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
         private val path = JsResultPath.Root
 
         private val isNotEmpty: JsPropertyValidator<String> =

@@ -18,7 +18,7 @@ import kotlin.test.Test
 class BasePrimitiveReaderTest {
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
         private const val TITLE_MIN_VALUE = "min value"
         private const val TITLE_MAX_VALUE = "max value"
     }

@@ -20,7 +20,7 @@ import kotlin.test.Test
 class JsPredicateExtensionTest {
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
         private val isNotBlank = JsPredicate<String> { _, _, value -> value.isNotBlank() }
 
         val stringReader: JsReader<String> = JsReader { _, path, input ->

@@ -12,12 +12,9 @@ infix fun <T> JsReader<T>.validation(validator: JsPropertyValidator<T>): JsReade
     }
 
 fun <T> JsResult<T>.validation(validator: JsPropertyValidator<T>): JsResult<T> =
-    validation(context = null, validator = validator)
+    validation(context = JsReaderContext(), validator = validator)
 
-fun <T> JsResult<T>.validation(
-    context: JsReaderContext?,
-    validator: JsPropertyValidator<T>
-): JsResult<T> =
+fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsPropertyValidator<T>): JsResult<T> =
     when (this) {
         is JsResult.Success -> {
             val errors = validator.validation(context, this.path, this.value)

@@ -9,7 +9,7 @@ import io.github.airflux.value.JsValue
 
 sealed interface OptionalProperty<T : Any> : JsReaderProperty {
 
-    fun read(context: JsReaderContext?, path: JsResultPath, input: JsValue): JsResult<T?>
+    fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T?>
 
     fun validation(validator: JsPropertyValidator<T?>): OptionalProperty<T>
 

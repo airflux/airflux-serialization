@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class JsPredicateTest {
 
     companion object {
-        private val context = JsReaderContext.Empty
+        private val context = JsReaderContext()
     }
 
     @ParameterizedTest

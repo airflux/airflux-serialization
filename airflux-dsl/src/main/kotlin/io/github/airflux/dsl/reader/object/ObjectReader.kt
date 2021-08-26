@@ -30,7 +30,7 @@ import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.readAsObject
 
-fun <T : Any> JsValue.deserialization(context: JsReaderContext? = null, reader: JsReader<T>): JsResult<T> =
+fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =
     reader.read(context, JsResultPath.Root, this)
 
 class ObjectReader(
@@ -147,7 +147,7 @@ class ObjectReader(
             validators: JsObjectValidatorInstances,
             properties: List<JsReaderProperty>,
             typeBuilder: (ObjectValuesMap, JsResultPath) -> JsResult<T>,
-            context: JsReaderContext?,
+            context: JsReaderContext,
             currentPath: JsResultPath,
             input: JsObject
         ): JsResult<T> {
@@ -184,7 +184,7 @@ class ObjectReader(
             input: JsObject,
             validators: JsObjectValidatorInstances,
             properties: List<JsReaderProperty>,
-            context: JsReaderContext?
+            context: JsReaderContext
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
                 validators.before
@@ -201,7 +201,7 @@ class ObjectReader(
             validators: JsObjectValidatorInstances,
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
-            context: JsReaderContext?
+            context: JsReaderContext
         ): List<JsError> = mutableListOf<JsError>()
             .apply {
                 validators.after

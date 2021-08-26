@@ -7,7 +7,7 @@ import io.github.airflux.reader.result.JsResultPath
 @Suppress("unused")
 fun interface JsPropertyValidator<in T> {
 
-    fun validation(context: JsReaderContext?, path: JsResultPath, value: T): List<JsError>
+    fun validation(context: JsReaderContext, path: JsResultPath, value: T): List<JsError>
 
     infix fun or(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this

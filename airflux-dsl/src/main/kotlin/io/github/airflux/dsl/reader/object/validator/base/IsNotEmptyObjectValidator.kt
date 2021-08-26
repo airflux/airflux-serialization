@@ -26,7 +26,7 @@ class IsNotEmptyObject(private val errorBuilder: ErrorBuilder) :
             input: JsObject,
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
-            context: JsReaderContext?
+            context: JsReaderContext
         ): List<JsError> =
             if (objectValuesMap.isEmpty)
                 listOf(errorBuilder.build())
