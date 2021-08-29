@@ -27,10 +27,11 @@ internal class NullablePropertyInstance<T : Any> private constructor(
             reader: JsReader<T>,
             pathMissingErrorBuilder: PathMissingErrorBuilder,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): NullablePropertyInstance<T> = NullablePropertyInstance(propertyPath) { context, path, input ->
-            val lookup = input.lookup(path, propertyPath)
-            readNullable(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
-        }
+        ): NullableProperty<T> =
+            NullablePropertyInstance(propertyPath) { context, path, input ->
+                val lookup = input.lookup(path, propertyPath)
+                readNullable(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+            }
     }
 
     override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T?> =

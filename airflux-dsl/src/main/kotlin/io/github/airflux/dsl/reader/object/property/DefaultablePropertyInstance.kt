@@ -24,10 +24,11 @@ internal class DefaultablePropertyInstance<T : Any> private constructor(
             reader: JsReader<T>,
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): DefaultablePropertyInstance<T> = DefaultablePropertyInstance(propertyPath) { context, path, input ->
-            val lookup = input.lookup(path, propertyPath)
-            readWithDefault(context, lookup, reader, default, invalidTypeErrorBuilder)
-        }
+        ): DefaultableProperty<T> =
+            DefaultablePropertyInstance(propertyPath) { context, path, input ->
+                val lookup = input.lookup(path, propertyPath)
+                readWithDefault(context, lookup, reader, default, invalidTypeErrorBuilder)
+            }
     }
 
     override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T> =

@@ -25,10 +25,11 @@ internal class OptionalPropertyInstance<T : Any> private constructor(
             propertyPath: JsPath.Identifiable,
             reader: JsReader<T>,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): OptionalPropertyInstance<T> = OptionalPropertyInstance(propertyPath) { context, path, input ->
-            val lookup = input.lookup(path, propertyPath)
-            readOptional(context, lookup, reader, invalidTypeErrorBuilder)
-        }
+        ): OptionalProperty<T> =
+            OptionalPropertyInstance(propertyPath) { context, path, input ->
+                val lookup = input.lookup(path, propertyPath)
+                readOptional(context, lookup, reader, invalidTypeErrorBuilder)
+            }
     }
 
     override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T?> =

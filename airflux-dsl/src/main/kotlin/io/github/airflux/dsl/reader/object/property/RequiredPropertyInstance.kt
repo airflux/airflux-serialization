@@ -25,10 +25,11 @@ internal class RequiredPropertyInstance<T : Any> private constructor(
             reader: JsReader<T>,
             pathMissingErrorBuilder: PathMissingErrorBuilder,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): RequiredPropertyInstance<T> = RequiredPropertyInstance(propertyPath) { context, path, input ->
-            val lookup = input.lookup(path, propertyPath)
-            readRequired(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
-        }
+        ): RequiredProperty<T> =
+            RequiredPropertyInstance(propertyPath) { context, path, input ->
+                val lookup = input.lookup(path, propertyPath)
+                readRequired(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+            }
     }
 
     override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T> =

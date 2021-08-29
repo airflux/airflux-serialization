@@ -26,7 +26,7 @@ internal class NullableWithDefaultPropertyInstance<T : Any> private constructor(
             reader: JsReader<T>,
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): NullableWithDefaultPropertyInstance<T> =
+        ): NullableWithDefaultProperty<T> =
             NullableWithDefaultPropertyInstance(propertyPath) { context, path, input ->
                 val lookup = input.lookup(path, propertyPath)
                 readNullable(context, lookup, reader, default, invalidTypeErrorBuilder)

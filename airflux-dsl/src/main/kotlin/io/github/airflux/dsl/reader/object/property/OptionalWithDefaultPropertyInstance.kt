@@ -24,7 +24,7 @@ internal class OptionalWithDefaultPropertyInstance<T : Any> private constructor(
             reader: JsReader<T>,
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): OptionalWithDefaultPropertyInstance<T> =
+        ): OptionalWithDefaultProperty<T> =
             OptionalWithDefaultPropertyInstance(propertyPath) { context, path, input ->
                 val lookup = input.lookup(path, propertyPath)
                 readOptional(context, lookup, reader, default, invalidTypeErrorBuilder)
