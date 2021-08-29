@@ -30,9 +30,11 @@ import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.readAsObject
 
+@Suppress("unused")
 fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =
     reader.read(context, JsResultPath.Root, this)
 
+@Suppress("unused")
 class ObjectReader(
     private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
     private val initialValidatorBuilders: JsObjectValidators = JsObjectValidators.Default,
