@@ -8,11 +8,12 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-class IsNotEmptyObject(private val errorBuilder: ErrorBuilder) :
+@Suppress("unused")
+class IsNotEmptyObjectValidator(private val errorBuilder: ErrorBuilder) :
     JsObjectValidator.Identifier,
     JsObjectValidator.After.Builder {
 
-    override val id = IsNotEmptyObject
+    override val id = IsNotEmptyObjectValidator
 
     override fun build(
         configuration: ObjectReaderConfiguration,

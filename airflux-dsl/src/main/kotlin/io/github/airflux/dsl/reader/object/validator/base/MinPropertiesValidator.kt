@@ -8,15 +8,16 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-class MinProperties(private val errorBuilder: ErrorBuilder) : JsObjectValidator.Identifier {
+@Suppress("unused")
+class MinPropertiesValidator(private val errorBuilder: ErrorBuilder) : JsObjectValidator.Identifier {
 
-    override val id = MinProperties
+    override val id = MinPropertiesValidator
 
     operator fun invoke(min: Int): JsObjectValidator.After.Builder = Builder(min)
 
     private inner class Builder(val min: Int) : JsObjectValidator.After.Builder {
 
-        override val id: JsObjectValidator.Id<*> = MinProperties
+        override val id: JsObjectValidator.Id<*> = MinPropertiesValidator
 
         override fun build(
             configuration: ObjectReaderConfiguration,

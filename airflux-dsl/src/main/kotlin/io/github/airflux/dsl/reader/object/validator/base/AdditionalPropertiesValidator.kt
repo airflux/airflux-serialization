@@ -9,11 +9,12 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-class AdditionalProperties(private val errorBuilder: ErrorBuilder) :
+@Suppress("unused")
+class AdditionalPropertiesValidator(private val errorBuilder: ErrorBuilder) :
     JsObjectValidator.Identifier,
     JsObjectValidator.Before.Builder {
 
-    override val id = AdditionalProperties
+    override val id = AdditionalPropertiesValidator
 
     override fun build(
         configuration: ObjectReaderConfiguration,

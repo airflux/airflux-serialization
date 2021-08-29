@@ -8,15 +8,16 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.value.JsObject
 
-class MaxProperties(private val errorBuilder: ErrorBuilder) : JsObjectValidator.Identifier {
+@Suppress("unused")
+class MaxPropertiesValidator(private val errorBuilder: ErrorBuilder) : JsObjectValidator.Identifier {
 
-    override val id = MaxProperties
+    override val id = MaxPropertiesValidator
 
     operator fun invoke(min: Int): JsObjectValidator.After.Builder = Builder(min)
 
     private inner class Builder(val max: Int) : JsObjectValidator.After.Builder {
 
-        override val id: JsObjectValidator.Id<*> = MaxProperties
+        override val id: JsObjectValidator.Id<*> = MaxPropertiesValidator
 
         override fun build(
             configuration: ObjectReaderConfiguration,
