@@ -56,8 +56,8 @@ class ObjectReader(
         fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P>
         fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P>
 
-        fun build(builder: (ObjectValuesMap) -> T): TypeBuilder<T>
-        fun build(builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T>
+        fun build(builder: ObjectValuesMap.(JsResultPath) -> JsResult<T>): TypeBuilder<T>
+        fun build(builder: ObjectValuesMap.(JsReaderContext, JsResultPath) -> JsResult<T>): TypeBuilder<T>
     }
 
     interface PropertyBinder<P : Any> {
@@ -71,7 +71,7 @@ class ObjectReader(
         fun nullable(default: () -> P): NullableWithDefaultProperty<P>
     }
 
-    fun interface TypeBuilder<T> : (ObjectValuesMap, JsResultPath) -> JsResult<T>
+    fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsResultPath) -> JsResult<T>
 
     private inner class BuilderInstance<T> : Builder<T> {
         private var configuration: ObjectReaderConfiguration = initialConfiguration
@@ -92,11 +92,11 @@ class ObjectReader(
         override fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
             PropertyBinderInstance(path, reader)
 
-        override fun build(builder: (ObjectValuesMap) -> T): TypeBuilder<T> =
-            TypeBuilder { v, p -> JsResult.Success(builder(v), p) }
+        override fun build(builder: ObjectValuesMap.(JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+            TypeBuilder { _, v, p -> v.builder(p) }
 
-        override fun build(builder: (ObjectValuesMap, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
-            TypeBuilder { v, p -> builder(v, p) }
+        override fun build(builder: ObjectValuesMap.(JsReaderContext, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+            TypeBuilder { c, v, p -> v.builder(c, p) }
 
         fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
             val validators = JsObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
@@ -148,7 +148,7 @@ class ObjectReader(
             configuration: ObjectReaderConfiguration,
             validators: JsObjectValidatorInstances,
             properties: List<JsReaderProperty>,
-            typeBuilder: (ObjectValuesMap, JsResultPath) -> JsResult<T>,
+            typeBuilder: TypeBuilder<T>,
             context: JsReaderContext,
             currentPath: JsResultPath,
             input: JsObject
@@ -176,7 +176,7 @@ class ObjectReader(
             }
 
             return if (parseErrors.isEmpty())
-                typeBuilder(objectValuesMap, currentPath)
+                typeBuilder(context, objectValuesMap, currentPath)
             else
                 JsResult.Failure(parseErrors.fold(mutableListOf()) { acc, failure -> acc.apply { addAll(failure.errors) } })
         }

@@ -1,5 +1,6 @@
 package io.github.airflux.sample.dto.reader.dsl
 
+import io.github.airflux.reader.result.asSuccess
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.sample.dto.model.Lot
 import io.github.airflux.sample.dto.model.LotStatus
@@ -17,12 +18,12 @@ val LotReader = reader<Lot> {
     val status = property(name = "status", reader = LotStatusReader).required()
     val value = property(name = "value", reader = ValueReader).required()
 
-    build { values ->
+    build { path ->
         Lot(
-            id = values[id],
-            status = values[status],
-            value = values[value]
-        )
+            id = this[id],
+            status = this[status],
+            value = this[value]
+        ).asSuccess(path)
     }
 }
 
