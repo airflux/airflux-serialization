@@ -10,8 +10,8 @@ val ValueReader = reader<Value> {
 
     build { path ->
         Value(
-            amount = this[amount],
-            currency = this[currency]
+            amount = +amount,
+            currency = +currency
         ).asSuccess(path)
     }
 }

@@ -16,21 +16,27 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: RequiredProperty<T>): T = results[attr] as T
+    operator fun <T : Any> RequiredProperty<T>.unaryPlus(): T = get(this)
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: DefaultableProperty<T>): T = results[attr] as T
+    operator fun <T : Any> DefaultableProperty<T>.unaryPlus(): T = get(this)
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: OptionalProperty<T>): T? = results[attr]?.let { it as T }
+    operator fun <T : Any> OptionalProperty<T>.unaryPlus(): T? = get(this)
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: OptionalWithDefaultProperty<T>): T = results[attr] as T
+    operator fun <T : Any> OptionalWithDefaultProperty<T>.unaryPlus(): T = get(this)
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: NullableProperty<T>): T? = results[attr]?.let { it as T }
+    operator fun <T : Any> NullableProperty<T>.unaryPlus(): T? = get(this)
 
     @Suppress("UNCHECKED_CAST")
     infix operator fun <T : Any> get(attr: NullableWithDefaultProperty<T>): T? = results[attr]?.let { it as T }
+    operator fun <T : Any> NullableWithDefaultProperty<T>.unaryPlus(): T? = get(this)
 
     val isEmpty: Boolean
         get() = results.isEmpty()

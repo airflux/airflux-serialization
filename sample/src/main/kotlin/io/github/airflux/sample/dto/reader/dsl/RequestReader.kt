@@ -8,7 +8,8 @@ val RequestReader = reader<Request> {
     val tender = property(name = "tender", reader = TenderReader).required()
 
     build { path ->
-        Request(tender = this[tender])
-            .asSuccess(path)
+        Request(
+            tender = this[tender]
+        ).asSuccess(path)
     }
 }

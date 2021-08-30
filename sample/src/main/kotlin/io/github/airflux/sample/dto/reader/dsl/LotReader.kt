@@ -20,9 +20,9 @@ val LotReader = reader<Lot> {
 
     build { path ->
         Lot(
-            id = this[id],
-            status = this[status],
-            value = this[value]
+            id = +id,
+            status = +status,
+            value = +value
         ).asSuccess(path)
     }
 }
