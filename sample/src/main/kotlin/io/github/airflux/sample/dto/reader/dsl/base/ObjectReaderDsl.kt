@@ -9,11 +9,11 @@ import io.github.airflux.sample.json.validation.isNotEmptyObject
 import io.github.airflux.sample.json.validation.maxProperties
 import io.github.airflux.sample.json.validation.minProperties
 
-private val DefaultObjectReaderConfig = ObjectReaderConfiguration.build {
+private val GlobalObjectReaderConfig = ObjectReaderConfiguration.build {
     failFast = true
 }
 
-private val DefaultObjectValidators = JsObjectValidators.build {
+private val GlobalObjectValidators = JsObjectValidators.build {
     +additionalProperties
     -additionalProperties
 
@@ -28,8 +28,8 @@ private val DefaultObjectValidators = JsObjectValidators.build {
 }
 
 val reader = ObjectReader(
-    initialConfiguration = DefaultObjectReaderConfig,
-    initialValidatorBuilders = DefaultObjectValidators,
+    globalConfiguration = GlobalObjectReaderConfig,
+    globalValidators = GlobalObjectValidators,
     pathMissingErrorBuilder = ErrorBuilder.PathMissing,
     invalidTypeErrorBuilder = ErrorBuilder.InvalidType
 )

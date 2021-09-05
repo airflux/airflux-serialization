@@ -36,14 +36,18 @@ fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext
 
 @Suppress("unused")
 class ObjectReader(
-    private val initialConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
-    private val initialValidatorBuilders: JsObjectValidators = JsObjectValidators.Default,
+    private val globalConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
+    private val globalValidators: JsObjectValidators = JsObjectValidators.Default,
     private val pathMissingErrorBuilder: PathMissingErrorBuilder,
     private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ) {
 
-    operator fun <T> invoke(init: Builder<T>.() -> TypeBuilder<T>): JsReader<T> {
-        val builder = BuilderInstance<T>()
+    operator fun <T> invoke(
+        configuration: ObjectReaderConfiguration? = null,
+        validators: JsObjectValidators? = null,
+        init: Builder<T>.() -> TypeBuilder<T>
+    ): JsReader<T> {
+        val builder = BuilderInstance<T>(configuration ?: globalConfiguration, validators ?: globalValidators)
         val typeBuilder = builder.init()
         return builder.build(typeBuilder)
     }
@@ -73,9 +77,12 @@ class ObjectReader(
 
     fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsResultPath) -> JsResult<T>
 
-    private inner class BuilderInstance<T> : Builder<T> {
-        private var configuration: ObjectReaderConfiguration = initialConfiguration
-        private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder(initialValidatorBuilders)
+    private inner class BuilderInstance<T>(
+        private var configuration: ObjectReaderConfiguration,
+        validators: JsObjectValidators
+    ) : Builder<T> {
+
+        private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder(validators)
         private val properties = mutableListOf<JsReaderProperty>()
 
         override fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {
@@ -178,7 +185,11 @@ class ObjectReader(
             return if (parseErrors.isEmpty())
                 typeBuilder(context, objectValuesMap, currentPath)
             else
-                JsResult.Failure(parseErrors.fold(mutableListOf()) { acc, failure -> acc.apply { addAll(failure.errors) } })
+                JsResult.Failure(
+                    parseErrors.fold(mutableListOf()) { acc, failure ->
+                        acc.apply { addAll(failure.errors) }
+                    }
+                )
         }
 
         internal fun preValidation(
