@@ -19,7 +19,7 @@ class ConditionValidatorsTest {
                 if (value.isNotEmpty()) emptyList() else listOf(JsonErrors.Validation.Strings.IsEmpty)
             }
 
-        private val validator = applyIfNotNull(isNotEmpty)
+        private val validator = isNotEmpty.applyIfNotNull()
     }
 
     @Test
@@ -40,6 +40,22 @@ class ConditionValidatorsTest {
     @Test
     fun `Testing the basic validator of the applyIfNotNull (value is null, target validator do not apply)`() {
         val errors = validator.validation(context, path, null)
+
+        assertTrue(errors.isEmpty())
+    }
+
+    @Test
+    fun `Testing the basic validator of the applyIf (value is empty string, target validator is apply)`() {
+        val errors = isNotEmpty.applyIf { _, _, _ -> true }
+            .validation(context, path, "")
+
+        assertTrue(errors.isNotEmpty())
+    }
+
+    @Test
+    fun `Testing the basic validator of the applyIf (value is empty string, target validator is not apply)`() {
+        val errors = isNotEmpty.applyIf { _, _, _ -> false }
+            .validation(context, path, "")
 
         assertTrue(errors.isEmpty())
     }
