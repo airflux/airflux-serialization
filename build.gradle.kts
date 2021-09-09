@@ -165,13 +165,13 @@ subprojects {
         }
     }
 
-    signing {
-        useInMemoryPgpKeys(
-            System.getenv("GPG_PRIVATE_KEY"),
-            System.getenv("GPG_PRIVATE_PASSWORD")
-        )
-
-        sign(publishing.publications["mavenJava"])
+    val signingKey = System.getenv("GPG_PRIVATE_KEY")
+    if(signingKey != null && signingKey != "") {
+        val signingKeyPassphrase = System.getenv("GPG_PRIVATE_PASSWORD")
+        signing {
+            useInMemoryPgpKeys(signingKey, signingKeyPassphrase)
+            sign(publishing.publications["mavenJava"])
+        }
     }
 }
 
