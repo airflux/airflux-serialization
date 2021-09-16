@@ -1,5 +1,7 @@
 plugins {
     kotlin("jvm") version "1.5.30"
+    java
+    application
 }
 
 repositories {
@@ -8,7 +10,7 @@ repositories {
 }
 
 val jvmTargetVersion by extra { "1.8" }
-val jacksonVersion by extra { "2.12.1" }
+val jacksonVersion by extra { "2.12.4" }
 
 dependencies {
     implementation("io.github.airflux:airflux-core:0.0.1-SNAPSHOT")
@@ -38,4 +40,28 @@ tasks {
                 )
             }
         }
+
+    val javaMainClass = "io.github.airflux.quickstart.QuickstartKt"
+
+    application {
+        mainClass.set(javaMainClass)
+    }
+
+    jar {
+        manifest {
+            attributes["Main-Class"] = javaMainClass
+        }
+
+        from(sourceSets.main.get().output)
+
+        dependsOn(configurations.runtimeClasspath)
+        from({
+            configurations.runtimeClasspath.get()
+                .filter { it.name.endsWith("jar") }
+                .map {
+                    if (it.isDirectory) it else zipTree(it)
+                }
+        })
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
