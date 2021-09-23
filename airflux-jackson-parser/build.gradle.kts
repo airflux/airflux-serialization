@@ -4,7 +4,7 @@ import io.github.airflux.gradle.Versions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.30"
+    kotlin("jvm") version "1.5.31"
     id("airflux-configuration-plugin")
     id("airflux-detekt-plugin")
     id("airflux-publishing-plugin")
