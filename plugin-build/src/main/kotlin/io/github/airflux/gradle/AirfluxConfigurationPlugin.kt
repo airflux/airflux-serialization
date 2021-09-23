@@ -19,7 +19,7 @@ object Versions {
     const val Jackson = "2.12.5"
 
     object Detect {
-        const val Tool = "1.17.1"
+        const val Tool = "1.18.1"
     }
 
     object JaCoCo {
@@ -32,7 +32,7 @@ object Versions {
     }
 
     object PiTest {
-        const val JUnit5 = "0.14"
-        const val CLI = "1.6.7"
+        const val JUnit5 = "0.15"
+        const val CLI = "1.7.0"
     }
 }
