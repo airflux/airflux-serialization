@@ -1,5 +1,7 @@
 rootProject.name = "airflux"
 
-include("airflux-core")
-include("airflux-dsl")
-include("airflux-jackson-parser")
+includeBuild("plugin-build")
+includeBuild("airflux-core")
+includeBuild("airflux-dsl")
+includeBuild("airflux-jackson-parser")
+includeBuild("quickstart")

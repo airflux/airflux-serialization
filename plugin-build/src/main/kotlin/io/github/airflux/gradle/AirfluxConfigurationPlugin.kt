@@ -1,5 +1,20 @@
+package io.github.airflux.gradle
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+@Suppress("unused")
+class AirfluxConfigurationPlugin : Plugin<Project> {
+    override fun apply(project: Project) {
+        project.version = Versions.Project
+        project.group = Versions.Group
+    }
+}
+
+@Suppress("unused")
 object Versions {
     const val Project = "0.0.1-SNAPSHOT"
+    const val Group = "io.github.airflux"
 
     const val Jackson = "2.12.4"
 

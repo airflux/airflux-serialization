@@ -1,209 +1,38 @@
-import info.solidsoft.gradle.pitest.PitestPlugin
-import info.solidsoft.gradle.pitest.PitestPluginExtension
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.6.0")
-    }
+tasks.register("clean") {
+    dependsOn(gradle.includedBuild("plugin-build").task(":clean"))
+    dependsOn(gradle.includedBuild("airflux-core").task(":clean"))
+    dependsOn(gradle.includedBuild("airflux-dsl").task(":clean"))
+    dependsOn(gradle.includedBuild("airflux-jackson-parser").task(":clean"))
+    dependsOn(gradle.includedBuild("quickstart").task(":clean"))
 }
 
-plugins {
-    kotlin("jvm") version "1.5.30"
-
-    id("io.gitlab.arturbosch.detekt") version "1.17.1"
-    jacoco
-
-    `maven-publish`
-    signing
+tasks.register("build") {
+    dependsOn(gradle.includedBuild("plugin-build").task(":build"))
+    dependsOn(gradle.includedBuild("airflux-core").task(":build"))
+    dependsOn(gradle.includedBuild("airflux-dsl").task(":build"))
+    dependsOn(gradle.includedBuild("airflux-jackson-parser").task(":build"))
+    dependsOn(gradle.includedBuild("quickstart").task(":build"))
 }
 
-apply<info.solidsoft.gradle.pitest.PitestAggregatorPlugin>()
-
-val jvmTargetVersion by extra { "1.8" }
-val detectConfigPath = "$projectDir/config/detekt/detekt.yml"
-
-allprojects {
-    repositories {
-        mavenCentral()
-    }
+tasks.register("jacocoTestReport") {
+    dependsOn(gradle.includedBuild("airflux-core").task(":jacocoTestReport"))
+    dependsOn(gradle.includedBuild("airflux-dsl").task(":jacocoTestReport"))
 }
 
-val testReport = tasks.register<TestReport>("testReport") {
-    destinationDir = file("$buildDir/reports/tests/test")
-    val testTasks = subprojects.mapNotNull { it.tasks.findByName("test") }
-    reportOn(testTasks)
+tasks.register("pitest") {
+    dependsOn(gradle.includedBuild("airflux-core").task(":pitest"))
+    dependsOn(gradle.includedBuild("airflux-dsl").task(":pitest"))
 }
 
-subprojects {
-    version = Versions.Project
-    group = "io.github.airflux"
-
-    apply<KotlinPlatformJvmPlugin>()
-    apply<JavaLibraryPlugin>()
-
-    apply<PitestPlugin>()
-    apply<DetektPlugin>()
-    apply<JacocoPlugin>()
-
-    apply<MavenPublishPlugin>()
-    apply<SigningPlugin>()
-
-    configure<JavaPluginExtension> {
-        withSourcesJar()
-        withJavadocJar()
-    }
-
-    configure<PitestPluginExtension> {
-        threads.set(4)
-        testPlugin.set("junit5")
-        junit5PluginVersion.set(Versions.PiTest.JUnit5)
-        pitestVersion.set(Versions.PiTest.CLI)
-        mutators.set(mutableListOf("STRONGER"))
-        outputFormats.set(listOf("XML", "HTML"))
-        targetClasses.set(mutableListOf("io.github.airflux.*"))
-        targetTests.set(mutableListOf("io.github.airflux.*"))
-        avoidCallsTo.set(mutableListOf("kotlin", "kotlin.jvm.internal", "kotlin.collections"))
-        mainSourceSets.set(listOf(project.sourceSets.main.get()))
-        timestampedReports.set(false)
-        exportLineCoverage.set(true)
-    }
-
-    tasks {
-
-        withType<Test> {
-            useJUnitPlatform()
-            finalizedBy(testReport)
-        }
-
-        withType<KotlinCompile>()
-            .configureEach {
-                kotlinOptions {
-                    jvmTarget = jvmTargetVersion
-                    suppressWarnings = false
-                    freeCompilerArgs = listOf(
-                        "-Xjsr305=strict",
-                        "-Xjvm-default=all"
-                    )
-                }
-            }
-    }
-
-    detekt {
-        toolVersion = Versions.Detect.Tool
-        ignoreFailures = true
-
-        input = project.files("src/main/kotlin", "src/test/kotlin")
-        config = project.files(detectConfigPath)
-        debug = false
-
-        reports {
-            html {
-                enabled = true
-            }
-
-            xml {
-                enabled = true
-            }
-            txt {
-                enabled = false
-            }
-        }
-    }
-
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                from(components["java"])
-                pom {
-                    name.set("Airflux")
-                    description.set("The library to parse, validate and generate data in the JSON (JavaScript Object Notation) format.")
-                    url.set("https://airflux.github.io/airflux/")
-                    licenses {
-                        license {
-                            name.set("Mozilla Public License Version 2.0")
-                            url.set("https://www.mozilla.org/en-US/MPL/2.0/")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("maxim-sambulat")
-                            name.set("Maxim Sambulat")
-                            email.set("airflux.github.io@gmail.com")
-                            organization.set("airflux")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:git://github.com/airflux/airflux.git")
-                        developerConnection.set("scm:git:ssh://github.com:airflux/airflux.git")
-                        url.set("https://github.com/airflux/airflux/tree/main")
-                    }
-                }
-            }
-        }
-
-        repositories {
-            mavenLocal()
-
-            maven {
-                name = "sonatype"
-                url = if (version.toString().endsWith("SNAPSHOT"))
-                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                else
-                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-
-                credentials {
-                    username = System.getenv("SONATYPE_USER")
-                    password = System.getenv("SONATYPE_PASSWORD")
-                }
-            }
-        }
-    }
-
-    val signingKey = System.getenv("GPG_PRIVATE_KEY")
-    if(signingKey != null && signingKey != "") {
-        val signingKeyPassphrase = System.getenv("GPG_PRIVATE_PASSWORD")
-        signing {
-            useInMemoryPgpKeys(signingKey, signingKeyPassphrase)
-            sign(publishing.publications["mavenJava"])
-        }
-    }
+tasks.register("publishToMavenLocal") {
+    dependsOn(gradle.includedBuild("airflux-core").task(":publishToMavenLocal"))
+    dependsOn(gradle.includedBuild("airflux-dsl").task(":publishToMavenLocal"))
+    dependsOn(gradle.includedBuild("airflux-jackson-parser").task(":publishToMavenLocal"))
 }
 
-tasks {
-    val jacocoReport = register<JacocoReport>("jacocoReport") {
-        subprojects {
-            val subproject = this
-
-            subproject.extensions.findByType<JacocoPluginExtension>()
-                ?.apply {
-                    toolVersion = Versions.JaCoCo.Tool
-                }
-
-            subproject.plugins.withType<JacocoPlugin>()
-                .configureEach {
-                    subproject.tasks
-                        .matching { it.extensions.findByType<JacocoTaskExtension>() != null }
-                        .configureEach {
-                            sourceSets(subproject.the<SourceSetContainer>().named("main").get())
-                            executionData(this)
-                        }
-                }
-        }
-
-        reports {
-            html.required.set(true)
-            xml.required.set(true)
-            csv.required.set(false)
-        }
-    }
-
-    build {
-        dependsOn(jacocoReport)
-    }
+tasks.register("publish") {
+    dependsOn(gradle.includedBuild("airflux-core").task(":publish"))
+    dependsOn(gradle.includedBuild("airflux-dsl").task(":publish"))
+    dependsOn(gradle.includedBuild("airflux-jackson-parser").task(":publish"))
 }

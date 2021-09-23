@@ -1,5 +1,23 @@
+import info.solidsoft.gradle.pitest.PitestPluginExtension
+import io.github.airflux.gradle.AirfluxPublishingPlugin.Companion.mavenCentralMetadata
+import io.github.airflux.gradle.AirfluxPublishingPlugin.Companion.mavenSonatypeRepository
+import io.github.airflux.gradle.Versions
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") version "1.5.30"
+    id("airflux-configuration-plugin")
+    id("airflux-jacoco-plugin")
+    id("airflux-pitest-plugin")
+    id("airflux-detekt-plugin")
+    id("airflux-publishing-plugin")
+    `java-library`
+}
+
+val jvmTargetVersion by extra { "1.8" }
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -18,4 +36,55 @@ dependencies {
 
     /* PITest */
     testImplementation("org.pitest:pitest-junit5-plugin:${Versions.PiTest.JUnit5}")
+}
+
+tasks {
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    withType<Test> {
+        useJUnitPlatform()
+    }
+
+    withType<KotlinCompile>()
+        .configureEach {
+            kotlinOptions {
+                jvmTarget = jvmTargetVersion
+                suppressWarnings = false
+                freeCompilerArgs = listOf(
+                    "-Xjsr305=strict",
+                    "-Xjvm-default=all"
+                )
+            }
+        }
+
+    detekt {
+        source = project.files("src/main/kotlin", "src/test/kotlin")
+    }
+}
+
+configure<PitestPluginExtension> {
+    mainSourceSets.set(listOf(project.sourceSets.main.get()))
+}
+
+val mavenPublicationName = "JVM"
+publishing {
+    publications {
+        create<MavenPublication>(mavenPublicationName) {
+            from(components["java"])
+            pom(mavenCentralMetadata)
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenSonatypeRepository(project)
+    }
+}
+
+
+signing {
+    sign(publishing.publications[mavenPublicationName])
 }
