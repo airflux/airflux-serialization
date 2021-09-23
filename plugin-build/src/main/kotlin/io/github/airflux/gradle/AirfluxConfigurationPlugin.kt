@@ -16,7 +16,7 @@ object Versions {
     const val Project = "0.0.1-SNAPSHOT"
     const val Group = "io.github.airflux"
 
-    const val Jackson = "2.12.4"
+    const val Jackson = "2.12.5"
 
     object Detect {
         const val Tool = "1.17.1"
@@ -27,8 +27,8 @@ object Versions {
     }
 
     object JUnit {
-        const val Jupiter = "5.7.2"
-        const val Platform = "1.7.2"
+        const val Jupiter = "5.8.0"
+        const val Platform = "1.8.0"
     }
 
     object PiTest {
