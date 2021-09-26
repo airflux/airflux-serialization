@@ -26,6 +26,8 @@ import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.result.asFailure
+import io.github.airflux.reader.validator.JsPropertyValidator.Companion.hasCritical
+import io.github.airflux.reader.validator.JsPropertyValidator.Companion.isFailure
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.readAsObject
@@ -168,9 +170,13 @@ class ObjectReader(
             val objectValuesMap = ObjectValuesMap.Builder(context, currentPath, input)
                 .apply {
                     properties.forEach { property ->
-                        tryAddValueBy(property)
-                            ?.also { parseErrors.add(it) }
-                        if (configuration.failFast && parseErrors.isNotEmpty()) return@apply
+                        val failure = tryAddValueBy(property)
+                        if (failure != null) {
+                            val hasCriticalError = failure.errors
+                                .any { (_, errors) -> errors.hasCritical() }
+                            parseErrors.add(failure)
+                            if (configuration.failFast || hasCriticalError) return@apply
+                        }
                     }
                 }
                 .build()
@@ -203,8 +209,11 @@ class ObjectReader(
                 validators.before
                     .forEach { validator ->
                         val validationResult = validator.validation(configuration, input, properties, context)
-                        addAll(validationResult)
-                        if (isNotEmpty() && configuration.failFast) return@forEach
+                        if (validationResult.isFailure()) {
+                            val hasCriticalError = validationResult.hasCritical()
+                            addAll(validationResult)
+                            if (configuration.failFast || hasCriticalError) return@forEach
+                        }
                     }
             }
 
@@ -221,8 +230,11 @@ class ObjectReader(
                     .forEach { validator ->
                         val validationResult =
                             validator.validation(configuration, input, properties, objectValuesMap, context)
-                        addAll(validationResult)
-                        if (isNotEmpty() && configuration.failFast) return@forEach
+                        if (validationResult.isFailure()) {
+                            val hasCriticalError = validationResult.hasCritical()
+                            addAll(validationResult)
+                            if (configuration.failFast || hasCriticalError) return@forEach
+                        }
                     }
             }
     }
