@@ -2,11 +2,14 @@ package io.github.airflux.reader.validator.base//
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class ConditionValidatorsTest {
 
@@ -16,7 +19,7 @@ class ConditionValidatorsTest {
 
         private val isNotEmpty: JsPropertyValidator<String> =
             JsPropertyValidator { _, _, value ->
-                if (value.isNotEmpty()) emptyList() else listOf(JsonErrors.Validation.Strings.IsEmpty)
+                if (value.isNotEmpty()) null else JsErrors.of(JsonErrors.Validation.Strings.IsEmpty)
             }
 
         private val validator = isNotEmpty.applyIfNotNull()
@@ -26,22 +29,23 @@ class ConditionValidatorsTest {
     fun `Testing the basic validator of the applyIfNotNull (value has string, target validator is apply)`() {
         val errors = validator.validation(context, path, "Hello")
 
-        assertTrue(errors.isEmpty())
+        assertNull(errors)
     }
 
     @Test
     fun `Testing the basic validator of the applyIfNotNull (value is empty string, target validator is apply)`() {
-        val error = validator.validation(context, path, "")
+        val errors = validator.validation(context, path, "")
 
-        assertEquals(1, error.size)
-        assertTrue(error[0] is JsonErrors.Validation.Strings.IsEmpty)
+        assertNotNull(errors)
+        assertEquals(1, errors.count())
+        assertContains(errors, JsonErrors.Validation.Strings.IsEmpty)
     }
 
     @Test
     fun `Testing the basic validator of the applyIfNotNull (value is null, target validator do not apply)`() {
         val errors = validator.validation(context, path, null)
 
-        assertTrue(errors.isEmpty())
+        assertNull(errors)
     }
 
     @Test
@@ -49,7 +53,7 @@ class ConditionValidatorsTest {
         val errors = isNotEmpty.applyIf { _, _, _ -> true }
             .validation(context, path, "")
 
-        assertTrue(errors.isNotEmpty())
+        assertNotNull(errors)
     }
 
     @Test
@@ -57,6 +61,6 @@ class ConditionValidatorsTest {
         val errors = isNotEmpty.applyIf { _, _, _ -> false }
             .validation(context, path, "")
 
-        assertTrue(errors.isEmpty())
+        assertNull(errors)
     }
 }

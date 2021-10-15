@@ -32,11 +32,30 @@ sealed class JsResult<out T> {
 
     class Success<T>(val value: T, val path: JsResultPath) : JsResult<T>()
 
-    class Failure(val errors: List<Pair<JsResultPath, List<JsError>>>) : JsResult<Nothing>() {
+    class Failure private constructor(val causes: List<Cause>) : JsResult<Nothing>() {
 
-        constructor(path: JsResultPath, error: JsError) : this(path, listOf(error))
+        constructor(path: JsResultPath, error: JsError) : this(listOf(Cause(path, JsErrors.of(error))))
 
-        constructor(path: JsResultPath, errors: List<JsError>) : this(listOf(Pair(path, errors)))
+        constructor(path: JsResultPath, errors: JsErrors) : this(listOf(Cause(path, errors)))
+
+        operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
+
+        data class Cause(val path: JsResultPath, val errors: JsErrors) {
+
+            companion object {
+                infix fun JsResultPath.bind(error: JsError): Cause = Cause(path = this, errors = JsErrors.of(error))
+
+                infix fun Int.bind(error: JsError): Cause =
+                    Cause(path = JsResultPath.Root / this, errors = JsErrors.of(error))
+
+                infix fun String.bind(error: JsError): Cause =
+                    Cause(path = JsResultPath.Root / this, errors = JsErrors.of(error))
+            }
+        }
+
+        companion object {
+            fun Collection<Failure>.merge(): Failure = Failure(causes = flatMap { failure -> failure.causes })
+        }
     }
 }
 
@@ -45,6 +64,3 @@ fun <T> T.asSuccess(path: JsResultPath): JsResult<T> =
 
 fun <E : JsError> E.asFailure(path: JsResultPath): JsResult<Nothing> =
     JsResult.Failure(path = path, error = this)
-
-fun <E : JsError> List<E>.asFailure(path: JsResultPath): JsResult<Nothing> =
-    JsResult.Failure(path = path, errors = this)

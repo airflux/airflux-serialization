@@ -1,6 +1,7 @@
 package io.github.airflux.reader.validator.base
 
 import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.validator.JsPropertyValidator
 
 @Suppress("unused")
@@ -9,13 +10,13 @@ object BaseArrayValidators {
     fun <T, C> minItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsPropertyValidator<C>
         where C : Collection<T> =
         JsPropertyValidator { _, _, values ->
-            if (values.size < expected) listOf(error(expected, values.size)) else emptyList()
+            if (values.size < expected) JsErrors.of(error(expected, values.size)) else null
         }
 
     fun <T, C> maxItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsPropertyValidator<C>
         where C : Collection<T> =
         JsPropertyValidator { _, _, values ->
-            if (values.size > expected) listOf(error(expected, values.size)) else emptyList()
+            if (values.size > expected) JsErrors.of(error(expected, values.size)) else null
         }
 
     fun <T, K> isUnique(
@@ -29,8 +30,8 @@ object BaseArrayValidators {
             values.forEachIndexed { index, item ->
                 val key = keySelector(item)
                 if (!unique.add(key)) errors.add(error(index, key))
-                if (failFast && errors.isNotEmpty()) return@JsPropertyValidator errors
+                if (failFast && errors.isNotEmpty()) return@JsPropertyValidator JsErrors.of(errors)
             }
-            errors
+            JsErrors.of(errors)
         }
 }

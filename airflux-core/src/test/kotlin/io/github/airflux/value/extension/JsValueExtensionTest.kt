@@ -11,6 +11,7 @@ import io.github.airflux.path.JsPath.Identifiable.Companion.div
 import io.github.airflux.path.KeyPathElement
 import io.github.airflux.path.PathElement
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
@@ -214,9 +215,7 @@ class JsValueExtensionTest {
             val result = json.readAsBoolean(currentPath, JsonErrors::InvalidType)
 
             result.assertAsFailure(
-                currentPath to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
-                )
+                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
             )
         }
     }
@@ -239,9 +238,7 @@ class JsValueExtensionTest {
             val result = json.readAsString(currentPath, JsonErrors::InvalidType)
 
             result.assertAsFailure(
-                currentPath to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                )
+                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
             )
         }
     }
@@ -267,9 +264,7 @@ class JsValueExtensionTest {
             val result = json.readAsNumber(currentPath, JsonErrors::InvalidType, transformer)
 
             result.assertAsFailure(
-                currentPath to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
-                )
+                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
             )
         }
     }
@@ -298,9 +293,7 @@ class JsValueExtensionTest {
             val result = json.readAsObject(currentPath, JsonErrors::InvalidType, reader)
 
             result.assertAsFailure(
-                currentPath to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.BOOLEAN)
-                )
+                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.BOOLEAN)
             )
         }
     }

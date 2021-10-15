@@ -23,11 +23,10 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.reader.result.JsResultPath
-import io.github.airflux.reader.result.asFailure
-import io.github.airflux.reader.validator.JsPropertyValidator.Companion.hasCritical
-import io.github.airflux.reader.validator.JsPropertyValidator.Companion.isFailure
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.readAsObject
@@ -162,40 +161,43 @@ class ObjectReader(
             currentPath: JsResultPath,
             input: JsObject
         ): JsResult<T> {
-            val preValidationErrors = preValidation(configuration, input, validators, properties, context)
-            if (preValidationErrors.isNotEmpty())
-                return preValidationErrors.asFailure(currentPath)
+            val failures = mutableListOf<JsResult.Failure>()
 
-            val parseErrors = mutableListOf<JsResult.Failure>()
+            val preValidationErrors = preValidation(configuration, input, validators, properties, context)
+            if (preValidationErrors != null) {
+                val hasCriticalError = preValidationErrors.hasCritical()
+                val failure = JsResult.Failure(currentPath, preValidationErrors)
+                if (configuration.failFast || hasCriticalError)
+                    return failure
+                else
+                    failures.add(failure)
+            }
+
             val objectValuesMap = ObjectValuesMap.Builder(context, currentPath, input)
                 .apply {
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
                         if (failure != null) {
-                            val hasCriticalError = failure.errors
+                            val hasCriticalError = failure.causes
                                 .any { (_, errors) -> errors.hasCritical() }
-                            parseErrors.add(failure)
-                            if (configuration.failFast || hasCriticalError) return@apply
+                            failures.add(failure)
+                            if (configuration.failFast || hasCriticalError) return failures.merge()
                         }
                     }
                 }
                 .build()
 
-            if (parseErrors.isEmpty()) {
-                val postValidationErrors =
-                    postValidation(configuration, input, validators, properties, objectValuesMap, context)
-                if (postValidationErrors.isNotEmpty())
-                    return postValidationErrors.asFailure(currentPath)
+            val postValidationErrors =
+                postValidation(configuration, input, validators, properties, objectValuesMap, context)
+            if (postValidationErrors != null) {
+                val error = JsResult.Failure(currentPath, postValidationErrors)
+                failures.add(error)
             }
 
-            return if (parseErrors.isEmpty())
+            return if (failures.isEmpty())
                 typeBuilder(context, objectValuesMap, currentPath)
             else
-                JsResult.Failure(
-                    parseErrors.fold(mutableListOf()) { acc, failure ->
-                        acc.apply { addAll(failure.errors) }
-                    }
-                )
+                failures.merge()
         }
 
         internal fun preValidation(
@@ -204,18 +206,19 @@ class ObjectReader(
             validators: JsObjectValidatorInstances,
             properties: List<JsReaderProperty>,
             context: JsReaderContext
-        ): List<JsError> = mutableListOf<JsError>()
+        ): JsErrors? = mutableListOf<JsError>()
             .apply {
                 validators.before
                     .forEach { validator ->
                         val validationResult = validator.validation(configuration, input, properties, context)
-                        if (validationResult.isFailure()) {
+                        if (validationResult != null) {
                             val hasCriticalError = validationResult.hasCritical()
                             addAll(validationResult)
                             if (configuration.failFast || hasCriticalError) return@forEach
                         }
                     }
             }
+            .let { JsErrors.of(it) }
 
         internal fun postValidation(
             configuration: ObjectReaderConfiguration,
@@ -224,18 +227,19 @@ class ObjectReader(
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext
-        ): List<JsError> = mutableListOf<JsError>()
+        ): JsErrors? = mutableListOf<JsError>()
             .apply {
                 validators.after
                     .forEach { validator ->
                         val validationResult =
                             validator.validation(configuration, input, properties, objectValuesMap, context)
-                        if (validationResult.isFailure()) {
+                        if (validationResult != null) {
                             val hasCriticalError = validationResult.hasCritical()
                             addAll(validationResult)
                             if (configuration.failFast || hasCriticalError) return@forEach
                         }
                     }
             }
+            .let { JsErrors.of(it) }
     }
 }

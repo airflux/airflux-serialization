@@ -65,8 +65,8 @@ fun <T : Any, C> readAsCollection(
                     }
 
                     is JsResult.Failure -> when (acc) {
-                        is JsResult.Success<*> -> result/*.repath(JsPath(idx))*/
-                        is JsResult.Failure -> JsResult.Failure(acc.errors + result.errors)
+                        is JsResult.Success<*> -> result
+                        is JsResult.Failure -> acc + result
                     }
                 }
             }

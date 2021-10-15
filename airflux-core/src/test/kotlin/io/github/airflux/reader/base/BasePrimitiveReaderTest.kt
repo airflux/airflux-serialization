@@ -4,6 +4,7 @@ import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.reader.context.JsReaderContext
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
@@ -44,8 +45,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.BOOLEAN,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -72,8 +74,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.STRING,
+                    actual = JsValue.Type.BOOLEAN
                 )
             )
         }
@@ -105,8 +108,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.NUMBER,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -118,9 +122,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Byte::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Byte::class)
             )
         }
 
@@ -131,9 +133,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = "10.5", type = Byte::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Byte::class)
             )
         }
     }
@@ -164,8 +164,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.NUMBER,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -177,9 +178,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Short::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Short::class)
             )
         }
 
@@ -190,9 +189,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = "10.5", type = Short::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Short::class)
             )
         }
     }
@@ -223,8 +220,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.NUMBER,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -236,9 +234,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
             )
         }
 
@@ -249,9 +245,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = "10.5", type = Int::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Int::class)
             )
         }
     }
@@ -282,8 +276,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.NUMBER,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -295,9 +290,7 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.ValueCast(value = "10.5", type = Long::class)
-                )
+                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Long::class)
             )
         }
     }
@@ -330,8 +323,9 @@ class BasePrimitiveReaderTest {
             val result = reader.read(context, JsResultPath.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.NUMBER,
+                    actual = JsValue.Type.STRING
                 )
             )
         }

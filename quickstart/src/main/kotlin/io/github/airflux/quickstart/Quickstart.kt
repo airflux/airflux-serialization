@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.dsl.reader.`object`.deserialization
 import io.github.airflux.dsl.writer.`object`.serialization
 import io.github.airflux.parser.AirFluxJsonModule
-import io.github.airflux.reader.result.JsResult
 import io.github.airflux.quickstart.dto.Response
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
@@ -12,6 +11,7 @@ import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
+import io.github.airflux.reader.result.JsResult
 import io.github.airflux.value.JsValue
 import java.math.BigDecimal
 
@@ -24,7 +24,7 @@ fun main() {
 
     when (val result = json.deserialization(reader = RequestReader)) {
         is JsResult.Success -> println(result.value)
-        is JsResult.Failure -> println(result.errors)
+        is JsResult.Failure -> println(result.causes)
     }
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")

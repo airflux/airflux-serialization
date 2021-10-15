@@ -5,6 +5,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsValue
@@ -77,9 +78,10 @@ class JsReaderTest {
         val result = composeReader.read(context, currentPath, JsNull)
 
         result.assertAsFailure(
-            currentPath / "id" to listOf(JsonErrors.PathMissing),
-            currentPath / "identifier" to listOf(
-                JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+            currentPath / "id" bind JsonErrors.PathMissing,
+            currentPath / "identifier" bind JsonErrors.InvalidType(
+                expected = JsValue.Type.OBJECT,
+                actual = JsValue.Type.STRING
             )
         )
     }

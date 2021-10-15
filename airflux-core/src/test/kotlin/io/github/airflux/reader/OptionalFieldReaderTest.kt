@@ -7,6 +7,7 @@ import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.lookup.JsLookup
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsString
@@ -57,9 +58,7 @@ class OptionalFieldReaderTest {
             )
 
         result.assertAsFailure(
-            JsResultPath.Root / "name" to listOf(
-                JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
-            )
+            "name" bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
         )
     }
 
@@ -95,9 +94,7 @@ class OptionalFieldReaderTest {
             )
 
         result.assertAsFailure(
-            JsResultPath.Root / "name" to listOf(
-                JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
-            )
+            "name" bind JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
         )
     }
 }

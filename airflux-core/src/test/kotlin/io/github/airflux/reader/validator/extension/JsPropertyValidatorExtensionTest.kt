@@ -7,7 +7,9 @@ import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.readRequired
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.value.JsNull
@@ -23,7 +25,7 @@ class JsPropertyValidatorExtensionTest {
     companion object {
         private val context = JsReaderContext()
         private val isNotEmpty = JsPropertyValidator<String> { _, _, value ->
-            if (value.isNotEmpty()) emptyList() else listOf(JsonErrors.Validation.Strings.IsEmpty)
+            if (value.isNotEmpty()) null else JsErrors.of(JsonErrors.Validation.Strings.IsEmpty)
         }
 
         val stringReader: JsReader<String> = JsReader { _, path, input ->
@@ -75,7 +77,7 @@ class JsPropertyValidatorExtensionTest {
 
             val result = reader.read(context, JsResultPath.Root, json)
 
-            result.assertAsFailure(JsResultPath.Root / "name" to listOf(JsonErrors.Validation.Strings.IsEmpty))
+            result.assertAsFailure("name" bind JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
@@ -95,9 +97,7 @@ class JsPropertyValidatorExtensionTest {
             val result = reader.read(context, JsResultPath.Root, json)
 
             result.assertAsFailure(
-                JsResultPath.Root / "name" to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
-                )
+                "name" bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
             )
         }
     }
@@ -120,7 +120,7 @@ class JsPropertyValidatorExtensionTest {
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsFailure(JsResultPath.Root / "user" to listOf(JsonErrors.Validation.Strings.IsEmpty))
+            validated.assertAsFailure("user" bind JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
@@ -130,7 +130,7 @@ class JsPropertyValidatorExtensionTest {
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsFailure(JsResultPath.Root / "user" to listOf(JsonErrors.PathMissing))
+            validated.assertAsFailure("user" bind JsonErrors.PathMissing)
         }
     }
 }

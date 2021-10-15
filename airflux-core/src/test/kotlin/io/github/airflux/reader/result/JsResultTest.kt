@@ -3,8 +3,12 @@ package io.github.airflux.reader.result
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
+import io.github.airflux.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.value.JsValue
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -77,21 +81,21 @@ class JsResultTest {
 
                 val original = JsResult.Failure(path = JsResultPath.Root, error = JsonErrors.PathMissing)
 
-                original.assertAsFailure(JsResultPath.Root to listOf(JsonErrors.PathMissing))
+                original.assertAsFailure(JsResultPath.Root bind JsonErrors.PathMissing)
             }
 
             @Test
             fun `Testing the constructor of the Failure class with path and one error description`() {
                 val original = JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
 
-                original.assertAsFailure(JsResultPath.Root / "user" to listOf(JsonErrors.PathMissing))
+                original.assertAsFailure("user" bind JsonErrors.PathMissing)
             }
 
             @Test
             fun `Testing the constructor of the Failure class with path and errors description`() {
                 val original = JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
 
-                original.assertAsFailure(JsResultPath.Root / "user" to listOf(JsonErrors.PathMissing))
+                original.assertAsFailure("user" bind JsonErrors.PathMissing)
             }
         }
 
@@ -102,7 +106,7 @@ class JsResultTest {
 
             val result = original.map { it.toInt() }
 
-            result.assertAsFailure(JsResultPath.Root / "name" to listOf(JsonErrors.PathMissing))
+            result.assertAsFailure("name" bind JsonErrors.PathMissing)
         }
 
         @Test
@@ -114,7 +118,7 @@ class JsResultTest {
                 JsResult.Success(v.toInt(), p)
             }
 
-            result.assertAsFailure(JsResultPath.Root / "name" to listOf(JsonErrors.PathMissing))
+            result.assertAsFailure("name" bind JsonErrors.PathMissing)
         }
 
         @Test
@@ -145,6 +149,59 @@ class JsResultTest {
 
             assertNotNull(error)
         }
+
+        @Nested
+        inner class Cause {
+
+            @Test
+            fun `Testing extension function the bind for JsResultPath`() {
+
+                val cause = JsResultPath.Root / "name" bind JsonErrors.PathMissing
+
+                assertEquals(JsResultPath.Root / "name", cause.path)
+                assertEquals(1, cause.errors.count())
+                assertContains(cause.errors, JsonErrors.PathMissing)
+            }
+
+            @Test
+            fun `Testing extension function the bind for Int type`() {
+
+                val cause = JsResultPath.Root / 1 bind JsonErrors.PathMissing
+
+                assertEquals(JsResultPath.Root / 1, cause.path)
+                assertEquals(1, cause.errors.count())
+                assertContains(cause.errors, JsonErrors.PathMissing)
+            }
+
+            @Test
+            fun `Testing extension function the bind for String type`() {
+
+                val cause = "name" bind JsonErrors.PathMissing
+
+                assertEquals(JsResultPath.Root / "name", cause.path)
+                assertEquals(1, cause.errors.count())
+                assertContains(cause.errors, JsonErrors.PathMissing)
+            }
+        }
+    }
+
+    @Test
+    fun `Testing the merge function`() {
+        val failures = listOf(
+            JsResult.Failure(path = JsResultPath.Root / "id", error = JsonErrors.PathMissing),
+            JsResult.Failure(
+                path = JsResultPath.Root / "name",
+                error = JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+            )
+        )
+
+        val failure = failures.merge()
+
+        assertContains(failure.causes, JsResultPath.Root / "id" bind JsonErrors.PathMissing)
+        assertContains(
+            failure.causes,
+            JsResultPath.Root / "name" bind JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+        )
     }
 
     fun <T> getErrorOrNull(result: JsResult<T>): JsResult.Failure? {

@@ -38,9 +38,7 @@ fun interface JsReader<T> {
             is JsResult.Success -> result
             is JsResult.Failure -> when (val alternative = other.read(context, path, input)) {
                 is JsResult.Success -> alternative
-                is JsResult.Failure -> {
-                    JsResult.Failure(errors = result.errors + alternative.errors)
-                }
+                is JsResult.Failure -> result + alternative
             }
         }
     }

@@ -8,6 +8,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
@@ -65,8 +66,9 @@ class CollectionFieldReaderTest {
                 )
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.ARRAY,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -90,12 +92,8 @@ class CollectionFieldReaderTest {
                 )
 
             result.assertAsFailure(
-                JsResultPath.Root / 1 to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
-                ),
-                JsResultPath.Root / 2 to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                )
+                1 bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER),
+                2 bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
             )
         }
 
@@ -149,8 +147,9 @@ class CollectionFieldReaderTest {
                 )
 
             result.assertAsFailure(
-                JsResultPath.Root to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+                JsResultPath.Root bind JsonErrors.InvalidType(
+                    expected = JsValue.Type.ARRAY,
+                    actual = JsValue.Type.STRING
                 )
             )
         }
@@ -175,12 +174,8 @@ class CollectionFieldReaderTest {
 
 
             result.assertAsFailure(
-                JsResultPath.Root / 1 to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
-                ),
-                JsResultPath.Root / 2 to listOf(
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                )
+                1 bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER),
+                2 bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
             )
         }
 

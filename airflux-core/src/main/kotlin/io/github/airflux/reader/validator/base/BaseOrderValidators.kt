@@ -1,6 +1,7 @@
 package io.github.airflux.reader.validator.base
 
 import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.validator.JsPropertyValidator
 
 @Suppress("unused")
@@ -12,7 +13,7 @@ object BaseOrderValidators {
     fun <T> min(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value < expected) listOf(error(expected, value)) else emptyList()
+            if (value < expected) JsErrors.of(error(expected, value)) else null
         }
 
     /**
@@ -21,7 +22,7 @@ object BaseOrderValidators {
     fun <T> max(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value > expected) listOf(error(expected, value)) else emptyList()
+            if (value > expected) JsErrors.of(error(expected, value)) else null
         }
 
     /**
@@ -30,7 +31,7 @@ object BaseOrderValidators {
     fun <T> eq(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value == expected) emptyList() else listOf(error(expected, value))
+            if (value == expected) null else JsErrors.of(error(expected, value))
         }
 
     /**
@@ -39,7 +40,7 @@ object BaseOrderValidators {
     fun <T> ne(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value != expected) emptyList() else listOf(error(expected, value))
+            if (value != expected) null else JsErrors.of(error(expected, value))
         }
 
     /**
@@ -48,7 +49,7 @@ object BaseOrderValidators {
     fun <T> gt(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value > expected) emptyList() else listOf(error(expected, value))
+            if (value > expected) null else JsErrors.of(error(expected, value))
         }
 
     /**
@@ -57,7 +58,7 @@ object BaseOrderValidators {
     fun <T> ge(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value >= expected) emptyList() else listOf(error(expected, value))
+            if (value >= expected) null else JsErrors.of(error(expected, value))
         }
 
     /**
@@ -66,7 +67,7 @@ object BaseOrderValidators {
     fun <T> lt(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value < expected) emptyList() else listOf(error(expected, value))
+            if (value < expected) null else JsErrors.of(error(expected, value))
         }
 
     /**
@@ -75,6 +76,6 @@ object BaseOrderValidators {
     fun <T> le(expected: T, error: (expected: T, actual: T) -> JsError): JsPropertyValidator<T>
         where T : Comparable<T> =
         JsPropertyValidator { _, _, value ->
-            if (value <= expected) emptyList() else listOf(error(expected, value))
+            if (value <= expected) null else JsErrors.of(error(expected, value))
         }
 }

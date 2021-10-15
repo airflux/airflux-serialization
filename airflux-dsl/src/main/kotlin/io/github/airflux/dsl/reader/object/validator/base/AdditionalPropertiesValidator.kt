@@ -7,6 +7,7 @@ import io.github.airflux.path.IdxPathElement
 import io.github.airflux.path.KeyPathElement
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
@@ -41,7 +42,7 @@ class AdditionalPropertiesValidator(private val errorBuilder: ErrorBuilder) :
             input: JsObject,
             properties: List<JsReaderProperty>,
             context: JsReaderContext
-        ): List<JsError> {
+        ): JsErrors? {
             val unknownProperties = mutableListOf<String>()
             input.underlying
                 .forEach { (name, _) ->
@@ -50,11 +51,8 @@ class AdditionalPropertiesValidator(private val errorBuilder: ErrorBuilder) :
                         if (configuration.failFast) return@forEach
                     }
                 }
-
-            return if (unknownProperties.isNotEmpty())
-                listOf(errorBuilder.build(unknownProperties))
-            else
-                emptyList()
+            return unknownProperties.takeIf { it.isNotEmpty() }
+                ?.let { JsErrors.of(errorBuilder.build(it)) }
         }
     }
 

@@ -6,6 +6,7 @@ import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
@@ -33,11 +34,11 @@ class MinPropertiesValidator(private val errorBuilder: ErrorBuilder) : JsObjectV
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext
-        ): List<JsError> =
+        ): JsErrors? =
             if (objectValuesMap.size < value)
-                listOf(errorBuilder.build(expected = value, actual = objectValuesMap.size))
+                JsErrors.of(errorBuilder.build(expected = value, actual = objectValuesMap.size))
             else
-                emptyList()
+                null
     }
 
     fun interface ErrorBuilder {

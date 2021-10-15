@@ -4,7 +4,7 @@ import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 sealed interface JsObjectValidator {
@@ -28,7 +28,7 @@ sealed interface JsObjectValidator {
             input: JsObject,
             properties: List<JsReaderProperty>,
             context: JsReaderContext
-        ): List<JsError>
+        ): JsErrors?
 
         interface Builder : JsObjectValidator.Builder<Before>
     }
@@ -41,7 +41,7 @@ sealed interface JsObjectValidator {
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext
-        ): List<JsError>
+        ): JsErrors?
 
         interface Builder : JsObjectValidator.Builder<After>
     }

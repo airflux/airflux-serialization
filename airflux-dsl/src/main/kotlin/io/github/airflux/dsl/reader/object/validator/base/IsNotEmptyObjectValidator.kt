@@ -6,6 +6,7 @@ import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
+import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
@@ -28,11 +29,8 @@ class IsNotEmptyObjectValidator(private val errorBuilder: ErrorBuilder) :
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
             context: JsReaderContext
-        ): List<JsError> =
-            if (objectValuesMap.isEmpty)
-                listOf(errorBuilder.build())
-            else
-                emptyList()
+        ): JsErrors? =
+            if (objectValuesMap.isEmpty) JsErrors.of(errorBuilder.build()) else null
     }
 
     fun interface ErrorBuilder {

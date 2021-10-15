@@ -9,6 +9,7 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.filter.JsPredicate
 import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -91,7 +92,7 @@ class JsPredicateExtensionTest {
 
             val result = reader.read(context, JsResultPath.Root, json)
 
-            result.assertAsFailure(JsResultPath.Root / "name" to listOf(JsonErrors.PathMissing))
+            result.assertAsFailure("name" bind JsonErrors.PathMissing)
         }
     }
 
@@ -132,7 +133,7 @@ class JsPredicateExtensionTest {
 
             val validated = result.filter(isNotBlank)
 
-            validated.assertAsFailure(JsResultPath.Root / "name" to listOf(error))
+            validated.assertAsFailure("name" bind error)
         }
     }
 }

@@ -6,8 +6,10 @@ import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.reader.validator.JsPropertyValidator
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class StringValidatorsTest {
 
@@ -61,10 +63,9 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.MinLength
-            assertEquals(minimum, error.expected)
-            assertEquals(0, error.actual)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 0))
         }
 
         @Test
@@ -74,10 +75,9 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, " ")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.MinLength
-            assertEquals(minimum, error.expected)
-            assertEquals(1, error.actual)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 1))
         }
 
         @Test
@@ -87,7 +87,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "  ")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -97,7 +97,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "   ")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -107,10 +107,9 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "a")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.MinLength
-            assertEquals(minimum, error.expected)
-            assertEquals(1, error.actual)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 1))
         }
 
         @Test
@@ -120,7 +119,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "ab")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -130,7 +129,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "abc")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
     }
 
@@ -144,7 +143,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -154,7 +153,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, " ")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -164,7 +163,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "  ")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -174,10 +173,9 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "   ")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.MaxLength
-            assertEquals(maximum, error.expected)
-            assertEquals(3, error.actual)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.MaxLength(expected = maximum, actual = 3))
         }
 
         @Test
@@ -187,7 +185,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "a")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -197,7 +195,7 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "ab")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
@@ -207,10 +205,9 @@ class StringValidatorsTest {
 
             val errors = validator.validation(context, path, "abc")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.MaxLength
-            assertEquals(maximum, error.expected)
-            assertEquals(3, error.actual)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.MaxLength(expected = maximum, actual = 3))
         }
     }
 
@@ -221,22 +218,23 @@ class StringValidatorsTest {
         fun `Testing the basic validator of the isNotEmpty (a value of a string is empty)`() {
             val errors = isNotEmptyValidator.validation(context, path, "")
 
-            assertEquals(1, errors.size)
-            assertTrue(errors[0] is JsonErrors.Validation.Strings.IsEmpty)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
         fun `Testing the basic validator of the isNotEmpty (a value of a string is blank)`() {
             val errors = isNotEmptyValidator.validation(context, path, " ")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
         fun `Testing the basic validator of the isNotEmpty (a value of a string is not empty)`() {
             val errors = isNotEmptyValidator.validation(context, path, "abc")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
     }
 
@@ -248,8 +246,9 @@ class StringValidatorsTest {
 
             val errors = isNotBlankValidator.validation(context, path, "")
 
-            assertEquals(1, errors.size)
-            assertTrue(errors[0] is JsonErrors.Validation.Strings.IsBlank)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.IsBlank)
         }
 
         @Test
@@ -257,8 +256,9 @@ class StringValidatorsTest {
 
             val errors = isNotBlankValidator.validation(context, path, " ")
 
-            assertEquals(1, errors.size)
-            assertTrue(errors[0] is JsonErrors.Validation.Strings.IsBlank)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.IsBlank)
         }
 
         @Test
@@ -266,7 +266,7 @@ class StringValidatorsTest {
 
             val errors = isNotBlankValidator.validation(context, path, " a ")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
     }
 
@@ -279,27 +279,25 @@ class StringValidatorsTest {
         fun `Testing the basic validator of the pattern (a value of a string is empty)`() {
             val errors = validator.validation(context, path, "")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.Pattern
-            assertEquals(regex.pattern, error.regex.pattern)
-            assertEquals("", error.value)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.Pattern(value = "", regex = regex))
         }
 
         @Test
         fun `Testing the basic validator of the pattern (a value of a string is matching to the pattern)`() {
             val errors = validator.validation(context, path, "abc")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
         fun `Testing the basic validator of the pattern (a value of a string is not matching to the pattern)`() {
             val errors = validator.validation(context, path, "aab")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.Pattern
-            assertEquals(regex.pattern, error.regex.pattern)
-            assertEquals("aab", error.value)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.Pattern(value = "aab", regex = regex))
         }
     }
 
@@ -313,25 +311,27 @@ class StringValidatorsTest {
         fun `Testing the basic validator of the isA (a value of a string is a number)`() {
             val errors = validator.validation(context, path, "123")
 
-            assertTrue(errors.isEmpty())
+            assertNull(errors)
         }
 
         @Test
         fun `Testing the basic validator of the isA (a value of a string is not a number)`() {
             val errors = validator.validation(context, path, "abc")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.IsA
-            assertEquals("abc", error.value)
+            assertNotNull(errors)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.IsA(value = "abc"))
         }
 
         @Test
         fun `Testing the basic validator of the isA (a value of a string is not a number but an empty string)`() {
             val errors = validator.validation(context, path, "")
 
-            assertEquals(1, errors.size)
-            val error = errors[0] as JsonErrors.Validation.Strings.IsA
-            assertEquals("", error.value)
+            assertNotNull(errors)
+            assertNotNull(errors)
+            assertEquals(1, errors.count())
+            assertContains(errors, JsonErrors.Validation.Strings.IsA(value = ""))
         }
     }
 }

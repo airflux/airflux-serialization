@@ -18,7 +18,7 @@ fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsPropertyVa
     when (this) {
         is JsResult.Success -> {
             val errors = validator.validation(context, this.path, this.value)
-            if (errors.isNotEmpty()) JsResult.Failure(path = this.path, errors = errors) else this
+            if (errors != null) JsResult.Failure(path = this.path, errors = errors) else this
         }
         is JsResult.Failure -> this
     }
