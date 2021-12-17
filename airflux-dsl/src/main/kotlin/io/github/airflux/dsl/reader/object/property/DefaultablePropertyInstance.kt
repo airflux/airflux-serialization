@@ -6,7 +6,7 @@ import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.readWithDefault
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue
@@ -25,19 +25,19 @@ internal class DefaultablePropertyInstance<T : Any> private constructor(
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
         ): DefaultableProperty<T> =
-            DefaultablePropertyInstance(propertyPath) { context, path, input ->
-                val lookup = input.lookup(path, propertyPath)
+            DefaultablePropertyInstance(propertyPath) { context, location, input ->
+                val lookup = input.lookup(location, propertyPath)
                 readWithDefault(context, lookup, reader, default, invalidTypeErrorBuilder)
             }
     }
 
-    override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T> =
-        reader.read(context, path, input)
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> =
+        reader.read(context, location, input)
 
     override fun validation(validator: JsPropertyValidator<T>): DefaultablePropertyInstance<T> {
         val previousReader = this.reader
-        reader = JsReader { context, path, input ->
-            previousReader.read(context, path, input).validation(context, validator)
+        reader = JsReader { context, location, input ->
+            previousReader.read(context, location, input).validation(context, validator)
         }
         return this
     }

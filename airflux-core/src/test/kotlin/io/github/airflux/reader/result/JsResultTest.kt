@@ -21,27 +21,27 @@ class JsResultTest {
         @Test
         fun `Testing the map function of the Success class`() {
             val originalValue = "10"
-            val original: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "id", value = originalValue)
+            val original: JsResult<String> = JsResult.Success(location = JsLocation.Root / "id", value = originalValue)
             val result = original.map { it.toInt() }
 
-            result.assertAsSuccess(path = JsResultPath.Root / "id", value = originalValue.toInt())
+            result.assertAsSuccess(location = JsLocation.Root / "id", value = originalValue.toInt())
         }
 
         @Test
         fun `Testing the flatMap function of the Success class`() {
             val originalValue = "10"
-            val original: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "id", value = originalValue)
+            val original: JsResult<String> = JsResult.Success(location = JsLocation.Root / "id", value = originalValue)
 
             val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
 
-            result.assertAsSuccess(path = JsResultPath.Root / "id", value = originalValue.toInt())
+            result.assertAsSuccess(location = JsLocation.Root / "id", value = originalValue.toInt())
         }
 
         @Test
         fun `Testing the orElse function of the Success class`() {
             val originalValue = "10"
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Success(path = JsResultPath.Root, value = originalValue)
+            val original: JsResult<String> = JsResult.Success(location = JsLocation.Root, value = originalValue)
 
             val result = original.orElse { elseValue }
 
@@ -52,7 +52,7 @@ class JsResultTest {
         fun `Testing the getOrElse function of the Success class`() {
             val originalValue = "10"
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Success(path = JsResultPath.Root, value = originalValue)
+            val original: JsResult<String> = JsResult.Success(location = JsLocation.Root, value = originalValue)
 
             val result = original.getOrElse(elseValue)
 
@@ -63,7 +63,7 @@ class JsResultTest {
         fun `Testing the onFailure function of the Success class`() {
             val originalValue = "10"
 
-            val original: JsResult<String> = JsResult.Success(path = JsResultPath.Root, value = originalValue)
+            val original: JsResult<String> = JsResult.Success(location = JsLocation.Root, value = originalValue)
             val error: JsResult.Failure? = getErrorOrNull(original)
 
             assertNull(error)
@@ -79,21 +79,21 @@ class JsResultTest {
             @Test
             fun `Testing the constructor of the Failure class with only error description`() {
 
-                val original = JsResult.Failure(path = JsResultPath.Root, error = JsonErrors.PathMissing)
+                val original = JsResult.Failure(location = JsLocation.Root, error = JsonErrors.PathMissing)
 
-                original.assertAsFailure(JsResultPath.Root bind JsonErrors.PathMissing)
+                original.assertAsFailure(JsLocation.Root bind JsonErrors.PathMissing)
             }
 
             @Test
             fun `Testing the constructor of the Failure class with path and one error description`() {
-                val original = JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
+                val original = JsResult.Failure(location = JsLocation.Root / "user", error = JsonErrors.PathMissing)
 
                 original.assertAsFailure("user" bind JsonErrors.PathMissing)
             }
 
             @Test
             fun `Testing the constructor of the Failure class with path and errors description`() {
-                val original = JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
+                val original = JsResult.Failure(location = JsLocation.Root / "user", error = JsonErrors.PathMissing)
 
                 original.assertAsFailure("user" bind JsonErrors.PathMissing)
             }
@@ -102,7 +102,7 @@ class JsResultTest {
         @Test
         fun `Testing the map function of the Failure class`() {
             val original: JsResult<String> =
-                JsResult.Failure(path = JsResultPath.Root / "name", error = JsonErrors.PathMissing)
+                JsResult.Failure(location = JsLocation.Root / "name", error = JsonErrors.PathMissing)
 
             val result = original.map { it.toInt() }
 
@@ -112,7 +112,7 @@ class JsResultTest {
         @Test
         fun `Testing the flatMap function of the Failure class`() {
             val original: JsResult<String> =
-                JsResult.Failure(path = JsResultPath.Root / "name", error = JsonErrors.PathMissing)
+                JsResult.Failure(location = JsLocation.Root / "name", error = JsonErrors.PathMissing)
 
             val result = original.flatMap { v, p ->
                 JsResult.Success(v.toInt(), p)
@@ -124,7 +124,7 @@ class JsResultTest {
         @Test
         fun `Testing the orElse function of the Failure class`() {
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Failure(path = JsResultPath.Root, error = JsonErrors.PathMissing)
+            val original: JsResult<String> = JsResult.Failure(location = JsLocation.Root, error = JsonErrors.PathMissing)
 
             val result = original.orElse { elseValue }
 
@@ -134,7 +134,7 @@ class JsResultTest {
         @Test
         fun `Testing the getOrElse function of the Failure class`() {
             val elseValue = "20"
-            val original: JsResult<String> = JsResult.Failure(path = JsResultPath.Root, error = JsonErrors.PathMissing)
+            val original: JsResult<String> = JsResult.Failure(location = JsLocation.Root, error = JsonErrors.PathMissing)
 
             val result = original.getOrElse(elseValue)
 
@@ -143,7 +143,7 @@ class JsResultTest {
 
         @Test
         fun `Testing the onFailure function of the Failure class`() {
-            val original: JsResult<String> = JsResult.Failure(path = JsResultPath.Root, error = JsonErrors.PathMissing)
+            val original: JsResult<String> = JsResult.Failure(location = JsLocation.Root, error = JsonErrors.PathMissing)
 
             val error: JsResult.Failure? = getErrorOrNull(original)
 
@@ -156,9 +156,9 @@ class JsResultTest {
             @Test
             fun `Testing extension function the bind for JsResultPath`() {
 
-                val cause = JsResultPath.Root / "name" bind JsonErrors.PathMissing
+                val cause = JsLocation.Root / "name" bind JsonErrors.PathMissing
 
-                assertEquals(JsResultPath.Root / "name", cause.path)
+                assertEquals(JsLocation.Root / "name", cause.location)
                 assertEquals(1, cause.errors.count())
                 assertContains(cause.errors, JsonErrors.PathMissing)
             }
@@ -166,9 +166,9 @@ class JsResultTest {
             @Test
             fun `Testing extension function the bind for Int type`() {
 
-                val cause = JsResultPath.Root / 1 bind JsonErrors.PathMissing
+                val cause = JsLocation.Root / 1 bind JsonErrors.PathMissing
 
-                assertEquals(JsResultPath.Root / 1, cause.path)
+                assertEquals(JsLocation.Root / 1, cause.location)
                 assertEquals(1, cause.errors.count())
                 assertContains(cause.errors, JsonErrors.PathMissing)
             }
@@ -178,7 +178,7 @@ class JsResultTest {
 
                 val cause = "name" bind JsonErrors.PathMissing
 
-                assertEquals(JsResultPath.Root / "name", cause.path)
+                assertEquals(JsLocation.Root / "name", cause.location)
                 assertEquals(1, cause.errors.count())
                 assertContains(cause.errors, JsonErrors.PathMissing)
             }
@@ -188,19 +188,19 @@ class JsResultTest {
     @Test
     fun `Testing the merge function`() {
         val failures = listOf(
-            JsResult.Failure(path = JsResultPath.Root / "id", error = JsonErrors.PathMissing),
+            JsResult.Failure(location = JsLocation.Root / "id", error = JsonErrors.PathMissing),
             JsResult.Failure(
-                path = JsResultPath.Root / "name",
+                location = JsLocation.Root / "name",
                 error = JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
             )
         )
 
         val failure = failures.merge()
 
-        assertContains(failure.causes, JsResultPath.Root / "id" bind JsonErrors.PathMissing)
+        assertContains(failure.causes, JsLocation.Root / "id" bind JsonErrors.PathMissing)
         assertContains(
             failure.causes,
-            JsResultPath.Root / "name" bind JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+            JsLocation.Root / "name" bind JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
         )
     }
 

@@ -1,13 +1,13 @@
 package io.github.airflux.common
 
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-fun <T> JsResult<T?>.assertAsSuccess(path: JsResultPath, value: T?) {
+fun <T> JsResult<T?>.assertAsSuccess(location: JsLocation, value: T?) {
     this as JsResult.Success
-    assertEquals(expected = path, actual = this.path)
+    assertEquals(expected = location, actual = this.location)
     assertEquals(expected = value, actual = this.value)
 }
 

@@ -26,14 +26,14 @@ import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Companion.merge
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.readAsObject
 
 @Suppress("unused")
 fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =
-    reader.read(context, JsResultPath.Root, this)
+    reader.read(context, JsLocation.Root, this)
 
 @Suppress("unused")
 class ObjectReader(
@@ -61,8 +61,8 @@ class ObjectReader(
         fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P>
         fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P>
 
-        fun build(builder: ObjectValuesMap.(JsResultPath) -> JsResult<T>): TypeBuilder<T>
-        fun build(builder: ObjectValuesMap.(JsReaderContext, JsResultPath) -> JsResult<T>): TypeBuilder<T>
+        fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T>
+        fun build(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
     }
 
     interface PropertyBinder<P : Any> {
@@ -76,7 +76,7 @@ class ObjectReader(
         fun nullable(default: () -> P): NullableWithDefaultProperty<P>
     }
 
-    fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsResultPath) -> JsResult<T>
+    fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsLocation) -> JsResult<T>
 
     private inner class BuilderInstance<T>(
         private var configuration: ObjectReaderConfiguration,
@@ -100,16 +100,16 @@ class ObjectReader(
         override fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
             PropertyBinderInstance(path, reader)
 
-        override fun build(builder: ObjectValuesMap.(JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+        override fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T> =
             TypeBuilder { _, v, p -> v.builder(p) }
 
-        override fun build(builder: ObjectValuesMap.(JsReaderContext, JsResultPath) -> JsResult<T>): TypeBuilder<T> =
+        override fun build(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T> =
             TypeBuilder { c, v, p -> v.builder(c, p) }
 
         fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
             val validators = JsObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
-            return JsReader { context, path, input ->
-                input.readAsObject(path, invalidTypeErrorBuilder) { p, b ->
+            return JsReader { context, location, input ->
+                input.readAsObject(location, invalidTypeErrorBuilder) { p, b ->
                     read(configuration, validators, properties, typeBuilder, context, p, b)
                 }
             }
@@ -158,7 +158,7 @@ class ObjectReader(
             properties: List<JsReaderProperty>,
             typeBuilder: TypeBuilder<T>,
             context: JsReaderContext,
-            currentPath: JsResultPath,
+            location: JsLocation,
             input: JsObject
         ): JsResult<T> {
             val failures = mutableListOf<JsResult.Failure>()
@@ -166,14 +166,14 @@ class ObjectReader(
             val preValidationErrors = preValidation(configuration, input, validators, properties, context)
             if (preValidationErrors != null) {
                 val hasCriticalError = preValidationErrors.hasCritical()
-                val failure = JsResult.Failure(currentPath, preValidationErrors)
+                val failure = JsResult.Failure(location, preValidationErrors)
                 if (configuration.failFast || hasCriticalError)
                     return failure
                 else
                     failures.add(failure)
             }
 
-            val objectValuesMap = ObjectValuesMap.Builder(context, currentPath, input)
+            val objectValuesMap = ObjectValuesMap.Builder(context, location, input)
                 .apply {
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
@@ -190,12 +190,12 @@ class ObjectReader(
             val postValidationErrors =
                 postValidation(configuration, input, validators, properties, objectValuesMap, context)
             if (postValidationErrors != null) {
-                val error = JsResult.Failure(currentPath, postValidationErrors)
+                val error = JsResult.Failure(location, postValidationErrors)
                 failures.add(error)
             }
 
             return if (failures.isEmpty())
-                typeBuilder(context, objectValuesMap, currentPath)
+                typeBuilder(context, objectValuesMap, location)
             else
                 failures.merge()
         }

@@ -3,7 +3,7 @@ package io.github.airflux.reader
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsValue
 
@@ -15,12 +15,12 @@ import io.github.airflux.value.JsValue
  */
 fun <T : Any> readAsList(
     context: JsReaderContext,
-    currentPath: JsResultPath,
+    location: JsLocation,
     from: JsValue,
     using: JsReader<T>,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<List<T>> =
-    readAsCollection(context, currentPath, from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
+    readAsCollection(context, location, from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
 
 /**
  * Read a node as set.
@@ -30,12 +30,12 @@ fun <T : Any> readAsList(
  */
 fun <T : Any> readAsSet(
     context: JsReaderContext,
-    currentPath: JsResultPath,
+    location: JsLocation,
     from: JsValue,
     using: JsReader<T>,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<Set<T>> =
-    readAsCollection(context, currentPath, from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
+    readAsCollection(context, location, from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
 
 /**
  * Read a node which represent as array.
@@ -45,7 +45,7 @@ fun <T : Any> readAsSet(
  */
 fun <T : Any, C> readAsCollection(
     context: JsReaderContext,
-    currentPath: JsResultPath,
+    location: JsLocation,
     from: JsValue,
     using: JsReader<T>,
     factory: CollectionBuilderFactory<T, C>,
@@ -54,11 +54,11 @@ fun <T : Any, C> readAsCollection(
     where C : Collection<T> = when (from) {
     is JsArray<*> -> {
         val values = factory.newBuilder(from.underlying.size)
-        val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(value = values, path = currentPath)
+        val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(value = values, location = location)
         from.underlying
             .withIndex()
             .fold(initial) { acc, (idx, elem) ->
-                when (val result = using.read(context, currentPath / idx, elem)) {
+                when (val result = using.read(context, location / idx, elem)) {
                     is JsResult.Success<T> -> when (acc) {
                         is JsResult.Success<*> -> acc.also { values += result.value }
                         is JsResult.Failure -> acc as JsResult<CollectionBuilder<T, C>>
@@ -73,5 +73,5 @@ fun <T : Any, C> readAsCollection(
             .map { it.result() }
     }
 
-    else -> JsResult.Failure(path = currentPath, error = invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
+    else -> JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
 }

@@ -12,7 +12,7 @@ import io.github.airflux.path.KeyPathElement
 import io.github.airflux.path.PathElement
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
@@ -26,7 +26,7 @@ import kotlin.test.assertEquals
 class JsValueExtensionTest {
 
     companion object {
-        private val currentPath = JsResultPath.Root / "user"
+        private val location = JsLocation.Root / "user"
     }
 
     @Test
@@ -60,24 +60,24 @@ class JsValueExtensionTest {
                 val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
                 val pathElement: PathElement = KeyPathElement("name")
 
-                val result = json.lookup(JsResultPath.Root, pathElement)
+                val result = json.lookup(JsLocation.Root, pathElement)
 
                 result as JsLookup.Defined
-                assertEquals(JsResultPath.Root / "name", result.path)
+                assertEquals(JsLocation.Root / "name", result.location)
                 result.value as JsString
                 val value = result.value as JsString
                 assertEquals(USER_NAME_VALUE, value.underlying)
             }
 
             @Test
-            fun `path missing`() {
+            fun `location missing`() {
                 val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
                 val pathElement: PathElement = KeyPathElement("user")
 
-                val result = json.lookup(JsResultPath.Root, pathElement)
+                val result = json.lookup(JsLocation.Root, pathElement)
 
                 result as JsLookup.Undefined.PathMissing
-                assertEquals(JsResultPath.Root / "user", result.path)
+                assertEquals(JsLocation.Root / "user", result.location)
             }
 
             @Test
@@ -85,10 +85,10 @@ class JsValueExtensionTest {
                 val json: JsValue = JsString(USER_NAME_VALUE)
                 val pathElement: PathElement = KeyPathElement("user")
 
-                val result = json.lookup(JsResultPath.Root, pathElement)
+                val result = json.lookup(JsLocation.Root, pathElement)
 
                 result as JsLookup.Undefined.InvalidType
-                assertEquals(JsResultPath.Root, result.path)
+                assertEquals(JsLocation.Root, result.location)
                 assertEquals(JsValue.Type.OBJECT, result.expected)
                 assertEquals(JsValue.Type.STRING, result.actual)
             }
@@ -102,10 +102,10 @@ class JsValueExtensionTest {
                 val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
                 val pathElement: PathElement = IdxPathElement(0)
 
-                val result = json.lookup(JsResultPath.Root, pathElement)
+                val result = json.lookup(JsLocation.Root, pathElement)
 
                 result as JsLookup.Defined
-                assertEquals(JsResultPath.Root / 0, result.path)
+                assertEquals(JsLocation.Root / 0, result.location)
                 result.value as JsString
                 val value = result.value as JsString
                 assertEquals(USER_NAME_VALUE, value.underlying)
@@ -116,10 +116,10 @@ class JsValueExtensionTest {
                 val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
                 val pathElement: PathElement = IdxPathElement(1)
 
-                val result = json.lookup(JsResultPath.Root, pathElement)
+                val result = json.lookup(JsLocation.Root, pathElement)
 
                 result as JsLookup.Undefined.PathMissing
-                assertEquals(JsResultPath.Root / 1, result.path)
+                assertEquals(JsLocation.Root / 1, result.location)
             }
 
             @Test
@@ -127,10 +127,10 @@ class JsValueExtensionTest {
                 val json: JsValue = JsString(USER_NAME_VALUE)
                 val pathElement: PathElement = IdxPathElement(0)
 
-                val result = json.lookup(JsResultPath.Root, pathElement)
+                val result = json.lookup(JsLocation.Root, pathElement)
 
                 result as JsLookup.Undefined.InvalidType
-                assertEquals(JsResultPath.Root, result.path)
+                assertEquals(JsLocation.Root, result.location)
                 assertEquals(JsValue.Type.ARRAY, result.expected)
                 assertEquals(JsValue.Type.STRING, result.actual)
             }
@@ -148,10 +148,10 @@ class JsValueExtensionTest {
                 val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
                 val attributePath = JsPath.Root / "name"
 
-                val result = json.lookup(JsResultPath.Root, attributePath)
+                val result = json.lookup(JsLocation.Root, attributePath)
 
                 result as JsLookup.Defined
-                assertEquals(JsResultPath.Root / "name", result.path)
+                assertEquals(JsLocation.Root / "name", result.location)
                 result.value as JsString
                 val value = result.value as JsString
                 assertEquals(USER_NAME_VALUE, value.underlying)
@@ -170,10 +170,10 @@ class JsValueExtensionTest {
                 )
                 val attributePath = ("user" / "name") /*as JsLookupPath.Identifiable.Composite*/
 
-                val result = json.lookup(JsResultPath.Root, attributePath)
+                val result = json.lookup(JsLocation.Root, attributePath)
 
                 result as JsLookup.Defined
-                assertEquals(JsResultPath.Root / "user" / "name", result.path)
+                assertEquals(JsLocation.Root / "user" / "name", result.location)
                 result.value as JsString
                 val value = result.value as JsString
                 assertEquals(USER_NAME_VALUE, value.underlying)
@@ -188,10 +188,10 @@ class JsValueExtensionTest {
                 )
                 val attributePath = ("user" / "phones" / 0) as JsPath.Identifiable.Composite
 
-                val result = json.lookup(JsResultPath.Root, attributePath)
+                val result = json.lookup(JsLocation.Root, attributePath)
 
                 result as JsLookup.Undefined
-                assertEquals(JsResultPath.Root / "user" / "phones", result.path)
+                assertEquals(JsLocation.Root / "user" / "phones", result.location)
             }
         }
     }
@@ -203,19 +203,19 @@ class JsValueExtensionTest {
         fun `Testing the extension-function the readAsBoolean`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsBoolean(currentPath, JsonErrors::InvalidType)
+            val result = json.readAsBoolean(location, JsonErrors::InvalidType)
 
-            result.assertAsSuccess(path = currentPath, value = true)
+            result.assertAsSuccess(location = location, value = true)
         }
 
         @Test
         fun `Testing the extension-function the readAsBoolean (invalid type)`() {
             val json = JsString("abc")
 
-            val result = json.readAsBoolean(currentPath, JsonErrors::InvalidType)
+            val result = json.readAsBoolean(location, JsonErrors::InvalidType)
 
             result.assertAsFailure(
-                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
+                location bind JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
             )
         }
     }
@@ -226,19 +226,19 @@ class JsValueExtensionTest {
         fun `Testing the extension-function the readAsString`() {
             val json: JsValue = JsString("abc")
 
-            val result = json.readAsString(currentPath, JsonErrors::InvalidType)
+            val result = json.readAsString(location, JsonErrors::InvalidType)
 
-            result.assertAsSuccess(path = currentPath, value = "abc")
+            result.assertAsSuccess(location = location, value = "abc")
         }
 
         @Test
         fun `Testing the extension-function the readAsString (invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsString(currentPath, JsonErrors::InvalidType)
+            val result = json.readAsString(location, JsonErrors::InvalidType)
 
             result.assertAsFailure(
-                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                location bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
             )
         }
     }
@@ -246,25 +246,25 @@ class JsValueExtensionTest {
     @Nested
     inner class ReadAsNumber {
 
-        private val transformer = { path: JsResultPath, text: String -> JsResult.Success(text.toInt(), path) }
+        private val transformer = { location: JsLocation, text: String -> JsResult.Success(text.toInt(), location) }
 
         @Test
         fun `Testing the extension-function the readAsNumber`() {
             val json: JsValue = JsNumber.valueOf(Int.MAX_VALUE)
 
-            val result = json.readAsNumber(currentPath, JsonErrors::InvalidType, transformer)
+            val result = json.readAsNumber(location, JsonErrors::InvalidType, transformer)
 
-            result.assertAsSuccess(path = currentPath, value = Int.MAX_VALUE)
+            result.assertAsSuccess(location = location, value = Int.MAX_VALUE)
         }
 
         @Test
         fun `Testing the extension-function the readAsNumber invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsNumber(currentPath, JsonErrors::InvalidType, transformer)
+            val result = json.readAsNumber(location, JsonErrors::InvalidType, transformer)
 
             result.assertAsFailure(
-                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
+                location bind JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
             )
         }
     }
@@ -272,28 +272,28 @@ class JsValueExtensionTest {
     @Nested
     inner class ReadAsObject {
 
-        private val reader = { path: JsResultPath, input: JsObject ->
+        private val reader = { location: JsLocation, input: JsObject ->
             val userName = input.underlying["name"] as JsString
-            JsResult.Success(User(name = userName.underlying), path)
+            JsResult.Success(User(name = userName.underlying), location)
         }
 
         @Test
         fun `Testing the extension-function the readAsObject`() {
             val json: JsValue = JsObject("name" to JsString("user-name"))
 
-            val result = json.readAsObject(currentPath, JsonErrors::InvalidType, reader)
+            val result = json.readAsObject(location, JsonErrors::InvalidType, reader)
 
-            result.assertAsSuccess(path = currentPath, value = User(name = "user-name"))
+            result.assertAsSuccess(location = location, value = User(name = "user-name"))
         }
 
         @Test
         fun `Testing the extension-function the readAsObject invalid type)`() {
             val json: JsValue = JsBoolean.valueOf(true)
 
-            val result = json.readAsObject(currentPath, JsonErrors::InvalidType, reader)
+            val result = json.readAsObject(location, JsonErrors::InvalidType, reader)
 
             result.assertAsFailure(
-                currentPath bind JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.BOOLEAN)
+                location bind JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.BOOLEAN)
             )
         }
     }

@@ -6,8 +6,8 @@ import io.github.airflux.path.JsPath
 import io.github.airflux.path.KeyPathElement
 import io.github.airflux.path.PathElement
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
@@ -15,87 +15,90 @@ import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
 
-operator fun JsValue.div(name: String): JsLookup = lookup(JsResultPath.Root, KeyPathElement(name))
+operator fun JsValue.div(name: String): JsLookup = lookup(JsLocation.Root, KeyPathElement(name))
 
-operator fun JsValue.div(idx: Int): JsLookup = lookup(JsResultPath.Root, IdxPathElement(idx))
+operator fun JsValue.div(idx: Int): JsLookup = lookup(JsLocation.Root, IdxPathElement(idx))
 
-fun JsValue.lookup(resultPath: JsResultPath, attributePath: JsPath.Identifiable): JsLookup =
+fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifiable): JsLookup =
     when (attributePath) {
-        is JsPath.Identifiable.Simple -> lookup(resultPath, attributePath)
-        is JsPath.Identifiable.Composite -> lookup(resultPath, attributePath)
+        is JsPath.Identifiable.Simple -> lookup(location, attributePath)
+        is JsPath.Identifiable.Composite -> lookup(location, attributePath)
     }
 
-internal fun JsValue.lookup(resultPath: JsResultPath, attributePath: JsPath.Identifiable.Composite): JsLookup {
-    var result: JsLookup = JsLookup.Defined(path = resultPath, value = this)
+internal fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifiable.Composite): JsLookup {
+    var result: JsLookup = JsLookup.Defined(location = location, value = this)
     for (pathElement in attributePath) {
         result = when (result) {
-            is JsLookup.Defined -> result.value.lookup(result.path, pathElement)
+            is JsLookup.Defined -> result.value.lookup(result.location, pathElement)
             is JsLookup.Undefined -> return result
         }
     }
     return result
 }
 
-internal fun JsValue.lookup(resultPath: JsResultPath, attributePath: JsPath.Identifiable.Simple): JsLookup =
-    lookup(resultPath, attributePath.value)
+internal fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifiable.Simple): JsLookup =
+    lookup(location, attributePath.value)
 
-internal fun JsValue.lookup(resultPath: JsResultPath, pathElement: PathElement): JsLookup = when (pathElement) {
-    is KeyPathElement -> lookup(resultPath, pathElement)
-    is IdxPathElement -> lookup(resultPath, pathElement)
+internal fun JsValue.lookup(location: JsLocation, pathElement: PathElement): JsLookup = when (pathElement) {
+    is KeyPathElement -> lookup(location, pathElement)
+    is IdxPathElement -> lookup(location, pathElement)
 }
 
-internal fun JsValue.lookup(resultPath: JsResultPath, pathElement: KeyPathElement): JsLookup = when (this) {
+internal fun JsValue.lookup(location: JsLocation, pathElement: KeyPathElement): JsLookup = when (this) {
     is JsObject -> {
-        val path = resultPath / pathElement
+        val currentLocation = location / pathElement
         this[pathElement.key]
-            ?.let { value -> JsLookup.Defined(path = path, value = value) }
-            ?: JsLookup.Undefined.PathMissing(path = path)
+            ?.let { value -> JsLookup.Defined(location = currentLocation, value = value) }
+            ?: JsLookup.Undefined.PathMissing(location = currentLocation)
     }
-    else -> JsLookup.Undefined.InvalidType(path = resultPath, expected = JsValue.Type.OBJECT, actual = type)
+    else -> JsLookup.Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = type)
 }
 
-internal fun JsValue.lookup(resultPath: JsResultPath, pathElement: IdxPathElement): JsLookup = when (this) {
+internal fun JsValue.lookup(location: JsLocation, pathElement: IdxPathElement): JsLookup = when (this) {
     is JsArray<*> -> {
-        val path = resultPath / pathElement
+        val currentLocation = location / pathElement
         this[pathElement.idx]
-            ?.let { value -> JsLookup.Defined(path = path, value = value) }
-            ?: JsLookup.Undefined.PathMissing(path = path)
+            ?.let { value -> JsLookup.Defined(location = currentLocation, value = value) }
+            ?: JsLookup.Undefined.PathMissing(location = currentLocation)
     }
-    else -> JsLookup.Undefined.InvalidType(path = resultPath, expected = JsValue.Type.ARRAY, actual = type)
+    else -> JsLookup.Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = type)
 }
 
-fun JsValue.readAsBoolean(currentPath: JsResultPath, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
+fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
     when (this) {
-        is JsBoolean -> JsResult.Success(this.underlying, path = currentPath)
+        is JsBoolean -> JsResult.Success(this.underlying, location = location)
         else ->
-            JsResult.Failure(path = currentPath, error = invalidTypeErrorBuilder.build(JsValue.Type.BOOLEAN, this.type))
+            JsResult.Failure(
+                location = location,
+                error = invalidTypeErrorBuilder.build(JsValue.Type.BOOLEAN, this.type)
+            )
     }
 
-fun JsValue.readAsString(currentPath: JsResultPath, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
+fun JsValue.readAsString(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
     when (this) {
-        is JsString -> JsResult.Success(this.underlying, path = currentPath)
+        is JsString -> JsResult.Success(this.underlying, location = location)
         else ->
-            JsResult.Failure(path = currentPath, error = invalidTypeErrorBuilder.build(JsValue.Type.STRING, this.type))
+            JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.STRING, this.type))
     }
 
 fun <T : Number> JsValue.readAsNumber(
-    currentPath: JsResultPath,
+    location: JsLocation,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
-    reader: (JsResultPath, String) -> JsResult<T>
+    reader: (JsLocation, String) -> JsResult<T>
 ) =
     when (this) {
-        is JsNumber -> reader(currentPath, this.underlying)
+        is JsNumber -> reader(location, this.underlying)
         else ->
-            JsResult.Failure(path = currentPath, error = invalidTypeErrorBuilder.build(JsValue.Type.NUMBER, this.type))
+            JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.NUMBER, this.type))
     }
 
 fun <T> JsValue.readAsObject(
-    currentPath: JsResultPath,
+    location: JsLocation,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
-    reader: (JsResultPath, JsObject) -> JsResult<T>
+    reader: (JsLocation, JsObject) -> JsResult<T>
 ) =
     when (this) {
-        is JsObject -> reader(currentPath, this)
+        is JsObject -> reader(location, this)
         else ->
-            JsResult.Failure(path = currentPath, error = invalidTypeErrorBuilder.build(JsValue.Type.OBJECT, this.type))
+            JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.OBJECT, this.type))
     }

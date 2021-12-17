@@ -7,9 +7,9 @@ import io.github.airflux.quickstart.dto.reader.dsl.base.reader
 val RequestReader = reader<Request> {
     val tender = property(name = "tender", reader = TenderReader).required()
 
-    build { path ->
+    build { location ->
         Request(
             tender = this[tender]
-        ).asSuccess(path)
+        ).asSuccess(location)
     }
 }

@@ -7,7 +7,7 @@ import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.error.PathMissingErrorBuilder
 import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue
@@ -26,19 +26,19 @@ internal class RequiredPropertyInstance<T : Any> private constructor(
             pathMissingErrorBuilder: PathMissingErrorBuilder,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
         ): RequiredProperty<T> =
-            RequiredPropertyInstance(propertyPath) { context, path, input ->
-                val lookup = input.lookup(path, propertyPath)
+            RequiredPropertyInstance(propertyPath) { context, location, input ->
+                val lookup = input.lookup(location, propertyPath)
                 readRequired(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
             }
     }
 
-    override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T> =
-        reader.read(context, path, input)
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> =
+        reader.read(context, location, input)
 
     override fun validation(validator: JsPropertyValidator<T>): RequiredPropertyInstance<T> {
         val previousReader = this.reader
-        reader = JsReader { context, path, input ->
-            previousReader.read(context, path, input).validation(context, validator)
+        reader = JsReader { context, location, input ->
+            previousReader.read(context, location, input).validation(context, validator)
         }
         return this
     }

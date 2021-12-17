@@ -8,7 +8,7 @@ import io.github.airflux.reader.filter.JsPredicate
 import io.github.airflux.reader.filter.extension.filter
 import io.github.airflux.reader.readNullable
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue
@@ -27,27 +27,27 @@ internal class NullableWithDefaultPropertyInstance<T : Any> private constructor(
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
         ): NullableWithDefaultProperty<T> =
-            NullableWithDefaultPropertyInstance(propertyPath) { context, path, input ->
-                val lookup = input.lookup(path, propertyPath)
+            NullableWithDefaultPropertyInstance(propertyPath) { context, location, input ->
+                val lookup = input.lookup(location, propertyPath)
                 readNullable(context, lookup, reader, default, invalidTypeErrorBuilder)
             }
     }
 
-    override fun read(context: JsReaderContext, path: JsResultPath, input: JsValue): JsResult<T?> =
-        reader.read(context, path, input)
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T?> =
+        reader.read(context, location, input)
 
     override fun validation(validator: JsPropertyValidator<T?>): NullableWithDefaultPropertyInstance<T> {
         val previousReader = this.reader
-        reader = JsReader { context, path, input ->
-            previousReader.read(context, path, input).validation(context, validator)
+        reader = JsReader { context, location, input ->
+            previousReader.read(context, location, input).validation(context, validator)
         }
         return this
     }
 
     override fun filter(predicate: JsPredicate<T>): NullableWithDefaultPropertyInstance<T> {
         val previousReader = this.reader
-        reader = JsReader { context, path, input ->
-            previousReader.read(context, path, input).filter(context, predicate)
+        reader = JsReader { context, location, input ->
+            previousReader.read(context, location, input).filter(context, predicate)
         }
         return this
     }

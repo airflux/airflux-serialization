@@ -5,7 +5,7 @@ import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
 import io.github.airflux.value.JsString
@@ -33,19 +33,19 @@ class BasePrimitiveReaderTest {
             val value = true
             val input: JsValue = JsBoolean.valueOf(value)
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
-            result.assertAsSuccess(path = JsResultPath.Root, value = value)
+            result.assertAsSuccess(location = JsLocation.Root, value = value)
         }
 
         @Test
         fun `Testing reader for the Boolean type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.BOOLEAN,
                     actual = JsValue.Type.STRING
                 )
@@ -62,19 +62,19 @@ class BasePrimitiveReaderTest {
             val value = "abc"
             val input: JsValue = JsString(value)
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
-            result.assertAsSuccess(path = JsResultPath.Root, value = value)
+            result.assertAsSuccess(location = JsLocation.Root, value = value)
         }
 
         @Test
         fun `Testing reader for the String type (reading from invalid node)`() {
             val input: JsValue = JsBoolean.valueOf(true)
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.STRING,
                     actual = JsValue.Type.BOOLEAN
                 )
@@ -95,9 +95,9 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(context, JsResultPath.Root, input)
+                    val result = reader.read(context, JsLocation.Root, input)
 
-                    result.assertAsSuccess(path = JsResultPath.Root, value = value)
+                    result.assertAsSuccess(location = JsLocation.Root, value = value)
                 }
             }
 
@@ -105,10 +105,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Byte type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.NUMBER,
                     actual = JsValue.Type.STRING
                 )
@@ -119,10 +119,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Byte type (reading a value that more the allowed range)`() {
             val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Byte::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Byte::class)
             )
         }
 
@@ -130,10 +130,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Byte type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Byte::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = "10.5", type = Byte::class)
             )
         }
     }
@@ -151,9 +151,9 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(context, JsResultPath.Root, input)
+                    val result = reader.read(context, JsLocation.Root, input)
 
-                    result.assertAsSuccess(path = JsResultPath.Root, value = value)
+                    result.assertAsSuccess(location = JsLocation.Root, value = value)
                 }
             }
 
@@ -161,10 +161,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Short type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.NUMBER,
                     actual = JsValue.Type.STRING
                 )
@@ -175,10 +175,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Short type (reading a value that more the allowed range)`() {
             val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Short::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Short::class)
             )
         }
 
@@ -186,10 +186,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Short type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Short::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = "10.5", type = Short::class)
             )
         }
     }
@@ -207,9 +207,9 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(context, JsResultPath.Root, input)
+                    val result = reader.read(context, JsLocation.Root, input)
 
-                    result.assertAsSuccess(path = JsResultPath.Root, value = value)
+                    result.assertAsSuccess(location = JsLocation.Root, value = value)
                 }
             }
 
@@ -217,10 +217,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Int type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.NUMBER,
                     actual = JsValue.Type.STRING
                 )
@@ -231,10 +231,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Int type (reading a value that more the allowed range)`() {
             val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
             )
         }
 
@@ -242,10 +242,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Int type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Int::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = "10.5", type = Int::class)
             )
         }
     }
@@ -263,9 +263,9 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value)
 
-                    val result = reader.read(context, JsResultPath.Root, input)
+                    val result = reader.read(context, JsLocation.Root, input)
 
-                    result.assertAsSuccess(path = JsResultPath.Root, value = value)
+                    result.assertAsSuccess(location = JsLocation.Root, value = value)
                 }
             }
 
@@ -273,10 +273,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Long type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.NUMBER,
                     actual = JsValue.Type.STRING
                 )
@@ -287,10 +287,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the Long type (reading a value of an invalid format)`() {
             val input: JsValue = JsNumber.valueOf("10.5")!!
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.ValueCast(value = "10.5", type = Long::class)
+                JsLocation.Root bind JsonErrors.ValueCast(value = "10.5", type = Long::class)
             )
         }
     }
@@ -308,11 +308,11 @@ class BasePrimitiveReaderTest {
                 DynamicTest.dynamicTest(displayName) {
                     val input: JsValue = JsNumber.valueOf(value.toPlainString())!!
 
-                    val result = reader.read(context, JsResultPath.Root, input)
+                    val result = reader.read(context, JsLocation.Root, input)
 
-                    result.assertAsSuccess(path = JsResultPath.Root, value = value)
+                    result.assertAsSuccess(location = JsLocation.Root, value = value)
 
-                    result.assertAsSuccess(path = JsResultPath.Root, value = value)
+                    result.assertAsSuccess(location = JsLocation.Root, value = value)
                 }
             }
 
@@ -320,10 +320,10 @@ class BasePrimitiveReaderTest {
         fun `Testing reader for the BigDecimal type (reading from invalid node)`() {
             val input: JsValue = JsString("abc")
 
-            val result = reader.read(context, JsResultPath.Root, input)
+            val result = reader.read(context, JsLocation.Root, input)
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.NUMBER,
                     actual = JsValue.Type.STRING
                 )

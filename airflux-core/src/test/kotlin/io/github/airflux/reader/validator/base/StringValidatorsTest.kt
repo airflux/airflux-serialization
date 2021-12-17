@@ -2,7 +2,7 @@ package io.github.airflux.reader.validator.base
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.validator.JsPropertyValidator
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
@@ -16,7 +16,7 @@ class StringValidatorsTest {
     companion object {
 
         private val context = JsReaderContext()
-        private val path = JsResultPath.Root
+        private val location = JsLocation.Root
 
         private fun minLengthBasicValidator(value: Int) =
             BaseStringValidators.minLength(
@@ -61,7 +61,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, "")
+            val errors = validator.validation(context, location, "")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -73,7 +73,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, " ")
+            val errors = validator.validation(context, location, " ")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -85,7 +85,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, "  ")
+            val errors = validator.validation(context, location, "  ")
 
             assertNull(errors)
         }
@@ -95,7 +95,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, "   ")
+            val errors = validator.validation(context, location, "   ")
 
             assertNull(errors)
         }
@@ -105,7 +105,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, "a")
+            val errors = validator.validation(context, location, "a")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -117,7 +117,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, "ab")
+            val errors = validator.validation(context, location, "ab")
 
             assertNull(errors)
         }
@@ -127,7 +127,7 @@ class StringValidatorsTest {
             val minimum = 2
             val validator = minLengthBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, "abc")
+            val errors = validator.validation(context, location, "abc")
 
             assertNull(errors)
         }
@@ -141,7 +141,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, "")
+            val errors = validator.validation(context, location, "")
 
             assertNull(errors)
         }
@@ -151,7 +151,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, " ")
+            val errors = validator.validation(context, location, " ")
 
             assertNull(errors)
         }
@@ -161,7 +161,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, "  ")
+            val errors = validator.validation(context, location, "  ")
 
             assertNull(errors)
         }
@@ -171,7 +171,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, "   ")
+            val errors = validator.validation(context, location, "   ")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -183,7 +183,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, "a")
+            val errors = validator.validation(context, location, "a")
 
             assertNull(errors)
         }
@@ -193,7 +193,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, "ab")
+            val errors = validator.validation(context, location, "ab")
 
             assertNull(errors)
         }
@@ -203,7 +203,7 @@ class StringValidatorsTest {
             val maximum = 2
             val validator = maxLengthBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, "abc")
+            val errors = validator.validation(context, location, "abc")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -216,7 +216,7 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing the basic validator of the isNotEmpty (a value of a string is empty)`() {
-            val errors = isNotEmptyValidator.validation(context, path, "")
+            val errors = isNotEmptyValidator.validation(context, location, "")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -225,14 +225,14 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing the basic validator of the isNotEmpty (a value of a string is blank)`() {
-            val errors = isNotEmptyValidator.validation(context, path, " ")
+            val errors = isNotEmptyValidator.validation(context, location, " ")
 
             assertNull(errors)
         }
 
         @Test
         fun `Testing the basic validator of the isNotEmpty (a value of a string is not empty)`() {
-            val errors = isNotEmptyValidator.validation(context, path, "abc")
+            val errors = isNotEmptyValidator.validation(context, location, "abc")
 
             assertNull(errors)
         }
@@ -244,7 +244,7 @@ class StringValidatorsTest {
         @Test
         fun `Testing the basic validator of the isNotBlank (a value of a string is empty)`() {
 
-            val errors = isNotBlankValidator.validation(context, path, "")
+            val errors = isNotBlankValidator.validation(context, location, "")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -254,7 +254,7 @@ class StringValidatorsTest {
         @Test
         fun `Testing the basic validator of the isNotBlank (a value of a string is blank)`() {
 
-            val errors = isNotBlankValidator.validation(context, path, " ")
+            val errors = isNotBlankValidator.validation(context, location, " ")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -264,7 +264,7 @@ class StringValidatorsTest {
         @Test
         fun `Testing the basic validator of the isNotBlank (a value of a string is not blank)`() {
 
-            val errors = isNotBlankValidator.validation(context, path, " a ")
+            val errors = isNotBlankValidator.validation(context, location, " a ")
 
             assertNull(errors)
         }
@@ -277,7 +277,7 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing the basic validator of the pattern (a value of a string is empty)`() {
-            val errors = validator.validation(context, path, "")
+            val errors = validator.validation(context, location, "")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -286,14 +286,14 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing the basic validator of the pattern (a value of a string is matching to the pattern)`() {
-            val errors = validator.validation(context, path, "abc")
+            val errors = validator.validation(context, location, "abc")
 
             assertNull(errors)
         }
 
         @Test
         fun `Testing the basic validator of the pattern (a value of a string is not matching to the pattern)`() {
-            val errors = validator.validation(context, path, "aab")
+            val errors = validator.validation(context, location, "aab")
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -309,14 +309,14 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing the basic validator of the isA (a value of a string is a number)`() {
-            val errors = validator.validation(context, path, "123")
+            val errors = validator.validation(context, location, "123")
 
             assertNull(errors)
         }
 
         @Test
         fun `Testing the basic validator of the isA (a value of a string is not a number)`() {
-            val errors = validator.validation(context, path, "abc")
+            val errors = validator.validation(context, location, "abc")
 
             assertNotNull(errors)
             assertNotNull(errors)
@@ -326,7 +326,7 @@ class StringValidatorsTest {
 
         @Test
         fun `Testing the basic validator of the isA (a value of a string is not a number but an empty string)`() {
-            val errors = validator.validation(context, path, "")
+            val errors = validator.validation(context, location, "")
 
             assertNotNull(errors)
             assertNotNull(errors)

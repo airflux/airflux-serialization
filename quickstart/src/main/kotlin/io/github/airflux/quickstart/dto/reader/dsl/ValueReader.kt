@@ -17,10 +17,10 @@ val ValueReader = reader<Value> {
     val amount = property(name = "amount", reader = AmountReader).required()
     val currency = property(name = "currency", reader = CurrencyReader).required()
 
-    build { path ->
+    build { location ->
         Value(
             amount = +amount,
             currency = +currency
-        ).asSuccess(path)
+        ).asSuccess(location)
     }
 }

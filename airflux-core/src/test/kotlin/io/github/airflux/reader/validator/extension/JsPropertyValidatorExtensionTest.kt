@@ -10,7 +10,7 @@ import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsObject
@@ -28,11 +28,11 @@ class JsPropertyValidatorExtensionTest {
             if (value.isNotEmpty()) null else JsErrors.of(JsonErrors.Validation.Strings.IsEmpty)
         }
 
-        val stringReader: JsReader<String> = JsReader { _, path, input ->
+        val stringReader: JsReader<String> = JsReader { _, location, input ->
             when (input) {
-                is JsString -> JsResult.Success(input.underlying, path)
+                is JsString -> JsResult.Success(input.underlying, location)
                 else -> JsResult.Failure(
-                    path = path,
+                    location = location,
                     error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
                 )
             }
@@ -45,8 +45,8 @@ class JsPropertyValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function the validation for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
-            val reader = JsReader { context, path, input ->
-                val result = input.lookup(path, JsPath.Root / "name")
+            val reader = JsReader { context, location, input ->
+                val result = input.lookup(location, JsPath.Root / "name")
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -56,16 +56,16 @@ class JsPropertyValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsResultPath.Root, json)
+            val result = reader.read(context, JsLocation.Root, json)
 
-            result.assertAsSuccess(path = JsResultPath.Root / "name", value = "user")
+            result.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
         }
 
         @Test
         fun `Testing of the extension-function the validation for JsReader (error of validation)`() {
             val json: JsValue = JsObject("name" to JsString(""))
-            val reader = JsReader { context, path, input ->
-                val result = input.lookup(path, JsPath.Root / "name")
+            val reader = JsReader { context, location, input ->
+                val result = input.lookup(location, JsPath.Root / "name")
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -75,7 +75,7 @@ class JsPropertyValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsResultPath.Root, json)
+            val result = reader.read(context, JsLocation.Root, json)
 
             result.assertAsFailure("name" bind JsonErrors.Validation.Strings.IsEmpty)
         }
@@ -83,8 +83,8 @@ class JsPropertyValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function the validation for JsReader (result is failure)`() {
             val json: JsValue = JsObject("name" to JsNull)
-            val reader = JsReader { context, path, input ->
-                val result = input.lookup(path, JsPath.Root / "name")
+            val reader = JsReader { context, location, input ->
+                val result = input.lookup(location, JsPath.Root / "name")
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -94,7 +94,7 @@ class JsPropertyValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsResultPath.Root, json)
+            val result = reader.read(context, JsLocation.Root, json)
 
             result.assertAsFailure(
                 "name" bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
@@ -107,16 +107,16 @@ class JsPropertyValidatorExtensionTest {
 
         @Test
         fun `Testing of the extension-function the validation for JsResult`() {
-            val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "user")
+            val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "name", value = "user")
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsSuccess(path = JsResultPath.Root / "name", value = "user")
+            validated.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
         }
 
         @Test
         fun `Testing of the extension-function the validation for JsResult (error of validation)`() {
-            val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "user", value = "")
+            val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "user", value = "")
 
             val validated = result.validation(isNotEmpty)
 
@@ -126,7 +126,7 @@ class JsPropertyValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function the validation for JsResult (result is failure)`() {
             val result: JsResult<String> =
-                JsResult.Failure(path = JsResultPath.Root / "user", error = JsonErrors.PathMissing)
+                JsResult.Failure(location = JsLocation.Root / "user", error = JsonErrors.PathMissing)
 
             val validated = result.validation(isNotEmpty)
 

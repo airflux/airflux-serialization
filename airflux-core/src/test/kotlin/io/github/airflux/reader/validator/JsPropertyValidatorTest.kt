@@ -3,7 +3,7 @@ package io.github.airflux.reader.validator
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsError
 import io.github.airflux.reader.result.JsErrors
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -22,7 +22,7 @@ class JsPropertyValidatorTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val path = JsResultPath.Root
+        private val location = JsLocation.Root
     }
 
     /*
@@ -38,7 +38,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNull(errors)
     }
@@ -54,7 +54,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(1, errors.count())
@@ -70,7 +70,7 @@ class JsPropertyValidatorTest {
         val rightValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
 
         val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNull(errors)
     }
@@ -86,7 +86,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(2, errors.count())
@@ -105,7 +105,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(2, errors.count())
@@ -123,7 +123,7 @@ class JsPropertyValidatorTest {
         val rightValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
 
         val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNull(errors)
     }
@@ -137,7 +137,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(1, errors.count())
@@ -153,7 +153,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(1, errors.count())
@@ -171,7 +171,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(1, errors.count())
@@ -189,7 +189,7 @@ class JsPropertyValidatorTest {
         }
 
         val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, path, Unit)
+        val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
         assertEquals(1, errors.count())

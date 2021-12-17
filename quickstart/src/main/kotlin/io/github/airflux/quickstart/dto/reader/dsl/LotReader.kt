@@ -30,12 +30,12 @@ val LotReader = reader<Lot>(configuration = LotObjectReaderConfig, validators = 
     val status = property(name = "status", reader = LotStatusReader).required()
     val value = property(name = "value", reader = ValueReader).required()
 
-    build { path ->
+    build { location ->
         Lot(
             id = +id,
             status = +status,
             value = +value
-        ).asSuccess(path)
+        ).asSuccess(location)
     }
 }
 

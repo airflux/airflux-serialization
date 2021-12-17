@@ -2,7 +2,7 @@ package io.github.airflux.reader.validator.base
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -15,7 +15,7 @@ class ArrayValidatorsTest {
     companion object {
 
         private val context = JsReaderContext()
-        private val path = JsResultPath.Root
+        private val location = JsLocation.Root
 
         private fun minItemsBasicValidator(value: Int) =
             BaseArrayValidators.minItems<String, List<String>>(
@@ -57,7 +57,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, emptyList())
+            val errors = validator.validation(context, location, emptyList())
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -69,7 +69,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, listOf("A"))
+            val errors = validator.validation(context, location, listOf("A"))
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -81,7 +81,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, listOf("A", "B"))
+            val errors = validator.validation(context, location, listOf("A", "B"))
 
             assertNull(errors)
         }
@@ -91,7 +91,7 @@ class ArrayValidatorsTest {
             val minimum = 2
             val validator = minItemsBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, listOf("A", "B", "C"))
+            val errors = validator.validation(context, location, listOf("A", "B", "C"))
 
             assertNull(errors)
         }
@@ -105,7 +105,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, emptyList())
+            val errors = validator.validation(context, location, emptyList())
 
             assertNull(errors)
         }
@@ -115,7 +115,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, listOf("A"))
+            val errors = validator.validation(context, location, listOf("A"))
 
             assertNull(errors)
         }
@@ -125,7 +125,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, listOf("A", "B"))
+            val errors = validator.validation(context, location, listOf("A", "B"))
 
             assertNull(errors)
         }
@@ -135,7 +135,7 @@ class ArrayValidatorsTest {
             val maximum = 2
             val validator = maxItemsBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, listOf("A", "B", "C"))
+            val errors = validator.validation(context, location, listOf("A", "B", "C"))
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -153,7 +153,7 @@ class ArrayValidatorsTest {
             fun `Testing basic validator of the isUnique (a collection is empty - failFast is true)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
-                val errors = validator.validation(context, path, emptyList())
+                val errors = validator.validation(context, location, emptyList())
 
                 assertNull(errors)
             }
@@ -162,7 +162,7 @@ class ArrayValidatorsTest {
             fun `Testing basic validator of the isUnique (a collection contains only unique values - failFast is true)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
-                val errors = validator.validation(context, path, listOf("A", "B"))
+                val errors = validator.validation(context, location, listOf("A", "B"))
 
                 assertNull(errors)
             }
@@ -171,7 +171,7 @@ class ArrayValidatorsTest {
             fun `Testing basic validator of the isUnique (a collection contains duplicates - failFast is true)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = true) { it }
 
-                val errors = validator.validation(context, path, listOf("A", "B", "A", "B", "C"))
+                val errors = validator.validation(context, location, listOf("A", "B", "A", "B", "C"))
 
                 assertNotNull(errors)
                 assertEquals(1, errors.count())
@@ -186,7 +186,7 @@ class ArrayValidatorsTest {
             fun `Testing basic validator of the isUnique (a collection is empty - failFast is false)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
-                val errors = validator.validation(context, path, emptyList())
+                val errors = validator.validation(context, location, emptyList())
 
                 assertNull(errors)
             }
@@ -195,7 +195,7 @@ class ArrayValidatorsTest {
             fun `Testing basic validator of the isUnique (a collection contains only unique values - failFast is false)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
-                val errors = validator.validation(context, path, listOf("A", "B"))
+                val errors = validator.validation(context, location, listOf("A", "B"))
 
                 assertNull(errors)
             }
@@ -204,7 +204,7 @@ class ArrayValidatorsTest {
             fun `Testing basic validator of the isUnique (a collection contains duplicates - failFast is false)`() {
                 val validator = isUniqueBasicValidator<String, String>(failFast = false) { it }
 
-                val errors = validator.validation(context, path, listOf("A", "B", "A", "B", "C"))
+                val errors = validator.validation(context, location, listOf("A", "B", "A", "B", "C"))
 
                 assertNotNull(errors)
 

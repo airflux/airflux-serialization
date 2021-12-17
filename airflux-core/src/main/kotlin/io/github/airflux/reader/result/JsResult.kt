@@ -6,12 +6,12 @@ sealed class JsResult<out T> {
     companion object;
 
     infix fun <R> map(transform: (T) -> R): JsResult<R> = when (this) {
-        is Success -> Success(transform(value), path)
+        is Success -> Success(transform(value), location)
         is Failure -> this
     }
 
-    fun <R> flatMap(transform: (T, path: JsResultPath) -> JsResult<R>): JsResult<R> = when (this) {
-        is Success -> transform(value, this.path)
+    fun <R> flatMap(transform: (T, location: JsLocation) -> JsResult<R>): JsResult<R> = when (this) {
+        is Success -> transform(value, this.location)
         is Failure -> this
     }
 
@@ -30,26 +30,26 @@ sealed class JsResult<out T> {
         is Failure -> defaultValue()
     }
 
-    class Success<T>(val value: T, val path: JsResultPath) : JsResult<T>()
+    class Success<T>(val value: T, val location: JsLocation) : JsResult<T>()
 
     class Failure private constructor(val causes: List<Cause>) : JsResult<Nothing>() {
 
-        constructor(path: JsResultPath, error: JsError) : this(listOf(Cause(path, JsErrors.of(error))))
+        constructor(location: JsLocation, error: JsError) : this(listOf(Cause(location, JsErrors.of(error))))
 
-        constructor(path: JsResultPath, errors: JsErrors) : this(listOf(Cause(path, errors)))
+        constructor(location: JsLocation, errors: JsErrors) : this(listOf(Cause(location, errors)))
 
         operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
 
-        data class Cause(val path: JsResultPath, val errors: JsErrors) {
+        data class Cause(val location: JsLocation, val errors: JsErrors) {
 
             companion object {
-                infix fun JsResultPath.bind(error: JsError): Cause = Cause(path = this, errors = JsErrors.of(error))
+                infix fun JsLocation.bind(error: JsError): Cause = Cause(location = this, errors = JsErrors.of(error))
 
                 infix fun Int.bind(error: JsError): Cause =
-                    Cause(path = JsResultPath.Root / this, errors = JsErrors.of(error))
+                    Cause(location = JsLocation.Root / this, errors = JsErrors.of(error))
 
                 infix fun String.bind(error: JsError): Cause =
-                    Cause(path = JsResultPath.Root / this, errors = JsErrors.of(error))
+                    Cause(location = JsLocation.Root / this, errors = JsErrors.of(error))
             }
         }
 
@@ -59,8 +59,8 @@ sealed class JsResult<out T> {
     }
 }
 
-fun <T> T.asSuccess(path: JsResultPath): JsResult<T> =
-    JsResult.Success(value = this, path = path)
+fun <T> T.asSuccess(location: JsLocation): JsResult<T> =
+    JsResult.Success(value = this, location = location)
 
-fun <E : JsError> E.asFailure(path: JsResultPath): JsResult<Nothing> =
-    JsResult.Failure(path = path, error = this)
+fun <E : JsError> E.asFailure(location: JsLocation): JsResult<Nothing> =
+    JsResult.Failure(location = location, error = this)

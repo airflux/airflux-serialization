@@ -9,7 +9,7 @@ import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
@@ -22,11 +22,11 @@ class CollectionFieldReaderTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val stringReader: JsReader<String> = JsReader { _, path, input ->
+        private val stringReader: JsReader<String> = JsReader { _, location, input ->
             when (input) {
-                is JsString -> JsResult.Success(input.underlying, path)
+                is JsString -> JsResult.Success(input.underlying, location)
                 else -> JsResult.Failure(
-                    path = path,
+                    location = location,
                     error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
                 )
             }
@@ -43,13 +43,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(path = JsResultPath.Root, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+            result.assertAsSuccess(location = JsLocation.Root, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
 
         @Test
@@ -59,14 +59,14 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.STRING
                 )
@@ -85,7 +85,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
@@ -104,13 +104,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(path = JsResultPath.Root, value = emptyList())
+            result.assertAsSuccess(location = JsLocation.Root, value = emptyList())
         }
     }
 
@@ -124,13 +124,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(path = JsResultPath.Root, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+            result.assertAsSuccess(location = JsLocation.Root, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
 
         @Test
@@ -140,14 +140,14 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
             result.assertAsFailure(
-                JsResultPath.Root bind JsonErrors.InvalidType(
+                JsLocation.Root bind JsonErrors.InvalidType(
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.STRING
                 )
@@ -166,7 +166,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
@@ -186,13 +186,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    currentPath = JsResultPath.Root,
+                    location = JsLocation.Root,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(path = JsResultPath.Root, value = emptySet())
+            result.assertAsSuccess(location = JsLocation.Root, value = emptySet())
         }
     }
 }

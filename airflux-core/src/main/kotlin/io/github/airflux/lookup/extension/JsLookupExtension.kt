@@ -19,16 +19,16 @@ operator fun JsLookup.div(idx: Int): JsLookup = when (this) {
 
 fun JsLookup.Defined.lookup(byName: String): JsLookup = when (value) {
     is JsObject -> value[byName]
-        ?.let { JsLookup.Defined(path = path / byName, value = it) }
-        ?: JsLookup.Undefined.PathMissing(path = path / byName)
+        ?.let { JsLookup.Defined(location = location / byName, value = it) }
+        ?: JsLookup.Undefined.PathMissing(location = location / byName)
 
-    else -> JsLookup.Undefined.InvalidType(path = path, expected = JsValue.Type.OBJECT, actual = value.type)
+    else -> JsLookup.Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
 }
 
 fun JsLookup.Defined.lookup(byIndex: Int): JsLookup = when (value) {
     is JsArray<*> -> value[byIndex]
-        ?.let { JsLookup.Defined(path = path / byIndex, value = it) }
-        ?: JsLookup.Undefined.PathMissing(path = path / byIndex)
+        ?.let { JsLookup.Defined(location = location / byIndex, value = it) }
+        ?: JsLookup.Undefined.PathMissing(location = location / byIndex)
 
-    else -> JsLookup.Undefined.InvalidType(path = path, expected = JsValue.Type.ARRAY, actual = value.type)
+    else -> JsLookup.Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
 }

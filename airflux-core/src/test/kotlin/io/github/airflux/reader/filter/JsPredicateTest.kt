@@ -1,7 +1,7 @@
 package io.github.airflux.reader.filter
 
 import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
@@ -27,7 +27,7 @@ class JsPredicateTest {
         val leftFilter = JsPredicate<Int> { _, _, value -> value > 10 }
         val rightFilter = JsPredicate<Int> { _, _, value -> value < 20 }
         val composedFilter = leftFilter and rightFilter
-        assertEquals(expected, composedFilter.test(context, JsResultPath.Root, actual))
+        assertEquals(expected, composedFilter.test(context, JsLocation.Root, actual))
     }
 
     @ParameterizedTest
@@ -45,6 +45,6 @@ class JsPredicateTest {
         val leftFilter = JsPredicate<Int> { _, _, value -> value < 10 }
         val rightFilter = JsPredicate<Int> { _, _, value -> value > 20 }
         val composedFilter = leftFilter or rightFilter
-        assertEquals(expected, composedFilter.test(context, JsResultPath.Root, actual))
+        assertEquals(expected, composedFilter.test(context, JsLocation.Root, actual))
     }
 }

@@ -9,7 +9,7 @@ import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropert
 import io.github.airflux.dsl.reader.`object`.property.RequiredProperty
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsObject
 
 class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty, Any>) {
@@ -49,7 +49,7 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
 
     class Builder internal constructor(
         private val context: JsReaderContext,
-        private val path: JsResultPath,
+        private val location: JsLocation,
         private val input: JsObject
     ) {
         private val results: MutableMap<JsReaderProperty, Any> = mutableMapOf()
@@ -57,12 +57,12 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
         fun tryAddValueBy(property: JsReaderProperty): JsResult.Failure? {
 
             val result: JsResult<Any?> = when (property) {
-                is RequiredProperty<*> -> property.read(context, path, input)
-                is DefaultableProperty<*> -> property.read(context, path, input)
-                is OptionalProperty<*> -> property.read(context, path, input)
-                is OptionalWithDefaultProperty<*> -> property.read(context, path, input)
-                is NullableProperty<*> -> property.read(context, path, input)
-                is NullableWithDefaultProperty<*> -> property.read(context, path, input)
+                is RequiredProperty<*> -> property.read(context, location, input)
+                is DefaultableProperty<*> -> property.read(context, location, input)
+                is OptionalProperty<*> -> property.read(context, location, input)
+                is OptionalWithDefaultProperty<*> -> property.read(context, location, input)
+                is NullableProperty<*> -> property.read(context, location, input)
+                is NullableWithDefaultProperty<*> -> property.read(context, location, input)
             }
 
             return when (result) {

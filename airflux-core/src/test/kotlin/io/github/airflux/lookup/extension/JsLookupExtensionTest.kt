@@ -3,7 +3,7 @@ package io.github.airflux.lookup.extension
 import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.lookup.JsLookup
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
@@ -38,7 +38,7 @@ class JsLookupExtensionTest {
                 val value = json / "role"
 
                 value as JsLookup.Undefined.PathMissing
-                assertEquals("#/role", value.path.toString())
+                assertEquals("#/role", value.location.toString())
             }
 
             @Test
@@ -48,7 +48,7 @@ class JsLookupExtensionTest {
                 val value = json / "name"
 
                 value as JsLookup.Undefined.InvalidType
-                assertEquals("#", value.path.toString())
+                assertEquals("#", value.location.toString())
                 assertEquals(JsValue.Type.OBJECT, value.expected)
                 assertEquals(JsValue.Type.STRING, value.actual)
             }
@@ -74,7 +74,7 @@ class JsLookupExtensionTest {
                 val value = json / 1
 
                 value as JsLookup.Undefined.PathMissing
-                assertEquals("#[1]", value.path.toString())
+                assertEquals("#[1]", value.location.toString())
             }
 
             @Test
@@ -84,7 +84,7 @@ class JsLookupExtensionTest {
                 val value = objValue / 0
 
                 value as JsLookup.Undefined.InvalidType
-                assertEquals("#", value.path.toString())
+                assertEquals("#", value.location.toString())
                 assertEquals(JsValue.Type.ARRAY, value.expected)
                 assertEquals(JsValue.Type.OBJECT, value.actual)
             }
@@ -100,48 +100,48 @@ class JsLookupExtensionTest {
             @Test
             fun `Element by a key is found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsResultPath.Root / "user",
+                    location = JsLocation.Root / "user",
                     value = JsObject("name" to JsString(USER_NAME_VALUE))
                 )
 
                 val value = defined / "name"
 
                 value as JsLookup.Defined
-                assertEquals("#/user/name", value.path.toString())
+                assertEquals("#/user/name", value.location.toString())
                 assertEquals(USER_NAME_VALUE, (value.value as JsString).underlying)
             }
 
             @Test
             fun `Element by a key is not found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsResultPath.Root / "user",
+                    location = JsLocation.Root / "user",
                     value = JsObject("name" to JsString(USER_NAME_VALUE))
                 )
 
                 val value = defined / "type"
 
                 value as JsLookup.Undefined.PathMissing
-                assertEquals("#/user/type", value.path.toString())
+                assertEquals("#/user/type", value.location.toString())
             }
 
             @Test
             fun `Element is invalid type`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsResultPath.Root / "user",
+                    location = JsLocation.Root / "user",
                     value = JsObject("name" to JsString(USER_NAME_VALUE))
                 )
 
                 val value = defined / "name" / "id"
 
                 value as JsLookup.Undefined.InvalidType
-                assertEquals("#/user/name", value.path.toString())
+                assertEquals("#/user/name", value.location.toString())
                 assertEquals(JsValue.Type.OBJECT, value.expected)
                 assertEquals(JsValue.Type.STRING, value.actual)
             }
 
             @Test
             fun `Element is undefined`() {
-                val undefined: JsLookup = JsLookup.Undefined.PathMissing(JsResultPath.Root / "user")
+                val undefined: JsLookup = JsLookup.Undefined.PathMissing(JsLocation.Root / "user")
 
                 val value = undefined / "phones"
 
@@ -155,48 +155,48 @@ class JsLookupExtensionTest {
             @Test
             fun `Element by an index is found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsResultPath.Root / "user",
+                    location = JsLocation.Root / "user",
                     value = JsObject("phones" to JsArray(JsString(FIRST_PHONE_VALUE)))
                 )
 
                 val value = defined / "phones" / 0
 
                 value as JsLookup.Defined
-                assertEquals("#/user/phones[0]", value.path.toString())
+                assertEquals("#/user/phones[0]", value.location.toString())
                 assertEquals(FIRST_PHONE_VALUE, (value.value as JsString).underlying)
             }
 
             @Test
             fun `Element by an index is not found`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsResultPath.Root / "user",
+                    location = JsLocation.Root / "user",
                     value = JsObject("phones" to JsArray(JsString(FIRST_PHONE_VALUE)))
                 )
 
                 val value = defined / "phones" / 1
 
                 value as JsLookup.Undefined.PathMissing
-                assertEquals("#/user/phones[1]", value.path.toString())
+                assertEquals("#/user/phones[1]", value.location.toString())
             }
 
             @Test
             fun `Element is invalid type`() {
                 val defined: JsLookup = JsLookup.Defined(
-                    path = JsResultPath.Root / "name",
+                    location = JsLocation.Root / "name",
                     value = JsString(USER_NAME_VALUE)
                 )
 
                 val value = defined / 0
 
                 value as JsLookup.Undefined.InvalidType
-                assertEquals("#/name", value.path.toString())
+                assertEquals("#/name", value.location.toString())
                 assertEquals(JsValue.Type.ARRAY, value.expected)
                 assertEquals(JsValue.Type.STRING, value.actual)
             }
 
             @Test
             fun `Element is undefined`() {
-                val undefined: JsLookup = JsLookup.Undefined.PathMissing(path = JsResultPath.Root / "user")
+                val undefined: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.Root / "user")
 
                 val value = undefined / 0
 

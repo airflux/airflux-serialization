@@ -12,12 +12,12 @@ val TenderReader = reader<Tender> {
     val value = property(name = "value", reader = ValueReader).optional()
     val lots = property(name = "lots", reader = LotsReader).required()
 
-    build { path ->
+    build { location ->
         Tender(
             id = this[id],
             title = this[title],
             value = this[value],
             lots = this[lots],
-        ).asSuccess(path)
+        ).asSuccess(location)
     }
 }

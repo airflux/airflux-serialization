@@ -10,7 +10,7 @@ import io.github.airflux.reader.filter.JsPredicate
 import io.github.airflux.reader.readRequired
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsObject
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
@@ -24,11 +24,11 @@ class JsPredicateExtensionTest {
         private val context = JsReaderContext()
         private val isNotBlank = JsPredicate<String> { _, _, value -> value.isNotBlank() }
 
-        val stringReader: JsReader<String> = JsReader { _, path, input ->
+        val stringReader: JsReader<String> = JsReader { _, location, input ->
             when (input) {
-                is JsString -> JsResult.Success(input.underlying, path)
+                is JsString -> JsResult.Success(input.underlying, location)
                 else -> JsResult.Failure(
-                    path = path,
+                    location = location,
                     error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
                 )
             }
@@ -41,8 +41,8 @@ class JsPredicateExtensionTest {
         @Test
         fun `Testing of the extension-function the filter for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
-            val reader = JsReader { context, path, input ->
-                val result = input.lookup(path, JsPath.Root / "name")
+            val reader = JsReader { context, location, input ->
+                val result = input.lookup(location, JsPath.Root / "name")
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -52,16 +52,16 @@ class JsPredicateExtensionTest {
                 )
             }.filter(isNotBlank)
 
-            val result = reader.read(context, JsResultPath.Root, json)
+            val result = reader.read(context, JsLocation.Root, json)
 
-            result.assertAsSuccess(path = JsResultPath.Root / "name", value = "user")
+            result.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
         }
 
         @Test
         fun `Testing of the extension-function the filter for JsReader (filtered)`() {
             val json: JsValue = JsObject("name" to JsString("  "))
-            val reader = JsReader { context, path, input ->
-                val result = input.lookup(path, JsPath.Root / "name")
+            val reader = JsReader { context, location, input ->
+                val result = input.lookup(location, JsPath.Root / "name")
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -71,16 +71,16 @@ class JsPredicateExtensionTest {
                 )
             }.filter(isNotBlank)
 
-            val result = reader.read(context, JsResultPath.Root, json)
+            val result = reader.read(context, JsLocation.Root, json)
 
-            result.assertAsSuccess(path = JsResultPath.Root / "name", value = null)
+            result.assertAsSuccess(location = JsLocation.Root / "name", value = null)
         }
 
         @Test
         fun `Testing of the extension-function the filter for JsReader as failure`() {
             val json: JsValue = JsObject("user" to JsString("  "))
-            val reader = JsReader { context, path, input ->
-                val result = input.lookup(path, JsPath.Root / "name")
+            val reader = JsReader { context, location, input ->
+                val result = input.lookup(location, JsPath.Root / "name")
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -90,7 +90,7 @@ class JsPredicateExtensionTest {
                 )
             }.filter(isNotBlank)
 
-            val result = reader.read(context, JsResultPath.Root, json)
+            val result = reader.read(context, JsLocation.Root, json)
 
             result.assertAsFailure("name" bind JsonErrors.PathMissing)
         }
@@ -101,35 +101,35 @@ class JsPredicateExtensionTest {
 
         @Test
         fun `Testing of the extension-function the filter for JsResult`() {
-            val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "user")
+            val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "name", value = "user")
 
             val validated = result.filter(isNotBlank)
 
-            validated.assertAsSuccess(path = JsResultPath.Root / "name", value = "user")
+            validated.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
         }
 
         @Test
         fun `Testing of the extension-function the filter for JsResult without value`() {
-            val result: JsResult<String?> = JsResult.Success(path = JsResultPath.Root / "name", value = null)
+            val result: JsResult<String?> = JsResult.Success(location = JsLocation.Root / "name", value = null)
 
             val validated = result.filter(isNotBlank)
 
-            validated.assertAsSuccess(path = JsResultPath.Root / "name", value = null)
+            validated.assertAsSuccess(location = JsLocation.Root / "name", value = null)
         }
 
         @Test
         fun `Testing of the extension-function the filter for JsResult (filtered)`() {
-            val result: JsResult<String> = JsResult.Success(path = JsResultPath.Root / "name", value = "  ")
+            val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "name", value = "  ")
 
             val validated = result.filter(isNotBlank)
 
-            validated.assertAsSuccess(path = JsResultPath.Root / "name", value = null)
+            validated.assertAsSuccess(location = JsLocation.Root / "name", value = null)
         }
 
         @Test
         fun `Testing of the extension-function the filter for JsResult as failure`() {
             val error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-            val result: JsResult<String> = JsResult.Failure(path = JsResultPath.Root / "name", error = error)
+            val result: JsResult<String> = JsResult.Failure(location = JsLocation.Root / "name", error = error)
 
             val validated = result.filter(isNotBlank)
 

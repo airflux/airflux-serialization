@@ -9,7 +9,7 @@ import io.github.airflux.lookup.JsLookup
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Cause.Companion.bind
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.value.JsNull
 import io.github.airflux.value.JsString
 import io.github.airflux.value.JsValue
@@ -20,11 +20,11 @@ class OptionalWithDefaultFieldReaderTest {
     companion object {
         private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { _, path, input ->
+            JsReader { _, location, input ->
                 when (input) {
-                    is JsString -> JsResult.Success(input.underlying, path)
+                    is JsString -> JsResult.Success(input.underlying, location)
                     else -> JsResult.Failure(
-                        path = path,
+                        location = location,
                         error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
                     )
                 }
@@ -34,7 +34,7 @@ class OptionalWithDefaultFieldReaderTest {
 
     @Test
     fun `Testing the readOptional function withDefault (a property is found)`() {
-        val from: JsLookup = JsLookup.Defined(path = JsResultPath.Root / "name", JsString(USER_NAME_VALUE))
+        val from: JsLookup = JsLookup.Defined(location = JsLocation.Root / "name", JsString(USER_NAME_VALUE))
 
         val result: JsResult<String?> = readOptional(
             from = from,
@@ -44,12 +44,12 @@ class OptionalWithDefaultFieldReaderTest {
             invalidTypeErrorBuilder = JsonErrors::InvalidType
         )
 
-        result.assertAsSuccess(path = JsResultPath.Root / "name", value = USER_NAME_VALUE)
+        result.assertAsSuccess(location = JsLocation.Root / "name", value = USER_NAME_VALUE)
     }
 
     @Test
     fun `Testing the readOptional function withDefault (a property is found with value the null)`() {
-        val from: JsLookup = JsLookup.Defined(path = JsResultPath.Root / "name", JsNull)
+        val from: JsLookup = JsLookup.Defined(location = JsLocation.Root / "name", JsNull)
 
         val result: JsResult<String?> = readOptional(
             from = from,
@@ -66,7 +66,7 @@ class OptionalWithDefaultFieldReaderTest {
 
     @Test
     fun `Testing the readOptional function withDefault (a property is not found, returning default value)`() {
-        val from: JsLookup = JsLookup.Undefined.PathMissing(path = JsResultPath.Root / "name")
+        val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.Root / "name")
 
         val result: JsResult<String?> = readOptional(
             from = from,
@@ -76,13 +76,13 @@ class OptionalWithDefaultFieldReaderTest {
             invalidTypeErrorBuilder = JsonErrors::InvalidType
         )
 
-        result.assertAsSuccess(path = JsResultPath.Root / "name", value = DEFAULT_VALUE)
+        result.assertAsSuccess(location = JsLocation.Root / "name", value = DEFAULT_VALUE)
     }
 
     @Test
     fun `Testing the readOptional function withDefault (a property is not found, invalid type)`() {
         val from: JsLookup = JsLookup.Undefined.InvalidType(
-            path = JsResultPath.Root / "name",
+            location = JsLocation.Root / "name",
             expected = JsValue.Type.ARRAY,
             actual = JsValue.Type.STRING
         )

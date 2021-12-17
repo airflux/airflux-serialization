@@ -22,12 +22,12 @@ fun <T : Any> readNullable(
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> = when (from) {
     is JsLookup.Defined -> when (from.value) {
-        is JsNull -> JsResult.Success(path = from.path, value = null)
-        else -> using.read(context, from.path, from.value)
+        is JsNull -> JsResult.Success(location = from.location, value = null)
+        else -> using.read(context, from.location, from.value)
     }
 
-    is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = defaultValue())
+    is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
 
     is JsLookup.Undefined.InvalidType ->
-        JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
+        JsResult.Failure(location = from.location, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
 }

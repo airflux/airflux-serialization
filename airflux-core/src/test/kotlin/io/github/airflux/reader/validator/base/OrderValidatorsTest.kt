@@ -2,7 +2,7 @@ package io.github.airflux.reader.validator.base
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -15,7 +15,7 @@ class OrderValidatorsTest {
     companion object {
 
         private val context = JsReaderContext()
-        private val path = JsResultPath.Root
+        private val location = JsLocation.Root
 
         private fun minBasicValidator(value: Int) =
             BaseOrderValidators.min(
@@ -91,7 +91,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = minBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -104,7 +104,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = minBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -115,7 +115,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = minBasicValidator(minimum)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -130,7 +130,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = maxBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -141,7 +141,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = maxBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -152,7 +152,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = maxBasicValidator(maximum)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -169,7 +169,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = eqBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -182,7 +182,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = eqBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -193,7 +193,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = eqBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -210,7 +210,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = neBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -221,7 +221,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = neBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -234,7 +234,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = neBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -249,7 +249,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = gtBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -262,7 +262,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = gtBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -275,7 +275,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = gtBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -290,7 +290,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = geBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -303,7 +303,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = geBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -314,7 +314,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = geBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -329,7 +329,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = ltBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -340,7 +340,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = ltBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -353,7 +353,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = ltBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())
@@ -370,7 +370,7 @@ class OrderValidatorsTest {
             val actual = 5
             val validator = leBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -381,7 +381,7 @@ class OrderValidatorsTest {
             val actual = 10
             val validator = leBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNull(errors)
         }
@@ -392,7 +392,7 @@ class OrderValidatorsTest {
             val actual = 15
             val validator = leBasicValidator(expected)
 
-            val errors = validator.validation(context, path, actual)
+            val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
             assertEquals(1, errors.count())

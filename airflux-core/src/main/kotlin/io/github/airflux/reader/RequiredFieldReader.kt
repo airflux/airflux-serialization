@@ -20,11 +20,11 @@ fun <T : Any> readRequired(
     pathMissingErrorBuilder: PathMissingErrorBuilder,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T> = when (from) {
-    is JsLookup.Defined -> using.read(context, from.path, from.value)
+    is JsLookup.Defined -> using.read(context, from.location, from.value)
 
     is JsLookup.Undefined.PathMissing ->
-        JsResult.Failure(path = from.path, error = pathMissingErrorBuilder.build())
+        JsResult.Failure(location = from.location, error = pathMissingErrorBuilder.build())
 
     is JsLookup.Undefined.InvalidType ->
-        JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
+        JsResult.Failure(location = from.location, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
 }

@@ -18,10 +18,10 @@ fun <T : Any> readOptional(
     using: JsReader<T>,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<T?> = when (from) {
-    is JsLookup.Defined -> using.read(context, from.path, from.value)
+    is JsLookup.Defined -> using.read(context, from.location, from.value)
 
-    is JsLookup.Undefined.PathMissing -> JsResult.Success(path = from.path, value = null)
+    is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = null)
 
     is JsLookup.Undefined.InvalidType ->
-        JsResult.Failure(path = from.path, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
+        JsResult.Failure(location = from.location, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
 }

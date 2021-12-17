@@ -2,12 +2,12 @@ package io.github.airflux.reader.validator
 
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsErrors
-import io.github.airflux.reader.result.JsResultPath
+import io.github.airflux.reader.result.JsLocation
 
 @Suppress("unused")
 fun interface JsPropertyValidator<in T> {
 
-    fun validation(context: JsReaderContext, path: JsResultPath, value: T): JsErrors?
+    fun validation(context: JsReaderContext, location: JsLocation, value: T): JsErrors?
 
     /*
      * | This        | Other       | Result      |
@@ -20,12 +20,12 @@ fun interface JsPropertyValidator<in T> {
      */
     infix fun or(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
-        return JsPropertyValidator { context, path, value ->
-            val result = self.validation(context, path, value)
+        return JsPropertyValidator { context, location, value ->
+            val result = self.validation(context, location, value)
             when {
                 result == null -> null
                 result.hasCritical() -> result
-                else -> other.validation(context, path, value)?.let { result + it }
+                else -> other.validation(context, location, value)?.let { result + it }
             }
         }
     }
@@ -41,9 +41,9 @@ fun interface JsPropertyValidator<in T> {
      */
     infix fun and(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
-        return JsPropertyValidator { context, path, value ->
-            when (val result = self.validation(context, path, value)) {
-                null -> other.validation(context, path, value)
+        return JsPropertyValidator { context, location, value ->
+            when (val result = self.validation(context, location, value)) {
+                null -> other.validation(context, location, value)
                 else -> result
             }
         }
