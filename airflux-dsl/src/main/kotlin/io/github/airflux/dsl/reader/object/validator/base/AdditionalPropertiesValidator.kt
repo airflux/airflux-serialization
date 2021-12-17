@@ -23,7 +23,7 @@ class AdditionalPropertiesValidator(private val errorBuilder: ErrorBuilder) :
     ): JsObjectValidator.Before = mutableSetOf<String>()
         .apply {
             properties.forEach { property ->
-                property.propertyPath
+                property.path
                     .firstOrNull()
                     ?.let {
                         when (it) {

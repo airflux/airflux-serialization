@@ -146,9 +146,9 @@ class JsValueExtensionTest {
             @Test
             fun defined() {
                 val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
-                val attributePath = JsPath.Root / "name"
+                val path = JsPath.Root / "name"
 
-                val result = json.lookup(JsLocation.Root, attributePath)
+                val result = json.lookup(JsLocation.Root, path)
 
                 result as JsLookup.Defined
                 assertEquals(JsLocation.Root / "name", result.location)
@@ -168,9 +168,9 @@ class JsValueExtensionTest {
                         "name" to JsString(USER_NAME_VALUE)
                     )
                 )
-                val attributePath = ("user" / "name") /*as JsLookupPath.Identifiable.Composite*/
+                val path = ("user" / "name") /*as JsLookupPath.Identifiable.Composite*/
 
-                val result = json.lookup(JsLocation.Root, attributePath)
+                val result = json.lookup(JsLocation.Root, path)
 
                 result as JsLookup.Defined
                 assertEquals(JsLocation.Root / "user" / "name", result.location)
@@ -186,9 +186,9 @@ class JsValueExtensionTest {
                         "name" to JsString(USER_NAME_VALUE)
                     )
                 )
-                val attributePath = ("user" / "phones" / 0) as JsPath.Identifiable.Composite
+                val path = ("user" / "phones" / 0) as JsPath.Identifiable.Composite
 
-                val result = json.lookup(JsLocation.Root, attributePath)
+                val result = json.lookup(JsLocation.Root, path)
 
                 result as JsLookup.Undefined
                 assertEquals(JsLocation.Root / "user" / "phones", result.location)

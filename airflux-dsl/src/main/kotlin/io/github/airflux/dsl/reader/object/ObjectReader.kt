@@ -116,32 +116,32 @@ class ObjectReader(
         }
 
         private inner class PropertyBinderInstance<P : Any>(
-            private val attributePath: JsPath.Identifiable,
+            private val path: JsPath.Identifiable,
             private val reader: JsReader<P>
         ) : PropertyBinder<P> {
 
             override fun required(): RequiredProperty<P> =
-                RequiredPropertyInstance.of(attributePath, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+                RequiredPropertyInstance.of(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             override fun defaultable(default: () -> P): DefaultableProperty<P> =
-                DefaultablePropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
+                DefaultablePropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             override fun optional(): OptionalProperty<P> =
-                OptionalPropertyInstance.of(attributePath, reader, invalidTypeErrorBuilder)
+                OptionalPropertyInstance.of(path, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             override fun optional(default: () -> P): OptionalWithDefaultProperty<P> =
-                OptionalWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
+                OptionalWithDefaultPropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             override fun nullable(): NullableProperty<P> =
-                NullablePropertyInstance.of(attributePath, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+                NullablePropertyInstance.of(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             override fun nullable(default: () -> P): NullableWithDefaultProperty<P> =
-                NullableWithDefaultPropertyInstance.of(attributePath, reader, default, invalidTypeErrorBuilder)
+                NullableWithDefaultPropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
             fun registration(property: JsReaderProperty) {

@@ -15,20 +15,20 @@ import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
 
 internal class NullableWithDefaultPropertyInstance<T : Any> private constructor(
-    override val propertyPath: JsPath.Identifiable,
+    override val path: JsPath.Identifiable,
     private var reader: JsReader<T?>
 ) : NullableWithDefaultProperty<T> {
 
     companion object {
 
         fun <T : Any> of(
-            propertyPath: JsPath.Identifiable,
+            path: JsPath.Identifiable,
             reader: JsReader<T>,
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
         ): NullableWithDefaultProperty<T> =
-            NullableWithDefaultPropertyInstance(propertyPath) { context, location, input ->
-                val lookup = input.lookup(location, propertyPath)
+            NullableWithDefaultPropertyInstance(path) { context, location, input ->
+                val lookup = input.lookup(location, path)
                 readNullable(context, lookup, reader, default, invalidTypeErrorBuilder)
             }
     }

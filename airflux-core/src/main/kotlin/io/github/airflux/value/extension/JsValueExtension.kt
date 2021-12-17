@@ -19,15 +19,15 @@ operator fun JsValue.div(name: String): JsLookup = lookup(JsLocation.Root, KeyPa
 
 operator fun JsValue.div(idx: Int): JsLookup = lookup(JsLocation.Root, IdxPathElement(idx))
 
-fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifiable): JsLookup =
-    when (attributePath) {
-        is JsPath.Identifiable.Simple -> lookup(location, attributePath)
-        is JsPath.Identifiable.Composite -> lookup(location, attributePath)
+fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable): JsLookup =
+    when (path) {
+        is JsPath.Identifiable.Simple -> lookup(location, path)
+        is JsPath.Identifiable.Composite -> lookup(location, path)
     }
 
-internal fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifiable.Composite): JsLookup {
+internal fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable.Composite): JsLookup {
     var result: JsLookup = JsLookup.Defined(location = location, value = this)
-    for (pathElement in attributePath) {
+    for (pathElement in path) {
         result = when (result) {
             is JsLookup.Defined -> result.value.lookup(result.location, pathElement)
             is JsLookup.Undefined -> return result
@@ -36,8 +36,8 @@ internal fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifi
     return result
 }
 
-internal fun JsValue.lookup(location: JsLocation, attributePath: JsPath.Identifiable.Simple): JsLookup =
-    lookup(location, attributePath.value)
+internal fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable.Simple): JsLookup =
+    lookup(location, path.value)
 
 internal fun JsValue.lookup(location: JsLocation, pathElement: PathElement): JsLookup = when (pathElement) {
     is KeyPathElement -> lookup(location, pathElement)
