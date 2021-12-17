@@ -27,8 +27,8 @@ object Versions {
     }
 
     object JUnit {
-        const val Jupiter = "5.8.0"
-        const val Platform = "1.8.0"
+        const val Jupiter = "5.8.2"
+        const val Platform = "1.8.2"
     }
 
     object PiTest {
