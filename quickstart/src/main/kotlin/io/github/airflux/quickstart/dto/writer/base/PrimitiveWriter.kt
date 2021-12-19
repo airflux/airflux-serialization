@@ -1,8 +1,9 @@
 package io.github.airflux.quickstart.dto.writer.base
 
-import io.github.airflux.writer.base.BasePrimitiveWriter
-import io.github.airflux.writer.base.BasePrimitiveWriter.bigDecimal
+import io.github.airflux.writer.base.buildBigDecimalWriter
+import io.github.airflux.writer.base.buildStringWriter
 
 object PrimitiveWriter {
-    val DecimalWriter = BasePrimitiveWriter.bigDecimal()
+    val stringWriter = buildStringWriter()
+    val DecimalWriter = buildBigDecimalWriter()
 }
