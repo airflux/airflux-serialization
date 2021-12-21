@@ -4,11 +4,11 @@ import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.reader.filter.JsPredicate
-import io.github.airflux.reader.filter.extension.filter
+import io.github.airflux.reader.predicate.JsPredicate
 import io.github.airflux.reader.readNullable
-import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsLocation
+import io.github.airflux.reader.result.JsResult
+import io.github.airflux.reader.result.extension.filter
 import io.github.airflux.reader.validator.JsPropertyValidator
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.value.JsValue

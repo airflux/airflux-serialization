@@ -1,4 +1,4 @@
-package io.github.airflux.reader.filter
+package io.github.airflux.reader.predicate
 
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.result.JsLocation
