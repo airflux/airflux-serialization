@@ -17,6 +17,6 @@ class BuilderStringWriterTest {
         val result = stringWriter.write(value)
 
         result as JsString
-        assertEquals(value, result.underlying)
+        assertEquals(value, result.get)
     }
 }

@@ -191,21 +191,19 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
         override fun serialize(value: JsValue, gen: JsonGenerator, provider: SerializerProvider) {
             when (value) {
                 is JsNull -> gen.writeNull()
-                is JsString -> gen.writeString(value.underlying)
-                is JsBoolean -> gen.writeBoolean(value.underlying)
-                is JsNumber -> gen.writeNumber(value.underlying)
+                is JsString -> gen.writeString(value.get)
+                is JsBoolean -> gen.writeBoolean(value.get)
+                is JsNumber -> gen.writeNumber(value.get)
                 is JsArray<*> -> {
                     gen.writeStartArray()
-                    value.underlying
-                        .forEach { element ->
-                            serialize(element, gen, provider)
-                        }
+                    value.forEach { element ->
+                        serialize(element, gen, provider)
+                    }
                     gen.writeEndArray()
                 }
                 is JsObject -> {
                     gen.writeStartObject()
-                    value.underlying
-                        .forEach { (name, element) ->
+                    value.forEach { (name, element) ->
                             gen.writeFieldName(name)
                             serialize(element, gen, provider)
                         }

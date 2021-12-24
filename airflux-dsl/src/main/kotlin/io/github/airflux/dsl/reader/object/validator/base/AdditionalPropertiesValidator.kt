@@ -44,8 +44,7 @@ class AdditionalPropertiesValidator(private val errorBuilder: ErrorBuilder) :
             context: JsReaderContext
         ): JsErrors? {
             val unknownProperties = mutableListOf<String>()
-            input.underlying
-                .forEach { (name, _) ->
+            input.forEach { (name, _) ->
                     if (name !in names) {
                         unknownProperties.add(name)
                         if (configuration.failFast) return@forEach

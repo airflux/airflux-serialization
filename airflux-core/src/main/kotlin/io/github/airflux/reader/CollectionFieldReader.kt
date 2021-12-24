@@ -53,10 +53,9 @@ fun <T : Any, C> readAsCollection(
 ): JsResult<C>
     where C : Collection<T> = when (from) {
     is JsArray<*> -> {
-        val values = factory.newBuilder(from.underlying.size)
+        val values = factory.newBuilder(from.size)
         val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(value = values, location = location)
-        from.underlying
-            .withIndex()
+        from.withIndex()
             .fold(initial) { acc, (idx, elem) ->
                 when (val result = using.read(context, location / idx, elem)) {
                     is JsResult.Success<T> -> when (acc) {

@@ -27,9 +27,9 @@ class WriteNullableTest {
         val result = writer.write(value)
 
         result as JsObject
-        assertEquals(1, result.underlying.size)
-        val name = result.underlying["name"] as JsString
-        assertEquals(TestData.USER_NAME_VALUE, name.underlying)
+        assertEquals(1, result.count)
+        val name = result["name"] as JsString
+        assertEquals(TestData.USER_NAME_VALUE, name.get)
     }
 
     @Test
@@ -42,8 +42,8 @@ class WriteNullableTest {
         val result = writer.write(value)
 
         result as JsObject
-        assertEquals(1, result.underlying.size)
-        assertEquals(JsNull, result.underlying["name"])
+        assertEquals(1, result.count)
+        assertEquals(JsNull, result["name"])
     }
 
     private class DTO(val name: String?)

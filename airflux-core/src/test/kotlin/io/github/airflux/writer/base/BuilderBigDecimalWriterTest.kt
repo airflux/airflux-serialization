@@ -18,7 +18,7 @@ class BuilderBigDecimalWriterTest {
         val result = writer.write(value)
 
         result as JsNumber
-        assertEquals(value, BigDecimal(result.underlying))
+        assertEquals(value, BigDecimal(result.get))
     }
 
     @Test
@@ -29,6 +29,6 @@ class BuilderBigDecimalWriterTest {
         val result = writer.write(value)
 
         result as JsNumber
-        assertEquals(BigDecimal("10.5"), BigDecimal(result.underlying))
+        assertEquals(BigDecimal("10.5"), BigDecimal(result.get))
     }
 }

@@ -21,7 +21,7 @@ class JsLookupFindByKeyTest {
 
         value as JsLookup.Defined
         assertEquals("#/user/name", value.location.toString())
-        assertEquals(USER_NAME_VALUE, (value.value as JsString).underlying)
+        assertEquals(USER_NAME_VALUE, (value.value as JsString).get)
     }
 
     @Test

@@ -5,37 +5,74 @@ import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.path.IdxPathElement
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class JsArrayTest {
 
-    @Test
-    fun `Testing JsArray class without data`() {
-        val json = JsArray<JsString>()
-
-        assertTrue(json.underlying.isEmpty())
-        assertNull(json[0])
+    companion object {
+        private val EMPTY_ARRAY = JsArray<JsString>()
+        private val FIRST_ITEM = JsString(FIRST_PHONE_VALUE)
+        private val SECOND_ITEM = JsString(SECOND_PHONE_VALUE)
+        private val NOT_EMPTY_ARRAY = JsArray(FIRST_ITEM, SECOND_ITEM)
     }
 
     @Test
-    fun `Testing JsArray class`() {
+    fun isEmpty() {
+        assertTrue(EMPTY_ARRAY.isEmpty())
+    }
 
-        val json = JsArray(
-            JsString(FIRST_PHONE_VALUE),
-            JsString(SECOND_PHONE_VALUE),
-        )
+    @Test
+    fun isNotEmpty() {
+        assertFalse(NOT_EMPTY_ARRAY.isEmpty())
+    }
 
-        assertEquals(2, json.underlying.size)
+    @Test
+    fun sizeEmptyArray() {
+        assertEquals(0, EMPTY_ARRAY.size)
+    }
 
-        val first = json[IdxPathElement(0)]
-        first as JsString
-        assertEquals(FIRST_PHONE_VALUE, first.underlying)
+    @Test
+    fun sizeNotEmptyArray() {
+        assertEquals(2, NOT_EMPTY_ARRAY.size)
+    }
 
-        val second = json[IdxPathElement(1)]
-        second as JsString
-        assertEquals(SECOND_PHONE_VALUE, second.underlying)
+    @Test
+    fun getByIntFromEmptyArray() {
+        assertNull(EMPTY_ARRAY[0])
+    }
+
+    @Test
+    fun getByIntFromNotEmptyArray() {
+        val item = NOT_EMPTY_ARRAY[0]
+
+        assertNotNull(item)
+        item as JsString
+        assertEquals(FIRST_PHONE_VALUE, item.get)
+    }
+
+    @Test
+    fun getByIdxFromEmptyArray() {
+        assertNull(EMPTY_ARRAY[IdxPathElement(0)])
+    }
+
+    @Test
+    fun getByIdxFromNotEmptyArray() {
+        val item = NOT_EMPTY_ARRAY[IdxPathElement(0)]
+
+        assertNotNull(item)
+        item as JsString
+        assertEquals(FIRST_PHONE_VALUE, item.get)
+    }
+
+    @Test
+    fun iterable() {
+        assertContains(NOT_EMPTY_ARRAY, FIRST_ITEM)
+        assertContains(NOT_EMPTY_ARRAY, SECOND_ITEM)
     }
 
     @Test

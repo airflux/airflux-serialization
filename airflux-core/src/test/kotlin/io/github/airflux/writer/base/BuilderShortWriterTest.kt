@@ -17,6 +17,6 @@ class BuilderShortWriterTest {
         val result = shortWriter.write(value)
 
         result as JsNumber
-        assertEquals(value, result.underlying.toShort())
+        assertEquals(value, result.get.toShort())
     }
 }

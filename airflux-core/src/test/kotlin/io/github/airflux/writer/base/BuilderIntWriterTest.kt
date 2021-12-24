@@ -17,6 +17,6 @@ class BuilderIntWriterTest {
         val result = intWriter.write(value)
 
         result as JsNumber
-        assertEquals(value, result.underlying.toInt())
+        assertEquals(value, result.get.toInt())
     }
 }

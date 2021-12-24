@@ -14,7 +14,7 @@ class JsBooleanTest {
 
     @Test
     fun `Testing inner state of the JsBoolean class`() {
-        assertEquals(true, JsBoolean.valueOf(true).underlying)
-        assertEquals(false, JsBoolean.valueOf(false).underlying)
+        assertEquals(true, JsBoolean.valueOf(true).get)
+        assertEquals(false, JsBoolean.valueOf(false).get)
     }
 }

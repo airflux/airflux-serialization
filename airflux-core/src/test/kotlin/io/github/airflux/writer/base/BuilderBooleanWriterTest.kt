@@ -16,7 +16,7 @@ class BuilderBooleanWriterTest {
         val result = booleanWriter.write(true)
 
         result as JsBoolean
-        assertEquals(true, result.underlying)
+        assertEquals(true, result.get)
     }
 
     @Test
@@ -25,6 +25,6 @@ class BuilderBooleanWriterTest {
         val result = booleanWriter.write(false)
 
         result as JsBoolean
-        assertEquals(false, result.underlying)
+        assertEquals(false, result.get)
     }
 }

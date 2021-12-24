@@ -16,7 +16,7 @@ object JsNull : JsValue() {
     override fun toString(): String = "null"
 }
 
-sealed class JsBoolean(val underlying: Boolean) : JsValue() {
+sealed class JsBoolean(val get: Boolean) : JsValue() {
 
     companion object {
         fun valueOf(value: Boolean): JsBoolean = if (value) True else False
@@ -27,22 +27,22 @@ sealed class JsBoolean(val underlying: Boolean) : JsValue() {
     object True : JsBoolean(true)
     object False : JsBoolean(false)
 
-    override fun toString(): String = underlying.toString()
+    override fun toString(): String = get.toString()
 }
 
-class JsString(val underlying: String) : JsValue() {
+class JsString(val get: String) : JsValue() {
 
     override val type: Type = Type.STRING
 
-    override fun toString(): String = """"$underlying""""
+    override fun toString(): String = """"$get""""
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsString && this.underlying == other.underlying)
+        this === other || (other is JsString && this.get == other.get)
 
-    override fun hashCode(): Int = underlying.hashCode()
+    override fun hashCode(): Int = get.hashCode()
 }
 
-class JsNumber private constructor(val underlying: String) : JsValue() {
+class JsNumber private constructor(val get: String) : JsValue() {
 
     companion object {
         private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
@@ -59,19 +59,19 @@ class JsNumber private constructor(val underlying: String) : JsValue() {
 
     override val type: Type = Type.NUMBER
 
-    val isInteger: Boolean = underlying.matches(integerNumberPattern)
+    val isInteger: Boolean = get.matches(integerNumberPattern)
 
-    val isReal: Boolean = underlying.matches(realNumberPattern)
+    val isReal: Boolean = get.matches(realNumberPattern)
 
-    override fun toString(): String = underlying
+    override fun toString(): String = get
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsNumber && this.underlying == other.underlying)
+        this === other || (other is JsNumber && this.get == other.get)
 
-    override fun hashCode(): Int = underlying.hashCode()
+    override fun hashCode(): Int = get.hashCode()
 }
 
-class JsArray<T : JsValue>(val underlying: List<T> = emptyList()) : JsValue() {
+class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue(), Iterable<T> {
 
     companion object {
         operator fun <T : JsValue> invoke(vararg elements: T): JsArray<T> = JsArray(elements.toList())
@@ -81,17 +81,24 @@ class JsArray<T : JsValue>(val underlying: List<T> = emptyList()) : JsValue() {
 
     operator fun get(path: IdxPathElement): JsValue? = get(path.idx)
 
-    operator fun get(idx: Int): JsValue? = underlying.getOrNull(idx)
+    operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
 
-    override fun toString(): String = underlying.joinToString(prefix = "[", postfix = "]")
+    val size: Int
+        get() = items.size
+
+    fun isEmpty(): Boolean = items.isEmpty()
+
+    override fun iterator(): Iterator<T> = items.iterator()
+
+    override fun toString(): String = items.joinToString(prefix = "[", postfix = "]")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsArray<*> && this.underlying == other.underlying)
+        this === other || (other is JsArray<*> && this.items == other.items)
 
-    override fun hashCode(): Int = underlying.hashCode()
+    override fun hashCode(): Int = items.hashCode()
 }
 
-class JsObject(val underlying: Map<String, JsValue> = emptyMap()) : JsValue() {
+class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsValue(), Iterable<Map.Entry<String, JsValue>> {
 
     companion object {
 
@@ -102,13 +109,20 @@ class JsObject(val underlying: Map<String, JsValue> = emptyMap()) : JsValue() {
 
     operator fun get(path: KeyPathElement): JsValue? = get(path.key)
 
-    operator fun get(name: String): JsValue? = underlying[name]
+    operator fun get(name: String): JsValue? = properties[name]
 
-    override fun toString(): String = underlying.map { (name, value) -> """"$name": $value""" }
+    val count: Int
+        get() = properties.size
+
+    fun isEmpty(): Boolean = properties.isEmpty()
+
+    override fun iterator(): Iterator<Map.Entry<String, JsValue>> = properties.iterator()
+
+    override fun toString(): String = properties.map { (name, value) -> """"$name": $value""" }
         .joinToString(prefix = "{", postfix = "}")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsObject && this.underlying.keys == other.underlying.keys)
+        this === other || (other is JsObject && this.properties.keys == other.properties.keys)
 
-    override fun hashCode(): Int = underlying.keys.hashCode()
+    override fun hashCode(): Int = properties.keys.hashCode()
 }

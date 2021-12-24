@@ -17,6 +17,6 @@ class BuilderLongWriterTest {
         val result = longWriter.write(value)
 
         result as JsNumber
-        assertEquals(value, result.underlying.toLong())
+        assertEquals(value, result.get.toLong())
     }
 }

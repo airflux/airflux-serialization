@@ -36,7 +36,7 @@ class JsValueExtensionTest {
         val value = json / "name"
 
         value as JsLookup.Defined
-        assertEquals(USER_NAME_VALUE, (value.value as JsString).underlying)
+        assertEquals(USER_NAME_VALUE, (value.value as JsString).get)
     }
 
     @Test
@@ -46,7 +46,7 @@ class JsValueExtensionTest {
         val value = json / 0
 
         value as JsLookup.Defined
-        assertEquals(USER_NAME_VALUE, (value.value as JsString).underlying)
+        assertEquals(USER_NAME_VALUE, (value.value as JsString).get)
     }
 
     @Nested
@@ -66,7 +66,7 @@ class JsValueExtensionTest {
                 assertEquals(JsLocation.Root / "name", result.location)
                 result.value as JsString
                 val value = result.value as JsString
-                assertEquals(USER_NAME_VALUE, value.underlying)
+                assertEquals(USER_NAME_VALUE, value.get)
             }
 
             @Test
@@ -108,7 +108,7 @@ class JsValueExtensionTest {
                 assertEquals(JsLocation.Root / 0, result.location)
                 result.value as JsString
                 val value = result.value as JsString
-                assertEquals(USER_NAME_VALUE, value.underlying)
+                assertEquals(USER_NAME_VALUE, value.get)
             }
 
             @Test
@@ -154,7 +154,7 @@ class JsValueExtensionTest {
                 assertEquals(JsLocation.Root / "name", result.location)
                 result.value as JsString
                 val value = result.value as JsString
-                assertEquals(USER_NAME_VALUE, value.underlying)
+                assertEquals(USER_NAME_VALUE, value.get)
             }
         }
 
@@ -176,7 +176,7 @@ class JsValueExtensionTest {
                 assertEquals(JsLocation.Root / "user" / "name", result.location)
                 result.value as JsString
                 val value = result.value as JsString
-                assertEquals(USER_NAME_VALUE, value.underlying)
+                assertEquals(USER_NAME_VALUE, value.get)
             }
 
             @Test
@@ -273,8 +273,8 @@ class JsValueExtensionTest {
     inner class ReadAsObject {
 
         private val reader = { location: JsLocation, input: JsObject ->
-            val userName = input.underlying["name"] as JsString
-            JsResult.Success(User(name = userName.underlying), location)
+            val userName = input["name"] as JsString
+            JsResult.Success(User(name = userName.get), location)
         }
 
         @Test

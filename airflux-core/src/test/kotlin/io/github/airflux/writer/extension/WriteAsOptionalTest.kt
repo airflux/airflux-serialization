@@ -20,7 +20,7 @@ class WriteAsOptionalTest {
         val result = writeAsOptional(value, DTO::phoneNumber, stringWriter)
 
         result as JsString
-        assertEquals(TestData.FIRST_PHONE_VALUE, result.underlying)
+        assertEquals(TestData.FIRST_PHONE_VALUE, result.get)
     }
 
     @Test

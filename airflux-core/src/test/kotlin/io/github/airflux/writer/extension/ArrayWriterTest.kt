@@ -21,7 +21,7 @@ class ArrayWriterTest {
         val result = writer.write(value)
 
         result as JsArray<JsString>
-        assertContains(result.underlying, JsString("One"))
-        assertContains(result.underlying, JsString("Two"))
+        assertContains(result, JsString("One"))
+        assertContains(result, JsString("Two"))
     }
 }

@@ -17,6 +17,6 @@ class BuilderByteWriterTest {
         val result = byteWriter.write(value)
 
         result as JsNumber
-        assertEquals(value, result.underlying.toByte())
+        assertEquals(value, result.get.toByte())
     }
 }

@@ -20,7 +20,7 @@ class WithDefaultFieldReaderTest {
         private val context = JsReaderContext()
         private const val DEFAULT_VALUE = "Default value"
         private val stringReader: JsReader<String> =
-            JsReader { _, location, input -> JsResult.Success((input as JsString).underlying, location) }
+            JsReader { _, location, input -> JsResult.Success((input as JsString).get, location) }
         private val defaultValue = { DEFAULT_VALUE }
     }
 

@@ -23,7 +23,7 @@ class JsLookupFindByIdxTest {
 
         value as JsLookup.Defined
         assertEquals("#/user/phones[0]", value.location.toString())
-        assertEquals(FIRST_PHONE_VALUE, (value.value as JsString).underlying)
+        assertEquals(FIRST_PHONE_VALUE, (value.value as JsString).get)
     }
 
     @Test

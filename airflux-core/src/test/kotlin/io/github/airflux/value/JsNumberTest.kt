@@ -15,8 +15,8 @@ class JsNumberTest {
         val min: Byte = Byte.MIN_VALUE
         val max: Byte = Byte.MAX_VALUE
 
-        assertEquals(min, JsNumber.valueOf(min).underlying.toByte())
-        assertEquals(max, JsNumber.valueOf(max).underlying.toByte())
+        assertEquals(min, JsNumber.valueOf(min).get.toByte())
+        assertEquals(max, JsNumber.valueOf(max).get.toByte())
     }
 
     @Test
@@ -24,8 +24,8 @@ class JsNumberTest {
         val min: Short = Short.MIN_VALUE
         val max: Short = Short.MAX_VALUE
 
-        assertEquals(min, JsNumber.valueOf(min).underlying.toShort())
-        assertEquals(max, JsNumber.valueOf(max).underlying.toShort())
+        assertEquals(min, JsNumber.valueOf(min).get.toShort())
+        assertEquals(max, JsNumber.valueOf(max).get.toShort())
     }
 
     @Test
@@ -33,8 +33,8 @@ class JsNumberTest {
         val min: Int = Int.MIN_VALUE
         val max: Int = Int.MAX_VALUE
 
-        assertEquals(min, JsNumber.valueOf(min).underlying.toInt())
-        assertEquals(max, JsNumber.valueOf(max).underlying.toInt())
+        assertEquals(min, JsNumber.valueOf(min).get.toInt())
+        assertEquals(max, JsNumber.valueOf(max).get.toInt())
     }
 
     @Test
@@ -42,8 +42,8 @@ class JsNumberTest {
         val min: Long = Long.MIN_VALUE
         val max: Long = Long.MAX_VALUE
 
-        assertEquals(min, JsNumber.valueOf(min).underlying.toLong())
-        assertEquals(max, JsNumber.valueOf(max).underlying.toLong())
+        assertEquals(min, JsNumber.valueOf(min).get.toLong())
+        assertEquals(max, JsNumber.valueOf(max).get.toLong())
     }
 
     @TestFactory
@@ -60,7 +60,7 @@ class JsNumberTest {
         Triple("-1.50", "-1.50", "-1.50")
     ).map { (displayName: String, text: String, expected: String?) ->
         DynamicTest.dynamicTest(displayName) {
-            assertEquals(expected, JsNumber.valueOf(text)?.underlying)
+            assertEquals(expected, JsNumber.valueOf(text)?.get)
         }
     }
 

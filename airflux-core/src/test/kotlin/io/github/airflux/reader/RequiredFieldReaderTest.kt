@@ -18,7 +18,7 @@ class RequiredFieldReaderTest {
     companion object {
         private val context = JsReaderContext()
         private val stringReader: JsReader<String> =
-            JsReader { _, location, input -> JsResult.Success((input as JsString).underlying, location) }
+            JsReader { _, location, input -> JsResult.Success((input as JsString).get, location) }
     }
 
     @Test

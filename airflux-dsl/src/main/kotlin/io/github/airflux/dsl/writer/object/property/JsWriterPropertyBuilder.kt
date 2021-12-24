@@ -160,8 +160,8 @@ internal interface JsWriterPropertyBuilder<T> {
 
         internal val JsValue.isEmpty: Boolean
             get() = when {
-                this is JsArray<*> && this.underlying.isEmpty() -> true
-                this is JsObject && this.underlying.isEmpty() -> true
+                this is JsArray<*> && this.isEmpty() -> true
+                this is JsObject && this.isEmpty() -> true
                 else -> false
             }
     }

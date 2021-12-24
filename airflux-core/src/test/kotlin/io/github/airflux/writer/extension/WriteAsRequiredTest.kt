@@ -19,7 +19,7 @@ class WriteAsRequiredTest {
         val result = writeAsRequired(value, DTO::firstName, stringWriter)
 
         result as JsString
-        assertEquals(TestData.USER_NAME_VALUE, result.underlying)
+        assertEquals(TestData.USER_NAME_VALUE, result.get)
     }
 
     private class DTO(val firstName: String)

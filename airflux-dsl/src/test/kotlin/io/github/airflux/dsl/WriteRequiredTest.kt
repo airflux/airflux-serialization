@@ -26,9 +26,9 @@ class WriteRequiredTest {
         val result = writer.write(value)
 
         result as JsObject
-        assertEquals(1, result.underlying.size)
-        val name = result.underlying["name"] as JsString
-        assertEquals(TestData.USER_NAME_VALUE, name.underlying)
+        assertEquals(1, result.count)
+        val name = result["name"] as JsString
+        assertEquals(TestData.USER_NAME_VALUE, name.get)
     }
 
     private class DTO(val name: String)

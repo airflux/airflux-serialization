@@ -3,38 +3,94 @@ package io.github.airflux.value
 import io.github.airflux.common.ObjectContract
 import io.github.airflux.path.KeyPathElement
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class JsObjectTest {
 
-    @Test
-    fun `Testing JsObject class without properties`() {
-        val json = JsObject()
+    companion object {
+        private const val USER_NAME_VALUE = "user"
+        private val USER_NAME = JsString(USER_NAME_VALUE)
 
-        assertTrue(json.underlying.isEmpty())
-        assertNull(json["name"])
+        private const val IS_ACTIVE_VALUE = true
+        private val IS_ACTIVE = JsBoolean.valueOf(IS_ACTIVE_VALUE)
+
+        private val EMPTY_OBJECT = JsObject()
+        private val NOT_EMPTY_OBJECT = JsObject(
+            "name" to USER_NAME,
+            "isActive" to IS_ACTIVE
+        )
     }
 
     @Test
-    fun `Testing JsObject class`() {
-        val userName = "user"
-        val isActive = true
-        val json = JsObject(
-            "name" to JsString(userName),
-            "isActive" to JsBoolean.valueOf(isActive)
-        )
+    fun isEmpty() {
+        assertTrue(EMPTY_OBJECT.isEmpty())
+    }
 
-        assertEquals(2, json.underlying.size)
+    @Test
+    fun isNotEmpty() {
+        assertFalse(NOT_EMPTY_OBJECT.isEmpty())
+    }
 
-        val first = json[KeyPathElement("name")]
-        first as JsString
-        assertEquals(userName, first.underlying)
+    @Test
+    fun sizeEmptyObject() {
+        assertEquals(0, EMPTY_OBJECT.count)
+    }
 
-        val second = json[KeyPathElement("isActive")]
-        second as JsBoolean
-        assertEquals(isActive, second.underlying)
+    @Test
+    fun sizeNotEmptyObject() {
+        assertEquals(2, NOT_EMPTY_OBJECT.count)
+    }
+
+    @Test
+    fun getByNameFromEmptyObject() {
+
+        val value = EMPTY_OBJECT["name"]
+
+        assertNull(value)
+    }
+
+    @Test
+    fun getByNameFromNotEmptyObject() {
+
+        val value = NOT_EMPTY_OBJECT["name"]
+
+        assertNotNull(value)
+        value as JsString
+        assertEquals(USER_NAME_VALUE, value.get)
+    }
+
+    @Test
+    fun getByKeyFromEmptyObject() {
+        val key = KeyPathElement("name")
+
+        val value = EMPTY_OBJECT[key]
+
+        assertNull(value)
+    }
+
+    @Test
+    fun getByKeyFromNotEmptyObject() {
+        val key = KeyPathElement("name")
+
+        val value = NOT_EMPTY_OBJECT[key]
+
+        assertNotNull(value)
+        value as JsString
+        assertEquals(USER_NAME_VALUE, value.get)
+    }
+
+    @Test
+    fun iterable() {
+
+        val items = NOT_EMPTY_OBJECT.map { (key, value) -> key to value }
+
+        assertContains(items, "name" to USER_NAME)
+        assertContains(items, "isActive" to IS_ACTIVE)
     }
 
     @Test

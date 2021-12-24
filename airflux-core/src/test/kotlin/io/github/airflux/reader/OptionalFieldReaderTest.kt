@@ -21,7 +21,7 @@ class OptionalFieldReaderTest {
         private val stringReader: JsReader<String> =
             JsReader { _, location, input ->
                 when (input) {
-                    is JsString -> JsResult.Success(input.underlying, location)
+                    is JsString -> JsResult.Success(input.get, location)
                     else -> JsResult.Failure(
                         location = location,
                         error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)

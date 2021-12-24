@@ -66,7 +66,7 @@ internal fun JsValue.lookup(location: JsLocation, pathElement: IdxPathElement): 
 
 fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
     when (this) {
-        is JsBoolean -> JsResult.Success(this.underlying, location = location)
+        is JsBoolean -> JsResult.Success(this.get, location = location)
         else ->
             JsResult.Failure(
                 location = location,
@@ -76,7 +76,7 @@ fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: Invalid
 
 fun JsValue.readAsString(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
     when (this) {
-        is JsString -> JsResult.Success(this.underlying, location = location)
+        is JsString -> JsResult.Success(this.get, location = location)
         else ->
             JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.STRING, this.type))
     }
@@ -87,7 +87,7 @@ fun <T : Number> JsValue.readAsNumber(
     reader: (JsLocation, String) -> JsResult<T>
 ) =
     when (this) {
-        is JsNumber -> reader(location, this.underlying)
+        is JsNumber -> reader(location, this.get)
         else ->
             JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.NUMBER, this.type))
     }
