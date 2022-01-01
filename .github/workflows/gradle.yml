@@ -37,6 +37,14 @@ jobs:
         jacoco-csv-file: core/build/reports/jacoco/test/jacocoTestReport.csv
         coverage-badge-filename: jacocoCoreModule.svg
         branches-badge-filename: branchesCoreModule.svg
+    - name: Generate JaCoCo Badges for DSL module
+      id: jacocoDSLModule
+      uses: cicirello/jacoco-badge-generator@v2
+      with:
+        generate-branches-badge: true
+        jacoco-csv-file: dsl/build/reports/jacoco/test/jacocoTestReport.csv
+        coverage-badge-filename: jacocoDSLModule.svg
+        branches-badge-filename: branchesDSLModule.svg
     - name: Commit the badge (if it changed)
       run: |
         if [[ `git status --porcelain` ]]; then
