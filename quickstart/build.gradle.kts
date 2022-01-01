@@ -1,5 +1,7 @@
+import Configuration.JVM
+
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm")
     java
     application
 }
@@ -9,13 +11,12 @@ repositories {
     mavenLocal()
 }
 
-val jvmTargetVersion by extra { "1.8" }
 val jacksonVersion by extra { "2.12.4" }
 
 dependencies {
-    implementation("io.github.airflux:airflux-core:0.0.1-SNAPSHOT")
-    implementation("io.github.airflux:airflux-dsl:0.0.1-SNAPSHOT")
-    implementation("io.github.airflux:airflux-jackson-parser:0.0.1-SNAPSHOT")
+    implementation(project(":airflux-core"))
+    implementation(project(":airflux-dsl"))
+    implementation(project(":airflux-jackson-parser"))
 
     /* Kotlin */
     implementation(kotlin("stdlib-jdk8"))
@@ -32,7 +33,7 @@ tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         .configureEach {
             kotlinOptions {
-                jvmTarget = jvmTargetVersion
+                jvmTarget = JVM.targetVersion
                 suppressWarnings = false
                 freeCompilerArgs = listOf(
                     "-Xjsr305=strict",
