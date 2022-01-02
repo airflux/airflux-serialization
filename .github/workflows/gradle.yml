@@ -57,4 +57,4 @@ jobs:
         args: >
           -Dsonar.organization=airflux
           -Dsonar.projectKey=airflux_airflux
-          -Dsonar.coverage.jacoco.xmlReportPaths=${{ env.COVERAGE_REPORT_PATH }}
+          -Dsonar.coverage.jacoco.xmlReportPaths=**/build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml
