@@ -9,16 +9,13 @@ configure<JacocoPluginExtension> {
     reportsDirectory.set(File("${project.buildDir}/reports/jacoco"))
 }
 
-val jacocoRootReport = tasks.register<JacocoReport>("jacocoRootReport") {
+val jacocoAggregatedReport = tasks.register<JacocoReport>("jacocoAggregatedReport") {
     group = "Reporting"
     description = "Generates an aggregate report from all subprojects"
 
     dependsOn(subprojects.map { it.tasks.withType<Test>() })
-//    dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() } )
 
     val jacocoSubprojects = subprojects.filter { it.tasks.withType<JacocoReport>().isNotEmpty() }
-
-//    val jacocoSubprojects = subprojects.filter { subproject -> subproject.tasks.findByName("jacocoTestReport") != null }
     val sourceSets = jacocoSubprojects.map { subproject -> subproject.the<SourceSetContainer>()["main"] }
 
     val srcDirs = sourceSets.flatMap { sourceSet -> sourceSet.allSource.srcDirs }
@@ -32,8 +29,15 @@ val jacocoRootReport = tasks.register<JacocoReport>("jacocoRootReport") {
     executionData.from(files(executionDataPaths))
 
     reports {
+        val baseDir = "reports/jacoco/test"
+
         html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("$baseDir/html"))
+
         xml.required.set(true)
+        xml.outputLocation.set(layout.buildDirectory.file("$baseDir/jacocoTestReport.xml"))
+
         csv.required.set(true)
+        csv.outputLocation.set(layout.buildDirectory.file("$baseDir/jacocoTestReport.csv"))
     }
 }
