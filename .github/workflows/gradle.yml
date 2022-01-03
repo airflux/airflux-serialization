@@ -44,10 +44,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build jacocoRootReport publish
-
-    - name: Echo
-      run: ls ${{ github.workspace }}/build/reports/jacoco/jacocoRootReport
+      run: ./gradlew build jacocoAggregatedReport publish
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
@@ -55,7 +52,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        COVERAGE_REPORT_PATH: ${{ github.workspace }}/build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml
       with:
         args: >
           -Dsonar.organization=airflux
