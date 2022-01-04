@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    id("jacoco-convention")
     id("pitest-convention")
     id("detekt-convention")
     id("publishing-convention")
@@ -43,8 +42,6 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
-        val jacocoTestReport by existing(JacocoReport::class)
-        finalizedBy(jacocoTestReport)
     }
 
     withType<KotlinCompile>()

@@ -1,5 +1,5 @@
 plugins {
-    id("jacoco-aggregated-convention")
+    id("kover-convention")
 }
 
 repositories {
