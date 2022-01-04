@@ -56,3 +56,4 @@ jobs:
         args: >
           -Dsonar.organization=airflux
           -Dsonar.projectKey=airflux_airflux
+          -Dsonar.coverage.exclusions="**/test/**"
