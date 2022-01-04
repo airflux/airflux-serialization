@@ -44,7 +44,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build jacocoAggregatedReport publish
+      run: ./gradlew build publish
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
