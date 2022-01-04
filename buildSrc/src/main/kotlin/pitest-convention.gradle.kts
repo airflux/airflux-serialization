@@ -10,8 +10,8 @@ tasks {
     configure<PitestPluginExtension> {
         threads.set(4)
         testPlugin.set("junit5")
-        junit5PluginVersion.set(Versions.PiTest.JUnit5)
-        pitestVersion.set(Versions.PiTest.CLI)
+        junit5PluginVersion.set(Versions.Test.PiTest.JUnit5)
+        pitestVersion.set(Versions.Test.PiTest.CLI)
         mutators.set(mutableListOf("STRONGER"))
         outputFormats.set(listOf("XML", "HTML"))
         targetClasses.set(mutableListOf("io.github.airflux.*"))

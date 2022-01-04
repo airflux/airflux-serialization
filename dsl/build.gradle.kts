@@ -24,14 +24,14 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 
     /* Junit */
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${Versions.JUnit.Jupiter}")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.JUnit.Jupiter}")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:${Versions.JUnit.Jupiter}")
-    testImplementation("org.junit.platform:junit-platform-engine:${Versions.JUnit.Platform}")
-    testImplementation("org.junit.platform:junit-platform-launcher:${Versions.JUnit.Platform}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${Versions.Test.JUnit.Jupiter}")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.Test.JUnit.Jupiter}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${Versions.Test.JUnit.Jupiter}")
+    testImplementation("org.junit.platform:junit-platform-engine:${Versions.Test.JUnit.Platform}")
+    testImplementation("org.junit.platform:junit-platform-launcher:${Versions.Test.JUnit.Platform}")
 
     /* PITest */
-    testImplementation("org.pitest:pitest-junit5-plugin:${Versions.PiTest.JUnit5}")
+    testImplementation("org.pitest:pitest-junit5-plugin:${Versions.Test.PiTest.JUnit5}")
 }
 
 tasks {
