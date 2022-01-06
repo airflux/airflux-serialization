@@ -73,6 +73,8 @@ object Configuration {
                 const val Platform = "1.8.2"
             }
 
+            const val Kotest = "4.6.4"
+
             object PiTest {
                 const val JUnit5 = "0.15"
                 const val CLI = "1.7.3"
