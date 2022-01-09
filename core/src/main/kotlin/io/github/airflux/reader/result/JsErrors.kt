@@ -4,8 +4,6 @@ class JsErrors private constructor(private val items: List<JsError>) : Iterable<
 
     operator fun plus(other: JsErrors): JsErrors = JsErrors(items + other.items)
 
-    fun hasCritical(): Boolean = any { it.level == JsError.Level.CRITICAL }
-
     override fun equals(other: Any?): Boolean =
         this === other || (other is JsErrors && this.items == other.items)
 

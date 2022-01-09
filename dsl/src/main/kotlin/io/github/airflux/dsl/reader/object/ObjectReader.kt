@@ -165,12 +165,9 @@ class ObjectReader(
 
             val preValidationErrors = preValidation(configuration, input, validators, properties, context)
             if (preValidationErrors != null) {
-                val hasCriticalError = preValidationErrors.hasCritical()
                 val failure = JsResult.Failure(location, preValidationErrors)
-                if (configuration.failFast || hasCriticalError)
-                    return failure
-                else
-                    failures.add(failure)
+                if (configuration.failFast) return failure
+                failures.add(failure)
             }
 
             val objectValuesMap = ObjectValuesMap.Builder(context, location, input)
@@ -178,10 +175,8 @@ class ObjectReader(
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
                         if (failure != null) {
-                            val hasCriticalError = failure.causes
-                                .any { (_, errors) -> errors.hasCritical() }
+                            if (configuration.failFast) return failure
                             failures.add(failure)
-                            if (configuration.failFast || hasCriticalError) return failures.merge()
                         }
                     }
                 }
@@ -190,8 +185,9 @@ class ObjectReader(
             val postValidationErrors =
                 postValidation(configuration, input, validators, properties, objectValuesMap, context)
             if (postValidationErrors != null) {
-                val error = JsResult.Failure(location, postValidationErrors)
-                failures.add(error)
+                val failure = JsResult.Failure(location, postValidationErrors)
+                if (configuration.failFast) return failure
+                failures.add(failure)
             }
 
             return if (failures.isEmpty())
@@ -212,9 +208,8 @@ class ObjectReader(
                     .forEach { validator ->
                         val validationResult = validator.validation(configuration, input, properties, context)
                         if (validationResult != null) {
-                            val hasCriticalError = validationResult.hasCritical()
+                            if (configuration.failFast) return@forEach
                             addAll(validationResult)
-                            if (configuration.failFast || hasCriticalError) return@forEach
                         }
                     }
             }
@@ -234,9 +229,8 @@ class ObjectReader(
                         val validationResult =
                             validator.validation(configuration, input, properties, objectValuesMap, context)
                         if (validationResult != null) {
-                            val hasCriticalError = validationResult.hasCritical()
+                            if (configuration.failFast) return@forEach
                             addAll(validationResult)
-                            if (configuration.failFast || hasCriticalError) return@forEach
                         }
                     }
             }

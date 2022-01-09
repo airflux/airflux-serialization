@@ -5,10 +5,8 @@ import io.github.airflux.value.JsValue
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class JsErrorsTest {
 
@@ -50,21 +48,6 @@ class JsErrorsTest {
         )
 
         assertNotNull(errors)
-        assertFalse(errors.hasCritical())
-    }
-
-    @Test
-    fun `Testing the hasCritical function for critical errors`() {
-        val errors = JsErrors.of(
-            listOf(
-                JsonErrors.PathMissing,
-                JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING),
-                JsonErrors.CriticalError
-            )
-        )
-
-        assertNotNull(errors)
-        assertTrue(errors.hasCritical())
     }
 
     @Test

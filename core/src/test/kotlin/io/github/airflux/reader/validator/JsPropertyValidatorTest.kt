@@ -15,9 +15,6 @@ class JsPropertyValidatorTest {
     private sealed class ValidationErrors : JsError {
         object PathMissingNormalError : ValidationErrors()
         object InvalidTypeNormalError : ValidationErrors()
-        object CriticalError : ValidationErrors() {
-            override val level: JsError.Level = JsError.Level.CRITICAL
-        }
     }
 
     companion object {
@@ -41,24 +38,6 @@ class JsPropertyValidatorTest {
         val errors = composeValidator.validation(context, location, Unit)
 
         assertNull(errors)
-    }
-
-    @Test
-    fun `Testing operator 'or' (the first validator returns a critical error and the second validator don't execute)`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.CriticalError)
-        }
-
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(1, errors.count())
-        assertContains(errors, ValidationErrors.CriticalError)
     }
 
     @Test
@@ -94,25 +73,6 @@ class JsPropertyValidatorTest {
         assertContains(errors, ValidationErrors.InvalidTypeNormalError)
     }
 
-    @Test
-    fun `Testing operator 'or' (the first validator returns a normal error and the second validator returns a critical error)`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.CriticalError)
-        }
-
-        val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(2, errors.count())
-        assertContains(errors, ValidationErrors.PathMissingNormalError)
-        assertContains(errors, ValidationErrors.CriticalError)
-    }
-
     /*
      * Testing operator 'and'.
      */
@@ -129,22 +89,6 @@ class JsPropertyValidatorTest {
     }
 
     @Test
-    fun `Testing operator 'and' (the first validator returns a success and the second validator returns a critical error`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
-
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.CriticalError)
-        }
-
-        val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(1, errors.count())
-        assertContains(errors, ValidationErrors.CriticalError)
-    }
-
-    @Test
     fun `Testing operator 'and' (the first validator returns a success and the second validator returns a normal error`() {
         val leftValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
 
@@ -158,24 +102,6 @@ class JsPropertyValidatorTest {
         assertNotNull(errors)
         assertEquals(1, errors.count())
         assertContains(errors, ValidationErrors.PathMissingNormalError)
-    }
-
-    @Test
-    fun `Testing operator 'and' (the first validator returns a critical error and the second validator don't execute`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.CriticalError)
-        }
-
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(1, errors.count())
-        assertContains(errors, ValidationErrors.CriticalError)
     }
 
     @Test

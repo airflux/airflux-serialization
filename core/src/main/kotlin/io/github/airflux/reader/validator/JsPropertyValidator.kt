@@ -10,34 +10,29 @@ fun interface JsPropertyValidator<in T> {
     fun validation(context: JsReaderContext, location: JsLocation, value: T): JsErrors?
 
     /*
-     * | This        | Other       | Result      |
-     * |-------------|-------------|-------------|
-     * | S           | ignore      | S           |
-     * | F(critical) | ignore      | F(critical) |
-     * | F(normal)   | S           | S           |
-     * | F(normal)   | F`(normal)  | F + F`      |
-     * | F(normal)   | F`(critical)| F + F`      |
+     * | This | Other  | Result |
+     * |------|--------|--------|
+     * | S    | ignore | S      |
+     * | F    | S      | S      |
+     * | F    | F`     | F + F` |
      */
     infix fun or(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
         return JsPropertyValidator { context, location, value ->
-            val result = self.validation(context, location, value)
-            when {
-                result == null -> null
-                result.hasCritical() -> result
-                else -> other.validation(context, location, value)?.let { result + it }
-            }
+            self.validation(context, location, value)
+                ?.let { error ->
+                    other.validation(context, location, value)
+                        ?.let { error + it }
+                }
         }
     }
 
     /*
-     * | This       | Other      | Result |
-     * |------------|------------|--------|
-     * | S          | S          | S      |
-     * | S          | F(critical)| F      |
-     * | S          | F(normal)  | F      |
-     * | F(critical)| ignore     | F      |
-     * | F(normal)  | ignore     | F      |
+     * | This | Other  | Result |
+     * |------|--------|--------|
+     * | S    | S      | S      |
+     * | S    | F      | F      |
+     * | F    | ignore | F      |
      */
     infix fun and(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
