@@ -10,40 +10,27 @@ import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
-class MaxPropertiesValidator(private val errorBuilder: ErrorBuilder) : JsObjectValidator.Identifier {
+class MaxPropertiesValidator private constructor(private val value: Int, private val errorBuilder: ErrorBuilder) :
+    JsObjectValidator.After {
 
-    override val id = MaxPropertiesValidator
+    override fun validation(
+        configuration: ObjectReaderConfiguration,
+        context: JsReaderContext,
+        properties: List<JsReaderProperty>,
+        objectValuesMap: ObjectValuesMap,
+        input: JsObject
+    ): JsErrors? =
+        if (objectValuesMap.size > value)
+            JsErrors.of(errorBuilder.build(expected = value, actual = objectValuesMap.size))
+        else
+            null
 
-    operator fun invoke(min: Int): JsObjectValidator.After.Builder = Builder(min)
+    class Builder(private val errorBuilder: ErrorBuilder) {
 
-    private inner class Builder(val max: Int) : JsObjectValidator.After.Builder {
-
-        override val id: JsObjectValidator.Id<*> = MaxPropertiesValidator
-
-        override fun build(
-            configuration: ObjectReaderConfiguration,
-            properties: List<JsReaderProperty>
-        ): JsObjectValidator.After = Validator(max, errorBuilder)
-    }
-
-    private class Validator(val value: Int, val errorBuilder: ErrorBuilder) : JsObjectValidator.After {
-
-        override fun validation(
-            configuration: ObjectReaderConfiguration,
-            input: JsObject,
-            properties: List<JsReaderProperty>,
-            objectValuesMap: ObjectValuesMap,
-            context: JsReaderContext
-        ): JsErrors? =
-            if (objectValuesMap.size > value)
-                JsErrors.of(errorBuilder.build(expected = value, actual = objectValuesMap.size))
-            else
-                null
+        operator fun invoke(max: Int): JsObjectValidator.After = MaxPropertiesValidator(max, errorBuilder)
     }
 
     fun interface ErrorBuilder {
         fun build(expected: Int, actual: Int): JsError
     }
-
-    companion object Id : JsObjectValidator.Id<Validator>
 }

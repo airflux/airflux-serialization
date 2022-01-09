@@ -15,15 +15,12 @@ import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropert
 import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
 import io.github.airflux.dsl.reader.`object`.property.RequiredProperty
 import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorInstances
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 import io.github.airflux.path.JsPath
 import io.github.airflux.reader.JsReader
 import io.github.airflux.reader.context.JsReaderContext
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.error.PathMissingErrorBuilder
-import io.github.airflux.reader.result.JsError
-import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.result.JsResult
 import io.github.airflux.reader.result.JsResult.Failure.Companion.merge
@@ -104,7 +101,7 @@ class ObjectReader(
             TypeBuilder { c, v, p -> v.builder(c, p) }
 
         fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
-            val validators = JsObjectValidatorInstances.of(validatorBuilders.build(), configuration, properties)
+            val validators = validatorBuilders.build(configuration, properties)
             return JsReader { context, location, input ->
                 input.readAsObject(location, invalidTypeErrorBuilder) { p, b ->
                     read(configuration, validators, properties, typeBuilder, context, p, b)
@@ -151,7 +148,7 @@ class ObjectReader(
 
         internal fun <T> read(
             configuration: ObjectReaderConfiguration,
-            validators: JsObjectValidatorInstances,
+            validators: JsObjectValidators,
             properties: List<JsReaderProperty>,
             typeBuilder: TypeBuilder<T>,
             context: JsReaderContext,
@@ -160,7 +157,8 @@ class ObjectReader(
         ): JsResult<T> {
             val failures = mutableListOf<JsResult.Failure>()
 
-            val preValidationErrors = preValidation(configuration, input, validators, properties, context)
+            val preValidationErrors = validators.before
+                ?.validation(configuration, context, properties, input)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
                 if (configuration.failFast) return failure
@@ -179,8 +177,8 @@ class ObjectReader(
                 }
                 .build()
 
-            val postValidationErrors =
-                postValidation(configuration, input, validators, properties, objectValuesMap, context)
+            val postValidationErrors = validators.after
+                ?.validation(configuration, context, properties, objectValuesMap, input)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
                 if (configuration.failFast) return failure
@@ -192,45 +190,5 @@ class ObjectReader(
             else
                 failures.merge()
         }
-
-        internal fun preValidation(
-            configuration: ObjectReaderConfiguration,
-            input: JsObject,
-            validators: JsObjectValidatorInstances,
-            properties: List<JsReaderProperty>,
-            context: JsReaderContext
-        ): JsErrors? = mutableListOf<JsError>()
-            .apply {
-                validators.before
-                    .forEach { validator ->
-                        val validationResult = validator.validation(configuration, input, properties, context)
-                        if (validationResult != null) {
-                            if (configuration.failFast) return@forEach
-                            addAll(validationResult)
-                        }
-                    }
-            }
-            .let { JsErrors.of(it) }
-
-        internal fun postValidation(
-            configuration: ObjectReaderConfiguration,
-            input: JsObject,
-            validators: JsObjectValidatorInstances,
-            properties: List<JsReaderProperty>,
-            objectValuesMap: ObjectValuesMap,
-            context: JsReaderContext
-        ): JsErrors? = mutableListOf<JsError>()
-            .apply {
-                validators.after
-                    .forEach { validator ->
-                        val validationResult =
-                            validator.validation(configuration, input, properties, objectValuesMap, context)
-                        if (validationResult != null) {
-                            if (configuration.failFast) return@forEach
-                            addAll(validationResult)
-                        }
-                    }
-            }
-            .let { JsErrors.of(it) }
     }
 }

@@ -10,32 +10,17 @@ import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
-class IsNotEmptyObjectValidator(private val errorBuilder: ErrorBuilder) :
-    JsObjectValidator.Identifier,
-    JsObjectValidator.After.Builder {
+class IsNotEmptyObjectValidator(private val errorBuilder: ErrorBuilder) : JsObjectValidator.After {
 
-    override val id = IsNotEmptyObjectValidator
-
-    override fun build(
+    override fun validation(
         configuration: ObjectReaderConfiguration,
-        properties: List<JsReaderProperty>
-    ): JsObjectValidator.After = lazy { Validator(errorBuilder) }.value
-
-    private class Validator(val errorBuilder: ErrorBuilder) : JsObjectValidator.After {
-
-        override fun validation(
-            configuration: ObjectReaderConfiguration,
-            input: JsObject,
-            properties: List<JsReaderProperty>,
-            objectValuesMap: ObjectValuesMap,
-            context: JsReaderContext
-        ): JsErrors? =
-            if (objectValuesMap.isEmpty) JsErrors.of(errorBuilder.build()) else null
-    }
+        context: JsReaderContext,
+        properties: List<JsReaderProperty>,
+        objectValuesMap: ObjectValuesMap,
+        input: JsObject
+    ): JsErrors? = if (objectValuesMap.isEmpty) JsErrors.of(errorBuilder.build()) else null
 
     fun interface ErrorBuilder {
         fun build(): JsError
     }
-
-    companion object Id : JsObjectValidator.Id<Validator>
 }

@@ -11,53 +11,47 @@ import io.github.airflux.reader.result.JsErrors
 import io.github.airflux.value.JsObject
 
 @Suppress("unused")
-class AdditionalPropertiesValidator(private val errorBuilder: ErrorBuilder) :
-    JsObjectValidator.Identifier,
-    JsObjectValidator.Before.Builder {
+class AdditionalPropertiesValidator private constructor(
+    private val names: Set<String>,
+    private val errorBuilder: ErrorBuilder
+) : JsObjectValidator.Before {
 
-    override val id = AdditionalPropertiesValidator
-
-    override fun build(
+    override fun validation(
         configuration: ObjectReaderConfiguration,
-        properties: List<JsReaderProperty>
-    ): JsObjectValidator.Before = mutableSetOf<String>()
-        .apply {
-            properties.forEach { property ->
-                property.path
-                    .firstOrNull()
-                    ?.let {
-                        when (it) {
-                            is KeyPathElement -> add(it.key)
-                            is IdxPathElement -> Unit
-                        }
-                    }
+        context: JsReaderContext,
+        properties: List<JsReaderProperty>,
+        input: JsObject
+    ): JsErrors? {
+        val unknownProperties = mutableListOf<String>()
+        input.forEach { (name, _) ->
+            if (name !in names) {
+                unknownProperties.add(name)
+                if (configuration.failFast) return@forEach
             }
         }
-        .let { Validator(it, errorBuilder) }
+        return unknownProperties.takeIf { it.isNotEmpty() }
+            ?.let { JsErrors.of(errorBuilder.build(it)) }
+    }
 
-    private class Validator(val names: Set<String>, val errorBuilder: ErrorBuilder) : JsObjectValidator.Before {
+    class Builder(private val errorBuilder: ErrorBuilder) {
 
-        override fun validation(
-            configuration: ObjectReaderConfiguration,
-            input: JsObject,
-            properties: List<JsReaderProperty>,
-            context: JsReaderContext
-        ): JsErrors? {
-            val unknownProperties = mutableListOf<String>()
-            input.forEach { (name, _) ->
-                    if (name !in names) {
-                        unknownProperties.add(name)
-                        if (configuration.failFast) return@forEach
-                    }
+        operator fun invoke(properties: List<JsReaderProperty>): JsObjectValidator.Before =
+            AdditionalPropertiesValidator(properties.names(), errorBuilder)
+
+        private fun List<JsReaderProperty>.names(): Set<String> =
+            mapNotNull { property -> property.name() }
+                .toSet()
+
+        private fun JsReaderProperty.name(): String? = path.firstOrNull()
+            ?.let {
+                when (it) {
+                    is KeyPathElement -> it.key
+                    is IdxPathElement -> null
                 }
-            return unknownProperties.takeIf { it.isNotEmpty() }
-                ?.let { JsErrors.of(errorBuilder.build(it)) }
-        }
+            }
     }
 
     fun interface ErrorBuilder {
         fun build(properties: List<String>): JsError
     }
-
-    companion object Id : JsObjectValidator.Id<Validator>
 }

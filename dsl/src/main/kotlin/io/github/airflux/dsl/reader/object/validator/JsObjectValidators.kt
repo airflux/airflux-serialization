@@ -1,50 +1,35 @@
 package io.github.airflux.dsl.reader.`object`.validator
 
-import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+
+typealias BeforeValidatorInitializer =
+        (config: ObjectReaderConfiguration, properties: List<JsReaderProperty>) -> JsObjectValidator.Before?
+
+typealias AfterValidatorInitializer =
+        (config: ObjectReaderConfiguration, properties: List<JsReaderProperty>) -> JsObjectValidator.After?
 
 class JsObjectValidators private constructor(
-    internal val before: Validators<JsObjectValidator.Before.Builder>,
-    internal val after: Validators<JsObjectValidator.After.Builder>
+    val before: JsObjectValidator.Before?,
+    val after: JsObjectValidator.After?
 ) {
 
-    @AirfluxMarker
-    class Builder internal constructor() {
-        private val before = Validators<JsObjectValidator.Before.Builder>()
-        private val after = Validators<JsObjectValidator.After.Builder>()
+    class Builder {
+        var before: BeforeValidatorInitializer? = null
+        var after: AfterValidatorInitializer? = null
 
-        operator fun JsObjectValidator.Before.Builder.unaryPlus() = before.add(this)
-        operator fun JsObjectValidator.After.Builder.unaryPlus() = after.add(this)
-        operator fun JsObjectValidator.Identifier.unaryMinus() {
-            if (!before.remove(this.id)) after.remove(this.id)
+        fun before(block: BeforeValidatorInitializer?) {
+            before = block
         }
 
-        internal fun build(): JsObjectValidators = JsObjectValidators(before, after)
-    }
-
-    internal class Validators<T>(other: Validators<T>? = null) : Iterable<T>
-        where T : JsObjectValidator.Builder<*> {
-
-        private val items: MutableMap<JsObjectValidator.Id<*>, T> =
-            if (other != null) LinkedHashMap(other.items) else LinkedHashMap()
-
-        operator fun contains(id: JsObjectValidator.Id<*>): Boolean = items.containsKey(id)
-
-        operator fun contains(validator: T): Boolean = items.containsKey(validator.id)
-
-        operator fun get(id: JsObjectValidator.Id<*>): T? = items[id]
-
-        fun add(validator: T) {
-            items[validator.id] = validator
+        fun after(block: AfterValidatorInitializer?) {
+            after = block
         }
 
-        fun remove(id: JsObjectValidator.Id<*>): Boolean = items.remove(id) != null
-
-        override fun iterator(): Iterator<T> = items.values.iterator()
-    }
-
-    companion object {
-        val Default = JsObjectValidators(before = Validators(), after = Validators())
-
-        fun build(init: Builder.() -> Unit): JsObjectValidators = Builder().apply(init).build()
+        fun build(config: ObjectReaderConfiguration, properties: List<JsReaderProperty>): JsObjectValidators =
+            JsObjectValidators(
+                before = before?.invoke(config, properties),
+                after = after?.invoke(config, properties)
+            )
     }
 }

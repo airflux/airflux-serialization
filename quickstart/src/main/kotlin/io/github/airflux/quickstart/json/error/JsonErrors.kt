@@ -38,10 +38,10 @@ sealed class JsonErrors : JsError {
         }
 
         sealed class Object : Validation() {
-            object IsEmpty : Validation.Object()
-            class AdditionalProperties(val names: List<String>) : Validation.Object()
-            class MinProperties(val expected: Int, val actual: Int) : Validation.Object()
-            class MaxProperties(val expected: Int, val actual: Int) : Validation.Object()
+            object IsEmpty : Object()
+            class AdditionalProperties(val names: List<String>) : Object()
+            class MinProperties(val expected: Int, val actual: Int) : Object()
+            class MaxProperties(val expected: Int, val actual: Int) : Object()
         }
     }
 }

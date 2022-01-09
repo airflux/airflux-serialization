@@ -6,15 +6,15 @@ import io.github.airflux.dsl.reader.`object`.validator.base.MaxPropertiesValidat
 import io.github.airflux.dsl.reader.`object`.validator.base.MinPropertiesValidator
 import io.github.airflux.quickstart.json.error.JsonErrors
 
-val additionalProperties = AdditionalPropertiesValidator { unknownProperties ->
+val additionalProperties = AdditionalPropertiesValidator.Builder { unknownProperties ->
     JsonErrors.Validation.Object.AdditionalProperties(unknownProperties)
 }
 
-val minProperties = MinPropertiesValidator { expected: Int, actual: Int ->
+val minProperties = MinPropertiesValidator.Builder { expected: Int, actual: Int ->
     JsonErrors.Validation.Object.MinProperties(expected, actual)
 }
 
-val maxProperties = MaxPropertiesValidator { expected: Int, actual: Int ->
+val maxProperties = MaxPropertiesValidator.Builder { expected: Int, actual: Int ->
     JsonErrors.Validation.Object.MaxProperties(expected, actual)
 }
 

@@ -1,8 +1,6 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.reader.result.asSuccess
-import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.reader.base.CollectionReader.list
@@ -13,6 +11,10 @@ import io.github.airflux.quickstart.json.validation.ArrayValidator.isUnique
 import io.github.airflux.quickstart.json.validation.ArrayValidator.minItems
 import io.github.airflux.quickstart.json.validation.StringValidator.isNotBlank
 import io.github.airflux.quickstart.json.validation.additionalProperties
+import io.github.airflux.quickstart.json.validation.isNotEmptyObject
+import io.github.airflux.quickstart.json.validation.maxProperties
+import io.github.airflux.reader.result.asSuccess
+import io.github.airflux.reader.validator.extension.validation
 
 val LotStatusReader = stringReader.validation(isNotBlank).asEnum<LotStatus>()
 
@@ -22,7 +24,12 @@ private val LotObjectReaderConfig = ObjectReaderConfiguration.build {
 
 val LotReader = reader<Lot>(configuration = LotObjectReaderConfig) {
     validation {
-        +additionalProperties
+        before { _, properties ->
+            additionalProperties(properties)
+        }
+        after { _, _ ->
+            isNotEmptyObject and maxProperties(3)
+        }
     }
 
     val id = property(name = "id", reader = stringReader).required()
