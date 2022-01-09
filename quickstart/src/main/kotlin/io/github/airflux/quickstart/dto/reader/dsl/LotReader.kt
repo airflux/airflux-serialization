@@ -1,7 +1,6 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 import io.github.airflux.reader.result.asSuccess
 import io.github.airflux.reader.validator.extension.validation
 import io.github.airflux.quickstart.dto.model.Lot
@@ -21,11 +20,11 @@ private val LotObjectReaderConfig = ObjectReaderConfiguration.build {
     failFast = false
 }
 
-private val LotObjectValidators = JsObjectValidators.build {
-    +additionalProperties
-}
+val LotReader = reader<Lot>(configuration = LotObjectReaderConfig) {
+    validation {
+        +additionalProperties
+    }
 
-val LotReader = reader<Lot>(configuration = LotObjectReaderConfig, validators = LotObjectValidators) {
     val id = property(name = "id", reader = stringReader).required()
     val status = property(name = "status", reader = LotStatusReader).required()
     val value = property(name = "value", reader = ValueReader).required()

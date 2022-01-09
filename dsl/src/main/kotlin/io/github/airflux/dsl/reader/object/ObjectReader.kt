@@ -38,17 +38,15 @@ fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext
 @Suppress("unused")
 class ObjectReader(
     private val globalConfiguration: ObjectReaderConfiguration = ObjectReaderConfiguration.Default,
-    private val globalValidators: JsObjectValidators = JsObjectValidators.Default,
     private val pathMissingErrorBuilder: PathMissingErrorBuilder,
     private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ) {
 
     operator fun <T> invoke(
         configuration: ObjectReaderConfiguration? = null,
-        validators: JsObjectValidators? = null,
         init: Builder<T>.() -> TypeBuilder<T>
     ): JsReader<T> {
-        val builder = BuilderInstance<T>(configuration ?: globalConfiguration, validators ?: globalValidators)
+        val builder = BuilderInstance<T>(configuration ?: globalConfiguration)
         val typeBuilder = builder.init()
         return builder.build(typeBuilder)
     }
@@ -79,11 +77,10 @@ class ObjectReader(
     fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsLocation) -> JsResult<T>
 
     private inner class BuilderInstance<T>(
-        private var configuration: ObjectReaderConfiguration,
-        validators: JsObjectValidators
+        private var configuration: ObjectReaderConfiguration
     ) : Builder<T> {
 
-        private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder(validators)
+        private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder()
         private val properties = mutableListOf<JsReaderProperty>()
 
         override fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {

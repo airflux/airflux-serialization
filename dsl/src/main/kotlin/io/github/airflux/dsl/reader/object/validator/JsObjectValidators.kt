@@ -8,9 +8,9 @@ class JsObjectValidators private constructor(
 ) {
 
     @AirfluxMarker
-    class Builder internal constructor(other: JsObjectValidators? = null) {
-        private val before = Validators(other?.before)
-        private val after = Validators(other?.after)
+    class Builder internal constructor() {
+        private val before = Validators<JsObjectValidator.Before.Builder>()
+        private val after = Validators<JsObjectValidator.After.Builder>()
 
         operator fun JsObjectValidator.Before.Builder.unaryPlus() = before.add(this)
         operator fun JsObjectValidator.After.Builder.unaryPlus() = after.add(this)
