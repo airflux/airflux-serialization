@@ -3,12 +3,12 @@ package io.github.airflux.dsl.reader.`object`.validator.base
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.path.IdxPathElement
-import io.github.airflux.path.KeyPathElement
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsError
-import io.github.airflux.reader.result.JsErrors
-import io.github.airflux.value.JsObject
+import io.github.airflux.core.path.IdxPathElement
+import io.github.airflux.core.path.KeyPathElement
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.reader.result.JsErrors
+import io.github.airflux.core.value.JsObject
 
 @Suppress("unused")
 class AdditionalPropertiesValidator private constructor(

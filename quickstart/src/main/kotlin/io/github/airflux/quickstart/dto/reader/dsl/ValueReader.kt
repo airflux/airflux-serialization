@@ -7,7 +7,7 @@ import io.github.airflux.quickstart.dto.reader.dsl.base.reader
 import io.github.airflux.quickstart.json.validation.additionalProperties
 import io.github.airflux.quickstart.json.validation.maxProperties
 import io.github.airflux.quickstart.json.validation.minProperties
-import io.github.airflux.reader.result.asSuccess
+import io.github.airflux.core.reader.result.asSuccess
 
 private val additionalPropertiesValidator = { _: ObjectReaderConfiguration, properties: List<JsReaderProperty> ->
     additionalProperties(properties)

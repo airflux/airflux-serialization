@@ -3,10 +3,10 @@ package io.github.airflux.dsl
 import io.github.airflux.common.TestData
 import io.github.airflux.dsl.writer.`object`.ObjectWriter
 import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
-import io.github.airflux.value.JsNull
-import io.github.airflux.value.JsObject
-import io.github.airflux.value.JsString
-import io.github.airflux.writer.base.buildStringWriter
+import io.github.airflux.core.value.JsNull
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.core.value.JsString
+import io.github.airflux.core.writer.base.buildStringWriter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

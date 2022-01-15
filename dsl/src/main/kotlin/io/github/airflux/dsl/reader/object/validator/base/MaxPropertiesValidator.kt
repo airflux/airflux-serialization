@@ -4,10 +4,10 @@ import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsError
-import io.github.airflux.reader.result.JsErrors
-import io.github.airflux.value.JsObject
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.reader.result.JsErrors
+import io.github.airflux.core.value.JsObject
 
 @Suppress("unused")
 class MaxPropertiesValidator private constructor(private val value: Int, private val errorBuilder: ErrorBuilder) :

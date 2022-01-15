@@ -16,17 +16,17 @@ import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropert
 import io.github.airflux.dsl.reader.`object`.property.RequiredProperty
 import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
-import io.github.airflux.path.JsPath
-import io.github.airflux.reader.JsReader
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.reader.error.PathMissingErrorBuilder
-import io.github.airflux.reader.result.JsLocation
-import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.JsResult.Failure.Companion.merge
-import io.github.airflux.value.JsObject
-import io.github.airflux.value.JsValue
-import io.github.airflux.value.extension.readAsObject
+import io.github.airflux.core.path.JsPath
+import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.core.value.JsValue
+import io.github.airflux.core.value.extension.readAsObject
 
 @Suppress("unused")
 fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =

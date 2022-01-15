@@ -1,6 +1,6 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
-import io.github.airflux.reader.result.asSuccess
+import io.github.airflux.core.reader.result.asSuccess
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.reader.base.PrimitiveReader.stringReader
 import io.github.airflux.quickstart.dto.reader.dsl.base.reader

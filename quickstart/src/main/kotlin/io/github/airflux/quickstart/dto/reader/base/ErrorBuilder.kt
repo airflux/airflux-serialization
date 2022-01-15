@@ -1,7 +1,7 @@
 package io.github.airflux.quickstart.dto.reader.base
 
-import io.github.airflux.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.reader.error.PathMissingErrorBuilder
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.quickstart.json.error.JsonErrors
 
 object ErrorBuilder {

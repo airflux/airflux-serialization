@@ -1,11 +1,11 @@
 package io.github.airflux.dsl.reader.`object`.property
 
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.predicate.JsPredicate
-import io.github.airflux.reader.result.JsLocation
-import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.value.JsValue
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.predicate.JsPredicate
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.value.JsValue
 
 sealed interface OptionalProperty<T : Any> : JsReaderProperty {
 

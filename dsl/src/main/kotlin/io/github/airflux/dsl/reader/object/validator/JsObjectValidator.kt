@@ -5,9 +5,9 @@ import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.After
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.Before
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsErrors
-import io.github.airflux.value.JsObject
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsErrors
+import io.github.airflux.core.value.JsObject
 
 @Suppress("unused")
 sealed interface JsObjectValidator {

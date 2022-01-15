@@ -1,7 +1,7 @@
 package io.github.airflux.quickstart.json.validation
 
-import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.reader.validator.base.BaseStringValidators
+import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.base.BaseStringValidators
 import io.github.airflux.quickstart.json.error.JsonErrors
 
 object StringValidator {

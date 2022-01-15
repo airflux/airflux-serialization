@@ -13,8 +13,8 @@ import io.github.airflux.quickstart.json.validation.StringValidator.isNotBlank
 import io.github.airflux.quickstart.json.validation.additionalProperties
 import io.github.airflux.quickstart.json.validation.isNotEmptyObject
 import io.github.airflux.quickstart.json.validation.maxProperties
-import io.github.airflux.reader.result.asSuccess
-import io.github.airflux.reader.validator.extension.validation
+import io.github.airflux.core.reader.result.asSuccess
+import io.github.airflux.core.reader.validator.extension.validation
 
 val LotStatusReader = stringReader.validation(isNotBlank).asEnum<LotStatus>()
 

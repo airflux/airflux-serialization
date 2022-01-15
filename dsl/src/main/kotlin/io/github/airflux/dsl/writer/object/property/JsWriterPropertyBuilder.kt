@@ -1,16 +1,16 @@
 package io.github.airflux.dsl.writer.`object`.property
 
 import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
-import io.github.airflux.value.JsArray
-import io.github.airflux.value.JsNull
-import io.github.airflux.value.JsObject
-import io.github.airflux.value.JsValue
-import io.github.airflux.writer.JsArrayWriter
-import io.github.airflux.writer.JsObjectWriter
-import io.github.airflux.writer.JsWriter
-import io.github.airflux.writer.extension.writeAsNullable
-import io.github.airflux.writer.extension.writeAsOptional
-import io.github.airflux.writer.extension.writeAsRequired
+import io.github.airflux.core.value.JsArray
+import io.github.airflux.core.value.JsNull
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.core.value.JsValue
+import io.github.airflux.core.writer.JsArrayWriter
+import io.github.airflux.core.writer.JsObjectWriter
+import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.core.writer.extension.writeAsNullable
+import io.github.airflux.core.writer.extension.writeAsOptional
+import io.github.airflux.core.writer.extension.writeAsRequired
 
 internal interface JsWriterPropertyBuilder<T> {
 

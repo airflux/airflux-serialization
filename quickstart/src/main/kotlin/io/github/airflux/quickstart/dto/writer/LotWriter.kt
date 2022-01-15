@@ -4,9 +4,9 @@ import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.writer.base.PrimitiveWriter.stringWriter
 import io.github.airflux.quickstart.dto.writer.base.writer
-import io.github.airflux.value.JsString
-import io.github.airflux.writer.JsWriter
-import io.github.airflux.writer.extension.arrayWriter
+import io.github.airflux.core.value.JsString
+import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.core.writer.extension.arrayWriter
 
 val LotStatus = JsWriter<LotStatus> { value ->
     JsString(value.name)

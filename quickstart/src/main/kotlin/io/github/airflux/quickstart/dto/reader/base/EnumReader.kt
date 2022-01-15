@@ -1,7 +1,7 @@
 package io.github.airflux.quickstart.dto.reader.base
 
-import io.github.airflux.reader.JsReader
-import io.github.airflux.reader.result.JsResult
+import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.quickstart.json.error.JsonErrors
 
 inline fun <reified T : Enum<T>> JsReader<String>.asEnum(): JsReader<T> =

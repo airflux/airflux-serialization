@@ -15,13 +15,13 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.Serializers
-import io.github.airflux.value.JsArray
-import io.github.airflux.value.JsBoolean
-import io.github.airflux.value.JsNull
-import io.github.airflux.value.JsNumber
-import io.github.airflux.value.JsObject
-import io.github.airflux.value.JsString
-import io.github.airflux.value.JsValue
+import io.github.airflux.core.value.JsArray
+import io.github.airflux.core.value.JsBoolean
+import io.github.airflux.core.value.JsNull
+import io.github.airflux.core.value.JsNumber
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.core.value.JsString
+import io.github.airflux.core.value.JsValue
 import java.util.*
 
 object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {

@@ -1,19 +1,19 @@
 package io.github.airflux.dsl.reader.`object`.property
 
-import io.github.airflux.path.JsPath
-import io.github.airflux.reader.JsReader
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.reader.error.PathMissingErrorBuilder
-import io.github.airflux.reader.predicate.JsPredicate
-import io.github.airflux.reader.readNullable
-import io.github.airflux.reader.result.JsLocation
-import io.github.airflux.reader.result.JsResult
-import io.github.airflux.reader.result.extension.filter
-import io.github.airflux.reader.validator.JsPropertyValidator
-import io.github.airflux.reader.validator.extension.validation
-import io.github.airflux.value.JsValue
-import io.github.airflux.value.extension.lookup
+import io.github.airflux.core.path.JsPath
+import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.core.reader.predicate.JsPredicate
+import io.github.airflux.core.reader.readNullable
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.extension.filter
+import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.core.value.JsValue
+import io.github.airflux.core.value.extension.lookup
 
 internal class NullablePropertyInstance<T : Any> private constructor(
     override val path: JsPath,

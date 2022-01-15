@@ -7,10 +7,10 @@ import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropert
 import io.github.airflux.dsl.reader.`object`.property.OptionalProperty
 import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultProperty
 import io.github.airflux.dsl.reader.`object`.property.RequiredProperty
-import io.github.airflux.reader.context.JsReaderContext
-import io.github.airflux.reader.result.JsLocation
-import io.github.airflux.reader.result.JsResult
-import io.github.airflux.value.JsObject
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsObject
 
 class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty, Any>) {
 
