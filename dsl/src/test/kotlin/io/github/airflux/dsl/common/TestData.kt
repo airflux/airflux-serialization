@@ -1,4 +1,4 @@
-package io.github.airflux.common
+package io.github.airflux.dsl.common
 
 object TestData {
     const val USER_NAME_VALUE = "user"

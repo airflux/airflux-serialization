@@ -1,4 +1,4 @@
-package io.github.airflux.common
+package io.github.airflux.dsl.common
 
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.value.JsValue

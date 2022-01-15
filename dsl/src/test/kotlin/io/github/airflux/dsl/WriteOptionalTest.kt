@@ -1,6 +1,6 @@
 package io.github.airflux.dsl
 
-import io.github.airflux.common.TestData
+import io.github.airflux.dsl.common.TestData
 import io.github.airflux.dsl.writer.`object`.ObjectWriter
 import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
 import io.github.airflux.core.value.JsObject
