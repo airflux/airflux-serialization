@@ -24,7 +24,7 @@ internal class LookupTest : FreeSpec() {
             "when called with a parameter of a simple path" - {
                 "should return the 'JsLookup.Defined' if a node is found" {
                     val json: JsValue = JsObject("name" to JsString(USER_NAME))
-                    val path: JsPath.Identifiable = JsPath.Root / "name"
+                    val path = JsPath("name")
 
                     val result = json.lookup(JsLocation.Root, path)
 
@@ -36,7 +36,7 @@ internal class LookupTest : FreeSpec() {
                 }
                 "should return the 'JsLookup.Undefined.PathMissing' if a node is not found" {
                     val json: JsValue = JsObject("name" to JsString(USER_NAME))
-                    val path: JsPath.Identifiable = JsPath.Root / "user"
+                    val path = JsPath("user")
 
                     val result = json.lookup(JsLocation.Root, path)
 
@@ -51,7 +51,7 @@ internal class LookupTest : FreeSpec() {
                             "name" to JsString(USER_NAME)
                         )
                     )
-                    val path: JsPath.Identifiable = JsPath.Root / "user" / "name"
+                    val path: JsPath = JsPath("user").append("name")
 
                     val result = json.lookup(JsLocation.Root, path)
 
@@ -67,7 +67,7 @@ internal class LookupTest : FreeSpec() {
                             "name" to JsString(USER_NAME)
                         )
                     )
-                    val path: JsPath.Identifiable = JsPath.Root / "user" / "phones" / 0
+                    val path: JsPath = JsPath("user").append("phones").append(0)
 
                     val result = json.lookup(JsLocation.Root, path)
 

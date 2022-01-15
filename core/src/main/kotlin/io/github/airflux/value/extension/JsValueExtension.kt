@@ -8,7 +8,6 @@ import io.github.airflux.path.PathElement
 import io.github.airflux.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.reader.result.JsLocation
 import io.github.airflux.reader.result.JsResult
-import io.github.airflux.value.JsArray
 import io.github.airflux.value.JsBoolean
 import io.github.airflux.value.JsNumber
 import io.github.airflux.value.JsObject
@@ -19,13 +18,7 @@ operator fun JsValue.div(name: String): JsLookup = lookup(JsLocation.Root, KeyPa
 
 operator fun JsValue.div(idx: Int): JsLookup = lookup(JsLocation.Root, IdxPathElement(idx))
 
-fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable): JsLookup =
-    when (path) {
-        is JsPath.Identifiable.Simple -> lookup(location, path)
-        is JsPath.Identifiable.Composite -> lookup(location, path)
-    }
-
-internal fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable.Composite): JsLookup {
+fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookup {
     var result: JsLookup = JsLookup.Defined(location = location, value = this)
     for (pathElement in path) {
         result = when (result) {
@@ -36,32 +29,9 @@ internal fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable.Comp
     return result
 }
 
-internal fun JsValue.lookup(location: JsLocation, path: JsPath.Identifiable.Simple): JsLookup =
-    lookup(location, path.value)
-
 internal fun JsValue.lookup(location: JsLocation, pathElement: PathElement): JsLookup = when (pathElement) {
-    is KeyPathElement -> lookup(location, pathElement)
-    is IdxPathElement -> lookup(location, pathElement)
-}
-
-internal fun JsValue.lookup(location: JsLocation, pathElement: KeyPathElement): JsLookup = when (this) {
-    is JsObject -> {
-        val currentLocation = location / pathElement
-        this[pathElement.key]
-            ?.let { value -> JsLookup.Defined(location = currentLocation, value = value) }
-            ?: JsLookup.Undefined.PathMissing(location = currentLocation)
-    }
-    else -> JsLookup.Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = type)
-}
-
-internal fun JsValue.lookup(location: JsLocation, pathElement: IdxPathElement): JsLookup = when (this) {
-    is JsArray<*> -> {
-        val currentLocation = location / pathElement
-        this[pathElement.idx]
-            ?.let { value -> JsLookup.Defined(location = currentLocation, value = value) }
-            ?: JsLookup.Undefined.PathMissing(location = currentLocation)
-    }
-    else -> JsLookup.Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = type)
+    is KeyPathElement -> JsLookup.apply(location, pathElement, this)
+    is IdxPathElement -> JsLookup.apply(location, pathElement, this)
 }
 
 fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =

@@ -1,164 +1,161 @@
 package io.github.airflux.path
 
-import io.github.airflux.common.ObjectContract
-import io.github.airflux.path.JsPath.Identifiable.Companion.div
-import org.junit.jupiter.api.Nested
-import kotlin.test.Test
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
+import io.github.airflux.common.kotest.shouldBeEqualsContract
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainInOrder
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
-class JsPathTest {
+class JsPathTest : FreeSpec() {
 
-    @Nested
-    inner class CompanionObject {
+    companion object {
+        private val OTHER_PATH = JsPath("other")
+    }
 
-        @Nested
-        inner class OperatorDivForKey {
+    init {
+        "A 'JsPath' type" - {
 
-            @Test
-            fun `Testing operator the div for Root`() {
-                val target = JsPath.Root
+            val user = "user"
+            "create from named path element '$user'" - {
+                val path = JsPath(user)
 
-                val path = target / "user"
+                "should have only one element" {
+                    path.size shouldBe 1
+                }
 
-                path as JsPath.Identifiable.Simple
-                assertContentEquals(expected = listOf(KeyPathElement("user")), actual = path)
-                assertEquals(expected = "#/user", actual = path.toString())
+                "should have element of type 'KeyPathElement' with value '$user'" {
+                    path[0].shouldBeInstanceOf<KeyPathElement>().key shouldBe user
+                }
+
+                "method 'toString() should return '#/$user'" {
+                    path.toString() shouldBe "#/$user"
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    path.shouldBeEqualsContract(y = JsPath(user), z = JsPath(user), other = OTHER_PATH)
+                }
+
+                val name = "name"
+                "append named path element '$name'" - {
+                    val updatedPath = path.append(name)
+
+                    "should have two elements"{
+                        updatedPath.size shouldBe 2
+                    }
+
+                    "should have elements in the order they were added" {
+                        updatedPath shouldContainInOrder listOf(KeyPathElement(user), KeyPathElement(name))
+                    }
+
+                    "method 'toString() should return '#/$user/$name'" {
+                        updatedPath.toString() shouldBe "#/$user/$name"
+                    }
+
+                    "should comply with equals() and hashCode() contract" {
+                        updatedPath.shouldBeEqualsContract(
+                            y = JsPath(user).append(name),
+                            z = JsPath(user).append(name),
+                            other = OTHER_PATH
+                        )
+                    }
+                }
+
+                val idx = 0
+                "append index path element '$idx'" - {
+                    val updatedPath = path.append(idx)
+
+                    "should have two elements"{
+                        updatedPath.size shouldBe 2
+                    }
+
+                    "should have elements in the order they were added" {
+                        updatedPath shouldContainInOrder listOf(KeyPathElement(user), IdxPathElement(idx))
+                    }
+
+                    "method 'toString() should return '#/$user[$idx]'" {
+                        updatedPath.toString() shouldBe "#/$user[$idx]"
+                    }
+
+                    "should comply with equals() and hashCode() contract" {
+                        updatedPath.shouldBeEqualsContract(
+                            y = JsPath(user).append(idx),
+                            z = JsPath(user).append(idx),
+                            other = OTHER_PATH
+                        )
+                    }
+                }
             }
 
-            @Test
-            fun `Testing operator the div for Simple`() {
-                val target = (JsPath.Root / "user") as JsPath.Identifiable.Simple
+            val firstIdx = 0
+            "create from index path element '$firstIdx'" - {
+                val path = JsPath(firstIdx)
 
-                val path = target / "id"
+                "should have only one element" {
+                    path.size shouldBe 1
+                }
 
-                path as JsPath.Identifiable.Composite
-                assertContentEquals(expected = listOf(KeyPathElement("user"), KeyPathElement("id")), actual = path)
-                assertEquals(expected = "#/user/id", actual = path.toString())
-            }
+                "should have element of type 'IdxPathElement' with value '$firstIdx'" {
+                    path[0].shouldBeInstanceOf<IdxPathElement>().idx shouldBe firstIdx
+                }
 
-            @Test
-            fun `Testing operator the div for Composite`() {
-                val target = (JsPath.Root / "user" / "phones") as JsPath.Identifiable.Composite
+                "method 'toString() should return '#[$firstIdx]'" {
+                    path.toString() shouldBe "#[$firstIdx]"
+                }
 
-                val path = target / "work"
+                "should comply with equals() and hashCode() contract" {
+                    path.shouldBeEqualsContract(y = JsPath(firstIdx), z = JsPath(firstIdx), other = OTHER_PATH)
+                }
 
-                path as JsPath.Identifiable.Composite
-                assertContentEquals(
-                    expected = listOf(
-                        KeyPathElement("user"),
-                        KeyPathElement("phones"),
-                        KeyPathElement("work")
-                    ), actual = path
-                )
-                assertEquals(expected = "#/user/phones/work", actual = path.toString())
+                val name = "name"
+                "append named path element '$name'" - {
+                    val updatedPath = path.append(name)
+
+                    "should have two elements"{
+                        updatedPath.size shouldBe 2
+                    }
+
+                    "should have elements in the order they were added" {
+                        updatedPath shouldContainInOrder listOf(IdxPathElement(firstIdx), KeyPathElement(name))
+                    }
+
+                    "method 'toString() should return '#[$firstIdx]/$name'" {
+                        updatedPath.toString() shouldBe "#[$firstIdx]/$name"
+                    }
+
+                    "should comply with equals() and hashCode() contract" {
+                        updatedPath.shouldBeEqualsContract(
+                            y = JsPath(firstIdx).append(name),
+                            z = JsPath(firstIdx).append(name),
+                            other = OTHER_PATH
+                        )
+                    }
+                }
+
+                val secondIdx = 1
+                "append index path element '$secondIdx'" - {
+                    val updatedPath = path.append(secondIdx)
+
+                    "should have two elements"{
+                        updatedPath.size shouldBe 2
+                    }
+
+                    "should have elements in the order they were added" {
+                        updatedPath shouldContainInOrder listOf(IdxPathElement(firstIdx), IdxPathElement(secondIdx))
+                    }
+
+                    "method 'toString() should return '#[$firstIdx][$secondIdx]'" {
+                        updatedPath.toString() shouldBe "#[$firstIdx][$secondIdx]"
+                    }
+
+                    "should comply with equals() and hashCode() contract" {
+                        updatedPath.shouldBeEqualsContract(
+                            y = JsPath(firstIdx).append(secondIdx),
+                            z = JsPath(firstIdx).append(secondIdx),
+                            other = OTHER_PATH
+                        )
+                    }
+                }
             }
         }
-
-        @Nested
-        inner class OperatorDivForIdx {
-
-            @Test
-            fun `Testing operator the div for Root`() {
-                val target = JsPath.Root
-
-                val path = target / 0
-
-                path as JsPath.Identifiable.Simple
-                assertContentEquals(expected = listOf(IdxPathElement(0)), actual = path)
-                assertEquals(expected = "#[0]", actual = path.toString())
-            }
-
-            @Test
-            fun `Testing operator the div for Simple`() {
-                val target = (JsPath.Root / "user") as JsPath.Identifiable.Simple
-
-                val path = target / 0
-
-                path as JsPath.Identifiable.Composite
-                assertContentEquals(expected = listOf(KeyPathElement("user"), IdxPathElement(0)), actual = path)
-                assertEquals(expected = "#/user[0]", actual = path.toString())
-            }
-
-            @Test
-            fun `Testing operator the div for Composite`() {
-                val target = (JsPath.Root / "user" / "phones") as JsPath.Identifiable.Composite
-
-                val path = target / 0
-
-                path as JsPath.Identifiable.Composite
-                assertContentEquals(
-                    expected = listOf(
-                        KeyPathElement("user"),
-                        KeyPathElement("phones"),
-                        IdxPathElement(0)
-                    ), actual = path
-                )
-                assertEquals(expected = "#/user/phones[0]", actual = path.toString())
-            }
-        }
-    }
-
-    @Nested
-    inner class Constructors {
-
-        @Test
-        fun `Testing the constructor of the JsLookupPath class with text parameter`() {
-            val path = JsPath.Root / "user"
-
-            path as JsPath.Identifiable.Simple
-            assertContentEquals(expected = listOf(KeyPathElement("user")), actual = path)
-        }
-
-        @Test
-        fun `Testing the constructor of the JsLookupPath class with number parameter`() {
-            val path = JsPath.Root / 10
-
-            path as JsPath.Identifiable.Simple
-            assertContentEquals(expected = listOf(IdxPathElement(10)), actual = path)
-        }
-    }
-
-    @Test
-    fun `Testing the toString function of the JsLookupPath class`() {
-        ObjectContract.checkToString(JsPath.Root, "#")
-        ObjectContract.checkToString(JsPath.Root / "user", "#/user")
-        ObjectContract.checkToString(JsPath.Root / "user" / "name", "#/user/name")
-    }
-
-    @Test
-    fun `Testing the equals contract of the JsLookupPath class (Simple)`() {
-        ObjectContract.checkEqualsContract(
-            JsPath.Root / "name",
-            JsPath.Root / "name",
-            JsPath.Root / "phones"
-        )
-    }
-
-    @Test
-    fun `Testing the equals contract of the JsLookupPath class (Composite)`() {
-        ObjectContract.checkEqualsContract(
-            JsPath.Root / "user" / "name",
-            JsPath.Root / "user" / "name",
-            JsPath.Root / "user" / "phones"
-        )
-    }
-
-    @Test
-    fun `Create a path by two text elements`() {
-        val path = "user" / "name"
-
-        path as JsPath.Identifiable.Composite
-        assertContentEquals(expected = listOf(KeyPathElement("user"), KeyPathElement("name")), actual = path)
-        assertEquals(expected = "#/user/name", actual = path.toString())
-    }
-
-    @Test
-    fun `Create a path by text element and index element`() {
-        val path = "phones" / 0
-
-        path as JsPath.Identifiable.Composite
-        assertContentEquals(expected = listOf(KeyPathElement("phones"), IdxPathElement(0)), actual = path)
-        assertEquals(expected = "#/phones[0]", actual = path.toString())
     }
 }

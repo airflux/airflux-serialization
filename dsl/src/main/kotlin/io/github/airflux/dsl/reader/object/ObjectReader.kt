@@ -54,7 +54,7 @@ class ObjectReader(
         fun validation(init: JsObjectValidators.Builder.() -> Unit)
 
         fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P>
-        fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P>
+        fun <P : Any> property(path: JsPath, reader: JsReader<P>): PropertyBinder<P>
 
         fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T>
         fun build(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
@@ -89,9 +89,9 @@ class ObjectReader(
         }
 
         override fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinderInstance(JsPath.Root / name, reader)
+            PropertyBinderInstance(JsPath(name), reader)
 
-        override fun <P : Any> property(path: JsPath.Identifiable, reader: JsReader<P>): PropertyBinder<P> =
+        override fun <P : Any> property(path: JsPath, reader: JsReader<P>): PropertyBinder<P> =
             PropertyBinderInstance(path, reader)
 
         override fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T> =
@@ -110,7 +110,7 @@ class ObjectReader(
         }
 
         private inner class PropertyBinderInstance<P : Any>(
-            private val path: JsPath.Identifiable,
+            private val path: JsPath,
             private val reader: JsReader<P>
         ) : PropertyBinder<P> {
 

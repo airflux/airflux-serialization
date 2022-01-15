@@ -46,7 +46,7 @@ class JsPropertyValidatorExtensionTest {
         fun `Testing of the extension-function the validation for JsReader`() {
             val json: JsValue = JsObject("name" to JsString("user"))
             val reader = JsReader { context, location, input ->
-                val result = input.lookup(location, JsPath.Root / "name")
+                val result = input.lookup(location, JsPath("name"))
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -65,7 +65,7 @@ class JsPropertyValidatorExtensionTest {
         fun `Testing of the extension-function the validation for JsReader (error of validation)`() {
             val json: JsValue = JsObject("name" to JsString(""))
             val reader = JsReader { context, location, input ->
-                val result = input.lookup(location, JsPath.Root / "name")
+                val result = input.lookup(location, JsPath("name"))
                 readRequired(
                     from = result,
                     using = stringReader,
@@ -84,7 +84,7 @@ class JsPropertyValidatorExtensionTest {
         fun `Testing of the extension-function the validation for JsReader (result is failure)`() {
             val json: JsValue = JsObject("name" to JsNull)
             val reader = JsReader { context, location, input ->
-                val result = input.lookup(location, JsPath.Root / "name")
+                val result = input.lookup(location, JsPath("name"))
                 readRequired(
                     from = result,
                     using = stringReader,

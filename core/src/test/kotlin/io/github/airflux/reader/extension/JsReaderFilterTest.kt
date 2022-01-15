@@ -35,7 +35,7 @@ class JsReaderFilterTest {
         }
 
         private val reader = JsReader { context, location, input ->
-            val result = input.lookup(location, JsPath.Root / "name")
+            val result = input.lookup(location, JsPath("name"))
             readNullable(
                 from = result,
                 using = stringReader,

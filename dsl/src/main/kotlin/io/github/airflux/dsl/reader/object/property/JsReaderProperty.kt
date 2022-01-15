@@ -4,5 +4,5 @@ import io.github.airflux.path.JsPath
 
 sealed interface JsReaderProperty {
 
-    val path: JsPath.Identifiable
+    val path: JsPath
 }

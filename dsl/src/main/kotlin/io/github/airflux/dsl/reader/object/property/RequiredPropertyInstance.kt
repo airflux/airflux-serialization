@@ -14,14 +14,14 @@ import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
 
 internal class RequiredPropertyInstance<T : Any> private constructor(
-    override val path: JsPath.Identifiable,
+    override val path: JsPath,
     private var reader: JsReader<T>
 ) : RequiredProperty<T> {
 
     companion object {
 
         fun <T : Any> of(
-            path: JsPath.Identifiable,
+            path: JsPath,
             reader: JsReader<T>,
             pathMissingErrorBuilder: PathMissingErrorBuilder,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder

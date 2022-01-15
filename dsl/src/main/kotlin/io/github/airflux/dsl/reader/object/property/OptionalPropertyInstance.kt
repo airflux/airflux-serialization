@@ -15,14 +15,14 @@ import io.github.airflux.value.JsValue
 import io.github.airflux.value.extension.lookup
 
 internal class OptionalPropertyInstance<T : Any> private constructor(
-    override val path: JsPath.Identifiable,
+    override val path: JsPath,
     private var reader: JsReader<T?>
 ) : OptionalProperty<T> {
 
     companion object {
 
         fun <T : Any> of(
-            path: JsPath.Identifiable,
+            path: JsPath,
             reader: JsReader<T>,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
         ): OptionalProperty<T> =
