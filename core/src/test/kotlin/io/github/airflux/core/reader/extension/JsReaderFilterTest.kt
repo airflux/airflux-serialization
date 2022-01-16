@@ -3,6 +3,7 @@ package io.github.airflux.core.reader.extension
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.assertAsFailure
 import io.github.airflux.core.common.assertAsSuccess
+import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
@@ -15,7 +16,6 @@ import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.value.extension.lookup
 import kotlin.test.Test
 
 class JsReaderFilterTest {
@@ -35,7 +35,7 @@ class JsReaderFilterTest {
         }
 
         private val reader = JsReader { context, location, input ->
-            val result = input.lookup(location, JsPath("name"))
+            val result = JsLookup.apply(location, JsPath("name"), input)
             readNullable(
                 from = result,
                 using = stringReader,

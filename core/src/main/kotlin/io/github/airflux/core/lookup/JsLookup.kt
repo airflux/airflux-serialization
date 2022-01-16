@@ -1,6 +1,7 @@
 package io.github.airflux.core.lookup
 
 import io.github.airflux.core.path.IdxPathElement
+import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.KeyPathElement
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.value.JsArray
@@ -51,6 +52,31 @@ sealed class JsLookup {
                 ?: Undefined.PathMissing(location = location / idx)
 
             else -> Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
+        }
+
+        fun apply(location: JsLocation, path: JsPath, value: JsValue): JsLookup {
+            tailrec fun apply(location: JsLocation, path: JsPath, posPath: Int, value: JsValue): JsLookup {
+                if (posPath == path.size) return Defined(location, value)
+                return when (val element = path[posPath]) {
+                    is KeyPathElement -> if (value is JsObject) {
+                        val currentLocation = location / element
+                        val currentValue = value[element]
+                            ?: return Undefined.PathMissing(location = currentLocation)
+                        apply(currentLocation, path, posPath + 1, currentValue)
+                    } else
+                        Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
+
+                    is IdxPathElement -> if (value is JsArray<*>) {
+                        val currentLocation = location / element
+                        val currentValue = value[element]
+                            ?: return Undefined.PathMissing(location = currentLocation)
+                        apply(currentLocation, path, posPath + 1, currentValue)
+                    } else
+                        Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
+                }
+            }
+
+            return apply(location, path, 0, value)
         }
     }
 }

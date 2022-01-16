@@ -3,6 +3,7 @@ package io.github.airflux.core.lookup
 import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.core.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.path.IdxPathElement
+import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.KeyPathElement
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.value.JsArray
@@ -10,225 +11,239 @@ import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 import kotlin.test.assertEquals
 
 class JsLookupTest : FreeSpec() {
 
     init {
 
-        "Calling function 'JsLookup.apply'" - {
+        "JsLookup#apply(_, KeyPathElement, _)" - {
 
-            "parameter 'name' is exists named path element" - {
-                val key = KeyPathElement("name")
+            "a key is found" {
+                val node = JsObject("name" to JsString(USER_NAME_VALUE))
+                val key = "name"
 
-                "parameter 'value' is 'JsObject'" - {
-                    val value = JsObject("name" to JsString(USER_NAME_VALUE))
+                val lookup = JsLookup.apply(JsLocation.Root, KeyPathElement(key), node)
 
-                    "should return 'JsLookup.Defined'" {
-                        val result = JsLookup.apply(JsLocation.Root, key, value)
+                lookup shouldBe JsLookup.Defined(JsLocation.Root / key, JsString(USER_NAME_VALUE))
+            }
 
-                        result as JsLookup.Defined
-                        assertEquals(JsLocation.Root / key, result.location)
-                        assertEquals(USER_NAME_VALUE, (result.value as JsString).get)
-                    }
+            "a key is not found" {
+                val node = JsObject("name" to JsString(USER_NAME_VALUE))
+                val key = "user"
+
+                val lookup = JsLookup.apply(JsLocation.Root, KeyPathElement(key), node)
+
+                lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / key)
+            }
+
+            "a node is invalid type" {
+                val node = JsString(USER_NAME_VALUE)
+                val key = "user"
+
+                val lookup = JsLookup.apply(JsLocation.Root, KeyPathElement(key), node)
+
+                lookup shouldBe JsLookup.Undefined.InvalidType(
+                    location = JsLocation.Root,
+                    expected = JsValue.Type.OBJECT,
+                    actual = JsValue.Type.STRING
+                )
+            }
+        }
+
+        "JsLookup#apply(_, IdxPathElement, _)" - {
+
+            "an idx is found" {
+                val node = JsArray(JsString(FIRST_PHONE_VALUE))
+                val idx = 0
+
+                val lookup = JsLookup.apply(JsLocation.Root, IdxPathElement(idx), node)
+
+                lookup shouldBe JsLookup.Defined(JsLocation.Root / idx, JsString(FIRST_PHONE_VALUE))
+            }
+
+            "an idx is not found" {
+                val node = JsArray(JsString(FIRST_PHONE_VALUE))
+                val idx = 1
+
+                val lookup = JsLookup.apply(JsLocation.Root, IdxPathElement(idx), node)
+
+                lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / idx)
+            }
+
+            "a node is invalid type" {
+                val node = JsString(USER_NAME_VALUE)
+                val idx = 0
+
+                val lookup = JsLookup.apply(JsLocation.Root, IdxPathElement(idx), node)
+
+                lookup shouldBe JsLookup.Undefined.InvalidType(
+                    location = JsLocation.Root,
+                    expected = JsValue.Type.ARRAY,
+                    actual = JsValue.Type.STRING
+                )
+            }
+        }
+
+        "JsLookup#apply(_, JsPath, _)" - {
+
+            val node = JsObject(
+                "user" to JsObject(
+                    "name" to JsString(USER_NAME_VALUE),
+                    "phones" to JsArray(JsString(FIRST_PHONE_VALUE))
+                )
+            )
+
+            "keyed element" - {
+
+                "a key is found" {
+                    val path = JsPath("user").append("name")
+
+                    val result = JsLookup.apply(JsLocation.Root, path, node)
+
+                    result shouldBe JsLookup.Defined(JsLocation.Root / "user" / "name", JsString(USER_NAME_VALUE))
                 }
 
-                "parameter 'value' is not 'JsObject'" - {
-                    val value = JsString(USER_NAME_VALUE)
+                "a key is not found" {
+                    val path = JsPath("user").append("id")
 
-                    "should return 'JsLookup.Undefined.InvalidType'" {
-                        val result = JsLookup.apply(JsLocation.Root, key, value)
+                    val result = JsLookup.apply(JsLocation.Root, path, node)
 
-                        result as JsLookup.Undefined.InvalidType
-                        assertEquals(JsLocation.Root, result.location)
-                        assertEquals(JsValue.Type.OBJECT, result.expected)
-                        assertEquals(JsValue.Type.STRING, result.actual)
-                    }
+                    result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / "user" / "id")
+                }
+
+                "a node is invalid type" {
+                    val path = JsPath("user").append("phones").append("mobile")
+
+                    val result = JsLookup.apply(JsLocation.Root, path, node)
+
+                    result shouldBe JsLookup.Undefined.InvalidType(
+                        location = JsLocation.Root / "user" / "phones",
+                        expected = JsValue.Type.OBJECT,
+                        actual = JsValue.Type.ARRAY
+                    )
                 }
             }
 
-            "parameter 'name' is not exists named path element" - {
-                val key = KeyPathElement("user")
+            "indexed element" - {
 
-                "parameter 'value' is 'JsObject'" - {
-                    val value = JsObject("name" to JsString(USER_NAME_VALUE))
+                "an idx is found" {
+                    val path = JsPath("user").append("phones").append(0)
 
-                    "should return 'JsLookup.Undefined.PathMissing'" {
-                        val result = JsLookup.apply(JsLocation.Root, key, value)
+                    val result = JsLookup.apply(JsLocation.Root, path, node)
 
-                        result as JsLookup.Undefined.PathMissing
-                        assertEquals(JsLocation.Root / key, result.location)
-                    }
+                    result shouldBe JsLookup.Defined(
+                        JsLocation.Root / "user" / "phones" / 0,
+                        JsString(FIRST_PHONE_VALUE)
+                    )
                 }
 
-                "parameter 'value' is not 'JsObject'" - {
-                    val value = JsString(USER_NAME_VALUE)
+                "an idx is not found" {
+                    val path = JsPath("user").append("phones").append(1)
 
-                    "should return 'JsLookup.Undefined.InvalidType'" {
-                        val result = JsLookup.apply(JsLocation.Root, key, value)
+                    val result = JsLookup.apply(JsLocation.Root, path, node)
 
-                        result as JsLookup.Undefined.InvalidType
-                        assertEquals(JsLocation.Root, result.location)
-                        assertEquals(JsValue.Type.OBJECT, result.expected)
-                        assertEquals(JsValue.Type.STRING, result.actual)
-                    }
-                }
-            }
-
-            "parameter 'idx' is exists index path element" - {
-                val idx = IdxPathElement(0)
-
-                "parameter 'value' is 'JsArray'" {
-                    val value = JsArray(JsString(FIRST_PHONE_VALUE))
-
-                    "should return 'JsLookup.Defined'" - {
-                        val result = JsLookup.apply(JsLocation.Root, idx, value)
-
-                        result as JsLookup.Defined
-                        assertEquals(JsLocation.Root / idx, result.location)
-                        assertEquals(FIRST_PHONE_VALUE, (result.value as JsString).get)
-                    }
+                    result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / "user" / "phones" / 1)
                 }
 
-                "parameter 'value' is not 'JsArray'" - {
-                    val value = JsString(USER_NAME_VALUE)
+                "a node is invalid type" {
+                    val path = JsPath("user").append("name").append(0)
 
-                    "should return 'JsLookup.Undefined.InvalidType'" {
-                        val result = JsLookup.apply(JsLocation.Root, idx, value)
+                    val result = JsLookup.apply(JsLocation.Root, path, node)
 
-                        result as JsLookup.Undefined.InvalidType
-                        assertEquals(JsLocation.Root, result.location)
-                        assertEquals(JsValue.Type.ARRAY, result.expected)
-                        assertEquals(JsValue.Type.STRING, result.actual)
-                    }
-                }
-            }
-
-            "parameter 'idx' is not exists named path element" - {
-                val idx = IdxPathElement(1)
-
-                "parameter 'value' is 'JsArray'" - {
-                    val value = JsArray(JsString(FIRST_PHONE_VALUE))
-
-                    "should return 'JsLookup.Undefined.PathMissing'" {
-                        val result = JsLookup.apply(JsLocation.Root, idx, value)
-
-                        result as JsLookup.Undefined.PathMissing
-                        assertEquals(JsLocation.Root / idx, result.location)
-                    }
-                }
-
-                "parameter 'value' is not 'JsArray'" - {
-                    val value = JsString(USER_NAME_VALUE)
-
-                    "should return 'JsLookup.Undefined.InvalidType'" {
-                        val result = JsLookup.apply(JsLocation.Root, idx, value)
-
-                        result as JsLookup.Undefined.InvalidType
-                        assertEquals(JsLocation.Root, result.location)
-                        assertEquals(JsValue.Type.ARRAY, result.expected)
-                        assertEquals(JsValue.Type.STRING, result.actual)
-                    }
+                    result shouldBe JsLookup.Undefined.InvalidType(
+                        location = JsLocation.Root / "user" / "name",
+                        expected = JsValue.Type.ARRAY,
+                        actual = JsValue.Type.STRING
+                    )
                 }
             }
         }
 
-        "JsLookup.Defined" - {
+        "JsLookup.Defined#apply(String)" - {
+            val lookup = JsLookup.Defined(JsLocation.Root, JsObject("name" to JsString(USER_NAME_VALUE)))
 
-            "property value has 'JsObject' value" - {
-                val value = JsObject("name" to JsString(USER_NAME_VALUE))
-                val lookup = JsLookup.Defined(JsLocation.Root, value)
+            "a key is found" {
+                val key = "name"
 
-                "calling function 'apply' with parameter 'name' is exists named path element" - {
-                    val key = "name"
-                    val result = lookup.apply(key)
+                val result = lookup.apply(key)
 
-                    "should return 'JsLookup.Defined'" {
-                        result as JsLookup.Defined
-                        assertEquals(JsLocation.Root / key, result.location)
-                        assertEquals(USER_NAME_VALUE, (result.value as JsString).get)
-                    }
-                }
-
-                "calling function 'apply' with parameter 'name' is not exists named path element" - {
-                    val key = "user"
-                    val result = lookup.apply(key)
-
-                    "should return 'JsLookup.Undefined.PathMissing'" {
-                        result as JsLookup.Undefined.PathMissing
-                        assertEquals(JsLocation.Root / key, result.location)
-                    }
-                }
-
-                "calling function 'apply' with parameter 'idx' is some index path element" - {
-                    val idx = 0
-                    val result = lookup.apply(idx)
-
-                    "should return 'JsLookup.Undefined.InvalidType'" {
-                        result as JsLookup.Undefined.InvalidType
-                        assertEquals(JsLocation.Root, result.location)
-                        assertEquals(JsValue.Type.ARRAY, result.expected)
-                        assertEquals(JsValue.Type.OBJECT, result.actual)
-                    }
-                }
+                result shouldBe JsLookup.Defined(JsLocation.Root / key, JsString(USER_NAME_VALUE))
             }
 
-            "property value has 'JsArray' value" - {
-                val value = JsArray(JsString(FIRST_PHONE_VALUE))
-                val lookup = JsLookup.Defined(JsLocation.Root, value)
+            "a key is not found" {
+                val key = "user"
 
-                "calling function 'apply' with parameter 'idx' is exists index path element" - {
-                    val idx = 0
-                    val result = lookup.apply(idx)
+                val result = lookup.apply(key)
 
-                    "should return 'JsLookup.Defined'" {
-                        result as JsLookup.Defined
-                        assertEquals(JsLocation.Root / idx, result.location)
-                        assertEquals(FIRST_PHONE_VALUE, (result.value as JsString).get)
-                    }
-                }
+                result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / key)
+            }
 
-                "calling function 'apply' with parameter 'idx' is not exists index path element" - {
-                    val idx = 1
-                    val result = lookup.apply(idx)
+            "a node is invalid type" {
+                val idx = 0
 
-                    "should return 'JsLookup.Undefined.PathMissing'" {
-                        result as JsLookup.Undefined.PathMissing
-                        assertEquals(JsLocation.Root / idx, result.location)
-                    }
-                }
+                val result = lookup.apply(idx)
 
-                "calling function 'apply' with parameter 'name' is some named path element" - {
-                    val key = "name"
-                    val result = lookup.apply(key)
-
-                    "should return 'JsLookup.Undefined.InvalidType'" {
-                        result as JsLookup.Undefined.InvalidType
-                        assertEquals(JsLocation.Root, result.location)
-                        assertEquals(JsValue.Type.OBJECT, result.expected)
-                        assertEquals(JsValue.Type.ARRAY, result.actual)
-                    }
-                }
+                result shouldBe JsLookup.Undefined.InvalidType(
+                    location = JsLocation.Root,
+                    expected = JsValue.Type.ARRAY,
+                    actual = JsValue.Type.OBJECT
+                )
             }
         }
 
-        "JsLookup.Undefined" - {
-            val lookup = JsLookup.Undefined.PathMissing(JsLocation.Root)
+        "JsLookup.Defined#apply(Int)" - {
+            val lookup = JsLookup.Defined(JsLocation.Root, JsArray(JsString(FIRST_PHONE_VALUE)))
 
-            "calling function 'apply' with parameter 'name' is some named path element" - {
+            "an idx is found" {
+                val idx = 0
+
+                val result = lookup.apply(idx)
+
+                result shouldBe JsLookup.Defined(JsLocation.Root / idx, JsString(FIRST_PHONE_VALUE))
+            }
+
+            "an idx is not found" {
+                val idx = 1
+
+                val result = lookup.apply(idx)
+
+                result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / idx)
+            }
+
+            "a node is invalid type" {
+                val key = "name"
+
+                val result = lookup.apply(key)
+
+                result shouldBe JsLookup.Undefined.InvalidType(
+                    location = JsLocation.Root,
+                    expected = JsValue.Type.OBJECT,
+                    actual = JsValue.Type.ARRAY
+                )
+            }
+        }
+
+        "JsLookup.Undefined#apply(String)" - {
+
+            "return same 'JsLookup.Undefined'" {
+                val lookup = JsLookup.Undefined.PathMissing(JsLocation.Root)
+
                 val result = lookup.apply("name")
 
-                "should return same 'JsLookup.Undefined'" {
-                    assertEquals(lookup, result)
-                }
+                assertEquals(lookup, result)
             }
+        }
 
-            "calling function 'apply' with parameter 'idx' is some index path element" - {
+        "JsLookup.Undefined#apply(Int)" - {
+
+            "return same 'JsLookup.Undefined'" {
+                val lookup = JsLookup.Undefined.PathMissing(JsLocation.Root)
+
                 val result = lookup.apply(0)
 
-                "should return same 'JsLookup.Undefined'" {
-                    assertEquals(lookup, result)
-                }
+                assertEquals(lookup, result)
             }
         }
     }

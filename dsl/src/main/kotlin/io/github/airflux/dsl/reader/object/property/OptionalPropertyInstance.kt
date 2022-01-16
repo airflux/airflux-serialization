@@ -1,5 +1,6 @@
 package io.github.airflux.dsl.reader.`object`.property
 
+import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
@@ -12,7 +13,6 @@ import io.github.airflux.core.reader.result.extension.filter
 import io.github.airflux.core.reader.validator.JsPropertyValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.value.extension.lookup
 
 internal class OptionalPropertyInstance<T : Any> private constructor(
     override val path: JsPath,
@@ -27,7 +27,7 @@ internal class OptionalPropertyInstance<T : Any> private constructor(
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
         ): OptionalProperty<T> =
             OptionalPropertyInstance(path) { context, location, input ->
-                val lookup = input.lookup(location, path)
+                val lookup = JsLookup.apply(location, path, input)
                 readOptional(context, lookup, reader, invalidTypeErrorBuilder)
             }
     }
