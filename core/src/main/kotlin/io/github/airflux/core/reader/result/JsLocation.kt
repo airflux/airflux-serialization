@@ -1,7 +1,5 @@
 package io.github.airflux.core.reader.result
 
-import io.github.airflux.core.path.IdxPathElement
-import io.github.airflux.core.path.KeyPathElement
 import io.github.airflux.core.path.PathElement
 
 sealed class JsLocation {
@@ -19,9 +17,9 @@ sealed class JsLocation {
         }
     }
 
-    operator fun div(child: String): JsLocation = div(KeyPathElement(child))
+    operator fun div(child: String): JsLocation = div(PathElement.Key(child))
 
-    operator fun div(idx: Int): JsLocation = div(IdxPathElement(idx))
+    operator fun div(idx: Int): JsLocation = div(PathElement.Idx(idx))
 
     operator fun div(idx: PathElement): JsLocation = Element(idx, this)
 

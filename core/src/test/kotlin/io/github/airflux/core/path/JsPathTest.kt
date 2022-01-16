@@ -23,8 +23,8 @@ class JsPathTest : FreeSpec() {
                     path.size shouldBe 1
                 }
 
-                "should have element of type 'KeyPathElement' with value '$user'" {
-                    path[0].shouldBeInstanceOf<KeyPathElement>().key shouldBe user
+                "should have element of type 'PathElement.Key' with value '$user'" {
+                    path[0].shouldBeInstanceOf<PathElement.Key>().key shouldBe user
                 }
 
                 "method 'toString() should return '#/$user'" {
@@ -44,7 +44,7 @@ class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(KeyPathElement(user), KeyPathElement(name))
+                        updatedPath shouldContainInOrder listOf(PathElement.Key(user), PathElement.Key(name))
                     }
 
                     "method 'toString() should return '#/$user/$name'" {
@@ -69,7 +69,7 @@ class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(KeyPathElement(user), IdxPathElement(idx))
+                        updatedPath shouldContainInOrder listOf(PathElement.Key(user), PathElement.Idx(idx))
                     }
 
                     "method 'toString() should return '#/$user[$idx]'" {
@@ -94,8 +94,8 @@ class JsPathTest : FreeSpec() {
                     path.size shouldBe 1
                 }
 
-                "should have element of type 'IdxPathElement' with value '$firstIdx'" {
-                    path[0].shouldBeInstanceOf<IdxPathElement>().idx shouldBe firstIdx
+                "should have element of type 'PathElement.Idx' with value '$firstIdx'" {
+                    path[0].shouldBeInstanceOf<PathElement.Idx>().idx shouldBe firstIdx
                 }
 
                 "method 'toString() should return '#[$firstIdx]'" {
@@ -115,7 +115,7 @@ class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(IdxPathElement(firstIdx), KeyPathElement(name))
+                        updatedPath shouldContainInOrder listOf(PathElement.Idx(firstIdx), PathElement.Key(name))
                     }
 
                     "method 'toString() should return '#[$firstIdx]/$name'" {
@@ -140,7 +140,7 @@ class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(IdxPathElement(firstIdx), IdxPathElement(secondIdx))
+                        updatedPath shouldContainInOrder listOf(PathElement.Idx(firstIdx), PathElement.Idx(secondIdx))
                     }
 
                     "method 'toString() should return '#[$firstIdx][$secondIdx]'" {

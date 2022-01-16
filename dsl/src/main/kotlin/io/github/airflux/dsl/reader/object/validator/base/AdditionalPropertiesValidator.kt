@@ -1,14 +1,13 @@
 package io.github.airflux.dsl.reader.`object`.validator.base
 
-import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.core.path.IdxPathElement
-import io.github.airflux.core.path.KeyPathElement
+import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
+import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 
 @Suppress("unused")
 class AdditionalPropertiesValidator private constructor(
@@ -45,8 +44,8 @@ class AdditionalPropertiesValidator private constructor(
         private fun JsReaderProperty.name(): String? = path.firstOrNull()
             ?.let {
                 when (it) {
-                    is KeyPathElement -> it.key
-                    is IdxPathElement -> null
+                    is PathElement.Key -> it.key
+                    is PathElement.Idx -> null
                 }
             }
     }

@@ -3,7 +3,7 @@ package io.github.airflux.core.value
 import io.github.airflux.core.common.ObjectContract
 import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.core.common.TestData.SECOND_PHONE_VALUE
-import io.github.airflux.core.path.IdxPathElement
+import io.github.airflux.core.path.PathElement
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -57,12 +57,12 @@ class JsArrayTest {
 
     @Test
     fun getByIdxFromEmptyArray() {
-        assertNull(EMPTY_ARRAY[IdxPathElement(0)])
+        assertNull(EMPTY_ARRAY[PathElement.Idx(0)])
     }
 
     @Test
     fun getByIdxFromNotEmptyArray() {
-        val item = NOT_EMPTY_ARRAY[IdxPathElement(0)]
+        val item = NOT_EMPTY_ARRAY[PathElement.Idx(0)]
 
         assertNotNull(item)
         item as JsString

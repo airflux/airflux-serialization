@@ -1,7 +1,7 @@
 package io.github.airflux.core.value
 
 import io.github.airflux.core.common.ObjectContract
-import io.github.airflux.core.path.KeyPathElement
+import io.github.airflux.core.path.PathElement
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -66,7 +66,7 @@ class JsObjectTest {
 
     @Test
     fun getByKeyFromEmptyObject() {
-        val key = KeyPathElement("name")
+        val key = PathElement.Key("name")
 
         val value = EMPTY_OBJECT[key]
 
@@ -75,7 +75,7 @@ class JsObjectTest {
 
     @Test
     fun getByKeyFromNotEmptyObject() {
-        val key = KeyPathElement("name")
+        val key = PathElement.Key("name")
 
         val value = NOT_EMPTY_OBJECT[key]
 

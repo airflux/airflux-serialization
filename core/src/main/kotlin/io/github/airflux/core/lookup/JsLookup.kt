@@ -1,8 +1,7 @@
 package io.github.airflux.core.lookup
 
-import io.github.airflux.core.path.IdxPathElement
 import io.github.airflux.core.path.JsPath
-import io.github.airflux.core.path.KeyPathElement
+import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsObject
@@ -13,19 +12,19 @@ sealed class JsLookup {
 
     abstract val location: JsLocation
 
-    fun apply(key: String): JsLookup = apply(KeyPathElement(key))
-    fun apply(idx: Int): JsLookup = apply(IdxPathElement(idx))
-    abstract fun apply(name: KeyPathElement): JsLookup
-    abstract fun apply(idx: IdxPathElement): JsLookup
+    fun apply(key: String): JsLookup = apply(PathElement.Key(key))
+    fun apply(idx: Int): JsLookup = apply(PathElement.Idx(idx))
+    abstract fun apply(name: PathElement.Key): JsLookup
+    abstract fun apply(idx: PathElement.Idx): JsLookup
 
     data class Defined(override val location: JsLocation, val value: JsValue) : JsLookup() {
-        override fun apply(name: KeyPathElement): JsLookup = apply(location, name, value)
-        override fun apply(idx: IdxPathElement): JsLookup = apply(location, idx, value)
+        override fun apply(name: PathElement.Key): JsLookup = apply(location, name, value)
+        override fun apply(idx: PathElement.Idx): JsLookup = apply(location, idx, value)
     }
 
     sealed class Undefined : JsLookup() {
-        override fun apply(name: KeyPathElement): JsLookup = this
-        override fun apply(idx: IdxPathElement): JsLookup = this
+        override fun apply(name: PathElement.Key): JsLookup = this
+        override fun apply(idx: PathElement.Idx): JsLookup = this
 
         data class PathMissing(override val location: JsLocation) : Undefined()
 
@@ -38,7 +37,7 @@ sealed class JsLookup {
 
     companion object {
 
-        fun apply(location: JsLocation, key: KeyPathElement, value: JsValue): JsLookup = when (value) {
+        fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup = when (value) {
             is JsObject -> value[key]
                 ?.let { Defined(location = location / key, value = it) }
                 ?: Undefined.PathMissing(location = location / key)
@@ -46,7 +45,7 @@ sealed class JsLookup {
             else -> Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
         }
 
-        fun apply(location: JsLocation, idx: IdxPathElement, value: JsValue): JsLookup = when (value) {
+        fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup = when (value) {
             is JsArray<*> -> value[idx]
                 ?.let { Defined(location = location / idx, value = it) }
                 ?: Undefined.PathMissing(location = location / idx)
@@ -58,7 +57,7 @@ sealed class JsLookup {
             tailrec fun apply(location: JsLocation, path: JsPath, posPath: Int, value: JsValue): JsLookup {
                 if (posPath == path.size) return Defined(location, value)
                 return when (val element = path[posPath]) {
-                    is KeyPathElement -> if (value is JsObject) {
+                    is PathElement.Key -> if (value is JsObject) {
                         val currentLocation = location / element
                         val currentValue = value[element]
                             ?: return Undefined.PathMissing(location = currentLocation)
@@ -66,7 +65,7 @@ sealed class JsLookup {
                     } else
                         Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
 
-                    is IdxPathElement -> if (value is JsArray<*>) {
+                    is PathElement.Idx -> if (value is JsArray<*>) {
                         val currentLocation = location / element
                         val currentValue = value[element]
                             ?: return Undefined.PathMissing(location = currentLocation)

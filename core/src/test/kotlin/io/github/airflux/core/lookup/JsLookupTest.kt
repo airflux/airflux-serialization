@@ -2,9 +2,8 @@ package io.github.airflux.core.lookup
 
 import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.core.common.TestData.USER_NAME_VALUE
-import io.github.airflux.core.path.IdxPathElement
 import io.github.airflux.core.path.JsPath
-import io.github.airflux.core.path.KeyPathElement
+import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsObject
@@ -18,13 +17,13 @@ class JsLookupTest : FreeSpec() {
 
     init {
 
-        "JsLookup#apply(_, KeyPathElement, _)" - {
+        "JsLookup#apply(_, PathElement.Key, _)" - {
 
             "a key is found" {
                 val node = JsObject("name" to JsString(USER_NAME_VALUE))
                 val key = "name"
 
-                val lookup = JsLookup.apply(JsLocation.Root, KeyPathElement(key), node)
+                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Key(key), node)
 
                 lookup shouldBe JsLookup.Defined(JsLocation.Root / key, JsString(USER_NAME_VALUE))
             }
@@ -33,7 +32,7 @@ class JsLookupTest : FreeSpec() {
                 val node = JsObject("name" to JsString(USER_NAME_VALUE))
                 val key = "user"
 
-                val lookup = JsLookup.apply(JsLocation.Root, KeyPathElement(key), node)
+                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Key(key), node)
 
                 lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / key)
             }
@@ -42,7 +41,7 @@ class JsLookupTest : FreeSpec() {
                 val node = JsString(USER_NAME_VALUE)
                 val key = "user"
 
-                val lookup = JsLookup.apply(JsLocation.Root, KeyPathElement(key), node)
+                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Key(key), node)
 
                 lookup shouldBe JsLookup.Undefined.InvalidType(
                     location = JsLocation.Root,
@@ -52,13 +51,13 @@ class JsLookupTest : FreeSpec() {
             }
         }
 
-        "JsLookup#apply(_, IdxPathElement, _)" - {
+        "JsLookup#apply(_, PathElement.Idx, _)" - {
 
             "an idx is found" {
                 val node = JsArray(JsString(FIRST_PHONE_VALUE))
                 val idx = 0
 
-                val lookup = JsLookup.apply(JsLocation.Root, IdxPathElement(idx), node)
+                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Idx(idx), node)
 
                 lookup shouldBe JsLookup.Defined(JsLocation.Root / idx, JsString(FIRST_PHONE_VALUE))
             }
@@ -67,7 +66,7 @@ class JsLookupTest : FreeSpec() {
                 val node = JsArray(JsString(FIRST_PHONE_VALUE))
                 val idx = 1
 
-                val lookup = JsLookup.apply(JsLocation.Root, IdxPathElement(idx), node)
+                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Idx(idx), node)
 
                 lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / idx)
             }
@@ -76,7 +75,7 @@ class JsLookupTest : FreeSpec() {
                 val node = JsString(USER_NAME_VALUE)
                 val idx = 0
 
-                val lookup = JsLookup.apply(JsLocation.Root, IdxPathElement(idx), node)
+                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Idx(idx), node)
 
                 lookup shouldBe JsLookup.Undefined.InvalidType(
                     location = JsLocation.Root,

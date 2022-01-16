@@ -1,7 +1,6 @@
 package io.github.airflux.core.value
 
-import io.github.airflux.core.path.IdxPathElement
-import io.github.airflux.core.path.KeyPathElement
+import io.github.airflux.core.path.PathElement
 
 sealed class JsValue {
 
@@ -79,7 +78,7 @@ class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue()
 
     override val type: Type = Type.ARRAY
 
-    operator fun get(path: IdxPathElement): JsValue? = get(path.idx)
+    operator fun get(path: PathElement.Idx): JsValue? = get(path.idx)
 
     operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
 
@@ -98,7 +97,8 @@ class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue()
     override fun hashCode(): Int = items.hashCode()
 }
 
-class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsValue(), Iterable<Map.Entry<String, JsValue>> {
+class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsValue(),
+                                                                            Iterable<Map.Entry<String, JsValue>> {
 
     companion object {
 
@@ -107,7 +107,7 @@ class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsVa
 
     override val type: Type = Type.OBJECT
 
-    operator fun get(path: KeyPathElement): JsValue? = get(path.key)
+    operator fun get(path: PathElement.Key): JsValue? = get(path.key)
 
     operator fun get(name: String): JsValue? = properties[name]
 

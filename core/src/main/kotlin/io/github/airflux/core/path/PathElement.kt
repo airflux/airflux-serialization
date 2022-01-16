@@ -1,13 +1,12 @@
 package io.github.airflux.core.path
 
-sealed class PathElement
+sealed class PathElement {
 
-data class KeyPathElement(val key: String) : PathElement() {
+    data class Key(val key: String) : PathElement() {
+        override fun toString(): String = "/$key"
+    }
 
-    override fun toString(): String = "/$key"
-}
-
-data class IdxPathElement(val idx: Int) : PathElement() {
-
-    override fun toString(): String = "[$idx]"
+    data class Idx(val idx: Int) : PathElement() {
+        override fun toString(): String = "[$idx]"
+    }
 }
