@@ -2,6 +2,7 @@ package io.github.airflux.core.path
 
 import io.github.airflux.core.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -15,46 +16,46 @@ class JsPathTest : FreeSpec() {
     init {
         "A 'JsPath' type" - {
 
-            val user = "user"
-            "create from named path element '$user'" - {
-                val path = JsPath(user)
+            val keyUser = "user"
+            "create from named path element '$keyUser'" - {
+                val path = JsPath(keyUser)
 
                 "should have only one element" {
                     path.size shouldBe 1
                 }
 
-                "should have element of type 'PathElement.Key' with value '$user'" {
-                    path[0].shouldBeInstanceOf<PathElement.Key>().get shouldBe user
+                "should have element of type 'PathElement.Key' with value '$keyUser'" {
+                    path shouldContain PathElement.Key(keyUser)
                 }
 
-                "method 'toString() should return '#/$user'" {
-                    path.toString() shouldBe "#/$user"
+                "method 'toString() should return '#/$keyUser'" {
+                    path.toString() shouldBe "#/$keyUser"
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    path.shouldBeEqualsContract(y = JsPath(user), z = JsPath(user), other = OTHER_PATH)
+                    path.shouldBeEqualsContract(y = JsPath(keyUser), z = JsPath(keyUser), other = OTHER_PATH)
                 }
 
-                val name = "name"
-                "append named path element '$name'" - {
-                    val updatedPath = path.append(name)
+                val keyName = "name"
+                "append named path element '$keyName'" - {
+                    val updatedPath = path.append(keyName)
 
                     "should have two elements"{
                         updatedPath.size shouldBe 2
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Key(user), PathElement.Key(name))
+                        updatedPath shouldContainInOrder listOf(PathElement.Key(keyUser), PathElement.Key(keyName))
                     }
 
-                    "method 'toString() should return '#/$user/$name'" {
-                        updatedPath.toString() shouldBe "#/$user/$name"
+                    "method 'toString() should return '#/$keyUser/$keyName'" {
+                        updatedPath.toString() shouldBe "#/$keyUser/$keyName"
                     }
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(user).append(name),
-                            z = JsPath(user).append(name),
+                            y = JsPath(keyUser).append(keyName),
+                            z = JsPath(keyUser).append(keyName),
                             other = OTHER_PATH
                         )
                     }
@@ -69,17 +70,17 @@ class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Key(user), PathElement.Idx(idx))
+                        updatedPath shouldContainInOrder listOf(PathElement.Key(keyUser), PathElement.Idx(idx))
                     }
 
-                    "method 'toString() should return '#/$user[$idx]'" {
-                        updatedPath.toString() shouldBe "#/$user[$idx]"
+                    "method 'toString() should return '#/$keyUser[$idx]'" {
+                        updatedPath.toString() shouldBe "#/$keyUser[$idx]"
                     }
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(user).append(idx),
-                            z = JsPath(user).append(idx),
+                            y = JsPath(keyUser).append(idx),
+                            z = JsPath(keyUser).append(idx),
                             other = OTHER_PATH
                         )
                     }
@@ -106,26 +107,26 @@ class JsPathTest : FreeSpec() {
                     path.shouldBeEqualsContract(y = JsPath(firstIdx), z = JsPath(firstIdx), other = OTHER_PATH)
                 }
 
-                val name = "name"
-                "append named path element '$name'" - {
-                    val updatedPath = path.append(name)
+                val keyName = "name"
+                "append named path element '$keyName'" - {
+                    val updatedPath = path.append(keyName)
 
                     "should have two elements"{
                         updatedPath.size shouldBe 2
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Idx(firstIdx), PathElement.Key(name))
+                        updatedPath shouldContainInOrder listOf(PathElement.Idx(firstIdx), PathElement.Key(keyName))
                     }
 
-                    "method 'toString() should return '#[$firstIdx]/$name'" {
-                        updatedPath.toString() shouldBe "#[$firstIdx]/$name"
+                    "method 'toString() should return '#[$firstIdx]/$keyName'" {
+                        updatedPath.toString() shouldBe "#[$firstIdx]/$keyName"
                     }
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(firstIdx).append(name),
-                            z = JsPath(firstIdx).append(name),
+                            y = JsPath(firstIdx).append(keyName),
+                            z = JsPath(firstIdx).append(keyName),
                             other = OTHER_PATH
                         )
                     }
