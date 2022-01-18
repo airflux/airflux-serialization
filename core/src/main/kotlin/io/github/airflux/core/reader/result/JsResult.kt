@@ -43,13 +43,9 @@ sealed class JsResult<out T> {
         data class Cause(val location: JsLocation, val errors: JsErrors) {
 
             companion object {
+                infix fun String.bind(error: JsError): Cause = JsLocation.empty.append(this).bind(error)
+                infix fun Int.bind(error: JsError): Cause = JsLocation.empty.append(this).bind(error)
                 infix fun JsLocation.bind(error: JsError): Cause = Cause(location = this, errors = JsErrors.of(error))
-
-                infix fun Int.bind(error: JsError): Cause =
-                    Cause(location = JsLocation.empty.append(this), errors = JsErrors.of(error))
-
-                infix fun String.bind(error: JsError): Cause =
-                    Cause(location = JsLocation.empty.append(this), errors = JsErrors.of(error))
             }
         }
 
