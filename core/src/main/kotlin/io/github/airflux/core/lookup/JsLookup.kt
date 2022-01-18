@@ -14,16 +14,16 @@ sealed class JsLookup {
 
     fun apply(key: String): JsLookup = apply(PathElement.Key(key))
     fun apply(idx: Int): JsLookup = apply(PathElement.Idx(idx))
-    abstract fun apply(name: PathElement.Key): JsLookup
+    abstract fun apply(key: PathElement.Key): JsLookup
     abstract fun apply(idx: PathElement.Idx): JsLookup
 
     data class Defined(override val location: JsLocation, val value: JsValue) : JsLookup() {
-        override fun apply(name: PathElement.Key): JsLookup = apply(location, name, value)
+        override fun apply(key: PathElement.Key): JsLookup = apply(location, key, value)
         override fun apply(idx: PathElement.Idx): JsLookup = apply(location, idx, value)
     }
 
     sealed class Undefined : JsLookup() {
-        override fun apply(name: PathElement.Key): JsLookup = this
+        override fun apply(key: PathElement.Key): JsLookup = this
         override fun apply(idx: PathElement.Idx): JsLookup = this
 
         data class PathMissing(override val location: JsLocation) : Undefined()

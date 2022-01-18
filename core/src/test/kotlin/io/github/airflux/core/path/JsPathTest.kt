@@ -24,7 +24,7 @@ class JsPathTest : FreeSpec() {
                 }
 
                 "should have element of type 'PathElement.Key' with value '$user'" {
-                    path[0].shouldBeInstanceOf<PathElement.Key>().key shouldBe user
+                    path[0].shouldBeInstanceOf<PathElement.Key>().get shouldBe user
                 }
 
                 "method 'toString() should return '#/$user'" {
@@ -95,7 +95,7 @@ class JsPathTest : FreeSpec() {
                 }
 
                 "should have element of type 'PathElement.Idx' with value '$firstIdx'" {
-                    path[0].shouldBeInstanceOf<PathElement.Idx>().idx shouldBe firstIdx
+                    path[0].shouldBeInstanceOf<PathElement.Idx>().get shouldBe firstIdx
                 }
 
                 "method 'toString() should return '#[$firstIdx]'" {

@@ -78,7 +78,7 @@ class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue()
 
     override val type: Type = Type.ARRAY
 
-    operator fun get(path: PathElement.Idx): JsValue? = get(path.idx)
+    operator fun get(idx: PathElement.Idx): JsValue? = get(idx.get)
 
     operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
 
@@ -107,9 +107,9 @@ class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsVa
 
     override val type: Type = Type.OBJECT
 
-    operator fun get(path: PathElement.Key): JsValue? = get(path.key)
+    operator fun get(key: PathElement.Key): JsValue? = get(key.get)
 
-    operator fun get(name: String): JsValue? = properties[name]
+    operator fun get(key: String): JsValue? = properties[key]
 
     val count: Int
         get() = properties.size

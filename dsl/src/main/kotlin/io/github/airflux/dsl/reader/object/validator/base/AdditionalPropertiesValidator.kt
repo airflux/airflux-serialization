@@ -44,7 +44,7 @@ class AdditionalPropertiesValidator private constructor(
         private fun JsReaderProperty.name(): String? = path.firstOrNull()
             ?.let {
                 when (it) {
-                    is PathElement.Key -> it.key
+                    is PathElement.Key -> it.get
                     is PathElement.Idx -> null
                 }
             }
