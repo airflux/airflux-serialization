@@ -39,16 +39,16 @@ sealed class JsLookup {
 
         fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup = when (value) {
             is JsObject -> value[key]
-                ?.let { Defined(location = location / key, value = it) }
-                ?: Undefined.PathMissing(location = location / key)
+                ?.let { Defined(location = location.append(key), value = it) }
+                ?: Undefined.PathMissing(location = location.append(key))
 
             else -> Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
         }
 
         fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup = when (value) {
             is JsArray<*> -> value[idx]
-                ?.let { Defined(location = location / idx, value = it) }
-                ?: Undefined.PathMissing(location = location / idx)
+                ?.let { Defined(location = location.append(idx), value = it) }
+                ?: Undefined.PathMissing(location = location.append(idx))
 
             else -> Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
         }
@@ -58,7 +58,7 @@ sealed class JsLookup {
                 if (posPath == path.size) return Defined(location, value)
                 return when (val element = path[posPath]) {
                     is PathElement.Key -> if (value is JsObject) {
-                        val currentLocation = location / element
+                        val currentLocation = location.append(element)
                         val currentValue = value[element]
                             ?: return Undefined.PathMissing(location = currentLocation)
                         apply(currentLocation, path, posPath + 1, currentValue)
@@ -66,7 +66,7 @@ sealed class JsLookup {
                         Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
 
                     is PathElement.Idx -> if (value is JsArray<*>) {
-                        val currentLocation = location / element
+                        val currentLocation = location.append(element)
                         val currentValue = value[element]
                             ?: return Undefined.PathMissing(location = currentLocation)
                         apply(currentLocation, path, posPath + 1, currentValue)

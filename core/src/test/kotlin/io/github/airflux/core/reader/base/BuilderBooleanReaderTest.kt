@@ -22,28 +22,28 @@ class BuilderBooleanReaderTest {
     fun `Testing reader for the Boolean type (true value)`() {
         val input: JsValue = JsBoolean.valueOf(true)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = true)
+        result.assertAsSuccess(location = JsLocation.empty, value = true)
     }
 
     @Test
     fun `Testing reader for the Boolean type (false value)`() {
         val input: JsValue = JsBoolean.valueOf(false)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = false)
+        result.assertAsSuccess(location = JsLocation.empty, value = false)
     }
 
     @Test
     fun `Testing reader for the Boolean type (reading from invalid node)`() {
         val input: JsValue = JsString("abc")
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
+            JsLocation.empty bind JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
         )
     }
 }

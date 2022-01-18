@@ -30,35 +30,35 @@ class JsResultFilterTest {
 
     @Test
     fun `The value satisfies the predicate`() {
-        val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "name", value = "  ")
+        val result: JsResult<String> = JsResult.Success(location = JsLocation.empty.append("name"), value = "  ")
 
         val validated = result.filter(isNotBlank)
 
-        validated.assertAsSuccess(location = JsLocation.Root / "name", value = null)
+        validated.assertAsSuccess(location = JsLocation.empty.append("name"), value = null)
     }
 
     @Test
     fun `The value does not satisfy the predicate`() {
-        val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "name", value = "user")
+        val result: JsResult<String> = JsResult.Success(location = JsLocation.empty.append("name"), value = "user")
 
         val validated = result.filter(isNotBlank)
 
-        validated.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
+        validated.assertAsSuccess(location = JsLocation.empty.append("name"), value = "user")
     }
 
     @Test
     fun `The value is null`() {
-        val result: JsResult<String?> = JsResult.Success(location = JsLocation.Root / "name", value = null)
+        val result: JsResult<String?> = JsResult.Success(location = JsLocation.empty.append("name"), value = null)
 
         val validated = result.filter(isNotBlank)
 
-        validated.assertAsSuccess(location = JsLocation.Root / "name", value = null)
+        validated.assertAsSuccess(location = JsLocation.empty.append("name"), value = null)
     }
 
     @Test
     fun `The failure result does no filtering`() {
         val error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-        val result: JsResult<String> = JsResult.Failure(location = JsLocation.Root / "name", error = error)
+        val result: JsResult<String> = JsResult.Failure(location = JsLocation.empty.append("name"), error = error)
 
         val validated = result.filter(isNotBlank)
 

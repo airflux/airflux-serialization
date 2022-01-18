@@ -56,9 +56,9 @@ class JsPropertyValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsLocation.Root, json)
+            val result = reader.read(context, JsLocation.empty, json)
 
-            result.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
+            result.assertAsSuccess(location = JsLocation.empty.append("name"), value = "user")
         }
 
         @Test
@@ -75,7 +75,7 @@ class JsPropertyValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsLocation.Root, json)
+            val result = reader.read(context, JsLocation.empty, json)
 
             result.assertAsFailure("name" bind JsonErrors.Validation.Strings.IsEmpty)
         }
@@ -94,7 +94,7 @@ class JsPropertyValidatorExtensionTest {
                 )
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsLocation.Root, json)
+            val result = reader.read(context, JsLocation.empty, json)
 
             result.assertAsFailure(
                 "name" bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
@@ -107,16 +107,16 @@ class JsPropertyValidatorExtensionTest {
 
         @Test
         fun `Testing of the extension-function the validation for JsResult`() {
-            val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "name", value = "user")
+            val result: JsResult<String> = JsResult.Success(location = JsLocation.empty.append("name"), value = "user")
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
+            validated.assertAsSuccess(location = JsLocation.empty.append("name"), value = "user")
         }
 
         @Test
         fun `Testing of the extension-function the validation for JsResult (error of validation)`() {
-            val result: JsResult<String> = JsResult.Success(location = JsLocation.Root / "user", value = "")
+            val result: JsResult<String> = JsResult.Success(location = JsLocation.empty.append("user"), value = "")
 
             val validated = result.validation(isNotEmpty)
 
@@ -126,7 +126,7 @@ class JsPropertyValidatorExtensionTest {
         @Test
         fun `Testing of the extension-function the validation for JsResult (result is failure)`() {
             val result: JsResult<String> =
-                JsResult.Failure(location = JsLocation.Root / "user", error = JsonErrors.PathMissing)
+                JsResult.Failure(location = JsLocation.empty.append("user"), error = JsonErrors.PathMissing)
 
             val validated = result.validation(isNotEmpty)
 

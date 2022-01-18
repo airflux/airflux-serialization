@@ -19,7 +19,7 @@ class JsPropertyValidatorTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val location = JsLocation.Root
+        private val location = JsLocation.empty
     }
 
     /*

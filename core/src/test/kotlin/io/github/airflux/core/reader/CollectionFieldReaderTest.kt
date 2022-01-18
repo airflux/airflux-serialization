@@ -43,13 +43,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(location = JsLocation.Root, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+            result.assertAsSuccess(location = JsLocation.empty, value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
 
         @Test
@@ -59,14 +59,14 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
             result.assertAsFailure(
-                JsLocation.Root bind JsonErrors.InvalidType(
+                JsLocation.empty bind JsonErrors.InvalidType(
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.STRING
                 )
@@ -85,7 +85,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
@@ -104,13 +104,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<List<String>> =
                 readAsList(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(location = JsLocation.Root, value = emptyList())
+            result.assertAsSuccess(location = JsLocation.empty, value = emptyList())
         }
     }
 
@@ -124,13 +124,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(location = JsLocation.Root, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+            result.assertAsSuccess(location = JsLocation.empty, value = setOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
         }
 
         @Test
@@ -140,14 +140,14 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
             result.assertAsFailure(
-                JsLocation.Root bind JsonErrors.InvalidType(
+                JsLocation.empty bind JsonErrors.InvalidType(
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.STRING
                 )
@@ -166,7 +166,7 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
@@ -186,13 +186,13 @@ class CollectionFieldReaderTest {
             val result: JsResult<Set<String>> =
                 readAsSet(
                     context = context,
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     from = json,
                     using = stringReader,
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-            result.assertAsSuccess(location = JsLocation.Root, value = emptySet())
+            result.assertAsSuccess(location = JsLocation.empty, value = emptySet())
         }
     }
 }

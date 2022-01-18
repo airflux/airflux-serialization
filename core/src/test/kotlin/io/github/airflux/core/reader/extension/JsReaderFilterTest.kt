@@ -50,34 +50,34 @@ class JsReaderFilterTest {
     fun `The value does not satisfy the predicate`() {
         val json: JsValue = JsObject("name" to JsString("user"))
 
-        val result = reader.filter(isNotBlank).read(context, JsLocation.Root, json)
+        val result = reader.filter(isNotBlank).read(context, JsLocation.empty, json)
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = "user")
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = "user")
     }
 
     @Test
     fun `The value satisfies the predicate`() {
         val json: JsValue = JsObject("name" to JsString("  "))
 
-        val result = reader.filter(isNotBlank).read(context, JsLocation.Root, json)
+        val result = reader.filter(isNotBlank).read(context, JsLocation.empty, json)
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = null)
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = null)
     }
 
     @Test
     fun `The value is null`() {
         val json: JsValue = JsObject("name" to JsNull)
 
-        val result = reader.filter(isNotBlank).read(context, JsLocation.Root, json)
+        val result = reader.filter(isNotBlank).read(context, JsLocation.empty, json)
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = null)
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = null)
     }
 
     @Test
     fun `The failure result does no filtering`() {
         val json: JsValue = JsObject("user" to JsString("  "))
 
-        val result = reader.filter(isNotBlank).read(context, JsLocation.Root, json)
+        val result = reader.filter(isNotBlank).read(context, JsLocation.empty, json)
 
         result.assertAsFailure("name" bind JsonErrors.PathMissing)
     }

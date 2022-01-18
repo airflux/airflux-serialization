@@ -23,28 +23,28 @@ class JsLookupTest : FreeSpec() {
                 val node = JsObject("name" to JsString(USER_NAME_VALUE))
                 val key = "name"
 
-                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Key(key), node)
+                val lookup = JsLookup.apply(JsLocation.empty, PathElement.Key(key), node)
 
-                lookup shouldBe JsLookup.Defined(JsLocation.Root / key, JsString(USER_NAME_VALUE))
+                lookup shouldBe JsLookup.Defined(JsLocation.empty.append(key), JsString(USER_NAME_VALUE))
             }
 
             "a key is not found" {
                 val node = JsObject("name" to JsString(USER_NAME_VALUE))
                 val key = "user"
 
-                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Key(key), node)
+                val lookup = JsLookup.apply(JsLocation.empty, PathElement.Key(key), node)
 
-                lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / key)
+                lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append(key))
             }
 
             "a node is invalid type" {
                 val node = JsString(USER_NAME_VALUE)
                 val key = "user"
 
-                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Key(key), node)
+                val lookup = JsLookup.apply(JsLocation.empty, PathElement.Key(key), node)
 
                 lookup shouldBe JsLookup.Undefined.InvalidType(
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     expected = JsValue.Type.OBJECT,
                     actual = JsValue.Type.STRING
                 )
@@ -57,28 +57,28 @@ class JsLookupTest : FreeSpec() {
                 val node = JsArray(JsString(FIRST_PHONE_VALUE))
                 val idx = 0
 
-                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Idx(idx), node)
+                val lookup = JsLookup.apply(JsLocation.empty, PathElement.Idx(idx), node)
 
-                lookup shouldBe JsLookup.Defined(JsLocation.Root / idx, JsString(FIRST_PHONE_VALUE))
+                lookup shouldBe JsLookup.Defined(JsLocation.empty.append(idx), JsString(FIRST_PHONE_VALUE))
             }
 
             "an idx is not found" {
                 val node = JsArray(JsString(FIRST_PHONE_VALUE))
                 val idx = 1
 
-                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Idx(idx), node)
+                val lookup = JsLookup.apply(JsLocation.empty, PathElement.Idx(idx), node)
 
-                lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / idx)
+                lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append(idx))
             }
 
             "a node is invalid type" {
                 val node = JsString(USER_NAME_VALUE)
                 val idx = 0
 
-                val lookup = JsLookup.apply(JsLocation.Root, PathElement.Idx(idx), node)
+                val lookup = JsLookup.apply(JsLocation.empty, PathElement.Idx(idx), node)
 
                 lookup shouldBe JsLookup.Undefined.InvalidType(
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.STRING
                 )
@@ -99,26 +99,29 @@ class JsLookupTest : FreeSpec() {
                 "a key is found" {
                     val path = JsPath("user").append("name")
 
-                    val result = JsLookup.apply(JsLocation.Root, path, node)
+                    val result = JsLookup.apply(JsLocation.empty, path, node)
 
-                    result shouldBe JsLookup.Defined(JsLocation.Root / "user" / "name", JsString(USER_NAME_VALUE))
+                    result shouldBe JsLookup.Defined(
+                        JsLocation.empty.append("user").append("name"),
+                        JsString(USER_NAME_VALUE)
+                    )
                 }
 
                 "a key is not found" {
                     val path = JsPath("user").append("id")
 
-                    val result = JsLookup.apply(JsLocation.Root, path, node)
+                    val result = JsLookup.apply(JsLocation.empty, path, node)
 
-                    result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / "user" / "id")
+                    result shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append("user").append("id"))
                 }
 
                 "a node is invalid type" {
                     val path = JsPath("user").append("phones").append("mobile")
 
-                    val result = JsLookup.apply(JsLocation.Root, path, node)
+                    val result = JsLookup.apply(JsLocation.empty, path, node)
 
                     result shouldBe JsLookup.Undefined.InvalidType(
-                        location = JsLocation.Root / "user" / "phones",
+                        location = JsLocation.empty.append("user").append("phones"),
                         expected = JsValue.Type.OBJECT,
                         actual = JsValue.Type.ARRAY
                     )
@@ -130,10 +133,10 @@ class JsLookupTest : FreeSpec() {
                 "an idx is found" {
                     val path = JsPath("user").append("phones").append(0)
 
-                    val result = JsLookup.apply(JsLocation.Root, path, node)
+                    val result = JsLookup.apply(JsLocation.empty, path, node)
 
                     result shouldBe JsLookup.Defined(
-                        JsLocation.Root / "user" / "phones" / 0,
+                        JsLocation.empty.append("user").append("phones").append(0),
                         JsString(FIRST_PHONE_VALUE)
                     )
                 }
@@ -141,18 +144,20 @@ class JsLookupTest : FreeSpec() {
                 "an idx is not found" {
                     val path = JsPath("user").append("phones").append(1)
 
-                    val result = JsLookup.apply(JsLocation.Root, path, node)
+                    val result = JsLookup.apply(JsLocation.empty, path, node)
 
-                    result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / "user" / "phones" / 1)
+                    result shouldBe JsLookup.Undefined.PathMissing(
+                        JsLocation.empty.append("user").append("phones").append(1)
+                    )
                 }
 
                 "a node is invalid type" {
                     val path = JsPath("user").append("name").append(0)
 
-                    val result = JsLookup.apply(JsLocation.Root, path, node)
+                    val result = JsLookup.apply(JsLocation.empty, path, node)
 
                     result shouldBe JsLookup.Undefined.InvalidType(
-                        location = JsLocation.Root / "user" / "name",
+                        location = JsLocation.empty.append("user").append("name"),
                         expected = JsValue.Type.ARRAY,
                         actual = JsValue.Type.STRING
                     )
@@ -161,14 +166,14 @@ class JsLookupTest : FreeSpec() {
         }
 
         "JsLookup.Defined#apply(String)" - {
-            val lookup = JsLookup.Defined(JsLocation.Root, JsObject("name" to JsString(USER_NAME_VALUE)))
+            val lookup = JsLookup.Defined(JsLocation.empty, JsObject("name" to JsString(USER_NAME_VALUE)))
 
             "a key is found" {
                 val key = "name"
 
                 val result = lookup.apply(key)
 
-                result shouldBe JsLookup.Defined(JsLocation.Root / key, JsString(USER_NAME_VALUE))
+                result shouldBe JsLookup.Defined(JsLocation.empty.append(key), JsString(USER_NAME_VALUE))
             }
 
             "a key is not found" {
@@ -176,7 +181,7 @@ class JsLookupTest : FreeSpec() {
 
                 val result = lookup.apply(key)
 
-                result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / key)
+                result shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append(key))
             }
 
             "a node is invalid type" {
@@ -185,7 +190,7 @@ class JsLookupTest : FreeSpec() {
                 val result = lookup.apply(idx)
 
                 result shouldBe JsLookup.Undefined.InvalidType(
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.OBJECT
                 )
@@ -193,14 +198,14 @@ class JsLookupTest : FreeSpec() {
         }
 
         "JsLookup.Defined#apply(Int)" - {
-            val lookup = JsLookup.Defined(JsLocation.Root, JsArray(JsString(FIRST_PHONE_VALUE)))
+            val lookup = JsLookup.Defined(JsLocation.empty, JsArray(JsString(FIRST_PHONE_VALUE)))
 
             "an idx is found" {
                 val idx = 0
 
                 val result = lookup.apply(idx)
 
-                result shouldBe JsLookup.Defined(JsLocation.Root / idx, JsString(FIRST_PHONE_VALUE))
+                result shouldBe JsLookup.Defined(JsLocation.empty.append(idx), JsString(FIRST_PHONE_VALUE))
             }
 
             "an idx is not found" {
@@ -208,7 +213,7 @@ class JsLookupTest : FreeSpec() {
 
                 val result = lookup.apply(idx)
 
-                result shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / idx)
+                result shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append(idx))
             }
 
             "a node is invalid type" {
@@ -217,7 +222,7 @@ class JsLookupTest : FreeSpec() {
                 val result = lookup.apply(key)
 
                 result shouldBe JsLookup.Undefined.InvalidType(
-                    location = JsLocation.Root,
+                    location = JsLocation.empty,
                     expected = JsValue.Type.OBJECT,
                     actual = JsValue.Type.ARRAY
                 )
@@ -227,7 +232,7 @@ class JsLookupTest : FreeSpec() {
         "JsLookup.Undefined#apply(String)" - {
 
             "return same 'JsLookup.Undefined'" {
-                val lookup = JsLookup.Undefined.PathMissing(JsLocation.Root)
+                val lookup = JsLookup.Undefined.PathMissing(JsLocation.empty)
 
                 val result = lookup.apply("name")
 
@@ -238,7 +243,7 @@ class JsLookupTest : FreeSpec() {
         "JsLookup.Undefined#apply(Int)" - {
 
             "return same 'JsLookup.Undefined'" {
-                val lookup = JsLookup.Undefined.PathMissing(JsLocation.Root)
+                val lookup = JsLookup.Undefined.PathMissing(JsLocation.empty)
 
                 val result = lookup.apply(0)
 

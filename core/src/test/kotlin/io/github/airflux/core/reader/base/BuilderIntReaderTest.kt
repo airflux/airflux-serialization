@@ -22,28 +22,28 @@ class BuilderIntReaderTest {
     fun `Testing reader for the Int type (min value)`() {
         val input: JsValue = JsNumber.valueOf(Int.MIN_VALUE)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = Int.MIN_VALUE)
+        result.assertAsSuccess(location = JsLocation.empty, value = Int.MIN_VALUE)
     }
 
     @Test
     fun `Testing reader for the Int type (max value)`() {
         val input: JsValue = JsNumber.valueOf(Int.MAX_VALUE)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = Int.MAX_VALUE)
+        result.assertAsSuccess(location = JsLocation.empty, value = Int.MAX_VALUE)
     }
 
     @Test
     fun `Testing reader for the Int type (reading from invalid node)`() {
         val input: JsValue = JsString("abc")
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.InvalidType(
+            JsLocation.empty bind JsonErrors.InvalidType(
                 expected = JsValue.Type.NUMBER,
                 actual = JsValue.Type.STRING
             )
@@ -54,10 +54,10 @@ class BuilderIntReaderTest {
     fun `Testing reader for the Int type (reading a value that less the allowed range)`() {
         val input: JsValue = JsNumber.valueOf(Long.MIN_VALUE)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.ValueCast(value = Long.MIN_VALUE.toString(), type = Int::class)
+            JsLocation.empty bind JsonErrors.ValueCast(value = Long.MIN_VALUE.toString(), type = Int::class)
         )
     }
 
@@ -65,10 +65,10 @@ class BuilderIntReaderTest {
     fun `Testing reader for the Int type (reading a value that more the allowed range)`() {
         val input: JsValue = JsNumber.valueOf(Long.MAX_VALUE)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
+            JsLocation.empty bind JsonErrors.ValueCast(value = Long.MAX_VALUE.toString(), type = Int::class)
         )
     }
 
@@ -76,10 +76,10 @@ class BuilderIntReaderTest {
     fun `Testing reader for the Int type (reading a value of an invalid format)`() {
         val input: JsValue = JsNumber.valueOf("10.5")!!
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.ValueCast(value = "10.5", type = Int::class)
+            JsLocation.empty bind JsonErrors.ValueCast(value = "10.5", type = Int::class)
         )
     }
 }

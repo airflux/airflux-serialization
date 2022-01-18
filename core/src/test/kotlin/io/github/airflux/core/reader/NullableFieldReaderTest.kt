@@ -24,7 +24,7 @@ class NullableFieldReaderTest {
 
     @Test
     fun `Testing the readNullable function (a property is found)`() {
-        val from: JsLookup = JsLookup.Defined(location = JsLocation.Root / "name", JsString(USER_NAME_VALUE))
+        val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
         val result: JsResult<String?> = readNullable(
             from = from,
@@ -34,12 +34,12 @@ class NullableFieldReaderTest {
             invalidTypeErrorBuilder = JsonErrors::InvalidType
         )
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = USER_NAME_VALUE)
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
     }
 
     @Test
     fun `Testing the readNullable function (a property is found with value null)`() {
-        val from: JsLookup = JsLookup.Defined(location = JsLocation.Root / "name", JsNull)
+        val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
 
         val result: JsResult<String?> = readNullable(
             from = from,
@@ -49,12 +49,12 @@ class NullableFieldReaderTest {
             invalidTypeErrorBuilder = JsonErrors::InvalidType
         )
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = null)
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = null)
     }
 
     @Test
     fun `Testing the readNullable function (a property is not found)`() {
-        val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.Root / "name")
+        val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
         val result: JsResult<String?> = readNullable(
             from = from,
@@ -70,7 +70,7 @@ class NullableFieldReaderTest {
     @Test
     fun `Testing the readNullable function (a property is not found, invalid type)`() {
         val from: JsLookup = JsLookup.Undefined.InvalidType(
-            location = JsLocation.Root / "name",
+            location = JsLocation.empty.append("name"),
             expected = JsValue.Type.ARRAY,
             actual = JsValue.Type.STRING
         )

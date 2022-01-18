@@ -24,9 +24,9 @@ class BuilderBigDecimalReaderTest {
         val value = BigDecimal.valueOf(Long.MIN_VALUE)
         val input: JsValue = JsNumber.valueOf(value.toPlainString())!!
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = value)
+        result.assertAsSuccess(location = JsLocation.empty, value = value)
     }
 
     @Test
@@ -34,19 +34,19 @@ class BuilderBigDecimalReaderTest {
         val value = BigDecimal.valueOf(Long.MAX_VALUE)
         val input: JsValue = JsNumber.valueOf(value.toPlainString())!!
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = value)
+        result.assertAsSuccess(location = JsLocation.empty, value = value)
     }
 
     @Test
     fun `Testing reader for the BigDecimal type (reading from invalid node)`() {
         val input: JsValue = JsString("abc")
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.InvalidType(
+            JsLocation.empty bind JsonErrors.InvalidType(
                 expected = JsValue.Type.NUMBER,
                 actual = JsValue.Type.STRING
             )

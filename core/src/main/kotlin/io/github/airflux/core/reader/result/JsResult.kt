@@ -46,10 +46,10 @@ sealed class JsResult<out T> {
                 infix fun JsLocation.bind(error: JsError): Cause = Cause(location = this, errors = JsErrors.of(error))
 
                 infix fun Int.bind(error: JsError): Cause =
-                    Cause(location = JsLocation.Root / this, errors = JsErrors.of(error))
+                    Cause(location = JsLocation.empty.append(this), errors = JsErrors.of(error))
 
                 infix fun String.bind(error: JsError): Cause =
-                    Cause(location = JsLocation.Root / this, errors = JsErrors.of(error))
+                    Cause(location = JsLocation.empty.append(this), errors = JsErrors.of(error))
             }
         }
 

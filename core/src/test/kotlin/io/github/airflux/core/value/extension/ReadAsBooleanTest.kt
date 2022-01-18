@@ -13,7 +13,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsBooleanTest : FreeSpec() {
 
     companion object {
-        private val LOCATION = JsLocation.Root / "user"
+        private val LOCATION = JsLocation.empty.append("user")
     }
 
     init {

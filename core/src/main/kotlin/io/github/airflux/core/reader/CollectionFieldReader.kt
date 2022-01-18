@@ -57,7 +57,7 @@ fun <T : Any, C> readAsCollection(
         val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(value = values, location = location)
         from.withIndex()
             .fold(initial) { acc, (idx, elem) ->
-                when (val result = using.read(context, location / idx, elem)) {
+                when (val result = using.read(context, location.append(idx), elem)) {
                     is JsResult.Success<T> -> when (acc) {
                         is JsResult.Success<*> -> acc.also { values += result.value }
                         is JsResult.Failure -> acc as JsResult<CollectionBuilder<T, C>>

@@ -16,7 +16,7 @@ class StringValidatorsTest {
     companion object {
 
         private val context = JsReaderContext()
-        private val location = JsLocation.Root
+        private val location = JsLocation.empty
 
         private fun minLengthBasicValidator(value: Int) =
             BaseStringValidators.minLength(

@@ -16,7 +16,7 @@ internal class ReadAsObjectTest : FreeSpec() {
 
     companion object {
         private const val USER_NAME = "user"
-        private val LOCATION = JsLocation.Root / "user"
+        private val LOCATION = JsLocation.empty.append("user")
         private val reader = { location: JsLocation, input: JsObject ->
             val name = input["name"] as JsString
             JsResult.Success(DTO(name = name.get), location)

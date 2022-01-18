@@ -1,115 +1,73 @@
 package io.github.airflux.core.reader.result
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
+import io.github.airflux.core.common.kotest.shouldBeEqualsContract
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
-class JsLocationTest {
+class JsLocationTest : FreeSpec() {
 
-    @Test
-    fun `Testing the equals contract`() {
-        assertEquals(
-            JsLocation.Root,
-            JsLocation.Root
-        )
-        assertEquals(
-            JsLocation.Root / "user",
-            JsLocation.Root / "user"
-        )
-        assertEquals(
-            JsLocation.Root / "user" / "address",
-            JsLocation.Root / "user" / "address"
-        )
-        assertEquals(
-            JsLocation.Root / "user" / "phones" / 0,
-            JsLocation.Root / "user" / "phones" / 0
-        )
+    init {
+        "A 'JsLocation' type" - {
 
-        assertNotEquals(JsLocation.Root, Any())
-        assertNotEquals(Any(), JsLocation.Root)
+            "when empty" - {
+                val location = JsLocation.empty
 
-        assertNotEquals(
-            JsLocation.Root,
-            JsLocation.Root / "user"
-        )
-        assertNotEquals(
-            JsLocation.Root / "user",
-            JsLocation.Root
-        )
+                "should be empty" {
+                    location.isEmpty shouldBe true
+                }
 
-        assertNotEquals(
-            JsLocation.Root / "user",
-            JsLocation.Root / 0
-        )
-        assertNotEquals(
-            JsLocation.Root / 0,
-            JsLocation.Root / "user"
-        )
+                "method foldRight() should perform the left right" {
+                    val result = JsLocation.foldRight("", location) { acc, elem -> acc + elem.toString() }
+                    result shouldBe ""
+                }
 
-        assertNotEquals(
-            JsLocation.Root / "user" / 0,
-            JsLocation.Root / "user"
-        )
-        assertNotEquals(
-            JsLocation.Root / "user",
-            JsLocation.Root / "user" / 0
-        )
-    }
+                "method foldLeft() should perform the right left" {
+                    val result = JsLocation.foldLeft("", location) { acc, elem -> acc + elem.toString() }
+                    result shouldBe ""
+                }
 
-    @Test
-    fun `Testing the hashCode contract`() {
-        assertEquals(
-            JsLocation.Root.hashCode(),
-            JsLocation.Root.hashCode()
-        )
-        assertEquals(
-            (JsLocation.Root / "user").hashCode(),
-            (JsLocation.Root / "user").hashCode()
-        )
-        assertEquals(
-            (JsLocation.Root / "user" / "address").hashCode(),
-            (JsLocation.Root / "user" / "address").hashCode()
-        )
-        assertEquals(
-            (JsLocation.Root / "user" / "address" / "city").hashCode(),
-            (JsLocation.Root / "user" / "address" / "city").hashCode()
-        )
-        assertEquals(
-            (JsLocation.Root / "user" / 0).hashCode(),
-            (JsLocation.Root / "user" / 0).hashCode()
-        )
-        assertEquals(
-            (JsLocation.Root / "user" / 0 / 0).hashCode(),
-            (JsLocation.Root / "user" / 0 / 0).hashCode()
-        )
+                "method 'toString() should return '#'" {
+                    location.toString() shouldBe "#"
+                }
 
-        assertNotEquals(
-            Any().hashCode(),
-            JsLocation.Root.hashCode()
-        )
-        assertNotEquals(
-            JsLocation.Root.hashCode(),
-            (JsLocation.Root / "user").hashCode()
-        )
-        assertNotEquals(
-            (JsLocation.Root / "user").hashCode(),
-            (JsLocation.Root / 0).hashCode()
-        )
-        assertNotEquals(
-            (JsLocation.Root / "user").hashCode(),
-            (JsLocation.Root / "user" / 0).hashCode()
-        )
-        assertNotEquals(
-            (JsLocation.Root / "user" / 0).hashCode(),
-            (JsLocation.Root / "user" / 0 / 0).hashCode(),
-        )
-    }
+                "should comply with equals() and hashCode() contract" {
+                    location.shouldBeEqualsContract(
+                        y = JsLocation.empty,
+                        z = JsLocation.empty,
+                        other = JsLocation.empty.append("user")
+                    )
+                }
+            }
 
-    @Test
-    fun `Testing the toString contract`() {
-        assertEquals("#", JsLocation.Root.toString())
-        assertEquals("#/user", (JsLocation.Root / "user").toString())
-        assertEquals("#/user/phones", (JsLocation.Root / "user" / "phones").toString())
-        assertEquals("#/user/phones[0]", (JsLocation.Root / "user" / "phones" / 0).toString())
+            "when non-empty" - {
+                val location = JsLocation.empty.append("users").append(0).append("phone")
+
+                "should be non-empty" {
+                    location.isEmpty shouldBe false
+                }
+
+                "method foldRight() should perform the left right" {
+                    val result = JsLocation.foldRight("", location) { acc, elem -> acc + elem.toString() }
+                    result shouldBe "/phone[0]/users"
+                }
+
+                "method foldLeft() should perform the right left" {
+                    val result = JsLocation.foldLeft("", location) { acc, elem -> acc + elem.toString() }
+                    result shouldBe "/users[0]/phone"
+                }
+
+                "method 'toString() should return '#/users[0]/phone'" {
+                    location.toString() shouldBe "#/users[0]/phone"
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    location.shouldBeEqualsContract(
+                        y = JsLocation.empty.append("users").append(0).append("phone"),
+                        z = JsLocation.empty.append("users").append(0).append("phone"),
+                        other = JsLocation.empty
+                    )
+                }
+            }
+        }
     }
 }

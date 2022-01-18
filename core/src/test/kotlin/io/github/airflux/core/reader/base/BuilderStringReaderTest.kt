@@ -23,19 +23,19 @@ class BuilderStringReaderTest {
         val value = "abc"
         val input: JsValue = JsString(value)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
-        result.assertAsSuccess(location = JsLocation.Root, value = value)
+        result.assertAsSuccess(location = JsLocation.empty, value = value)
     }
 
     @Test
     fun `Testing reader for the String type (reading from invalid node)`() {
         val input: JsValue = JsBoolean.valueOf(true)
 
-        val result = reader.read(context, JsLocation.Root, input)
+        val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.Root bind JsonErrors.InvalidType(
+            JsLocation.empty bind JsonErrors.InvalidType(
                 expected = JsValue.Type.STRING,
                 actual = JsValue.Type.BOOLEAN
             )

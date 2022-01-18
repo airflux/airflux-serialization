@@ -15,7 +15,7 @@ class OrderValidatorsTest {
     companion object {
 
         private val context = JsReaderContext()
-        private val location = JsLocation.Root
+        private val location = JsLocation.empty
 
         private fun minBasicValidator(value: Int) =
             BaseOrderValidators.min(

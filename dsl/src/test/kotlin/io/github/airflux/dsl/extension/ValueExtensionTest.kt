@@ -20,14 +20,14 @@ class ValueExtensionTest : FreeSpec() {
 
                     val lookup = json / "name"
 
-                    lookup shouldBe JsLookup.Defined(JsLocation.Root / "name", JsString(USER_NAME_VALUE))
+                    lookup shouldBe JsLookup.Defined(JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
                 }
                 "returns the 'JsLookup.Undefined.PathMissing' if a node is not found" {
                     val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
 
                     val lookup = json / "user"
 
-                    lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / "user")
+                    lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append("user"))
                 }
                 "returns the 'JsLookup.Undefined.InvalidType' if a node element is invalid type" {
                     val json: JsValue = JsString(USER_NAME_VALUE)
@@ -35,7 +35,7 @@ class ValueExtensionTest : FreeSpec() {
                     val lookup = json / "user"
 
                     lookup shouldBe JsLookup.Undefined.InvalidType(
-                        location = JsLocation.Root,
+                        location = JsLocation.empty,
                         expected = JsValue.Type.OBJECT,
                         actual = JsValue.Type.STRING
                     )
@@ -47,14 +47,14 @@ class ValueExtensionTest : FreeSpec() {
 
                     val lookup = json / 0
 
-                    lookup shouldBe JsLookup.Defined(JsLocation.Root / 0, JsString(USER_NAME_VALUE))
+                    lookup shouldBe JsLookup.Defined(JsLocation.empty.append(0), JsString(USER_NAME_VALUE))
                 }
                 "returns the 'JsLookup.Undefined.PathMissing' if a node is not found return" {
                     val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
 
                     val lookup = json / 1
 
-                    lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.Root / 1)
+                    lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append(1))
                 }
                 "returns the 'JsLookup.Undefined.InvalidType' if a node element is invalid type" {
                     val json: JsValue = JsString(USER_NAME_VALUE)
@@ -62,7 +62,7 @@ class ValueExtensionTest : FreeSpec() {
                     val lookup = json / 0
 
                     lookup shouldBe JsLookup.Undefined.InvalidType(
-                        location = JsLocation.Root,
+                        location = JsLocation.empty,
                         expected = JsValue.Type.ARRAY,
                         actual = JsValue.Type.STRING
                     )

@@ -30,7 +30,7 @@ import io.github.airflux.core.value.extension.readAsObject
 
 @Suppress("unused")
 fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =
-    reader.read(context, JsLocation.Root, this)
+    reader.read(context, JsLocation.empty, this)
 
 @Suppress("unused")
 class ObjectReader(

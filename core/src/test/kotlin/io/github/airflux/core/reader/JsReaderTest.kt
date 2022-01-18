@@ -15,7 +15,7 @@ class JsReaderTest {
 
     companion object {
         private val context = JsReaderContext()
-        private val location = JsLocation.Root / "user"
+        private val location = JsLocation.empty.append("user")
         private const val ID_VALUE = "10"
         private const val IDENTIFIER_VALUE = "100"
     }
@@ -23,53 +23,53 @@ class JsReaderTest {
     @Test
     fun `Testing the map function of the JsReader class`() {
         val reader = JsReader { _, location, _ ->
-            JsResult.Success(location = location / "id", value = ID_VALUE)
+            JsResult.Success(location = location.append("id"), value = ID_VALUE)
         }
         val transformedReader = reader.map { value -> value.toInt() }
 
         val result = transformedReader.read(context, location, JsNull)
 
-        result.assertAsSuccess(location = location / "id", value = ID_VALUE.toInt())
+        result.assertAsSuccess(location = location.append("id"), value = ID_VALUE.toInt())
     }
 
     @Test
     fun `Testing the or function of the JsReader class (first reader)`() {
         val idReader = JsReader { _, location, _ ->
-            JsResult.Success(location = location / "id", value = ID_VALUE)
+            JsResult.Success(location = location.append("id"), value = ID_VALUE)
         }
         val identifierReader = JsReader<String> { _, location, _ ->
-            JsResult.Failure(location = location / "identifier", error = JsonErrors.PathMissing)
+            JsResult.Failure(location = location.append("identifier"), error = JsonErrors.PathMissing)
         }
         val composeReader = idReader or identifierReader
 
         val result = composeReader.read(context, location, JsNull)
 
-        result.assertAsSuccess(location = location / "id", value = ID_VALUE)
+        result.assertAsSuccess(location = location.append("id"), value = ID_VALUE)
     }
 
     @Test
     fun `Testing the or function of the JsReader class (second reader)`() {
         val idReader = JsReader<String> { _, location, _ ->
-            JsResult.Failure(location = location / "id", error = JsonErrors.PathMissing)
+            JsResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
         }
         val identifierReader = JsReader { _, location, _ ->
-            JsResult.Success(location = location / "identifier", value = IDENTIFIER_VALUE)
+            JsResult.Success(location = location.append("identifier"), value = IDENTIFIER_VALUE)
         }
         val composeReader = idReader or identifierReader
 
         val result = composeReader.read(context, location, JsNull)
 
-        result.assertAsSuccess(location = location / "identifier", value = IDENTIFIER_VALUE)
+        result.assertAsSuccess(location = location.append("identifier"), value = IDENTIFIER_VALUE)
     }
 
     @Test
     fun `Testing the or function of the JsReader class (failure both reader)`() {
         val idReader = JsReader { _, location, _ ->
-            JsResult.Failure(location = location / "id", error = JsonErrors.PathMissing)
+            JsResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
         }
         val identifierReader = JsReader { _, location, _ ->
             JsResult.Failure(
-                location = location / "identifier",
+                location = location.append("identifier"),
                 error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
             )
         }
@@ -78,8 +78,8 @@ class JsReaderTest {
         val result = composeReader.read(context, location, JsNull)
 
         result.assertAsFailure(
-            location / "id" bind JsonErrors.PathMissing,
-            location / "identifier" bind JsonErrors.InvalidType(
+            location.append("id") bind JsonErrors.PathMissing,
+            location.append("identifier") bind JsonErrors.InvalidType(
                 expected = JsValue.Type.OBJECT,
                 actual = JsValue.Type.STRING
             )

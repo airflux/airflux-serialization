@@ -34,7 +34,7 @@ class OptionalWithDefaultFieldReaderTest {
 
     @Test
     fun `Testing the readOptional function withDefault (a property is found)`() {
-        val from: JsLookup = JsLookup.Defined(location = JsLocation.Root / "name", JsString(USER_NAME_VALUE))
+        val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
         val result: JsResult<String?> = readOptional(
             from = from,
@@ -44,12 +44,12 @@ class OptionalWithDefaultFieldReaderTest {
             invalidTypeErrorBuilder = JsonErrors::InvalidType
         )
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = USER_NAME_VALUE)
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
     }
 
     @Test
     fun `Testing the readOptional function withDefault (a property is found with value the null)`() {
-        val from: JsLookup = JsLookup.Defined(location = JsLocation.Root / "name", JsNull)
+        val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
 
         val result: JsResult<String?> = readOptional(
             from = from,
@@ -66,7 +66,7 @@ class OptionalWithDefaultFieldReaderTest {
 
     @Test
     fun `Testing the readOptional function withDefault (a property is not found, returning default value)`() {
-        val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.Root / "name")
+        val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
         val result: JsResult<String?> = readOptional(
             from = from,
@@ -76,13 +76,13 @@ class OptionalWithDefaultFieldReaderTest {
             invalidTypeErrorBuilder = JsonErrors::InvalidType
         )
 
-        result.assertAsSuccess(location = JsLocation.Root / "name", value = DEFAULT_VALUE)
+        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
     }
 
     @Test
     fun `Testing the readOptional function withDefault (a property is not found, invalid type)`() {
         val from: JsLookup = JsLookup.Undefined.InvalidType(
-            location = JsLocation.Root / "name",
+            location = JsLocation.empty.append("name"),
             expected = JsValue.Type.ARRAY,
             actual = JsValue.Type.STRING
         )
