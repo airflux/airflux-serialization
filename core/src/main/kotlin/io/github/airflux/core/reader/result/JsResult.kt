@@ -30,7 +30,7 @@ sealed class JsResult<out T> {
         is Failure -> defaultValue()
     }
 
-    class Success<T>(val value: T, val location: JsLocation) : JsResult<T>()
+    data class Success<T>(val value: T, val location: JsLocation) : JsResult<T>()
 
     class Failure private constructor(val causes: List<Cause>) : JsResult<Nothing>() {
 
@@ -39,6 +39,11 @@ sealed class JsResult<out T> {
         constructor(location: JsLocation, errors: JsErrors) : this(listOf(Cause(location, errors)))
 
         operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
+
+        override fun equals(other: Any?): Boolean =
+            this === other || (other is Failure && this.causes == other.causes)
+
+        override fun hashCode(): Int = causes.hashCode()
 
         data class Cause(val location: JsLocation, val errors: JsErrors) {
 

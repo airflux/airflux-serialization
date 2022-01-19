@@ -1,218 +1,193 @@
 package io.github.airflux.core.reader.result
 
 import io.github.airflux.core.common.JsonErrors
-import io.github.airflux.core.common.assertAsFailure
-import io.github.airflux.core.common.assertAsSuccess
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
+import io.github.airflux.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsValue
-import org.junit.jupiter.api.Nested
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import io.kotest.assertions.fail
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.shouldBe
 
-class JsResultTest {
+class JsResultTest : FreeSpec() {
 
-    @Nested
-    inner class Success {
-
-        @Test
-        fun `Testing the map function of the Success class`() {
-            val originalValue = "10"
-            val original: JsResult<String> =
-                JsResult.Success(location = JsLocation.empty.append("id"), value = originalValue)
-            val result = original.map { it.toInt() }
-
-            result.assertAsSuccess(location = JsLocation.empty.append("id"), value = originalValue.toInt())
-        }
-
-        @Test
-        fun `Testing the flatMap function of the Success class`() {
-            val originalValue = "10"
-            val original: JsResult<String> =
-                JsResult.Success(location = JsLocation.empty.append("id"), value = originalValue)
-
-            val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
-
-            result.assertAsSuccess(location = JsLocation.empty.append("id"), value = originalValue.toInt())
-        }
-
-        @Test
-        fun `Testing the orElse function of the Success class`() {
-            val originalValue = "10"
-            val elseValue = "20"
-            val original: JsResult<String> = JsResult.Success(location = JsLocation.empty, value = originalValue)
-
-            val result = original.orElse { elseValue }
-
-            assertEquals(originalValue, result)
-        }
-
-        @Test
-        fun `Testing the getOrElse function of the Success class`() {
-            val originalValue = "10"
-            val elseValue = "20"
-            val original: JsResult<String> = JsResult.Success(location = JsLocation.empty, value = originalValue)
-
-            val result = original.getOrElse(elseValue)
-
-            assertEquals(originalValue, result)
-        }
-
-        @Test
-        fun `Testing the onFailure function of the Success class`() {
-            val originalValue = "10"
-
-            val original: JsResult<String> = JsResult.Success(location = JsLocation.empty, value = originalValue)
-            val error: JsResult.Failure? = getErrorOrNull(original)
-
-            assertNull(error)
-        }
+    companion object {
+        private const val ORIGINAL_VALUE = "10"
+        private const val ELSE_VALUE = "20"
+        private val LOCATION = JsLocation.empty.append("id")
     }
 
-    @Nested
-    inner class Failure {
+    init {
 
-        @Nested
-        inner class Constructors {
+        "A JsResult#Success type" - {
+            val original: JsResult<String> = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
-            @Test
-            fun `Testing the constructor of the Failure class with only error description`() {
+            "calling map function should return a result of applying the [transform] function to the value" {
+                val result = original.map { it.toInt() }
 
-                val original = JsResult.Failure(location = JsLocation.empty, error = JsonErrors.PathMissing)
-
-                original.assertAsFailure(JsLocation.empty bind JsonErrors.PathMissing)
+                result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
-            @Test
-            fun `Testing the constructor of the Failure class with path and one error description`() {
-                val original =
-                    JsResult.Failure(location = JsLocation.empty.append("user"), error = JsonErrors.PathMissing)
+            "calling flatMap function should return a result of applying the [transform] function to the value" {
+                val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
 
-                original.assertAsFailure("user" bind JsonErrors.PathMissing)
+                result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
-            @Test
-            fun `Testing the constructor of the Failure class with path and errors description`() {
-                val original =
-                    JsResult.Failure(location = JsLocation.empty.append("user"), error = JsonErrors.PathMissing)
+            "calling onFailure function should return a value" {
+                val result = original.onFailure { fail("failure") }
 
-                original.assertAsFailure("user" bind JsonErrors.PathMissing)
+                result shouldBe ORIGINAL_VALUE
+            }
+
+            "calling getOrElse function should return a value" {
+                val result = original.getOrElse(ELSE_VALUE)
+
+                result shouldBe ORIGINAL_VALUE
+            }
+
+            "calling orElse function should return a value" {
+                val result = original.orElse { ELSE_VALUE }
+
+                result shouldBe ORIGINAL_VALUE
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                original.shouldBeEqualsContract(
+                    y = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    other = JsResult.Success(location = JsLocation.empty, value = ORIGINAL_VALUE)
+                )
+            }
+        }
+
+        "A JsResult#Failure type" - {
+            val original: JsResult<String> = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+            "constructor(JsLocation, JsError)" {
+                val failure = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                failure.causes shouldContainAll listOf(
+                    JsResult.Failure.Cause(location = LOCATION, errors = JsErrors.of(JsonErrors.PathMissing))
+                )
+            }
+
+            "constructor(JsLocation, JsErrors)" {
+                val errors = JsErrors.of(
+                    listOf(
+                        JsonErrors.PathMissing,
+                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    )
+                )!!
+
+                val failure = JsResult.Failure(location = LOCATION, errors = errors)
+
+                failure.causes shouldContainAll listOf(JsResult.Failure.Cause(location = LOCATION, errors = errors))
+            }
+
+            "calling plus function should return " {
+                val firstFailure = JsResult.Failure(location = LOCATION, errors = JsErrors.of(JsonErrors.PathMissing))
+                val secondFailure = JsResult.Failure(
+                    location = LOCATION,
+                    errors = JsErrors.of(
+                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    )
+                )
+
+                val failure = firstFailure + secondFailure
+
+                failure.causes shouldContainAll listOf(
+                    JsResult.Failure.Cause(location = LOCATION, errors = JsErrors.of(JsonErrors.PathMissing)),
+                    JsResult.Failure.Cause(
+                        location = LOCATION,
+                        errors = JsErrors.of(
+                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                        )
+                    )
+                )
+            }
+
+            "calling map function should return an original do not apply the [transform] function to the value" {
+                val result = original.map { it.toInt() }
+
+                result shouldBe original
+            }
+
+            "calling flatMap function should return an original do not apply the [transform] function to the value" {
+                val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
+
+                result shouldBe original
+            }
+
+            "calling onFailure function should invoke the lambda" {
+                shouldThrow<RuntimeException> {
+                    original.onFailure { throw RuntimeException() }
+                }
+            }
+
+            "calling getOrElse function should return a defaultValue" {
+                val result = original.getOrElse(ELSE_VALUE)
+
+                result shouldBe ELSE_VALUE
+            }
+
+            "calling orElse function should return the result of calling the [defaultValue] function" {
+                val result = original.orElse { ELSE_VALUE }
+
+                result shouldBe ELSE_VALUE
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                original.shouldBeEqualsContract(
+                    y = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    other = JsResult.Failure(location = JsLocation.empty, error = JsonErrors.PathMissing)
+                )
             }
         }
 
-        @Test
-        fun `Testing the map function of the Failure class`() {
-            val original: JsResult<String> =
-                JsResult.Failure(location = JsLocation.empty.append("name"), error = JsonErrors.PathMissing)
-
-            val result = original.map { it.toInt() }
-
-            result.assertAsFailure("name" bind JsonErrors.PathMissing)
-        }
-
-        @Test
-        fun `Testing the flatMap function of the Failure class`() {
-            val original: JsResult<String> =
-                JsResult.Failure(location = JsLocation.empty.append("name"), error = JsonErrors.PathMissing)
-
-            val result = original.flatMap { v, p ->
-                JsResult.Success(v.toInt(), p)
-            }
-
-            result.assertAsFailure("name" bind JsonErrors.PathMissing)
-        }
-
-        @Test
-        fun `Testing the orElse function of the Failure class`() {
-            val elseValue = "20"
-            val original: JsResult<String> =
-                JsResult.Failure(location = JsLocation.empty, error = JsonErrors.PathMissing)
-
-            val result = original.orElse { elseValue }
-
-            assertEquals(elseValue, result)
-        }
-
-        @Test
-        fun `Testing the getOrElse function of the Failure class`() {
-            val elseValue = "20"
-            val original: JsResult<String> =
-                JsResult.Failure(location = JsLocation.empty, error = JsonErrors.PathMissing)
-
-            val result = original.getOrElse(elseValue)
-
-            assertEquals(elseValue, result)
-        }
-
-        @Test
-        fun `Testing the onFailure function of the Failure class`() {
-            val original: JsResult<String> =
-                JsResult.Failure(location = JsLocation.empty, error = JsonErrors.PathMissing)
-
-            val error: JsResult.Failure? = getErrorOrNull(original)
-
-            assertNotNull(error)
-        }
-
-        @Nested
-        inner class Cause {
-
-            @Test
-            fun `Testing extension function the bind for JsResultPath`() {
-
-                val cause = JsLocation.empty.append("name") bind JsonErrors.PathMissing
-
-                assertEquals(JsLocation.empty.append("name"), cause.location)
-                assertEquals(1, cause.errors.count())
-                assertContains(cause.errors, JsonErrors.PathMissing)
-            }
-
-            @Test
-            fun `Testing extension function the bind for Int type`() {
-
-                val cause = JsLocation.empty.append(1) bind JsonErrors.PathMissing
-
-                assertEquals(JsLocation.empty.append(1), cause.location)
-                assertEquals(1, cause.errors.count())
-                assertContains(cause.errors, JsonErrors.PathMissing)
-            }
-
-            @Test
-            fun `Testing extension function the bind for String type`() {
-
-                val cause = "name" bind JsonErrors.PathMissing
-
-                assertEquals(JsLocation.empty.append("name"), cause.location)
-                assertEquals(1, cause.errors.count())
-                assertContains(cause.errors, JsonErrors.PathMissing)
-            }
-        }
-    }
-
-    @Test
-    fun `Testing the merge function`() {
-        val failures = listOf(
-            JsResult.Failure(location = JsLocation.empty.append("id"), error = JsonErrors.PathMissing),
-            JsResult.Failure(
-                location = JsLocation.empty.append("name"),
-                error = JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+        "JsResult#merge function" {
+            val failures = listOf(
+                JsResult.Failure(location = LOCATION, errors = JsErrors.of(JsonErrors.PathMissing)),
+                JsResult.Failure(
+                    location = LOCATION,
+                    errors = JsErrors.of(
+                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    )
+                )
             )
-        )
 
-        val failure = failures.merge()
+            val failure = failures.merge()
 
-        assertContains(failure.causes, JsLocation.empty.append("id") bind JsonErrors.PathMissing)
-        assertContains(
-            failure.causes,
-            JsLocation.empty.append("name") bind JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
-        )
-    }
+            failure.causes shouldContainAll listOf(
+                JsResult.Failure.Cause(location = LOCATION, errors = JsErrors.of(JsonErrors.PathMissing)),
+                JsResult.Failure.Cause(
+                    location = LOCATION,
+                    errors = JsErrors.of(
+                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    )
+                )
+            )
+        }
 
-    fun <T> getErrorOrNull(result: JsResult<T>): JsResult.Failure? {
-        result.onFailure { return it }
-        return null
+        "asSuccess(JsLocation) extension function" {
+            val result = ORIGINAL_VALUE.asSuccess(LOCATION)
+
+            result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+        }
+
+        "asFailure(JsLocation) extension function" {
+            val result = JsonErrors.PathMissing.asFailure(LOCATION)
+
+            result as JsResult.Failure
+
+            result.causes shouldContainAll listOf(
+                JsResult.Failure.Cause(
+                    location = LOCATION,
+                    errors = JsErrors.of(JsonErrors.PathMissing)
+                )
+            )
+        }
     }
 }
