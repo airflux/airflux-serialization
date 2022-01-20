@@ -11,7 +11,6 @@ import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.readNullable
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
@@ -79,6 +78,8 @@ class JsReaderFilterTest {
 
         val result = reader.filter(isNotBlank).read(context, JsLocation.empty, json)
 
-        result.assertAsFailure("name" bind JsonErrors.PathMissing)
+        result.assertAsFailure(
+            JsResult.Failure.Cause(location = JsLocation.empty.append("name"), error = JsonErrors.PathMissing)
+        )
     }
 }

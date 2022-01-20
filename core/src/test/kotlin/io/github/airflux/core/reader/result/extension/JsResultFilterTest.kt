@@ -7,7 +7,6 @@ import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
 import kotlin.test.Test
@@ -62,6 +61,6 @@ class JsResultFilterTest {
 
         val validated = result.filter(isNotBlank)
 
-        validated.assertAsFailure("name" bind error)
+        validated.assertAsFailure(JsResult.Failure.Cause(location = JsLocation.empty.append("name"), error = error))
     }
 }

@@ -11,7 +11,6 @@ import io.github.airflux.core.reader.readRequired
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.core.reader.validator.JsPropertyValidator
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
@@ -77,7 +76,12 @@ class JsPropertyValidatorExtensionTest {
 
             val result = reader.read(context, JsLocation.empty, json)
 
-            result.assertAsFailure("name" bind JsonErrors.Validation.Strings.IsEmpty)
+            result.assertAsFailure(
+                JsResult.Failure.Cause(
+                    location = JsLocation.empty.append("name"),
+                    error = JsonErrors.Validation.Strings.IsEmpty
+                )
+            )
         }
 
         @Test
@@ -97,7 +101,10 @@ class JsPropertyValidatorExtensionTest {
             val result = reader.read(context, JsLocation.empty, json)
 
             result.assertAsFailure(
-                "name" bind JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
+                JsResult.Failure.Cause(
+                    location = JsLocation.empty.append("name"),
+                    error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NULL)
+                )
             )
         }
     }
@@ -120,7 +127,12 @@ class JsPropertyValidatorExtensionTest {
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsFailure("user" bind JsonErrors.Validation.Strings.IsEmpty)
+            validated.assertAsFailure(
+                JsResult.Failure.Cause(
+                    location = JsLocation.empty.append("user"),
+                    error = JsonErrors.Validation.Strings.IsEmpty
+                )
+            )
         }
 
         @Test
@@ -130,7 +142,12 @@ class JsPropertyValidatorExtensionTest {
 
             val validated = result.validation(isNotEmpty)
 
-            validated.assertAsFailure("user" bind JsonErrors.PathMissing)
+            validated.assertAsFailure(
+                JsResult.Failure.Cause(
+                    location = JsLocation.empty.append("user"),
+                    error = JsonErrors.PathMissing
+                )
+            )
         }
     }
 }

@@ -34,7 +34,7 @@ sealed class JsResult<out T> {
 
     class Failure private constructor(val causes: List<Cause>) : JsResult<Nothing>() {
 
-        constructor(location: JsLocation, error: JsError) : this(listOf(Cause(location, JsErrors.of(error))))
+        constructor(location: JsLocation, error: JsError) : this(listOf(Cause(location, error)))
 
         constructor(location: JsLocation, errors: JsErrors) : this(listOf(Cause(location, errors)))
 
@@ -45,12 +45,17 @@ sealed class JsResult<out T> {
 
         override fun hashCode(): Int = causes.hashCode()
 
-        data class Cause(val location: JsLocation, val errors: JsErrors) {
+        class Cause(val location: JsLocation, val errors: JsErrors) {
 
-            companion object {
-                infix fun String.bind(error: JsError): Cause = JsLocation.empty.append(this).bind(error)
-                infix fun Int.bind(error: JsError): Cause = JsLocation.empty.append(this).bind(error)
-                infix fun JsLocation.bind(error: JsError): Cause = Cause(location = this, errors = JsErrors.of(error))
+            constructor(location: JsLocation, error: JsError) : this(location, JsErrors.of(error))
+
+            override fun equals(other: Any?): Boolean =
+                this === other || (other is Cause && this.location == other.location && this.errors == other.errors)
+
+            override fun hashCode(): Int {
+                var result = location.hashCode()
+                result = 31 * result + errors.hashCode()
+                return result
             }
         }
 

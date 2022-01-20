@@ -8,7 +8,6 @@ import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
@@ -86,7 +85,10 @@ class WithDefaultFieldReaderTest {
         )
 
         result.assertAsFailure(
-            "name" bind JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+            JsResult.Failure.Cause(
+                location = JsLocation.empty.append("name"),
+                error = JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
+            )
         )
     }
 }

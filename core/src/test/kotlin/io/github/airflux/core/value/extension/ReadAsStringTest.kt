@@ -4,7 +4,7 @@ import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.assertAsFailure
 import io.github.airflux.core.common.assertAsSuccess
 import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsBoolean
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
@@ -30,9 +30,12 @@ internal class ReadAsStringTest : FreeSpec() {
                     val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsString(LOCATION, JsonErrors::InvalidType)
                     result.assertAsFailure(
-                        LOCATION bind JsonErrors.InvalidType(
-                            expected = JsValue.Type.STRING,
-                            actual = JsValue.Type.BOOLEAN
+                        JsResult.Failure.Cause(
+                            location = LOCATION,
+                            error = JsonErrors.InvalidType(
+                                expected = JsValue.Type.STRING,
+                                actual = JsValue.Type.BOOLEAN
+                            )
                         )
                     )
                 }

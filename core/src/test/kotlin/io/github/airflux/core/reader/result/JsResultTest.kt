@@ -149,6 +149,44 @@ class JsResultTest : FreeSpec() {
             }
         }
 
+        "A JsResult#Failure#Cause type" - {
+
+            "constructor(JsLocation, JsError)" {
+                val cause = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+
+                cause.location shouldBe LOCATION
+                cause.errors shouldBe JsErrors.of(JsonErrors.PathMissing)
+            }
+
+            "constructor(JsLocation, JsErrors)" {
+                val cause = JsResult.Failure.Cause(
+                    location = LOCATION,
+                    errors = JsErrors.of(
+                        listOf(
+                            JsonErrors.PathMissing,
+                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                        )
+                    )!!
+                )
+
+                cause.location shouldBe LOCATION
+                cause.errors shouldContainAll listOf(
+                    JsonErrors.PathMissing,
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                )
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                val cause = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+
+                cause.shouldBeEqualsContract(
+                    y = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                    other = JsResult.Failure.Cause(location = JsLocation.empty, error = JsonErrors.PathMissing)
+                )
+            }
+        }
+
         "JsResult#merge function" {
             val failures = listOf(
                 JsResult.Failure(location = LOCATION, errors = JsErrors.of(JsonErrors.PathMissing)),

@@ -5,7 +5,7 @@ import io.github.airflux.core.common.assertAsFailure
 import io.github.airflux.core.common.assertAsSuccess
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.reader.result.JsResult.Failure.Cause.Companion.bind
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsBoolean
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
@@ -35,9 +35,9 @@ class BuilderStringReaderTest {
         val result = reader.read(context, JsLocation.empty, input)
 
         result.assertAsFailure(
-            JsLocation.empty bind JsonErrors.InvalidType(
-                expected = JsValue.Type.STRING,
-                actual = JsValue.Type.BOOLEAN
+            JsResult.Failure.Cause(
+                location = JsLocation.empty,
+                error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
             )
         )
     }
