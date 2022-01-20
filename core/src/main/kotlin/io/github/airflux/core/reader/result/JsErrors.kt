@@ -1,6 +1,6 @@
 package io.github.airflux.core.reader.result
 
-class JsErrors private constructor(private val items: List<JsError>) : Iterable<JsError> by items {
+class JsErrors private constructor(private val items: List<JsError>) : Collection<JsError> by items {
 
     operator fun plus(other: JsErrors): JsErrors = JsErrors(items + other.items)
 
@@ -10,7 +10,10 @@ class JsErrors private constructor(private val items: List<JsError>) : Iterable<
     override fun hashCode(): Int = items.hashCode()
 
     companion object {
-        fun of(error: JsError): JsErrors = JsErrors(listOf(error))
+        fun of(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
+            JsErrors(listOf(error))
+        else
+            JsErrors(listOf(error) + errors.asList())
 
         fun of(errors: List<JsError>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
     }

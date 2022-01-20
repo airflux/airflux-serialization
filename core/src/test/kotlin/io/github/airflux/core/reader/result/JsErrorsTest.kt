@@ -1,100 +1,85 @@
 package io.github.airflux.core.reader.result
 
 import io.github.airflux.core.common.JsonErrors
+import io.github.airflux.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.core.value.JsValue
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.nulls.beNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
 
-class JsErrorsTest {
+class JsErrorsTest : FreeSpec() {
 
-    @Test
-    fun `Testing the of function for once error`() {
+    init {
 
-        val failure = JsErrors.of(JsonErrors.PathMissing)
+        "A JsErrors type" - {
 
-        assertEquals(1, failure.count())
-        assertContains(failure, JsonErrors.PathMissing)
-    }
+            "#of(JsError, _) should return JsErrors with a single error" {
+                val errors = JsErrors.of(JsonErrors.PathMissing)
 
-    @Test
-    fun `Testing the of function for more errors`() {
+                errors shouldContainAll listOf(JsonErrors.PathMissing)
+            }
 
-        val errors = JsErrors.of(
-            listOf(
-                JsonErrors.PathMissing,
-                JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING),
-                JsonErrors.ValueCast("10", Boolean::class)
-            )
-        )
+            "#of(JsError, JsError) should return JsErrors with all errors" {
+                val errors = JsErrors.of(
+                    JsonErrors.PathMissing,
+                    JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                )
 
-        assertNotNull(errors)
-        assertEquals(3, errors.count())
-        assertContains(errors, JsonErrors.PathMissing)
-        assertContains(errors, JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
-        assertContains(errors, JsonErrors.ValueCast("10", Boolean::class))
-    }
+                errors shouldContainAll listOf(
+                    JsonErrors.PathMissing,
+                    JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                )
+            }
 
-    @Test
-    fun `Testing the hasCritical function for non-critical errors`() {
-        val errors = JsErrors.of(
-            listOf(
-                JsonErrors.PathMissing,
-                JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING),
-                JsonErrors.ValueCast("10", Boolean::class)
-            )
-        )
+            "#of(List<JsError>)" - {
 
-        assertNotNull(errors)
-    }
+                "should return null if list is empty" {
+                    val errors = JsErrors.of(emptyList())
 
-    @Test
-    fun `Testing the plus function`() {
+                    errors should beNull()
+                }
 
-        val firstFailure = JsErrors.of(JsonErrors.PathMissing)
-        val secondFailure = JsErrors.of(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
-        val threeFailure = JsErrors.of(JsonErrors.ValueCast("10", Boolean::class))
+                "should return JsErrors with errors from the list" {
+                    val errors = JsErrors.of(
+                        listOf(
+                            JsonErrors.PathMissing,
+                            JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                        )
+                    )
 
-        val merged = firstFailure + secondFailure + threeFailure
+                    errors.shouldNotBeNull()
+                        .shouldContainAll(
+                            listOf(
+                                JsonErrors.PathMissing,
+                                JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                            )
+                        )
+                }
+            }
 
-        assertContains(merged, JsonErrors.PathMissing)
-        assertContains(merged, JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
-        assertContains(merged, JsonErrors.ValueCast("10", Boolean::class))
-    }
+            "calling plus function should return a new JsErrors object with all errors" {
+                val firstErrors = JsErrors.of(JsonErrors.PathMissing)
+                val secondErrors = JsErrors.of(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
 
-    @Test
-    fun `Testing the equals function`() {
-        val firstFailure = JsErrors.of(JsonErrors.PathMissing)
-        val secondFailure = JsErrors.of(JsonErrors.PathMissing)
-        val threeFailure = JsErrors.of(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
-        val fourFailure: JsErrors? = null
+                val errors = firstErrors + secondErrors
 
-        assertEquals(firstFailure, firstFailure)
+                errors shouldContainAll JsErrors.of(
+                    JsonErrors.PathMissing,
+                    JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                )
+            }
 
-        assertEquals(firstFailure, secondFailure)
-        assertEquals(secondFailure, firstFailure)
+            "should comply with equals() and hashCode() contract" {
+                val errors = JsErrors.of(JsonErrors.PathMissing)
 
-        assertNotEquals(firstFailure, threeFailure)
-        assertNotEquals(threeFailure, firstFailure)
-
-        assertNotEquals(firstFailure, fourFailure)
-        assertNotEquals(fourFailure, firstFailure)
-    }
-
-    @Test
-    fun `Testing the hashCode function`() {
-        val firstFailure = JsErrors.of(JsonErrors.PathMissing)
-        val secondFailure = JsErrors.of(JsonErrors.PathMissing)
-        val threeFailure = JsErrors.of(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
-
-        assertEquals(firstFailure.hashCode(), firstFailure.hashCode())
-
-        assertEquals(firstFailure.hashCode(), secondFailure.hashCode())
-        assertEquals(secondFailure.hashCode(), firstFailure.hashCode())
-
-        assertNotEquals(firstFailure.hashCode(), threeFailure.hashCode())
-        assertNotEquals(threeFailure.hashCode(), firstFailure.hashCode())
+                errors.shouldBeEqualsContract(
+                    y = JsErrors.of(JsonErrors.PathMissing),
+                    z = JsErrors.of(JsonErrors.PathMissing),
+                    other = JsErrors.of(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
+                )
+            }
+        }
     }
 }

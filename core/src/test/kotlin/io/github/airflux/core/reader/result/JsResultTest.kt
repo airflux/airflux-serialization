@@ -75,11 +75,9 @@ class JsResultTest : FreeSpec() {
 
             "constructor(JsLocation, JsErrors)" {
                 val errors = JsErrors.of(
-                    listOf(
-                        JsonErrors.PathMissing,
-                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                    )
-                )!!
+                    JsonErrors.PathMissing,
+                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                )
 
                 val failure = JsResult.Failure(location = LOCATION, errors = errors)
 
@@ -162,11 +160,9 @@ class JsResultTest : FreeSpec() {
                 val cause = JsResult.Failure.Cause(
                     location = LOCATION,
                     errors = JsErrors.of(
-                        listOf(
-                            JsonErrors.PathMissing,
-                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                        )
-                    )!!
+                        JsonErrors.PathMissing,
+                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    )
                 )
 
                 cause.location shouldBe LOCATION
