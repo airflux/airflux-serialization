@@ -51,26 +51,46 @@ fun <T : Any, C> readAsCollection(
     factory: CollectionBuilderFactory<T, C>,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
 ): JsResult<C>
-    where C : Collection<T> = when (from) {
-    is JsArray<*> -> {
+    where C : Collection<T> {
+
+    fun <T, C : Collection<T>> readAsCollection(
+        context: JsReaderContext,
+        location: JsLocation,
+        from: JsArray<*>,
+        using: JsReader<T>,
+        factory: CollectionBuilderFactory<T, C>
+    ): JsResult<C> {
+
+        fun <T, C : Collection<T>> dispatch(
+            result: JsResult.Success<T>,
+            acc: JsResult<CollectionBuilder<T, C>>
+        ): JsResult<CollectionBuilder<T, C>> =
+            when (acc) {
+                is JsResult.Success<CollectionBuilder<T, C>> -> acc.apply { value += result.value }
+                is JsResult.Failure -> acc
+            }
+
+        fun <T, C : Collection<T>> dispatch(
+            result: JsResult.Failure,
+            acc: JsResult<CollectionBuilder<T, C>>
+        ): JsResult<CollectionBuilder<T, C>> =
+            when (acc) {
+                is JsResult.Success<CollectionBuilder<T, C>> -> result
+                is JsResult.Failure -> result + acc
+            }
+
         val values = factory.newBuilder(from.size)
         val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(value = values, location = location)
-        from.withIndex()
-            .fold(initial) { acc, (idx, elem) ->
-                when (val result = using.read(context, location.append(idx), elem)) {
-                    is JsResult.Success<T> -> when (acc) {
-                        is JsResult.Success<*> -> acc.also { values += result.value }
-                        is JsResult.Failure -> acc as JsResult<CollectionBuilder<T, C>>
-                    }
-
-                    is JsResult.Failure -> when (acc) {
-                        is JsResult.Success<*> -> result
-                        is JsResult.Failure -> acc + result
-                    }
-                }
+        return from.foldIndexed(initial) { idx, acc, elem ->
+            when (val result = using.read(context, location.append(idx), elem)) {
+                is JsResult.Success<T> -> dispatch(result, acc)
+                is JsResult.Failure -> dispatch(result, acc)
             }
-            .map { it.result() }
+        }.map { it.result() }
     }
 
-    else -> JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
+    return when (from) {
+        is JsArray<*> -> readAsCollection(context, location, from, using, factory)
+        else -> JsResult.Failure(location, invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
+    }
 }
