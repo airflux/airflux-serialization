@@ -1,4 +1,4 @@
-package io.github.airflux.core.reader.validator.base//
+package io.github.airflux.core.reader.validator.base
 
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext

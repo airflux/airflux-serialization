@@ -30,7 +30,6 @@ internal class ReadAsObjectTest : FreeSpec() {
                     val json: JsValue = JsObject("name" to JsString(USER_NAME))
                     val result = json.readAsObject(LOCATION, JsonErrors::InvalidType, reader)
                     result.assertAsSuccess(location = LOCATION, value = DTO(name = USER_NAME))
-
                 }
             }
             "when called with a receiver of a not 'JsObject'" - {

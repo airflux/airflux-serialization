@@ -5,7 +5,7 @@ import io.github.airflux.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsValue
 import io.kotest.assertions.fail
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.shouldFail
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
@@ -121,9 +121,11 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling onFailure function should invoke the lambda" {
-                shouldThrow<RuntimeException> {
-                    original.onFailure { throw RuntimeException() }
+                val fail = shouldFail {
+                    original.onFailure { fail("onFailure") }
                 }
+
+                fail.message shouldBe "onFailure"
             }
 
             "calling getOrElse function should return a defaultValue" {

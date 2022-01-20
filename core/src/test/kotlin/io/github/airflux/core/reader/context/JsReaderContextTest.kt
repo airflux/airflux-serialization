@@ -43,7 +43,6 @@ class JsReaderContextTest {
 
             val context = JsReaderContext(user)
 
-
             assertTrue(User.Key in context)
             assertEquals(user, context[User.Key])
         }
