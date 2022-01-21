@@ -2,8 +2,6 @@ package io.github.airflux.core.reader
 
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.TestData.USER_NAME_VALUE
-import io.github.airflux.core.common.assertAsFailure
-import io.github.airflux.core.common.assertAsSuccess
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
@@ -11,84 +9,87 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
-import kotlin.test.Test
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
-class WithDefaultFieldReaderTest {
+class WithDefaultFieldReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext()
         private const val DEFAULT_VALUE = "Default value"
-        private val stringReader: JsReader<String> =
-            JsReader { _, location, input -> JsResult.Success((input as JsString).get, location) }
+        private val stringReader: JsReader<String> = JsReader { _, location, input ->
+            JsResult.Success((input as JsString).get, location)
+        }
         private val defaultValue = { DEFAULT_VALUE }
     }
 
-    @Test
-    fun `Testing the readWithDefault function (a property is found)`() {
-        val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
+    init {
 
-        val result: JsResult<String> = readWithDefault(
-            from = from,
-            using = stringReader,
-            defaultValue = defaultValue,
-            context = context,
-            invalidTypeErrorBuilder = JsonErrors::InvalidType
-        )
+        "The 'readWithDefault' function" - {
 
-        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
-    }
+            "should return the result of applying the reader to the node if it is not the JsNull node" {
+                val from: JsLookup =
+                    JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
-    @Test
-    fun `Testing the readWithDefault function (a property is found with value the null, returning default value)`() {
-        val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
+                val result: JsResult<String> = readWithDefault(
+                    from = from,
+                    using = stringReader,
+                    defaultValue = defaultValue,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
-        val result: JsResult<String> = readWithDefault(
-            from = from,
-            using = stringReader,
-            defaultValue = defaultValue,
-            context = context,
-            invalidTypeErrorBuilder = JsonErrors::InvalidType
-        )
+                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
+            }
 
-        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
-    }
+            "should return the default value if found a JsNull node" {
+                val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
 
-    @Test
-    fun `Testing the readWithDefault function (a property is not found, returning default value)`() {
-        val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
+                val result: JsResult<String> = readWithDefault(
+                    from = from,
+                    using = stringReader,
+                    defaultValue = defaultValue,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
-        val result: JsResult<String> = readWithDefault(
-            from = from,
-            using = stringReader,
-            defaultValue = defaultValue,
-            context = context,
-            invalidTypeErrorBuilder = JsonErrors::InvalidType
-        )
+                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
+            }
 
-        result.assertAsSuccess(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
-    }
+            "should return the default value if did not find a node" {
+                val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
-    @Test
-    fun `Testing the readWithDefault function (a property is not found, invalid type)`() {
-        val from: JsLookup = JsLookup.Undefined.InvalidType(
-            location = JsLocation.empty.append("name"),
-            expected = JsValue.Type.ARRAY,
-            actual = JsValue.Type.STRING
-        )
+                val result: JsResult<String> = readWithDefault(
+                    from = from,
+                    using = stringReader,
+                    defaultValue = defaultValue,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
 
-        val result: JsResult<String> = readWithDefault(
-            from = from,
-            using = stringReader,
-            defaultValue = defaultValue,
-            context = context,
-            invalidTypeErrorBuilder = JsonErrors::InvalidType
-        )
+                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
+            }
 
-        result.assertAsFailure(
-            JsResult.Failure.Cause(
-                location = JsLocation.empty.append("name"),
-                error = JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
-            )
-        )
+            "should return the invalid type error if a node is not an object" {
+                val from: JsLookup = JsLookup.Undefined.InvalidType(
+                    location = JsLocation.empty.append("name"),
+                    expected = JsValue.Type.OBJECT,
+                    actual = JsValue.Type.STRING
+                )
+
+                val result: JsResult<String> = readWithDefault(
+                    from = from,
+                    using = stringReader,
+                    defaultValue = defaultValue,
+                    context = context,
+                    invalidTypeErrorBuilder = JsonErrors::InvalidType
+                )
+
+                result shouldBe JsResult.Failure(
+                    location = JsLocation.empty.append("name"),
+                    error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+                )
+            }
+        }
     }
 }

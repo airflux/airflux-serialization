@@ -5,7 +5,6 @@ import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.core.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.core.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
@@ -34,9 +33,9 @@ class CollectionFieldReaderTest : FreeSpec() {
 
     init {
 
-        "A 'readAsList' function" - {
+        "The readAsList function" - {
 
-            "should return non-empty result if collection is non-empty" {
+            "should return the result with a non-empty value if a collection is not empty" {
                 val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
                 val result: JsResult<List<String>> = readAsList(
@@ -53,7 +52,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                 )
             }
 
-            "should return empty result if collection is empty" {
+            "should return the result with an empty value if a collection is empty" {
                 val json: JsValue = JsArray<JsString>()
 
                 val result: JsResult<List<String>> = readAsList(
@@ -67,7 +66,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                 result shouldBe JsResult.Success(location = JsLocation.empty, value = emptyList())
             }
 
-            "should return error if parameter 'from' is not JsArray" {
+            "should return the invalid type error if the parameter 'from' is not JsArray" {
                 val json: JsValue = JsString(USER_NAME_VALUE)
 
                 val result: JsResult<List<String>> = readAsList(
@@ -78,14 +77,13 @@ class CollectionFieldReaderTest : FreeSpec() {
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-                result as JsResult.Failure
                 result shouldBe JsResult.Failure(
                     JsLocation.empty,
                     JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
                 )
             }
 
-            "should return error if collection with inconsistent content" {
+            "should return the invalid type error if a collection has inconsistent content" {
                 val json: JsValue = JsArray(
                     JsString(FIRST_PHONE_VALUE),
                     JsNumber.valueOf(10),
@@ -105,23 +103,19 @@ class CollectionFieldReaderTest : FreeSpec() {
                 result.causes shouldContainAll listOf(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty.append(1),
-                        errors = JsErrors.of(
-                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
-                        )
+                        error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
                     ),
                     JsResult.Failure.Cause(
                         location = JsLocation.empty.append(2),
-                        errors = JsErrors.of(
-                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                        )
+                        error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
                     )
                 )
             }
         }
 
-        "A 'readAsSet' method" - {
+        "The readAsSet function" - {
 
-            "should return non-empty result if collection is non-empty" {
+            "should return the result with a non-empty value if a collection is not empty" {
                 val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
                 val result: JsResult<Set<String>> = readAsSet(
@@ -138,7 +132,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                 )
             }
 
-            "should return empty result if collection is empty" {
+            "should return the result with an empty value if a collection is empty" {
                 val json: JsValue = JsArray<JsString>()
 
                 val result: JsResult<Set<String>> = readAsSet(
@@ -152,7 +146,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                 result shouldBe JsResult.Success(location = JsLocation.empty, value = emptySet())
             }
 
-            "should return error if parameter 'from' is not JsArray" {
+            "should return the invalid type error if the parameter 'from' is not JsArray" {
                 val json: JsValue = JsString(USER_NAME_VALUE)
 
                 val result: JsResult<Set<String>> = readAsSet(
@@ -163,14 +157,13 @@ class CollectionFieldReaderTest : FreeSpec() {
                     invalidTypeErrorBuilder = JsonErrors::InvalidType
                 )
 
-                result as JsResult.Failure
                 result shouldBe JsResult.Failure(
                     JsLocation.empty,
                     JsonErrors.InvalidType(expected = JsValue.Type.ARRAY, actual = JsValue.Type.STRING)
                 )
             }
 
-            "should return error if collection with inconsistent content" {
+            "should return the invalid type error if a collection has inconsistent content" {
                 val json: JsValue = JsArray(
                     JsString(FIRST_PHONE_VALUE),
                     JsNumber.valueOf(10),
@@ -190,15 +183,11 @@ class CollectionFieldReaderTest : FreeSpec() {
                 result.causes shouldContainAll listOf(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty.append(1),
-                        errors = JsErrors.of(
-                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
-                        )
+                        error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.NUMBER)
                     ),
                     JsResult.Failure.Cause(
                         location = JsLocation.empty.append(2),
-                        errors = JsErrors.of(
-                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                        )
+                        error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
                     )
                 )
             }

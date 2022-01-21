@@ -64,23 +64,21 @@ fun <T : Any, C> readAsCollection(
         fun <T, C : Collection<T>> dispatch(
             result: JsResult.Success<T>,
             acc: JsResult<CollectionBuilder<T, C>>
-        ): JsResult<CollectionBuilder<T, C>> =
-            when (acc) {
-                is JsResult.Success<CollectionBuilder<T, C>> -> acc.apply { value += result.value }
-                is JsResult.Failure -> acc
-            }
+        ): JsResult<CollectionBuilder<T, C>> = when (acc) {
+            is JsResult.Success<CollectionBuilder<T, C>> -> acc.apply { value += result.value }
+            is JsResult.Failure -> acc
+        }
 
         fun <T, C : Collection<T>> dispatch(
             result: JsResult.Failure,
             acc: JsResult<CollectionBuilder<T, C>>
-        ): JsResult<CollectionBuilder<T, C>> =
-            when (acc) {
-                is JsResult.Success<CollectionBuilder<T, C>> -> result
-                is JsResult.Failure -> result + acc
-            }
+        ): JsResult<CollectionBuilder<T, C>> = when (acc) {
+            is JsResult.Success<CollectionBuilder<T, C>> -> result
+            is JsResult.Failure -> result + acc
+        }
 
-        val values = factory.newBuilder(from.size)
-        val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(value = values, location = location)
+        val initial: JsResult<CollectionBuilder<T, C>> =
+            JsResult.Success(value = factory.newBuilder(from.size), location = location)
         return from.foldIndexed(initial) { idx, acc, elem ->
             when (val result = using.read(context, location.append(idx), elem)) {
                 is JsResult.Success<T> -> dispatch(result, acc)

@@ -20,14 +20,24 @@ fun <T : Any> readWithDefault(
     using: JsReader<T>,
     defaultValue: () -> T,
     invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-): JsResult<T> = when (from) {
-    is JsLookup.Defined -> when (from.value) {
+): JsResult<T> {
+
+    fun <T : Any> readWithDefault(
+        context: JsReaderContext,
+        from: JsLookup.Defined,
+        using: JsReader<T>,
+        defaultValue: () -> T
+    ): JsResult<T> = when (from.value) {
         is JsNull -> JsResult.Success(location = from.location, value = defaultValue())
         else -> using.read(context, from.location, from.value)
     }
 
-    is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
-
-    is JsLookup.Undefined.InvalidType ->
-        JsResult.Failure(location = from.location, error = invalidTypeErrorBuilder.build(from.expected, from.actual))
+    return when (from) {
+        is JsLookup.Defined -> readWithDefault(context, from, using, defaultValue)
+        is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
+        is JsLookup.Undefined.InvalidType -> JsResult.Failure(
+            location = from.location,
+            error = invalidTypeErrorBuilder.build(from.expected, from.actual)
+        )
+    }
 }
