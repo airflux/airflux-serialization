@@ -1,3 +1,4 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
 plugins {
@@ -8,17 +9,17 @@ val detectConfigPath = "${project.rootProject.projectDir}/config/detekt/detekt.y
 
 configure<DetektExtension> {
     ignoreFailures = true
+    toolVersion = "1.19.0"
     config = project.files(detectConfigPath)
     debug = false
-    reports{
-        html {
-            enabled = true
-        }
-        xml {
-            enabled = true
-        }
-        txt {
-            enabled = false
-        }
+}
+
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = Configuration.JVM.targetVersion
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(false)
+        sarif.required.set(true)
     }
 }
