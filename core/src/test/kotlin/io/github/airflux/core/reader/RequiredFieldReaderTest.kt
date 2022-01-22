@@ -16,7 +16,7 @@ class RequiredFieldReaderTest : FreeSpec() {
     companion object {
         private val context = JsReaderContext()
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
-            JsResult.Success((input as JsString).get, location)
+            JsResult.Success(location, (input as JsString).get)
         }
     }
 

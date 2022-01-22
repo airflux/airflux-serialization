@@ -6,12 +6,12 @@ sealed class JsResult<out T> {
     companion object;
 
     infix fun <R> map(transform: (T) -> R): JsResult<R> = when (this) {
-        is Success -> Success(transform(value), location)
+        is Success -> Success(location, transform(value))
         is Failure -> this
     }
 
-    fun <R> flatMap(transform: (T, location: JsLocation) -> JsResult<R>): JsResult<R> = when (this) {
-        is Success -> transform(value, this.location)
+    fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = when (this) {
+        is Success -> transform(this.location, value)
         is Failure -> this
     }
 
@@ -30,7 +30,7 @@ sealed class JsResult<out T> {
         is Failure -> defaultValue()
     }
 
-    data class Success<T>(val value: T, val location: JsLocation) : JsResult<T>()
+    data class Success<T>(val location: JsLocation, val value: T) : JsResult<T>()
 
     class Failure private constructor(val causes: List<Cause>) : JsResult<Nothing>() {
 
@@ -65,8 +65,5 @@ sealed class JsResult<out T> {
     }
 }
 
-fun <T> T.asSuccess(location: JsLocation): JsResult<T> =
-    JsResult.Success(value = this, location = location)
-
-fun <E : JsError> E.asFailure(location: JsLocation): JsResult<Nothing> =
-    JsResult.Failure(location = location, error = this)
+fun <T> T.asSuccess(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
+fun <E : JsError> E.asFailure(location: JsLocation): JsResult<Nothing> = JsResult.Failure(location, this)

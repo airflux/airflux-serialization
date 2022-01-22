@@ -11,7 +11,7 @@ fun <T> JsResult<T?>.filter(context: JsReaderContext, predicate: JsPredicate<T>)
     when (this) {
         is JsResult.Success -> if (this.value != null) {
             if (predicate.test(context, this.location, this.value)) this
-            else JsResult.Success(value = null, location = this.location)
+            else JsResult.Success(this.location, null)
         } else
             this
 

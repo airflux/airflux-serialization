@@ -11,7 +11,7 @@ import io.github.airflux.core.value.JsValue
 
 fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
     when (this) {
-        is JsBoolean -> JsResult.Success(this.get, location = location)
+        is JsBoolean -> JsResult.Success(location, this.get)
         else -> JsResult.Failure(
             location = location,
             error = invalidTypeErrorBuilder.build(JsValue.Type.BOOLEAN, this.type)
@@ -20,7 +20,7 @@ fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: Invalid
 
 fun JsValue.readAsString(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) =
     when (this) {
-        is JsString -> JsResult.Success(this.get, location = location)
+        is JsString -> JsResult.Success(location, this.get)
         else ->
             JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.STRING, this.type))
     }

@@ -77,8 +77,7 @@ fun <T : Any, C> readAsCollection(
             is JsResult.Failure -> result + acc
         }
 
-        val initial: JsResult<CollectionBuilder<T, C>> =
-            JsResult.Success(value = factory.newBuilder(from.size), location = location)
+        val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(location, factory.newBuilder(from.size))
         return from.foldIndexed(initial) { idx, acc, elem ->
             when (val result = using.read(context, location.append(idx), elem)) {
                 is JsResult.Success<T> -> dispatch(result, acc)

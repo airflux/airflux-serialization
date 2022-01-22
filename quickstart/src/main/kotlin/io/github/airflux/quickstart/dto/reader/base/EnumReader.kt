@@ -14,9 +14,9 @@ inline fun <reified T : Enum<T>> JsResult<String>.asEnum(): JsResult<T> =
     this.asEnum(enumValues()) { text -> enumValueOf(text.uppercase()) }
 
 fun <T : Enum<T>> JsResult<String>.asEnum(allowable: Array<T>, transform: (String) -> T): JsResult<T> =
-    flatMap { text, location ->
+    flatMap { location, text ->
         try {
-            JsResult.Success(transform(text), location)
+            JsResult.Success(location, transform(text))
         } catch (ignored: Exception) {
             JsResult.Failure(
                 location = location,

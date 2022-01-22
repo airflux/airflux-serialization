@@ -14,7 +14,7 @@ internal class ReadAsNumberTest : FreeSpec() {
 
     companion object {
         private val LOCATION = JsLocation.empty.append("user")
-        private val reader = { location: JsLocation, text: String -> JsResult.Success(text.toInt(), location) }
+        private val reader = { location: JsLocation, text: String -> JsResult.Success(location, text.toInt()) }
     }
 
     init {

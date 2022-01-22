@@ -28,13 +28,13 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling flatMap function should return a result of applying the [transform] function to the value" {
-                val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
+                val result = original.flatMap { location, value -> JsResult.Success(location, value.toInt()) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling recovery function should return an original" {
-                val result = original.recovery { _ -> JsResult.Success(ELSE_VALUE, LOCATION) }
+                val result = original.recovery { _ -> JsResult.Success(LOCATION, ELSE_VALUE) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
             }
@@ -111,13 +111,13 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling flatMap function should return an original do not apply the [transform] function to the value" {
-                val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
+                val result = original.flatMap { location, value -> JsResult.Success(location, value.toInt()) }
 
                 result shouldBe original
             }
 
             "calling recovery function should return the result of invoking the recovery function" {
-                val result = original.recovery { _ -> JsResult.Success(ELSE_VALUE, LOCATION) }
+                val result = original.recovery { _ -> JsResult.Success(LOCATION, ELSE_VALUE) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ELSE_VALUE)
             }

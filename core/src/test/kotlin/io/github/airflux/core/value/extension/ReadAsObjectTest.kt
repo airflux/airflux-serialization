@@ -18,7 +18,7 @@ internal class ReadAsObjectTest : FreeSpec() {
         private val LOCATION = JsLocation.empty.append("user")
         private val reader = { location: JsLocation, input: JsObject ->
             val name = input["name"] as JsString
-            JsResult.Success(DTO(name = name.get), location)
+            JsResult.Success(location, DTO(name = name.get))
         }
     }
 
