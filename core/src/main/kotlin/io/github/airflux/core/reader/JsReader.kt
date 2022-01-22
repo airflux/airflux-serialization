@@ -34,12 +34,10 @@ fun interface JsReader<T> {
      * @return A new [JsReader] with the updated behavior.
      */
     infix fun or(other: JsReader<T>): JsReader<T> = JsReader { context, location, input ->
-        when (val result = read(context, location, input)) {
-            is JsResult.Success -> result
-            is JsResult.Failure -> when (val alternative = other.read(context, location, input)) {
-                is JsResult.Success -> alternative
-                is JsResult.Failure -> result + alternative
+        read(context, location, input)
+            .recovery { failure ->
+                other.read(context, location, input)
+                    .recovery { alternative -> failure + alternative }
             }
-        }
     }
 }
