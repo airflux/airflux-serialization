@@ -35,6 +35,12 @@ class JsResultTest : FreeSpec() {
                 result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
+            "calling recovery function should return an original" {
+                val result = original.recovery { _ -> JsResult.Success(ELSE_VALUE, LOCATION) }
+
+                result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+            }
+
             "calling onFailure function should return a value" {
                 val result = original.onFailure { fail("failure") }
 
@@ -116,6 +122,12 @@ class JsResultTest : FreeSpec() {
                 val result = original.flatMap { v, p -> JsResult.Success(v.toInt(), p) }
 
                 result shouldBe original
+            }
+
+            "calling recovery function should return the result of invoking the recovery function" {
+                val result = original.recovery { _ -> JsResult.Success(ELSE_VALUE, LOCATION) }
+
+                result shouldBe JsResult.Success(location = LOCATION, value = ELSE_VALUE)
             }
 
             "calling onFailure function should invoke the lambda" {
