@@ -4,8 +4,6 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.validator.JsPropertyValidator
 
-fun <T> JsPropertyValidator<T>.applyIfPresent() = applyIfNotNull()
-
 fun <T> JsPropertyValidator<T>.applyIfNotNull() =
     JsPropertyValidator<T?> { context, location, value ->
         if (value != null) validation(context, location, value) else null
