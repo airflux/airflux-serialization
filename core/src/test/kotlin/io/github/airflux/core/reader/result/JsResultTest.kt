@@ -4,8 +4,6 @@ import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsValue
-import io.kotest.assertions.fail
-import io.kotest.assertions.shouldFail
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
@@ -39,12 +37,6 @@ class JsResultTest : FreeSpec() {
                 val result = original.recovery { _ -> JsResult.Success(ELSE_VALUE, LOCATION) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
-            }
-
-            "calling onFailure function should return a value" {
-                val result = original.onFailure { fail("failure") }
-
-                result shouldBe ORIGINAL_VALUE
             }
 
             "calling getOrElse function should return a value" {
@@ -128,14 +120,6 @@ class JsResultTest : FreeSpec() {
                 val result = original.recovery { _ -> JsResult.Success(ELSE_VALUE, LOCATION) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ELSE_VALUE)
-            }
-
-            "calling onFailure function should invoke the lambda" {
-                val fail = shouldFail {
-                    original.onFailure { fail("onFailure") }
-                }
-
-                fail.message shouldBe "onFailure"
             }
 
             "calling getOrElse function should return a defaultValue" {

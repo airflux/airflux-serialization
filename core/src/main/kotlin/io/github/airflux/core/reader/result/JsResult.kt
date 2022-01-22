@@ -15,11 +15,6 @@ sealed class JsResult<out T> {
         is Failure -> this
     }
 
-    inline infix fun onFailure(block: (Failure) -> Nothing): T = when (this) {
-        is Success<T> -> value
-        is Failure -> block(this)
-    }
-
     inline infix fun recovery(function: (Failure) -> JsResult<@UnsafeVariance T>): JsResult<T> = when (this) {
         is Success -> this
         is Failure -> function(this)
