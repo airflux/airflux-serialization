@@ -22,7 +22,13 @@ import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.NullablePropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.OptionalPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 
 @Suppress("unused")
@@ -57,13 +63,25 @@ class AdditionalPropertiesValidator private constructor(
             mapNotNull { property -> property.name() }
                 .toSet()
 
-        private fun JsReaderProperty.name(): String? = path.firstOrNull()
-            ?.let {
-                when (it) {
-                    is PathElement.Key -> it.get
-                    is PathElement.Idx -> null
-                }
+        private fun JsReaderProperty.name(): String? {
+            fun JsReaderProperty.path() = when (this) {
+                is RequiredPropertyInstance<*> -> path
+                is DefaultablePropertyInstance<*> -> path
+                is OptionalPropertyInstance<*> -> path
+                is OptionalWithDefaultPropertyInstance<*> -> path
+                is NullablePropertyInstance<*> -> path
+                is NullableWithDefaultPropertyInstance<*> -> path
             }
+
+            return path()
+                .first()
+                .let { path ->
+                    when (path) {
+                        is PathElement.Key -> path.get
+                        is PathElement.Idx -> null
+                    }
+                }
+        }
     }
 
     fun interface ErrorBuilder {

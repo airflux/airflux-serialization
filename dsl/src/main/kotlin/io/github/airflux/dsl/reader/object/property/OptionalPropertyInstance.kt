@@ -31,27 +31,14 @@ import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.core.value.JsValue
 
 internal class OptionalPropertyInstance<T : Any> private constructor(
-    override val path: JsPath,
+    val path: JsPath,
     private var reader: JsReader<T?>
-) : OptionalProperty<T> {
+) : JsReaderProperty.Optional<T> {
 
-    companion object {
-
-        fun <T : Any> of(
-            path: JsPath,
-            reader: JsReader<T>,
-            invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): OptionalProperty<T> =
-            OptionalPropertyInstance(path) { context, location, input ->
-                val lookup = JsLookup.apply(location, path, input)
-                readOptional(context, lookup, reader, invalidTypeErrorBuilder)
-            }
-    }
-
-    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T?> =
+    fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T?> =
         reader.read(context, location, input)
 
-    override fun validation(validator: JsPropertyValidator<T?>): OptionalPropertyInstance<T> {
+    override fun validation(validator: JsPropertyValidator<T?>): JsReaderProperty.Optional<T> {
         val previousReader = this.reader
         reader = JsReader { context, location, input ->
             previousReader.read(context, location, input).validation(context, validator)
@@ -59,11 +46,24 @@ internal class OptionalPropertyInstance<T : Any> private constructor(
         return this
     }
 
-    override fun filter(predicate: JsPredicate<T>): OptionalPropertyInstance<T> {
+    override fun filter(predicate: JsPredicate<T>): JsReaderProperty.Optional<T> {
         val previousReader = this.reader
         reader = JsReader { context, location, input ->
             previousReader.read(context, location, input).filter(context, predicate)
         }
         return this
+    }
+
+    companion object {
+
+        fun <T : Any> of(
+            path: JsPath,
+            reader: JsReader<T>,
+            invalidTypeErrorBuilder: InvalidTypeErrorBuilder
+        ): OptionalPropertyInstance<T> =
+            OptionalPropertyInstance(path) { context, location, input ->
+                val lookup = JsLookup.apply(location, path, input)
+                readOptional(context, lookup, reader, invalidTypeErrorBuilder)
+            }
     }
 }

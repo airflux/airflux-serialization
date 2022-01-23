@@ -16,22 +16,6 @@
 
 package io.github.airflux.dsl.reader.`object`
 
-import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.ObjectReader.TypeBuilder
-import io.github.airflux.dsl.reader.`object`.property.DefaultableProperty
-import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.NullableProperty
-import io.github.airflux.dsl.reader.`object`.property.NullablePropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultProperty
-import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.OptionalProperty
-import io.github.airflux.dsl.reader.`object`.property.OptionalPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultProperty
-import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.RequiredProperty
-import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
@@ -43,6 +27,16 @@ import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsObject
+import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.ObjectReader.TypeBuilder
+import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.NullablePropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.OptionalPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 
 @Suppress("unused")
 fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =
@@ -77,14 +71,14 @@ class ObjectReader(
     }
 
     interface PropertyBinder<P : Any> {
-        fun required(): RequiredProperty<P>
-        fun defaultable(default: () -> P): DefaultableProperty<P>
+        fun required(): JsReaderProperty.Required<P>
+        fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P>
 
-        fun optional(): OptionalProperty<P>
-        fun optional(default: () -> P): OptionalWithDefaultProperty<P>
+        fun optional(): JsReaderProperty.Optional<P>
+        fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P>
 
-        fun nullable(): NullableProperty<P>
-        fun nullable(default: () -> P): NullableWithDefaultProperty<P>
+        fun nullable(): JsReaderProperty.Nullable<P>
+        fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P>
     }
 
     fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsLocation) -> JsResult<T>
@@ -130,27 +124,27 @@ class ObjectReader(
             private val reader: JsReader<P>
         ) : PropertyBinder<P> {
 
-            override fun required(): RequiredProperty<P> =
+            override fun required(): JsReaderProperty.Required<P> =
                 RequiredPropertyInstance.of(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            override fun defaultable(default: () -> P): DefaultableProperty<P> =
+            override fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P> =
                 DefaultablePropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            override fun optional(): OptionalProperty<P> =
+            override fun optional(): JsReaderProperty.Optional<P> =
                 OptionalPropertyInstance.of(path, reader, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            override fun optional(default: () -> P): OptionalWithDefaultProperty<P> =
+            override fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P> =
                 OptionalWithDefaultPropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            override fun nullable(): NullableProperty<P> =
+            override fun nullable(): JsReaderProperty.Nullable<P> =
                 NullablePropertyInstance.of(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
                     .also { registration(it) }
 
-            override fun nullable(default: () -> P): NullableWithDefaultProperty<P> =
+            override fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P> =
                 NullableWithDefaultPropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
                     .also { registration(it) }
 

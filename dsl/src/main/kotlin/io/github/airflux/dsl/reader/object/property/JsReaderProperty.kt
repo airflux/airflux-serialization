@@ -16,9 +16,35 @@
 
 package io.github.airflux.dsl.reader.`object`.property
 
-import io.github.airflux.core.path.JsPath
+import io.github.airflux.core.reader.predicate.JsPredicate
+import io.github.airflux.core.reader.validator.JsPropertyValidator
 
 sealed interface JsReaderProperty {
 
-    val path: JsPath
+    sealed interface Required<T : Any> : JsReaderProperty {
+        infix fun validation(validator: JsPropertyValidator<T>): Required<T>
+    }
+
+    sealed interface Defaultable<T : Any> : JsReaderProperty {
+        infix fun validation(validator: JsPropertyValidator<T>): Defaultable<T>
+    }
+
+    sealed interface Optional<T : Any> : JsReaderProperty {
+        infix fun validation(validator: JsPropertyValidator<T?>): Optional<T>
+        infix fun filter(predicate: JsPredicate<T>): Optional<T>
+    }
+
+    sealed interface OptionalWithDefault<T : Any> : JsReaderProperty {
+        infix fun validation(validator: JsPropertyValidator<T>): OptionalWithDefault<T>
+    }
+
+    sealed interface Nullable<T : Any> : JsReaderProperty {
+        infix fun validation(validator: JsPropertyValidator<T?>): Nullable<T>
+        infix fun filter(predicate: JsPredicate<T>): Nullable<T>
+    }
+
+    sealed interface NullableWithDefault<T : Any> : JsReaderProperty {
+        infix fun validation(validator: JsPropertyValidator<T?>): NullableWithDefault<T>
+        infix fun filter(predicate: JsPredicate<T>): NullableWithDefault<T>
+    }
 }

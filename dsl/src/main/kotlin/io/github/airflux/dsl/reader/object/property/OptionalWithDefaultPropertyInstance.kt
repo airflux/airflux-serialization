@@ -29,9 +29,20 @@ import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.core.value.JsValue
 
 internal class OptionalWithDefaultPropertyInstance<T : Any> private constructor(
-    override val path: JsPath,
+    val path: JsPath,
     private var reader: JsReader<T>,
-) : OptionalWithDefaultProperty<T> {
+) : JsReaderProperty.OptionalWithDefault<T> {
+
+    fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> =
+        reader.read(context, location, input)
+
+    override fun validation(validator: JsPropertyValidator<T>): JsReaderProperty.OptionalWithDefault<T> {
+        val previousReader = this.reader
+        reader = JsReader { context, location, input ->
+            previousReader.read(context, location, input).validation(context, validator)
+        }
+        return this
+    }
 
     companion object {
 
@@ -40,21 +51,10 @@ internal class OptionalWithDefaultPropertyInstance<T : Any> private constructor(
             reader: JsReader<T>,
             default: () -> T,
             invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): OptionalWithDefaultProperty<T> =
+        ): OptionalWithDefaultPropertyInstance<T> =
             OptionalWithDefaultPropertyInstance(path) { context, location, input ->
                 val lookup = JsLookup.apply(location, path, input)
                 readOptional(context, lookup, reader, default, invalidTypeErrorBuilder)
             }
-    }
-
-    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> =
-        reader.read(context, location, input)
-
-    override fun validation(validator: JsPropertyValidator<T>): OptionalWithDefaultPropertyInstance<T> {
-        val previousReader = this.reader
-        reader = JsReader { context, location, input ->
-            previousReader.read(context, location, input).validation(context, validator)
-        }
-        return this
     }
 }
