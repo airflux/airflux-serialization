@@ -17,14 +17,14 @@ object Configuration {
             url.set("https://airflux.github.io/airflux/")
             licenses {
                 license {
-                    name.set("Mozilla Public License Version 2.0")
-                    url.set("https://www.mozilla.org/en-US/MPL/2.0/")
+                    name.set("Apache License Version 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0")
                 }
             }
 
             developers {
                 developer {
-                    id.set("maxim-sambulat")
+                    id.set("smblt")
                     name.set("Maxim Sambulat")
                     email.set("airflux.github.io@gmail.com")
                     organization.set("airflux")
