@@ -15,6 +15,7 @@ import io.github.airflux.quickstart.json.validation.isNotEmptyObject
 import io.github.airflux.quickstart.json.validation.maxProperties
 import io.github.airflux.core.reader.result.asSuccess
 import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.dsl.reader.`object`.property.specification.builder.required
 
 val LotStatusReader = stringReader.validation(isNotBlank).asEnum<LotStatus>()
 
@@ -32,9 +33,9 @@ val LotReader = reader<Lot>(configuration = LotObjectReaderConfig) {
         }
     }
 
-    val id = property(name = "id", reader = stringReader).required()
-    val status = property(name = "status", reader = LotStatusReader).required()
-    val value = property(name = "value", reader = ValueReader).required()
+    val id = property(required(name = "id", reader = stringReader))
+    val status = property(required(name = "status", reader = LotStatusReader))
+    val value = property(required(name = "value", reader = ValueReader))
 
     build { location ->
         Lot(

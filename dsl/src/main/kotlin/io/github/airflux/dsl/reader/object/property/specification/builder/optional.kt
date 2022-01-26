@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.property
+package io.github.airflux.dsl.reader.`object`.property.specification.builder
 
-sealed interface JsReaderProperty {
-    sealed interface Required<T : Any> : JsReaderProperty
-    sealed interface Defaultable<T : Any> : JsReaderProperty
-    sealed interface Optional<T : Any> : JsReaderProperty
-    sealed interface OptionalWithDefault<T : Any> : JsReaderProperty
-    sealed interface Nullable<T : Any> : JsReaderProperty
-    sealed interface NullableWithDefault<T : Any> : JsReaderProperty
-}
+import io.github.airflux.core.path.JsPath
+import io.github.airflux.core.reader.JsReader
+import io.github.airflux.dsl.reader.`object`.property.specification.JsOptionalReaderPropertySpec
+
+@Suppress("unused")
+fun <T : Any> optional(name: String, reader: JsReader<T>) =
+    optional(JsPath(name), reader)
+
+fun <T : Any> optional(path: JsPath, reader: JsReader<T>) =
+    JsReaderPropertySpecBuilder.Optional { invalidTypeErrorBuilder ->
+        JsOptionalReaderPropertySpec(path, reader, invalidTypeErrorBuilder)
+    }

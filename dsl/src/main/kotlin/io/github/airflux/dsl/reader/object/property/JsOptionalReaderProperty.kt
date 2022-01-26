@@ -16,11 +16,14 @@
 
 package io.github.airflux.dsl.reader.`object`.property
 
-sealed interface JsReaderProperty {
-    sealed interface Required<T : Any> : JsReaderProperty
-    sealed interface Defaultable<T : Any> : JsReaderProperty
-    sealed interface Optional<T : Any> : JsReaderProperty
-    sealed interface OptionalWithDefault<T : Any> : JsReaderProperty
-    sealed interface Nullable<T : Any> : JsReaderProperty
-    sealed interface NullableWithDefault<T : Any> : JsReaderProperty
+import io.github.airflux.core.path.JsPath
+import io.github.airflux.core.reader.JsReader
+import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
+
+internal class JsOptionalReaderProperty<T : Any> private constructor(
+    val path: List<JsPath>,
+    val reader: JsReader<T?>
+) : JsReaderProperty.Optional<T> {
+
+    constructor(spec: JsReaderPropertySpec.Optional<T>) : this(spec.path, spec.reader)
 }

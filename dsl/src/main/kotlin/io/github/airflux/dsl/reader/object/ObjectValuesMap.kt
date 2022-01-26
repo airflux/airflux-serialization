@@ -20,13 +20,13 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.NullablePropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.OptionalPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 
 class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty, Any>) {
 
@@ -51,7 +51,9 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
     operator fun <T : Any> JsReaderProperty.Nullable<T>.unaryPlus(): T? = get(this)
 
     @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.NullableWithDefault<T>): T? = results[attr]?.let { it as T }
+    infix operator fun <T : Any> get(attr: JsReaderProperty.NullableWithDefault<T>): T? =
+        results[attr]?.let { it as T }
+
     operator fun <T : Any> JsReaderProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
 
     val isEmpty: Boolean
@@ -71,12 +73,14 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
         private val results: MutableMap<JsReaderProperty, Any> = mutableMapOf()
 
         fun tryAddValueBy(property: JsReaderProperty): JsResult.Failure? = when (property) {
-            is RequiredPropertyInstance<*> -> append(property, property.read(context, location, input))
-            is DefaultablePropertyInstance<*> -> append(property, property.read(context, location, input))
-            is OptionalPropertyInstance<*> -> append(property, property.read(context, location, input))
-            is OptionalWithDefaultPropertyInstance<*> -> append(property, property.read(context, location, input))
-            is NullablePropertyInstance<*> -> append(property, property.read(context, location, input))
-            is NullableWithDefaultPropertyInstance<*> -> append(property, property.read(context, location, input))
+            is JsRequiredReaderProperty<*> -> append(property, property.reader.read(context, location, input))
+            is JsDefaultableReaderProperty<*> -> append(property, property.reader.read(context, location, input))
+            is JsOptionalReaderProperty<*> -> append(property, property.reader.read(context, location, input))
+            is JsOptionalWithDefaultReaderProperty<*> ->
+                append(property, property.reader.read(context, location, input))
+            is JsNullableReaderProperty<*> -> append(property, property.reader.read(context, location, input))
+            is JsNullableWithDefaultReaderProperty<*> ->
+                append(property, property.reader.read(context, location, input))
         }
 
         private fun append(property: JsReaderProperty, result: JsResult<Any?>): JsResult.Failure? = when (result) {

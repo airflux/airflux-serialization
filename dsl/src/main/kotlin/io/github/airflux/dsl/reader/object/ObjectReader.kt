@@ -16,7 +16,6 @@
 
 package io.github.airflux.dsl.reader.`object`
 
-import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
@@ -29,13 +28,14 @@ import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsObject
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.ObjectReader.TypeBuilder
-import io.github.airflux.dsl.reader.`object`.property.DefaultablePropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.NullablePropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.NullableWithDefaultPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.OptionalPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.OptionalWithDefaultPropertyInstance
-import io.github.airflux.dsl.reader.`object`.property.RequiredPropertyInstance
+import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 
 @Suppress("unused")
@@ -63,22 +63,15 @@ class ObjectReader(
         fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit)
         fun validation(init: JsObjectValidators.Builder.() -> Unit)
 
-        fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P>
-        fun <P : Any> property(path: JsPath, reader: JsReader<P>): PropertyBinder<P>
+        infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P>
+        infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Defaultable<P>): JsReaderProperty.Defaultable<P>
+        infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Optional<P>): JsReaderProperty.Optional<P>
+        infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P>
+        infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P>
+        infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P>
 
         fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T>
         fun build(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
-    }
-
-    interface PropertyBinder<P : Any> {
-        fun required(): JsReaderProperty.Required<P>
-        fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P>
-
-        fun optional(): JsReaderProperty.Optional<P>
-        fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P>
-
-        fun nullable(): JsReaderProperty.Nullable<P>
-        fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P>
     }
 
     fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsLocation) -> JsResult<T>
@@ -98,11 +91,29 @@ class ObjectReader(
             validatorBuilders.apply(init)
         }
 
-        override fun <P : Any> property(name: String, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinderInstance(JsPath(name), reader)
+        override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P> =
+            JsRequiredReaderProperty(builder.build(pathMissingErrorBuilder, invalidTypeErrorBuilder))
+                .also { registration(it) }
 
-        override fun <P : Any> property(path: JsPath, reader: JsReader<P>): PropertyBinder<P> =
-            PropertyBinderInstance(path, reader)
+        override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Defaultable<P>): JsReaderProperty.Defaultable<P> =
+            JsDefaultableReaderProperty(builder.build(invalidTypeErrorBuilder))
+                .also { registration(it) }
+
+        override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Optional<P>): JsReaderProperty.Optional<P> =
+            JsOptionalReaderProperty(builder.build(invalidTypeErrorBuilder))
+                .also { registration(it) }
+
+        override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P> =
+            JsOptionalWithDefaultReaderProperty(builder.build(invalidTypeErrorBuilder))
+                .also { registration(it) }
+
+        override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P> =
+            JsNullableReaderProperty(builder.build(pathMissingErrorBuilder, invalidTypeErrorBuilder))
+                .also { registration(it) }
+
+        override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P> =
+            JsNullableWithDefaultReaderProperty(builder.build(invalidTypeErrorBuilder))
+                .also { registration(it) }
 
         override fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T> =
             TypeBuilder { _, v, p -> v.builder(p) }
@@ -119,38 +130,8 @@ class ObjectReader(
             }
         }
 
-        private inner class PropertyBinderInstance<P : Any>(
-            private val path: JsPath,
-            private val reader: JsReader<P>
-        ) : PropertyBinder<P> {
-
-            override fun required(): JsReaderProperty.Required<P> =
-                RequiredPropertyInstance.of(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
-                    .also { registration(it) }
-
-            override fun defaultable(default: () -> P): JsReaderProperty.Defaultable<P> =
-                DefaultablePropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
-                    .also { registration(it) }
-
-            override fun optional(): JsReaderProperty.Optional<P> =
-                OptionalPropertyInstance.of(path, reader, invalidTypeErrorBuilder)
-                    .also { registration(it) }
-
-            override fun optional(default: () -> P): JsReaderProperty.OptionalWithDefault<P> =
-                OptionalWithDefaultPropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
-                    .also { registration(it) }
-
-            override fun nullable(): JsReaderProperty.Nullable<P> =
-                NullablePropertyInstance.of(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
-                    .also { registration(it) }
-
-            override fun nullable(default: () -> P): JsReaderProperty.NullableWithDefault<P> =
-                NullableWithDefaultPropertyInstance.of(path, reader, default, invalidTypeErrorBuilder)
-                    .also { registration(it) }
-
-            fun registration(property: JsReaderProperty) {
-                properties.add(property)
-            }
+        private fun registration(property: JsReaderProperty) {
+            properties.add(property)
         }
     }
 

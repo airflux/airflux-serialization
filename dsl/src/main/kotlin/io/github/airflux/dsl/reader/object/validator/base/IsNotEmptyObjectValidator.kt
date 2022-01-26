@@ -16,14 +16,14 @@
 
 package io.github.airflux.dsl.reader.`object`.validator.base
 
-import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
+import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 
 @Suppress("unused")
 class IsNotEmptyObjectValidator(private val errorBuilder: ErrorBuilder) : JsObjectValidator.After {
