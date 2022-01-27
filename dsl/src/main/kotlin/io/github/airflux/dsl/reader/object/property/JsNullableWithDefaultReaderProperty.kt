@@ -16,12 +16,12 @@
 
 package io.github.airflux.dsl.reader.`object`.property
 
-import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
 
 internal class JsNullableWithDefaultReaderProperty<T : Any> private constructor(
-    val path: List<JsPath>,
+    val path: JsPaths,
     val reader: JsReader<T?>
 ) : JsReaderProperty.NullableWithDefault<T> {
 

@@ -23,15 +23,16 @@ import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.readOptional
 import io.github.airflux.core.reader.validator.JsPropertyValidator
 import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
 internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private constructor(
-    override val path: List<JsPath>,
+    override val path: JsPaths,
     override val reader: JsReader<T>
 ) : JsReaderPropertySpec.OptionalWithDefault<T> {
 
     constructor(path: JsPath, reader: JsReader<T>, default: () -> T, invalidTypeErrorBuilder: InvalidTypeErrorBuilder) :
         this(
-            path = listOf(path),
+            path = JsPaths(path),
             reader = { context, location, input ->
                 val lookup = JsLookup.apply(location, path, input)
                 readOptional(context, lookup, reader, default, invalidTypeErrorBuilder)
@@ -47,8 +48,5 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
         )
 
     override fun or(alt: JsReaderPropertySpec.OptionalWithDefault<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
-        JsOptionalWithDefaultReaderPropertySpec(
-            path = path + alt.path,
-            reader = reader or alt.reader
-        )
+        JsOptionalWithDefaultReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 }

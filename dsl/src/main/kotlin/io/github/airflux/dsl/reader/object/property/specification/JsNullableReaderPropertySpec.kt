@@ -26,9 +26,10 @@ import io.github.airflux.core.reader.readNullable
 import io.github.airflux.core.reader.result.extension.filter
 import io.github.airflux.core.reader.validator.JsPropertyValidator
 import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
 internal class JsNullableReaderPropertySpec<T : Any> private constructor(
-    override val path: List<JsPath>,
+    override val path: JsPaths,
     override val reader: JsReader<T?>
 ) : JsReaderPropertySpec.Nullable<T> {
 
@@ -38,7 +39,7 @@ internal class JsNullableReaderPropertySpec<T : Any> private constructor(
         pathMissingErrorBuilder: PathMissingErrorBuilder,
         invalidTypeErrorBuilder: InvalidTypeErrorBuilder
     ) : this(
-        path = listOf(path),
+        path = JsPaths(path),
         reader = { context, location, input ->
             val lookup = JsLookup.apply(location, path, input)
             readNullable(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
@@ -62,8 +63,5 @@ internal class JsNullableReaderPropertySpec<T : Any> private constructor(
         )
 
     override fun or(alt: JsReaderPropertySpec.Nullable<T>): JsReaderPropertySpec.Nullable<T> =
-        JsNullableReaderPropertySpec(
-            path = path + alt.path,
-            reader = reader or alt.reader
-        )
+        JsNullableReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 }

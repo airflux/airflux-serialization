@@ -74,6 +74,7 @@ class AdditionalPropertiesValidator private constructor(
             }
 
             return paths()
+                .items
                 .mapNotNull { path ->
                     when (val element = path.elements.first()) {
                         is PathElement.Key -> element.get

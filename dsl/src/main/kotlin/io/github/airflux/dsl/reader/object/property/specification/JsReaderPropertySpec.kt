@@ -16,13 +16,13 @@
 
 package io.github.airflux.dsl.reader.`object`.property.specification
 
-import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
 sealed interface JsReaderPropertySpec<T : Any> {
-    val path: List<JsPath>
+    val path: JsPaths
 
     sealed interface Required<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T>
