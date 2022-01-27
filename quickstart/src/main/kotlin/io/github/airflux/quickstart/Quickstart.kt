@@ -1,6 +1,8 @@
 package io.github.airflux.quickstart
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsValue
 import io.github.airflux.dsl.reader.`object`.deserialization
 import io.github.airflux.dsl.writer.`object`.serialization
 import io.github.airflux.parser.AirFluxJsonModule
@@ -11,8 +13,6 @@ import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
-import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsValue
 import java.math.BigDecimal
 
 fun main() {

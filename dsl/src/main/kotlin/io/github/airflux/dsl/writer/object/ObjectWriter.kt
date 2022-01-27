@@ -16,14 +16,14 @@
 
 package io.github.airflux.dsl.writer.`object`
 
-import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.writer.`object`.property.JsWriterProperty
-import io.github.airflux.dsl.writer.`object`.property.JsWriterPropertyBuilder
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsArrayWriter
 import io.github.airflux.core.writer.JsObjectWriter
 import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.writer.`object`.property.JsWriterProperty
+import io.github.airflux.dsl.writer.`object`.property.JsWriterPropertyBuilder
 
 fun <T : Any> T.serialization(writer: JsWriter<T>): JsValue = writer.write(this)
 

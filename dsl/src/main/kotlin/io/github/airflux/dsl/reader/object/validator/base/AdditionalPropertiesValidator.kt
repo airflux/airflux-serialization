@@ -23,11 +23,11 @@ import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
 import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 

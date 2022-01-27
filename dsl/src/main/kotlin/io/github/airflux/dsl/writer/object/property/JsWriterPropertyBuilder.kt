@@ -16,7 +16,6 @@
 
 package io.github.airflux.dsl.writer.`object`.property
 
-import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
@@ -27,6 +26,7 @@ import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.extension.writeAsNullable
 import io.github.airflux.core.writer.extension.writeAsOptional
 import io.github.airflux.core.writer.extension.writeAsRequired
+import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
 
 internal interface JsWriterPropertyBuilder<T> {
 

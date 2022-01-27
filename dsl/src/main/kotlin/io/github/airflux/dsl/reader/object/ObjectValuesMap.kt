@@ -21,11 +21,11 @@ import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 
 class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty, Any>) {
