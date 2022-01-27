@@ -36,4 +36,6 @@ class JsPath private constructor(private val elements: List<PathElement>) : List
         this === other || (other is JsPath && this.elements == other.elements)
 
     override fun hashCode(): Int = elements.hashCode()
+
+    companion object
 }
