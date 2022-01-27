@@ -70,14 +70,14 @@ sealed class JsLookup {
         }
 
         fun apply(location: JsLocation, path: JsPath, value: JsValue): JsLookup {
-            tailrec fun apply(location: JsLocation, path: JsPath, posPath: Int, value: JsValue): JsLookup {
-                if (posPath == path.size) return Defined(location, value)
-                return when (val element = path[posPath]) {
+            tailrec fun apply(location: JsLocation, path: JsPath, idxElement: Int, value: JsValue): JsLookup {
+                if (idxElement == path.elements.size) return Defined(location, value)
+                return when (val element = path.elements[idxElement]) {
                     is PathElement.Key -> if (value is JsObject) {
                         val currentLocation = location.append(element)
                         val currentValue = value[element]
                             ?: return Undefined.PathMissing(location = currentLocation)
-                        apply(currentLocation, path, posPath + 1, currentValue)
+                        apply(currentLocation, path, idxElement + 1, currentValue)
                     } else
                         Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
 
@@ -85,7 +85,7 @@ sealed class JsLookup {
                         val currentLocation = location.append(element)
                         val currentValue = value[element]
                             ?: return Undefined.PathMissing(location = currentLocation)
-                        apply(currentLocation, path, posPath + 1, currentValue)
+                        apply(currentLocation, path, idxElement + 1, currentValue)
                     } else
                         Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
                 }

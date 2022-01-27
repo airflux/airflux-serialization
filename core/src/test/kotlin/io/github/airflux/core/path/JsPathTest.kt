@@ -21,11 +21,11 @@ class JsPathTest : FreeSpec() {
                 val path = JsPath(keyUser)
 
                 "should have only one element" {
-                    path.size shouldBe 1
+                    path.elements.size shouldBe 1
                 }
 
                 "should have element of type 'PathElement.Key' with value '$keyUser'" {
-                    path shouldContain PathElement.Key(keyUser)
+                    path.elements shouldContain PathElement.Key(keyUser)
                 }
 
                 "method 'toString() should return '#/$keyUser'" {
@@ -41,11 +41,14 @@ class JsPathTest : FreeSpec() {
                     val updatedPath = path.append(keyName)
 
                     "should have two elements"{
-                        updatedPath.size shouldBe 2
+                        updatedPath.elements.size shouldBe 2
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Key(keyUser), PathElement.Key(keyName))
+                        updatedPath.elements shouldContainInOrder listOf(
+                            PathElement.Key(keyUser),
+                            PathElement.Key(keyName)
+                        )
                     }
 
                     "method 'toString() should return '#/$keyUser/$keyName'" {
@@ -66,11 +69,11 @@ class JsPathTest : FreeSpec() {
                     val updatedPath = path.append(idx)
 
                     "should have two elements"{
-                        updatedPath.size shouldBe 2
+                        updatedPath.elements.size shouldBe 2
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Key(keyUser), PathElement.Idx(idx))
+                        updatedPath.elements shouldContainInOrder listOf(PathElement.Key(keyUser), PathElement.Idx(idx))
                     }
 
                     "method 'toString() should return '#/$keyUser[$idx]'" {
@@ -92,11 +95,11 @@ class JsPathTest : FreeSpec() {
                 val path = JsPath(firstIdx)
 
                 "should have only one element" {
-                    path.size shouldBe 1
+                    path.elements.size shouldBe 1
                 }
 
                 "should have element of type 'PathElement.Idx' with value '$firstIdx'" {
-                    path[0].shouldBeInstanceOf<PathElement.Idx>().get shouldBe firstIdx
+                    path.elements[0].shouldBeInstanceOf<PathElement.Idx>().get shouldBe firstIdx
                 }
 
                 "method 'toString() should return '#[$firstIdx]'" {
@@ -112,11 +115,14 @@ class JsPathTest : FreeSpec() {
                     val updatedPath = path.append(keyName)
 
                     "should have two elements"{
-                        updatedPath.size shouldBe 2
+                        updatedPath.elements.size shouldBe 2
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Idx(firstIdx), PathElement.Key(keyName))
+                        updatedPath.elements shouldContainInOrder listOf(
+                            PathElement.Idx(firstIdx),
+                            PathElement.Key(keyName)
+                        )
                     }
 
                     "method 'toString() should return '#[$firstIdx]/$keyName'" {
@@ -137,11 +143,14 @@ class JsPathTest : FreeSpec() {
                     val updatedPath = path.append(secondIdx)
 
                     "should have two elements"{
-                        updatedPath.size shouldBe 2
+                        updatedPath.elements.size shouldBe 2
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath shouldContainInOrder listOf(PathElement.Idx(firstIdx), PathElement.Idx(secondIdx))
+                        updatedPath.elements shouldContainInOrder listOf(
+                            PathElement.Idx(firstIdx),
+                            PathElement.Idx(secondIdx)
+                        )
                     }
 
                     "method 'toString() should return '#[$firstIdx][$secondIdx]'" {

@@ -17,7 +17,7 @@
 package io.github.airflux.core.path
 
 @Suppress("unused")
-class JsPath private constructor(private val elements: List<PathElement>) : List<PathElement> by elements {
+class JsPath private constructor(val elements: List<PathElement>) {
 
     constructor(key: String) : this(PathElement.Key(key))
     constructor(idx: Int) : this(PathElement.Idx(idx))
