@@ -28,51 +28,44 @@ import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReade
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 
-class ObjectValuesMap private constructor(private val results: Map<JsReaderProperty, Any>) {
-
-    @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Required<T>): T = results[attr] as T
-    operator fun <T : Any> JsReaderProperty.Required<T>.unaryPlus(): T = get(this)
-
-    @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Defaultable<T>): T = results[attr] as T
-    operator fun <T : Any> JsReaderProperty.Defaultable<T>.unaryPlus(): T = get(this)
-
-    @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Optional<T>): T? = results[attr]?.let { it as T }
-    operator fun <T : Any> JsReaderProperty.Optional<T>.unaryPlus(): T? = get(this)
-
-    @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.OptionalWithDefault<T>): T = results[attr] as T
-    operator fun <T : Any> JsReaderProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
-
-    @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Nullable<T>): T? = results[attr]?.let { it as T }
-    operator fun <T : Any> JsReaderProperty.Nullable<T>.unaryPlus(): T? = get(this)
-
-    @Suppress("UNCHECKED_CAST")
-    infix operator fun <T : Any> get(attr: JsReaderProperty.NullableWithDefault<T>): T? =
-        results[attr]?.let { it as T }
-
-    operator fun <T : Any> JsReaderProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
+interface ObjectValuesMap {
 
     val isEmpty: Boolean
-        get() = results.isEmpty()
-
     val isNotEmpty: Boolean
-        get() = results.isNotEmpty()
-
     val size: Int
-        get() = results.size
 
-    class Builder internal constructor(
+    infix operator fun <T : Any> get(attr: JsReaderProperty.Required<T>): T
+    operator fun <T : Any> JsReaderProperty.Required<T>.unaryPlus(): T = get(this)
+
+    infix operator fun <T : Any> get(attr: JsReaderProperty.Defaultable<T>): T
+    operator fun <T : Any> JsReaderProperty.Defaultable<T>.unaryPlus(): T = get(this)
+
+    infix operator fun <T : Any> get(attr: JsReaderProperty.Optional<T>): T?
+    operator fun <T : Any> JsReaderProperty.Optional<T>.unaryPlus(): T? = get(this)
+
+    infix operator fun <T : Any> get(attr: JsReaderProperty.OptionalWithDefault<T>): T
+    operator fun <T : Any> JsReaderProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
+
+    infix operator fun <T : Any> get(attr: JsReaderProperty.Nullable<T>): T?
+    operator fun <T : Any> JsReaderProperty.Nullable<T>.unaryPlus(): T? = get(this)
+
+    infix operator fun <T : Any> get(attr: JsReaderProperty.NullableWithDefault<T>): T?
+    operator fun <T : Any> JsReaderProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
+
+    interface Builder {
+        fun tryAddValueBy(property: JsReaderProperty): JsResult.Failure?
+        fun build(): ObjectValuesMap
+    }
+
+    private class BuilderInstance(
         private val context: JsReaderContext,
         private val location: JsLocation,
         private val input: JsObject
-    ) {
+    ) : Builder {
+
         private val results: MutableMap<JsReaderProperty, Any> = mutableMapOf()
 
-        fun tryAddValueBy(property: JsReaderProperty): JsResult.Failure? = when (property) {
+        override fun tryAddValueBy(property: JsReaderProperty): JsResult.Failure? = when (property) {
             is JsRequiredReaderProperty<*> -> append(property, property.reader.read(context, location, input))
             is JsDefaultableReaderProperty<*> -> append(property, property.reader.read(context, location, input))
             is JsOptionalReaderProperty<*> -> append(property, property.reader.read(context, location, input))
@@ -92,6 +85,41 @@ class ObjectValuesMap private constructor(private val results: Map<JsReaderPrope
             is JsResult.Failure -> result
         }
 
-        internal fun build(): ObjectValuesMap = ObjectValuesMap(results)
+        override fun build(): ObjectValuesMap = ObjectValuesMapInstance(results)
+    }
+
+    private class ObjectValuesMapInstance(private val results: Map<JsReaderProperty, Any>) : ObjectValuesMap {
+
+        override val isEmpty: Boolean
+            get() = results.isEmpty()
+
+        override val isNotEmpty: Boolean
+            get() = results.isNotEmpty()
+
+        override val size: Int
+            get() = results.size
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> get(attr: JsReaderProperty.Required<T>): T = results[attr] as T
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> get(attr: JsReaderProperty.Defaultable<T>): T = results[attr] as T
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> get(attr: JsReaderProperty.Optional<T>): T? = results[attr]?.let { it as T }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> get(attr: JsReaderProperty.OptionalWithDefault<T>): T = results[attr] as T
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> get(attr: JsReaderProperty.Nullable<T>): T? = results[attr]?.let { it as T }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any> get(attr: JsReaderProperty.NullableWithDefault<T>): T? = results[attr]?.let { it as T }
+    }
+
+    companion object {
+        fun builder(context: JsReaderContext, location: JsLocation, input: JsObject): Builder =
+            BuilderInstance(context, location, input)
     }
 }

@@ -156,7 +156,7 @@ class ObjectReader(
                 failures.add(failure)
             }
 
-            val objectValuesMap = ObjectValuesMap.Builder(context, location, input)
+            val objectValuesMap = ObjectValuesMap.builder(context, location, input)
                 .apply {
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
