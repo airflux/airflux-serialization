@@ -9,7 +9,7 @@ val detectConfigPath = "${project.rootProject.projectDir}/config/detekt/detekt.y
 
 configure<DetektExtension> {
     ignoreFailures = true
-    toolVersion = "1.19.0"
+    toolVersion = Configuration.Versions.Detect.Tool
     config = project.files(detectConfigPath)
     debug = false
 }

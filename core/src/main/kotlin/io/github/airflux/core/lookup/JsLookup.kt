@@ -53,21 +53,21 @@ sealed class JsLookup {
 
     companion object {
 
-        fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup = when (value) {
-            is JsObject -> value[key]
-                ?.let { Defined(location = location.append(key), value = it) }
-                ?: Undefined.PathMissing(location = location.append(key))
+        fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup =
+            if (value is JsObject)
+                value[key]
+                    ?.let { Defined(location = location.append(key), value = it) }
+                    ?: Undefined.PathMissing(location = location.append(key))
+            else
+                Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
 
-            else -> Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
-        }
-
-        fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup = when (value) {
-            is JsArray<*> -> value[idx]
-                ?.let { Defined(location = location.append(idx), value = it) }
-                ?: Undefined.PathMissing(location = location.append(idx))
-
-            else -> Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
-        }
+        fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup =
+            if (value is JsArray<*>)
+                value[idx]
+                    ?.let { Defined(location = location.append(idx), value = it) }
+                    ?: Undefined.PathMissing(location = location.append(idx))
+            else
+                Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
 
         fun apply(location: JsLocation, path: JsPath, value: JsValue): JsLookup {
             tailrec fun apply(location: JsLocation, path: JsPath, idxElement: Int, value: JsValue): JsLookup {

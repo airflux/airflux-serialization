@@ -31,6 +31,6 @@ fun buildBigDecimalWriter(
         .let { JsNumber.valueOf(it.toPlainString())!! }
 }
 
-class BigDecimalWriterConfiguration(
+data class BigDecimalWriterConfiguration(
     val stripTrailingZeros: Boolean = false
 )

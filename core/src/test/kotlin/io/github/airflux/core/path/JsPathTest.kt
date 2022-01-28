@@ -40,7 +40,7 @@ class JsPathTest : FreeSpec() {
                 "append named path element '$keyName'" - {
                     val updatedPath = path.append(keyName)
 
-                    "should have two elements"{
+                    "should have two elements" {
                         updatedPath.elements.size shouldBe 2
                     }
 

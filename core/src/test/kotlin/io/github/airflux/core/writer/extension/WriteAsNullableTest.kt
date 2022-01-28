@@ -33,5 +33,5 @@ class WriteAsNullableTest {
         assertTrue(result is JsNull)
     }
 
-    private class DTO(val phoneNumber: String? = null)
+    private data class DTO(val phoneNumber: String? = null)
 }

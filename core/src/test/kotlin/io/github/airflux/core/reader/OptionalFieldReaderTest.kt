@@ -16,13 +16,13 @@ class OptionalFieldReaderTest : FreeSpec() {
     companion object {
         private val context = JsReaderContext()
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
-            when (input) {
-                is JsString -> JsResult.Success(location, input.get)
-                else -> JsResult.Failure(
+            if (input is JsString)
+                JsResult.Success(location, input.get)
+            else
+                JsResult.Failure(
                     location = location,
                     error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
                 )
-            }
         }
     }
 

@@ -54,7 +54,6 @@ class RequiredFieldReaderTest : FreeSpec() {
                     location = JsLocation.empty.append("name"),
                     error = JsonErrors.PathMissing
                 )
-
             }
 
             "should return the invalid type error if a node is not an object" {

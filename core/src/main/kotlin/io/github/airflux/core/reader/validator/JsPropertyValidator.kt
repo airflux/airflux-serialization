@@ -53,10 +53,8 @@ fun interface JsPropertyValidator<in T> {
     infix fun and(other: JsPropertyValidator<@UnsafeVariance T>): JsPropertyValidator<T> {
         val self = this
         return JsPropertyValidator { context, location, value ->
-            when (val result = self.validation(context, location, value)) {
-                null -> other.validation(context, location, value)
-                else -> result
-            }
+            val result = self.validation(context, location, value)
+            result ?: other.validation(context, location, value)
         }
     }
 }

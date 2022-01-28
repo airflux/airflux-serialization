@@ -65,10 +65,8 @@ sealed interface JsObjectValidator {
         infix fun and(other: Before): Before {
             val self = this
             return Before { configuration, context, properties, input ->
-                when (val result = self.validation(configuration, context, properties, input)) {
-                    null -> other.validation(configuration, context, properties, input)
-                    else -> result
-                }
+                val result = self.validation(configuration, context, properties, input)
+                result ?: other.validation(configuration, context, properties, input)
             }
         }
     }
@@ -111,10 +109,8 @@ sealed interface JsObjectValidator {
         infix fun and(other: After): After {
             val self = this
             return After { configuration, context, properties, objectValuesMap, input ->
-                when (val result = self.validation(configuration, context, properties, objectValuesMap, input)) {
-                    null -> other.validation(configuration, context, properties, objectValuesMap, input)
-                    else -> result
-                }
+                val result = self.validation(configuration, context, properties, objectValuesMap, input)
+                result ?: other.validation(configuration, context, properties, objectValuesMap, input)
             }
         }
     }

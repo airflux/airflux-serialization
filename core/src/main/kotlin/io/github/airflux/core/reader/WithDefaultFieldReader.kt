@@ -43,10 +43,12 @@ fun <T : Any> readWithDefault(
         from: JsLookup.Defined,
         using: JsReader<T>,
         defaultValue: () -> T
-    ): JsResult<T> = when (from.value) {
-        is JsNull -> JsResult.Success(location = from.location, value = defaultValue())
-        else -> using.read(context, from.location, from.value)
-    }
+    ): JsResult<T> =
+        if (from.value is JsNull)
+            JsResult.Success(location = from.location, value = defaultValue())
+        else
+            using.read(context, from.location, from.value)
+
 
     return when (from) {
         is JsLookup.Defined -> readWithDefault(context, from, using, defaultValue)

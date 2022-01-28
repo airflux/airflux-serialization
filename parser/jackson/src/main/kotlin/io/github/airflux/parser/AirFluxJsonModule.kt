@@ -76,7 +76,7 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
 
         private tailrec fun deserialize(
             jp: JsonParser,
-            ctxt: DeserializationContext,
+            context: DeserializationContext,
             parserContext: Stack<DeserializerContext>
         ): JsValue {
 
@@ -114,13 +114,12 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
                     }
                 }
                 JsonToken.END_ARRAY -> {
-                    when (val head = parserContext.pop()) {
-                        is DeserializerContext.ReadingList -> {
-                            maybeValue = JsArray(head.values)
-                            nextContext = parserContext
-                        }
-                        else -> throw ParsingException("We should have been reading list, something got wrong")
-                    }
+                    val head = parserContext.pop()
+                    if (head is DeserializerContext.ReadingList) {
+                        maybeValue = JsArray(head.values)
+                        nextContext = parserContext
+                    } else
+                        throw ParsingException("We should have been reading list, something got wrong")
                 }
                 JsonToken.START_OBJECT -> {
                     maybeValue = null
@@ -129,24 +128,21 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
                     }
                 }
                 JsonToken.FIELD_NAME -> {
-                    when (val head = parserContext.pop()) {
-                        is DeserializerContext.ReadingObject -> {
-                            parserContext.push(head.setField(jp.currentName))
-                            maybeValue = null
-                            nextContext = parserContext
-                        }
-                        else -> throw ParsingException("We should be reading map, something got wrong")
-                    }
+                    val head = parserContext.pop()
+                    if (head is DeserializerContext.ReadingObject) {
+                        parserContext.push(head.setField(jp.currentName))
+                        maybeValue = null
+                        nextContext = parserContext
+                    } else
+                        throw ParsingException("We should be reading map, something got wrong")
                 }
                 JsonToken.END_OBJECT -> {
-                    when (val head = parserContext.pop()) {
-                        is DeserializerContext.ReadingObject -> {
-                            maybeValue = JsObject(head.values.toMap())
-                            nextContext = parserContext
-                        }
-                        else ->
-                            throw ParsingException("We should have been reading an object, something got wrong ($head)")
-                    }
+                    val head = parserContext.pop()
+                    if (head is DeserializerContext.ReadingObject) {
+                        maybeValue = JsObject(head.values.toMap())
+                        nextContext = parserContext
+                    } else
+                        throw ParsingException("We should have been reading an object, something got wrong ($head)")
                 }
                 JsonToken.NOT_AVAILABLE ->
                     throw ParsingException("We should have been reading an object, something got wrong")
@@ -167,7 +163,7 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
                     nextContext
                 } ?: nextContext
 
-                deserialize(jp, ctxt, toPass)
+                deserialize(jp, context, toPass)
             }
         }
 
@@ -187,7 +183,7 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
                     ReadingObject(values.apply { add(fieldName to value) })
             }
 
-            data class ReadingObject(val values: MutableList<Pair<String, JsValue>>) : DeserializerContext() {
+            class ReadingObject(val values: MutableList<Pair<String, JsValue>>) : DeserializerContext() {
                 fun setField(fieldName: String): KeyRead = KeyRead(fieldName, values)
                 override fun addValue(value: JsValue): DeserializerContext =
                     throw ParsingException("Cannot add a value on an object without a key, malformed JSON object!")
@@ -220,9 +216,9 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
                 is JsObject -> {
                     gen.writeStartObject()
                     value.forEach { (name, element) ->
-                            gen.writeFieldName(name)
-                            serialize(element, gen, provider)
-                        }
+                        gen.writeFieldName(name)
+                        serialize(element, gen, provider)
+                    }
                     gen.writeEndObject()
                 }
             }

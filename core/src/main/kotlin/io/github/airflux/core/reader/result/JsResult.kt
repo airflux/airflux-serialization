@@ -61,18 +61,8 @@ sealed class JsResult<out T> {
 
         override fun hashCode(): Int = causes.hashCode()
 
-        class Cause(val location: JsLocation, val errors: JsErrors) {
-
+        data class Cause(val location: JsLocation, val errors: JsErrors) {
             constructor(location: JsLocation, error: JsError) : this(location, JsErrors.of(error))
-
-            override fun equals(other: Any?): Boolean =
-                this === other || (other is Cause && this.location == other.location && this.errors == other.errors)
-
-            override fun hashCode(): Int {
-                var result = location.hashCode()
-                result = 31 * result + errors.hashCode()
-                return result
-            }
         }
 
         companion object {

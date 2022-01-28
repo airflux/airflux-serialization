@@ -44,5 +44,5 @@ class WriteOptionalTest {
         assertEquals(expected, result)
     }
 
-    private class DTO(val name: String?)
+    private data class DTO(val name: String?)
 }

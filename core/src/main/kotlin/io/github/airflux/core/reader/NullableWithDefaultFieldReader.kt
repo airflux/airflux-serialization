@@ -39,10 +39,11 @@ fun <T : Any> readNullable(
 ): JsResult<T?> {
 
     fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup.Defined, using: JsReader<T>): JsResult<T?> =
-        when (from.value) {
-            is JsNull -> JsResult.Success(location = from.location, value = null)
-            else -> using.read(context, from.location, from.value)
-        }
+        if (from.value is JsNull)
+            JsResult.Success(location = from.location, value = null)
+        else
+            using.read(context, from.location, from.value)
+
 
     return when (from) {
         is JsLookup.Defined -> readNullable(context, from, using)

@@ -167,16 +167,6 @@ class JsResultTest : FreeSpec() {
                     JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
                 )
             }
-
-            "should comply with equals() and hashCode() contract" {
-                val cause = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
-
-                cause.shouldBeEqualsContract(
-                    y = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    other = JsResult.Failure.Cause(location = JsLocation.empty, error = JsonErrors.PathMissing)
-                )
-            }
         }
 
         "JsResult#merge function" {

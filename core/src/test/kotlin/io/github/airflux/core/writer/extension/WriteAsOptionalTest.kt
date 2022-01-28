@@ -32,5 +32,5 @@ class WriteAsOptionalTest {
         assertNull(result)
     }
 
-    private class DTO(val phoneNumber: String? = null)
+    private data class DTO(val phoneNumber: String? = null)
 }

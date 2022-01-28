@@ -22,5 +22,5 @@ class WriteAsRequiredTest {
         assertEquals(TestData.USER_NAME_VALUE, result.get)
     }
 
-    private class DTO(val firstName: String)
+    private data class DTO(val firstName: String)
 }

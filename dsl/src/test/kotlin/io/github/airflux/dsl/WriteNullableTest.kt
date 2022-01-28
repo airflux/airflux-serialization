@@ -46,5 +46,5 @@ class WriteNullableTest {
         assertEquals(JsNull, result["name"])
     }
 
-    private class DTO(val name: String?)
+    private data class DTO(val name: String?)
 }

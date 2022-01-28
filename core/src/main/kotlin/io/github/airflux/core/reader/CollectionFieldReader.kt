@@ -102,8 +102,8 @@ fun <T : Any, C> readAsCollection(
         }.map { it.result() }
     }
 
-    return when (from) {
-        is JsArray<*> -> readAsCollection(context, location, from, using, factory)
-        else -> JsResult.Failure(location, invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
-    }
+    return if (from is JsArray<*>)
+        readAsCollection(context, location, from, using, factory)
+    else
+        JsResult.Failure(location, invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
 }
