@@ -16,7 +16,7 @@
 
 package io.github.airflux.core.reader.result
 
-class JsErrors private constructor(private val items: List<JsError>) : Collection<JsError> by items {
+class JsErrors private constructor(val items: List<JsError>) {
 
     operator fun plus(other: JsErrors): JsErrors = JsErrors(items + other.items)
 

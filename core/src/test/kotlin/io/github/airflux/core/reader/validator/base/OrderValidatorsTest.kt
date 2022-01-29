@@ -94,8 +94,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Min(expected = minimum, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Min(expected = minimum, actual = actual))
         }
 
         @Test
@@ -155,8 +155,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Max(expected = maximum, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Max(expected = maximum, actual = actual))
         }
     }
 
@@ -172,8 +172,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Eq(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Eq(expected = expected, actual = actual))
         }
 
         @Test
@@ -196,8 +196,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Eq(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Eq(expected = expected, actual = actual))
         }
     }
 
@@ -224,8 +224,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Ne(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Ne(expected = expected, actual = actual))
         }
 
         @Test
@@ -252,8 +252,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual))
         }
 
         @Test
@@ -265,8 +265,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual))
         }
 
         @Test
@@ -293,8 +293,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Ge(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Ge(expected = expected, actual = actual))
         }
 
         @Test
@@ -343,8 +343,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Lt(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Lt(expected = expected, actual = actual))
         }
 
         @Test
@@ -356,8 +356,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Lt(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Lt(expected = expected, actual = actual))
         }
     }
 
@@ -395,8 +395,8 @@ class OrderValidatorsTest {
             val errors = validator.validation(context, location, actual)
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Numbers.Le(expected = expected, actual = actual))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Numbers.Le(expected = expected, actual = actual))
         }
     }
 }

@@ -60,8 +60,8 @@ class ArrayValidatorsTest {
             val errors = validator.validation(context, location, emptyList())
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Arrays.MinItems(expected = minimum, actual = 0))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Arrays.MinItems(expected = minimum, actual = 0))
         }
 
         @Test
@@ -72,8 +72,8 @@ class ArrayValidatorsTest {
             val errors = validator.validation(context, location, listOf("A"))
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Arrays.MinItems(expected = minimum, actual = 1))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Arrays.MinItems(expected = minimum, actual = 1))
         }
 
         @Test
@@ -138,8 +138,8 @@ class ArrayValidatorsTest {
             val errors = validator.validation(context, location, listOf("A", "B", "C"))
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Arrays.MaxItems(expected = maximum, actual = 3))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Arrays.MaxItems(expected = maximum, actual = 3))
         }
     }
 
@@ -174,8 +174,8 @@ class ArrayValidatorsTest {
                 val errors = validator.validation(context, location, listOf("A", "B", "A", "B", "C"))
 
                 assertNotNull(errors)
-                assertEquals(1, errors.count())
-                assertContains(errors, JsonErrors.Validation.Arrays.Unique(index = 2, value = "A"))
+                assertEquals(1, errors.items.count())
+                assertContains(errors.items, JsonErrors.Validation.Arrays.Unique(index = 2, value = "A"))
             }
         }
 
@@ -208,9 +208,9 @@ class ArrayValidatorsTest {
 
                 assertNotNull(errors)
 
-                assertEquals(2, errors.count())
-                assertContains(errors, JsonErrors.Validation.Arrays.Unique(index = 2, value = "A"))
-                assertContains(errors, JsonErrors.Validation.Arrays.Unique(index = 3, value = "B"))
+                assertEquals(2, errors.items.count())
+                assertContains(errors.items, JsonErrors.Validation.Arrays.Unique(index = 2, value = "A"))
+                assertContains(errors.items, JsonErrors.Validation.Arrays.Unique(index = 3, value = "B"))
             }
         }
     }

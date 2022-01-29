@@ -64,8 +64,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, "")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 0))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 0))
         }
 
         @Test
@@ -76,8 +76,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, " ")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 1))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 1))
         }
 
         @Test
@@ -108,8 +108,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, "a")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 1))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.MinLength(expected = minimum, actual = 1))
         }
 
         @Test
@@ -174,8 +174,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, "   ")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.MaxLength(expected = maximum, actual = 3))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.MaxLength(expected = maximum, actual = 3))
         }
 
         @Test
@@ -206,8 +206,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, "abc")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.MaxLength(expected = maximum, actual = 3))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.MaxLength(expected = maximum, actual = 3))
         }
     }
 
@@ -219,8 +219,8 @@ class StringValidatorsTest {
             val errors = isNotEmptyValidator.validation(context, location, "")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.IsEmpty)
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.IsEmpty)
         }
 
         @Test
@@ -247,8 +247,8 @@ class StringValidatorsTest {
             val errors = isNotBlankValidator.validation(context, location, "")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.IsBlank)
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.IsBlank)
         }
 
         @Test
@@ -257,8 +257,8 @@ class StringValidatorsTest {
             val errors = isNotBlankValidator.validation(context, location, " ")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.IsBlank)
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.IsBlank)
         }
 
         @Test
@@ -280,8 +280,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, "")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.Pattern(value = "", regex = regex))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.Pattern(value = "", regex = regex))
         }
 
         @Test
@@ -296,8 +296,8 @@ class StringValidatorsTest {
             val errors = validator.validation(context, location, "aab")
 
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.Pattern(value = "aab", regex = regex))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.Pattern(value = "aab", regex = regex))
         }
     }
 
@@ -320,8 +320,8 @@ class StringValidatorsTest {
 
             assertNotNull(errors)
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.IsA(value = "abc"))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.IsA(value = "abc"))
         }
 
         @Test
@@ -330,8 +330,8 @@ class StringValidatorsTest {
 
             assertNotNull(errors)
             assertNotNull(errors)
-            assertEquals(1, errors.count())
-            assertContains(errors, JsonErrors.Validation.Strings.IsA(value = ""))
+            assertEquals(1, errors.items.count())
+            assertContains(errors.items, JsonErrors.Validation.Strings.IsA(value = ""))
         }
     }
 }

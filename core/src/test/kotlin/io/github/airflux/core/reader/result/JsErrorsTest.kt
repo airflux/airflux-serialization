@@ -18,7 +18,7 @@ class JsErrorsTest : FreeSpec() {
             "#of(JsError, _) should return JsErrors with a single error" {
                 val errors = JsErrors.of(JsonErrors.PathMissing)
 
-                errors shouldContainAll listOf(JsonErrors.PathMissing)
+                errors.items shouldContainAll listOf(JsonErrors.PathMissing)
             }
 
             "#of(JsError, JsError) should return JsErrors with all errors" {
@@ -27,7 +27,7 @@ class JsErrorsTest : FreeSpec() {
                     JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
                 )
 
-                errors shouldContainAll listOf(
+                errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
                     JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
                 )
@@ -50,7 +50,7 @@ class JsErrorsTest : FreeSpec() {
                     )
 
                     errors.shouldNotBeNull()
-                        .shouldContainAll(
+                        .items.shouldContainAll(
                             listOf(
                                 JsonErrors.PathMissing,
                                 JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
@@ -65,7 +65,7 @@ class JsErrorsTest : FreeSpec() {
 
                 val errors = firstErrors + secondErrors
 
-                errors shouldContainAll JsErrors.of(
+                errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
                     JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
                 )

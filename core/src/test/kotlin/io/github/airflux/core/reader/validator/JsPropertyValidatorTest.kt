@@ -68,9 +68,9 @@ class JsPropertyValidatorTest {
         val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
-        assertEquals(2, errors.count())
-        assertContains(errors, ValidationErrors.PathMissingNormalError)
-        assertContains(errors, ValidationErrors.InvalidTypeNormalError)
+        assertEquals(2, errors.items.count())
+        assertContains(errors.items, ValidationErrors.PathMissingNormalError)
+        assertContains(errors.items, ValidationErrors.InvalidTypeNormalError)
     }
 
     /*
@@ -100,8 +100,8 @@ class JsPropertyValidatorTest {
         val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
-        assertEquals(1, errors.count())
-        assertContains(errors, ValidationErrors.PathMissingNormalError)
+        assertEquals(1, errors.items.count())
+        assertContains(errors.items, ValidationErrors.PathMissingNormalError)
     }
 
     @Test
@@ -118,7 +118,7 @@ class JsPropertyValidatorTest {
         val errors = composeValidator.validation(context, location, Unit)
 
         assertNotNull(errors)
-        assertEquals(1, errors.count())
-        assertContains(errors, ValidationErrors.PathMissingNormalError)
+        assertEquals(1, errors.items.count())
+        assertContains(errors.items, ValidationErrors.PathMissingNormalError)
     }
 }

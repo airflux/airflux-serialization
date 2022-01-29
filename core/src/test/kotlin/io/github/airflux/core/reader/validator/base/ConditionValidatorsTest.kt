@@ -8,6 +8,7 @@ import io.github.airflux.core.reader.validator.JsPropertyValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 
 class ConditionValidatorsTest : FreeSpec() {
 
@@ -28,7 +29,8 @@ class ConditionValidatorsTest : FreeSpec() {
             "should return the result of applying the validator to the value if it is not the null value" {
                 val errors = validator.validation(context, location, "")
 
-                errors.shouldContainExactly(JsonErrors.Validation.Strings.IsEmpty)
+                errors.shouldNotBeNull()
+                    .items.shouldContainExactly(JsonErrors.Validation.Strings.IsEmpty)
             }
 
             "should return the null value if the value is the null value" {
@@ -45,7 +47,8 @@ class ConditionValidatorsTest : FreeSpec() {
 
                 val errors = validator.validation(context, location, "")
 
-                errors.shouldContainExactly(JsonErrors.Validation.Strings.IsEmpty)
+                errors.shouldNotBeNull()
+                    .items.shouldContainExactly(JsonErrors.Validation.Strings.IsEmpty)
             }
 
             "should return the null value if the predicate returns false" {

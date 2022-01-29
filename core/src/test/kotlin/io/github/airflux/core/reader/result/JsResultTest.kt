@@ -34,7 +34,7 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling recovery function should return an original" {
-                val result = original.recovery { _ -> JsResult.Success(LOCATION, ELSE_VALUE) }
+                val result = original.recovery { JsResult.Success(LOCATION, ELSE_VALUE) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
             }
@@ -117,7 +117,7 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling recovery function should return the result of invoking the recovery function" {
-                val result = original.recovery { _ -> JsResult.Success(LOCATION, ELSE_VALUE) }
+                val result = original.recovery { JsResult.Success(LOCATION, ELSE_VALUE) }
 
                 result shouldBe JsResult.Success(location = LOCATION, value = ELSE_VALUE)
             }
@@ -162,7 +162,7 @@ class JsResultTest : FreeSpec() {
                 )
 
                 cause.location shouldBe LOCATION
-                cause.errors shouldContainAll listOf(
+                cause.errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
                     JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
                 )
