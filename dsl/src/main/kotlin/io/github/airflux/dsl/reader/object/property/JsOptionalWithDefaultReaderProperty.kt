@@ -21,7 +21,7 @@ import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
 
 internal class JsOptionalWithDefaultReaderProperty<T : Any> private constructor(
-    val path: JsPaths,
+    override val path: JsPaths,
     val reader: JsReader<T>
 ) : JsReaderProperty.OptionalWithDefault<T> {
 

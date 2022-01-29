@@ -16,7 +16,11 @@
 
 package io.github.airflux.dsl.reader.`object`.property
 
+import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
+
 sealed interface JsReaderProperty {
+    val path: JsPaths
+
     sealed interface Required<T : Any> : JsReaderProperty
     sealed interface Defaultable<T : Any> : JsReaderProperty
     sealed interface Optional<T : Any> : JsReaderProperty

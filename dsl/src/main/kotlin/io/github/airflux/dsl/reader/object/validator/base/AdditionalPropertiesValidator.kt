@@ -22,13 +22,7 @@ import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
-import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 
 @Suppress("unused")
@@ -63,25 +57,13 @@ class AdditionalPropertiesValidator private constructor(
             flatMap { property -> property.names() }
                 .toSet()
 
-        private fun JsReaderProperty.names(): List<String> {
-            fun JsReaderProperty.paths() = when (this) {
-                is JsRequiredReaderProperty<*> -> path
-                is JsDefaultableReaderProperty<*> -> path
-                is JsOptionalReaderProperty<*> -> path
-                is JsOptionalWithDefaultReaderProperty<*> -> path
-                is JsNullableReaderProperty<*> -> path
-                is JsNullableWithDefaultReaderProperty<*> -> path
-            }
-
-            return paths()
-                .items
-                .mapNotNull { path ->
-                    when (val element = path.elements.first()) {
-                        is PathElement.Key -> element.get
-                        is PathElement.Idx -> null
-                    }
+        private fun JsReaderProperty.names(): List<String> = path.items
+            .mapNotNull { path ->
+                when (val element = path.elements.first()) {
+                    is PathElement.Key -> element.get
+                    is PathElement.Idx -> null
                 }
-        }
+            }
     }
 
     fun interface ErrorBuilder {
