@@ -29,6 +29,8 @@ import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 
 interface ObjectValuesMap {
+    val context: JsReaderContext
+    val location: JsLocation
 
     val isEmpty: Boolean
     val isNotEmpty: Boolean
@@ -85,10 +87,14 @@ interface ObjectValuesMap {
             is JsResult.Failure -> result
         }
 
-        override fun build(): ObjectValuesMap = ObjectValuesMapInstance(results)
+        override fun build(): ObjectValuesMap = ObjectValuesMapInstance(context, location, results)
     }
 
-    private class ObjectValuesMapInstance(private val results: Map<JsReaderProperty, Any>) : ObjectValuesMap {
+    private class ObjectValuesMapInstance(
+        override val context: JsReaderContext,
+        override val location: JsLocation,
+        private val results: Map<JsReaderProperty, Any>
+    ) : ObjectValuesMap {
 
         override val isEmpty: Boolean
             get() = results.isEmpty()

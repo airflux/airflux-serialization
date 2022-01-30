@@ -29,10 +29,7 @@ val ValueReader = reader<Value> {
     val amount = property(required(name = "amount", reader = AmountReader))
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
-    build { location ->
-        Value(
-            amount = +amount,
-            currency = +currency
-        ).asSuccess(location)
+    build {
+        Value(amount = +amount, currency = +currency).asSuccess(location)
     }
 }

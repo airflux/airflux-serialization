@@ -14,12 +14,7 @@ val TenderReader = reader<Tender> {
     val value = property(optional(name = "value", reader = ValueReader))
     val lots = property(required(name = "lots", reader = LotsReader))
 
-    build { location ->
-        Tender(
-            id = this[id],
-            title = this[title],
-            value = this[value],
-            lots = this[lots],
-        ).asSuccess(location)
+    build {
+        Tender(+id, +title, +value, +lots).asSuccess(location)
     }
 }

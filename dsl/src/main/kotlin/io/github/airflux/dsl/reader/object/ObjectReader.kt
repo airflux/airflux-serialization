@@ -70,11 +70,10 @@ class ObjectReader(
         infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P>
         infix fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P>
 
-        fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T>
-        fun build(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
+        fun build(builder: ObjectValuesMap.() -> JsResult<T>): TypeBuilder<T>
     }
 
-    fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap, JsLocation) -> JsResult<T>
+    fun interface TypeBuilder<T> : (ObjectValuesMap) -> JsResult<T>
 
     private inner class BuilderInstance<T>(
         private var configuration: ObjectReaderConfiguration
@@ -115,11 +114,8 @@ class ObjectReader(
             JsNullableWithDefaultReaderProperty(builder.build(invalidTypeErrorBuilder))
                 .also { registration(it) }
 
-        override fun build(builder: ObjectValuesMap.(JsLocation) -> JsResult<T>): TypeBuilder<T> =
-            TypeBuilder { _, v, p -> v.builder(p) }
-
-        override fun build(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T> =
-            TypeBuilder { c, v, p -> v.builder(c, p) }
+        override fun build(builder: ObjectValuesMap.() -> JsResult<T>): TypeBuilder<T> =
+            TypeBuilder { v -> v.builder() }
 
         fun build(typeBuilder: TypeBuilder<T>): JsReader<T> {
             val validators = validatorBuilders.build(configuration, properties)
@@ -177,7 +173,7 @@ class ObjectReader(
             }
 
             return if (failures.isEmpty())
-                typeBuilder(context, objectValuesMap, location)
+                typeBuilder(objectValuesMap)
             else
                 failures.merge()
         }
