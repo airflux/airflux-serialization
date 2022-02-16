@@ -1,24 +1,21 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.core.reader.result.asSuccess
-import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.required
+import io.github.airflux.dsl.reader.objectReaderOf
 import io.github.airflux.quickstart.dto.model.Value
-import io.github.airflux.quickstart.dto.reader.dsl.base.reader
+import io.github.airflux.quickstart.dto.reader.dsl.base.readerBuilderConfig
 import io.github.airflux.quickstart.json.validation.additionalProperties
 import io.github.airflux.quickstart.json.validation.maxProperties
 import io.github.airflux.quickstart.json.validation.minProperties
 
-private val additionalPropertiesValidator = { _: ObjectReaderConfiguration, properties: List<JsReaderProperty> ->
+private val additionalPropertiesValidator = { _: JsReaderBuilder.Options, properties: List<JsReaderProperty> ->
     additionalProperties(properties)
 }
 
-val ValueReader = reader<Value> {
-    configuration {
-        failFast = false
-    }
-
+val ValueReader = objectReaderOf<Value>(readerBuilderConfig) {
     validation {
         before(additionalPropertiesValidator)
         after { _, _ ->

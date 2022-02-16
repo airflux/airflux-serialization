@@ -3,7 +3,7 @@ package io.github.airflux.quickstart
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.dsl.reader.`object`.deserialization
+import io.github.airflux.dsl.extension.deserialization
 import io.github.airflux.dsl.writer.`object`.serialization
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.quickstart.dto.Response

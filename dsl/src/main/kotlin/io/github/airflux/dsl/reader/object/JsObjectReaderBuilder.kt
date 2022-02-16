@@ -16,15 +16,13 @@
 
 package io.github.airflux.dsl.reader.`object`
 
-import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
+import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
@@ -35,55 +33,56 @@ import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 
-internal class ObjectReaderBuilderInstance<T>(
-    private var configuration: ObjectReaderConfiguration,
-    private val pathMissingErrorBuilder: PathMissingErrorBuilder,
-    private val invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-) : ObjectReader.Builder<T> {
-
+internal class JsObjectReaderBuilder<T>(
+    private val config: JsReaderBuilder.Configuration
+) : JsObjectReader.Builder<T> {
     private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder()
     private val properties = mutableListOf<JsReaderProperty>()
-
-    override fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit) {
-        configuration = ObjectReaderConfiguration.Builder(configuration).apply(init).build()
-    }
 
     override fun validation(init: JsObjectValidators.Builder.() -> Unit) {
         validatorBuilders.apply(init)
     }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P> =
-        JsRequiredReaderProperty(builder.build(pathMissingErrorBuilder, invalidTypeErrorBuilder))
+        JsRequiredReaderProperty(builder.build(config.errorBuilders.pathMissing, config.errorBuilders.invalidType))
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Defaultable<P>): JsReaderProperty.Defaultable<P> =
-        JsDefaultableReaderProperty(builder.build(invalidTypeErrorBuilder))
+        JsDefaultableReaderProperty(builder.build(config.errorBuilders.invalidType))
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Optional<P>): JsReaderProperty.Optional<P> =
-        JsOptionalReaderProperty(builder.build(invalidTypeErrorBuilder))
+        JsOptionalReaderProperty(builder.build(config.errorBuilders.invalidType))
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P> =
-        JsOptionalWithDefaultReaderProperty(builder.build(invalidTypeErrorBuilder))
+        JsOptionalWithDefaultReaderProperty(builder.build(config.errorBuilders.invalidType))
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P> =
-        JsNullableReaderProperty(builder.build(pathMissingErrorBuilder, invalidTypeErrorBuilder))
+        JsNullableReaderProperty(builder.build(config.errorBuilders.pathMissing, config.errorBuilders.invalidType))
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P> =
-        JsNullableWithDefaultReaderProperty(builder.build(invalidTypeErrorBuilder))
+        JsNullableWithDefaultReaderProperty(builder.build(config.errorBuilders.invalidType))
             .also { registration(it) }
 
-    override fun build(builder: ObjectValuesMap.() -> JsResult<T>): ObjectReader.TypeBuilder<T> =
-        ObjectReader.TypeBuilder { v -> v.builder() }
+    override fun build(builder: ObjectValuesMap.() -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
+        JsObjectReader.TypeBuilder { v ->
+            try {
+                v.builder()
+            } catch (expected: Throwable) {
+                config.exceptionHandlers[expected]
+                    ?.invoke(v.location, expected)
+                    ?: throw expected
+            }
+        }
 
-    fun build(typeBuilder: ObjectReader.TypeBuilder<T>): JsReader<T> {
-        val validators = validatorBuilders.build(configuration, properties)
-        return JsReader { context, location, input ->
-            input.readAsObject(location, invalidTypeErrorBuilder) { l, v ->
-                read(configuration, validators, properties, typeBuilder, context, l, v)
+    fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
+        val validators = validatorBuilders.build(config, properties)
+        return JsObjectReader { context, location, input ->
+            input.readAsObject(location, config.errorBuilders.invalidType) { l, v ->
+                read(config, validators, properties, typeBuilder, context, l, v)
             }
         }
     }
@@ -95,10 +94,10 @@ internal class ObjectReaderBuilderInstance<T>(
     companion object {
 
         internal fun <T> read(
-            configuration: ObjectReaderConfiguration,
+            options: JsReaderBuilder.Options,
             validators: JsObjectValidators,
             properties: List<JsReaderProperty>,
-            typeBuilder: ObjectReader.TypeBuilder<T>,
+            typeBuilder: JsObjectReader.TypeBuilder<T>,
             context: JsReaderContext,
             location: JsLocation,
             input: JsObject
@@ -106,10 +105,10 @@ internal class ObjectReaderBuilderInstance<T>(
             val failures = mutableListOf<JsResult.Failure>()
 
             val preValidationErrors = validators.before
-                ?.validation(configuration, context, properties, input)
+                ?.validation(options, context, properties, input)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
-                if (configuration.failFast) return failure
+                if (options.failFast) return failure
                 failures.add(failure)
             }
 
@@ -118,7 +117,7 @@ internal class ObjectReaderBuilderInstance<T>(
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
                         if (failure != null) {
-                            if (configuration.failFast) return failure
+                            if (options.failFast) return failure
                             failures.add(failure)
                         }
                     }
@@ -126,10 +125,10 @@ internal class ObjectReaderBuilderInstance<T>(
                 .build()
 
             val postValidationErrors = validators.after
-                ?.validation(configuration, context, properties, objectValuesMap, input)
+                ?.validation(options, context, properties, objectValuesMap, input)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
-                if (configuration.failFast) return failure
+                if (options.failFast) return failure
                 failures.add(failure)
             }
 

@@ -21,7 +21,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 
@@ -32,7 +32,7 @@ class AdditionalPropertiesValidator private constructor(
 ) : JsObjectValidator.Before {
 
     override fun validation(
-        configuration: ObjectReaderConfiguration,
+        options: JsReaderBuilder.Options,
         context: JsReaderContext,
         properties: List<JsReaderProperty>,
         input: JsObject
@@ -41,7 +41,7 @@ class AdditionalPropertiesValidator private constructor(
         input.forEach { (name, _) ->
             if (name !in names) {
                 unknownProperties.add(name)
-                if (configuration.failFast) return@forEach
+                if (options.failFast) return@forEach
             }
         }
         return unknownProperties.takeIf { it.isNotEmpty() }

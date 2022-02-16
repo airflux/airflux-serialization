@@ -17,32 +17,20 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsValue
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 
 @Suppress("unused")
-fun <T : Any> JsValue.deserialization(context: JsReaderContext = JsReaderContext(), reader: JsReader<T>): JsResult<T> =
-    reader.read(context, JsLocation.empty, this)
-
-@Suppress("unused")
-sealed interface ObjectReader {
-
-    operator fun <T> invoke(
-        configuration: ObjectReaderConfiguration? = null,
-        init: Builder<T>.() -> TypeBuilder<T>
-    ): JsReader<T>
+fun interface JsObjectReader<T> : JsReader<T> {
 
     fun interface TypeBuilder<T> : (ObjectValuesMap) -> JsResult<T>
 
     @AirfluxMarker
     interface Builder<T> {
-        fun configuration(init: ObjectReaderConfiguration.Builder.() -> Unit)
+
         fun validation(init: JsObjectValidators.Builder.() -> Unit)
 
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P>

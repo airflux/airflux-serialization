@@ -19,7 +19,7 @@ package io.github.airflux.dsl.reader.`object`.validator
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.After
@@ -31,7 +31,7 @@ sealed interface JsObjectValidator {
     fun interface Before : JsObjectValidator {
 
         fun validation(
-            configuration: ObjectReaderConfiguration,
+            options: JsReaderBuilder.Options,
             context: JsReaderContext,
             properties: List<JsReaderProperty>,
             input: JsObject
@@ -46,10 +46,10 @@ sealed interface JsObjectValidator {
         */
         infix fun or(other: Before): Before {
             val self = this
-            return Before { configuration, context, properties, input ->
-                self.validation(configuration, context, properties, input)
+            return Before { options, context, properties, input ->
+                self.validation(options, context, properties, input)
                     ?.let { error ->
-                        other.validation(configuration, context, properties, input)
+                        other.validation(options, context, properties, input)
                             ?.let { error + it }
                     }
             }
@@ -64,9 +64,9 @@ sealed interface JsObjectValidator {
          */
         infix fun and(other: Before): Before {
             val self = this
-            return Before { configuration, context, properties, input ->
-                val result = self.validation(configuration, context, properties, input)
-                result ?: other.validation(configuration, context, properties, input)
+            return Before { options, context, properties, input ->
+                val result = self.validation(options, context, properties, input)
+                result ?: other.validation(options, context, properties, input)
             }
         }
     }
@@ -74,7 +74,7 @@ sealed interface JsObjectValidator {
     fun interface After : JsObjectValidator {
 
         fun validation(
-            configuration: ObjectReaderConfiguration,
+            options: JsReaderBuilder.Options,
             context: JsReaderContext,
             properties: List<JsReaderProperty>,
             objectValuesMap: ObjectValuesMap,
@@ -90,10 +90,10 @@ sealed interface JsObjectValidator {
         */
         infix fun or(other: After): After {
             val self = this
-            return After { configuration, context, properties, objectValuesMap, input ->
-                self.validation(configuration, context, properties, objectValuesMap, input)
+            return After { options, context, properties, objectValuesMap, input ->
+                self.validation(options, context, properties, objectValuesMap, input)
                     ?.let { error ->
-                        other.validation(configuration, context, properties, objectValuesMap, input)
+                        other.validation(options, context, properties, objectValuesMap, input)
                             ?.let { error + it }
                     }
             }
@@ -108,9 +108,9 @@ sealed interface JsObjectValidator {
          */
         infix fun and(other: After): After {
             val self = this
-            return After { configuration, context, properties, objectValuesMap, input ->
-                val result = self.validation(configuration, context, properties, objectValuesMap, input)
-                result ?: other.validation(configuration, context, properties, objectValuesMap, input)
+            return After { options, context, properties, objectValuesMap, input ->
+                val result = self.validation(options, context, properties, objectValuesMap, input)
+                result ?: other.validation(options, context, properties, objectValuesMap, input)
             }
         }
     }

@@ -16,20 +16,19 @@
 
 package io.github.airflux.dsl.reader.`object`.validator
 
-import io.github.airflux.dsl.reader.`object`.ObjectReaderConfiguration
+import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 
-typealias BeforeValidatorInitializer =
-        (config: ObjectReaderConfiguration, properties: List<JsReaderProperty>) -> JsObjectValidator.Before?
-
-typealias AfterValidatorInitializer =
-        (config: ObjectReaderConfiguration, properties: List<JsReaderProperty>) -> JsObjectValidator.After?
+typealias BeforeValidatorInitializer = (JsReaderBuilder.Options, List<JsReaderProperty>) -> JsObjectValidator.Before?
+typealias AfterValidatorInitializer = (JsReaderBuilder.Options, List<JsReaderProperty>) -> JsObjectValidator.After?
 
 class JsObjectValidators private constructor(
     val before: JsObjectValidator.Before?,
     val after: JsObjectValidator.After?
 ) {
 
+    @AirfluxMarker
     class Builder {
         var before: BeforeValidatorInitializer? = null
         var after: AfterValidatorInitializer? = null
@@ -42,10 +41,10 @@ class JsObjectValidators private constructor(
             after = block
         }
 
-        fun build(config: ObjectReaderConfiguration, properties: List<JsReaderProperty>): JsObjectValidators =
+        fun build(options: JsReaderBuilder.Options, properties: List<JsReaderProperty>): JsObjectValidators =
             JsObjectValidators(
-                before = before?.invoke(config, properties),
-                after = after?.invoke(config, properties)
+                before = before?.invoke(options, properties),
+                after = after?.invoke(options, properties)
             )
     }
 }
