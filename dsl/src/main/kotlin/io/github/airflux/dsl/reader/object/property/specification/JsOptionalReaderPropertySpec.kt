@@ -20,6 +20,7 @@ import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.readOptional
 import io.github.airflux.core.reader.result.extension.filter

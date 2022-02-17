@@ -23,7 +23,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsValue
 
 @Suppress("unused")
-fun interface JsReader<T> {
+fun interface JsReader<out T> {
 
     /**
      * Convert the [JsValue] into a T
@@ -40,20 +40,20 @@ fun interface JsReader<T> {
      */
     infix fun <R> map(transform: (T) -> R): JsReader<R> =
         JsReader { context, location, input -> read(context, location, input).map(transform) }
+}
 
-    /**
-     * Creates a new [JsReader], based on this one, which first executes this
-     * [JsReader] logic then, if this [JsReader] resulted in a [JsError], runs
-     * the other [JsReader] on the [JsValue].
-     *
-     * @param other the [JsReader] to run if this one gets a [JsError]
-     * @return A new [JsReader] with the updated behavior.
-     */
-    infix fun or(other: JsReader<T>): JsReader<T> = JsReader { context, location, input ->
-        read(context, location, input)
-            .recovery { failure ->
-                other.read(context, location, input)
-                    .recovery { alternative -> failure + alternative }
-            }
-    }
+/**
+ * Creates a new [JsReader], based on this one, which first executes this
+ * [JsReader] logic then, if this [JsReader] resulted in a [JsError], runs
+ * the other [JsReader] on the [JsValue].
+ *
+ * @param other the [JsReader] to run if this one gets a [JsError]
+ * @return A new [JsReader] with the updated behavior.
+ */
+infix fun <T> JsReader<T>.or(other: JsReader<T>): JsReader<T> = JsReader { context, location, input ->
+    read(context, location, input)
+        .recovery { failure ->
+            other.read(context, location, input)
+                .recovery { alternative -> failure + alternative }
+        }
 }

@@ -21,6 +21,7 @@ import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.readNullable
 import io.github.airflux.core.reader.result.extension.filter
