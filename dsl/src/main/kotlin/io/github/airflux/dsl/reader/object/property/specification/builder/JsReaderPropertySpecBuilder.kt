@@ -19,7 +19,7 @@ package io.github.airflux.dsl.reader.`object`.property.specification.builder
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder.Defaultable
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder.Nullable
@@ -32,7 +32,7 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
     fun interface Required<T : Any> : JsReaderPropertySpecBuilder<T> {
 
-        infix fun validation(validator: JsPropertyValidator<T>): Required<T> {
+        infix fun validation(validator: JsValidator<T>): Required<T> {
             val self = this
             return Required { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
                 self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder).validation(validator)
@@ -55,7 +55,7 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
     fun interface Defaultable<T : Any> : JsReaderPropertySpecBuilder<T> {
 
-        infix fun validation(validator: JsPropertyValidator<T>): Defaultable<T> {
+        infix fun validation(validator: JsValidator<T>): Defaultable<T> {
             val self = this
             return Defaultable { invalidTypeErrorBuilder ->
                 self.build(invalidTypeErrorBuilder).validation(validator)
@@ -76,7 +76,7 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
     fun interface Optional<T : Any> : JsReaderPropertySpecBuilder<T> {
 
-        infix fun validation(validator: JsPropertyValidator<T?>): Optional<T> {
+        infix fun validation(validator: JsValidator<T?>): Optional<T> {
             val self = this
             return Optional { invalidTypeErrorBuilder ->
                 self.build(invalidTypeErrorBuilder).validation(validator)
@@ -104,7 +104,7 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
     fun interface OptionalWithDefault<T : Any> : JsReaderPropertySpecBuilder<T> {
 
-        infix fun validation(validator: JsPropertyValidator<T>): OptionalWithDefault<T> {
+        infix fun validation(validator: JsValidator<T>): OptionalWithDefault<T> {
             val self = this
             return OptionalWithDefault { invalidTypeErrorBuilder ->
                 self.build(invalidTypeErrorBuilder).validation(validator)
@@ -125,7 +125,7 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
     fun interface Nullable<T : Any> : JsReaderPropertySpecBuilder<T> {
 
-        infix fun validation(validator: JsPropertyValidator<T?>): Nullable<T> {
+        infix fun validation(validator: JsValidator<T?>): Nullable<T> {
             val self = this
             return Nullable { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
                 self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder).validation(validator)
@@ -155,7 +155,7 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
     fun interface NullableWithDefault<T : Any> : JsReaderPropertySpecBuilder<T> {
 
-        infix fun validation(validator: JsPropertyValidator<T?>): NullableWithDefault<T> {
+        infix fun validation(validator: JsValidator<T?>): NullableWithDefault<T> {
             val self = this
             return NullableWithDefault { invalidTypeErrorBuilder ->
                 self.build(invalidTypeErrorBuilder).validation(validator)

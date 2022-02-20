@@ -24,7 +24,7 @@ import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.readOptional
 import io.github.airflux.core.reader.result.extension.filter
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
@@ -42,7 +42,7 @@ internal class JsOptionalReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun validation(validator: JsPropertyValidator<T?>): JsReaderPropertySpec.Optional<T> =
+    override fun validation(validator: JsValidator<T?>): JsReaderPropertySpec.Optional<T> =
         JsOptionalReaderPropertySpec(
             path = path,
             reader = { context, location, input ->

@@ -23,7 +23,7 @@ import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.readRequired
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
@@ -45,7 +45,7 @@ internal class JsRequiredReaderPropertySpec<T : Any> private constructor(
         }
     )
 
-    override fun validation(validator: JsPropertyValidator<T>): JsReaderPropertySpec.Required<T> =
+    override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.Required<T> =
         JsRequiredReaderPropertySpec(
             path = path,
             reader = { context, location, input ->

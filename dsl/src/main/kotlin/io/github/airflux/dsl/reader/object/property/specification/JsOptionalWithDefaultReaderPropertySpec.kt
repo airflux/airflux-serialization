@@ -22,7 +22,7 @@ import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.readOptional
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
@@ -40,7 +40,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
             }
         )
 
-    override fun validation(validator: JsPropertyValidator<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
+    override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
         JsOptionalWithDefaultReaderPropertySpec(
             path = path,
             reader = { context, location, input ->

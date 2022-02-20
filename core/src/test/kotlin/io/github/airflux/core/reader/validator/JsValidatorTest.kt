@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-class JsPropertyValidatorTest {
+class JsValidatorTest {
 
     private sealed class ValidationErrors : JsError {
         object PathMissingNormalError : ValidationErrors()
@@ -28,9 +28,9 @@ class JsPropertyValidatorTest {
 
     @Test
     fun `Testing operator 'or' (the first validator returns a success and the second validator don't execute)`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
+        val leftValidator = JsValidator<Unit> { _, _, _ -> null }
 
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val rightValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.PathMissingNormalError)
         }
 
@@ -42,11 +42,11 @@ class JsPropertyValidatorTest {
 
     @Test
     fun `Testing operator 'or' (the first validator returns a normal error and the second validator returns a success)`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val leftValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.PathMissingNormalError)
         }
 
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
+        val rightValidator = JsValidator<Unit> { _, _, _ -> null }
 
         val composeValidator = leftValidator or rightValidator
         val errors = composeValidator.validation(context, location, Unit)
@@ -56,11 +56,11 @@ class JsPropertyValidatorTest {
 
     @Test
     fun `Testing operator 'or' (the first validator returns a normal error and the second validator returns a normal error)`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val leftValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.PathMissingNormalError)
         }
 
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val rightValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.InvalidTypeNormalError)
         }
 
@@ -79,8 +79,8 @@ class JsPropertyValidatorTest {
 
     @Test
     fun `Testing operator 'and' (the first validator returns a success and the second validator returns a success)`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
+        val leftValidator = JsValidator<Unit> { _, _, _ -> null }
+        val rightValidator = JsValidator<Unit> { _, _, _ -> null }
 
         val composeValidator = leftValidator and rightValidator
         val errors = composeValidator.validation(context, location, Unit)
@@ -90,9 +90,9 @@ class JsPropertyValidatorTest {
 
     @Test
     fun `Testing operator 'and' (the first validator returns a success and the second validator returns a normal error`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ -> null }
+        val leftValidator = JsValidator<Unit> { _, _, _ -> null }
 
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val rightValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.PathMissingNormalError)
         }
 
@@ -106,11 +106,11 @@ class JsPropertyValidatorTest {
 
     @Test
     fun `Testing operator 'and' (the first validator returns a normal error and the second validator don't execute`() {
-        val leftValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val leftValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.PathMissingNormalError)
         }
 
-        val rightValidator = JsPropertyValidator<Unit> { _, _, _ ->
+        val rightValidator = JsValidator<Unit> { _, _, _ ->
             JsErrors.of(ValidationErrors.InvalidTypeNormalError)
         }
 

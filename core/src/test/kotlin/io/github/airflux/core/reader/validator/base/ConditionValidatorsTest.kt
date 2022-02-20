@@ -4,7 +4,7 @@ import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
@@ -15,8 +15,8 @@ class ConditionValidatorsTest : FreeSpec() {
     companion object {
         private val context = JsReaderContext()
         private val location = JsLocation.empty
-        private val isNotEmpty: JsPropertyValidator<String> =
-            JsPropertyValidator { _, _, value ->
+        private val isNotEmpty: JsValidator<String> =
+            JsValidator { _, _, value ->
                 if (value.isNotEmpty()) null else JsErrors.of(JsonErrors.Validation.Strings.IsEmpty)
             }
     }

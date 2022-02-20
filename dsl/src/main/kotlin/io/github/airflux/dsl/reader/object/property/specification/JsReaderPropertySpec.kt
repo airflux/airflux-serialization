@@ -18,7 +18,7 @@ package io.github.airflux.dsl.reader.`object`.property.specification
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
 sealed interface JsReaderPropertySpec<T : Any> {
@@ -27,21 +27,21 @@ sealed interface JsReaderPropertySpec<T : Any> {
     sealed interface Required<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T>
 
-        infix fun validation(validator: JsPropertyValidator<T>): Required<T>
+        infix fun validation(validator: JsValidator<T>): Required<T>
         infix fun or(alt: Required<T>): Required<T>
     }
 
     sealed interface Defaultable<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T>
 
-        infix fun validation(validator: JsPropertyValidator<T>): Defaultable<T>
+        infix fun validation(validator: JsValidator<T>): Defaultable<T>
         infix fun or(alt: Defaultable<T>): Defaultable<T>
     }
 
     sealed interface Optional<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T?>
 
-        infix fun validation(validator: JsPropertyValidator<T?>): Optional<T>
+        infix fun validation(validator: JsValidator<T?>): Optional<T>
         infix fun filter(predicate: JsPredicate<T>): Optional<T>
         infix fun or(alt: Optional<T>): Optional<T>
     }
@@ -49,14 +49,14 @@ sealed interface JsReaderPropertySpec<T : Any> {
     sealed interface OptionalWithDefault<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T>
 
-        infix fun validation(validator: JsPropertyValidator<T>): OptionalWithDefault<T>
+        infix fun validation(validator: JsValidator<T>): OptionalWithDefault<T>
         infix fun or(alt: OptionalWithDefault<T>): OptionalWithDefault<T>
     }
 
     sealed interface Nullable<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T?>
 
-        infix fun validation(validator: JsPropertyValidator<T?>): Nullable<T>
+        infix fun validation(validator: JsValidator<T?>): Nullable<T>
         infix fun filter(predicate: JsPredicate<T>): Nullable<T>
         infix fun or(alt: Nullable<T>): Nullable<T>
     }
@@ -64,7 +64,7 @@ sealed interface JsReaderPropertySpec<T : Any> {
     sealed interface NullableWithDefault<T : Any> : JsReaderPropertySpec<T> {
         val reader: JsReader<T?>
 
-        infix fun validation(validator: JsPropertyValidator<T?>): NullableWithDefault<T>
+        infix fun validation(validator: JsValidator<T?>): NullableWithDefault<T>
         infix fun filter(predicate: JsPredicate<T>): NullableWithDefault<T>
         infix fun or(alt: NullableWithDefault<T>): NullableWithDefault<T>
     }

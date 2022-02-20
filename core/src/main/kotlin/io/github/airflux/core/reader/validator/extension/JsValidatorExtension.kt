@@ -19,18 +19,18 @@ package io.github.airflux.core.reader.validator.extension
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.validator.JsPropertyValidator
+import io.github.airflux.core.reader.validator.JsValidator
 
-infix fun <T> JsReader<T>.validation(validator: JsPropertyValidator<T>): JsReader<T> =
+infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
     JsReader { context, location, input ->
         this@validation.read(context, location, input)
             .validation(context, validator)
     }
 
-fun <T> JsResult<T>.validation(validator: JsPropertyValidator<T>): JsResult<T> =
+fun <T> JsResult<T>.validation(validator: JsValidator<T>): JsResult<T> =
     validation(context = JsReaderContext(), validator = validator)
 
-fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsPropertyValidator<T>): JsResult<T> =
+fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
     when (this) {
         is JsResult.Success -> {
             val errors = validator.validation(context, this.location, this.value)
