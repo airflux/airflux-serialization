@@ -24,37 +24,37 @@ import io.github.airflux.core.reader.result.JsLocation
 fun interface JsValidator<in T> {
 
     fun validation(context: JsReaderContext, location: JsLocation, value: T): JsErrors?
+}
 
-    /*
-     * | This | Other  | Result |
-     * |------|--------|--------|
-     * | S    | ignore | S      |
-     * | F    | S      | S      |
-     * | F    | F`     | F + F` |
-     */
-    infix fun or(other: JsValidator<@UnsafeVariance T>): JsValidator<T> {
-        val self = this
-        return JsValidator { context, location, value ->
-            self.validation(context, location, value)
-                ?.let { error ->
-                    other.validation(context, location, value)
-                        ?.let { error + it }
-                }
-        }
+/*
+ * | This | Other  | Result |
+ * |------|--------|--------|
+ * | S    | ignore | S      |
+ * | F    | S      | S      |
+ * | F    | F`     | F + F` |
+ */
+infix fun <T> JsValidator<T>.or(other: JsValidator<T>): JsValidator<T> {
+    val self = this
+    return JsValidator { context, location, value ->
+        self.validation(context, location, value)
+            ?.let { error ->
+                other.validation(context, location, value)
+                    ?.let { error + it }
+            }
     }
+}
 
-    /*
-     * | This | Other  | Result |
-     * |------|--------|--------|
-     * | S    | S      | S      |
-     * | S    | F      | F      |
-     * | F    | ignore | F      |
-     */
-    infix fun and(other: JsValidator<@UnsafeVariance T>): JsValidator<T> {
-        val self = this
-        return JsValidator { context, location, value ->
-            val result = self.validation(context, location, value)
-            result ?: other.validation(context, location, value)
-        }
+/*
+ * | This | Other  | Result |
+ * |------|--------|--------|
+ * | S    | S      | S      |
+ * | S    | F      | F      |
+ * | F    | ignore | F      |
+ */
+infix fun <T> JsValidator<T>.and(other: JsValidator<T>): JsValidator<T> {
+    val self = this
+    return JsValidator { context, location, value ->
+        val result = self.validation(context, location, value)
+        result ?: other.validation(context, location, value)
     }
 }

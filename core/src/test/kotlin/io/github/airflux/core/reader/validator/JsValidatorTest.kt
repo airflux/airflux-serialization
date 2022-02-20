@@ -4,121 +4,116 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 
-class JsValidatorTest {
-
-    private sealed class ValidationErrors : JsError {
-        object PathMissingNormalError : ValidationErrors()
-        object InvalidTypeNormalError : ValidationErrors()
-    }
+class JsValidatorTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext()
         private val location = JsLocation.empty
     }
 
-    /*
-     * Testing operator 'and'.
-     */
+    init {
 
-    @Test
-    fun `Testing operator 'or' (the first validator returns a success and the second validator don't execute)`() {
-        val leftValidator = JsValidator<Unit> { _, _, _ -> null }
+        "A JsValidator type" - {
 
-        val rightValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
+            "testing the or composite operator" - {
+
+                "if the left validator returns success then the right validator doesn't execute" {
+                    val leftValidator = JsValidator<Unit> { _, _, _ -> null }
+
+                    val rightValidator = JsValidator<Unit> { _, _, _ ->
+                        JsErrors.of(ValidationErrors.PathMissing)
+                    }
+
+                    val composeValidator = leftValidator or rightValidator
+                    val errors = composeValidator.validation(context, location, Unit)
+
+                    errors.shouldBeNull()
+                }
+
+                "if the left validator returns an error" - {
+                    val leftValidator = JsValidator<Unit> { _, _, _ ->
+                        JsErrors.of(ValidationErrors.PathMissing)
+                    }
+
+                    "and the right validator returns success then returning the first error" {
+                        val rightValidator = JsValidator<Unit> { _, _, _ -> null }
+
+                        val composeValidator = leftValidator or rightValidator
+                        val errors = composeValidator.validation(context, location, Unit)
+
+                        errors.shouldBeNull()
+                    }
+
+                    "and the right validator returns an error then returning both errors" {
+                        val rightValidator = JsValidator<Unit> { _, _, _ ->
+                            JsErrors.of(ValidationErrors.InvalidType)
+                        }
+
+                        val composeValidator = leftValidator or rightValidator
+                        val errors = composeValidator.validation(context, location, Unit)
+
+                        errors.shouldNotBeNull()
+                        errors.items shouldContainExactly listOf(
+                            ValidationErrors.PathMissing,
+                            ValidationErrors.InvalidType
+                        )
+                    }
+                }
+            }
+
+            "testing the and composite operator" - {
+
+                "if the left validator returns an error then the right validator doesn't execute" {
+                    val leftValidator = JsValidator<Unit> { _, _, _ ->
+                        JsErrors.of(ValidationErrors.PathMissing)
+                    }
+
+                    val rightValidator = JsValidator<Unit> { _, _, _ ->
+                        JsErrors.of(ValidationErrors.InvalidType)
+                    }
+
+                    val composeValidator = leftValidator and rightValidator
+                    val errors = composeValidator.validation(context, location, Unit)
+
+                    errors.shouldNotBeNull()
+                    errors.items shouldContainExactly listOf(ValidationErrors.PathMissing)
+                }
+
+                "if the left validator returns a success" - {
+                    val leftValidator = JsValidator<Unit> { _, _, _ -> null }
+
+                    "and the second validator returns success, then success is returned" {
+                        val rightValidator = JsValidator<Unit> { _, _, _ -> null }
+
+                        val composeValidator = leftValidator and rightValidator
+                        val errors = composeValidator.validation(context, location, Unit)
+
+                        errors.shouldBeNull()
+                    }
+
+                    "and the right validator returns an error, then an error is returned" {
+                        val rightValidator = JsValidator<Unit> { _, _, _ ->
+                            JsErrors.of(ValidationErrors.PathMissing)
+                        }
+
+                        val composeValidator = leftValidator and rightValidator
+                        val errors = composeValidator.validation(context, location, Unit)
+
+                        errors.shouldNotBeNull()
+                        errors.items shouldContainExactly listOf(ValidationErrors.PathMissing)
+                    }
+                }
+            }
         }
-
-        val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNull(errors)
     }
 
-    @Test
-    fun `Testing operator 'or' (the first validator returns a normal error and the second validator returns a success)`() {
-        val leftValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val rightValidator = JsValidator<Unit> { _, _, _ -> null }
-
-        val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNull(errors)
-    }
-
-    @Test
-    fun `Testing operator 'or' (the first validator returns a normal error and the second validator returns a normal error)`() {
-        val leftValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val rightValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.InvalidTypeNormalError)
-        }
-
-        val composeValidator = leftValidator or rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(2, errors.items.count())
-        assertContains(errors.items, ValidationErrors.PathMissingNormalError)
-        assertContains(errors.items, ValidationErrors.InvalidTypeNormalError)
-    }
-
-    /*
-     * Testing operator 'and'.
-     */
-
-    @Test
-    fun `Testing operator 'and' (the first validator returns a success and the second validator returns a success)`() {
-        val leftValidator = JsValidator<Unit> { _, _, _ -> null }
-        val rightValidator = JsValidator<Unit> { _, _, _ -> null }
-
-        val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNull(errors)
-    }
-
-    @Test
-    fun `Testing operator 'and' (the first validator returns a success and the second validator returns a normal error`() {
-        val leftValidator = JsValidator<Unit> { _, _, _ -> null }
-
-        val rightValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(1, errors.items.count())
-        assertContains(errors.items, ValidationErrors.PathMissingNormalError)
-    }
-
-    @Test
-    fun `Testing operator 'and' (the first validator returns a normal error and the second validator don't execute`() {
-        val leftValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.PathMissingNormalError)
-        }
-
-        val rightValidator = JsValidator<Unit> { _, _, _ ->
-            JsErrors.of(ValidationErrors.InvalidTypeNormalError)
-        }
-
-        val composeValidator = leftValidator and rightValidator
-        val errors = composeValidator.validation(context, location, Unit)
-
-        assertNotNull(errors)
-        assertEquals(1, errors.items.count())
-        assertContains(errors.items, ValidationErrors.PathMissingNormalError)
+    private sealed class ValidationErrors : JsError {
+        object PathMissing : ValidationErrors()
+        object InvalidType : ValidationErrors()
     }
 }
