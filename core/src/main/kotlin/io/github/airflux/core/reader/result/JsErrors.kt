@@ -25,6 +25,12 @@ class JsErrors private constructor(val items: List<JsError>) {
 
     override fun hashCode(): Int = items.hashCode()
 
+    override fun toString(): String = buildString {
+        append("JsErrors(items=")
+        append(items.toString())
+        append(")")
+    }
+
     companion object {
         fun of(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
             JsErrors(listOf(error))

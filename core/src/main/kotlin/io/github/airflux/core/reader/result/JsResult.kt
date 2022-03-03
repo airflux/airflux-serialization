@@ -61,6 +61,12 @@ sealed class JsResult<out T> {
 
         override fun hashCode(): Int = causes.hashCode()
 
+        override fun toString(): String = buildString {
+            append("Failure(causes=")
+            append(causes.toString())
+            append(")")
+        }
+
         data class Cause(val location: JsLocation, val errors: JsErrors) {
             constructor(location: JsLocation, error: JsError) : this(location, JsErrors.of(error))
         }
