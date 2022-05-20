@@ -32,6 +32,7 @@ dependencies {
     /* Kotest */
     testImplementation("io.kotest:kotest-runner-junit5:${Versions.Test.Kotest}")
     testImplementation("io.kotest:kotest-assertions-core:${Versions.Test.Kotest}")
+    testImplementation("io.kotest:kotest-framework-datatest:${Versions.Test.Kotest}")
 
     /* PITest */
     testImplementation("org.pitest:pitest-junit5-plugin:${Versions.Test.PiTest.JUnit5}")
