@@ -71,6 +71,6 @@ fun <T : Any> nullableWithDefault(name: String, reader: JsReader<T>, default: ()
     nullableWithDefault(JsPath(name), reader, default)
 
 fun <T : Any> nullableWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsReaderPropertySpecBuilder.NullableWithDefault { invalidTypeErrorBuilder ->
-        JsNullableWithDefaultReaderPropertySpec(path, reader, default, invalidTypeErrorBuilder)
+    JsReaderPropertySpecBuilder.NullableWithDefault {
+        JsNullableWithDefaultReaderPropertySpec(path, reader, default)
     }
