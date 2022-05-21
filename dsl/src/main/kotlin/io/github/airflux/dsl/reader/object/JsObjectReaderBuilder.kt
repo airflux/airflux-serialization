@@ -81,8 +81,8 @@ internal class JsObjectReaderBuilder<T>(
     fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
         val validators = validatorBuilders.build(config, properties)
         return JsObjectReader { context, location, input ->
-            input.readAsObject(location, config.errorBuilders.invalidType) { l, v ->
-                read(config, validators, properties, typeBuilder, context, l, v)
+            input.readAsObject(context, location) { c, l, v ->
+                read(config, validators, properties, typeBuilder, c, l, v)
             }
         }
     }
