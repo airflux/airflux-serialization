@@ -17,8 +17,7 @@
 package io.github.airflux.core.reader.base
 
 import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.core.reader.result.asFailure
 import io.github.airflux.core.reader.result.asSuccess
 import io.github.airflux.core.value.extension.readAsNumber
@@ -26,16 +25,14 @@ import io.github.airflux.core.value.extension.readAsNumber
 /**
  * Reader for primitive [Byte] type.
  */
-fun buildByteReader(
-    invalidTypeErrorBuilder: InvalidTypeErrorBuilder,
-    valueCastErrorBuilder: ValueCastErrorBuilder
-): JsReader<Byte> =
-    JsReader { _, location, input ->
-        input.readAsNumber(location, invalidTypeErrorBuilder) { p, text ->
+fun buildByteReader(): JsReader<Byte> =
+    JsReader { context, location, input ->
+        input.readAsNumber(context, location) { c, l, text ->
             try {
-                text.toByte().asSuccess(location = p)
+                text.toByte().asSuccess(location = l)
             } catch (expected: NumberFormatException) {
-                valueCastErrorBuilder.build(text, Byte::class).asFailure(location = p)
+                val errorBuilder = c.getValue(ValueCastErrorBuilder)
+                errorBuilder.build(text, Byte::class).asFailure(location = l)
             }
         }
     }

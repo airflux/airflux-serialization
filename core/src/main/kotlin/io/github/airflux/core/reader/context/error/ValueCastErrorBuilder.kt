@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.error
+package io.github.airflux.core.reader.context.error
 
+import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import kotlin.reflect.KClass
 
-fun interface ValueCastErrorBuilder {
-    fun build(value: String, type: KClass<*>): JsError
+class ValueCastErrorBuilder(private val builder: (value: String, target: KClass<*>) -> JsError) :
+    JsReaderAbstractContextElement<ValueCastErrorBuilder>(key = ValueCastErrorBuilder) {
+
+    fun build(value: String, target: KClass<*>): JsError = builder(value, target)
+
+    companion object Key : JsReaderContext.Key<ValueCastErrorBuilder> {
+        override val name: String = "ValueCastErrorBuilder"
+    }
 }

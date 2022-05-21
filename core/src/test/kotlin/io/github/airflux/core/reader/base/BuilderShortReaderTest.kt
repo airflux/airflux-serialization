@@ -4,6 +4,8 @@ import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.assertAsFailure
 import io.github.airflux.core.common.assertAsSuccess
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNumber
@@ -14,8 +16,13 @@ import kotlin.test.Test
 class BuilderShortReaderTest {
 
     companion object {
-        private val context = JsReaderContext()
-        private val reader = buildShortReader(JsonErrors::InvalidType, JsonErrors::ValueCast)
+        private val context = JsReaderContext(
+            listOf(
+                InvalidTypeErrorBuilder(JsonErrors::InvalidType),
+                ValueCastErrorBuilder(JsonErrors::ValueCast)
+            )
+        )
+        private val reader = buildShortReader()
     }
 
     @Test
