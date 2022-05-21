@@ -4,6 +4,7 @@ import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.assertAsFailure
 import io.github.airflux.core.common.assertAsSuccess
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsBoolean
@@ -14,8 +15,8 @@ import kotlin.test.Test
 class BuilderBooleanReaderTest {
 
     companion object {
-        private val context = JsReaderContext()
-        private val reader = buildBooleanReader(JsonErrors::InvalidType)
+        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val reader = buildBooleanReader()
     }
 
     @Test
