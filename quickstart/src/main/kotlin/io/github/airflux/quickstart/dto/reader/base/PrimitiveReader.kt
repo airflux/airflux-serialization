@@ -4,6 +4,6 @@ import io.github.airflux.core.reader.base.buildBigDecimalReader
 import io.github.airflux.core.reader.base.buildStringReader
 
 object PrimitiveReader {
-    val stringReader = buildStringReader(ErrorBuilder.InvalidType)
+    val stringReader = buildStringReader()
     val bigDecimalReader = buildBigDecimalReader()
 }

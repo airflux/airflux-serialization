@@ -32,11 +32,13 @@ fun JsValue.readAsBoolean(location: JsLocation, invalidTypeErrorBuilder: Invalid
     else
         JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.BOOLEAN, this.type))
 
-fun JsValue.readAsString(location: JsLocation, invalidTypeErrorBuilder: InvalidTypeErrorBuilder): JsResult<String> =
+fun JsValue.readAsString(context: JsReaderContext, location: JsLocation): JsResult<String> =
     if (this is JsString)
         JsResult.Success(location, this.get)
-    else
-        JsResult.Failure(location = location, error = invalidTypeErrorBuilder.build(JsValue.Type.STRING, this.type))
+    else {
+        val errorBuilder = context.getValue(io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder)
+        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.STRING, this.type))
+    }
 
 fun <T : Number> JsValue.readAsNumber(
     context: JsReaderContext,

@@ -3,6 +3,8 @@ package io.github.airflux.core.value.extension
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.assertAsFailure
 import io.github.airflux.core.common.assertAsSuccess
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsBoolean
@@ -13,6 +15,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsStringTest : FreeSpec() {
 
     companion object {
+        private val context = JsReaderContext(
+            InvalidTypeErrorBuilder(JsonErrors::InvalidType)
+        )
         private val LOCATION = JsLocation.empty.append("user")
     }
 
@@ -21,14 +26,14 @@ internal class ReadAsStringTest : FreeSpec() {
             "when called with a receiver of a 'JsString'" - {
                 "should return the string value" {
                     val json: JsValue = JsString("abc")
-                    val result = json.readAsString(LOCATION, JsonErrors::InvalidType)
+                    val result = json.readAsString(context, LOCATION)
                     result.assertAsSuccess(location = LOCATION, value = "abc")
                 }
             }
             "when called with a receiver of a not 'JsString'" - {
                 "should return the 'InvalidType' error" {
                     val json: JsValue = JsBoolean.valueOf(true)
-                    val result = json.readAsString(LOCATION, JsonErrors::InvalidType)
+                    val result = json.readAsString(context, LOCATION)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = LOCATION,
