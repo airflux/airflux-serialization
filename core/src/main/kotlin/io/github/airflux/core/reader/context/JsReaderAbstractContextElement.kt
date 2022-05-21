@@ -16,5 +16,5 @@
 
 package io.github.airflux.core.reader.context
 
-@Suppress("unused")
-abstract class JsReaderAbstractContextElement(override val key: JsReaderContext.Key<*>) : JsReaderContext.Element
+abstract class JsReaderAbstractContextElement<T : JsReaderContext.Element>(override val key: JsReaderContext.Key<T>) :
+    JsReaderContext.Element
