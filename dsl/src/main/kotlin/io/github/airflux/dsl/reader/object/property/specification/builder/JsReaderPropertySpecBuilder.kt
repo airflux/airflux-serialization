@@ -17,7 +17,6 @@
 package io.github.airflux.dsl.reader.`object`.property.specification.builder
 
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
@@ -34,23 +33,19 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
         infix fun validation(validator: JsValidator<T>): Required<T> {
             val self = this
-            return Required { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
-                self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder).validation(validator)
+            return Required {
+                self.build().validation(validator)
             }
         }
 
         infix fun or(alt: Required<T>): Required<T> {
             val self = this
-            return Required { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
-                self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder)
-                    .or(alt.build(pathMissingErrorBuilder, invalidTypeErrorBuilder))
+            return Required {
+                self.build().or(alt.build())
             }
         }
 
-        fun build(
-            pathMissingErrorBuilder: PathMissingErrorBuilder,
-            invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): JsReaderPropertySpec.Required<T>
+        fun build(): JsReaderPropertySpec.Required<T>
     }
 
     fun interface Defaultable<T : Any> : JsReaderPropertySpecBuilder<T> {

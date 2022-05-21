@@ -7,6 +7,8 @@ import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.readRequired
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
@@ -22,7 +24,12 @@ import kotlin.test.Test
 class JsValidatorExtensionTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext(
+            listOf(
+                PathMissingErrorBuilder { JsonErrors.PathMissing },
+                InvalidTypeErrorBuilder(JsonErrors::InvalidType)
+            )
+        )
         private val isNotEmpty = JsValidator<String> { _, _, value ->
             if (value.isNotEmpty()) null else JsErrors.of(JsonErrors.Validation.Strings.IsEmpty)
         }
@@ -46,13 +53,7 @@ class JsValidatorExtensionTest {
             val json: JsValue = JsObject("name" to JsString("user"))
             val reader = JsReader { context, location, input ->
                 val result = JsLookup.apply(location, JsPath("name"), input)
-                readRequired(
-                    from = result,
-                    using = stringReader,
-                    context = context,
-                    pathMissingErrorBuilder = { JsonErrors.PathMissing },
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                readRequired(context = context, from = result, using = stringReader)
             }.validation(isNotEmpty)
 
             val result = reader.read(context, JsLocation.empty, json)
@@ -65,13 +66,7 @@ class JsValidatorExtensionTest {
             val json: JsValue = JsObject("name" to JsString(""))
             val reader = JsReader { context, location, input ->
                 val result = JsLookup.apply(location, JsPath("name"), input)
-                readRequired(
-                    from = result,
-                    using = stringReader,
-                    context = context,
-                    pathMissingErrorBuilder = { JsonErrors.PathMissing },
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                readRequired(context = context, from = result, using = stringReader)
             }.validation(isNotEmpty)
 
             val result = reader.read(context, JsLocation.empty, json)
@@ -89,13 +84,7 @@ class JsValidatorExtensionTest {
             val json: JsValue = JsObject("name" to JsNull)
             val reader = JsReader { context, location, input ->
                 val result = JsLookup.apply(location, JsPath("name"), input)
-                readRequired(
-                    from = result,
-                    using = stringReader,
-                    context = context,
-                    pathMissingErrorBuilder = { JsonErrors.PathMissing },
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                readRequired(context = context, from = result, using = stringReader)
             }.validation(isNotEmpty)
 
             val result = reader.read(context, JsLocation.empty, json)

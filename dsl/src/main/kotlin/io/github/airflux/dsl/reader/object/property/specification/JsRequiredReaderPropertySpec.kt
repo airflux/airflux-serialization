@@ -19,8 +19,6 @@ package io.github.airflux.dsl.reader.`object`.property.specification
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.readRequired
 import io.github.airflux.core.reader.validator.JsValidator
@@ -32,16 +30,11 @@ internal class JsRequiredReaderPropertySpec<T : Any> private constructor(
     override val reader: JsReader<T>
 ) : JsReaderPropertySpec.Required<T> {
 
-    constructor(
-        path: JsPath,
-        reader: JsReader<T>,
-        pathMissingErrorBuilder: PathMissingErrorBuilder,
-        invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-    ) : this(
+    constructor(path: JsPath, reader: JsReader<T>) : this(
         path = JsPaths(path),
         reader = { context, location, input ->
             val lookup = JsLookup.apply(location, path, input)
-            readRequired(context, lookup, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+            readRequired(context, lookup, reader)
         }
     )
 

@@ -31,8 +31,8 @@ fun <T : Any> required(name: String, reader: JsReader<T>) =
     required(JsPath(name), reader)
 
 fun <T : Any> required(path: JsPath, reader: JsReader<T>) =
-    JsReaderPropertySpecBuilder.Required { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
-        JsRequiredReaderPropertySpec(path, reader, pathMissingErrorBuilder, invalidTypeErrorBuilder)
+    JsReaderPropertySpecBuilder.Required {
+        JsRequiredReaderPropertySpec(path, reader)
     }
 
 fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =

@@ -44,7 +44,7 @@ internal class JsObjectReaderBuilder<T>(
     }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P> =
-        JsRequiredReaderProperty(builder.build(config.errorBuilders.pathMissing, config.errorBuilders.invalidType))
+        JsRequiredReaderProperty(builder.build())
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Defaultable<P>): JsReaderProperty.Defaultable<P> =
