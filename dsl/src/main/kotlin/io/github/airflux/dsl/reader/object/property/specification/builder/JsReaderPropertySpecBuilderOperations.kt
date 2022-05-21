@@ -39,8 +39,8 @@ fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =
     defaultable(JsPath(name), reader, default)
 
 fun <T : Any> defaultable(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsReaderPropertySpecBuilder.Defaultable { invalidTypeErrorBuilder ->
-        JsDefaultableReaderPropertySpec(path, reader, default, invalidTypeErrorBuilder)
+    JsReaderPropertySpecBuilder.Defaultable {
+        JsDefaultableReaderPropertySpec(path, reader, default)
     }
 
 fun <T : Any> optional(name: String, reader: JsReader<T>) =

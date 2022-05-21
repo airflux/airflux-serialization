@@ -18,7 +18,7 @@ package io.github.airflux.core.reader
 
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNull
 
@@ -28,14 +28,14 @@ import io.github.airflux.core.value.JsNull
  * - If a node is found with a value no 'null' ([from] is [JsLookup.Defined]) then applies [reader]
  * - If a node is found with a value 'null' ([from] is [JsLookup.Defined]) then returns [defaultValue]
  * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then returns [defaultValue]
- * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then returning error [invalidTypeErrorBuilder]
+ * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
+ *   that was build using [InvalidTypeErrorBuilder]
  */
 fun <T : Any> readWithDefault(
     context: JsReaderContext,
     from: JsLookup,
     using: JsReader<T>,
-    defaultValue: () -> T,
-    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
+    defaultValue: () -> T
 ): JsResult<T> {
 
     fun <T : Any> readWithDefault(
@@ -53,9 +53,9 @@ fun <T : Any> readWithDefault(
     return when (from) {
         is JsLookup.Defined -> readWithDefault(context, from, using, defaultValue)
         is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
-        is JsLookup.Undefined.InvalidType -> JsResult.Failure(
-            location = from.location,
-            error = invalidTypeErrorBuilder.build(from.expected, from.actual)
-        )
+        is JsLookup.Undefined.InvalidType -> {
+            val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+            JsResult.Failure(location = from.location, error = errorBuilder.build(from.expected, from.actual))
+        }
     }
 }
