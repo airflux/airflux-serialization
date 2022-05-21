@@ -47,8 +47,8 @@ fun <T : Any> optional(name: String, reader: JsReader<T>) =
     optional(JsPath(name), reader)
 
 fun <T : Any> optional(path: JsPath, reader: JsReader<T>) =
-    JsReaderPropertySpecBuilder.Optional { invalidTypeErrorBuilder ->
-        JsOptionalReaderPropertySpec(path, reader, invalidTypeErrorBuilder)
+    JsReaderPropertySpecBuilder.Optional {
+        JsOptionalReaderPropertySpec(path, reader)
     }
 
 fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: () -> T) =

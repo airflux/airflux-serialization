@@ -78,28 +78,26 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
         infix fun validation(validator: JsValidator<T?>): Optional<T> {
             val self = this
-            return Optional { invalidTypeErrorBuilder ->
-                self.build(invalidTypeErrorBuilder).validation(validator)
+            return Optional {
+                self.build().validation(validator)
             }
         }
 
         infix fun filter(predicate: JsPredicate<T>): Optional<T> {
             val self = this
-            return Optional { invalidTypeErrorBuilder ->
-                self.build(invalidTypeErrorBuilder).filter(predicate)
+            return Optional {
+                self.build().filter(predicate)
             }
         }
 
         infix fun or(alt: Optional<T>): Optional<T> {
             val self = this
-            return Optional { invalidTypeErrorBuilder ->
-                self.build(invalidTypeErrorBuilder) or alt.build(invalidTypeErrorBuilder)
+            return Optional {
+                self.build() or alt.build()
             }
         }
 
-        fun build(
-            invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): JsReaderPropertySpec.Optional<T>
+        fun build(): JsReaderPropertySpec.Optional<T>
     }
 
     fun interface OptionalWithDefault<T : Any> : JsReaderPropertySpecBuilder<T> {

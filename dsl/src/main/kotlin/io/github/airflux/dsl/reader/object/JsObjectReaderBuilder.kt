@@ -52,7 +52,7 @@ internal class JsObjectReaderBuilder<T>(
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Optional<P>): JsReaderProperty.Optional<P> =
-        JsOptionalReaderProperty(builder.build(config.errorBuilders.invalidType))
+        JsOptionalReaderProperty(builder.build())
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P> =

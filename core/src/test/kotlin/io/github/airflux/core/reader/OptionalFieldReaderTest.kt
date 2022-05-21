@@ -4,6 +4,7 @@ import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsString
@@ -14,7 +15,7 @@ import io.kotest.matchers.shouldBe
 class OptionalFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
             if (input is JsString)
                 JsResult.Success(location, input.get)
@@ -34,12 +35,7 @@ class OptionalFieldReaderTest : FreeSpec() {
                 val from: JsLookup =
                     JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
-                val result: JsResult<String?> = readOptional(
-                    from = from,
-                    using = stringReader,
-                    context = context,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<String?> = readOptional(context = context, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
             }
@@ -47,12 +43,7 @@ class OptionalFieldReaderTest : FreeSpec() {
             "should return the value null if did not find a node" {
                 val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
-                val result: JsResult<String?> = readOptional(
-                    from = from,
-                    using = stringReader,
-                    context = context,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<String?> = readOptional(context = context, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = null)
             }
@@ -64,12 +55,7 @@ class OptionalFieldReaderTest : FreeSpec() {
                     actual = JsValue.Type.STRING
                 )
 
-                val result: JsResult<String?> = readOptional(
-                    from = from,
-                    using = stringReader,
-                    context = context,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<String?> = readOptional(context = context, from = from, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),
