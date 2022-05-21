@@ -60,7 +60,7 @@ internal class JsObjectReaderBuilder<T>(
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P> =
-        JsNullableReaderProperty(builder.build(config.errorBuilders.pathMissing, config.errorBuilders.invalidType))
+        JsNullableReaderProperty(builder.build())
             .also { registration(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P> =

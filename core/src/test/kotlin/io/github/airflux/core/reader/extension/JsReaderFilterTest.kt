@@ -7,6 +7,8 @@ import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.readNullable
 import io.github.airflux.core.reader.result.JsLocation
@@ -20,7 +22,12 @@ import kotlin.test.Test
 class JsReaderFilterTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext(
+            listOf(
+                PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }),
+                InvalidTypeErrorBuilder(builder = JsonErrors::InvalidType)
+            )
+        )
         private val isNotBlank = JsPredicate<String> { _, _, value -> value.isNotBlank() }
 
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
@@ -35,13 +42,7 @@ class JsReaderFilterTest {
 
         private val reader = JsReader { context, location, input ->
             val result = JsLookup.apply(location, JsPath("name"), input)
-            readNullable(
-                from = result,
-                using = stringReader,
-                context = context,
-                pathMissingErrorBuilder = { JsonErrors.PathMissing },
-                invalidTypeErrorBuilder = JsonErrors::InvalidType
-            )
+            readNullable(context = context, from = result, using = stringReader)
         }
     }
 

@@ -127,30 +127,26 @@ sealed interface JsReaderPropertySpecBuilder<T : Any> {
 
         infix fun validation(validator: JsValidator<T?>): Nullable<T> {
             val self = this
-            return Nullable { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
-                self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder).validation(validator)
+            return Nullable {
+                self.build().validation(validator)
             }
         }
 
         infix fun filter(predicate: JsPredicate<T>): Nullable<T> {
             val self = this
-            return Nullable { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
-                self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder).filter(predicate)
+            return Nullable {
+                self.build().filter(predicate)
             }
         }
 
         infix fun or(alt: Nullable<T>): Nullable<T> {
             val self = this
-            return Nullable { pathMissingErrorBuilder, invalidTypeErrorBuilder ->
-                self.build(pathMissingErrorBuilder, invalidTypeErrorBuilder)
-                    .or(alt.build(pathMissingErrorBuilder, invalidTypeErrorBuilder))
+            return Nullable {
+                self.build().or(alt.build())
             }
         }
 
-        fun build(
-            pathMissingErrorBuilder: PathMissingErrorBuilder,
-            invalidTypeErrorBuilder: InvalidTypeErrorBuilder
-        ): JsReaderPropertySpec.Nullable<T>
+        fun build(): JsReaderPropertySpec.Nullable<T>
     }
 
     fun interface NullableWithDefault<T : Any> : JsReaderPropertySpecBuilder<T> {
