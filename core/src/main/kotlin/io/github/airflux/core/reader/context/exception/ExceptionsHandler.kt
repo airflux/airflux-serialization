@@ -21,8 +21,9 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 
-class ExceptionsHandler(private val handler: (context: JsReaderContext, location: JsLocation, exception: Throwable) -> JsError) :
-    JsReaderAbstractContextElement<ExceptionsHandler>(key = ExceptionsHandler) {
+class ExceptionsHandler(
+    private val handler: (context: JsReaderContext, location: JsLocation, exception: Throwable) -> JsError
+) : JsReaderAbstractContextElement<ExceptionsHandler>(key = ExceptionsHandler) {
 
     fun handleException(context: JsReaderContext, location: JsLocation, exception: Throwable): JsError =
         handler(context, location, exception)

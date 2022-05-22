@@ -68,7 +68,7 @@ class JsPathTest : FreeSpec() {
                 "append index path element '$idx'" - {
                     val updatedPath = path.append(idx)
 
-                    "should have two elements"{
+                    "should have two elements" {
                         updatedPath.elements.size shouldBe 2
                     }
 
@@ -114,7 +114,7 @@ class JsPathTest : FreeSpec() {
                 "append named path element '$keyName'" - {
                     val updatedPath = path.append(keyName)
 
-                    "should have two elements"{
+                    "should have two elements" {
                         updatedPath.elements.size shouldBe 2
                     }
 
@@ -142,7 +142,7 @@ class JsPathTest : FreeSpec() {
                 "append index path element '$secondIdx'" - {
                     val updatedPath = path.append(secondIdx)
 
-                    "should have two elements"{
+                    "should have two elements" {
                         updatedPath.elements.size shouldBe 2
                     }
 

@@ -44,7 +44,6 @@ fun <T : Any> readNullable(
         else
             using.read(context, from.location, from.value)
 
-
     return when (from) {
         is JsLookup.Defined -> readNullable(context, from, using)
         is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
