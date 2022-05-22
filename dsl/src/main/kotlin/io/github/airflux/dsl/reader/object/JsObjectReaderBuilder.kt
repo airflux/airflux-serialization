@@ -17,6 +17,7 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
@@ -82,7 +83,7 @@ internal class JsObjectReaderBuilder<T>(
         val validators = validatorBuilders.build(config, properties)
         return JsObjectReader { context, location, input ->
             input.readAsObject(context, location) { c, l, v ->
-                read(config, validators, properties, typeBuilder, c, l, v)
+                read(c, l, v, validators, properties, typeBuilder)
             }
         }
     }
@@ -94,21 +95,21 @@ internal class JsObjectReaderBuilder<T>(
     companion object {
 
         internal fun <T> read(
-            options: JsReaderBuilder.Options,
-            validators: JsObjectValidators,
-            properties: List<JsReaderProperty>,
-            typeBuilder: JsObjectReader.TypeBuilder<T>,
             context: JsReaderContext,
             location: JsLocation,
-            input: JsObject
+            input: JsObject,
+            validators: JsObjectValidators,
+            properties: List<JsReaderProperty>,
+            typeBuilder: JsObjectReader.TypeBuilder<T>
         ): JsResult<T> {
+            val failFast = context.getValue(FailFast)
             val failures = mutableListOf<JsResult.Failure>()
 
             val preValidationErrors = validators.before
                 ?.validation(context, properties, input)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
-                if (options.failFast) return failure
+                if (failFast.isTrue) return failure
                 failures.add(failure)
             }
 
@@ -117,7 +118,7 @@ internal class JsObjectReaderBuilder<T>(
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
                         if (failure != null) {
-                            if (options.failFast) return failure
+                            if (failFast.isTrue) return failure
                             failures.add(failure)
                         }
                     }
@@ -128,7 +129,7 @@ internal class JsObjectReaderBuilder<T>(
                 ?.validation(context, properties, objectValuesMap, input)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
-                if (options.failFast) return failure
+                if (failFast.isTrue) return failure
                 failures.add(failure)
             }
 
