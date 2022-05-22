@@ -17,10 +17,16 @@
 package io.github.airflux.core.reader.base
 
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsString
 
 /**
  * Reader for primitive [String] type.
  */
-fun buildStringReader(): JsReader<String> =
-    JsReader { context, location, input -> input.readAsString(context, location) }
+object StringReader : JsReader<String> {
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<String> =
+        input.readAsString(context, location)
+}

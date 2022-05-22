@@ -17,22 +17,20 @@
 package io.github.airflux.core.reader.base
 
 import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
-import io.github.airflux.core.reader.result.asFailure
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.asSuccess
+import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsNumber
+import java.math.BigDecimal
 
 /**
- * Reader for primitive [Short] type.
+ * Reader for [BigDecimal] type.
  */
-fun buildShortReader(): JsReader<Short> =
-    JsReader { context, location, input ->
-        input.readAsNumber(context, location) { c, l, text ->
-            try {
-                text.toShort().asSuccess(location = l)
-            } catch (expected: NumberFormatException) {
-                val errorBuilder = c.getValue(ValueCastErrorBuilder)
-                errorBuilder.build(text, Short::class).asFailure(location = l)
-            }
+object BigDecimalReader : JsReader<BigDecimal> {
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<BigDecimal> =
+        input.readAsNumber(context, location) { _, p, text ->
+            BigDecimal(text).asSuccess(location = p)
         }
-    }
+}

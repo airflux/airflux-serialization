@@ -17,16 +17,20 @@
 package io.github.airflux.core.reader.base
 
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.asFailure
 import io.github.airflux.core.reader.result.asSuccess
+import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsNumber
 
 /**
  * Reader for primitive [Int] type.
  */
-fun buildIntReader(): JsReader<Int> =
-    JsReader { context, location, input ->
+object IntReader : JsReader<Int> {
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Int> =
         input.readAsNumber(context, location) { c, l, text ->
             try {
                 text.toInt().asSuccess(location = l)
@@ -35,4 +39,4 @@ fun buildIntReader(): JsReader<Int> =
                 errorBuilder.build(text, Int::class).asFailure(location = l)
             }
         }
-    }
+}
