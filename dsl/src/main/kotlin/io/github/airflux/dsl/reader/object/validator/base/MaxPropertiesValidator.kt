@@ -20,7 +20,6 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
@@ -30,7 +29,6 @@ class MaxPropertiesValidator private constructor(private val value: Int, private
     JsObjectValidator.After {
 
     override fun validation(
-        options: JsReaderBuilder.Options,
         context: JsReaderContext,
         properties: List<JsReaderProperty>,
         objectValuesMap: ObjectValuesMap,

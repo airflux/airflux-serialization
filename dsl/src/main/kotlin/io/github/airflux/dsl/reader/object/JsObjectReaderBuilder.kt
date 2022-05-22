@@ -105,7 +105,7 @@ internal class JsObjectReaderBuilder<T>(
             val failures = mutableListOf<JsResult.Failure>()
 
             val preValidationErrors = validators.before
-                ?.validation(options, context, properties, input)
+                ?.validation(context, properties, input)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
                 if (options.failFast) return failure
@@ -125,7 +125,7 @@ internal class JsObjectReaderBuilder<T>(
                 .build()
 
             val postValidationErrors = validators.after
-                ?.validation(options, context, properties, objectValuesMap, input)
+                ?.validation(context, properties, objectValuesMap, input)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
                 if (options.failFast) return failure

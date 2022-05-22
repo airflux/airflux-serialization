@@ -18,10 +18,10 @@ package io.github.airflux.dsl.reader.`object`.validator.base
 
 import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 
@@ -32,16 +32,16 @@ class AdditionalPropertiesValidator private constructor(
 ) : JsObjectValidator.Before {
 
     override fun validation(
-        options: JsReaderBuilder.Options,
         context: JsReaderContext,
         properties: List<JsReaderProperty>,
         input: JsObject
     ): JsErrors? {
+        val failFast = context.getValue(FailFast)
         val unknownProperties = mutableListOf<String>()
         input.forEach { (name, _) ->
             if (name !in names) {
                 unknownProperties.add(name)
-                if (options.failFast) return@forEach
+                if (failFast.isTrue) return@forEach
             }
         }
         return unknownProperties.takeIf { it.isNotEmpty() }
