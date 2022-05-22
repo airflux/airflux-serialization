@@ -5,6 +5,6 @@ import io.github.airflux.core.reader.readAsList
 
 object CollectionReader {
     fun <T : Any> list(using: JsReader<T>): JsReader<List<T>> = JsReader { context, location, input ->
-        readAsList(context, location, input, using, ErrorBuilder.InvalidType)
+        readAsList(context, location, input, using)
     }
 }

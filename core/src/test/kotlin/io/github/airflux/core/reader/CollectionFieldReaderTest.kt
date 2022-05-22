@@ -5,6 +5,7 @@ import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.core.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.core.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
@@ -19,7 +20,7 @@ import io.kotest.matchers.shouldBe
 class CollectionFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext()
+        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
             if (input is JsString)
                 JsResult.Success(location, input.get)
@@ -37,13 +38,8 @@ class CollectionFieldReaderTest : FreeSpec() {
             "should return the result with a non-empty value if a collection is not empty" {
                 val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
-                val result: JsResult<List<String>> = readAsList(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<List<String>> =
+                    readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Success(
                     location = JsLocation.empty,
@@ -54,13 +50,8 @@ class CollectionFieldReaderTest : FreeSpec() {
             "should return the result with an empty value if a collection is empty" {
                 val json: JsValue = JsArray<JsString>()
 
-                val result: JsResult<List<String>> = readAsList(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<List<String>> =
+                    readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty, value = emptyList())
             }
@@ -68,13 +59,8 @@ class CollectionFieldReaderTest : FreeSpec() {
             "should return the invalid type error if the parameter 'from' is not JsArray" {
                 val json: JsValue = JsString(USER_NAME_VALUE)
 
-                val result: JsResult<List<String>> = readAsList(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<List<String>> =
+                    readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     JsLocation.empty,
@@ -90,13 +76,8 @@ class CollectionFieldReaderTest : FreeSpec() {
                     JsString(SECOND_PHONE_VALUE)
                 )
 
-                val result: JsResult<List<String>> = readAsList(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<List<String>> =
+                    readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result as JsResult.Failure
                 result.causes shouldContainAll listOf(
@@ -117,13 +98,8 @@ class CollectionFieldReaderTest : FreeSpec() {
             "should return the result with a non-empty value if a collection is not empty" {
                 val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
-                val result: JsResult<Set<String>> = readAsSet(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<Set<String>> =
+                    readAsSet(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Success(
                     location = JsLocation.empty,
@@ -134,13 +110,8 @@ class CollectionFieldReaderTest : FreeSpec() {
             "should return the result with an empty value if a collection is empty" {
                 val json: JsValue = JsArray<JsString>()
 
-                val result: JsResult<Set<String>> = readAsSet(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<Set<String>> =
+                    readAsSet(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty, value = emptySet())
             }
@@ -148,13 +119,8 @@ class CollectionFieldReaderTest : FreeSpec() {
             "should return the invalid type error if the parameter 'from' is not JsArray" {
                 val json: JsValue = JsString(USER_NAME_VALUE)
 
-                val result: JsResult<Set<String>> = readAsSet(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<Set<String>> =
+                    readAsSet(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     JsLocation.empty,
@@ -170,13 +136,8 @@ class CollectionFieldReaderTest : FreeSpec() {
                     JsString(SECOND_PHONE_VALUE)
                 )
 
-                val result: JsResult<Set<String>> = readAsSet(
-                    context = context,
-                    location = JsLocation.empty,
-                    from = json,
-                    using = stringReader,
-                    invalidTypeErrorBuilder = JsonErrors::InvalidType
-                )
+                val result: JsResult<Set<String>> =
+                    readAsSet(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result as JsResult.Failure
                 result.causes shouldContainAll listOf(

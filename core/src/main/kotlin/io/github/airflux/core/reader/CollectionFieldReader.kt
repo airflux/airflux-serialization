@@ -17,7 +17,7 @@
 package io.github.airflux.core.reader
 
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
@@ -26,37 +26,35 @@ import io.github.airflux.core.value.JsValue
 /**
  * Read a node as list.
  *
- * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
+ * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
 fun <T : Any> readAsList(
     context: JsReaderContext,
     location: JsLocation,
     from: JsValue,
-    using: JsReader<T>,
-    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
+    using: JsReader<T>
 ): JsResult<List<T>> =
-    readAsCollection(context, location, from, using, CollectionBuilderFactory.listFactory(), invalidTypeErrorBuilder)
+    readAsCollection(context, location, from, using, CollectionBuilderFactory.listFactory())
 
 /**
  * Read a node as set.
  *
- * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
+ * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
 fun <T : Any> readAsSet(
     context: JsReaderContext,
     location: JsLocation,
     from: JsValue,
-    using: JsReader<T>,
-    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
+    using: JsReader<T>
 ): JsResult<Set<T>> =
-    readAsCollection(context, location, from, using, CollectionBuilderFactory.setFactory(), invalidTypeErrorBuilder)
+    readAsCollection(context, location, from, using, CollectionBuilderFactory.setFactory())
 
 /**
  * Read a node which represent as array.
  *
- * - If node does not match array type, then returning error [invalidTypeErrorBuilder].
+ * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
 fun <T : Any, C> readAsCollection(
@@ -64,8 +62,7 @@ fun <T : Any, C> readAsCollection(
     location: JsLocation,
     from: JsValue,
     using: JsReader<T>,
-    factory: CollectionBuilderFactory<T, C>,
-    invalidTypeErrorBuilder: InvalidTypeErrorBuilder
+    factory: CollectionBuilderFactory<T, C>
 ): JsResult<C>
     where C : Collection<T> {
 
@@ -104,6 +101,8 @@ fun <T : Any, C> readAsCollection(
 
     return if (from is JsArray<*>)
         readAsCollection(context, location, from, using, factory)
-    else
-        JsResult.Failure(location, invalidTypeErrorBuilder.build(JsValue.Type.ARRAY, from.type))
+    else {
+        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        JsResult.Failure(location, errorBuilder.build(JsValue.Type.ARRAY, from.type))
+    }
 }
