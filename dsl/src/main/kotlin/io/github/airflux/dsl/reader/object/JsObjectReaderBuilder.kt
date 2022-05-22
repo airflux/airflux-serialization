@@ -17,10 +17,12 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.exception.ExceptionsHandler
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.core.reader.result.asFailure
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
 import io.github.airflux.dsl.reader.JsReaderBuilder
@@ -69,13 +71,12 @@ internal class JsObjectReaderBuilder<T>(
             .also { registration(it) }
 
     override fun build(builder: ObjectValuesMap.() -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
-        JsObjectReader.TypeBuilder { v ->
+        JsObjectReader.TypeBuilder { context, values ->
             try {
-                v.builder()
+                values.builder()
             } catch (expected: Throwable) {
-                config.exceptionHandlers[expected]
-                    ?.invoke(v.location, expected)
-                    ?: throw expected
+                val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
+                handler.handleException(context, values.location, expected).asFailure(values.location)
             }
         }
 
@@ -134,7 +135,7 @@ internal class JsObjectReaderBuilder<T>(
             }
 
             return if (failures.isEmpty())
-                typeBuilder(objectValuesMap)
+                typeBuilder(context, objectValuesMap)
             else
                 failures.merge()
         }

@@ -17,6 +17,7 @@
 package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
@@ -26,7 +27,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 @Suppress("unused")
 fun interface JsObjectReader<T> : JsReader<T> {
 
-    fun interface TypeBuilder<T> : (ObjectValuesMap) -> JsResult<T>
+    fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap) -> JsResult<T>
 
     @AirfluxMarker
     interface Builder<T> {
