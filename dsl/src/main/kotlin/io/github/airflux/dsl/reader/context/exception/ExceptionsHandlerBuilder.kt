@@ -20,11 +20,10 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.exception.ExceptionsHandler
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.dsl.AirfluxMarker
 import kotlin.reflect.KClass
 
-@Suppress("unused")
-fun exceptionsHandler(block: ExceptionsHandlerBuilder.() -> Unit) = ExceptionsHandlerBuilder().apply(block).build()
-
+@AirfluxMarker
 class ExceptionsHandlerBuilder {
 
     private val handlers = mutableListOf<Pair<KClass<*>, ExceptionHandler>>()
@@ -41,8 +40,7 @@ class ExceptionsHandlerBuilder {
     internal fun build(): ExceptionsHandler {
         val handlers = ExceptionHandlers(handlers)
         return ExceptionsHandler { context, location, exception ->
-            val handler = handlers[exception] ?: throw exception
-            handler(context, location, exception)
+            handlers[exception]?.invoke(context, location, exception)
         }
     }
 }

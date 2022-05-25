@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.context.error
+package io.github.airflux.dsl.reader
 
-import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.dsl.reader.`object`.JsObjectReader
+import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder
+import io.github.airflux.dsl.reader.scope.JsObjectReaderScope
 
-class PathMissingErrorBuilder(private val builder: () -> JsError) :
-    JsReaderAbstractContextElement<PathMissingErrorBuilder>(key = PathMissingErrorBuilder),
-    ErrorBuilder {
-
-    fun build(): JsError = builder()
-
-    companion object Key : JsReaderContext.Key<PathMissingErrorBuilder> {
-        override val name: String = "PathMissingErrorBuilder"
-    }
+fun <T> JsObjectReaderScope.reader(
+    block: JsObjectReader.Builder<T>.() -> JsObjectReader.TypeBuilder<T>
+): JsObjectReader<T> {
+    val readerBuilder = JsObjectReaderBuilder<T>(this)
+    val typeBuilder = readerBuilder.block()
+    return readerBuilder.build(typeBuilder)
 }

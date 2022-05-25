@@ -25,7 +25,6 @@ import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.asFailure
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
-import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
@@ -35,9 +34,10 @@ import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
+import io.github.airflux.dsl.reader.scope.JsObjectReaderScope
 
 internal class JsObjectReaderBuilder<T>(
-    private val config: JsReaderBuilder.Configuration
+    private val scope: JsObjectReaderScope,
 ) : JsObjectReader.Builder<T> {
     private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder()
     private val properties = mutableListOf<JsReaderProperty>()
@@ -75,13 +75,15 @@ internal class JsObjectReaderBuilder<T>(
             try {
                 values.builder()
             } catch (expected: Throwable) {
-                val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
-                handler.handleException(context, values.location, expected).asFailure(values.location)
+                context.getOrNull(ExceptionsHandler)
+                    ?.handleException(context, values.location, expected)
+                    ?.asFailure(values.location)
+                    ?: throw expected
             }
         }
 
     fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
-        val validators = validatorBuilders.build(config, properties)
+        val validators = validatorBuilders.build(scope, properties)
         return JsObjectReader { context, location, input ->
             input.readAsObject(context, location) { c, l, v ->
                 read(c, l, v, validators, properties, typeBuilder)

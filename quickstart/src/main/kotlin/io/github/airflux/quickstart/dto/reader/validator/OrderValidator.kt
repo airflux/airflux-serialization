@@ -1,4 +1,4 @@
-package io.github.airflux.quickstart.json.validation
+package io.github.airflux.quickstart.dto.reader.validator
 
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.base.BaseOrderValidators

@@ -17,11 +17,11 @@
 package io.github.airflux.dsl.reader.`object`.validator
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.JsReaderBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.scope.JsObjectReaderScope
 
-typealias BeforeValidatorInitializer = (JsReaderBuilder.Options, List<JsReaderProperty>) -> JsObjectValidator.Before?
-typealias AfterValidatorInitializer = (JsReaderBuilder.Options, List<JsReaderProperty>) -> JsObjectValidator.After?
+typealias BeforeValidatorInitializer = (JsObjectReaderScope, List<JsReaderProperty>) -> JsObjectValidator.Before?
+typealias AfterValidatorInitializer = (JsObjectReaderScope, List<JsReaderProperty>) -> JsObjectValidator.After?
 
 class JsObjectValidators private constructor(
     val before: JsObjectValidator.Before?,
@@ -41,10 +41,10 @@ class JsObjectValidators private constructor(
             after = block
         }
 
-        fun build(options: JsReaderBuilder.Options, properties: List<JsReaderProperty>): JsObjectValidators =
+        fun build(scope: JsObjectReaderScope, properties: List<JsReaderProperty>): JsObjectValidators =
             JsObjectValidators(
-                before = before?.invoke(options, properties),
-                after = after?.invoke(options, properties)
+                before = before?.invoke(scope, properties),
+                after = after?.invoke(scope, properties)
             )
     }
 }

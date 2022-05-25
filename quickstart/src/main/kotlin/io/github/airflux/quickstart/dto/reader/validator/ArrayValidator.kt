@@ -1,4 +1,4 @@
-package io.github.airflux.quickstart.json.validation
+package io.github.airflux.quickstart.dto.reader.validator
 
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.base.BaseArrayValidators
@@ -18,9 +18,8 @@ object ArrayValidator {
             error = { expected, actual -> JsonErrors.Validation.Arrays.MaxItems(expected = expected, actual = actual) }
         )
 
-    fun <T, K> isUnique(failFast: Boolean = true, keySelector: (T) -> K): JsValidator<List<T>> =
+    fun <T, K> isUnique(keySelector: (T) -> K): JsValidator<List<T>> =
         BaseArrayValidators.isUnique(
-            failFast = failFast,
             keySelector = keySelector,
             error = { index, value: K -> JsonErrors.Validation.Arrays.Unique(index = index, value = value) }
         )

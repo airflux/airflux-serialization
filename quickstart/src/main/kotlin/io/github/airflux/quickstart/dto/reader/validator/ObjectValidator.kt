@@ -1,4 +1,4 @@
-package io.github.airflux.quickstart.json.validation
+package io.github.airflux.quickstart.dto.reader.validator
 
 import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalPropertiesValidator
 import io.github.airflux.dsl.reader.`object`.validator.base.IsNotEmptyObjectValidator

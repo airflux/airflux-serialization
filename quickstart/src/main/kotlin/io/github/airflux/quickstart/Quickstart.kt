@@ -12,6 +12,7 @@ import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
+import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
 import java.math.BigDecimal
 
@@ -22,7 +23,7 @@ fun main() {
 
     val json = mapper.readValue(jsonOfTender, JsValue::class.java)
 
-    when (val result = json.deserialization(reader = RequestReader)) {
+    when (val result = json.deserialization(context = DefaultReaderContext, reader = RequestReader)) {
         is JsResult.Success -> println(result.value)
         is JsResult.Failure -> println(result.causes)
     }

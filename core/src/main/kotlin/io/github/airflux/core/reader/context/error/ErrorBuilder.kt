@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader
+package io.github.airflux.core.reader.context.error
 
-import io.github.airflux.dsl.reader.`object`.JsObjectReader
-import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder
-
-fun <T> objectReaderOf(
-    configuration: JsReaderBuilder.Configuration,
-    block: JsObjectReader.Builder<T>.() -> JsObjectReader.TypeBuilder<T>
-): JsObjectReader<T> {
-    val readerBuilder = JsObjectReaderBuilder<T>(configuration)
-    val typeBuilder = readerBuilder.block()
-    return readerBuilder.build(typeBuilder)
-}
+interface ErrorBuilder

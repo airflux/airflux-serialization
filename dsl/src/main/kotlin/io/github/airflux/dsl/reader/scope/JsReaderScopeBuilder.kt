@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.error
+package io.github.airflux.dsl.reader.scope
 
-import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.value.JsValue
+import io.github.airflux.dsl.AirfluxMarker
 
-fun interface InvalidTypeErrorBuilder {
-    fun build(expected: JsValue.Type, actual: JsValue.Type): JsError
+fun readerScope(block: JsReaderScopeBuilder.() -> Unit): JsObjectReaderScope =
+    JsReaderScopeBuilder().apply(block).build()
+
+@AirfluxMarker
+class JsReaderScopeBuilder {
+
+    internal fun build(): JsObjectReaderScope = object : JsObjectReaderScope {}
 }

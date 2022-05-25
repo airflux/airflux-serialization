@@ -4,12 +4,11 @@ import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.result.asSuccess
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.optional
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.required
-import io.github.airflux.dsl.reader.objectReaderOf
+import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.model.Tender
-import io.github.airflux.quickstart.dto.reader.dsl.base.readerBuilderConfig
-import io.github.airflux.quickstart.json.validation.StringValidator.isNotBlank
+import io.github.airflux.quickstart.dto.reader.validator.StringValidator.isNotBlank
 
-val TenderReader = objectReaderOf<Tender>(readerBuilderConfig) {
+val TenderReader = ObjectReaderScope.reader<Tender> {
     val id = property(required(name = "id", reader = StringReader).validation(isNotBlank))
     val title = property(optional(name = "title", reader = TitleReader))
     val value = property(optional(name = "value", reader = ValueReader))

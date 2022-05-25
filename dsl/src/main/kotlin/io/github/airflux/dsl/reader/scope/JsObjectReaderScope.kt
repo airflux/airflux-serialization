@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.error
+package io.github.airflux.dsl.reader.scope
 
-import io.github.airflux.core.reader.result.JsError
-
-fun interface PathMissingErrorBuilder {
-    fun build(): JsError
-}
+interface JsObjectReaderScope
