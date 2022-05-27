@@ -4,7 +4,6 @@ import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.result.success
 import io.github.airflux.core.reader.validator.and
 import io.github.airflux.core.reader.validator.extension.validation
-import io.github.airflux.dsl.reader.`object`.property.path.or
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.required
 import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalProperties
 import io.github.airflux.dsl.reader.`object`.validator.base.IsNotEmpty
@@ -13,6 +12,7 @@ import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.reader.base.CollectionReader.list
 import io.github.airflux.quickstart.dto.reader.base.asEnum
+import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySpec
 import io.github.airflux.quickstart.dto.reader.validator.ArrayValidator.isUnique
 import io.github.airflux.quickstart.dto.reader.validator.ArrayValidator.minItems
 import io.github.airflux.quickstart.dto.reader.validator.StringValidator.isNotBlank
@@ -28,7 +28,7 @@ val LotReader = reader<Lot>(ObjectReaderConfiguration) {
         after = IsNotEmpty
     }
 
-    val id = property(required("id" or "identifier", reader = StringReader))
+    val id = property(identifierPropertySpec)
     val status = property(required(name = "status", reader = LotStatusReader))
     val value = property(required(name = "value", reader = ValueReader))
 
