@@ -8,7 +8,7 @@ import io.github.airflux.dsl.reader.`object`.validator.base.MinProperties
 import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.model.Value
 
-val ValueReader = ObjectReaderScope.reader<Value> {
+val ValueReader = reader<Value>(ObjectReaderConfiguration) {
     validation {
         before = AdditionalProperties
         after = MinProperties(2) and MaxProperties(2)

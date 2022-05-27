@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.quickstart.dto.reader.dsl
+package io.github.airflux.dsl.reader
 
-import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalProperties
-import io.github.airflux.dsl.reader.`object`.validator.base.IsNotEmpty
-import io.github.airflux.dsl.reader.`object`.validator.base.MaxProperties
-import io.github.airflux.dsl.reader.scope.objectReaderScope
+import io.github.airflux.dsl.reader.`object`.JsObjectReader
+import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder
+import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
-val ObjectReaderScope = objectReaderScope {
-
-    checkUniquePropertyPath = true
-
-    validation {
-        before = AdditionalProperties
-        after = IsNotEmpty and MaxProperties(3)
-    }
+fun <T> reader(
+    configuration: JsObjectReaderConfiguration = JsObjectReaderConfiguration.DEFAULT,
+    block: JsObjectReader.Builder<T>.() -> JsObjectReader.TypeBuilder<T>
+): JsObjectReader<T> {
+    val readerBuilder = JsObjectReaderBuilder<T>(configuration)
+    val typeBuilder = readerBuilder.block()
+    return readerBuilder.build(typeBuilder)
 }

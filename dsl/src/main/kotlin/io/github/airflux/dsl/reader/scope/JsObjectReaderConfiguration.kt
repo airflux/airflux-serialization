@@ -19,10 +19,10 @@ package io.github.airflux.dsl.reader.scope
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.JsObjectValidation
 
-fun objectReaderScope(block: JsObjectReaderScope.Builder.() -> Unit): JsObjectReaderScope =
-    JsObjectReaderScope.Builder().apply(block).build()
+fun objectReaderConfiguration(block: JsObjectReaderConfiguration.Builder.() -> Unit): JsObjectReaderConfiguration =
+    JsObjectReaderConfiguration.Builder().apply(block).build()
 
-class JsObjectReaderScope private constructor(
+class JsObjectReaderConfiguration private constructor(
     val checkUniquePropertyPath: Boolean,
     val validation: JsObjectValidation
 ) {
@@ -36,10 +36,14 @@ class JsObjectReaderScope private constructor(
             validation.block()
         }
 
-        internal fun build(): JsObjectReaderScope =
-            JsObjectReaderScope(
+        internal fun build(): JsObjectReaderConfiguration =
+            JsObjectReaderConfiguration(
                 checkUniquePropertyPath = checkUniquePropertyPath,
                 validation = validation.build()
             )
+    }
+
+    companion object {
+        val DEFAULT = Builder().build()
     }
 }

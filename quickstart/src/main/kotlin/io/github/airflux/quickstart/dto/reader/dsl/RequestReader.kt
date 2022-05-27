@@ -5,7 +5,7 @@ import io.github.airflux.dsl.reader.`object`.property.specification.builder.requ
 import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.Request
 
-val RequestReader = ObjectReaderScope.reader<Request> {
+val RequestReader = reader<Request> {
     val tender = property(required(name = "tender", reader = TenderReader))
 
     build {

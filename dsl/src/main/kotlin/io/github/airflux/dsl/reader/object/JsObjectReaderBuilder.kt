@@ -35,15 +35,15 @@ import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.dsl.reader.scope.JsObjectReaderScope
+import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
-internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectReader.Builder<T> {
-    private val validation: JsObjectValidation.Builder = scope.validation
+internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration) : JsObjectReader.Builder<T> {
+    private val validation: JsObjectValidation.Builder = configuration.validation
         .let { JsObjectValidation.Builder(before = it.before, after = it.after) }
 
     private val propertiesBuilder = JsReaderProperties.Builder()
 
-    override var checkUniquePropertyPath: Boolean = scope.checkUniquePropertyPath
+    override var checkUniquePropertyPath: Boolean = configuration.checkUniquePropertyPath
 
     override fun validation(block: JsObjectValidation.Builder.() -> Unit) {
         validation.block()

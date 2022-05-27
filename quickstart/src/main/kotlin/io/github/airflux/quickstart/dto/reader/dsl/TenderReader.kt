@@ -8,7 +8,7 @@ import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.reader.validator.StringValidator.isNotBlank
 
-val TenderReader = ObjectReaderScope.reader<Tender> {
+val TenderReader = reader<Tender>(ObjectReaderConfiguration) {
     val id = property(required(name = "id", reader = StringReader).validation(isNotBlank))
     val title = property(optional(name = "title", reader = TitleReader))
     val value = property(optional(name = "value", reader = ValueReader))

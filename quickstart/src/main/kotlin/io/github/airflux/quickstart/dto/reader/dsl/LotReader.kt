@@ -18,7 +18,7 @@ import io.github.airflux.quickstart.dto.reader.validator.StringValidator.isNotBl
 
 val LotStatusReader = StringReader.validation(isNotBlank).asEnum<LotStatus>()
 
-val LotReader = ObjectReaderScope.reader<Lot> {
+val LotReader = reader<Lot>(ObjectReaderConfiguration) {
 
     checkUniquePropertyPath = false
 
