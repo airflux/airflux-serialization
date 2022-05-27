@@ -4,6 +4,7 @@ import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.result.success
 import io.github.airflux.core.reader.validator.and
 import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.dsl.reader.`object`.property.path.or
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.required
 import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalProperties
 import io.github.airflux.dsl.reader.`object`.validator.base.IsNotEmpty
@@ -27,7 +28,7 @@ val LotReader = reader<Lot>(ObjectReaderConfiguration) {
         after = IsNotEmpty
     }
 
-    val id = property(required(name = "id", reader = StringReader))
+    val id = property(required("id" or "identifier", reader = StringReader))
     val status = property(required(name = "status", reader = LotStatusReader))
     val value = property(required(name = "value", reader = ValueReader))
 

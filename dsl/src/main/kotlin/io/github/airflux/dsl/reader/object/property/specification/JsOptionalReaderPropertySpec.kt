@@ -32,14 +32,6 @@ internal class JsOptionalReaderPropertySpec<T : Any> private constructor(
     override val reader: JsReader<T?>
 ) : JsReaderPropertySpec.Optional<T> {
 
-    constructor(path: JsPath, reader: JsReader<T>) : this(
-        path = JsPaths(path),
-        reader = { context, location, input ->
-            val lookup = JsLookup.apply(location, path, input)
-            readOptional(context, lookup, reader)
-        }
-    )
-
     override fun validation(validator: JsValidator<T?>): JsReaderPropertySpec.Optional<T> =
         JsOptionalReaderPropertySpec(
             path = path,
@@ -58,4 +50,27 @@ internal class JsOptionalReaderPropertySpec<T : Any> private constructor(
 
     override fun or(alt: JsReaderPropertySpec.Optional<T>): JsReaderPropertySpec.Optional<T> =
         JsOptionalReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+
+    companion object {
+
+        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsReaderPropertySpec.Optional<T> =
+            JsOptionalReaderPropertySpec(
+                path = JsPaths(path),
+                reader = buildReader(path, reader)
+            )
+
+        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsReaderPropertySpec.Optional<T> =
+            JsOptionalReaderPropertySpec(
+                path = paths,
+                reader = paths.items
+                    .map { path -> buildReader(path, reader) }
+                    .reduce { acc, element -> acc.or(element) }
+            )
+
+        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>) =
+            JsReader { context, location, input ->
+                val lookup = JsLookup.apply(location, path, input)
+                readOptional(context, lookup, reader)
+            }
+    }
 }

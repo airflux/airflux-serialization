@@ -30,14 +30,6 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
     override val reader: JsReader<T>
 ) : JsReaderPropertySpec.OptionalWithDefault<T> {
 
-    constructor(path: JsPath, reader: JsReader<T>, default: () -> T) : this(
-        path = JsPaths(path),
-        reader = { context, location, input ->
-            val lookup = JsLookup.apply(location, path, input)
-            readOptional(context, lookup, reader, default)
-        }
-    )
-
     override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
         JsOptionalWithDefaultReaderPropertySpec(
             path = path,
@@ -48,4 +40,35 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
 
     override fun or(alt: JsReaderPropertySpec.OptionalWithDefault<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
         JsOptionalWithDefaultReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+
+    companion object {
+
+        fun <T : Any> of(
+            path: JsPath,
+            reader: JsReader<T>,
+            default: () -> T
+        ): JsReaderPropertySpec.OptionalWithDefault<T> =
+            JsOptionalWithDefaultReaderPropertySpec(
+                path = JsPaths(path),
+                reader = buildReader(path, reader, default)
+            )
+
+        fun <T : Any> of(
+            paths: JsPaths,
+            reader: JsReader<T>,
+            default: () -> T
+        ): JsReaderPropertySpec.OptionalWithDefault<T> =
+            JsOptionalWithDefaultReaderPropertySpec(
+                path = paths,
+                reader = paths.items
+                    .map { path -> buildReader(path, reader, default) }
+                    .reduce { acc, element -> acc.or(element) }
+            )
+
+        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>, default: () -> T) =
+            JsReader { context, location, input ->
+                val lookup = JsLookup.apply(location, path, input)
+                readOptional(context, lookup, reader, default)
+            }
+    }
 }

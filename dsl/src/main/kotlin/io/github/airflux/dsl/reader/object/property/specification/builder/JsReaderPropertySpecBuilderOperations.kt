@@ -20,6 +20,7 @@ package io.github.airflux.dsl.reader.`object`.property.specification.builder
 
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 import io.github.airflux.dsl.reader.`object`.property.specification.JsDefaultableReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.property.specification.JsNullableReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.property.specification.JsNullableWithDefaultReaderPropertySpec
@@ -32,7 +33,12 @@ fun <T : Any> required(name: String, reader: JsReader<T>) =
 
 fun <T : Any> required(path: JsPath, reader: JsReader<T>) =
     JsReaderPropertySpecBuilder.Required {
-        JsRequiredReaderPropertySpec(path, reader)
+        JsRequiredReaderPropertySpec.of(path, reader)
+    }
+
+fun <T : Any> required(paths: JsPaths, reader: JsReader<T>) =
+    JsReaderPropertySpecBuilder.Required {
+        JsRequiredReaderPropertySpec.of(paths, reader)
     }
 
 fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =
@@ -40,7 +46,12 @@ fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =
 
 fun <T : Any> defaultable(path: JsPath, reader: JsReader<T>, default: () -> T) =
     JsReaderPropertySpecBuilder.Defaultable {
-        JsDefaultableReaderPropertySpec(path, reader, default)
+        JsDefaultableReaderPropertySpec.of(path, reader, default)
+    }
+
+fun <T : Any> defaultable(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
+    JsReaderPropertySpecBuilder.Defaultable {
+        JsDefaultableReaderPropertySpec.of(paths, reader, default)
     }
 
 fun <T : Any> optional(name: String, reader: JsReader<T>) =
@@ -48,7 +59,12 @@ fun <T : Any> optional(name: String, reader: JsReader<T>) =
 
 fun <T : Any> optional(path: JsPath, reader: JsReader<T>) =
     JsReaderPropertySpecBuilder.Optional {
-        JsOptionalReaderPropertySpec(path, reader)
+        JsOptionalReaderPropertySpec.of(path, reader)
+    }
+
+fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>) =
+    JsReaderPropertySpecBuilder.Optional {
+        JsOptionalReaderPropertySpec.of(paths, reader)
     }
 
 fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
@@ -56,7 +72,12 @@ fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: ()
 
 fun <T : Any> optionalWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
     JsReaderPropertySpecBuilder.OptionalWithDefault {
-        JsOptionalWithDefaultReaderPropertySpec(path, reader, default)
+        JsOptionalWithDefaultReaderPropertySpec.of(path, reader, default)
+    }
+
+fun <T : Any> optionalWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
+    JsReaderPropertySpecBuilder.OptionalWithDefault {
+        JsOptionalWithDefaultReaderPropertySpec.of(paths, reader, default)
     }
 
 fun <T : Any> nullable(name: String, reader: JsReader<T>) =
@@ -64,7 +85,12 @@ fun <T : Any> nullable(name: String, reader: JsReader<T>) =
 
 fun <T : Any> nullable(path: JsPath, reader: JsReader<T>) =
     JsReaderPropertySpecBuilder.Nullable {
-        JsNullableReaderPropertySpec(path, reader)
+        JsNullableReaderPropertySpec.of(path, reader)
+    }
+
+fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>) =
+    JsReaderPropertySpecBuilder.Nullable {
+        JsNullableReaderPropertySpec.of(paths, reader)
     }
 
 fun <T : Any> nullableWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
@@ -72,5 +98,10 @@ fun <T : Any> nullableWithDefault(name: String, reader: JsReader<T>, default: ()
 
 fun <T : Any> nullableWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
     JsReaderPropertySpecBuilder.NullableWithDefault {
-        JsNullableWithDefaultReaderPropertySpec(path, reader, default)
+        JsNullableWithDefaultReaderPropertySpec.of(path, reader, default)
+    }
+
+fun <T : Any> nullableWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
+    JsReaderPropertySpecBuilder.NullableWithDefault {
+        JsNullableWithDefaultReaderPropertySpec.of(paths, reader, default)
     }

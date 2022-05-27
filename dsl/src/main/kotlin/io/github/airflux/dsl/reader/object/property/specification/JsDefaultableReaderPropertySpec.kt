@@ -30,14 +30,6 @@ internal class JsDefaultableReaderPropertySpec<T : Any> private constructor(
     override val reader: JsReader<T>
 ) : JsReaderPropertySpec.Defaultable<T> {
 
-    constructor(path: JsPath, reader: JsReader<T>, default: () -> T) : this(
-        path = JsPaths(path),
-        reader = { context, location, input ->
-            val lookup = JsLookup.apply(location, path, input)
-            readWithDefault(context, lookup, reader, default)
-        }
-    )
-
     override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.Defaultable<T> =
         JsDefaultableReaderPropertySpec(
             path = path,
@@ -48,4 +40,27 @@ internal class JsDefaultableReaderPropertySpec<T : Any> private constructor(
 
     override fun or(alt: JsReaderPropertySpec.Defaultable<T>): JsReaderPropertySpec.Defaultable<T> =
         JsDefaultableReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+
+    companion object {
+
+        fun <T : Any> of(path: JsPath, reader: JsReader<T>, default: () -> T): JsReaderPropertySpec.Defaultable<T> =
+            JsDefaultableReaderPropertySpec(
+                path = JsPaths(path),
+                reader = buildReader(path, reader, default)
+            )
+
+        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>, default: () -> T): JsReaderPropertySpec.Defaultable<T> =
+            JsDefaultableReaderPropertySpec(
+                path = paths,
+                reader = paths.items
+                    .map { path -> buildReader(path, reader, default) }
+                    .reduce { acc, element -> acc.or(element) }
+            )
+
+        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>, default: () -> T) =
+            JsReader { context, location, input ->
+                val lookup = JsLookup.apply(location, path, input)
+                readWithDefault(context, lookup, reader, default)
+            }
+    }
 }
