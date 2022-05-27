@@ -30,6 +30,7 @@ import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
@@ -83,6 +84,7 @@ internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectRe
         }
 
     fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
+        val properties = JsReaderProperties(this.properties)
         val validators = validation.build().let {
             JsObjectValidators(
                 before = it.before.build(properties),
@@ -112,7 +114,7 @@ internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectRe
             location: JsLocation,
             input: JsObject,
             validators: JsObjectValidators,
-            properties: List<JsReaderProperty>,
+            properties: JsReaderProperties,
             typeBuilder: JsObjectReader.TypeBuilder<T>
         ): JsResult<T> {
             val failFast = context.failFast

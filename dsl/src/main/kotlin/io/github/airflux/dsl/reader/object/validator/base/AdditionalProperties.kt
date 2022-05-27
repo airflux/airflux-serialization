@@ -23,6 +23,7 @@ import io.github.airflux.core.reader.context.error.ErrorBuilder
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
@@ -30,7 +31,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 @Suppress("unused")
 object AdditionalProperties : JsObjectValidatorBuilder.Before {
 
-    override fun build(properties: List<JsReaderProperty>): JsObjectValidator.Before {
+    override fun build(properties: JsReaderProperties): JsObjectValidator.Before {
         val names: Set<String> = properties.names()
         return JsObjectValidator.Before { context, _, input ->
             val failFast = context.failFast
@@ -49,7 +50,7 @@ object AdditionalProperties : JsObjectValidatorBuilder.Before {
         }
     }
 
-    fun List<JsReaderProperty>.names(): Set<String> {
+    fun JsReaderProperties.names(): Set<String> {
         fun JsReaderProperty.names(): List<String> = path.items
             .mapNotNull { path ->
                 when (val element = path.elements.first()) {

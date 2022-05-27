@@ -21,7 +21,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.ErrorBuilder
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
@@ -33,7 +33,7 @@ object IsNotEmpty : JsObjectValidatorBuilder.After {
         if (values.isEmpty) JsErrors.of(errorBuilder.build()) else null
     }
 
-    override fun build(properties: List<JsReaderProperty>): JsObjectValidator.After = validator
+    override fun build(properties: JsReaderProperties): JsObjectValidator.After = validator
 
     class Error(private val function: () -> JsError) :
         JsReaderAbstractContextElement<Error>(key = Error),
