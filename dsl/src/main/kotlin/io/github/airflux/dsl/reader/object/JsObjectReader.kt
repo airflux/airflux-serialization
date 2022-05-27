@@ -22,7 +22,6 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
 
 @Suppress("unused")
 fun interface JsObjectReader<T> : JsReader<T> {
@@ -32,7 +31,7 @@ fun interface JsObjectReader<T> : JsReader<T> {
     @AirfluxMarker
     interface Builder<T> {
 
-        fun validation(init: JsObjectValidators.Builder.() -> Unit)
+        fun validation(block: JsObjectValidation.Builder.() -> Unit)
 
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P>
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Defaultable<P>): JsReaderProperty.Defaultable<P>

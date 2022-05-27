@@ -16,4 +16,24 @@
 
 package io.github.airflux.dsl.reader.scope
 
-interface JsObjectReaderScope
+import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.JsObjectValidation
+
+fun objectReaderScope(block: JsObjectReaderScope.Builder.() -> Unit): JsObjectReaderScope =
+    JsObjectReaderScope.Builder().apply(block).build()
+
+class JsObjectReaderScope private constructor(
+    val validation: JsObjectValidation
+) {
+
+    @AirfluxMarker
+    class Builder {
+        private var validation: JsObjectValidation.Builder = JsObjectValidation.Builder()
+
+        fun validation(block: JsObjectValidation.Builder.() -> Unit) {
+            validation.block()
+        }
+
+        internal fun build(): JsObjectReaderScope = JsObjectReaderScope(validation.build())
+    }
+}

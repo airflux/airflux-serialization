@@ -18,7 +18,7 @@ package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.exception.ExceptionsHandler
-import io.github.airflux.core.reader.context.option.FailFast
+import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
@@ -33,17 +33,17 @@ import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReade
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsReaderPropertySpecBuilder
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidators
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.scope.JsObjectReaderScope
 
-internal class JsObjectReaderBuilder<T>(
-    private val scope: JsObjectReaderScope,
-) : JsObjectReader.Builder<T> {
-    private val validatorBuilders: JsObjectValidators.Builder = JsObjectValidators.Builder()
+internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectReader.Builder<T> {
+    private val validation: JsObjectValidation.Builder = scope.validation
+        .let { JsObjectValidation.Builder(before = it.before, after = it.after) }
+
     private val properties = mutableListOf<JsReaderProperty>()
 
-    override fun validation(init: JsObjectValidators.Builder.() -> Unit) {
-        validatorBuilders.apply(init)
+    override fun validation(block: JsObjectValidation.Builder.() -> Unit) {
+        validation.block()
     }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P> =
@@ -83,7 +83,12 @@ internal class JsObjectReaderBuilder<T>(
         }
 
     fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
-        val validators = validatorBuilders.build(scope, properties)
+        val validators = validation.build().let {
+            JsObjectValidators(
+                before = it.before.build(properties),
+                after = it.after.build(properties)
+            )
+        }
         return JsObjectReader { context, location, input ->
             input.readAsObject(context, location) { c, l, v ->
                 read(c, l, v, validators, properties, typeBuilder)
@@ -95,6 +100,11 @@ internal class JsObjectReaderBuilder<T>(
         properties.add(property)
     }
 
+    internal data class JsObjectValidators(
+        val before: JsObjectValidator.Before,
+        val after: JsObjectValidator.After
+    )
+
     companion object {
 
         internal fun <T> read(
@@ -105,14 +115,13 @@ internal class JsObjectReaderBuilder<T>(
             properties: List<JsReaderProperty>,
             typeBuilder: JsObjectReader.TypeBuilder<T>
         ): JsResult<T> {
-            val failFast = context.getValue(FailFast)
+            val failFast = context.failFast
             val failures = mutableListOf<JsResult.Failure>()
 
-            val preValidationErrors = validators.before
-                ?.validation(context, properties, input)
+            val preValidationErrors = validators.before.validation(context, properties, input)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
-                if (failFast.isTrue) return failure
+                if (failFast) return failure
                 failures.add(failure)
             }
 
@@ -121,18 +130,17 @@ internal class JsObjectReaderBuilder<T>(
                     properties.forEach { property ->
                         val failure = tryAddValueBy(property)
                         if (failure != null) {
-                            if (failFast.isTrue) return failure
+                            if (failFast) return failure
                             failures.add(failure)
                         }
                     }
                 }
                 .build()
 
-            val postValidationErrors = validators.after
-                ?.validation(context, properties, objectValuesMap, input)
+            val postValidationErrors = validators.after.validation(context, properties, objectValuesMap, input)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
-                if (failFast.isTrue) return failure
+                if (failFast) return failure
                 failures.add(failure)
             }
 

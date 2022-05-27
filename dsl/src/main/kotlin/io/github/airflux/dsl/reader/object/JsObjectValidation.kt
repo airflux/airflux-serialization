@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.scope
+package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-fun readerScope(block: JsReaderScopeBuilder.() -> Unit): JsObjectReaderScope =
-    JsReaderScopeBuilder().apply(block).build()
+class JsObjectValidation private constructor(
+    val before: JsObjectValidatorBuilder.Before,
+    val after: JsObjectValidatorBuilder.After
+) {
 
-@AirfluxMarker
-class JsReaderScopeBuilder {
-
-    internal fun build(): JsObjectReaderScope = object : JsObjectReaderScope {}
+    @AirfluxMarker
+    class Builder(
+        var before: JsObjectValidatorBuilder.Before = JsObjectValidatorBuilder.Before,
+        var after: JsObjectValidatorBuilder.After = JsObjectValidatorBuilder.After
+    ) {
+        internal fun build(): JsObjectValidation = JsObjectValidation(before, after)
+    }
 }

@@ -16,7 +16,7 @@
 
 package io.github.airflux.core.reader.validator.base
 
-import io.github.airflux.core.reader.context.option.FailFast
+import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.validator.JsValidator
@@ -41,7 +41,7 @@ object BaseArrayValidators {
         error: (index: Int, value: K) -> JsError
     ): JsValidator<Collection<T>> =
         JsValidator { context, _, values ->
-            val failFast = context.getOrNull(FailFast)?.isTrue ?: true
+            val failFast = context.failFast
             val errors = mutableListOf<JsError>()
             val unique = mutableSetOf<K>()
             values.forEachIndexed { index, item ->
