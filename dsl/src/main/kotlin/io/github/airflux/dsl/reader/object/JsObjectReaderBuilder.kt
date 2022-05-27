@@ -22,7 +22,7 @@ import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
-import io.github.airflux.core.reader.result.asFailure
+import io.github.airflux.core.reader.result.failure
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
 import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
@@ -80,7 +80,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             } catch (expected: Throwable) {
                 context.getOrNull(ExceptionsHandler)
                     ?.handleException(context, values.location, expected)
-                    ?.asFailure(values.location)
+                    ?.failure(values.location)
                     ?: throw expected
             }
         }

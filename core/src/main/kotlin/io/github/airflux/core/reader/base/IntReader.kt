@@ -21,8 +21,8 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.asFailure
-import io.github.airflux.core.reader.result.asSuccess
+import io.github.airflux.core.reader.result.failure
+import io.github.airflux.core.reader.result.success
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsNumber
 
@@ -33,10 +33,10 @@ object IntReader : JsReader<Int> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Int> =
         input.readAsNumber(context, location) { c, l, text ->
             try {
-                text.toInt().asSuccess(location = l)
+                text.toInt().success(location = l)
             } catch (expected: NumberFormatException) {
                 val errorBuilder = c.getValue(ValueCastErrorBuilder)
-                errorBuilder.build(text, Int::class).asFailure(location = l)
+                errorBuilder.build(text, Int::class).failure(location = l)
             }
         }
 }

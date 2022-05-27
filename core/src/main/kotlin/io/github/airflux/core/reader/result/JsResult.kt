@@ -21,30 +21,13 @@ sealed class JsResult<out T> {
 
     companion object;
 
-    infix fun <R> map(transform: (T) -> R): JsResult<R> = when (this) {
-        is Success -> Success(location, transform(value))
-        is Failure -> this
-    }
+    infix fun <R> map(transform: (T) -> R): JsResult<R> =
+        flatMap { location, value -> transform(value).success(location) }
 
-    fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = when (this) {
-        is Success -> transform(this.location, value)
-        is Failure -> this
-    }
-
-    inline infix fun recovery(function: (Failure) -> JsResult<@UnsafeVariance T>): JsResult<T> = when (this) {
-        is Success -> this
-        is Failure -> function(this)
-    }
-
-    infix fun getOrElse(defaultValue: @UnsafeVariance T): T = when (this) {
-        is Success -> value
-        is Failure -> defaultValue
-    }
-
-    infix fun orElse(defaultValue: () -> @UnsafeVariance T): T = when (this) {
-        is Success -> value
-        is Failure -> defaultValue()
-    }
+    fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = fold(
+        ifFailure = { it },
+        ifSuccess = { transform(it.location, it.value) }
+    )
 
     data class Success<T>(val location: JsLocation, val value: T) : JsResult<T>()
 
@@ -77,5 +60,26 @@ sealed class JsResult<out T> {
     }
 }
 
-fun <T> T.asSuccess(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
-fun <E : JsError> E.asFailure(location: JsLocation): JsResult<Nothing> = JsResult.Failure(location, this)
+inline fun <T, R> JsResult<T>.fold(ifFailure: (JsResult.Failure) -> R, ifSuccess: (JsResult.Success<T>) -> R): R =
+    when (this) {
+        is JsResult.Success -> ifSuccess(this)
+        is JsResult.Failure -> ifFailure(this)
+    }
+
+inline infix fun <T> JsResult<T>.recovery(function: (JsResult.Failure) -> JsResult<T>): JsResult<T> = fold(
+    ifFailure = { function(it) },
+    ifSuccess = { it }
+)
+
+infix fun <T> JsResult<T>.getOrElse(defaultValue: () -> T): T = fold(
+    ifFailure = { defaultValue() },
+    ifSuccess = { it.value }
+)
+
+infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResult<T> = fold(
+    ifFailure = { defaultValue() },
+    ifSuccess = { it }
+)
+
+fun <T> T.success(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
+fun <E : JsError> E.failure(location: JsLocation): JsResult<Nothing> = JsResult.Failure(location, this)

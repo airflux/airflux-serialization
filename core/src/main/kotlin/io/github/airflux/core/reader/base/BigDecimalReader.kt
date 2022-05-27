@@ -20,7 +20,7 @@ import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.asSuccess
+import io.github.airflux.core.reader.result.success
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.value.extension.readAsNumber
 import java.math.BigDecimal
@@ -31,6 +31,6 @@ import java.math.BigDecimal
 object BigDecimalReader : JsReader<BigDecimal> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<BigDecimal> =
         input.readAsNumber(context, location) { _, p, text ->
-            BigDecimal(text).asSuccess(location = p)
+            BigDecimal(text).success(location = p)
         }
 }

@@ -21,6 +21,15 @@ class JsResultTest : FreeSpec() {
         "A JsResult#Success type" - {
             val original: JsResult<String> = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
+            "calling fold function should return an original value" {
+                val result = original.fold(
+                    ifFailure = { ELSE_VALUE },
+                    ifSuccess = { it.value }
+                )
+
+                result shouldBe ORIGINAL_VALUE
+            }
+
             "calling map function should return a result of applying the [transform] function to the value" {
                 val result = original.map { it.toInt() }
 
@@ -40,15 +49,17 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling getOrElse function should return a value" {
-                val result = original.getOrElse(ELSE_VALUE)
+                val result = original.getOrElse { ELSE_VALUE }
 
                 result shouldBe ORIGINAL_VALUE
             }
 
             "calling orElse function should return a value" {
-                val result = original.orElse { ELSE_VALUE }
+                val elseResult = JsResult.Success(location = LOCATION, value = ELSE_VALUE)
 
-                result shouldBe ORIGINAL_VALUE
+                val result = original.orElse { elseResult }
+
+                result shouldBe original
             }
 
             "should comply with equals() and hashCode() contract" {
@@ -104,6 +115,15 @@ class JsResultTest : FreeSpec() {
                 )
             }
 
+            "calling fold function should return an alternative value" {
+                val result = original.fold(
+                    ifFailure = { ELSE_VALUE },
+                    ifSuccess = { it.value }
+                )
+
+                result shouldBe ELSE_VALUE
+            }
+
             "calling map function should return an original do not apply the [transform] function to the value" {
                 val result = original.map { it.toInt() }
 
@@ -123,15 +143,17 @@ class JsResultTest : FreeSpec() {
             }
 
             "calling getOrElse function should return a defaultValue" {
-                val result = original.getOrElse(ELSE_VALUE)
+                val result = original.getOrElse { ELSE_VALUE }
 
                 result shouldBe ELSE_VALUE
             }
 
             "calling orElse function should return the result of calling the [defaultValue] function" {
-                val result = original.orElse { ELSE_VALUE }
+                val elseResult = JsResult.Success(location = LOCATION, value = ELSE_VALUE)
 
-                result shouldBe ELSE_VALUE
+                val result = original.orElse { elseResult }
+
+                result shouldBe elseResult
             }
 
             "should comply with equals() and hashCode() contract" {
@@ -194,13 +216,13 @@ class JsResultTest : FreeSpec() {
         }
 
         "asSuccess(JsLocation) extension function" {
-            val result = ORIGINAL_VALUE.asSuccess(LOCATION)
+            val result = ORIGINAL_VALUE.success(LOCATION)
 
             result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
         "asFailure(JsLocation) extension function" {
-            val result = JsonErrors.PathMissing.asFailure(LOCATION)
+            val result = JsonErrors.PathMissing.failure(LOCATION)
 
             result as JsResult.Failure
 
