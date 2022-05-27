@@ -41,7 +41,9 @@ internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectRe
     private val validation: JsObjectValidation.Builder = scope.validation
         .let { JsObjectValidation.Builder(before = it.before, after = it.after) }
 
-    private val properties = mutableListOf<JsReaderProperty>()
+    private val propertiesBuilder = JsReaderProperties.Builder()
+
+    override var checkUniquePropertyPath: Boolean = scope.checkUniquePropertyPath
 
     override fun validation(block: JsObjectValidation.Builder.() -> Unit) {
         validation.block()
@@ -49,27 +51,27 @@ internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectRe
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P> =
         JsRequiredReaderProperty(builder.build())
-            .also { registration(it) }
+            .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Defaultable<P>): JsReaderProperty.Defaultable<P> =
         JsDefaultableReaderProperty(builder.build())
-            .also { registration(it) }
+            .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Optional<P>): JsReaderProperty.Optional<P> =
         JsOptionalReaderProperty(builder.build())
-            .also { registration(it) }
+            .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P> =
         JsOptionalWithDefaultReaderProperty(builder.build())
-            .also { registration(it) }
+            .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P> =
         JsNullableReaderProperty(builder.build())
-            .also { registration(it) }
+            .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P> =
         JsNullableWithDefaultReaderProperty(builder.build())
-            .also { registration(it) }
+            .also { propertiesBuilder.add(it) }
 
     override fun build(builder: ObjectValuesMap.() -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
         JsObjectReader.TypeBuilder { context, values ->
@@ -84,7 +86,7 @@ internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectRe
         }
 
     fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
-        val properties = JsReaderProperties(this.properties)
+        val properties = propertiesBuilder.build(checkUniquePropertyPath)
         val validators = validation.build().let {
             JsObjectValidators(
                 before = it.before.build(properties),
@@ -96,10 +98,6 @@ internal class JsObjectReaderBuilder<T>(scope: JsObjectReaderScope) : JsObjectRe
                 read(c, l, v, validators, properties, typeBuilder)
             }
         }
-    }
-
-    private fun registration(property: JsReaderProperty) {
-        properties.add(property)
     }
 
     internal data class JsObjectValidators(

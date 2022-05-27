@@ -23,17 +23,23 @@ fun objectReaderScope(block: JsObjectReaderScope.Builder.() -> Unit): JsObjectRe
     JsObjectReaderScope.Builder().apply(block).build()
 
 class JsObjectReaderScope private constructor(
+    val checkUniquePropertyPath: Boolean,
     val validation: JsObjectValidation
 ) {
 
     @AirfluxMarker
     class Builder {
+        var checkUniquePropertyPath: Boolean = false
         private var validation: JsObjectValidation.Builder = JsObjectValidation.Builder()
 
         fun validation(block: JsObjectValidation.Builder.() -> Unit) {
             validation.block()
         }
 
-        internal fun build(): JsObjectReaderScope = JsObjectReaderScope(validation.build())
+        internal fun build(): JsObjectReaderScope =
+            JsObjectReaderScope(
+                checkUniquePropertyPath = checkUniquePropertyPath,
+                validation = validation.build()
+            )
     }
 }

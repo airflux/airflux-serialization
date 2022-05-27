@@ -22,6 +22,9 @@ import io.github.airflux.dsl.reader.`object`.validator.base.MaxProperties
 import io.github.airflux.dsl.reader.scope.objectReaderScope
 
 val ObjectReaderScope = objectReaderScope {
+
+    checkUniquePropertyPath = true
+
     validation {
         before = AdditionalProperties
         after = IsNotEmpty and MaxProperties(3)

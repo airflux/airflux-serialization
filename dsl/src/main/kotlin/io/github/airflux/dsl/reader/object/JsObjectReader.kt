@@ -31,6 +31,8 @@ fun interface JsObjectReader<T> : JsReader<T> {
     @AirfluxMarker
     interface Builder<T> {
 
+        var checkUniquePropertyPath: Boolean
+
         fun validation(block: JsObjectValidation.Builder.() -> Unit)
 
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Required<P>): JsReaderProperty.Required<P>

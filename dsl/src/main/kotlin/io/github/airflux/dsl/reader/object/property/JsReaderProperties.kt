@@ -16,4 +16,30 @@
 
 package io.github.airflux.dsl.reader.`object`.property
 
-class JsReaderProperties(private val elements: List<JsReaderProperty>) : Collection<JsReaderProperty> by elements
+import io.github.airflux.core.path.JsPath
+
+class JsReaderProperties(private val elements: List<JsReaderProperty>) : Collection<JsReaderProperty> by elements {
+
+    internal class Builder {
+        private val properties = mutableListOf<JsReaderProperty>()
+
+        fun add(property: JsReaderProperty) {
+            properties.add(property)
+        }
+
+        internal fun build(checkUniquePropertyPath: Boolean): JsReaderProperties {
+            if (checkUniquePropertyPath) checkingUniquePropertyPath(properties)
+            return JsReaderProperties(properties)
+        }
+
+        internal fun checkingUniquePropertyPath(properties: List<JsReaderProperty>) {
+            val paths = mutableSetOf<JsPath>()
+            properties.forEach { property ->
+                property.path.items.forEach { path ->
+                    if (path in paths)
+                        throw IllegalStateException("The path $path is already.")
+                }
+            }
+        }
+    }
+}
