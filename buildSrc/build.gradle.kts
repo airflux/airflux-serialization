@@ -20,5 +20,5 @@ dependencies {
     implementation("org.jacoco:org.jacoco.core:0.8.7")
     implementation("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.0")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0")
-    implementation("org.jetbrains.kotlinx:kover:0.5.0-RC")
+    implementation("org.jetbrains.kotlinx:kover:0.5.1")
 }
