@@ -37,7 +37,7 @@ class JsReaderProperties(private val elements: List<JsReaderProperty>) : Collect
             properties.forEach { property ->
                 property.path.items.forEach { path ->
                     if (path in paths)
-                        throw IllegalStateException("The path $path is already.")
+                        error("The path $path is already.")
                 }
             }
         }
