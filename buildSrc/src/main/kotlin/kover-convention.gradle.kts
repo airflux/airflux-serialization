@@ -15,11 +15,11 @@ tasks {
 
     val baseDir = "reports/jacoco/test"
     val isCI = System.getenv().containsKey("CI")
-    koverHtmlReport {
+    koverMergedHtmlReport {
         isEnabled = !isCI
         htmlReportDir.set(layout.buildDirectory.dir("$baseDir/html"))
     }
-    koverXmlReport {
+    koverMergedXmlReport {
         isEnabled = true
         xmlReportFile.set(layout.buildDirectory.file("$baseDir/jacocoTestReport.xml"))
     }
