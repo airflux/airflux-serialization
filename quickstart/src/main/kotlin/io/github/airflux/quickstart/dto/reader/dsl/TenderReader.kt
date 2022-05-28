@@ -13,7 +13,7 @@ val TenderReader = reader<Tender>(ObjectReaderConfiguration) {
     val value = property(optional(name = "value", reader = ValueReader))
     val lots = property(required(name = "lots", reader = LotsReader))
 
-    build {
+    returns {
         Tender(+id, +title, +value, +lots).success(location)
     }
 }

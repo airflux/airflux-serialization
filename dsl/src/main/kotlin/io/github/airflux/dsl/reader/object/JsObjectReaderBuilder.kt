@@ -73,7 +73,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         JsNullableWithDefaultReaderProperty(builder.build())
             .also { propertiesBuilder.add(it) }
 
-    override fun build(builder: ObjectValuesMap.(JsReaderContext) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
+    override fun returns(builder: ObjectValuesMap.(JsReaderContext) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
         JsObjectReader.TypeBuilder { context, values ->
             try {
                 values.builder(context)

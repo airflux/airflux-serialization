@@ -42,6 +42,6 @@ fun interface JsObjectReader<T> : JsReader<T> {
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P>
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P>
 
-        fun build(builder: ObjectValuesMap.(JsReaderContext) -> JsResult<T>): TypeBuilder<T>
+        fun returns(builder: ObjectValuesMap.(JsReaderContext) -> JsResult<T>): TypeBuilder<T>
     }
 }

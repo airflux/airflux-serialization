@@ -32,7 +32,7 @@ val LotReader = reader<Lot>(ObjectReaderConfiguration) {
     val status = property(required(name = "status", reader = LotStatusReader))
     val value = property(required(name = "value", reader = ValueReader))
 
-    build {
+    returns {
         Lot(id = +id, status = +status, value = +value).success(location)
     }
 }
