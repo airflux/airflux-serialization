@@ -34,7 +34,7 @@ class CollectionFieldReaderTest : FreeSpec() {
 
     init {
 
-        "The readAsList function" - {
+        "The readAsArray function" - {
 
             "when the parameter 'from' is JsArray type" - {
 
@@ -42,7 +42,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                     val json: JsValue = JsArray<JsString>()
 
                     val result: JsResult<List<String>> =
-                        readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
+                        readAsArray(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                     result shouldBe JsResult.Success(location = JsLocation.empty, value = emptyList())
                 }
@@ -51,7 +51,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                     val json: JsValue = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
                     val result: JsResult<List<String>> =
-                        readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
+                        readAsArray(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                     result shouldBe JsResult.Success(
                         location = JsLocation.empty,
@@ -70,13 +70,12 @@ class CollectionFieldReaderTest : FreeSpec() {
                     "and the fail-fast option is missing" - {
 
                         "should return the invalid type error" {
-                            val result: JsResult<List<String>> =
-                                readAsList(
-                                    context = context,
-                                    location = JsLocation.empty,
-                                    from = json,
-                                    using = stringReader
-                                )
+                            val result: JsResult<List<String>> = readAsArray(
+                                context = context,
+                                location = JsLocation.empty,
+                                from = json,
+                                using = stringReader
+                            )
 
                             result as JsResult.Failure
                             result.causes shouldContainAll listOf(
@@ -95,13 +94,12 @@ class CollectionFieldReaderTest : FreeSpec() {
                         val failFastContext = context + FailFast(true)
 
                         "should return the invalid type error" {
-                            val result: JsResult<List<String>> =
-                                readAsList(
-                                    context = failFastContext,
-                                    location = JsLocation.empty,
-                                    from = json,
-                                    using = stringReader
-                                )
+                            val result: JsResult<List<String>> = readAsArray(
+                                context = failFastContext,
+                                location = JsLocation.empty,
+                                from = json,
+                                using = stringReader
+                            )
 
                             result as JsResult.Failure
                             result.causes shouldContainAll listOf(
@@ -120,13 +118,12 @@ class CollectionFieldReaderTest : FreeSpec() {
                         val failFastContext = context + FailFast(false)
 
                         "should return the invalid type error" {
-                            val result: JsResult<List<String>> =
-                                readAsList(
-                                    context = failFastContext,
-                                    location = JsLocation.empty,
-                                    from = json,
-                                    using = stringReader
-                                )
+                            val result: JsResult<List<String>> = readAsArray(
+                                context = failFastContext,
+                                location = JsLocation.empty,
+                                from = json,
+                                using = stringReader
+                            )
 
                             result as JsResult.Failure
                             result.causes shouldContainAll listOf(
@@ -154,7 +151,7 @@ class CollectionFieldReaderTest : FreeSpec() {
                 val json: JsValue = JsString(USER_NAME_VALUE)
 
                 val result: JsResult<List<String>> =
-                    readAsList(context = context, location = JsLocation.empty, from = json, using = stringReader)
+                    readAsArray(context = context, location = JsLocation.empty, from = json, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     JsLocation.empty,

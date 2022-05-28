@@ -31,7 +31,7 @@ import io.github.airflux.core.value.JsValue
  * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
  */
-fun <T : Any> readAsList(
+fun <T : Any> readAsArray(
     context: JsReaderContext,
     location: JsLocation,
     from: JsValue,
