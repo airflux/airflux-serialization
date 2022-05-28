@@ -18,13 +18,15 @@ package io.github.airflux.core.reader
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsValue
 
 /**
- * Read a node as list.
+ * Read a node which represent as array.
  *
  * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
  * - If node match array type, then applies [using]
@@ -33,74 +35,49 @@ fun <T : Any> readAsList(
     context: JsReaderContext,
     location: JsLocation,
     from: JsValue,
-    using: JsReader<T>
-): JsResult<List<T>> =
-    readAsCollection(context, location, from, using, CollectionBuilderFactory.listFactory())
-
-/**
- * Read a node as set.
- *
- * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
- * - If node match array type, then applies [using]
- */
-fun <T : Any> readAsSet(
-    context: JsReaderContext,
-    location: JsLocation,
-    from: JsValue,
-    using: JsReader<T>
-): JsResult<Set<T>> =
-    readAsCollection(context, location, from, using, CollectionBuilderFactory.setFactory())
-
-/**
- * Read a node which represent as array.
- *
- * - If node does not match array type, then an error is returned that was build using [InvalidTypeErrorBuilder].
- * - If node match array type, then applies [using]
- */
-fun <T : Any, C> readAsCollection(
-    context: JsReaderContext,
-    location: JsLocation,
-    from: JsValue,
     using: JsReader<T>,
-    factory: CollectionBuilderFactory<T, C>
-): JsResult<C>
-    where C : Collection<T> {
+): JsResult<List<T>> {
 
-    fun <T, C : Collection<T>> readAsCollection(
+    fun <T> readAsArray(
         context: JsReaderContext,
         location: JsLocation,
         from: JsArray<*>,
         using: JsReader<T>,
-        factory: CollectionBuilderFactory<T, C>
-    ): JsResult<C> {
+    ): JsResult<List<T>> {
 
-        fun <T, C : Collection<T>> dispatch(
-            result: JsResult.Success<T>,
-            acc: JsResult<CollectionBuilder<T, C>>
-        ): JsResult<CollectionBuilder<T, C>> = when (acc) {
-            is JsResult.Success<CollectionBuilder<T, C>> -> acc.apply { value += result.value }
-            is JsResult.Failure -> acc
-        }
+        fun <T> dispatch(
+            acc: JsResult<MutableList<T>>,
+            result: JsResult.Success<T>
+        ): JsResult<MutableList<T>> = acc.fold(
+            ifFailure = { it },
+            ifSuccess = { it.apply { value += result.value } }
+        )
 
-        fun <T, C : Collection<T>> dispatch(
-            result: JsResult.Failure,
-            acc: JsResult<CollectionBuilder<T, C>>
-        ): JsResult<CollectionBuilder<T, C>> = when (acc) {
-            is JsResult.Success<CollectionBuilder<T, C>> -> result
-            is JsResult.Failure -> result + acc
-        }
+        fun <T> dispatch(
+            acc: JsResult<MutableList<T>>,
+            result: JsResult.Failure
+        ): JsResult<MutableList<T>> = acc.fold(
+            ifFailure = { result + it },
+            ifSuccess = { result }
+        )
 
-        val initial: JsResult<CollectionBuilder<T, C>> = JsResult.Success(location, factory.newBuilder(from.size))
+        val failFast = context.failFast
+        val initial: JsResult<MutableList<T>> = JsResult.Success(location, ArrayList(from.size))
         return from.foldIndexed(initial) { idx, acc, elem ->
-            when (val result = using.read(context, location.append(idx), elem)) {
-                is JsResult.Success<T> -> dispatch(result, acc)
-                is JsResult.Failure -> dispatch(result, acc)
-            }
-        }.map { it.result() }
+            val currentLocation = location.append(idx)
+            using.read(context, currentLocation, elem)
+                .fold(
+                    ifFailure = { result ->
+                        if (failFast) return result
+                        dispatch(acc, result)
+                    },
+                    ifSuccess = { result -> dispatch(acc, result) }
+                )
+        }
     }
 
     return if (from is JsArray<*>)
-        readAsCollection(context, location, from, using, factory)
+        readAsArray(context, location, from, using)
     else {
         val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
         JsResult.Failure(location, errorBuilder.build(JsValue.Type.ARRAY, from.type))
