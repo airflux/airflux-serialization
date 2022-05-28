@@ -16,6 +16,7 @@
 
 package io.github.airflux.core.reader.validator.extension
 
+import io.github.airflux.core.common.identity
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
@@ -33,7 +34,7 @@ fun <T> JsResult<T>.validation(validator: JsValidator<T>): JsResult<T> =
 
 fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
     fold(
-        ifFailure = { it },
+        ifFailure = ::identity,
         ifSuccess = { result ->
             val errors = validator.validation(context, result.location, result.value)
             if (errors != null) JsResult.Failure(location = result.location, errors = errors) else result

@@ -16,6 +16,7 @@
 
 package io.github.airflux.dsl.reader.`object`
 
+import io.github.airflux.core.common.identity
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
@@ -81,7 +82,7 @@ interface ObjectValuesMap {
 
         private fun append(property: JsReaderProperty, result: JsResult<Any?>): JsResult.Failure? =
             result.fold(
-                ifFailure = { it },
+                ifFailure = ::identity,
                 ifSuccess = {
                     val value = it.value
                     if (value != null) results[property] = value

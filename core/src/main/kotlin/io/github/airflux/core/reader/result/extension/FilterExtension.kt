@@ -16,6 +16,7 @@
 
 package io.github.airflux.core.reader.result.extension
 
+import io.github.airflux.core.common.identity
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsResult
@@ -26,7 +27,7 @@ fun <T> JsResult<T?>.filter(predicate: JsPredicate<T>): JsResult<T?> =
 
 fun <T> JsResult<T?>.filter(context: JsReaderContext, predicate: JsPredicate<T>): JsResult<T?> =
     fold(
-        ifFailure = { it },
+        ifFailure = ::identity,
         ifSuccess = { result ->
             if (result.value == null)
                 result

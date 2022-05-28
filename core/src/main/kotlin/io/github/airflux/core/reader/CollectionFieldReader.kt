@@ -16,6 +16,7 @@
 
 package io.github.airflux.core.reader
 
+import io.github.airflux.core.common.identity
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.option.failFast
@@ -45,21 +46,17 @@ fun <T : Any> readAsArray(
         using: JsReader<T>,
     ): JsResult<List<T>> {
 
-        fun <T> dispatch(
-            acc: JsResult<MutableList<T>>,
-            result: JsResult.Success<T>
-        ): JsResult<MutableList<T>> = acc.fold(
-            ifFailure = { it },
-            ifSuccess = { it.apply { value += result.value } }
-        )
+        fun <T> dispatch(acc: JsResult<MutableList<T>>, result: JsResult.Success<T>): JsResult<MutableList<T>> =
+            acc.fold(
+                ifFailure = ::identity,
+                ifSuccess = { it.apply { value += result.value } }
+            )
 
-        fun <T> dispatch(
-            acc: JsResult<MutableList<T>>,
-            result: JsResult.Failure
-        ): JsResult<MutableList<T>> = acc.fold(
-            ifFailure = { result + it },
-            ifSuccess = { result }
-        )
+        fun <T> dispatch(acc: JsResult<MutableList<T>>, result: JsResult.Failure): JsResult<MutableList<T>> =
+            acc.fold(
+                ifFailure = { result + it },
+                ifSuccess = { result }
+            )
 
         val failFast = context.failFast
         val initial: JsResult<MutableList<T>> = JsResult.Success(location, ArrayList(from.size))

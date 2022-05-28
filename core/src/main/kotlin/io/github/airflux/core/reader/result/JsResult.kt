@@ -16,6 +16,8 @@
 
 package io.github.airflux.core.reader.result
 
+import io.github.airflux.core.common.identity
+
 @Suppress("unused")
 sealed class JsResult<out T> {
 
@@ -25,7 +27,7 @@ sealed class JsResult<out T> {
         flatMap { location, value -> transform(value).success(location) }
 
     fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = fold(
-        ifFailure = { it },
+        ifFailure = ::identity,
         ifSuccess = { transform(it.location, it.value) }
     )
 
@@ -68,7 +70,7 @@ inline fun <T, R> JsResult<T>.fold(ifFailure: (JsResult.Failure) -> R, ifSuccess
 
 inline infix fun <T> JsResult<T>.recovery(function: (JsResult.Failure) -> JsResult<T>): JsResult<T> = fold(
     ifFailure = { function(it) },
-    ifSuccess = { it }
+    ifSuccess = ::identity
 )
 
 infix fun <T> JsResult<T>.getOrElse(defaultValue: () -> T): T = fold(
@@ -78,7 +80,7 @@ infix fun <T> JsResult<T>.getOrElse(defaultValue: () -> T): T = fold(
 
 infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResult<T> = fold(
     ifFailure = { defaultValue() },
-    ifSuccess = { it }
+    ifSuccess = ::identity
 )
 
 fun <T> T.success(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
