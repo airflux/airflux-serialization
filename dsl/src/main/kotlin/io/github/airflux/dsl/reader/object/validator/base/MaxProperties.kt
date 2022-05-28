@@ -16,9 +16,8 @@
 
 package io.github.airflux.dsl.reader.`object`.validator.base
 
-import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.ErrorBuilder
+import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
@@ -31,19 +30,18 @@ class MaxProperties(val value: Int) : JsObjectValidatorBuilder.After {
     override fun build(properties: JsReaderProperties): JsObjectValidator.After =
         JsObjectValidator.After { context, _, values, _ ->
             if (values.size > value) {
-                val errorBuilder = context.getValue(Error)
+                val errorBuilder = context.getValue(ErrorBuilder)
                 JsErrors.of(errorBuilder.build(value, values.size))
             } else
                 null
         }
 
-    class Error(private val function: (expected: Int, actual: Int) -> JsError) :
-        JsReaderAbstractContextElement<Error>(key = Error),
-        ErrorBuilder {
+    class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
+        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
         fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
-        companion object Key : JsReaderContext.Key<Error> {
+        companion object Key : JsReaderContext.Key<ErrorBuilder> {
             override val name: String = "MaxPropertiesErrorBuilder"
         }
     }

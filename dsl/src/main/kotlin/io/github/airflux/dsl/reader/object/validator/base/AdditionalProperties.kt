@@ -17,9 +17,8 @@
 package io.github.airflux.dsl.reader.`object`.validator.base
 
 import io.github.airflux.core.path.PathElement
-import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.ErrorBuilder
+import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
@@ -44,13 +43,13 @@ object AdditionalProperties : JsObjectValidatorBuilder.Before {
             }
             unknownProperties.takeIf { it.isNotEmpty() }
                 ?.let {
-                    val errorBuilder = context.getValue(Error)
+                    val errorBuilder = context.getValue(ErrorBuilder)
                     JsErrors.of(errorBuilder.build(it))
                 }
         }
     }
 
-    fun JsReaderProperties.names(): Set<String> {
+    internal fun JsReaderProperties.names(): Set<String> {
         fun JsReaderProperty.names(): List<String> = path.items
             .mapNotNull { path ->
                 when (val element = path.elements.first()) {
@@ -62,13 +61,12 @@ object AdditionalProperties : JsObjectValidatorBuilder.Before {
         return flatMap { property -> property.names() }.toSet()
     }
 
-    class Error(private val function: (properties: List<String>) -> JsError) :
-        JsReaderAbstractContextElement<Error>(key = Error),
-        ErrorBuilder {
+    class ErrorBuilder(private val function: (properties: List<String>) -> JsError) :
+        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
         fun build(properties: List<String>): JsError = function(properties)
 
-        companion object Key : JsReaderContext.Key<Error> {
+        companion object Key : JsReaderContext.Key<ErrorBuilder> {
             override val name: String = "AdditionalPropertiesErrorBuilder"
         }
     }

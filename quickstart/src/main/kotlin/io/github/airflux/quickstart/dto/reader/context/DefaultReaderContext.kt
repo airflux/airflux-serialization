@@ -32,8 +32,8 @@ fun JsReaderContextBuilder.ErrorsBuilder.readerErrorBuilders() {
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
-    +AdditionalProperties.Error(JsonErrors.Validation.Object::AdditionalProperties)
-    +IsNotEmpty.Error { JsonErrors.Validation.Object.IsEmpty }
-    +MinProperties.Error(JsonErrors.Validation.Object::MinProperties)
-    +MaxProperties.Error(JsonErrors.Validation.Object::MaxProperties)
+    +AdditionalProperties.ErrorBuilder(JsonErrors.Validation.Object::AdditionalProperties)
+    +IsNotEmpty.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
+    +MinProperties.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
+    +MaxProperties.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
 }

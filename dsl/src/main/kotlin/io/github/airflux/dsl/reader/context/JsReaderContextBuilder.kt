@@ -17,7 +17,7 @@
 package io.github.airflux.dsl.reader.context
 
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.ErrorBuilder
+import io.github.airflux.core.reader.context.error.ErrorBuilderContextElement
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.context.exception.ExceptionsHandlerBuilder
@@ -51,17 +51,13 @@ class JsReaderContextBuilder {
 
     @AirfluxMarker
     class ErrorsBuilder {
-        private val items = mutableListOf<JsReaderContext.Element>()
+        private val items = mutableListOf<ErrorBuilderContextElement>()
 
-        fun <E> register(error: E)
-            where E : ErrorBuilder,
-                  E : JsReaderContext.Element {
+        fun <E : ErrorBuilderContextElement> register(error: E) {
             items.add(error)
         }
 
-        operator fun <E> E.unaryPlus()
-            where E : ErrorBuilder,
-                  E : JsReaderContext.Element = register(this)
+        operator fun <E : ErrorBuilderContextElement> E.unaryPlus() = register(this)
 
         internal fun build(): List<JsReaderContext.Element> = items
     }

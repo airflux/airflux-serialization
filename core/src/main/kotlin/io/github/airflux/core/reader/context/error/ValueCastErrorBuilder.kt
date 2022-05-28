@@ -16,14 +16,12 @@
 
 package io.github.airflux.core.reader.context.error
 
-import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import kotlin.reflect.KClass
 
 class ValueCastErrorBuilder(private val builder: (value: String, target: KClass<*>) -> JsError) :
-    JsReaderAbstractContextElement<ValueCastErrorBuilder>(key = ValueCastErrorBuilder),
-    ErrorBuilder {
+    AbstractErrorBuilderContextElement<ValueCastErrorBuilder>(key = ValueCastErrorBuilder) {
 
     fun build(value: String, target: KClass<*>): JsError = builder(value, target)
 
