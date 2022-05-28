@@ -19,6 +19,7 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
@@ -78,14 +79,15 @@ interface ObjectValuesMap {
                 append(property, property.reader.read(context, location, input))
         }
 
-        private fun append(property: JsReaderProperty, result: JsResult<Any?>): JsResult.Failure? = when (result) {
-            is JsResult.Success -> {
-                val value = result.value
-                if (value != null) results[property] = value
-                null
-            }
-            is JsResult.Failure -> result
-        }
+        private fun append(property: JsReaderProperty, result: JsResult<Any?>): JsResult.Failure? =
+            result.fold(
+                ifFailure = { it },
+                ifSuccess = {
+                    val value = it.value
+                    if (value != null) results[property] = value
+                    null
+                }
+            )
 
         override fun build(): ObjectValuesMap = ObjectValuesMapInstance(context, location, results)
     }

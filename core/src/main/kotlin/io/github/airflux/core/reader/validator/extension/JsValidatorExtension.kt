@@ -19,6 +19,7 @@ package io.github.airflux.core.reader.validator.extension
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.reader.validator.JsValidator
 
 infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
@@ -31,10 +32,10 @@ fun <T> JsResult<T>.validation(validator: JsValidator<T>): JsResult<T> =
     validation(context = JsReaderContext(), validator = validator)
 
 fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
-    when (this) {
-        is JsResult.Success -> {
-            val errors = validator.validation(context, this.location, this.value)
-            if (errors != null) JsResult.Failure(location = this.location, errors = errors) else this
+    fold(
+        ifFailure = { it },
+        ifSuccess = { result ->
+            val errors = validator.validation(context, result.location, result.value)
+            if (errors != null) JsResult.Failure(location = result.location, errors = errors) else result
         }
-        is JsResult.Failure -> this
-    }
+    )

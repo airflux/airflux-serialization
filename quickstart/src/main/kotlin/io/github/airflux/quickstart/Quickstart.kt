@@ -11,8 +11,8 @@ import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.model.Value
-import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
+import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
 import java.math.BigDecimal
 

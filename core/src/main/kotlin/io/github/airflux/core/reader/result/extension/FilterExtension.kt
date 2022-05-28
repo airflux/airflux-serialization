@@ -19,17 +19,22 @@ package io.github.airflux.core.reader.result.extension
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.fold
 
 fun <T> JsResult<T?>.filter(predicate: JsPredicate<T>): JsResult<T?> =
     filter(context = JsReaderContext(), predicate = predicate)
 
 fun <T> JsResult<T?>.filter(context: JsReaderContext, predicate: JsPredicate<T>): JsResult<T?> =
-    when (this) {
-        is JsResult.Success -> if (this.value != null) {
-            if (predicate.test(context, this.location, this.value)) this
-            else JsResult.Success(this.location, null)
-        } else
-            this
-
-        is JsResult.Failure -> this
-    }
+    fold(
+        ifFailure = { it },
+        ifSuccess = { result ->
+            if (result.value == null)
+                result
+            else {
+                if (predicate.test(context, result.location, result.value))
+                    result
+                else
+                    JsResult.Success(result.location, null)
+            }
+        }
+    )
