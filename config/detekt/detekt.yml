@@ -15,8 +15,8 @@ config:
 
 processors:
   active: true
-  exclude:
-    - 'DetektProgressListener'
+#  exclude:
+#    - 'DetektProgressListener'
 #    - 'KtFileCountProcessor'
 #    - 'PackageCountProcessor'
 #    - 'ClassCountProcessor'
@@ -33,25 +33,24 @@ processors:
 console-reports:
   active: true
   exclude:
-    - 'ProjectStatisticsReport'
-    - 'ComplexityReport'
+#    - 'ProjectStatisticsReport'
+#    - 'ComplexityReport'
     - 'NotificationReport'
-#    - 'FindingsReport'
-    - 'FileBasedFindingsReport'
+    - 'FindingsReport'
+#    - 'FileBasedFindingsReport'
     - 'LiteFindingsReport'
 
 output-reports:
   active: true
-  exclude:
-#   - 'TxtOutputReport'
-#   - 'XmlOutputReport'
-#   - 'HtmlOutputReport'
+#  exclude:
+#    - 'TxtOutputReport'
+#    - 'XmlOutputReport'
+#    - 'HtmlOutputReport'
 
 comments:
   active: true
-  excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   AbsentOrWrongFileLicense:
-    active: true
+    active: false
     licenseTemplateFile: 'license.template'
     licenseTemplateIsRegex: false
   CommentOverPrivateFunction:
@@ -67,19 +66,20 @@ comments:
     active: false
     matchTypeParameters: true
     matchDeclarationsOrder: true
+    allowParamOnConstructorProperties: false
   UndocumentedPublicClass:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     searchInNestedClass: true
     searchInInnerClass: true
     searchInInnerObject: true
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   UndocumentedPublicProperty:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
 
 complexity:
   active: true
@@ -109,7 +109,7 @@ complexity:
       - 'with'
   LabeledExpression:
     active: false
-    ignoredLabels: []
+    ignoredLabels: [ ]
   LargeClass:
     active: true
     threshold: 600
@@ -122,29 +122,30 @@ complexity:
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
-    ignoreAnnotatedParameter: []
+    ignoreAnnotatedParameter: [ ]
   MethodOverloading:
     active: false
     threshold: 6
   NamedArguments:
-    active: true
+    active: false
     threshold: 3
+    ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
     threshold: 4
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**',  '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   ReplaceSafeCallChainWithRun:
     active: true
   StringLiteralDuplication:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     threshold: 3
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -167,6 +168,8 @@ coroutines:
   RedundantSuspendModifier:
     active: false
   SleepInsteadOfDelay:
+    active: false
+  SuspendFunWithCoroutineScopeReceiver:
     active: false
   SuspendFunWithFlowReturnType:
     active: false
@@ -217,11 +220,11 @@ exceptions:
       - 'toString'
   InstanceOfCheckForException:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   NotImplementedDeclaration:
     active: true
   ObjectExtendsThrowable:
-    active: false
+    active: true
   PrintStackTrace:
     active: true
   RethrowCaughtException:
@@ -243,7 +246,7 @@ exceptions:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     exceptions:
       - 'ArrayIndexOutOfBoundsException'
       - 'Exception'
@@ -258,7 +261,7 @@ exceptions:
     active: true
   TooGenericExceptionCaught:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     exceptionNames:
       - 'ArrayIndexOutOfBoundsException'
       - 'Error'
@@ -280,189 +283,166 @@ exceptions:
 formatting:
   active: true
   android: false
-  autoCorrect: false
+  autoCorrect: true
   AnnotationOnSeparateLine:
     active: false
-    autoCorrect: false
-  AnnotationSpacing:
-    active: true
-    autoCorrect: false
-  ArgumentListWrapping:
-    active: false
-    autoCorrect: false
-    indentSize: 4
-    maxLineLength: 120
+    autoCorrect: true
   ChainWrapping:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   CommentSpacing:
-    active: true
-    autoCorrect: false
+    active: false
+    autoCorrect: true
   EnumEntryNameCase:
     active: false
-    autoCorrect: false
+    autoCorrect: true
   Filename:
     active: true
   FinalNewline:
     active: true
-    autoCorrect: false
+    autoCorrect: true
     insertFinalNewLine: true
   ImportOrdering:
-    active: true
-    autoCorrect: false
-    layout: '*,java.**,javax.**,kotlin.**,^'
+    active: false
+    autoCorrect: true
+    layout: 'idea'
   Indentation:
-    active: true
-    autoCorrect: false
+    active: false
+    autoCorrect: true
     indentSize: 4
     continuationIndentSize: 4
   MaximumLineLength:
     active: false
     maxLineLength: 120
-    ignoreBackTickedIdentifier: false
   ModifierOrdering:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   MultiLineIfElse:
     active: false
-    autoCorrect: false
+    autoCorrect: true
   NoBlankLineBeforeRbrace:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoConsecutiveBlankLines:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoEmptyClassBody:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoEmptyFirstLineInMethodBlock:
     active: false
-    autoCorrect: false
+    autoCorrect: true
   NoLineBreakAfterElse:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoLineBreakBeforeAssignment:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoMultipleSpaces:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoSemicolons:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoTrailingSpaces:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoUnitReturn:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoUnusedImports:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   NoWildcardImports:
     active: true
   PackageName:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   ParameterListWrapping:
     active: true
-    autoCorrect: false
+    autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
-  SpacingAroundAngleBrackets:
-    active: false
-    autoCorrect: false
   SpacingAroundColon:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundComma:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundCurly:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundDot:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundDoubleColon:
     active: false
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundKeyword:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundOperators:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundParens:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingAroundRangeOperator:
     active: true
-    autoCorrect: false
-  SpacingAroundUnaryOperator:
-    active: true
-    autoCorrect: false
+    autoCorrect: true
   SpacingBetweenDeclarationsWithAnnotations:
-    active: true
-    autoCorrect: false
+    active: false
+    autoCorrect: true
   SpacingBetweenDeclarationsWithComments:
-    active: true
-    autoCorrect: false
+    active: false
+    autoCorrect: true
   StringTemplate:
     active: true
-    autoCorrect: false
+    autoCorrect: true
 
 naming:
   active: true
   BooleanPropertyNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     allowedPattern: '^(is|has|are)'
+    ignoreOverridden: true
   ClassNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     classPattern: '[A-Z][a-zA-Z0-9]*'
   ConstructorParameterNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     parameterPattern: '[a-z][A-Za-z0-9]*'
     privateParameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
     ignoreOverridden: true
   EnumNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     enumEntryPattern: '[A-Z][_a-zA-Z0-9]*'
   ForbiddenClassName:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    forbiddenName: []
+    forbiddenName: [ ]
   FunctionMaxLength:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     maximumFunctionNameLength: 30
   FunctionMinLength:
     active: false
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
-    functionPattern: '([a-z][a-zA-Z0-9]*)|(`.*`)'
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
     ignoreOverridden: true
   FunctionParameterNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
     ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
     rootPackage: ''
+    requireRootInDeclaration: false
   LambdaParameterNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     parameterPattern: '[a-z][A-Za-z0-9]*|_'
   MatchingDeclarationName:
     active: true
@@ -474,34 +454,27 @@ naming:
     active: true
   NonBooleanPropertyPrefixedWithIs:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
   ObjectPropertyNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
   TopLevelPropertyNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     constantPattern: '[A-Z][_A-Z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '_?[A-Za-z][_A-Za-z0-9]*'
   VariableMaxLength:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     maximumVariableNameLength: 64
   VariableMinLength:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     minimumVariableNameLength: 1
   VariableNaming:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
@@ -513,10 +486,10 @@ performance:
     active: true
   ForEachOnRange:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   SpreadOperator:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   UnnecessaryTemporaryInstantiation:
     active: true
 
@@ -534,7 +507,18 @@ potential-bugs:
     active: true
   DoubleMutabilityForCollection:
     active: true
+    mutableTypes:
+      - 'kotlin.collections.MutableList'
+      - 'kotlin.collections.MutableMap'
+      - 'kotlin.collections.MutableSet'
+      - 'java.util.ArrayList'
+      - 'java.util.LinkedHashSet'
+      - 'java.util.HashSet'
+      - 'java.util.LinkedHashMap'
+      - 'java.util.HashMap'
   DuplicateCaseInWhenExpression:
+    active: true
+  ElseCaseInsteadOfExhaustiveWhen:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
@@ -554,6 +538,7 @@ potential-bugs:
       - '*.CheckReturnValue'
     ignoreReturnValueAnnotations:
       - '*.CanIgnoreReturnValue'
+    ignoreFunctionCall: [ ]
   ImplicitDefaultLocale:
     active: true
   ImplicitUnitReturnType:
@@ -567,18 +552,18 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     ignoreOnClassesPattern: ''
   MapGetWithNotNullAssertionOperator:
     active: true
   MissingPackageDeclaration:
     active: true
-    excludes: ['**/*.kts']
+    excludes: [ '**/*.kts' ]
   MissingWhenCase:
     active: true
     allowElseExpression: true
-#  NullCheckOnMutableProperty:
-#    active: true
+  NullCheckOnMutableProperty:
+    active: true
   NullableToStringCall:
     active: true
   RedundantElseInWhen:
@@ -595,18 +580,20 @@ potential-bugs:
     active: true
   UnsafeCallOnNullableType:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   UnsafeCast:
     active: true
   UnusedUnaryOperator:
     active: true
   UselessPostfixExpression:
-    active: true
+    active: false
   WrongEqualsTypeParameter:
     active: true
 
 style:
   active: true
+  CanBeNonNullable:
+    active: true
   ClassOrdering:
     active: false
   CollapsibleIfStatements:
@@ -617,7 +604,7 @@ style:
   DataClassShouldBeImmutable:
     active: true
   DestructuringDeclarationWithTooManyEntries:
-    active: false
+    active: true
     maxDestructuringEntries: 3
   EqualsNullCall:
     active: true
@@ -640,7 +627,7 @@ style:
     customMessage: ''
   ForbiddenImport:
     active: false
-    imports: []
+    imports: [ ]
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: false
@@ -648,13 +635,13 @@ style:
       - 'kotlin.io.print'
       - 'kotlin.io.println'
   ForbiddenPublicDataClass:
-    active: true
-    excludes: ['**']
+    active: false
+    excludes: [ '**' ]
     ignorePackages:
       - '*.internal'
       - '*.internal.*'
   ForbiddenVoid:
-    active: true
+    active: false
     ignoreOverridden: false
     ignoreUsageInGenerics: false
   FunctionOnlyReturningConstant:
@@ -664,16 +651,16 @@ style:
     excludedFunctions: ''
   LibraryCodeMustSpecifyReturnType:
     active: true
-    excludes: ['**']
+    excludes: [ '**' ]
   LibraryEntitiesShouldNotBePublic:
     active: true
-    excludes: ['**']
+    excludes: [ '**' ]
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
   MagicNumber:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     ignoreNumbers:
       - '-1'
       - '0'
@@ -692,7 +679,7 @@ style:
   MandatoryBracesIfStatements:
     active: false
   MandatoryBracesLoops:
-    active: true
+    active: false
   MaxLineLength:
     active: false
     maxLineLength: 120
@@ -751,6 +738,7 @@ style:
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
+    allowNonStandardGrouping: false
   UnnecessaryAbstractClass:
     active: true
   UnnecessaryAnnotationUseSiteTarget:
@@ -760,6 +748,8 @@ style:
   UnnecessaryFilter:
     active: true
   UnnecessaryInheritance:
+    active: true
+  UnnecessaryInnerClass:
     active: true
   UnnecessaryLet:
     active: true
@@ -779,9 +769,9 @@ style:
   UseArrayLiteralsInAnnotations:
     active: true
   UseCheckNotNull:
-    active: false
+    active: true
   UseCheckOrError:
-    active: false
+    active: true
   UseDataClass:
     active: true
     allowVars: false
@@ -796,9 +786,9 @@ style:
   UseOrEmpty:
     active: true
   UseRequire:
-    active: false
+    active: true
   UseRequireNotNull:
-    active: false
+    active: true
   UselessCallOnNotNull:
     active: true
   UtilityClassWithPublicConstructor:
@@ -807,6 +797,6 @@ style:
     active: true
   WildcardImport:
     active: true
-    excludes: ['**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: [ '**/test/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
     excludeImports:
       - 'java.util.*'

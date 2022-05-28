@@ -5,12 +5,15 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-val detectConfigPath = "${project.rootProject.projectDir}/config/detekt/detekt.yml"
-
+dependencies{
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${Configuration.Versions.Detekt.Tool}")
+}
 configure<DetektExtension> {
     ignoreFailures = true
-    toolVersion = Configuration.Versions.Detect.Tool
-    config = project.files(detectConfigPath)
+    toolVersion = Configuration.Versions.Detekt.Tool
+    config = project.files("${project.rootProject.projectDir}/config/detekt/detekt.yml")
+    baseline = file("${project.rootProject.projectDir}/config/detekt/baseline.xml")
+    parallel = true
     debug = false
 }
 

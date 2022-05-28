@@ -58,8 +58,8 @@ object Configuration {
 
         const val Jackson = "2.12.5"
 
-        object Detect {
-            const val Tool = "1.19.0"
+        object Detekt {
+            const val Tool = "1.20.0"
         }
 
         object JaCoCo {
