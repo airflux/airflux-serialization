@@ -18,6 +18,7 @@ package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
@@ -26,7 +27,7 @@ import io.github.airflux.dsl.reader.`object`.property.specification.builder.JsRe
 @Suppress("unused")
 fun interface JsObjectReader<T> : JsReader<T> {
 
-    fun interface TypeBuilder<T> : (JsReaderContext, ObjectValuesMap) -> JsResult<T>
+    fun interface TypeBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
 
     @AirfluxMarker
     interface Builder<T> {
@@ -42,6 +43,6 @@ fun interface JsObjectReader<T> : JsReader<T> {
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.Nullable<P>): JsReaderProperty.Nullable<P>
         fun <P : Any> property(builder: JsReaderPropertySpecBuilder.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P>
 
-        fun returns(builder: ObjectValuesMap.(JsReaderContext) -> JsResult<T>): TypeBuilder<T>
+        fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
     }
 }

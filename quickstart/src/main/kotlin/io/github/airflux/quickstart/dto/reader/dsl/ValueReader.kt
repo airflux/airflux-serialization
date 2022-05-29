@@ -17,7 +17,7 @@ val ValueReader = reader<Value>(ObjectReaderConfiguration) {
     val amount = property(required(name = "amount", reader = AmountReader))
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
-    returns {
+    returns { _, location ->
         Value(amount = +amount, currency = +currency).success(location)
     }
 }

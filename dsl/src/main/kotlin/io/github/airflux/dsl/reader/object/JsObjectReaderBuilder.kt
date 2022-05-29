@@ -73,14 +73,14 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         JsNullableWithDefaultReaderProperty(builder.build())
             .also { propertiesBuilder.add(it) }
 
-    override fun returns(builder: ObjectValuesMap.(JsReaderContext) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
-        JsObjectReader.TypeBuilder { context, values ->
+    override fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
+        JsObjectReader.TypeBuilder { context, location, values ->
             try {
-                values.builder(context)
+                values.builder(context, location)
             } catch (expected: Throwable) {
                 context.getOrNull(ExceptionsHandler)
-                    ?.handleException(context, values.location, expected)
-                    ?.failure(values.location)
+                    ?.handleException(context, location, expected)
+                    ?.failure(location)
                     ?: throw expected
             }
         }
@@ -145,7 +145,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             }
 
             return if (failures.isEmpty())
-                typeBuilder(context, objectValuesMap)
+                typeBuilder(context, location, objectValuesMap)
             else
                 failures.merge()
         }
