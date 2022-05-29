@@ -125,10 +125,10 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
                 failures.add(failure)
             }
 
-            val objectValuesMap = ObjectValuesMap.builder(context, location, input)
+            val objectValuesMap = ObjectValuesMap.builder()
                 .apply {
                     properties.forEach { property ->
-                        val failure = tryAddValueBy(property)
+                        val failure = tryPutValueBy(context, location, property, input)
                         if (failure != null) {
                             if (failFast) return failure
                             failures.add(failure)
