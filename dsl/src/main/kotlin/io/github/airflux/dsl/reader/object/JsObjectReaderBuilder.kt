@@ -29,7 +29,7 @@ import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
 import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
+import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
@@ -45,27 +45,27 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         validation.block()
     }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P> =
+    override fun <P : Any> property(spec: JsObjectReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P> =
         JsObjectReaderProperty.Required(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P> =
+    override fun <P : Any> property(spec: JsObjectReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P> =
         JsObjectReaderProperty.Defaultable(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsObjectReaderProperty.Optional<P> =
+    override fun <P : Any> property(spec: JsObjectReaderPropertySpec.Optional<P>): JsObjectReaderProperty.Optional<P> =
         JsObjectReaderProperty.Optional(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsObjectReaderProperty.OptionalWithDefault<P> =
+    override fun <P : Any> property(spec: JsObjectReaderPropertySpec.OptionalWithDefault<P>): JsObjectReaderProperty.OptionalWithDefault<P> =
         JsObjectReaderProperty.OptionalWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsObjectReaderProperty.Nullable<P> =
+    override fun <P : Any> property(spec: JsObjectReaderPropertySpec.Nullable<P>): JsObjectReaderProperty.Nullable<P> =
         JsObjectReaderProperty.Nullable(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P> =
+    override fun <P : Any> property(spec: JsObjectReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P> =
         JsObjectReaderProperty.NullableWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 

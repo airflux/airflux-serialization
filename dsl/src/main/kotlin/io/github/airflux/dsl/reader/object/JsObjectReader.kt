@@ -22,7 +22,7 @@ import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
+import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectReaderPropertySpec
 
 @Suppress("unused")
 fun interface JsObjectReader<T> : JsReader<T> {
@@ -36,12 +36,12 @@ fun interface JsObjectReader<T> : JsReader<T> {
 
         fun validation(block: JsObjectValidation.Builder.() -> Unit)
 
-        fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsObjectReaderProperty.Optional<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsObjectReaderProperty.OptionalWithDefault<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsObjectReaderProperty.Nullable<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P>
+        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P>
+        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P>
+        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Optional<P>): JsObjectReaderProperty.Optional<P>
+        fun <P : Any> property(spec: JsObjectReaderPropertySpec.OptionalWithDefault<P>): JsObjectReaderProperty.OptionalWithDefault<P>
+        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Nullable<P>): JsObjectReaderProperty.Nullable<P>
+        fun <P : Any> property(spec: JsObjectReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P>
 
         fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
     }

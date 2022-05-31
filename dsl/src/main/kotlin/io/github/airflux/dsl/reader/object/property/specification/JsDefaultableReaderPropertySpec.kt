@@ -28,9 +28,9 @@ import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 internal class JsDefaultableReaderPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T>
-) : JsReaderPropertySpec.Defaultable<T> {
+) : JsObjectReaderPropertySpec.Defaultable<T> {
 
-    override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.Defaultable<T> =
+    override fun validation(validator: JsValidator<T>): JsObjectReaderPropertySpec.Defaultable<T> =
         JsDefaultableReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -38,18 +38,18 @@ internal class JsDefaultableReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun or(alt: JsReaderPropertySpec.Defaultable<T>): JsReaderPropertySpec.Defaultable<T> =
+    override fun or(alt: JsObjectReaderPropertySpec.Defaultable<T>): JsObjectReaderPropertySpec.Defaultable<T> =
         JsDefaultableReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>, default: () -> T): JsReaderPropertySpec.Defaultable<T> =
+        fun <T : Any> of(path: JsPath, reader: JsReader<T>, default: () -> T): JsObjectReaderPropertySpec.Defaultable<T> =
             JsDefaultableReaderPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader, default)
             )
 
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>, default: () -> T): JsReaderPropertySpec.Defaultable<T> =
+        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>, default: () -> T): JsObjectReaderPropertySpec.Defaultable<T> =
             JsDefaultableReaderPropertySpec(
                 path = paths,
                 reader = paths.items

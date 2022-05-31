@@ -28,9 +28,9 @@ import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T>
-) : JsReaderPropertySpec.OptionalWithDefault<T> {
+) : JsObjectReaderPropertySpec.OptionalWithDefault<T> {
 
-    override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
+    override fun validation(validator: JsValidator<T>): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
         JsOptionalWithDefaultReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -38,7 +38,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
             }
         )
 
-    override fun or(alt: JsReaderPropertySpec.OptionalWithDefault<T>): JsReaderPropertySpec.OptionalWithDefault<T> =
+    override fun or(alt: JsObjectReaderPropertySpec.OptionalWithDefault<T>): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
         JsOptionalWithDefaultReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
@@ -47,7 +47,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
             path: JsPath,
             reader: JsReader<T>,
             default: () -> T
-        ): JsReaderPropertySpec.OptionalWithDefault<T> =
+        ): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
             JsOptionalWithDefaultReaderPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader, default)
@@ -57,7 +57,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
             paths: JsPaths,
             reader: JsReader<T>,
             default: () -> T
-        ): JsReaderPropertySpec.OptionalWithDefault<T> =
+        ): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
             JsOptionalWithDefaultReaderPropertySpec(
                 path = paths,
                 reader = paths.items

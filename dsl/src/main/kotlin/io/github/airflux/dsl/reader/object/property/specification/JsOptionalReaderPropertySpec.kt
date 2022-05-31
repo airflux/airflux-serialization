@@ -30,9 +30,9 @@ import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 internal class JsOptionalReaderPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T?>
-) : JsReaderPropertySpec.Optional<T> {
+) : JsObjectReaderPropertySpec.Optional<T> {
 
-    override fun validation(validator: JsValidator<T?>): JsReaderPropertySpec.Optional<T> =
+    override fun validation(validator: JsValidator<T?>): JsObjectReaderPropertySpec.Optional<T> =
         JsOptionalReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -40,7 +40,7 @@ internal class JsOptionalReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun filter(predicate: JsPredicate<T>): JsReaderPropertySpec.Optional<T> =
+    override fun filter(predicate: JsPredicate<T>): JsObjectReaderPropertySpec.Optional<T> =
         JsOptionalReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -48,18 +48,18 @@ internal class JsOptionalReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun or(alt: JsReaderPropertySpec.Optional<T>): JsReaderPropertySpec.Optional<T> =
+    override fun or(alt: JsObjectReaderPropertySpec.Optional<T>): JsObjectReaderPropertySpec.Optional<T> =
         JsOptionalReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsReaderPropertySpec.Optional<T> =
+        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectReaderPropertySpec.Optional<T> =
             JsOptionalReaderPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader)
             )
 
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsReaderPropertySpec.Optional<T> =
+        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectReaderPropertySpec.Optional<T> =
             JsOptionalReaderPropertySpec(
                 path = paths,
                 reader = paths.items

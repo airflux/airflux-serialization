@@ -30,9 +30,9 @@ import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 internal class JsNullableReaderPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T?>
-) : JsReaderPropertySpec.Nullable<T> {
+) : JsObjectReaderPropertySpec.Nullable<T> {
 
-    override fun validation(validator: JsValidator<T?>): JsReaderPropertySpec.Nullable<T> =
+    override fun validation(validator: JsValidator<T?>): JsObjectReaderPropertySpec.Nullable<T> =
         JsNullableReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -40,7 +40,7 @@ internal class JsNullableReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun filter(predicate: JsPredicate<T>): JsReaderPropertySpec.Nullable<T> =
+    override fun filter(predicate: JsPredicate<T>): JsObjectReaderPropertySpec.Nullable<T> =
         JsNullableReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -48,18 +48,18 @@ internal class JsNullableReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun or(alt: JsReaderPropertySpec.Nullable<T>): JsReaderPropertySpec.Nullable<T> =
+    override fun or(alt: JsObjectReaderPropertySpec.Nullable<T>): JsObjectReaderPropertySpec.Nullable<T> =
         JsNullableReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsReaderPropertySpec.Nullable<T> =
+        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectReaderPropertySpec.Nullable<T> =
             JsNullableReaderPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader)
             )
 
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsReaderPropertySpec.Nullable<T> =
+        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectReaderPropertySpec.Nullable<T> =
             JsNullableReaderPropertySpec(
                 path = paths,
                 reader = paths.items

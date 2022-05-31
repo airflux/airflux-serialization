@@ -28,9 +28,9 @@ import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 internal class JsRequiredReaderPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T>
-) : JsReaderPropertySpec.Required<T> {
+) : JsObjectReaderPropertySpec.Required<T> {
 
-    override fun validation(validator: JsValidator<T>): JsReaderPropertySpec.Required<T> =
+    override fun validation(validator: JsValidator<T>): JsObjectReaderPropertySpec.Required<T> =
         JsRequiredReaderPropertySpec(
             path = path,
             reader = { context, location, input ->
@@ -38,18 +38,18 @@ internal class JsRequiredReaderPropertySpec<T : Any> private constructor(
             }
         )
 
-    override fun or(alt: JsReaderPropertySpec.Required<T>): JsReaderPropertySpec.Required<T> =
+    override fun or(alt: JsObjectReaderPropertySpec.Required<T>): JsObjectReaderPropertySpec.Required<T> =
         JsRequiredReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsReaderPropertySpec.Required<T> =
+        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectReaderPropertySpec.Required<T> =
             JsRequiredReaderPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader)
             )
 
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsReaderPropertySpec.Required<T> =
+        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectReaderPropertySpec.Required<T> =
             JsRequiredReaderPropertySpec(
                 path = paths,
                 reader = paths.items
