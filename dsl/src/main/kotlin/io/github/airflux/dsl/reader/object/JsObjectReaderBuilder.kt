@@ -82,39 +82,53 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         }
 
     fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
-        val properties = propertiesBuilder.build(checkUniquePropertyPath)
-        val validators = validation.build().let {
-            JsObjectValidators(
-                before = it.before.build(properties),
-                after = it.after.build(properties)
-            )
-        }
+        val configuration = buildConfiguration(typeBuilder = typeBuilder)
         return JsObjectReader { context, location, input ->
-            input.readAsObject(context, location) { c, l, v ->
-                read(c, l, v, validators, properties, typeBuilder)
+            input.readAsObject(context, location) { c, l, i ->
+                i.read(c, l, configuration)
             }
         }
     }
 
-    internal data class JsObjectValidators(
-        val before: JsObjectValidator.Before,
-        val after: JsObjectValidator.After
-    )
+    private fun buildConfiguration(typeBuilder: JsObjectReader.TypeBuilder<T>): Configuration<T> {
+        val properties: JsReaderProperties = propertiesBuilder.build(checkUniquePropertyPath)
+        val validators = validation.build()
+            .let {
+                Configuration.Validators(
+                    before = it.before.build(properties),
+                    after = it.after.build(properties)
+                )
+            }
+        return Configuration(
+            properties = properties,
+            validators = validators,
+            typeBuilder = typeBuilder
+        )
+    }
+
+    internal data class Configuration<T>(
+        val properties: JsReaderProperties,
+        val validators: Validators,
+        val typeBuilder: JsObjectReader.TypeBuilder<T>
+    ) {
+        internal data class Validators(
+            val before: JsObjectValidator.Before,
+            val after: JsObjectValidator.After
+        )
+    }
 
     companion object {
 
-        internal fun <T> read(
+        internal fun <T> JsObject.read(
             context: JsReaderContext,
             location: JsLocation,
-            input: JsObject,
-            validators: JsObjectValidators,
-            properties: JsReaderProperties,
-            typeBuilder: JsObjectReader.TypeBuilder<T>
+            configuration: Configuration<T>
         ): JsResult<T> {
             val failFast = context.failFast
             val failures = mutableListOf<JsResult.Failure>()
 
-            val preValidationErrors = validators.before.validation(context, properties, input)
+            val preValidationErrors =
+                configuration.validators.before.validation(context, configuration.properties, this)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
                 if (failFast) return failure
@@ -123,8 +137,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
 
             val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
                 .apply {
-                    properties.forEach { property ->
-                        input.read(context, location, property)
+                    configuration.properties.forEach { property ->
+                        this@read.read(context, location, property)
                             .fold(
                                 ifFailure = { failure ->
                                     if (failFast) return failure
@@ -137,7 +151,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
                     }
                 }
 
-            val postValidationErrors = validators.after.validation(context, properties, objectValuesMap, input)
+            val postValidationErrors =
+                configuration.validators.after.validation(context, configuration.properties, objectValuesMap, this)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
                 if (failFast) return failure
@@ -145,7 +160,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             }
 
             return if (failures.isEmpty())
-                typeBuilder(context, location, objectValuesMap)
+                configuration.typeBuilder(context, location, objectValuesMap)
             else
                 failures.merge()
         }
