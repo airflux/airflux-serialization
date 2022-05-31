@@ -22,7 +22,7 @@ import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextEl
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
@@ -30,7 +30,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 @Suppress("unused")
 object AdditionalProperties : JsObjectValidatorBuilder.Before {
 
-    override fun build(properties: JsReaderProperties): JsObjectValidator.Before {
+    override fun build(properties: JsObjectReaderProperties): JsObjectValidator.Before {
         val names: Set<String> = properties.names()
         return JsObjectValidator.Before { context, _, input ->
             val failFast = context.failFast
@@ -49,7 +49,7 @@ object AdditionalProperties : JsObjectValidatorBuilder.Before {
         }
     }
 
-    internal fun JsReaderProperties.names(): Set<String> {
+    internal fun JsObjectReaderProperties.names(): Set<String> {
         fun JsObjectReaderProperty.names(): List<String> = path.items
             .mapNotNull { path ->
                 when (val element = path.elements.first()) {

@@ -20,14 +20,14 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
 class MinProperties(val value: Int) : JsObjectValidatorBuilder.After {
 
-    override fun build(properties: JsReaderProperties): JsObjectValidator.After =
+    override fun build(properties: JsObjectReaderProperties): JsObjectValidator.After =
         JsObjectValidator.After { context, _, values, _ ->
             if (values.size < value) {
                 val errorBuilder = context.getValue(ErrorBuilder)

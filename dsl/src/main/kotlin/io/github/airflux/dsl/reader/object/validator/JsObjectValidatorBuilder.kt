@@ -16,7 +16,7 @@
 
 package io.github.airflux.dsl.reader.`object`.validator
 
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.After
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.Before
 
@@ -32,11 +32,11 @@ sealed interface JsObjectValidatorBuilder {
             this.build(properties).and(other.build(properties))
         }
 
-        fun build(properties: JsReaderProperties): JsObjectValidator.Before
+        fun build(properties: JsObjectReaderProperties): JsObjectValidator.Before
 
         companion object : Before {
             private val empty = JsObjectValidator.Before { _, _, _ -> null }
-            override fun build(properties: JsReaderProperties): JsObjectValidator.Before = empty
+            override fun build(properties: JsObjectReaderProperties): JsObjectValidator.Before = empty
         }
     }
 
@@ -50,11 +50,11 @@ sealed interface JsObjectValidatorBuilder {
             this.build(properties).and(other.build(properties))
         }
 
-        fun build(properties: JsReaderProperties): JsObjectValidator.After
+        fun build(properties: JsObjectReaderProperties): JsObjectValidator.After
 
         companion object : After {
             private val empty = JsObjectValidator.After { _, _, _, _ -> null }
-            override fun build(properties: JsReaderProperties): JsObjectValidator.After = empty
+            override fun build(properties: JsObjectReaderProperties): JsObjectValidator.After = empty
         }
     }
 }
