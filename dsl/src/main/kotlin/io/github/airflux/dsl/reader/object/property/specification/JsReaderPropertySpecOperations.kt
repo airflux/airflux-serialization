@@ -44,10 +44,10 @@ fun <T : Any> optional(name: String, reader: JsReader<T>) =
     optional(JsPath(name), reader)
 
 fun <T : Any> optional(path: JsPath, reader: JsReader<T>) =
-    JsOptionalReaderPropertySpec.of(path, reader)
+    JsObjectReaderOptionalPropertySpec.of(path, reader)
 
 fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>) =
-    JsOptionalReaderPropertySpec.of(paths, reader)
+    JsObjectReaderOptionalPropertySpec.of(paths, reader)
 
 fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
     optionalWithDefault(JsPath(name), reader, default)
