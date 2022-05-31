@@ -16,6 +16,7 @@
 
 package io.github.airflux.dsl.reader.`object`
 
+import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.exception.ExceptionsHandler
 import io.github.airflux.core.reader.context.option.failFast
@@ -23,16 +24,11 @@ import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.failure
+import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
-import io.github.airflux.dsl.reader.`object`.property.JsDefaultableReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsNullableReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsNullableWithDefaultReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsOptionalReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsOptionalWithDefaultReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
-import io.github.airflux.dsl.reader.`object`.property.JsRequiredReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
@@ -50,27 +46,27 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
     }
 
     override fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsReaderProperty.Required<P> =
-        JsRequiredReaderProperty(spec)
+        JsReaderProperty.Required(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsReaderProperty.Defaultable<P> =
-        JsDefaultableReaderProperty(spec)
+        JsReaderProperty.Defaultable(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsReaderProperty.Optional<P> =
-        JsOptionalReaderProperty(spec)
+        JsReaderProperty.Optional(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P> =
-        JsOptionalWithDefaultReaderProperty(spec)
+        JsReaderProperty.OptionalWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsReaderProperty.Nullable<P> =
-        JsNullableReaderProperty(spec)
+        JsReaderProperty.Nullable(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P> =
-        JsNullableWithDefaultReaderProperty(spec)
+        JsReaderProperty.NullableWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
@@ -125,17 +121,21 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
                 failures.add(failure)
             }
 
-            val objectValuesMap = ObjectValuesMap.builder()
+            val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
                 .apply {
                     properties.forEach { property ->
-                        val failure = tryPutValueBy(context, location, property, input)
-                        if (failure != null) {
-                            if (failFast) return failure
-                            failures.add(failure)
-                        }
+                        input.read(context, location, property)
+                            .fold(
+                                ifFailure = { failure ->
+                                    if (failFast) return failure
+                                    failures.add(failure)
+                                },
+                                ifSuccess = { value ->
+                                    this[property] = value
+                                }
+                            )
                     }
                 }
-                .build()
 
             val postValidationErrors = validators.after.validation(context, properties, objectValuesMap, input)
             if (postValidationErrors != null) {
@@ -148,6 +148,23 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
                 typeBuilder(context, location, objectValuesMap)
             else
                 failures.merge()
+        }
+
+        internal fun JsObject.read(
+            context: JsReaderContext,
+            location: JsLocation,
+            property: JsReaderProperty
+        ): JsResult<Any?> {
+            fun JsReaderProperty.getReader(): JsReader<Any?> = when (this) {
+                is JsReaderProperty.Required<*> -> this.reader
+                is JsReaderProperty.Defaultable<*> -> this.reader
+                is JsReaderProperty.Optional<*> -> this.reader
+                is JsReaderProperty.OptionalWithDefault<*> -> this.reader
+                is JsReaderProperty.Nullable<*> -> this.reader
+                is JsReaderProperty.NullableWithDefault<*> -> this.reader
+            }
+
+            return property.getReader().read(context, location, this)
         }
     }
 }

@@ -16,10 +16,6 @@
 
 package io.github.airflux.dsl.reader.`object`
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
 
 @Suppress("TooManyFunctions")
@@ -29,37 +25,21 @@ sealed interface ObjectValuesMap {
     val isNotEmpty: Boolean
     val size: Int
 
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Required<T>): T
+    infix operator fun <T : Any> get(property: JsReaderProperty.Required<T>): T
     operator fun <T : Any> JsReaderProperty.Required<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Defaultable<T>): T
+    infix operator fun <T : Any> get(property: JsReaderProperty.Defaultable<T>): T
     operator fun <T : Any> JsReaderProperty.Defaultable<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Optional<T>): T?
+    infix operator fun <T : Any> get(property: JsReaderProperty.Optional<T>): T?
     operator fun <T : Any> JsReaderProperty.Optional<T>.unaryPlus(): T? = get(this)
 
-    infix operator fun <T : Any> get(attr: JsReaderProperty.OptionalWithDefault<T>): T
+    infix operator fun <T : Any> get(property: JsReaderProperty.OptionalWithDefault<T>): T
     operator fun <T : Any> JsReaderProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(attr: JsReaderProperty.Nullable<T>): T?
+    infix operator fun <T : Any> get(property: JsReaderProperty.Nullable<T>): T?
     operator fun <T : Any> JsReaderProperty.Nullable<T>.unaryPlus(): T? = get(this)
 
-    infix operator fun <T : Any> get(attr: JsReaderProperty.NullableWithDefault<T>): T?
+    infix operator fun <T : Any> get(property: JsReaderProperty.NullableWithDefault<T>): T?
     operator fun <T : Any> JsReaderProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
-
-    sealed interface Builder {
-
-        fun tryPutValueBy(
-            context: JsReaderContext,
-            location: JsLocation,
-            property: JsReaderProperty,
-            input: JsObject
-        ): JsResult.Failure?
-
-        fun build(): ObjectValuesMap
-    }
-
-    companion object {
-        fun builder(): Builder = ObjectValuesMapInstance.BuilderInstance()
-    }
 }
