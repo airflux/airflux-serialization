@@ -27,13 +27,13 @@ import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
-internal class JsNullableWithDefaultReaderPropertySpec<T : Any> private constructor(
+internal class JsObjectReaderNullableWithDefaultPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T?>
 ) : JsObjectReaderPropertySpec.NullableWithDefault<T> {
 
     override fun validation(validator: JsValidator<T?>): JsObjectReaderPropertySpec.NullableWithDefault<T> =
-        JsNullableWithDefaultReaderPropertySpec(
+        JsObjectReaderNullableWithDefaultPropertySpec(
             path = path,
             reader = { context, location, input ->
                 reader.read(context, location, input).validation(context, validator)
@@ -41,7 +41,7 @@ internal class JsNullableWithDefaultReaderPropertySpec<T : Any> private construc
         )
 
     override fun filter(predicate: JsPredicate<T>): JsObjectReaderPropertySpec.NullableWithDefault<T> =
-        JsNullableWithDefaultReaderPropertySpec(
+        JsObjectReaderNullableWithDefaultPropertySpec(
             path = path,
             reader = { context, location, input ->
                 reader.read(context, location, input).filter(context, predicate)
@@ -49,7 +49,7 @@ internal class JsNullableWithDefaultReaderPropertySpec<T : Any> private construc
         )
 
     override fun or(alt: JsObjectReaderPropertySpec.NullableWithDefault<T>): JsObjectReaderPropertySpec.NullableWithDefault<T> =
-        JsNullableWithDefaultReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+        JsObjectReaderNullableWithDefaultPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
@@ -58,7 +58,7 @@ internal class JsNullableWithDefaultReaderPropertySpec<T : Any> private construc
             reader: JsReader<T>,
             default: () -> T
         ): JsObjectReaderPropertySpec.NullableWithDefault<T> =
-            JsNullableWithDefaultReaderPropertySpec(
+            JsObjectReaderNullableWithDefaultPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader, default)
             )
@@ -68,7 +68,7 @@ internal class JsNullableWithDefaultReaderPropertySpec<T : Any> private construc
             reader: JsReader<T>,
             default: () -> T
         ): JsObjectReaderPropertySpec.NullableWithDefault<T> =
-            JsNullableWithDefaultReaderPropertySpec(
+            JsObjectReaderNullableWithDefaultPropertySpec(
                 path = paths,
                 reader = paths.items
                     .map { path -> buildReader(path, reader, default) }
