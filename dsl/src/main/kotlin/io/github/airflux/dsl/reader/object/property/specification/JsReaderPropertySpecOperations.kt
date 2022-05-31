@@ -53,10 +53,10 @@ fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: ()
     optionalWithDefault(JsPath(name), reader, default)
 
 fun <T : Any> optionalWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsOptionalWithDefaultReaderPropertySpec.of(path, reader, default)
+    JsObjectReaderOptionalWithDefaultPropertySpec.of(path, reader, default)
 
 fun <T : Any> optionalWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
-    JsOptionalWithDefaultReaderPropertySpec.of(paths, reader, default)
+    JsObjectReaderOptionalWithDefaultPropertySpec.of(paths, reader, default)
 
 fun <T : Any> nullable(name: String, reader: JsReader<T>) =
     nullable(JsPath(name), reader)

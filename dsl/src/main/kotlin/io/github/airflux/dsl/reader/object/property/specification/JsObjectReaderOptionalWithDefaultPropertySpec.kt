@@ -25,13 +25,13 @@ import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
-internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private constructor(
+internal class JsObjectReaderOptionalWithDefaultPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
     override val reader: JsReader<T>
 ) : JsObjectReaderPropertySpec.OptionalWithDefault<T> {
 
     override fun validation(validator: JsValidator<T>): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
-        JsOptionalWithDefaultReaderPropertySpec(
+        JsObjectReaderOptionalWithDefaultPropertySpec(
             path = path,
             reader = { context, location, input ->
                 reader.read(context, location, input).validation(context, validator)
@@ -39,7 +39,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
         )
 
     override fun or(alt: JsObjectReaderPropertySpec.OptionalWithDefault<T>): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
-        JsOptionalWithDefaultReaderPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+        JsObjectReaderOptionalWithDefaultPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
@@ -48,7 +48,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
             reader: JsReader<T>,
             default: () -> T
         ): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
-            JsOptionalWithDefaultReaderPropertySpec(
+            JsObjectReaderOptionalWithDefaultPropertySpec(
                 path = JsPaths(path),
                 reader = buildReader(path, reader, default)
             )
@@ -58,7 +58,7 @@ internal class JsOptionalWithDefaultReaderPropertySpec<T : Any> private construc
             reader: JsReader<T>,
             default: () -> T
         ): JsObjectReaderPropertySpec.OptionalWithDefault<T> =
-            JsOptionalWithDefaultReaderPropertySpec(
+            JsObjectReaderOptionalWithDefaultPropertySpec(
                 path = paths,
                 reader = paths.items
                     .map { path -> buildReader(path, reader, default) }
