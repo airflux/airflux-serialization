@@ -16,7 +16,7 @@
 
 package io.github.airflux.dsl.reader.`object`
 
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 
 @Suppress("TooManyFunctions")
 sealed interface ObjectValuesMap {
@@ -25,21 +25,21 @@ sealed interface ObjectValuesMap {
     val isNotEmpty: Boolean
     val size: Int
 
-    infix operator fun <T : Any> get(property: JsReaderProperty.Required<T>): T
-    operator fun <T : Any> JsReaderProperty.Required<T>.unaryPlus(): T = get(this)
+    infix operator fun <T : Any> get(property: JsObjectReaderProperty.Required<T>): T
+    operator fun <T : Any> JsObjectReaderProperty.Required<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(property: JsReaderProperty.Defaultable<T>): T
-    operator fun <T : Any> JsReaderProperty.Defaultable<T>.unaryPlus(): T = get(this)
+    infix operator fun <T : Any> get(property: JsObjectReaderProperty.Defaultable<T>): T
+    operator fun <T : Any> JsObjectReaderProperty.Defaultable<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(property: JsReaderProperty.Optional<T>): T?
-    operator fun <T : Any> JsReaderProperty.Optional<T>.unaryPlus(): T? = get(this)
+    infix operator fun <T : Any> get(property: JsObjectReaderProperty.Optional<T>): T?
+    operator fun <T : Any> JsObjectReaderProperty.Optional<T>.unaryPlus(): T? = get(this)
 
-    infix operator fun <T : Any> get(property: JsReaderProperty.OptionalWithDefault<T>): T
-    operator fun <T : Any> JsReaderProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
+    infix operator fun <T : Any> get(property: JsObjectReaderProperty.OptionalWithDefault<T>): T
+    operator fun <T : Any> JsObjectReaderProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(property: JsReaderProperty.Nullable<T>): T?
-    operator fun <T : Any> JsReaderProperty.Nullable<T>.unaryPlus(): T? = get(this)
+    infix operator fun <T : Any> get(property: JsObjectReaderProperty.Nullable<T>): T?
+    operator fun <T : Any> JsObjectReaderProperty.Nullable<T>.unaryPlus(): T? = get(this)
 
-    infix operator fun <T : Any> get(property: JsReaderProperty.NullableWithDefault<T>): T?
-    operator fun <T : Any> JsReaderProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
+    infix operator fun <T : Any> get(property: JsObjectReaderProperty.NullableWithDefault<T>): T?
+    operator fun <T : Any> JsObjectReaderProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
 }

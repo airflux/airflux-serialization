@@ -21,7 +21,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
 
 @Suppress("unused")
@@ -36,12 +36,12 @@ fun interface JsObjectReader<T> : JsReader<T> {
 
         fun validation(block: JsObjectValidation.Builder.() -> Unit)
 
-        fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsReaderProperty.Required<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsReaderProperty.Defaultable<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsReaderProperty.Optional<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsReaderProperty.Nullable<P>
-        fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P>
+        fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P>
+        fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P>
+        fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsObjectReaderProperty.Optional<P>
+        fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsObjectReaderProperty.OptionalWithDefault<P>
+        fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsObjectReaderProperty.Nullable<P>
+        fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P>
 
         fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
     }

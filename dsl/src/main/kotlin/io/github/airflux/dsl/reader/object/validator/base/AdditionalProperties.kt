@@ -23,7 +23,7 @@ import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
@@ -50,7 +50,7 @@ object AdditionalProperties : JsObjectValidatorBuilder.Before {
     }
 
     internal fun JsReaderProperties.names(): Set<String> {
-        fun JsReaderProperty.names(): List<String> = path.items
+        fun JsObjectReaderProperty.names(): List<String> = path.items
             .mapNotNull { path ->
                 when (val element = path.elements.first()) {
                     is PathElement.Key -> element.get

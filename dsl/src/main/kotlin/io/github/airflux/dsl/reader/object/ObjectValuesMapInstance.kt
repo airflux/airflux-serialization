@@ -16,10 +16,10 @@
 
 package io.github.airflux.dsl.reader.`object`
 
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 
 internal class ObjectValuesMapInstance : ObjectValuesMap {
-    private val items: MutableMap<JsReaderProperty, Any?> = mutableMapOf()
+    private val items: MutableMap<JsObjectReaderProperty, Any?> = mutableMapOf()
 
     override val isEmpty: Boolean
         get() = items.isEmpty()
@@ -30,38 +30,38 @@ internal class ObjectValuesMapInstance : ObjectValuesMap {
     override val size: Int
         get() = items.size
 
-    override infix operator fun <T : Any> get(property: JsReaderProperty.Required<T>): T =
+    override infix operator fun <T : Any> get(property: JsObjectReaderProperty.Required<T>): T =
         items.getNonNullable(property)
 
-    override infix operator fun <T : Any> get(property: JsReaderProperty.Defaultable<T>): T =
+    override infix operator fun <T : Any> get(property: JsObjectReaderProperty.Defaultable<T>): T =
         items.getNonNullable(property)
 
-    override infix operator fun <T : Any> get(property: JsReaderProperty.Optional<T>): T? =
+    override infix operator fun <T : Any> get(property: JsObjectReaderProperty.Optional<T>): T? =
         items.getNullable(property)
 
-    override infix operator fun <T : Any> get(property: JsReaderProperty.OptionalWithDefault<T>): T =
+    override infix operator fun <T : Any> get(property: JsObjectReaderProperty.OptionalWithDefault<T>): T =
         items.getNonNullable(property)
 
-    override infix operator fun <T : Any> get(property: JsReaderProperty.Nullable<T>): T? =
+    override infix operator fun <T : Any> get(property: JsObjectReaderProperty.Nullable<T>): T? =
         items.getNullable(property)
 
-    override infix operator fun <T : Any> get(property: JsReaderProperty.NullableWithDefault<T>): T? =
+    override infix operator fun <T : Any> get(property: JsObjectReaderProperty.NullableWithDefault<T>): T? =
         items.getNullable(property)
 
-    operator fun set(property: JsReaderProperty, value: Any?) {
+    operator fun set(property: JsObjectReaderProperty, value: Any?) {
         items[property] = value
     }
 
     companion object {
 
-        private fun <T> Map<JsReaderProperty, Any?>.getNonNullable(property: JsReaderProperty): T =
+        private fun <T> Map<JsObjectReaderProperty, Any?>.getNonNullable(property: JsObjectReaderProperty): T =
             getValue(property)
                 .let {
                     @Suppress("UNCHECKED_CAST")
                     checkNotNull(it) as T
                 }
 
-        private fun <T> Map<JsReaderProperty, Any?>.getNullable(property: JsReaderProperty): T? =
+        private fun <T> Map<JsObjectReaderProperty, Any?>.getNullable(property: JsObjectReaderProperty): T? =
             getValue(property)
                 ?.let {
                     @Suppress("UNCHECKED_CAST")

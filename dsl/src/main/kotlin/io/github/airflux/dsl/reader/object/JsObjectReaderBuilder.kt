@@ -28,7 +28,7 @@ import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
 import io.github.airflux.dsl.reader.`object`.property.JsReaderProperties
-import io.github.airflux.dsl.reader.`object`.property.JsReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
@@ -45,28 +45,28 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         validation.block()
     }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsReaderProperty.Required<P> =
-        JsReaderProperty.Required(spec)
+    override fun <P : Any> property(spec: JsReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P> =
+        JsObjectReaderProperty.Required(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsReaderProperty.Defaultable<P> =
-        JsReaderProperty.Defaultable(spec)
+    override fun <P : Any> property(spec: JsReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P> =
+        JsObjectReaderProperty.Defaultable(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsReaderProperty.Optional<P> =
-        JsReaderProperty.Optional(spec)
+    override fun <P : Any> property(spec: JsReaderPropertySpec.Optional<P>): JsObjectReaderProperty.Optional<P> =
+        JsObjectReaderProperty.Optional(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsReaderProperty.OptionalWithDefault<P> =
-        JsReaderProperty.OptionalWithDefault(spec)
+    override fun <P : Any> property(spec: JsReaderPropertySpec.OptionalWithDefault<P>): JsObjectReaderProperty.OptionalWithDefault<P> =
+        JsObjectReaderProperty.OptionalWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsReaderProperty.Nullable<P> =
-        JsReaderProperty.Nullable(spec)
+    override fun <P : Any> property(spec: JsReaderPropertySpec.Nullable<P>): JsObjectReaderProperty.Nullable<P> =
+        JsObjectReaderProperty.Nullable(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsReaderProperty.NullableWithDefault<P> =
-        JsReaderProperty.NullableWithDefault(spec)
+    override fun <P : Any> property(spec: JsReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P> =
+        JsObjectReaderProperty.NullableWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
     override fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
@@ -168,15 +168,15 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         internal fun JsObject.read(
             context: JsReaderContext,
             location: JsLocation,
-            property: JsReaderProperty
+            property: JsObjectReaderProperty
         ): JsResult<Any?> {
-            fun JsReaderProperty.getReader(): JsReader<Any?> = when (this) {
-                is JsReaderProperty.Required<*> -> this.reader
-                is JsReaderProperty.Defaultable<*> -> this.reader
-                is JsReaderProperty.Optional<*> -> this.reader
-                is JsReaderProperty.OptionalWithDefault<*> -> this.reader
-                is JsReaderProperty.Nullable<*> -> this.reader
-                is JsReaderProperty.NullableWithDefault<*> -> this.reader
+            fun JsObjectReaderProperty.getReader(): JsReader<Any?> = when (this) {
+                is JsObjectReaderProperty.Required<*> -> this.reader
+                is JsObjectReaderProperty.Defaultable<*> -> this.reader
+                is JsObjectReaderProperty.Optional<*> -> this.reader
+                is JsObjectReaderProperty.OptionalWithDefault<*> -> this.reader
+                is JsObjectReaderProperty.Nullable<*> -> this.reader
+                is JsObjectReaderProperty.NullableWithDefault<*> -> this.reader
             }
 
             return property.getReader().read(context, location, this)
