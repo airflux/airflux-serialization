@@ -35,10 +35,10 @@ fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =
     defaultable(JsPath(name), reader, default)
 
 fun <T : Any> defaultable(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsDefaultableReaderPropertySpec.of(path, reader, default)
+    JsObjectReaderDefaultablePropertySpec.of(path, reader, default)
 
 fun <T : Any> defaultable(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
-    JsDefaultableReaderPropertySpec.of(paths, reader, default)
+    JsObjectReaderDefaultablePropertySpec.of(paths, reader, default)
 
 fun <T : Any> optional(name: String, reader: JsReader<T>) =
     optional(JsPath(name), reader)
