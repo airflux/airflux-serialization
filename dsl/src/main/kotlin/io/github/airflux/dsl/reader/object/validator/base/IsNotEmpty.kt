@@ -20,7 +20,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsErrors
-import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
+import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
@@ -32,7 +32,7 @@ object IsNotEmpty : JsObjectValidatorBuilder.After {
         if (values.isEmpty) JsErrors.of(errorBuilder.build()) else null
     }
 
-    override fun build(properties: JsObjectReaderProperties): JsObjectValidator.After = validator
+    override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 
     class ErrorBuilder(private val function: () -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {

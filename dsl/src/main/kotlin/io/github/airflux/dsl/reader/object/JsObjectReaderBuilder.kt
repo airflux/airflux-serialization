@@ -27,7 +27,7 @@ import io.github.airflux.core.reader.result.failure
 import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
-import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
+import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectReaderPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
@@ -37,7 +37,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
     private val validation: JsObjectReader.Validation.Builder = configuration.validation
         .let { JsObjectReader.Validation.Builder(before = it.before, after = it.after) }
 
-    private val propertiesBuilder = JsObjectReaderProperties.Builder()
+    private val propertiesBuilder = JsObjectProperties.Builder()
 
     override var checkUniquePropertyPath: Boolean = configuration.checkUniquePropertyPath
 
@@ -91,7 +91,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
     }
 
     private fun buildConfiguration(typeBuilder: JsObjectReader.TypeBuilder<T>): Configuration<T> {
-        val properties: JsObjectReaderProperties = propertiesBuilder.build(checkUniquePropertyPath)
+        val properties: JsObjectProperties = propertiesBuilder.build(checkUniquePropertyPath)
         val validators = validation.build()
             .let {
                 Configuration.Validators(
@@ -107,7 +107,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
     }
 
     internal data class Configuration<T>(
-        val properties: JsObjectReaderProperties,
+        val properties: JsObjectProperties,
         val validators: Validators,
         val typeBuilder: JsObjectReader.TypeBuilder<T>
     ) {

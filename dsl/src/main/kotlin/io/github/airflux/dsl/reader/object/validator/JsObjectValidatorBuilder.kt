@@ -16,18 +16,18 @@
 
 package io.github.airflux.dsl.reader.`object`.validator
 
-import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperties
+import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.After
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.Before
 
 sealed interface JsObjectValidatorBuilder {
 
     fun interface Before : JsObjectValidatorBuilder {
-        fun build(properties: JsObjectReaderProperties): JsObjectValidator.Before
+        fun build(properties: JsObjectProperties): JsObjectValidator.Before
     }
 
     fun interface After : JsObjectValidatorBuilder {
-        fun build(properties: JsObjectReaderProperties): JsObjectValidator.After
+        fun build(properties: JsObjectProperties): JsObjectValidator.After
     }
 }
 
