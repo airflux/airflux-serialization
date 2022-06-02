@@ -20,6 +20,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsBoolean
 import io.github.airflux.core.value.JsNumber
 import io.github.airflux.core.value.JsObject
@@ -64,4 +65,16 @@ inline fun <T> JsValue.readAsObject(
     else {
         val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.OBJECT, this.type))
+    }
+
+inline fun <T> JsValue.readAsArray(
+    context: JsReaderContext,
+    location: JsLocation,
+    reader: (JsReaderContext, JsLocation, JsArray<*>) -> JsResult<T>
+): JsResult<T> =
+    if (this is JsArray<*>)
+        reader(context, location, this)
+    else {
+        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.ARRAY, this.type))
     }
