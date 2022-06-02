@@ -18,12 +18,12 @@ package io.github.airflux.dsl.reader.`object`.property
 
 import io.github.airflux.core.path.JsPath
 
-class JsObjectReaderProperties(private val elements: List<JsObjectReaderProperty>) : Collection<JsObjectReaderProperty> by elements {
+class JsObjectReaderProperties(private val elements: List<JsObjectProperty>) : Collection<JsObjectProperty> by elements {
 
     internal class Builder {
-        private val properties = mutableListOf<JsObjectReaderProperty>()
+        private val properties = mutableListOf<JsObjectProperty>()
 
-        fun add(property: JsObjectReaderProperty) {
+        fun add(property: JsObjectProperty) {
             properties.add(property)
         }
 
@@ -32,7 +32,7 @@ class JsObjectReaderProperties(private val elements: List<JsObjectReaderProperty
             return JsObjectReaderProperties(properties)
         }
 
-        internal fun checkingUniquePropertyPath(properties: List<JsObjectReaderProperty>) {
+        internal fun checkingUniquePropertyPath(properties: List<JsObjectProperty>) {
             val paths = mutableSetOf<JsPath>()
             properties.forEach { property ->
                 property.path.items.forEach { path ->

@@ -3,7 +3,7 @@ package io.github.airflux.dsl.reader
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMapInstance
-import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
+import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.defaultable
 import io.github.airflux.dsl.reader.`object`.property.specification.nullable
 import io.github.airflux.dsl.reader.`object`.property.specification.nullableWithDefault
@@ -45,7 +45,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for required property" - {
-                    val property = JsObjectReaderProperty.Required(required(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Required(required(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -62,7 +62,7 @@ class ObjectValuesMapTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        JsObjectReaderProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
+                        JsObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -78,7 +78,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for optional property" - {
-                    val property = JsObjectReaderProperty.Optional(optional(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -94,7 +94,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for optional with default property" - {
-                    val property = JsObjectReaderProperty.OptionalWithDefault(
+                    val property = JsObjectProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
 
@@ -112,7 +112,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = JsObjectReaderProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -128,7 +128,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for nullable with default property" - {
-                    val property = JsObjectReaderProperty.NullableWithDefault(
+                    val property = JsObjectProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
 
@@ -149,7 +149,7 @@ class ObjectValuesMapTest : FreeSpec() {
             "when the added value is not null" - {
 
                 "for required property" - {
-                    val property = JsObjectReaderProperty.Required(required(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Required(required(PROPERTY_NAME, StringReader))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -182,7 +182,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.Required(required(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsObjectProperty.Required(required(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -200,7 +200,7 @@ class ObjectValuesMapTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        JsObjectReaderProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
+                        JsObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -233,7 +233,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.Defaultable(
+                        val unknownProperty = JsObjectProperty.Defaultable(
                             defaultable(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                         )
 
@@ -252,7 +252,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for optional property" - {
-                    val property = JsObjectReaderProperty.Optional(optional(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -285,7 +285,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsObjectProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -302,7 +302,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for optional with default property" - {
-                    val property = JsObjectReaderProperty.OptionalWithDefault(
+                    val property = JsObjectProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
@@ -337,7 +337,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.OptionalWithDefault(
+                        val unknownProperty = JsObjectProperty.OptionalWithDefault(
                             optionalWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                         )
 
@@ -356,7 +356,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = JsObjectReaderProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -389,7 +389,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsObjectProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -406,7 +406,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for nullable with default property" - {
-                    val property = JsObjectReaderProperty.NullableWithDefault(
+                    val property = JsObjectProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
@@ -441,7 +441,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.NullableWithDefault(
+                        val unknownProperty = JsObjectProperty.NullableWithDefault(
                             nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                         )
 
@@ -463,7 +463,7 @@ class ObjectValuesMapTest : FreeSpec() {
             "when the added value is null" - {
 
                 "for required property" - {
-                    val property = JsObjectReaderProperty.Required(required(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Required(required(PROPERTY_NAME, StringReader))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = null
                     }
@@ -495,7 +495,7 @@ class ObjectValuesMapTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        JsObjectReaderProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
+                        JsObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = null
                     }
@@ -526,7 +526,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for optional property" - {
-                    val property = JsObjectReaderProperty.Optional(optional(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = null
                     }
@@ -559,7 +559,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsObjectProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -576,7 +576,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for optional with default property" - {
-                    val property = JsObjectReaderProperty.OptionalWithDefault(
+                    val property = JsObjectProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
@@ -609,7 +609,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = JsObjectReaderProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = JsObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[property] = null
                     }
@@ -642,7 +642,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsObjectProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -659,7 +659,7 @@ class ObjectValuesMapTest : FreeSpec() {
                 }
 
                 "for nullable with default property" - {
-                    val property = JsObjectReaderProperty.NullableWithDefault(
+                    val property = JsObjectProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
                     val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
@@ -694,7 +694,7 @@ class ObjectValuesMapTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = JsObjectReaderProperty.NullableWithDefault(
+                        val unknownProperty = JsObjectProperty.NullableWithDefault(
                             nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                         )
 
