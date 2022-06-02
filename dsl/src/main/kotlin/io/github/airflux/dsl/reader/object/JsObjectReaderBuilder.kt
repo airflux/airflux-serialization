@@ -34,14 +34,14 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
 internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration) : JsObjectReader.Builder<T> {
-    private val validation: JsObjectValidation.Builder = configuration.validation
-        .let { JsObjectValidation.Builder(before = it.before, after = it.after) }
+    private val validation: JsObjectReader.Validation.Builder = configuration.validation
+        .let { JsObjectReader.Validation.Builder(before = it.before, after = it.after) }
 
     private val propertiesBuilder = JsObjectReaderProperties.Builder()
 
     override var checkUniquePropertyPath: Boolean = configuration.checkUniquePropertyPath
 
-    override fun validation(block: JsObjectValidation.Builder.() -> Unit) {
+    override fun validation(block: JsObjectReader.Validation.Builder.() -> Unit) {
         validation.block()
     }
 
@@ -95,8 +95,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         val validators = validation.build()
             .let {
                 Configuration.Validators(
-                    before = it.before.build(properties),
-                    after = it.after.build(properties)
+                    before = it.before?.build(properties),
+                    after = it.after?.build(properties)
                 )
             }
         return Configuration(
@@ -112,8 +112,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         val typeBuilder: JsObjectReader.TypeBuilder<T>
     ) {
         internal data class Validators(
-            val before: JsObjectValidator.Before,
-            val after: JsObjectValidator.After
+            val before: JsObjectValidator.Before?,
+            val after: JsObjectValidator.After?
         )
     }
 
@@ -127,8 +127,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             val failFast = context.failFast
             val failures = mutableListOf<JsResult.Failure>()
 
-            val preValidationErrors =
-                configuration.validators.before.validation(context, configuration.properties, this)
+            val preValidationErrors = configuration.validators.before
+                ?.validation(context, configuration.properties, this)
             if (preValidationErrors != null) {
                 val failure = JsResult.Failure(location, preValidationErrors)
                 if (failFast) return failure
@@ -151,8 +151,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
                     }
                 }
 
-            val postValidationErrors =
-                configuration.validators.after.validation(context, configuration.properties, objectValuesMap, this)
+            val postValidationErrors = configuration.validators.after
+                ?.validation(context, configuration.properties, objectValuesMap, this)
             if (postValidationErrors != null) {
                 val failure = JsResult.Failure(location, postValidationErrors)
                 if (failFast) return failure

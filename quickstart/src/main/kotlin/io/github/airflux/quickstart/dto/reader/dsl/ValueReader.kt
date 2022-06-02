@@ -2,6 +2,7 @@ package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.core.reader.result.success
 import io.github.airflux.dsl.reader.`object`.property.specification.required
+import io.github.airflux.dsl.reader.`object`.validator.and
 import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalProperties
 import io.github.airflux.dsl.reader.`object`.validator.base.MaxProperties
 import io.github.airflux.dsl.reader.`object`.validator.base.MinProperties

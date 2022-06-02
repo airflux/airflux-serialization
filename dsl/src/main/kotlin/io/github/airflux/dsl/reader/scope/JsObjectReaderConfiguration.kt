@@ -17,22 +17,22 @@
 package io.github.airflux.dsl.reader.scope
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.JsObjectValidation
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 fun objectReaderConfiguration(block: JsObjectReaderConfiguration.Builder.() -> Unit): JsObjectReaderConfiguration =
     JsObjectReaderConfiguration.Builder().apply(block).build()
 
 class JsObjectReaderConfiguration private constructor(
     val checkUniquePropertyPath: Boolean,
-    val validation: JsObjectValidation
+    val validation: Validation
 ) {
 
     @AirfluxMarker
     class Builder {
         var checkUniquePropertyPath: Boolean = false
-        private var validation: JsObjectValidation.Builder = JsObjectValidation.Builder()
+        private var validation: Validation.Builder = Validation.Builder()
 
-        fun validation(block: JsObjectValidation.Builder.() -> Unit) {
+        fun validation(block: Validation.Builder.() -> Unit) {
             validation.block()
         }
 
@@ -41,6 +41,20 @@ class JsObjectReaderConfiguration private constructor(
                 checkUniquePropertyPath = checkUniquePropertyPath,
                 validation = validation.build()
             )
+    }
+
+    class Validation private constructor(
+        val before: JsObjectValidatorBuilder.Before?,
+        val after: JsObjectValidatorBuilder.After?
+    ) {
+
+        @AirfluxMarker
+        class Builder(
+            var before: JsObjectValidatorBuilder.Before? = null,
+            var after: JsObjectValidatorBuilder.After? = null
+        ) {
+            internal fun build(): Validation = Validation(before, after)
+        }
     }
 
     companion object {

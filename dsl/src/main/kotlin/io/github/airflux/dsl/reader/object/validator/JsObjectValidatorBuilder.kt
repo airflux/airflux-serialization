@@ -23,38 +23,42 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.
 sealed interface JsObjectValidatorBuilder {
 
     fun interface Before : JsObjectValidatorBuilder {
-
-        infix fun or(other: Before): Before = Before { properties ->
-            this.build(properties).or(other.build(properties))
-        }
-
-        infix fun and(other: Before): Before = Before { properties ->
-            this.build(properties).and(other.build(properties))
-        }
-
         fun build(properties: JsObjectReaderProperties): JsObjectValidator.Before
-
-        companion object : Before {
-            private val empty = JsObjectValidator.Before { _, _, _ -> null }
-            override fun build(properties: JsObjectReaderProperties): JsObjectValidator.Before = empty
-        }
     }
 
     fun interface After : JsObjectValidatorBuilder {
-
-        infix fun or(other: After): After = After { properties ->
-            this.build(properties).or(other.build(properties))
-        }
-
-        infix fun and(other: After): After = After { properties ->
-            this.build(properties).and(other.build(properties))
-        }
-
         fun build(properties: JsObjectReaderProperties): JsObjectValidator.After
-
-        companion object : After {
-            private val empty = JsObjectValidator.After { _, _, _, _ -> null }
-            override fun build(properties: JsObjectReaderProperties): JsObjectValidator.After = empty
-        }
     }
 }
+
+infix fun Before?.or(alt: Before): Before =
+    if (this == null)
+        alt
+    else
+        Before { properties ->
+            this.build(properties).or(alt.build(properties))
+        }
+
+infix fun Before?.and(alt: Before): Before =
+    if (this == null)
+        alt
+    else
+        Before { properties ->
+            this.build(properties).and(alt.build(properties))
+        }
+
+infix fun After?.or(alt: After): After =
+    if (this == null)
+        alt
+    else
+        After { properties ->
+            this.build(properties).or(alt.build(properties))
+        }
+
+infix fun After?.and(alt: After): After =
+    if (this == null)
+        alt
+    else
+        After { properties ->
+            this.build(properties).and(alt.build(properties))
+        }

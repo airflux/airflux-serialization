@@ -23,6 +23,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsObjectReaderProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectReaderPropertySpec
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
 fun interface JsObjectReader<T> : JsReader<T> {
@@ -34,7 +35,7 @@ fun interface JsObjectReader<T> : JsReader<T> {
 
         var checkUniquePropertyPath: Boolean
 
-        fun validation(block: JsObjectValidation.Builder.() -> Unit)
+        fun validation(block: Validation.Builder.() -> Unit)
 
         fun <P : Any> property(spec: JsObjectReaderPropertySpec.Required<P>): JsObjectReaderProperty.Required<P>
         fun <P : Any> property(spec: JsObjectReaderPropertySpec.Defaultable<P>): JsObjectReaderProperty.Defaultable<P>
@@ -44,5 +45,19 @@ fun interface JsObjectReader<T> : JsReader<T> {
         fun <P : Any> property(spec: JsObjectReaderPropertySpec.NullableWithDefault<P>): JsObjectReaderProperty.NullableWithDefault<P>
 
         fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
+    }
+
+    class Validation private constructor(
+        val before: JsObjectValidatorBuilder.Before?,
+        val after: JsObjectValidatorBuilder.After?
+    ) {
+
+        @AirfluxMarker
+        class Builder(
+            var before: JsObjectValidatorBuilder.Before? = null,
+            var after: JsObjectValidatorBuilder.After? = null
+        ) {
+            internal fun build(): Validation = Validation(before, after)
+        }
     }
 }
