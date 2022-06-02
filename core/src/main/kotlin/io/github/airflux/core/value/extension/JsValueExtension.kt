@@ -54,7 +54,7 @@ fun <T : Number> JsValue.readAsNumber(
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.NUMBER, this.type))
     }
 
-fun <T> JsValue.readAsObject(
+inline fun <T> JsValue.readAsObject(
     context: JsReaderContext,
     location: JsLocation,
     reader: (JsReaderContext, JsLocation, JsObject) -> JsResult<T>
