@@ -22,7 +22,7 @@ import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
-import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectReaderPropertySpec
+import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
@@ -37,12 +37,12 @@ fun interface JsObjectReader<T> : JsReader<T> {
 
         fun validation(block: Validation.Builder.() -> Unit)
 
-        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Required<P>): JsObjectProperty.Required<P>
-        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P>
-        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Optional<P>): JsObjectProperty.Optional<P>
-        fun <P : Any> property(spec: JsObjectReaderPropertySpec.OptionalWithDefault<P>): JsObjectProperty.OptionalWithDefault<P>
-        fun <P : Any> property(spec: JsObjectReaderPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
-        fun <P : Any> property(spec: JsObjectReaderPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P>
+        fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P>
+        fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P>
+        fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P>
+        fun <P : Any> property(spec: JsObjectPropertySpec.OptionalWithDefault<P>): JsObjectProperty.OptionalWithDefault<P>
+        fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
+        fun <P : Any> property(spec: JsObjectPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P>
 
         fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
     }

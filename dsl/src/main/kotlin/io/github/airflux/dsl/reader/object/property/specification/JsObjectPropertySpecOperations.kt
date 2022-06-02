@@ -26,52 +26,52 @@ fun <T : Any> required(name: String, reader: JsReader<T>) =
     required(JsPath(name), reader)
 
 fun <T : Any> required(path: JsPath, reader: JsReader<T>) =
-    JsObjectReaderRequiredPropertySpec.of(path, reader)
+    JsObjectRequiredPropertySpec.of(path, reader)
 
 fun <T : Any> required(paths: JsPaths, reader: JsReader<T>) =
-    JsObjectReaderRequiredPropertySpec.of(paths, reader)
+    JsObjectRequiredPropertySpec.of(paths, reader)
 
 fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =
     defaultable(JsPath(name), reader, default)
 
 fun <T : Any> defaultable(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsObjectReaderDefaultablePropertySpec.of(path, reader, default)
+    JsObjectDefaultablePropertySpec.of(path, reader, default)
 
 fun <T : Any> defaultable(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
-    JsObjectReaderDefaultablePropertySpec.of(paths, reader, default)
+    JsObjectDefaultablePropertySpec.of(paths, reader, default)
 
 fun <T : Any> optional(name: String, reader: JsReader<T>) =
     optional(JsPath(name), reader)
 
 fun <T : Any> optional(path: JsPath, reader: JsReader<T>) =
-    JsObjectReaderOptionalPropertySpec.of(path, reader)
+    JsObjectOptionalPropertySpec.of(path, reader)
 
 fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>) =
-    JsObjectReaderOptionalPropertySpec.of(paths, reader)
+    JsObjectOptionalPropertySpec.of(paths, reader)
 
 fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
     optionalWithDefault(JsPath(name), reader, default)
 
 fun <T : Any> optionalWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsObjectReaderOptionalWithDefaultPropertySpec.of(path, reader, default)
+    JsObjectOptionalWithDefaultPropertySpec.of(path, reader, default)
 
 fun <T : Any> optionalWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
-    JsObjectReaderOptionalWithDefaultPropertySpec.of(paths, reader, default)
+    JsObjectOptionalWithDefaultPropertySpec.of(paths, reader, default)
 
 fun <T : Any> nullable(name: String, reader: JsReader<T>) =
     nullable(JsPath(name), reader)
 
 fun <T : Any> nullable(path: JsPath, reader: JsReader<T>) =
-    JsObjectReaderNullablePropertySpec.of(path, reader)
+    JsObjectNullablePropertySpec.of(path, reader)
 
 fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>) =
-    JsObjectReaderNullablePropertySpec.of(paths, reader)
+    JsObjectNullablePropertySpec.of(paths, reader)
 
 fun <T : Any> nullableWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
     nullableWithDefault(JsPath(name), reader, default)
 
 fun <T : Any> nullableWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
-    JsObjectReaderNullableWithDefaultPropertySpec.of(path, reader, default)
+    JsObjectNullableWithDefaultPropertySpec.of(path, reader, default)
 
 fun <T : Any> nullableWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
-    JsObjectReaderNullableWithDefaultPropertySpec.of(paths, reader, default)
+    JsObjectNullableWithDefaultPropertySpec.of(paths, reader, default)

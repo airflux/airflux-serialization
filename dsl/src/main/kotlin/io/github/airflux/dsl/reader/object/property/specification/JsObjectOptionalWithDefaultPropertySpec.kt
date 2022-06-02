@@ -20,57 +20,55 @@ import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.or
-import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.readNullable
-import io.github.airflux.core.reader.result.extension.filter
+import io.github.airflux.core.reader.readOptional
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
-internal class JsObjectReaderNullablePropertySpec<T : Any> private constructor(
+internal class JsObjectOptionalWithDefaultPropertySpec<T : Any> private constructor(
     override val path: JsPaths,
-    override val reader: JsReader<T?>
-) : JsObjectReaderPropertySpec.Nullable<T> {
+    override val reader: JsReader<T>
+) : JsObjectPropertySpec.OptionalWithDefault<T> {
 
-    override fun validation(validator: JsValidator<T?>): JsObjectReaderPropertySpec.Nullable<T> =
-        JsObjectReaderNullablePropertySpec(
+    override fun validation(validator: JsValidator<T>): JsObjectPropertySpec.OptionalWithDefault<T> =
+        JsObjectOptionalWithDefaultPropertySpec(
             path = path,
             reader = { context, location, input ->
                 reader.read(context, location, input).validation(context, validator)
             }
         )
 
-    override fun filter(predicate: JsPredicate<T>): JsObjectReaderPropertySpec.Nullable<T> =
-        JsObjectReaderNullablePropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).filter(context, predicate)
-            }
-        )
-
-    override fun or(alt: JsObjectReaderPropertySpec.Nullable<T>): JsObjectReaderPropertySpec.Nullable<T> =
-        JsObjectReaderNullablePropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+    override fun or(alt: JsObjectPropertySpec.OptionalWithDefault<T>): JsObjectPropertySpec.OptionalWithDefault<T> =
+        JsObjectOptionalWithDefaultPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
 
     companion object {
 
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectReaderPropertySpec.Nullable<T> =
-            JsObjectReaderNullablePropertySpec(
+        fun <T : Any> of(
+            path: JsPath,
+            reader: JsReader<T>,
+            default: () -> T
+        ): JsObjectPropertySpec.OptionalWithDefault<T> =
+            JsObjectOptionalWithDefaultPropertySpec(
                 path = JsPaths(path),
-                reader = buildReader(path, reader)
+                reader = buildReader(path, reader, default)
             )
 
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectReaderPropertySpec.Nullable<T> =
-            JsObjectReaderNullablePropertySpec(
+        fun <T : Any> of(
+            paths: JsPaths,
+            reader: JsReader<T>,
+            default: () -> T
+        ): JsObjectPropertySpec.OptionalWithDefault<T> =
+            JsObjectOptionalWithDefaultPropertySpec(
                 path = paths,
                 reader = paths.items
-                    .map { path -> buildReader(path, reader) }
+                    .map { path -> buildReader(path, reader, default) }
                     .reduce { acc, element -> acc.or(element) }
             )
 
-        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>) =
+        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>, default: () -> T) =
             JsReader { context, location, input ->
                 val lookup = JsLookup.apply(location, path, input)
-                readNullable(context, lookup, reader)
+                readOptional(context, lookup, reader, default)
             }
     }
 }
