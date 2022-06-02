@@ -22,9 +22,9 @@ import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
 fun <T> reader(
     configuration: JsObjectReaderConfiguration = JsObjectReaderConfiguration.DEFAULT,
-    block: JsObjectReader.Builder<T>.() -> JsObjectReader.TypeBuilder<T>
+    block: JsObjectReader.Builder<T>.() -> JsObjectReader.ResultBuilder<T>
 ): JsObjectReader<T> {
     val readerBuilder = JsObjectReaderBuilder<T>(configuration)
-    val typeBuilder = readerBuilder.block()
-    return readerBuilder.build(typeBuilder)
+    val resultBuilder = readerBuilder.block()
+    return readerBuilder.build(resultBuilder)
 }

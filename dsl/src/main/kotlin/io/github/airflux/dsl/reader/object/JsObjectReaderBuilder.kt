@@ -69,8 +69,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         JsObjectProperty.NullableWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): JsObjectReader.TypeBuilder<T> =
-        JsObjectReader.TypeBuilder { context, location, values ->
+    override fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): JsObjectReader.ResultBuilder<T> =
+        JsObjectReader.ResultBuilder { context, location, values ->
             try {
                 values.builder(context, location)
             } catch (expected: Throwable) {
@@ -81,8 +81,8 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             }
         }
 
-    fun build(typeBuilder: JsObjectReader.TypeBuilder<T>): JsObjectReader<T> {
-        val configuration = buildConfiguration(typeBuilder = typeBuilder)
+    fun build(resultBuilder: JsObjectReader.ResultBuilder<T>): JsObjectReader<T> {
+        val configuration = buildConfiguration(resultBuilder = resultBuilder)
         return JsObjectReader { context, location, input ->
             input.readAsObject(context, location) { c, l, i ->
                 i.read(c, l, configuration)
@@ -90,7 +90,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         }
     }
 
-    private fun buildConfiguration(typeBuilder: JsObjectReader.TypeBuilder<T>): Configuration<T> {
+    private fun buildConfiguration(resultBuilder: JsObjectReader.ResultBuilder<T>): Configuration<T> {
         val properties: JsObjectProperties = propertiesBuilder.build(checkUniquePropertyPath)
         val validators = validation.build()
             .let {
@@ -102,14 +102,14 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         return Configuration(
             properties = properties,
             validators = validators,
-            typeBuilder = typeBuilder
+            resultBuilder = resultBuilder
         )
     }
 
     internal data class Configuration<T>(
         val properties: JsObjectProperties,
         val validators: Validators,
-        val typeBuilder: JsObjectReader.TypeBuilder<T>
+        val resultBuilder: JsObjectReader.ResultBuilder<T>
     ) {
         internal data class Validators(
             val before: JsObjectValidator.Before?,
@@ -160,7 +160,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             }
 
             return if (failures.isEmpty())
-                configuration.typeBuilder(context, location, objectValuesMap)
+                configuration.resultBuilder(context, location, objectValuesMap)
             else
                 failures.merge()
         }

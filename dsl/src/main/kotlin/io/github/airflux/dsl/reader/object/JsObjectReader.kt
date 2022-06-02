@@ -28,7 +28,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 @Suppress("unused")
 fun interface JsObjectReader<T> : JsReader<T> {
 
-    fun interface TypeBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
+    fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
 
     @AirfluxMarker
     interface Builder<T> {
@@ -44,7 +44,7 @@ fun interface JsObjectReader<T> : JsReader<T> {
         fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
         fun <P : Any> property(spec: JsObjectPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P>
 
-        fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): TypeBuilder<T>
+        fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T>
     }
 
     class Validation private constructor(
