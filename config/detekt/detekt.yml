@@ -773,7 +773,7 @@ style:
   UseCheckOrError:
     active: true
   UseDataClass:
-    active: true
+    active: false
     allowVars: false
   UseEmptyCounterpart:
     active: true
