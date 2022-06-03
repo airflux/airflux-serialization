@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.context.exception
+package io.github.airflux.dsl.reader.context.exception
 
 import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext

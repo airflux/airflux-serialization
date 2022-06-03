@@ -18,7 +18,7 @@ package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.exception.ExceptionsHandler
+import io.github.airflux.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
