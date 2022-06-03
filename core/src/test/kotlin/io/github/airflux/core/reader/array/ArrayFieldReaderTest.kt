@@ -1,8 +1,6 @@
-package io.github.airflux.core.reader.validator
+package io.github.airflux.core.reader.array
 
 import io.github.airflux.core.common.JsonErrors
-import io.github.airflux.core.reader.array.plus
-import io.github.airflux.core.reader.array.readArray
 import io.github.airflux.core.reader.base.BooleanReader
 import io.github.airflux.core.reader.base.IntReader
 import io.github.airflux.core.reader.base.LongReader

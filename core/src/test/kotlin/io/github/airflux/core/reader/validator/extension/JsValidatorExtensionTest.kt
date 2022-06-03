@@ -9,7 +9,7 @@ import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
-import io.github.airflux.core.reader.readRequired
+import io.github.airflux.core.reader.`object`.readRequired
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult

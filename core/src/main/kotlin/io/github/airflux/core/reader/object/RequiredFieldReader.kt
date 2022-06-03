@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader
+package io.github.airflux.core.reader.`object`
 
 import io.github.airflux.core.lookup.JsLookup
+import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 
 /**
- * Reads optional field or return default if a field is not found.
+ * Reads required field.
  *
  * - If a node is found ([from] is [JsLookup.Defined]) then applies [reader]
- * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then returns [defaultValue]
+ * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then an error is returned
+ *   that was build using [PathMissingErrorBuilder]
  * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
  *   that was build using [InvalidTypeErrorBuilder]
  */
-fun <T : Any> readOptional(
-    context: JsReaderContext,
-    from: JsLookup,
-    using: JsReader<T>,
-    defaultValue: () -> T
-): JsResult<T> = when (from) {
+fun <T : Any> readRequired(context: JsReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T> = when (from) {
     is JsLookup.Defined -> using.read(context, from.location, from.value)
-    is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
+    is JsLookup.Undefined.PathMissing -> {
+        val errorBuilder = context.getValue(PathMissingErrorBuilder)
+        JsResult.Failure(location = from.location, error = errorBuilder.build())
+    }
     is JsLookup.Undefined.InvalidType -> {
         val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
         JsResult.Failure(location = from.location, error = errorBuilder.build(from.expected, from.actual))

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader
+package io.github.airflux.core.reader.`object`
 
 import io.github.airflux.core.lookup.JsLookup
+import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNull
 
@@ -28,12 +28,16 @@ import io.github.airflux.core.value.JsNull
  *
  * - If a node is found with a value no 'null' ([from] is [JsLookup.Defined]) then applies [reader]
  * - If a node is found with a value 'null' ([from] is [JsLookup.Defined]) then returns 'null'
- * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then an error is returned
- *   that was build using [PathMissingErrorBuilder]
+ * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then returns [defaultValue]
  * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
  *   that was build using [InvalidTypeErrorBuilder]
  */
-fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> {
+fun <T : Any> readNullable(
+    context: JsReaderContext,
+    from: JsLookup,
+    using: JsReader<T>,
+    defaultValue: () -> T?
+): JsResult<T?> {
 
     fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup.Defined, using: JsReader<T>): JsResult<T?> =
         if (from.value is JsNull)
@@ -43,10 +47,7 @@ fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup, using: JsRe
 
     return when (from) {
         is JsLookup.Defined -> readNullable(context, from, using)
-        is JsLookup.Undefined.PathMissing -> {
-            val errorBuilder = context.getValue(PathMissingErrorBuilder)
-            JsResult.Failure(location = from.location, error = errorBuilder.build())
-        }
+        is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
         is JsLookup.Undefined.InvalidType -> {
             val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
             JsResult.Failure(
