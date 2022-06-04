@@ -145,7 +145,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
                                     failures.add(failure)
                                 },
                                 ifSuccess = { value ->
-                                    this[property] = value
+                                    this[property] = value.value
                                 }
                             )
                     }
