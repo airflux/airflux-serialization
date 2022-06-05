@@ -16,8 +16,11 @@
 
 package io.github.airflux.dsl.reader
 
+import io.github.airflux.dsl.reader.array.JsArrayReader
+import io.github.airflux.dsl.reader.array.JsArrayReaderBuilder
 import io.github.airflux.dsl.reader.`object`.JsObjectReader
 import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder
+import io.github.airflux.dsl.reader.scope.JsArrayReaderConfiguration
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
 fun <T> reader(
@@ -25,6 +28,15 @@ fun <T> reader(
     block: JsObjectReader.Builder<T>.() -> JsObjectReader.ResultBuilder<T>
 ): JsObjectReader<T> {
     val readerBuilder = JsObjectReaderBuilder<T>(configuration)
+    val resultBuilder = readerBuilder.block()
+    return readerBuilder.build(resultBuilder)
+}
+
+fun <T> arrayReader(
+    configuration: JsArrayReaderConfiguration = JsArrayReaderConfiguration.DEFAULT,
+    block: JsArrayReader.Builder<T>.() -> JsArrayReader.ResultBuilder<T>
+): JsArrayReader<T> {
+    val readerBuilder = JsArrayReaderBuilder<T>(configuration)
     val resultBuilder = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }

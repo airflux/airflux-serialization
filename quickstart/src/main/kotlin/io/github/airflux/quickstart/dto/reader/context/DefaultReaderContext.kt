@@ -1,5 +1,6 @@
 package io.github.airflux.quickstart.dto.reader.context
 
+import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
@@ -29,6 +30,7 @@ fun JsReaderContextBuilder.ErrorsBuilder.readerErrorBuilders() {
     register(PathMissingErrorBuilder { JsonErrors.PathMissing })
     +InvalidTypeErrorBuilder(JsonErrors::InvalidType)
     +ValueCastErrorBuilder(JsonErrors::ValueCast)
+    +AdditionalItemsErrorBuilder { JsonErrors.AdditionalItems }
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {

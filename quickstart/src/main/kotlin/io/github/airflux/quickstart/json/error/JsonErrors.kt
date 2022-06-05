@@ -14,6 +14,8 @@ sealed class JsonErrors : JsError {
 
     data class EnumCast(val expected: String, val actual: String) : JsonErrors()
 
+    object AdditionalItems : Validation.Arrays()
+
     sealed class Validation : JsonErrors() {
 
         sealed class Numbers : Validation() {
