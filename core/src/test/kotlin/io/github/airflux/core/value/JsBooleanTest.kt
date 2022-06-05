@@ -4,7 +4,7 @@ import io.github.airflux.core.common.ObjectContract
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class JsBooleanTest {
+internal class JsBooleanTest {
 
     @Test
     fun `Testing the toString function of the JsBoolean class`() {

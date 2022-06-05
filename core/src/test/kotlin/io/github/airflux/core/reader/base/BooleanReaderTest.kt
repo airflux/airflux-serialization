@@ -12,7 +12,7 @@ import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 
-class BooleanReaderTest : FreeSpec() {
+internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))

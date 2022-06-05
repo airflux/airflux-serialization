@@ -18,8 +18,8 @@ package io.github.airflux.dsl.extension
 
 import io.github.airflux.core.path.JsPath
 
-infix operator fun JsPath.Companion.div(key: String): JsPath = JsPath(key)
-infix operator fun JsPath.Companion.div(idx: Int): JsPath = JsPath(idx)
+public infix operator fun JsPath.Companion.div(key: String): JsPath = JsPath(key)
+public infix operator fun JsPath.Companion.div(idx: Int): JsPath = JsPath(idx)
 
-infix operator fun JsPath.div(key: String): JsPath = append(key)
-infix operator fun JsPath.div(idx: Int): JsPath = append(idx)
+public infix operator fun JsPath.div(key: String): JsPath = append(key)
+public infix operator fun JsPath.div(idx: Int): JsPath = append(idx)

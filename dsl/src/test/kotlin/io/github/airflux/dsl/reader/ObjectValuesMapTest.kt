@@ -15,7 +15,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-class ObjectValuesMapTest : FreeSpec() {
+internal class ObjectValuesMapTest : FreeSpec() {
 
     companion object {
         private const val UNKNOWN_PROPERTY_NAME = "name"

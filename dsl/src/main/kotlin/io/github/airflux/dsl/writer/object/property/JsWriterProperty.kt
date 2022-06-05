@@ -16,35 +16,35 @@
 
 package io.github.airflux.dsl.writer.`object`.property
 
-sealed interface JsWriterProperty<T, P : Any> {
+public sealed interface JsWriterProperty<T, P : Any> {
 
-    val name: String
+    public val name: String
 
-    sealed interface Required<T, P : Any> : JsWriterProperty<T, P>
+    public sealed interface Required<T, P : Any> : JsWriterProperty<T, P>
 
-    sealed interface Optional<T, P : Any> : JsWriterProperty<T, P> {
+    public sealed interface Optional<T, P : Any> : JsWriterProperty<T, P> {
 
-        sealed interface Simple<T, P : Any> : Optional<T, P>
+        public sealed interface Simple<T, P : Any> : Optional<T, P>
 
-        sealed interface Array<T, P : Any> : Optional<T, P> {
-            fun skipIfEmpty()
+        public sealed interface Array<T, P : Any> : Optional<T, P> {
+            public fun skipIfEmpty()
         }
 
-        sealed interface Object<T, P : Any> : Optional<T, P> {
-            fun skipIfEmpty()
+        public sealed interface Object<T, P : Any> : Optional<T, P> {
+            public fun skipIfEmpty()
         }
     }
 
-    sealed interface Nullable<T, P : Any> : JsWriterProperty<T, P> {
+    public sealed interface Nullable<T, P : Any> : JsWriterProperty<T, P> {
 
-        sealed interface Simple<T, P : Any> : Nullable<T, P>
+        public sealed interface Simple<T, P : Any> : Nullable<T, P>
 
-        sealed interface Array<T, P : Any> : Nullable<T, P> {
-            fun writeNullIfEmpty()
+        public sealed interface Array<T, P : Any> : Nullable<T, P> {
+            public fun writeNullIfEmpty()
         }
 
-        sealed interface Object<T, P : Any> : Nullable<T, P> {
-            fun writeNullIfEmpty()
+        public sealed interface Object<T, P : Any> : Nullable<T, P> {
+            public fun writeNullIfEmpty()
         }
     }
 }

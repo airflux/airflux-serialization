@@ -24,36 +24,36 @@ import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsValue
 
 @Suppress("unused")
-sealed class JsLookup {
+public sealed class JsLookup {
 
-    abstract val location: JsLocation
+    public abstract val location: JsLocation
 
-    fun apply(key: String): JsLookup = apply(PathElement.Key(key))
-    fun apply(idx: Int): JsLookup = apply(PathElement.Idx(idx))
-    abstract fun apply(key: PathElement.Key): JsLookup
-    abstract fun apply(idx: PathElement.Idx): JsLookup
+    public fun apply(key: String): JsLookup = apply(PathElement.Key(key))
+    public fun apply(idx: Int): JsLookup = apply(PathElement.Idx(idx))
+    public abstract fun apply(key: PathElement.Key): JsLookup
+    public abstract fun apply(idx: PathElement.Idx): JsLookup
 
-    data class Defined(override val location: JsLocation, val value: JsValue) : JsLookup() {
+    public data class Defined(override val location: JsLocation, val value: JsValue) : JsLookup() {
         override fun apply(key: PathElement.Key): JsLookup = apply(location, key, value)
         override fun apply(idx: PathElement.Idx): JsLookup = apply(location, idx, value)
     }
 
-    sealed class Undefined : JsLookup() {
+    public sealed class Undefined : JsLookup() {
         override fun apply(key: PathElement.Key): JsLookup = this
         override fun apply(idx: PathElement.Idx): JsLookup = this
 
-        data class PathMissing(override val location: JsLocation) : Undefined()
+        public data class PathMissing(override val location: JsLocation) : Undefined()
 
-        data class InvalidType(
+        public data class InvalidType(
             override val location: JsLocation,
             val expected: JsValue.Type,
             val actual: JsValue.Type
         ) : Undefined()
     }
 
-    companion object {
+    public companion object {
 
-        fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup =
+        public fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup =
             if (value is JsObject)
                 value[key]
                     ?.let { Defined(location = location.append(key), value = it) }
@@ -61,7 +61,7 @@ sealed class JsLookup {
             else
                 Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
 
-        fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup =
+        public fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup =
             if (value is JsArray<*>)
                 value[idx]
                     ?.let { Defined(location = location.append(idx), value = it) }
@@ -69,7 +69,7 @@ sealed class JsLookup {
             else
                 Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
 
-        fun apply(location: JsLocation, path: JsPath, value: JsValue): JsLookup {
+        public fun apply(location: JsLocation, path: JsPath, value: JsValue): JsLookup {
             tailrec fun apply(location: JsLocation, path: JsPath, idxElement: Int, value: JsValue): JsLookup {
                 if (idxElement == path.elements.size) return Defined(location, value)
                 return when (val element = path.elements[idxElement]) {

@@ -17,4 +17,4 @@
 package io.github.airflux.core.common
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun <T> identity(value: T): T = value
+public inline fun <T> identity(value: T): T = value

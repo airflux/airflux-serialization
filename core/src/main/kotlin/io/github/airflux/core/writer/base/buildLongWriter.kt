@@ -22,4 +22,4 @@ import io.github.airflux.core.writer.JsWriter
 /**
  * Writer for primitive [Long] type.
  */
-fun buildLongWriter(): JsWriter<Long> = JsWriter { value -> JsNumber.valueOf(value) }
+public fun buildLongWriter(): JsWriter<Long> = JsWriter { value -> JsNumber.valueOf(value) }

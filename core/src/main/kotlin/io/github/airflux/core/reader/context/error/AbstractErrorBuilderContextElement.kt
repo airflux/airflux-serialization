@@ -18,6 +18,6 @@ package io.github.airflux.core.reader.context.error
 
 import io.github.airflux.core.reader.context.JsReaderContext
 
-abstract class AbstractErrorBuilderContextElement<T : ErrorBuilderContextElement>(
+public abstract class AbstractErrorBuilderContextElement<T : ErrorBuilderContextElement>(
     override val key: JsReaderContext.Key<T>
 ) : ErrorBuilderContextElement

@@ -20,52 +20,52 @@ import io.github.airflux.core.reader.JsReader
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectPropertySpec
 
-sealed class JsObjectProperty {
-    abstract val path: JsPaths
+public sealed class JsObjectProperty {
+    public abstract val path: JsPaths
 
-    class Required<T : Any> private constructor(
+    public class Required<T : Any> private constructor(
         override val path: JsPaths,
-        val reader: JsReader<T>
+        public val reader: JsReader<T>
     ) : JsObjectProperty() {
 
         internal constructor(spec: JsObjectPropertySpec.Required<T>) : this(spec.path, spec.reader)
     }
 
-    class Defaultable<T : Any> private constructor(
+    public class Defaultable<T : Any> private constructor(
         override val path: JsPaths,
-        val reader: JsReader<T>
+        public val reader: JsReader<T>
     ) : JsObjectProperty() {
 
         internal constructor(spec: JsObjectPropertySpec.Defaultable<T>) : this(spec.path, spec.reader)
     }
 
-    class Optional<T : Any> private constructor(
+    public class Optional<T : Any> private constructor(
         override val path: JsPaths,
-        val reader: JsReader<T?>
+        public val reader: JsReader<T?>
     ) : JsObjectProperty() {
 
         internal constructor(spec: JsObjectPropertySpec.Optional<T>) : this(spec.path, spec.reader)
     }
 
-    class OptionalWithDefault<T : Any> private constructor(
+    public class OptionalWithDefault<T : Any> private constructor(
         override val path: JsPaths,
-        val reader: JsReader<T>
+        public val reader: JsReader<T>
     ) : JsObjectProperty() {
 
         internal constructor(spec: JsObjectPropertySpec.OptionalWithDefault<T>) : this(spec.path, spec.reader)
     }
 
-    class Nullable<T : Any> private constructor(
+    public class Nullable<T : Any> private constructor(
         override val path: JsPaths,
-        val reader: JsReader<T?>
+        public val reader: JsReader<T?>
     ) : JsObjectProperty() {
 
         internal constructor(spec: JsObjectPropertySpec.Nullable<T>) : this(spec.path, spec.reader)
     }
 
-    class NullableWithDefault<T : Any> private constructor(
+    public class NullableWithDefault<T : Any> private constructor(
         override val path: JsPaths,
-        val reader: JsReader<T?>
+        public val reader: JsReader<T?>
     ) : JsObjectProperty() {
 
         internal constructor(spec: JsObjectPropertySpec.NullableWithDefault<T>) : this(spec.path, spec.reader)

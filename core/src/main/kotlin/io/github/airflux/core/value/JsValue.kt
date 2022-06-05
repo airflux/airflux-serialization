@@ -18,34 +18,34 @@ package io.github.airflux.core.value
 
 import io.github.airflux.core.path.PathElement
 
-sealed class JsValue {
+public sealed class JsValue {
 
-    enum class Type { ARRAY, BOOLEAN, NULL, NUMBER, OBJECT, STRING }
+    public enum class Type { ARRAY, BOOLEAN, NULL, NUMBER, OBJECT, STRING }
 
-    abstract val type: Type
+    public abstract val type: Type
 }
 
-object JsNull : JsValue() {
+public object JsNull : JsValue() {
     override val type: Type = Type.NULL
 
     override fun toString(): String = "null"
 }
 
-sealed class JsBoolean(val get: Boolean) : JsValue() {
+public sealed class JsBoolean(public val get: Boolean) : JsValue() {
 
-    companion object {
-        fun valueOf(value: Boolean): JsBoolean = if (value) True else False
+    public companion object {
+        public fun valueOf(value: Boolean): JsBoolean = if (value) True else False
     }
 
     override val type: Type = Type.BOOLEAN
 
-    object True : JsBoolean(true)
-    object False : JsBoolean(false)
+    public object True : JsBoolean(true)
+    public object False : JsBoolean(false)
 
     override fun toString(): String = get.toString()
 }
 
-class JsString(val get: String) : JsValue() {
+public class JsString(public val get: String) : JsValue() {
 
     override val type: Type = Type.STRING
 
@@ -57,26 +57,26 @@ class JsString(val get: String) : JsValue() {
     override fun hashCode(): Int = get.hashCode()
 }
 
-class JsNumber private constructor(val get: String) : JsValue() {
+public class JsNumber private constructor(public val get: String) : JsValue() {
 
-    companion object {
+    public companion object {
         private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
         private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
         private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
 
-        fun valueOf(value: Byte) = JsNumber(value.toString())
-        fun valueOf(value: Short) = JsNumber(value.toString())
-        fun valueOf(value: Int) = JsNumber(value.toString())
-        fun valueOf(value: Long) = JsNumber(value.toString())
+        public fun valueOf(value: Byte): JsNumber = JsNumber(value.toString())
+        public fun valueOf(value: Short): JsNumber = JsNumber(value.toString())
+        public fun valueOf(value: Int): JsNumber = JsNumber(value.toString())
+        public fun valueOf(value: Long): JsNumber = JsNumber(value.toString())
 
-        fun valueOf(value: String): JsNumber? = if (value.matches(pattern)) JsNumber(value) else null
+        public fun valueOf(value: String): JsNumber? = if (value.matches(pattern)) JsNumber(value) else null
     }
 
     override val type: Type = Type.NUMBER
 
-    val isInteger: Boolean = get.matches(integerNumberPattern)
+    public val isInteger: Boolean = get.matches(integerNumberPattern)
 
-    val isReal: Boolean = get.matches(realNumberPattern)
+    public val isReal: Boolean = get.matches(realNumberPattern)
 
     override fun toString(): String = get
 
@@ -86,22 +86,22 @@ class JsNumber private constructor(val get: String) : JsValue() {
     override fun hashCode(): Int = get.hashCode()
 }
 
-class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue(), Iterable<T> {
+public class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue(), Iterable<T> {
 
-    companion object {
-        operator fun <T : JsValue> invoke(vararg elements: T): JsArray<T> = JsArray(elements.toList())
+    public companion object {
+        public operator fun <T : JsValue> invoke(vararg elements: T): JsArray<T> = JsArray(elements.toList())
     }
 
     override val type: Type = Type.ARRAY
 
-    operator fun get(idx: PathElement.Idx): JsValue? = get(idx.get)
+    public operator fun get(idx: PathElement.Idx): JsValue? = get(idx.get)
 
-    operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
+    public operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
 
-    val size: Int
+    public val size: Int
         get() = items.size
 
-    fun isEmpty(): Boolean = items.isEmpty()
+    public fun isEmpty(): Boolean = items.isEmpty()
 
     override fun iterator(): Iterator<T> = items.iterator()
 
@@ -113,24 +113,24 @@ class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue()
     override fun hashCode(): Int = items.hashCode()
 }
 
-class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsValue(),
-                                                                            Iterable<Map.Entry<String, JsValue>> {
+public class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsValue(),
+                                                                                   Iterable<Map.Entry<String, JsValue>> {
 
-    companion object {
+    public companion object {
 
-        operator fun invoke(vararg properties: Pair<String, JsValue>): JsObject = JsObject(properties.toMap())
+        public operator fun invoke(vararg properties: Pair<String, JsValue>): JsObject = JsObject(properties.toMap())
     }
 
     override val type: Type = Type.OBJECT
 
-    operator fun get(key: PathElement.Key): JsValue? = get(key.get)
+    public operator fun get(key: PathElement.Key): JsValue? = get(key.get)
 
-    operator fun get(key: String): JsValue? = properties[key]
+    public operator fun get(key: String): JsValue? = properties[key]
 
-    val count: Int
+    public val count: Int
         get() = properties.size
 
-    fun isEmpty(): Boolean = properties.isEmpty()
+    public fun isEmpty(): Boolean = properties.isEmpty()
 
     override fun iterator(): Iterator<Map.Entry<String, JsValue>> = properties.iterator()
 

@@ -23,7 +23,7 @@ import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder
 import io.github.airflux.dsl.reader.scope.JsArrayReaderConfiguration
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
-fun <T> reader(
+public fun <T> reader(
     configuration: JsObjectReaderConfiguration = JsObjectReaderConfiguration.DEFAULT,
     block: JsObjectReader.Builder<T>.() -> JsObjectReader.ResultBuilder<T>
 ): JsObjectReader<T> {
@@ -32,7 +32,7 @@ fun <T> reader(
     return readerBuilder.build(resultBuilder)
 }
 
-fun <T> arrayReader(
+public fun <T> arrayReader(
     configuration: JsArrayReaderConfiguration = JsArrayReaderConfiguration.DEFAULT,
     block: JsArrayReader.Builder<T>.() -> JsArrayReader.ResultBuilder<T>
 ): JsArrayReader<T> {

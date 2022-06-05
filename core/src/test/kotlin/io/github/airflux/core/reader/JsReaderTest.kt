@@ -10,7 +10,7 @@ import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsValue
 import kotlin.test.Test
 
-class JsReaderTest {
+internal class JsReaderTest {
 
     companion object {
         private val context = JsReaderContext()

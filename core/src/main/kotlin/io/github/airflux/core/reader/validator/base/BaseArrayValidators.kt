@@ -22,21 +22,21 @@ import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.validator.JsValidator
 
 @Suppress("unused")
-object BaseArrayValidators {
+public object BaseArrayValidators {
 
-    fun <T, C> minItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<C>
+    public fun <T, C> minItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<C>
         where C : Collection<T> =
         JsValidator { _, _, values ->
             if (values.size < expected) JsErrors.of(error(expected, values.size)) else null
         }
 
-    fun <T, C> maxItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<C>
+    public fun <T, C> maxItems(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<C>
         where C : Collection<T> =
         JsValidator { _, _, values ->
             if (values.size > expected) JsErrors.of(error(expected, values.size)) else null
         }
 
-    fun <T, K> isUnique(
+    public fun <T, K> isUnique(
         keySelector: (T) -> K,
         error: (index: Int, value: K) -> JsError
     ): JsValidator<Collection<T>> =

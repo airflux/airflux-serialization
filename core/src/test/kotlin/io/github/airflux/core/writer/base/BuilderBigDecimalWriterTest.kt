@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BuilderBigDecimalWriterTest {
+internal class BuilderBigDecimalWriterTest {
 
     companion object {
         private val value = BigDecimal("10.50")

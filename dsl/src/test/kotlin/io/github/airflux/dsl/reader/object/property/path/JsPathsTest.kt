@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.shouldBe
 
-class JsPathsTest : FreeSpec() {
+internal class JsPathsTest : FreeSpec() {
 
     companion object {
         private val pathUser = JsPath("user")

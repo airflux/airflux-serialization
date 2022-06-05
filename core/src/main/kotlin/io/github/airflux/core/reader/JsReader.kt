@@ -24,12 +24,12 @@ import io.github.airflux.core.reader.result.recovery
 import io.github.airflux.core.value.JsValue
 
 @Suppress("unused")
-fun interface JsReader<out T> {
+public fun interface JsReader<out T> {
 
     /**
      * Convert the [JsValue] into a T
      */
-    fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T>
+    public fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T>
 
     /**
      * Create a new [JsReader] which maps the value produced by this [JsReader].
@@ -39,7 +39,7 @@ fun interface JsReader<out T> {
      * if successful
      * @return A new [JsReader] with the updated behavior.
      */
-    infix fun <R> map(transform: (T) -> R): JsReader<R> =
+    public infix fun <R> map(transform: (T) -> R): JsReader<R> =
         JsReader { context, location, input -> read(context, location, input).map(transform) }
 }
 
@@ -51,7 +51,7 @@ fun interface JsReader<out T> {
  * @param other the [JsReader] to run if this one gets a [JsError]
  * @return A new [JsReader] with the updated behavior.
  */
-infix fun <T> JsReader<T>.or(other: JsReader<T>): JsReader<T> = JsReader { context, location, input ->
+public infix fun <T> JsReader<T>.or(other: JsReader<T>): JsReader<T> = JsReader { context, location, input ->
     read(context, location, input)
         .recovery { failure ->
             other.read(context, location, input)

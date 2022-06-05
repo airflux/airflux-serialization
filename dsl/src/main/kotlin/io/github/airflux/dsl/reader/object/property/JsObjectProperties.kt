@@ -18,7 +18,7 @@ package io.github.airflux.dsl.reader.`object`.property
 
 import io.github.airflux.core.path.JsPath
 
-class JsObjectProperties(private val items: List<JsObjectProperty>) : Collection<JsObjectProperty> by items {
+public class JsObjectProperties(private val items: List<JsObjectProperty>) : Collection<JsObjectProperty> by items {
 
     internal class Builder {
         private val properties = mutableListOf<JsObjectProperty>()

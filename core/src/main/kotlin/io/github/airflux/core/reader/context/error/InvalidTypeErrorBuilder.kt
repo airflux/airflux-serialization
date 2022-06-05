@@ -20,12 +20,12 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.value.JsValue
 
-class InvalidTypeErrorBuilder(private val builder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError) :
+public class InvalidTypeErrorBuilder(private val builder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError) :
     AbstractErrorBuilderContextElement<InvalidTypeErrorBuilder>(key = InvalidTypeErrorBuilder) {
 
-    fun build(expected: JsValue.Type, actual: JsValue.Type): JsError = builder(expected, actual)
+    public fun build(expected: JsValue.Type, actual: JsValue.Type): JsError = builder(expected, actual)
 
-    companion object Key : JsReaderContext.Key<InvalidTypeErrorBuilder> {
+    public companion object Key : JsReaderContext.Key<InvalidTypeErrorBuilder> {
         override val name: String = "InvalidTypeErrorBuilder"
     }
 }

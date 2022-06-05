@@ -22,4 +22,4 @@ import io.github.airflux.core.writer.JsWriter
 /**
  * Writer for primitive [String] type.
  */
-fun buildStringWriter(): JsWriter<String> = JsWriter { value -> JsString(value) }
+public fun buildStringWriter(): JsWriter<String> = JsWriter { value -> JsString(value) }

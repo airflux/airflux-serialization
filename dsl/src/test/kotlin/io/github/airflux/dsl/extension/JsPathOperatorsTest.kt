@@ -5,7 +5,7 @@ import io.github.airflux.core.path.PathElement
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainInOrder
 
-class JsPathOperatorsTest : FreeSpec() {
+internal class JsPathOperatorsTest : FreeSpec() {
 
     init {
 

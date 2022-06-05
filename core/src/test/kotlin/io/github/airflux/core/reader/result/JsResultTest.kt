@@ -8,7 +8,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 
-class JsResultTest : FreeSpec() {
+internal class JsResultTest : FreeSpec() {
 
     companion object {
         private const val ORIGINAL_VALUE = "10"

@@ -6,7 +6,7 @@ import io.github.airflux.core.writer.base.buildStringWriter
 import kotlin.test.Test
 import kotlin.test.assertContains
 
-class ArrayWriterTest {
+internal class ArrayWriterTest {
 
     companion object {
         private val stringWriter = buildStringWriter()

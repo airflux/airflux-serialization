@@ -14,7 +14,7 @@ import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class OptionalWithDefaultFieldReaderTest : FreeSpec() {
+internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))

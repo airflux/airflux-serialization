@@ -25,15 +25,11 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.After
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.Before
 
 @Suppress("unused")
-sealed interface JsObjectValidator {
+public sealed interface JsObjectValidator {
 
-    fun interface Before : JsObjectValidator {
+    public fun interface Before : JsObjectValidator {
 
-        fun validation(
-            context: JsReaderContext,
-            properties: JsObjectProperties,
-            input: JsObject
-        ): JsErrors?
+        public fun validation(context: JsReaderContext, properties: JsObjectProperties, input: JsObject): JsErrors?
 
         /*
         * | This | Other  | Result |
@@ -42,7 +38,7 @@ sealed interface JsObjectValidator {
         * | F    | S      | S      |
         * | F    | F`     | F + F` |
         */
-        infix fun or(other: Before): Before {
+        public infix fun or(other: Before): Before {
             val self = this
             return Before { context, properties, input ->
                 self.validation(context, properties, input)
@@ -60,7 +56,7 @@ sealed interface JsObjectValidator {
          * | S    | F      | F      |
          * | F    | ignore | F      |
          */
-        infix fun and(other: Before): Before {
+        public infix fun and(other: Before): Before {
             val self = this
             return Before { context, properties, input ->
                 val result = self.validation(context, properties, input)
@@ -69,9 +65,9 @@ sealed interface JsObjectValidator {
         }
     }
 
-    fun interface After : JsObjectValidator {
+    public fun interface After : JsObjectValidator {
 
-        fun validation(
+        public fun validation(
             context: JsReaderContext,
             properties: JsObjectProperties,
             objectValuesMap: ObjectValuesMap,
@@ -85,7 +81,7 @@ sealed interface JsObjectValidator {
         * | F    | S      | S      |
         * | F    | F`     | F + F` |
         */
-        infix fun or(other: After): After {
+        public infix fun or(other: After): After {
             val self = this
             return After { context, properties, objectValuesMap, input ->
                 self.validation(context, properties, objectValuesMap, input)
@@ -103,7 +99,7 @@ sealed interface JsObjectValidator {
          * | S    | F      | F      |
          * | F    | ignore | F      |
          */
-        infix fun and(other: After): After {
+        public infix fun and(other: After): After {
             val self = this
             return After { context, properties, objectValuesMap, input ->
                 val result = self.validation(context, properties, objectValuesMap, input)

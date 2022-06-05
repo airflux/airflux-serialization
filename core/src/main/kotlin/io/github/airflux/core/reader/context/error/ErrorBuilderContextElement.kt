@@ -18,4 +18,4 @@ package io.github.airflux.core.reader.context.error
 
 import io.github.airflux.core.reader.context.JsReaderContext
 
-interface ErrorBuilderContextElement : JsReaderContext.Element
+public interface ErrorBuilderContextElement : JsReaderContext.Element

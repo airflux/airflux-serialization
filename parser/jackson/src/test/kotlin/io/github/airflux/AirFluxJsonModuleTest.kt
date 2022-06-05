@@ -13,12 +13,13 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-class AirFluxJsonModuleTest : FreeSpec() {
+internal class AirFluxJsonModuleTest : FreeSpec() {
 
     companion object {
         private val mapper = ObjectMapper().apply {
             registerModule(AirFluxJsonModule)
         }
+
         private fun String.deserialization(): JsValue = mapper.readValue(this, JsValue::class.java)
         private fun JsValue.serialization(): String = mapper.writeValueAsString(this)
     }

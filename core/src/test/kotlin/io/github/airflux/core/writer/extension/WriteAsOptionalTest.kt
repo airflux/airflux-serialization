@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class WriteAsOptionalTest {
+internal class WriteAsOptionalTest {
 
     companion object {
         private val stringWriter = buildStringWriter()

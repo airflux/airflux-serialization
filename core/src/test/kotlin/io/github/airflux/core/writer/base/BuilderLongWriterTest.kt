@@ -4,7 +4,7 @@ import io.github.airflux.core.value.JsNumber
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BuilderLongWriterTest {
+internal class BuilderLongWriterTest {
 
     companion object {
         private val longWriter = buildLongWriter()

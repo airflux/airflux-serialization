@@ -22,9 +22,10 @@ import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNull
 
-fun <T : Any> nonNullable(reader: JsReader<T>): JsArrayItemSpec.NonNullable<T> = JsArrayNonNullableItemSpec(reader)
+public fun <T : Any> nonNullable(reader: JsReader<T>): JsArrayItemSpec.NonNullable<T> =
+    JsArrayNonNullableItemSpec(reader)
 
-fun <T : Any> nullable(reader: JsReader<T>): JsArrayItemSpec.Nullable<T?> = JsArrayNullableItemSpec(
+public fun <T : Any> nullable(reader: JsReader<T>): JsArrayItemSpec.Nullable<T?> = JsArrayNullableItemSpec(
     reader = { context, location, input ->
         if (input is JsNull)
             JsResult.Success(location = location, value = null)

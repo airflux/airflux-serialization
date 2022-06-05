@@ -20,11 +20,11 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 
 @Suppress("unused")
-fun interface JsPredicate<T> {
+public fun interface JsPredicate<T> {
 
-    fun test(context: JsReaderContext, location: JsLocation, value: T): Boolean
+    public fun test(context: JsReaderContext, location: JsLocation, value: T): Boolean
 
-    infix fun or(other: JsPredicate<T>): JsPredicate<T> {
+    public infix fun or(other: JsPredicate<T>): JsPredicate<T> {
         val self = this
         return JsPredicate { context, location, value ->
             val result = self.test(context, location, value)
@@ -32,7 +32,7 @@ fun interface JsPredicate<T> {
         }
     }
 
-    infix fun and(other: JsPredicate<T>): JsPredicate<T> {
+    public infix fun and(other: JsPredicate<T>): JsPredicate<T> {
         val self = this
         return JsPredicate { context, location, value ->
             val result = self.test(context, location, value)

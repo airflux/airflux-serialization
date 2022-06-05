@@ -29,7 +29,7 @@ import io.github.airflux.core.value.extension.readAsNumber
 /**
  * Reader for primitive [Byte] type.
  */
-object ByteReader : JsReader<Byte> {
+public object ByteReader : JsReader<Byte> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Byte> =
         input.readAsNumber(context, location) { c, l, text ->
             try {

@@ -24,11 +24,11 @@ import io.github.airflux.dsl.reader.array.validator.JsArrayValidator.After
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidator.Before
 
 @Suppress("unused")
-sealed interface JsArrayValidator {
+public sealed interface JsArrayValidator {
 
-    fun interface Before : JsArrayValidator {
+    public fun interface Before : JsArrayValidator {
 
-        fun validation(context: JsReaderContext, input: JsArray<JsValue>): JsErrors?
+        public fun validation(context: JsReaderContext, input: JsArray<JsValue>): JsErrors?
 
         /*
         * | This | Other  | Result |
@@ -37,7 +37,7 @@ sealed interface JsArrayValidator {
         * | F    | S      | S      |
         * | F    | F`     | F + F` |
         */
-        infix fun or(alt: Before): Before {
+        public infix fun or(alt: Before): Before {
             val self = this
             return Before { context, input ->
                 self.validation(context, input)
@@ -55,7 +55,7 @@ sealed interface JsArrayValidator {
          * | S    | F      | F      |
          * | F    | ignore | F      |
          */
-        infix fun and(alt: Before): Before {
+        public infix fun and(alt: Before): Before {
             val self = this
             return Before { context, input ->
                 val result = self.validation(context, input)
@@ -64,9 +64,9 @@ sealed interface JsArrayValidator {
         }
     }
 
-    fun interface After<T> : JsArrayValidator {
+    public fun interface After<T> : JsArrayValidator {
 
-        fun validation(context: JsReaderContext, input: JsArray<JsValue>, items: List<T>): JsErrors?
+        public fun validation(context: JsReaderContext, input: JsArray<JsValue>, items: List<T>): JsErrors?
 
         /*
         * | This | Other  | Result |
@@ -75,7 +75,7 @@ sealed interface JsArrayValidator {
         * | F    | S      | S      |
         * | F    | F`     | F + F` |
         */
-        infix fun or(alt: After<T>): After<T> {
+        public infix fun or(alt: After<T>): After<T> {
             val self = this
             return After { context, input, items ->
                 self.validation(context, input, items)
@@ -93,7 +93,7 @@ sealed interface JsArrayValidator {
          * | S    | F      | F      |
          * | F    | ignore | F      |
          */
-        infix fun and(alt: After<T>): After<T> {
+        public infix fun and(alt: After<T>): After<T> {
             val self = this
             return After { context, input, items ->
                 val result = self.validation(context, input, items)

@@ -12,7 +12,7 @@ import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 
-class StringReaderTest : FreeSpec() {
+internal class StringReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext(

@@ -23,7 +23,7 @@ import java.math.BigDecimal
 /**
  * Writer for primitive [BigDecimal] type.
  */
-fun buildBigDecimalWriter(
+public fun buildBigDecimalWriter(
     config: BigDecimalWriterConfiguration = BigDecimalWriterConfiguration()
 ): JsWriter<BigDecimal> = JsWriter { value ->
     value
@@ -31,6 +31,6 @@ fun buildBigDecimalWriter(
         .let { JsNumber.valueOf(it.toPlainString())!! }
 }
 
-data class BigDecimalWriterConfiguration(
-    val stripTrailingZeros: Boolean = false
+public class BigDecimalWriterConfiguration(
+    public val stripTrailingZeros: Boolean = false
 )

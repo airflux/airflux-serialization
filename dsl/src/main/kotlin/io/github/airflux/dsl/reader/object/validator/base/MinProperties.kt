@@ -25,7 +25,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
-class MinProperties(val value: Int) : JsObjectValidatorBuilder.After {
+public class MinProperties(public val value: Int) : JsObjectValidatorBuilder.After {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.After =
         JsObjectValidator.After { context, _, values, _ ->
@@ -36,12 +36,12 @@ class MinProperties(val value: Int) : JsObjectValidatorBuilder.After {
                 null
         }
 
-    class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
+    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        fun build(expected: Int, actual: Int): JsError = function(expected, actual)
+        public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
-        companion object Key : JsReaderContext.Key<ErrorBuilder> {
+        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
             override val name: String = "MinPropertiesErrorBuilder"
         }
     }

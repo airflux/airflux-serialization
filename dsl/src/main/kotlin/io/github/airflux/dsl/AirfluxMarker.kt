@@ -17,4 +17,4 @@
 package io.github.airflux.dsl
 
 @DslMarker
-annotation class AirfluxMarker
+public annotation class AirfluxMarker

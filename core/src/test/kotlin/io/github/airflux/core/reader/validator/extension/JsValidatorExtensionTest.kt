@@ -21,7 +21,7 @@ import io.github.airflux.core.value.JsValue
 import org.junit.jupiter.api.Nested
 import kotlin.test.Test
 
-class JsValidatorExtensionTest {
+internal class JsValidatorExtensionTest {
 
     companion object {
         private val context = JsReaderContext(

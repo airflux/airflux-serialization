@@ -10,7 +10,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class JsObjectTest {
+internal class JsObjectTest {
 
     companion object {
         private const val USER_NAME_VALUE = "user"

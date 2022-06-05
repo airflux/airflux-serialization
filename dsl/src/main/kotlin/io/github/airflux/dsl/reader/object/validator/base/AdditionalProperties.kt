@@ -28,7 +28,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
-object AdditionalProperties : JsObjectValidatorBuilder.Before {
+public object AdditionalProperties : JsObjectValidatorBuilder.Before {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.Before {
         val names: Set<String> = properties.names()
@@ -61,12 +61,12 @@ object AdditionalProperties : JsObjectValidatorBuilder.Before {
         return flatMap { property -> property.names() }.toSet()
     }
 
-    class ErrorBuilder(private val function: (properties: List<String>) -> JsError) :
+    public class ErrorBuilder(private val function: (properties: List<String>) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        fun build(properties: List<String>): JsError = function(properties)
+        public fun build(properties: List<String>): JsError = function(properties)
 
-        companion object Key : JsReaderContext.Key<ErrorBuilder> {
+        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
             override val name: String = "AdditionalPropertiesErrorBuilder"
         }
     }

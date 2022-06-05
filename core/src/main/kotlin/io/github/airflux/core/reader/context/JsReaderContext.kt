@@ -16,42 +16,42 @@
 
 package io.github.airflux.core.reader.context
 
-class JsReaderContext private constructor(private val elements: Map<Key<*>, Element>) {
+public class JsReaderContext private constructor(private val elements: Map<Key<*>, Element>) {
 
-    operator fun <E : Element> plus(element: E): JsReaderContext =
+    public operator fun <E : Element> plus(element: E): JsReaderContext =
         JsReaderContext(this.elements + (element.key to element))
 
-    operator fun <E : Element> plus(elements: Iterable<E>): JsReaderContext =
+    public operator fun <E : Element> plus(elements: Iterable<E>): JsReaderContext =
         JsReaderContext(this.elements + elements.map { it.key to it })
 
     @Suppress("UNCHECKED_CAST")
-    fun <E : Element> getOrNull(key: Key<E>): E? = elements[key]?.let { it as E }
+    public fun <E : Element> getOrNull(key: Key<E>): E? = elements[key]?.let { it as E }
 
-    fun <E : Element> getValue(key: Key<E>): E = getOrNull(key)
+    public fun <E : Element> getValue(key: Key<E>): E = getOrNull(key)
         ?: throw NoSuchElementException("Key '${key.name}' is missing in the JsReaderContext.")
 
-    operator fun <E : Element> contains(key: Key<E>): Boolean = elements.contains(key)
+    public operator fun <E : Element> contains(key: Key<E>): Boolean = elements.contains(key)
 
-    val isEmpty: Boolean
+    public val isEmpty: Boolean
         get() = elements.isEmpty()
 
-    val isNotEmpty: Boolean
+    public val isNotEmpty: Boolean
         get() = !isEmpty
 
     @Suppress("unused")
-    interface Key<E : Element> {
-        val name: String
+    public interface Key<E : Element> {
+        public val name: String
     }
 
-    interface Element {
-        val key: Key<*>
-        operator fun <E : Element> plus(element: E): List<Element> = listOf(this, element)
+    public interface Element {
+        public val key: Key<*>
+        public operator fun <E : Element> plus(element: E): List<Element> = listOf(this, element)
     }
 
-    companion object {
-        operator fun invoke(): JsReaderContext = JsReaderContext(emptyMap())
-        operator fun invoke(element: Element): JsReaderContext = JsReaderContext(mapOf(element.key to element))
-        operator fun invoke(elements: Iterable<Element>): JsReaderContext =
+    public companion object {
+        public operator fun invoke(): JsReaderContext = JsReaderContext(emptyMap())
+        public operator fun invoke(element: Element): JsReaderContext = JsReaderContext(mapOf(element.key to element))
+        public operator fun invoke(elements: Iterable<Element>): JsReaderContext =
             JsReaderContext(elements.associateBy { it.key })
     }
 }

@@ -9,7 +9,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 
-class MaxItemsValidatorTest : FreeSpec() {
+internal class MaxItemsValidatorTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext()

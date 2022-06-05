@@ -7,7 +7,7 @@ import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-class JsPathTest : FreeSpec() {
+internal class JsPathTest : FreeSpec() {
 
     companion object {
         private val OTHER_PATH = JsPath("other")

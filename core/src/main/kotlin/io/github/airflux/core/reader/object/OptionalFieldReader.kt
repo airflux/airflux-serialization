@@ -30,11 +30,12 @@ import io.github.airflux.core.reader.result.JsResult
  * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
  *   that was build using [InvalidTypeErrorBuilder]
  */
-fun <T : Any> readOptional(context: JsReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> = when (from) {
-    is JsLookup.Defined -> using.read(context, from.location, from.value)
-    is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = null)
-    is JsLookup.Undefined.InvalidType -> {
-        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
-        JsResult.Failure(location = from.location, error = errorBuilder.build(from.expected, from.actual))
+public fun <T : Any> readOptional(context: JsReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> =
+    when (from) {
+        is JsLookup.Defined -> using.read(context, from.location, from.value)
+        is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = null)
+        is JsLookup.Undefined.InvalidType -> {
+            val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+            JsResult.Failure(location = from.location, error = errorBuilder.build(from.expected, from.actual))
+        }
     }
-}

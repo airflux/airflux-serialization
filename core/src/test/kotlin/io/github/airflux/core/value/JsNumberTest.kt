@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class JsNumberTest {
+internal class JsNumberTest {
 
     @Test
     fun `Testing the valueOf function of the JsNumber class for Byte type`() {
@@ -47,7 +47,7 @@ class JsNumberTest {
     }
 
     @TestFactory
-    fun `Testing the valueOf function of the JsNumber class for String type`() = listOf(
+    fun `Testing the valueOf function of the JsNumber class for String type`(): List<DynamicTest> = listOf(
         Triple("false", "false", null),
         Triple(".0", ".0", null),
         Triple("+.0", "+.0", null),
@@ -65,7 +65,7 @@ class JsNumberTest {
     }
 
     @TestFactory
-    fun `Testing the internal representation as an integer number`() = listOf(
+    fun `Testing the internal representation as an integer number`(): List<DynamicTest> = listOf(
         "0" to "0", "-0" to "-0",
         "1" to "1", "-1" to "-1",
         "100" to "100", "-100" to "-100"
@@ -78,7 +78,7 @@ class JsNumberTest {
     }
 
     @TestFactory
-    fun `Testing the internal representation as a real number`() = listOf(
+    fun `Testing the internal representation as a real number`(): List<DynamicTest> = listOf(
         "0.0" to "0.0", "-0.0" to "-0.0",
         "0.1" to "0.1", "-0.1" to "-0.1",
         "1.5" to "1.5", "-1.5" to "-1.5",
@@ -92,7 +92,7 @@ class JsNumberTest {
     }
 
     @TestFactory
-    fun `Testing the toString function of the JsNumber class`() = listOf(
+    fun `Testing the toString function of the JsNumber class`(): List<DynamicTest> = listOf(
         "1" to "1", "-1" to "-1",
         "1.5" to "1.5", "-1.5" to "-1.5",
         "1.50" to "1.50", "-1.50" to "-1.50"

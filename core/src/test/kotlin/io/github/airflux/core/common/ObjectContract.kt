@@ -3,7 +3,7 @@ package io.github.airflux.core.common
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-object ObjectContract {
+internal object ObjectContract {
 
     fun <T : Any> checkEqualsContract(original: T, copy: T, other: T) {
         assertEquals(original, original)

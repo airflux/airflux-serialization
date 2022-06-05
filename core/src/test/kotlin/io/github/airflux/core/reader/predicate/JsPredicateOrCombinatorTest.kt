@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class JsPredicateOrCombinatorTest {
+internal class JsPredicateOrCombinatorTest {
 
     companion object {
         private val context = JsReaderContext()

@@ -20,18 +20,18 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.After
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.Before
 
-sealed interface JsObjectValidatorBuilder {
+public sealed interface JsObjectValidatorBuilder {
 
-    fun interface Before : JsObjectValidatorBuilder {
-        fun build(properties: JsObjectProperties): JsObjectValidator.Before
+    public fun interface Before : JsObjectValidatorBuilder {
+        public fun build(properties: JsObjectProperties): JsObjectValidator.Before
     }
 
-    fun interface After : JsObjectValidatorBuilder {
-        fun build(properties: JsObjectProperties): JsObjectValidator.After
+    public fun interface After : JsObjectValidatorBuilder {
+        public fun build(properties: JsObjectProperties): JsObjectValidator.After
     }
 }
 
-infix fun Before?.or(alt: Before): Before =
+public infix fun Before?.or(alt: Before): Before =
     if (this == null)
         alt
     else
@@ -39,7 +39,7 @@ infix fun Before?.or(alt: Before): Before =
             this.build(properties).or(alt.build(properties))
         }
 
-infix fun Before?.and(alt: Before): Before =
+public infix fun Before?.and(alt: Before): Before =
     if (this == null)
         alt
     else
@@ -47,7 +47,7 @@ infix fun Before?.and(alt: Before): Before =
             this.build(properties).and(alt.build(properties))
         }
 
-infix fun After?.or(alt: After): After =
+public infix fun After?.or(alt: After): After =
     if (this == null)
         alt
     else
@@ -55,7 +55,7 @@ infix fun After?.or(alt: After): After =
             this.build(properties).or(alt.build(properties))
         }
 
-infix fun After?.and(alt: After): After =
+public infix fun After?.and(alt: After): After =
     if (this == null)
         alt
     else

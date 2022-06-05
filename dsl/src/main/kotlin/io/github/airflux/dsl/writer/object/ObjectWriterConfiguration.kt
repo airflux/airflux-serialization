@@ -18,20 +18,20 @@ package io.github.airflux.dsl.writer.`object`
 
 import io.github.airflux.dsl.AirfluxMarker
 
-class ObjectWriterConfiguration private constructor(
-    val skipPropertyIfArrayIsEmpty: Boolean,
-    val skipPropertyIfObjectIsEmpty: Boolean,
-    val writeNullIfArrayIsEmpty: Boolean,
-    val writeNullIfObjectIsEmpty: Boolean
+public class ObjectWriterConfiguration private constructor(
+    public val skipPropertyIfArrayIsEmpty: Boolean,
+    public val skipPropertyIfObjectIsEmpty: Boolean,
+    public val writeNullIfArrayIsEmpty: Boolean,
+    public val writeNullIfObjectIsEmpty: Boolean
 ) {
 
     @AirfluxMarker
-    class Builder internal constructor(base: ObjectWriterConfiguration) {
+    public class Builder internal constructor(base: ObjectWriterConfiguration) {
 
-        var skipPropertyIfArrayIsEmpty = base.skipPropertyIfArrayIsEmpty
-        var skipPropertyIfObjectIsEmpty = base.skipPropertyIfObjectIsEmpty
-        var writeNullIfArrayIsEmpty = base.writeNullIfArrayIsEmpty
-        var writeNullIfObjectIsEmpty = base.writeNullIfObjectIsEmpty
+        public var skipPropertyIfArrayIsEmpty: Boolean = base.skipPropertyIfArrayIsEmpty
+        public var skipPropertyIfObjectIsEmpty: Boolean = base.skipPropertyIfObjectIsEmpty
+        public var writeNullIfArrayIsEmpty: Boolean = base.writeNullIfArrayIsEmpty
+        public var writeNullIfObjectIsEmpty: Boolean = base.writeNullIfObjectIsEmpty
 
         internal fun build(): ObjectWriterConfiguration = ObjectWriterConfiguration(
             skipPropertyIfArrayIsEmpty = skipPropertyIfArrayIsEmpty,
@@ -41,14 +41,14 @@ class ObjectWriterConfiguration private constructor(
         )
     }
 
-    companion object {
-        val Default = ObjectWriterConfiguration(
+    public companion object {
+        public val Default: ObjectWriterConfiguration = ObjectWriterConfiguration(
             skipPropertyIfArrayIsEmpty = false,
             skipPropertyIfObjectIsEmpty = false,
             writeNullIfArrayIsEmpty = false,
             writeNullIfObjectIsEmpty = false
         )
 
-        fun build(block: Builder.() -> Unit): ObjectWriterConfiguration = Builder(Default).apply(block).build()
+        public fun build(block: Builder.() -> Unit): ObjectWriterConfiguration = Builder(Default).apply(block).build()
     }
 }

@@ -10,7 +10,7 @@ import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WriteNullableTest {
+internal class WriteNullableTest {
 
     companion object {
         private val objectWriter = ObjectWriter(ObjectWriterConfiguration.Default)

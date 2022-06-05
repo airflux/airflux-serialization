@@ -21,34 +21,34 @@ import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.validator.JsValidator
 
 @Suppress("unused")
-object BaseStringValidators {
+public object BaseStringValidators {
 
-    fun minLength(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<String> =
+    public fun minLength(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<String> =
         JsValidator { _, _, value ->
             if (value.length < expected) JsErrors.of(error(expected, value.length)) else null
         }
 
-    fun maxLength(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<String> =
+    public fun maxLength(expected: Int, error: (expected: Int, actual: Int) -> JsError): JsValidator<String> =
         JsValidator { _, _, value ->
             if (value.length > expected) JsErrors.of(error(expected, value.length)) else null
         }
 
-    fun isNotEmpty(error: () -> JsError): JsValidator<String> =
+    public fun isNotEmpty(error: () -> JsError): JsValidator<String> =
         JsValidator { _, _, value ->
             if (value.isEmpty()) JsErrors.of(error()) else null
         }
 
-    fun isNotBlank(error: () -> JsError): JsValidator<String> =
+    public fun isNotBlank(error: () -> JsError): JsValidator<String> =
         JsValidator { _, _, value ->
             if (value.isBlank()) JsErrors.of(error()) else null
         }
 
-    fun pattern(pattern: Regex, error: (value: String, pattern: Regex) -> JsError): JsValidator<String> =
+    public fun pattern(pattern: Regex, error: (value: String, pattern: Regex) -> JsError): JsValidator<String> =
         JsValidator { _, _, value ->
             if (pattern.matches(value)) null else JsErrors.of(error(value, pattern))
         }
 
-    fun isA(predicate: (String) -> Boolean, error: (value: String) -> JsError): JsValidator<String> =
+    public fun isA(predicate: (String) -> Boolean, error: (value: String) -> JsError): JsValidator<String> =
         JsValidator { _, _, value ->
             if (predicate(value)) null else JsErrors.of(error(value))
         }

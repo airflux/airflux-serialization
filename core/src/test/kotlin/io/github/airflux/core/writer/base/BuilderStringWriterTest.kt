@@ -4,7 +4,7 @@ import io.github.airflux.core.value.JsString
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BuilderStringWriterTest {
+internal class BuilderStringWriterTest {
 
     companion object {
         private val stringWriter = buildStringWriter()

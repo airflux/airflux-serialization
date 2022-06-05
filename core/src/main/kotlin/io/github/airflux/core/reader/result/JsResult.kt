@@ -19,27 +19,27 @@ package io.github.airflux.core.reader.result
 import io.github.airflux.core.common.identity
 
 @Suppress("unused")
-sealed class JsResult<out T> {
+public sealed class JsResult<out T> {
 
-    companion object;
+    public companion object;
 
-    infix fun <R> map(transform: (T) -> R): JsResult<R> =
+    public infix fun <R> map(transform: (T) -> R): JsResult<R> =
         flatMap { location, value -> transform(value).success(location) }
 
-    fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = fold(
+    public fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = fold(
         ifFailure = ::identity,
         ifSuccess = { transform(it.location, it.value) }
     )
 
-    data class Success<T>(val location: JsLocation, val value: T) : JsResult<T>()
+    public data class Success<T>(val location: JsLocation, val value: T) : JsResult<T>()
 
-    class Failure private constructor(val causes: List<Cause>) : JsResult<Nothing>() {
+    public class Failure private constructor(public val causes: List<Cause>) : JsResult<Nothing>() {
 
-        constructor(location: JsLocation, error: JsError) : this(listOf(Cause(location, error)))
+        public constructor(location: JsLocation, error: JsError) : this(listOf(Cause(location, error)))
 
-        constructor(location: JsLocation, errors: JsErrors) : this(listOf(Cause(location, errors)))
+        public constructor(location: JsLocation, errors: JsErrors) : this(listOf(Cause(location, errors)))
 
-        operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
+        public operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
 
         override fun equals(other: Any?): Boolean =
             this === other || (other is Failure && this.causes == other.causes)
@@ -52,36 +52,39 @@ sealed class JsResult<out T> {
             append(")")
         }
 
-        data class Cause(val location: JsLocation, val errors: JsErrors) {
-            constructor(location: JsLocation, error: JsError) : this(location, JsErrors.of(error))
+        public data class Cause(val location: JsLocation, val errors: JsErrors) {
+            public constructor(location: JsLocation, error: JsError) : this(location, JsErrors.of(error))
         }
 
-        companion object {
-            fun Collection<Failure>.merge(): Failure = Failure(causes = flatMap { failure -> failure.causes })
+        public companion object {
+            public fun Collection<Failure>.merge(): Failure = Failure(causes = flatMap { failure -> failure.causes })
         }
     }
 }
 
-inline fun <T, R> JsResult<T>.fold(ifFailure: (JsResult.Failure) -> R, ifSuccess: (JsResult.Success<T>) -> R): R =
+public inline fun <T, R> JsResult<T>.fold(
+    ifFailure: (JsResult.Failure) -> R,
+    ifSuccess: (JsResult.Success<T>) -> R
+): R =
     when (this) {
         is JsResult.Success -> ifSuccess(this)
         is JsResult.Failure -> ifFailure(this)
     }
 
-inline infix fun <T> JsResult<T>.recovery(function: (JsResult.Failure) -> JsResult<T>): JsResult<T> = fold(
+public inline infix fun <T> JsResult<T>.recovery(function: (JsResult.Failure) -> JsResult<T>): JsResult<T> = fold(
     ifFailure = { function(it) },
     ifSuccess = ::identity
 )
 
-infix fun <T> JsResult<T>.getOrElse(defaultValue: () -> T): T = fold(
+public infix fun <T> JsResult<T>.getOrElse(defaultValue: () -> T): T = fold(
     ifFailure = { defaultValue() },
     ifSuccess = { it.value }
 )
 
-infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResult<T> = fold(
+public infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResult<T> = fold(
     ifFailure = { defaultValue() },
     ifSuccess = ::identity
 )
 
-fun <T> T.success(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
-fun <E : JsError> E.failure(location: JsLocation): JsResult<Nothing> = JsResult.Failure(location, this)
+public fun <T> T.success(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
+public fun <E : JsError> E.failure(location: JsLocation): JsResult<Nothing> = JsResult.Failure(location, this)

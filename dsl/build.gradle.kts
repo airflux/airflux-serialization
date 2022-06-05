@@ -56,7 +56,8 @@ tasks {
                 suppressWarnings = false
                 freeCompilerArgs = listOf(
                     "-Xjsr305=strict",
-                    "-Xjvm-default=all"
+                    "-Xjvm-default=all",
+                    "-Xexplicit-api=strict"
                 )
             }
         }
@@ -70,7 +71,7 @@ configure<PitestPluginExtension> {
     mainSourceSets.set(listOf(project.sourceSets.main.get()))
 }
 
-val mavenPublicationName = "Jvm"
+val mavenPublicationName: String = "Jvm"
 publishing {
     publications {
         create<MavenPublication>(mavenPublicationName) {

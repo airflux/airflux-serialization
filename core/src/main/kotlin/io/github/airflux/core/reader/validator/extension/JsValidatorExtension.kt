@@ -23,16 +23,16 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.reader.validator.JsValidator
 
-infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
+public infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
     JsReader { context, location, input ->
         this@validation.read(context, location, input)
             .validation(context, validator)
     }
 
-fun <T> JsResult<T>.validation(validator: JsValidator<T>): JsResult<T> =
+public fun <T> JsResult<T>.validation(validator: JsValidator<T>): JsResult<T> =
     validation(context = JsReaderContext(), validator = validator)
 
-fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
+public fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { result ->

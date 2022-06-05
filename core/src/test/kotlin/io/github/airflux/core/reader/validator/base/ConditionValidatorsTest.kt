@@ -10,7 +10,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 
-class ConditionValidatorsTest : FreeSpec() {
+internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext()

@@ -6,7 +6,7 @@ import io.github.airflux.core.writer.base.buildStringWriter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WriteAsRequiredTest {
+internal class WriteAsRequiredTest {
 
     companion object {
         private val stringWriter = buildStringWriter()

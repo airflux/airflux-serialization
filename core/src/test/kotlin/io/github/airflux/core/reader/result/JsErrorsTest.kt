@@ -9,7 +9,7 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
-class JsErrorsTest : FreeSpec() {
+internal class JsErrorsTest : FreeSpec() {
 
     init {
 

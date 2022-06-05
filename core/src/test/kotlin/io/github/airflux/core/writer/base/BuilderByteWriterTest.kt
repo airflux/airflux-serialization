@@ -4,7 +4,7 @@ import io.github.airflux.core.value.JsNumber
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BuilderByteWriterTest {
+internal class BuilderByteWriterTest {
 
     companion object {
         private val byteWriter = buildByteWriter()

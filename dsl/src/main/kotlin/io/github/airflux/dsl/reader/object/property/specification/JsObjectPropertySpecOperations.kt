@@ -22,56 +22,92 @@ import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
-fun <T : Any> required(name: String, reader: JsReader<T>) =
+public fun <T : Any> required(name: String, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
     required(JsPath(name), reader)
 
-fun <T : Any> required(path: JsPath, reader: JsReader<T>) =
+public fun <T : Any> required(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
     JsObjectRequiredPropertySpec.of(path, reader)
 
-fun <T : Any> required(paths: JsPaths, reader: JsReader<T>) =
+public fun <T : Any> required(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
     JsObjectRequiredPropertySpec.of(paths, reader)
 
-fun <T : Any> defaultable(name: String, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> defaultable(
+    name: String,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.Defaultable<T> =
     defaultable(JsPath(name), reader, default)
 
-fun <T : Any> defaultable(path: JsPath, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> defaultable(
+    path: JsPath,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.Defaultable<T> =
     JsObjectDefaultablePropertySpec.of(path, reader, default)
 
-fun <T : Any> defaultable(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> defaultable(
+    paths: JsPaths,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.Defaultable<T> =
     JsObjectDefaultablePropertySpec.of(paths, reader, default)
 
-fun <T : Any> optional(name: String, reader: JsReader<T>) =
+public fun <T : Any> optional(name: String, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
     optional(JsPath(name), reader)
 
-fun <T : Any> optional(path: JsPath, reader: JsReader<T>) =
+public fun <T : Any> optional(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
     JsObjectOptionalPropertySpec.of(path, reader)
 
-fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>) =
+public fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
     JsObjectOptionalPropertySpec.of(paths, reader)
 
-fun <T : Any> optionalWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> optionalWithDefault(
+    name: String,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.OptionalWithDefault<T> =
     optionalWithDefault(JsPath(name), reader, default)
 
-fun <T : Any> optionalWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> optionalWithDefault(
+    path: JsPath,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.OptionalWithDefault<T> =
     JsObjectOptionalWithDefaultPropertySpec.of(path, reader, default)
 
-fun <T : Any> optionalWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> optionalWithDefault(
+    paths: JsPaths,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.OptionalWithDefault<T> =
     JsObjectOptionalWithDefaultPropertySpec.of(paths, reader, default)
 
-fun <T : Any> nullable(name: String, reader: JsReader<T>) =
+public fun <T : Any> nullable(name: String, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
     nullable(JsPath(name), reader)
 
-fun <T : Any> nullable(path: JsPath, reader: JsReader<T>) =
+public fun <T : Any> nullable(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
     JsObjectNullablePropertySpec.of(path, reader)
 
-fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>) =
+public fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
     JsObjectNullablePropertySpec.of(paths, reader)
 
-fun <T : Any> nullableWithDefault(name: String, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> nullableWithDefault(
+    name: String,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.NullableWithDefault<T> =
     nullableWithDefault(JsPath(name), reader, default)
 
-fun <T : Any> nullableWithDefault(path: JsPath, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> nullableWithDefault(
+    path: JsPath,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.NullableWithDefault<T> =
     JsObjectNullableWithDefaultPropertySpec.of(path, reader, default)
 
-fun <T : Any> nullableWithDefault(paths: JsPaths, reader: JsReader<T>, default: () -> T) =
+public fun <T : Any> nullableWithDefault(
+    paths: JsPaths,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.NullableWithDefault<T> =
     JsObjectNullableWithDefaultPropertySpec.of(paths, reader, default)

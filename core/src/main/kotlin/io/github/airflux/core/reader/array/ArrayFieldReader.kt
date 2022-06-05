@@ -32,7 +32,7 @@ import io.github.airflux.core.value.JsArray
  * @param errorIfAdditionalItems return error if the number of items of an array is more than the number of the reader
  * for prefix items of an array
  */
-fun <T> readArray(
+public fun <T> readArray(
     context: JsReaderContext,
     location: JsLocation,
     from: JsArray<*>,
@@ -50,7 +50,7 @@ fun <T> readArray(
  * Read a node which represent as array.
  * @param items the reader for items of an array
  */
-fun <T> readArray(
+public fun <T> readArray(
     context: JsReaderContext,
     location: JsLocation,
     from: JsArray<*>,
@@ -69,7 +69,7 @@ fun <T> readArray(
  * @param prefixItems the reader for prefix items of an array
  * @param items the reader for items of an array
  */
-fun <T> readArray(
+public fun <T> readArray(
     context: JsReaderContext,
     location: JsLocation,
     from: JsArray<*>,

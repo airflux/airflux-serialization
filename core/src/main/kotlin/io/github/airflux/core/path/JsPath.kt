@@ -17,15 +17,15 @@
 package io.github.airflux.core.path
 
 @Suppress("unused")
-class JsPath private constructor(val elements: List<PathElement>) {
+public class JsPath private constructor(public val elements: List<PathElement>) {
 
-    constructor(key: String) : this(PathElement.Key(key))
-    constructor(idx: Int) : this(PathElement.Idx(idx))
-    constructor(element: PathElement) : this(listOf(element))
+    public constructor(key: String) : this(PathElement.Key(key))
+    public constructor(idx: Int) : this(PathElement.Idx(idx))
+    public constructor(element: PathElement) : this(listOf(element))
 
-    fun append(key: String): JsPath = append(PathElement.Key(key))
-    fun append(idx: Int): JsPath = append(PathElement.Idx(idx))
-    fun append(element: PathElement): JsPath = JsPath(elements + element)
+    public fun append(key: String): JsPath = append(PathElement.Key(key))
+    public fun append(idx: Int): JsPath = append(PathElement.Idx(idx))
+    public fun append(element: PathElement): JsPath = JsPath(elements + element)
 
     override fun toString(): String = buildString {
         append("#")
@@ -37,5 +37,5 @@ class JsPath private constructor(val elements: List<PathElement>) {
 
     override fun hashCode(): Int = elements.hashCode()
 
-    companion object
+    public companion object
 }

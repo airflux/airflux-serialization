@@ -19,15 +19,15 @@ package io.github.airflux.dsl.reader.`object`.property.path
 import io.github.airflux.core.path.JsPath
 
 @Suppress("unused")
-class JsPaths private constructor(val items: List<JsPath>) {
+public class JsPaths private constructor(public val items: List<JsPath>) {
 
-    constructor(path: JsPath, vararg other: JsPath) : this(path, other.asList())
-    constructor(path: JsPath, other: List<JsPath>) : this(listOf(path) + other)
+    public constructor(path: JsPath, vararg other: JsPath) : this(path, other.asList())
+    public constructor(path: JsPath, other: List<JsPath>) : this(listOf(path) + other)
 
-    fun append(path: JsPath): JsPaths = JsPaths(items + path)
-    fun append(paths: JsPaths): JsPaths = JsPaths(items + paths.items)
+    public fun append(path: JsPath): JsPaths = JsPaths(items + path)
+    public fun append(paths: JsPaths): JsPaths = JsPaths(items + paths.items)
 
-    inline fun <R> fold(initial: (JsPath) -> R, operation: (acc: R, JsPath) -> R): R {
+    public inline fun <R> fold(initial: (JsPath) -> R, operation: (acc: R, JsPath) -> R): R {
         val iterator = items.iterator()
         var accumulator = initial(iterator.next())
         while (iterator.hasNext()) {
@@ -38,5 +38,5 @@ class JsPaths private constructor(val items: List<JsPath>) {
 
     override fun toString(): String = items.toString()
 
-    companion object
+    public companion object
 }

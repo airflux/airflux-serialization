@@ -22,22 +22,22 @@ import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.context.exception.ExceptionsHandlerBuilder
 
-fun readerContext(block: JsReaderContextBuilder.() -> Unit): JsReaderContext =
+public fun readerContext(block: JsReaderContextBuilder.() -> Unit): JsReaderContext =
     JsReaderContextBuilder().apply(block).build()
 
 @AirfluxMarker
-class JsReaderContextBuilder {
+public class JsReaderContextBuilder {
 
     private val elements = mutableListOf<JsReaderContext.Element>()
 
-    var failFast: Boolean? = null
+    public var failFast: Boolean? = null
 
-    fun errorBuilders(block: ErrorsBuilder.() -> Unit) {
+    public fun errorBuilders(block: ErrorsBuilder.() -> Unit) {
         val errors = ErrorsBuilder().apply(block).build()
         elements.addAll(errors)
     }
 
-    fun exceptions(block: ExceptionsHandlerBuilder.() -> Unit) {
+    public fun exceptions(block: ExceptionsHandlerBuilder.() -> Unit) {
         ExceptionsHandlerBuilder().apply(block).build().also { elements.add(it) }
     }
 
@@ -50,14 +50,14 @@ class JsReaderContextBuilder {
     }
 
     @AirfluxMarker
-    class ErrorsBuilder {
+    public class ErrorsBuilder {
         private val items = mutableListOf<ErrorBuilderContextElement>()
 
-        fun <E : ErrorBuilderContextElement> register(error: E) {
+        public fun <E : ErrorBuilderContextElement> register(error: E) {
             items.add(error)
         }
 
-        operator fun <E : ErrorBuilderContextElement> E.unaryPlus() = register(this)
+        public operator fun <E : ErrorBuilderContextElement> E.unaryPlus(): Unit = register(this)
 
         internal fun build(): List<JsReaderContext.Element> = items
     }

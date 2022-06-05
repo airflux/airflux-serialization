@@ -16,5 +16,6 @@
 
 package io.github.airflux.core.reader.context
 
-abstract class JsReaderAbstractContextElement<T : JsReaderContext.Element>(override val key: JsReaderContext.Key<T>) :
-    JsReaderContext.Element
+public abstract class JsReaderAbstractContextElement<T : JsReaderContext.Element>(
+    override val key: JsReaderContext.Key<T>
+) : JsReaderContext.Element

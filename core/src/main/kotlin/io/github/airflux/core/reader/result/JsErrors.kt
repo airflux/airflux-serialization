@@ -16,9 +16,9 @@
 
 package io.github.airflux.core.reader.result
 
-class JsErrors private constructor(val items: List<JsError>) {
+public class JsErrors private constructor(public val items: List<JsError>) {
 
-    operator fun plus(other: JsErrors): JsErrors = JsErrors(items + other.items)
+    public operator fun plus(other: JsErrors): JsErrors = JsErrors(items + other.items)
 
     override fun equals(other: Any?): Boolean =
         this === other || (other is JsErrors && this.items == other.items)
@@ -31,12 +31,13 @@ class JsErrors private constructor(val items: List<JsError>) {
         append(")")
     }
 
-    companion object {
-        fun of(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
+    public companion object {
+
+        public fun of(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
             JsErrors(listOf(error))
         else
             JsErrors(listOf(error) + errors.asList())
 
-        fun of(errors: List<JsError>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
+        public fun of(errors: List<JsError>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
     }
 }

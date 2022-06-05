@@ -10,7 +10,7 @@ import io.github.airflux.dsl.common.TestData.USER_NAME_VALUE
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class JsValueOperatorsTest : FreeSpec() {
+internal class JsValueOperatorsTest : FreeSpec() {
 
     init {
         "The 'div' extension-function" - {

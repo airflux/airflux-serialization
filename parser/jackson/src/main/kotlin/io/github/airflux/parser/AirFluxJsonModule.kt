@@ -40,9 +40,9 @@ import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
 import java.util.*
 
-object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
+public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
 
-    class ParsingException(message: String) : RuntimeException(message)
+    public class ParsingException(message: String) : RuntimeException(message)
 
     override fun setupModule(context: SetupContext) {
         context.addDeserializers(AirFluxDeserializers())
@@ -168,7 +168,7 @@ object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
         }
 
         // This is used when the root object is null, ie when deserialising "null"
-        override fun getNullValue() = JsNull
+        override fun getNullValue(): JsNull = JsNull
 
         private sealed class DeserializerContext {
             abstract fun addValue(value: JsValue): DeserializerContext

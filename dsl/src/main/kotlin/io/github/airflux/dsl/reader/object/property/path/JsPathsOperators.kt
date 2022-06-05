@@ -18,6 +18,6 @@ package io.github.airflux.dsl.reader.`object`.property.path
 
 import io.github.airflux.core.path.JsPath
 
-infix fun String.or(alt: String): JsPaths = JsPaths(JsPath(this), JsPath(alt))
-infix fun JsPaths.or(path: JsPath): JsPaths = append(path)
-infix fun JsPaths.or(paths: JsPaths): JsPaths = append(paths)
+public infix fun String.or(alt: String): JsPaths = JsPaths(JsPath(this), JsPath(alt))
+public infix fun JsPaths.or(path: JsPath): JsPaths = append(path)
+public infix fun JsPaths.or(paths: JsPaths): JsPaths = append(paths)

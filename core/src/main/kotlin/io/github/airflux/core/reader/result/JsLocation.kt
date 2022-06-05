@@ -18,13 +18,13 @@ package io.github.airflux.core.reader.result
 
 import io.github.airflux.core.path.PathElement
 
-sealed class JsLocation {
+public sealed class JsLocation {
 
-    abstract val isEmpty: Boolean
+    public abstract val isEmpty: Boolean
 
-    fun append(key: String): JsLocation = append(PathElement.Key(key))
-    fun append(idx: Int): JsLocation = append(PathElement.Idx(idx))
-    fun append(element: PathElement): JsLocation = Element(this, element)
+    public fun append(key: String): JsLocation = append(PathElement.Key(key))
+    public fun append(idx: Int): JsLocation = append(PathElement.Idx(idx))
+    public fun append(element: PathElement): JsLocation = Element(this, element)
 
     private object Empty : JsLocation() {
         override val isEmpty: Boolean = true
@@ -54,17 +54,17 @@ sealed class JsLocation {
         }
     }
 
-    companion object {
+    public companion object {
 
-        val empty: JsLocation = Empty
+        public val empty: JsLocation = Empty
 
-        tailrec fun <R> foldRight(initial: R, location: JsLocation, operation: (R, PathElement) -> R): R =
+        public tailrec fun <R> foldRight(initial: R, location: JsLocation, operation: (R, PathElement) -> R): R =
             when (location) {
                 is Empty -> initial
                 is Element -> foldRight(operation(initial, location.value), location.begin, operation)
             }
 
-        fun <R> foldLeft(initial: R, location: JsLocation, operation: (R, PathElement) -> R): R =
+        public fun <R> foldLeft(initial: R, location: JsLocation, operation: (R, PathElement) -> R): R =
             when (location) {
                 is Empty -> initial
                 is Element -> operation(foldLeft(initial, location.begin, operation), location.value)

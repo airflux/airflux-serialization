@@ -26,36 +26,36 @@ import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectProp
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
-fun interface JsObjectReader<T> : JsReader<T> {
+public fun interface JsObjectReader<T> : JsReader<T> {
 
-    fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
+    public fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
 
     @AirfluxMarker
-    interface Builder<T> {
+    public interface Builder<T> {
 
-        var checkUniquePropertyPath: Boolean
+        public var checkUniquePropertyPath: Boolean
 
-        fun validation(block: Validation.Builder.() -> Unit)
+        public fun validation(block: Validation.Builder.() -> Unit)
 
-        fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P>
-        fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P>
-        fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P>
-        fun <P : Any> property(spec: JsObjectPropertySpec.OptionalWithDefault<P>): JsObjectProperty.OptionalWithDefault<P>
-        fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
-        fun <P : Any> property(spec: JsObjectPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P>
+        public fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P>
+        public fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P>
+        public fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P>
+        public fun <P : Any> property(spec: JsObjectPropertySpec.OptionalWithDefault<P>): JsObjectProperty.OptionalWithDefault<P>
+        public fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
+        public fun <P : Any> property(spec: JsObjectPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P>
 
-        fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T>
+        public fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T>
     }
 
-    class Validation private constructor(
-        val before: JsObjectValidatorBuilder.Before?,
-        val after: JsObjectValidatorBuilder.After?
+    public class Validation private constructor(
+        public val before: JsObjectValidatorBuilder.Before?,
+        public val after: JsObjectValidatorBuilder.After?
     ) {
 
         @AirfluxMarker
-        class Builder(
-            var before: JsObjectValidatorBuilder.Before? = null,
-            var after: JsObjectValidatorBuilder.After? = null
+        public class Builder(
+            public var before: JsObjectValidatorBuilder.Before? = null,
+            public var after: JsObjectValidatorBuilder.After? = null
         ) {
             internal fun build(): Validation = Validation(before, after)
         }

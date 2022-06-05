@@ -8,7 +8,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-class JsReaderContextTest : FreeSpec() {
+internal class JsReaderContextTest : FreeSpec() {
 
     companion object {
         private val userContext = UserContext()

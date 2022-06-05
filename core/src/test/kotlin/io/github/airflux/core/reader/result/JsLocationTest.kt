@@ -4,7 +4,7 @@ import io.github.airflux.core.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class JsLocationTest : FreeSpec() {
+internal class JsLocationTest : FreeSpec() {
 
     init {
         "A 'JsLocation' type" - {

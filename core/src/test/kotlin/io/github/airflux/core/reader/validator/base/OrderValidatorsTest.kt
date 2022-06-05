@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-class OrderValidatorsTest {
+internal class OrderValidatorsTest {
 
     companion object {
 

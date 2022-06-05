@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class WriteAsNullableTest {
+internal class WriteAsNullableTest {
 
     companion object {
         private val stringWriter = buildStringWriter()

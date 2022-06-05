@@ -15,7 +15,7 @@ import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-class NullableFieldReaderTest : FreeSpec() {
+internal class NullableFieldReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext(

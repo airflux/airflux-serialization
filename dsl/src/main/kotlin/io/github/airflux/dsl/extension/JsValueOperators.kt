@@ -25,8 +25,8 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsValue
 
 @Suppress("unused")
-fun <T : Any> JsValue.deserialization(context: JsReaderContext, reader: JsReader<T>): JsResult<T> =
+public fun <T : Any> JsValue.deserialization(context: JsReaderContext, reader: JsReader<T>): JsResult<T> =
     reader.read(context, JsLocation.empty, this)
 
-operator fun JsValue.div(key: String): JsLookup = JsLookup.apply(JsLocation.empty, PathElement.Key(key), this)
-operator fun JsValue.div(idx: Int): JsLookup = JsLookup.apply(JsLocation.empty, PathElement.Idx(idx), this)
+public operator fun JsValue.div(key: String): JsLookup = JsLookup.apply(JsLocation.empty, PathElement.Key(key), this)
+public operator fun JsValue.div(idx: Int): JsLookup = JsLookup.apply(JsLocation.empty, PathElement.Idx(idx), this)

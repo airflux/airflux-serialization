@@ -19,20 +19,20 @@ package io.github.airflux.dsl.reader.scope
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-fun objectReaderConfiguration(block: JsObjectReaderConfiguration.Builder.() -> Unit): JsObjectReaderConfiguration =
+public fun objectReaderConfiguration(block: JsObjectReaderConfiguration.Builder.() -> Unit): JsObjectReaderConfiguration =
     JsObjectReaderConfiguration.Builder().apply(block).build()
 
-class JsObjectReaderConfiguration private constructor(
-    val checkUniquePropertyPath: Boolean,
-    val validation: Validation
+public class JsObjectReaderConfiguration private constructor(
+    public val checkUniquePropertyPath: Boolean,
+    public val validation: Validation
 ) {
 
     @AirfluxMarker
-    class Builder {
-        var checkUniquePropertyPath: Boolean = false
+    public class Builder {
+        public var checkUniquePropertyPath: Boolean = false
         private var validation: Validation.Builder = Validation.Builder()
 
-        fun validation(block: Validation.Builder.() -> Unit) {
+        public fun validation(block: Validation.Builder.() -> Unit) {
             validation.block()
         }
 
@@ -43,21 +43,21 @@ class JsObjectReaderConfiguration private constructor(
             )
     }
 
-    class Validation private constructor(
-        val before: JsObjectValidatorBuilder.Before?,
-        val after: JsObjectValidatorBuilder.After?
+    public class Validation private constructor(
+        public val before: JsObjectValidatorBuilder.Before?,
+        public val after: JsObjectValidatorBuilder.After?
     ) {
 
         @AirfluxMarker
-        class Builder(
-            var before: JsObjectValidatorBuilder.Before? = null,
-            var after: JsObjectValidatorBuilder.After? = null
+        public class Builder(
+            public var before: JsObjectValidatorBuilder.Before? = null,
+            public var after: JsObjectValidatorBuilder.After? = null
         ) {
             internal fun build(): Validation = Validation(before, after)
         }
     }
 
-    companion object {
-        val DEFAULT = Builder().build()
+    public companion object {
+        public val DEFAULT: JsObjectReaderConfiguration = Builder().build()
     }
 }

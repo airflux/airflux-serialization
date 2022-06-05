@@ -4,7 +4,7 @@ import io.github.airflux.core.value.JsBoolean
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class BuilderBooleanWriterTest {
+internal class BuilderBooleanWriterTest {
 
     companion object {
         private val booleanWriter = buildBooleanWriter()

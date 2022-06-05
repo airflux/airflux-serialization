@@ -49,7 +49,8 @@ tasks {
                 suppressWarnings = false
                 freeCompilerArgs = listOf(
                     "-Xjsr305=strict",
-                    "-Xjvm-default=all"
+                    "-Xjvm-default=all",
+                    "-Xexplicit-api=strict"
                 )
             }
         }
@@ -59,7 +60,7 @@ configure<DetektExtension> {
     source = project.files("src/main/kotlin", "src/test/kotlin")
 }
 
-val mavenPublicationName = "Jvm"
+val mavenPublicationName: String = "Jvm"
 publishing {
     publications {
         create<MavenPublication>(mavenPublicationName) {

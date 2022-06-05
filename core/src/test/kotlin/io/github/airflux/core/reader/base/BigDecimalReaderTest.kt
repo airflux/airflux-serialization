@@ -14,7 +14,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import java.math.BigDecimal
 
-class BigDecimalReaderTest : FreeSpec() {
+internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))

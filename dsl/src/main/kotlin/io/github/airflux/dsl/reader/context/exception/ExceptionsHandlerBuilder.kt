@@ -23,15 +23,17 @@ import io.github.airflux.dsl.AirfluxMarker
 import kotlin.reflect.KClass
 
 @AirfluxMarker
-class ExceptionsHandlerBuilder {
+public class ExceptionsHandlerBuilder {
 
     private val handlers = mutableListOf<Pair<KClass<*>, ExceptionHandler>>()
 
     @Suppress("unused")
-    inline fun <reified E : Throwable> exception(noinline handler: (JsReaderContext, JsLocation, E) -> JsError) =
+    public inline fun <reified E : Throwable> exception(
+        noinline handler: (JsReaderContext, JsLocation, E) -> JsError
+    ): Unit =
         exception(E::class, handler)
 
-    fun <E : Throwable> exception(kClass: KClass<E>, handler: (JsReaderContext, JsLocation, E) -> JsError) {
+    public fun <E : Throwable> exception(kClass: KClass<E>, handler: (JsReaderContext, JsLocation, E) -> JsError) {
         @Suppress("UNCHECKED_CAST")
         handlers += kClass to handler as (JsReaderContext, JsLocation, Throwable) -> JsError
     }

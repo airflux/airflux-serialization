@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
 @Suppress("ReplaceCallWithBinaryOperator", "EqualsNullCall")
-fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) {
+internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) {
     val x = this
     assertSoftly {
         withClue("reflexive") {

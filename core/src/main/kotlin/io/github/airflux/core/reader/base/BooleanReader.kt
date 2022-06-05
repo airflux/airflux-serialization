@@ -26,7 +26,7 @@ import io.github.airflux.core.value.extension.readAsBoolean
 /**
  * Reader for primitive [Boolean] type.
  */
-object BooleanReader : JsReader<Boolean> {
+public object BooleanReader : JsReader<Boolean> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Boolean> =
         input.readAsBoolean(context, location)
 }

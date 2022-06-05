@@ -13,7 +13,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import kotlin.test.assertEquals
 
-class JsLookupTest : FreeSpec() {
+internal class JsLookupTest : FreeSpec() {
 
     init {
 

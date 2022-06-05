@@ -29,7 +29,7 @@ import io.github.airflux.core.value.extension.readAsNumber
 /**
  * Reader for primitive [Long] type.
  */
-object LongReader : JsReader<Long> {
+public object LongReader : JsReader<Long> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Long> =
         input.readAsNumber(context, location) { c, p, text ->
             try {

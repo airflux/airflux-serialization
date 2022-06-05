@@ -25,7 +25,7 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 @Suppress("unused")
-object IsNotEmpty : JsObjectValidatorBuilder.After {
+public object IsNotEmpty : JsObjectValidatorBuilder.After {
 
     private val validator = JsObjectValidator.After { context, _, values, _ ->
         val errorBuilder = context.getValue(ErrorBuilder)
@@ -34,12 +34,12 @@ object IsNotEmpty : JsObjectValidatorBuilder.After {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 
-    class ErrorBuilder(private val function: () -> JsError) :
+    public class ErrorBuilder(private val function: () -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        fun build(): JsError = function()
+        public fun build(): JsError = function()
 
-        companion object Key : JsReaderContext.Key<ErrorBuilder> {
+        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
             override val name: String = "IsNotEmptyErrorBuilder"
         }
     }

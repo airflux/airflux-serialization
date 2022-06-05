@@ -14,7 +14,7 @@ import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 
-class ByteReaderTest : FreeSpec() {
+internal class ByteReaderTest : FreeSpec() {
 
     companion object {
         private val context = JsReaderContext(

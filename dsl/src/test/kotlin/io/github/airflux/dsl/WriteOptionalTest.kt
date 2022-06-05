@@ -9,7 +9,7 @@ import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WriteOptionalTest {
+internal class WriteOptionalTest {
 
     companion object {
         private val objectWriter = ObjectWriter(ObjectWriterConfiguration.Default)

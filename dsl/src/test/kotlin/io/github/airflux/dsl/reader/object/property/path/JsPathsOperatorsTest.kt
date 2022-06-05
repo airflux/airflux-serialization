@@ -4,7 +4,7 @@ import io.github.airflux.core.path.JsPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainInOrder
 
-class JsPathsOperatorsTest : FreeSpec() {
+internal class JsPathsOperatorsTest : FreeSpec() {
 
     companion object {
         private val pathUser = JsPath("user")

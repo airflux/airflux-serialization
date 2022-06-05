@@ -19,27 +19,28 @@ package io.github.airflux.dsl.reader.`object`
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 
 @Suppress("TooManyFunctions")
-sealed interface ObjectValuesMap {
+public sealed interface ObjectValuesMap {
 
-    val isEmpty: Boolean
-    val isNotEmpty: Boolean
-    val size: Int
+    public val isEmpty: Boolean
+    public val isNotEmpty: Boolean
+    public val size: Int
 
-    infix operator fun <T : Any> get(property: JsObjectProperty.Required<T>): T
-    operator fun <T : Any> JsObjectProperty.Required<T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: JsObjectProperty.Required<T>): T
+    public operator fun <T : Any> JsObjectProperty.Required<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(property: JsObjectProperty.Defaultable<T>): T
-    operator fun <T : Any> JsObjectProperty.Defaultable<T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: JsObjectProperty.Defaultable<T>): T
+    public operator fun <T : Any> JsObjectProperty.Defaultable<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(property: JsObjectProperty.Optional<T>): T?
-    operator fun <T : Any> JsObjectProperty.Optional<T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: JsObjectProperty.Optional<T>): T?
+    public operator fun <T : Any> JsObjectProperty.Optional<T>.unaryPlus(): T? = get(this)
 
-    infix operator fun <T : Any> get(property: JsObjectProperty.OptionalWithDefault<T>): T
-    operator fun <T : Any> JsObjectProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: JsObjectProperty.OptionalWithDefault<T>): T
+    public operator fun <T : Any> JsObjectProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
 
-    infix operator fun <T : Any> get(property: JsObjectProperty.Nullable<T>): T?
-    operator fun <T : Any> JsObjectProperty.Nullable<T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: JsObjectProperty.Nullable<T>): T?
+    public operator fun <T : Any> JsObjectProperty.Nullable<T>.unaryPlus(): T? = get(this)
 
+    public
     infix operator fun <T : Any> get(property: JsObjectProperty.NullableWithDefault<T>): T?
-    operator fun <T : Any> JsObjectProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
+    public operator fun <T : Any> JsObjectProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
 }

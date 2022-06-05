@@ -20,18 +20,18 @@ import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
 
 @Suppress("unused")
-fun arrayReaderConfiguration(block: JsArrayReaderConfiguration.Builder.() -> Unit): JsArrayReaderConfiguration =
+public fun arrayReaderConfiguration(block: JsArrayReaderConfiguration.Builder.() -> Unit): JsArrayReaderConfiguration =
     JsArrayReaderConfiguration.Builder().apply(block).build()
 
-class JsArrayReaderConfiguration private constructor(
-    val validation: Validation
+public class JsArrayReaderConfiguration private constructor(
+    public val validation: Validation
 ) {
 
     @AirfluxMarker
-    class Builder {
+    public class Builder {
         private var validation: Validation.Builder = Validation.Builder()
 
-        fun validation(block: Validation.Builder.() -> Unit) {
+        public fun validation(block: Validation.Builder.() -> Unit) {
             validation.block()
         }
 
@@ -41,19 +41,19 @@ class JsArrayReaderConfiguration private constructor(
             )
     }
 
-    class Validation private constructor(
-        val before: JsArrayValidatorBuilder.Before?
+    public class Validation private constructor(
+        public val before: JsArrayValidatorBuilder.Before?
     ) {
 
         @AirfluxMarker
-        class Builder(
-            var before: JsArrayValidatorBuilder.Before? = null
+        public class Builder(
+            public var before: JsArrayValidatorBuilder.Before? = null
         ) {
             internal fun build(): Validation = Validation(before)
         }
     }
 
-    companion object {
-        val DEFAULT: JsArrayReaderConfiguration = Builder().build()
+    public companion object {
+        public val DEFAULT: JsArrayReaderConfiguration = Builder().build()
     }
 }

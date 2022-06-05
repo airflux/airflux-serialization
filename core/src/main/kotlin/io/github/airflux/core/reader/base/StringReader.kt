@@ -26,7 +26,7 @@ import io.github.airflux.core.value.extension.readAsString
 /**
  * Reader for primitive [String] type.
  */
-object StringReader : JsReader<String> {
+public object StringReader : JsReader<String> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<String> =
         input.readAsString(context, location)
 }

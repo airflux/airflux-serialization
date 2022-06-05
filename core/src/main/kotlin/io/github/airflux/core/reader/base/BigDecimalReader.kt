@@ -28,7 +28,7 @@ import java.math.BigDecimal
 /**
  * Reader for [BigDecimal] type.
  */
-object BigDecimalReader : JsReader<BigDecimal> {
+public object BigDecimalReader : JsReader<BigDecimal> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<BigDecimal> =
         input.readAsNumber(context, location) { _, p, text ->
             BigDecimal(text).success(location = p)

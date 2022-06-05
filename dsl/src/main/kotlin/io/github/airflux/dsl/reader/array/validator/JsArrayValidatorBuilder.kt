@@ -19,36 +19,36 @@ package io.github.airflux.dsl.reader.array.validator
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder.After
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder.Before
 
-sealed interface JsArrayValidatorBuilder {
+public sealed interface JsArrayValidatorBuilder {
 
-    fun interface Before : JsArrayValidatorBuilder {
-        fun build(): JsArrayValidator.Before
+    public fun interface Before : JsArrayValidatorBuilder {
+        public fun build(): JsArrayValidator.Before
     }
 
-    fun interface After<T> : JsArrayValidatorBuilder {
-        fun build(): JsArrayValidator.After<T>
+    public fun interface After<T> : JsArrayValidatorBuilder {
+        public fun build(): JsArrayValidator.After<T>
     }
 }
 
-infix fun Before?.or(alt: Before): Before =
+public infix fun Before?.or(alt: Before): Before =
     if (this != null)
         Before { this.build().or(alt.build()) }
     else
         alt
 
-infix fun Before?.and(alt: Before): Before =
+public infix fun Before?.and(alt: Before): Before =
     if (this != null)
         Before { this.build().and(alt.build()) }
     else
         alt
 
-infix fun <T : Any> After<T>?.or(alt: After<T>): After<T> =
+public infix fun <T : Any> After<T>?.or(alt: After<T>): After<T> =
     if (this != null)
         After { this.build().or(alt.build()) }
     else
         alt
 
-infix fun <T : Any> After<T>?.and(alt: After<T>): After<T> =
+public infix fun <T : Any> After<T>?.and(alt: After<T>): After<T> =
     if (this != null)
         After { this.build().and(alt.build()) }
     else

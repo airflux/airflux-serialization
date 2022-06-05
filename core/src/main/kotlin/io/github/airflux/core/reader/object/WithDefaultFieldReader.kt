@@ -32,7 +32,7 @@ import io.github.airflux.core.value.JsNull
  * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
  *   that was build using [InvalidTypeErrorBuilder]
  */
-fun <T : Any> readWithDefault(
+public fun <T : Any> readWithDefault(
     context: JsReaderContext,
     from: JsLookup,
     using: JsReader<T>,
