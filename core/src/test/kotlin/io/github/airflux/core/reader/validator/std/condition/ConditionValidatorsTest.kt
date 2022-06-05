@@ -1,10 +1,12 @@
-package io.github.airflux.core.reader.validator.base
+package io.github.airflux.core.reader.validator.std.condition
 
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.validator.JsValidator
+import io.github.airflux.core.reader.validator.base.applyIf
+import io.github.airflux.core.reader.validator.base.applyIfNotNull
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
