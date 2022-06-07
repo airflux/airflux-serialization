@@ -3,6 +3,7 @@ package io.github.airflux.quickstart.dto.reader.dsl
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.result.success
 import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.core.reader.validator.std.string.StringValidator.isNotBlank
 import io.github.airflux.dsl.reader.array.item.specification.nonNullable
 import io.github.airflux.dsl.reader.arrayReader
 import io.github.airflux.dsl.reader.`object`.property.specification.required
@@ -14,7 +15,6 @@ import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.reader.base.asEnum
 import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySpec
-import io.github.airflux.quickstart.dto.reader.validator.StringValidator.isNotBlank
 
 val LotStatusReader = StringReader.validation(isNotBlank).asEnum<LotStatus>()
 
