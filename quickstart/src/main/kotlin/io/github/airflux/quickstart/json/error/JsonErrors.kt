@@ -21,7 +21,12 @@ sealed class JsonErrors : JsError {
         sealed class Numbers : Validation() {
             class Min<T>(val expected: T, val actual: T) : Numbers()
             class Max<T>(val expected: T, val actual: T) : Numbers()
+            class Eq<T>(val expected: T, val actual: T) : Numbers()
+            class Ne<T>(val expected: T, val actual: T) : Numbers()
             class Gt<T>(val expected: T, val actual: T) : Numbers()
+            class Ge<T>(val expected: T, val actual: T) : Numbers()
+            class Lt<T>(val expected: T, val actual: T) : Numbers()
+            class Le<T>(val expected: T, val actual: T) : Numbers()
         }
 
         sealed class Arrays : Validation() {

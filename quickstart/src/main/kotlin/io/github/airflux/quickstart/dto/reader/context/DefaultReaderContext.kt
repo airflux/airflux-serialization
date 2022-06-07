@@ -4,6 +4,14 @@ import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.validator.std.comparable.EqComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.GeComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.GtComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.LeComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.LtComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.MaxComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.MinComparableValidator
+import io.github.airflux.core.reader.validator.std.comparable.NeComparableValidator
 import io.github.airflux.core.reader.validator.std.string.IsAStringValidator
 import io.github.airflux.core.reader.validator.std.string.IsNotBlankStringValidator
 import io.github.airflux.core.reader.validator.std.string.IsNotEmptyStringValidator
@@ -25,6 +33,7 @@ val DefaultReaderContext = readerContext {
         readerErrorBuilders()
         objectValidationErrorBuilders()
         stringValidationErrorBuilders()
+        comparableValidationErrorBuilders()
     }
 
     exceptions {
@@ -54,4 +63,15 @@ fun JsReaderContextBuilder.ErrorsBuilder.stringValidationErrorBuilders() {
     +MaxLengthStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::MaxLength)
     +PatternStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::Pattern)
     +IsAStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::IsA)
+}
+
+fun JsReaderContextBuilder.ErrorsBuilder.comparableValidationErrorBuilders() {
+    +MinComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Min)
+    +MaxComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Max)
+    +EqComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Eq)
+    +NeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ne)
+    +GtComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Gt)
+    +GeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ge)
+    +LtComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Lt)
+    +LeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Le)
 }
