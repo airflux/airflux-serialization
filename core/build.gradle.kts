@@ -12,6 +12,8 @@ plugins {
     id("detekt-convention")
     id("publishing-convention")
     `java-library`
+
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.10.0"
 }
 
 dependencies {
