@@ -8,7 +8,7 @@ public fun <T> prefixItems(
     vararg items: JsArrayItemSpec<T>
 ): JsArrayPrefixItemsSpec<T> = JsArrayPrefixItemsSpec(item = item, items = items)
 
-public class JsArrayPrefixItemsSpec<out T> private constructor(public val items: List<JsArrayItemSpec<T>>) {
+public class JsArrayPrefixItemsSpec<T> private constructor(public val items: List<JsArrayItemSpec<T>>) {
 
     internal constructor(item: JsArrayItemSpec<T>, vararg items: JsArrayItemSpec<T>) : this(
         mutableListOf<JsArrayItemSpec<T>>()

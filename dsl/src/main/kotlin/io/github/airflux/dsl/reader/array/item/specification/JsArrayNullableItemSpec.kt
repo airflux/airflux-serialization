@@ -21,10 +21,7 @@ import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.reader.validator.extension.validation
 
-public infix fun <T> JsArrayItemSpec.Nullable<T>.or(alt: JsArrayItemSpec.Nullable<T>): JsArrayItemSpec.Nullable<T> =
-    JsArrayNullableItemSpec(reader or alt.reader)
-
-internal class JsArrayNullableItemSpec<out T>(override val reader: JsReader<T?>) : JsArrayItemSpec.Nullable<T> {
+internal class JsArrayNullableItemSpec<T>(override val reader: JsReader<T?>) : JsArrayItemSpec.Nullable<T> {
 
     override infix fun validation(validator: JsValidator<T?>): JsArrayItemSpec.Nullable<T> =
         JsArrayNullableItemSpec(
@@ -32,4 +29,7 @@ internal class JsArrayNullableItemSpec<out T>(override val reader: JsReader<T?>)
                 reader.read(context, location, input).validation(context, validator)
             }
         )
+
+    override fun or(alt: JsArrayItemSpec.Nullable<T>): JsArrayItemSpec.Nullable<T> =
+        JsArrayNullableItemSpec(reader or alt.reader)
 }
