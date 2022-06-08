@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.validator.base
+package io.github.airflux.core.reader.validator.std.condition
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation

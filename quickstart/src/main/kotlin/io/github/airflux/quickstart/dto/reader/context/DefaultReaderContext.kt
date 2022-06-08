@@ -4,6 +4,9 @@ import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.validator.std.array.IsUniqueArrayValidator
+import io.github.airflux.core.reader.validator.std.array.MaxItemsArrayValidator
+import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
 import io.github.airflux.core.reader.validator.std.comparable.EqComparableValidator
 import io.github.airflux.core.reader.validator.std.comparable.GeComparableValidator
 import io.github.airflux.core.reader.validator.std.comparable.GtComparableValidator
@@ -32,6 +35,7 @@ val DefaultReaderContext = readerContext {
     errorBuilders {
         readerErrorBuilders()
         objectValidationErrorBuilders()
+        arrayValidationErrorBuilders()
         stringValidationErrorBuilders()
         comparableValidationErrorBuilders()
     }
@@ -54,6 +58,12 @@ fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
     +IsNotEmpty.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
     +MinProperties.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
     +MaxProperties.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
+}
+
+fun JsReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {
+    +IsUniqueArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::Unique)
+    +MinItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
+    +MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.stringValidationErrorBuilders() {
