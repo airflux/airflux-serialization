@@ -34,7 +34,7 @@ public fun <T> reader(
 
 public fun <T> arrayReader(
     configuration: JsArrayReaderConfiguration = JsArrayReaderConfiguration.DEFAULT,
-    block: JsArrayReader.Builder<T>.() -> JsArrayReader.ResultBuilder<T>
+    block: JsArrayReaderBuilder<T>.() -> JsArrayReaderBuilder.ResultBuilder<T>
 ): JsArrayReader<T> {
     val readerBuilder = JsArrayReaderBuilder<T>(configuration)
     val resultBuilder = readerBuilder.block()

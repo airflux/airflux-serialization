@@ -19,7 +19,6 @@ package io.github.airflux.dsl.reader.array.validator
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.core.value.JsValue
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidator.After
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidator.Before
 
@@ -28,7 +27,7 @@ public sealed interface JsArrayValidator {
 
     public fun interface Before : JsArrayValidator {
 
-        public fun validation(context: JsReaderContext, input: JsArray<JsValue>): JsErrors?
+        public fun validation(context: JsReaderContext, input: JsArray<*>): JsErrors?
 
         /*
         * | This | Other  | Result |
@@ -66,7 +65,7 @@ public sealed interface JsArrayValidator {
 
     public fun interface After<T> : JsArrayValidator {
 
-        public fun validation(context: JsReaderContext, input: JsArray<JsValue>, items: List<T>): JsErrors?
+        public fun validation(context: JsReaderContext, input: JsArray<*>, items: List<T>): JsErrors?
 
         /*
         * | This | Other  | Result |
