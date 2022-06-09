@@ -27,7 +27,6 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-@Suppress("unused")
 public object AdditionalProperties : JsObjectValidatorBuilder.Before {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.Before {

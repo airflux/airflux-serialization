@@ -24,8 +24,7 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-@Suppress("unused")
-public class MaxProperties(public val value: Int) : JsObjectValidatorBuilder.After {
+public class MaxProperties internal constructor(private val value: Int) : JsObjectValidatorBuilder.After {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.After =
         JsObjectValidator.After { context, _, values, _ ->

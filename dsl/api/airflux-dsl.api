@@ -401,9 +401,7 @@ public final class io/github/airflux/dsl/reader/object/validator/std/IsNotEmpty$
 }
 
 public final class io/github/airflux/dsl/reader/object/validator/std/MaxProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
-	public fun <init> (I)V
 	public fun build (Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
-	public final fun getValue ()I
 }
 
 public final class io/github/airflux/dsl/reader/object/validator/std/MaxProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -417,9 +415,7 @@ public final class io/github/airflux/dsl/reader/object/validator/std/MaxProperti
 }
 
 public final class io/github/airflux/dsl/reader/object/validator/std/MinProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
-	public fun <init> (I)V
 	public fun build (Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
-	public final fun getValue ()I
 }
 
 public final class io/github/airflux/dsl/reader/object/validator/std/MinProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -430,6 +426,14 @@ public final class io/github/airflux/dsl/reader/object/validator/std/MinProperti
 
 public final class io/github/airflux/dsl/reader/object/validator/std/MinProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
 	public fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/dsl/reader/object/validator/std/ObjectValidator {
+	public static final field INSTANCE Lio/github/airflux/dsl/reader/object/validator/std/ObjectValidator;
+	public final fun getAdditionalProperties ()Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$Before;
+	public final fun isNotEmpty ()Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After;
+	public final fun maxProperties (I)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After;
+	public final fun minProperties (I)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After;
 }
 
 public final class io/github/airflux/dsl/reader/result/LocationKt {

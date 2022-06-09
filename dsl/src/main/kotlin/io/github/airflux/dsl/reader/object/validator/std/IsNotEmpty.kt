@@ -24,7 +24,6 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-@Suppress("unused")
 public object IsNotEmpty : JsObjectValidatorBuilder.After {
 
     private val validator = JsObjectValidator.After { context, _, values, _ ->
