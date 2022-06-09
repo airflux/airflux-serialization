@@ -147,12 +147,11 @@ public class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration
             val failFast = context.failFast
             val failures = mutableListOf<JsResult.Failure>()
 
-            val preValidationErrors = configuration.validators.before
-                ?.validation(context, configuration.properties, this)
-            if (preValidationErrors != null) {
-                val failure = JsResult.Failure(location, preValidationErrors)
-                if (failFast) return failure
-                failures.add(failure)
+            val preValidationFailure = configuration.validators.before
+                ?.validation(context, location, configuration.properties, this)
+            if (preValidationFailure != null) {
+                if (failFast) return preValidationFailure
+                failures.add(preValidationFailure)
             }
 
             val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
@@ -171,12 +170,11 @@ public class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration
                     }
                 }
 
-            val postValidationErrors = configuration.validators.after
-                ?.validation(context, configuration.properties, objectValuesMap, this)
-            if (postValidationErrors != null) {
-                val failure = JsResult.Failure(location, postValidationErrors)
-                if (failFast) return failure
-                failures.add(failure)
+            val postValidationFailure = configuration.validators.after
+                ?.validation(context, location, configuration.properties, objectValuesMap, this)
+            if (postValidationFailure != null) {
+                if (failFast) return postValidationFailure
+                failures.add(postValidationFailure)
             }
 
             return if (failures.isEmpty())

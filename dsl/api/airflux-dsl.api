@@ -343,13 +343,13 @@ public abstract interface class io/github/airflux/dsl/reader/object/validator/Js
 public abstract interface class io/github/airflux/dsl/reader/object/validator/JsObjectValidator$After : io/github/airflux/dsl/reader/object/validator/JsObjectValidator {
 	public fun and (Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
 	public fun or (Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
-	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;Lio/github/airflux/dsl/reader/object/ObjectValuesMap;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsErrors;
+	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;Lio/github/airflux/dsl/reader/object/ObjectValuesMap;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public abstract interface class io/github/airflux/dsl/reader/object/validator/JsObjectValidator$Before : io/github/airflux/dsl/reader/object/validator/JsObjectValidator {
 	public fun and (Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$Before;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$Before;
 	public fun or (Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$Before;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$Before;
-	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsErrors;
+	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public abstract interface class io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder {
@@ -377,8 +377,8 @@ public final class io/github/airflux/dsl/reader/object/validator/std/AdditionalP
 
 public final class io/github/airflux/dsl/reader/object/validator/std/AdditionalProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
 	public static final field Key Lio/github/airflux/dsl/reader/object/validator/std/AdditionalProperties$ErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function1;)V
-	public final fun build (Ljava/util/List;)Lio/github/airflux/core/reader/result/JsError;
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
 }
 
 public final class io/github/airflux/dsl/reader/object/validator/std/AdditionalProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {

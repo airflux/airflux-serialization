@@ -17,7 +17,8 @@
 package io.github.airflux.dsl.reader.`object`.validator
 
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsErrors
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
@@ -29,7 +30,12 @@ public sealed interface JsObjectValidator {
 
     public fun interface Before : JsObjectValidator {
 
-        public fun validation(context: JsReaderContext, properties: JsObjectProperties, input: JsObject): JsErrors?
+        public fun validation(
+            context: JsReaderContext,
+            location: JsLocation,
+            properties: JsObjectProperties,
+            input: JsObject
+        ): JsResult.Failure?
 
         /*
         * | This | Other  | Result |
@@ -40,10 +46,10 @@ public sealed interface JsObjectValidator {
         */
         public infix fun or(other: Before): Before {
             val self = this
-            return Before { context, properties, input ->
-                self.validation(context, properties, input)
+            return Before { context, location, properties, input ->
+                self.validation(context, location, properties, input)
                     ?.let { error ->
-                        other.validation(context, properties, input)
+                        other.validation(context, location, properties, input)
                             ?.let { error + it }
                     }
             }
@@ -58,9 +64,9 @@ public sealed interface JsObjectValidator {
          */
         public infix fun and(other: Before): Before {
             val self = this
-            return Before { context, properties, input ->
-                val result = self.validation(context, properties, input)
-                result ?: other.validation(context, properties, input)
+            return Before { context, location, properties, input ->
+                val result = self.validation(context, location, properties, input)
+                result ?: other.validation(context, location, properties, input)
             }
         }
     }
@@ -69,10 +75,11 @@ public sealed interface JsObjectValidator {
 
         public fun validation(
             context: JsReaderContext,
+            location: JsLocation,
             properties: JsObjectProperties,
             objectValuesMap: ObjectValuesMap,
             input: JsObject
-        ): JsErrors?
+        ): JsResult.Failure?
 
         /*
         * | This | Other  | Result |
@@ -83,10 +90,10 @@ public sealed interface JsObjectValidator {
         */
         public infix fun or(other: After): After {
             val self = this
-            return After { context, properties, objectValuesMap, input ->
-                self.validation(context, properties, objectValuesMap, input)
+            return After { context, location, properties, objectValuesMap, input ->
+                self.validation(context, location, properties, objectValuesMap, input)
                     ?.let { error ->
-                        other.validation(context, properties, objectValuesMap, input)
+                        other.validation(context, location, properties, objectValuesMap, input)
                             ?.let { error + it }
                     }
             }
@@ -101,9 +108,9 @@ public sealed interface JsObjectValidator {
          */
         public infix fun and(other: After): After {
             val self = this
-            return After { context, properties, objectValuesMap, input ->
-                val result = self.validation(context, properties, objectValuesMap, input)
-                result ?: other.validation(context, properties, objectValuesMap, input)
+            return After { context, location, properties, objectValuesMap, input ->
+                val result = self.validation(context, location, properties, objectValuesMap, input)
+                result ?: other.validation(context, location, properties, objectValuesMap, input)
             }
         }
     }

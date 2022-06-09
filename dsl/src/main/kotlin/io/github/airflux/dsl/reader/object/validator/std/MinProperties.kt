@@ -19,7 +19,7 @@ package io.github.airflux.dsl.reader.`object`.validator.std
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
@@ -27,11 +27,11 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 public class MinProperties internal constructor(private val value: Int) : JsObjectValidatorBuilder.After {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.After =
-        JsObjectValidator.After { context, _, values, _ ->
-            if (values.size < value) {
-                val errorBuilder = context.getValue(ErrorBuilder)
-                JsErrors.of(errorBuilder.build(value, values.size))
-            } else
+        JsObjectValidator.After { context, location, _, values, _ ->
+            val errorBuilder = context.getValue(ErrorBuilder)
+            if (values.size < value)
+                JsResult.Failure(location, errorBuilder.build(value, values.size))
+            else
                 null
         }
 

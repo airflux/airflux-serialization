@@ -46,7 +46,7 @@ sealed class JsonErrors : JsError {
 
         sealed class Object : Validation() {
             object IsEmpty : Object()
-            class AdditionalProperties(val names: List<String>) : Object()
+            object AdditionalProperties : Object()
             class MinProperties(val expected: Int, val actual: Int) : Object()
             class MaxProperties(val expected: Int, val actual: Int) : Object()
         }

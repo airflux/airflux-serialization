@@ -2,6 +2,10 @@ package io.github.airflux.dsl.reader.`object`.validator.std
 
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.option.FailFast
+import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.dsl.common.JsonErrors
@@ -12,7 +16,6 @@ import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.additionalProperties
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -24,6 +27,9 @@ internal class AdditionalPropertiesTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "property-id"
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-name"
+        private const val NAME_PROPERTY_NAME = "title"
+        private const val NAME_PROPERTY_VALUE = "property-title"
+        private val LOCATION = JsLocation.empty
 
         private val idProperty: JsObjectProperty.Required<String> =
             JsObjectProperty.Required(required(ID_PROPERTY_NAME, StringReader))
@@ -47,7 +53,7 @@ internal class AdditionalPropertiesTest : FreeSpec() {
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, properties, input)
+                        validator.validation(context, LOCATION, properties, input)
                     }
                     exception.message shouldBe "Key '${AdditionalProperties.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
                 }
@@ -62,7 +68,7 @@ internal class AdditionalPropertiesTest : FreeSpec() {
                     val input = JsObject()
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, properties, input)
+                        val errors = validator.validation(context, LOCATION, properties, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -71,7 +77,7 @@ internal class AdditionalPropertiesTest : FreeSpec() {
                     val input = JsObject(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, properties, input)
+                        val errors = validator.validation(context, LOCATION, properties, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -79,37 +85,57 @@ internal class AdditionalPropertiesTest : FreeSpec() {
                 "when the object contains additional properties" - {
                     val input = JsObject(
                         ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
-                        TITLE_PROPERTY_VALUE to JsString(TITLE_PROPERTY_NAME)
+                        TITLE_PROPERTY_VALUE to JsString(TITLE_PROPERTY_NAME),
+                        NAME_PROPERTY_VALUE to JsString(NAME_PROPERTY_NAME)
                     )
 
-                    "then the validator should return an error" {
-                        val errors = validator.validation(context, properties, input)
+                    "when fail-fast is missing" - {
 
-                        errors.shouldNotBeNull()
-                        errors.items shouldContainExactly listOf(
-                            JsonErrors.Validation.Object.AdditionalProperties
-                        )
+                        "then the validator should return an error" {
+                            val failure = validator.validation(context, LOCATION, properties, input)
+
+                            failure.shouldNotBeNull()
+                            failure shouldBe JsResult.Failure(
+                                location = LOCATION.append(TITLE_PROPERTY_VALUE),
+                                error = JsonErrors.Validation.Object.AdditionalProperties
+                            )
+                        }
+                    }
+
+                    "when fail-fast is true" - {
+                        val contextWithFailFast = context + FailFast(true)
+
+                        "then the validator should return an error" {
+                            val failure = validator.validation(contextWithFailFast, LOCATION, properties, input)
+
+                            failure.shouldNotBeNull()
+                            failure shouldBe JsResult.Failure(
+                                location = LOCATION.append(TITLE_PROPERTY_VALUE),
+                                error = JsonErrors.Validation.Object.AdditionalProperties
+                            )
+                        }
+                    }
+
+                    "when fail-fast is false" - {
+                        val contextWithFailFast = context + FailFast(false)
+
+                        "then the validator should return an error" {
+                            val failure = validator.validation(contextWithFailFast, LOCATION, properties, input)
+
+                            failure.shouldNotBeNull()
+                            failure shouldBe listOf(
+                                JsResult.Failure(
+                                    location = LOCATION.append(TITLE_PROPERTY_VALUE),
+                                    error = JsonErrors.Validation.Object.AdditionalProperties
+                                ),
+                                JsResult.Failure(
+                                    location = LOCATION.append(NAME_PROPERTY_VALUE),
+                                    error = JsonErrors.Validation.Object.AdditionalProperties
+                                )
+                            ).merge()
+                        }
                     }
                 }
-
-                /*"when the object contains a number of properties equal to the maximum" - {
-
-                    "then the validator should return an error" {
-                        val errors = validator.validation(context, properties, input)
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when the object contains a number of properties more than the maximum" - {
-
-                    "then the validator should return an error" {
-                        val errors = validator.validation(context, properties, input)
-                        errors.shouldNotBeNull()
-                        errors.items shouldContainExactly listOf(
-                            JsonErrors.Validation.Object.AdditionalProperties
-                        )
-                    }
-                }*/
             }
         }
     }
