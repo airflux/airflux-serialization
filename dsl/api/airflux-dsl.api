@@ -370,65 +370,65 @@ public final class io/github/airflux/dsl/reader/object/validator/JsObjectValidat
 	public static final fun or (Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$Before;Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$Before;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$Before;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/AdditionalProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$Before {
-	public static final field INSTANCE Lio/github/airflux/dsl/reader/object/validator/base/AdditionalProperties;
+public final class io/github/airflux/dsl/reader/object/validator/std/AdditionalProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$Before {
+	public static final field INSTANCE Lio/github/airflux/dsl/reader/object/validator/std/AdditionalProperties;
 	public fun build (Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$Before;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/AdditionalProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/dsl/reader/object/validator/base/AdditionalProperties$ErrorBuilder$Key;
+public final class io/github/airflux/dsl/reader/object/validator/std/AdditionalProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/object/validator/std/AdditionalProperties$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
 	public final fun build (Ljava/util/List;)Lio/github/airflux/core/reader/result/JsError;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/AdditionalProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+public final class io/github/airflux/dsl/reader/object/validator/std/AdditionalProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/IsNotEmpty : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
-	public static final field INSTANCE Lio/github/airflux/dsl/reader/object/validator/base/IsNotEmpty;
+public final class io/github/airflux/dsl/reader/object/validator/std/IsNotEmpty : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
+	public static final field INSTANCE Lio/github/airflux/dsl/reader/object/validator/std/IsNotEmpty;
 	public fun build (Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/IsNotEmpty$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/dsl/reader/object/validator/base/IsNotEmpty$ErrorBuilder$Key;
+public final class io/github/airflux/dsl/reader/object/validator/std/IsNotEmpty$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/object/validator/std/IsNotEmpty$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function0;)V
 	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/IsNotEmpty$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+public final class io/github/airflux/dsl/reader/object/validator/std/IsNotEmpty$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/MaxProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
+public final class io/github/airflux/dsl/reader/object/validator/std/MaxProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
 	public fun <init> (I)V
 	public fun build (Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
 	public final fun getValue ()I
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/MaxProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/dsl/reader/object/validator/base/MaxProperties$ErrorBuilder$Key;
+public final class io/github/airflux/dsl/reader/object/validator/std/MaxProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/object/validator/std/MaxProperties$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (II)Lio/github/airflux/core/reader/result/JsError;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/MaxProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+public final class io/github/airflux/dsl/reader/object/validator/std/MaxProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/MinProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
+public final class io/github/airflux/dsl/reader/object/validator/std/MinProperties : io/github/airflux/dsl/reader/object/validator/JsObjectValidatorBuilder$After {
 	public fun <init> (I)V
 	public fun build (Lio/github/airflux/dsl/reader/object/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/object/validator/JsObjectValidator$After;
 	public final fun getValue ()I
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/MinProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/dsl/reader/object/validator/base/MinProperties$ErrorBuilder$Key;
+public final class io/github/airflux/dsl/reader/object/validator/std/MinProperties$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/object/validator/std/MinProperties$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (II)Lio/github/airflux/core/reader/result/JsError;
 }
 
-public final class io/github/airflux/dsl/reader/object/validator/base/MinProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+public final class io/github/airflux/dsl/reader/object/validator/std/MinProperties$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
 	public fun getName ()Ljava/lang/String;
 }
 

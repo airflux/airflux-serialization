@@ -3,9 +3,9 @@ package io.github.airflux.quickstart.dto.reader.dsl
 import io.github.airflux.core.reader.result.success
 import io.github.airflux.dsl.reader.`object`.property.specification.required
 import io.github.airflux.dsl.reader.`object`.validator.and
-import io.github.airflux.dsl.reader.`object`.validator.base.AdditionalProperties
-import io.github.airflux.dsl.reader.`object`.validator.base.MaxProperties
-import io.github.airflux.dsl.reader.`object`.validator.base.MinProperties
+import io.github.airflux.dsl.reader.`object`.validator.std.AdditionalProperties
+import io.github.airflux.dsl.reader.`object`.validator.std.MaxProperties
+import io.github.airflux.dsl.reader.`object`.validator.std.MinProperties
 import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.model.Value
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.validator.base
+package io.github.airflux.dsl.reader.`object`.validator.std
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
