@@ -18,7 +18,6 @@ package io.github.airflux.dsl.reader.`object`
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
@@ -27,50 +26,57 @@ import io.github.airflux.core.reader.result.failure
 import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.extension.readAsObject
+import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.reader.context.exception.ExceptionsHandler
+import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
+import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
 
-internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration) : JsObjectReader.Builder<T> {
-    private val validation: JsObjectReader.Validation.Builder = configuration.validation
-        .let { JsObjectReader.Validation.Builder(before = it.before, after = it.after) }
+@AirfluxMarker
+public class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration) {
 
+    public fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
+
+    private val validation: Validation.Builder = configuration.validation
+        .let { Validation.Builder(before = it.before, after = it.after) }
     private val propertiesBuilder = JsObjectProperties.Builder()
 
-    override var checkUniquePropertyPath: Boolean = configuration.checkUniquePropertyPath
+    public var checkUniquePropertyPath: Boolean = configuration.checkUniquePropertyPath
 
-    override fun validation(block: JsObjectReader.Validation.Builder.() -> Unit) {
+    public fun validation(block: Validation.Builder.() -> Unit) {
         validation.block()
     }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P> =
+    public fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P> =
         JsObjectProperty.Required(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P> =
+    public fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P> =
         JsObjectProperty.Defaultable(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P> =
+    public fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P> =
         JsObjectProperty.Optional(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.OptionalWithDefault<P>): JsObjectProperty.OptionalWithDefault<P> =
+    public fun <P : Any> property(spec: JsObjectPropertySpec.OptionalWithDefault<P>): JsObjectProperty.OptionalWithDefault<P> =
         JsObjectProperty.OptionalWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P> =
+    public fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P> =
         JsObjectProperty.Nullable(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P> =
+    public fun <P : Any> property(spec: JsObjectPropertySpec.NullableWithDefault<P>): JsObjectProperty.NullableWithDefault<P> =
         JsObjectProperty.NullableWithDefault(spec)
             .also { propertiesBuilder.add(it) }
 
-    override fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): JsObjectReader.ResultBuilder<T> =
-        JsObjectReader.ResultBuilder { context, location, values ->
+    public fun returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T> =
+        ResultBuilder { context, location, values ->
             try {
                 values.builder(context, location)
             } catch (expected: Throwable) {
@@ -81,7 +87,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
             }
         }
 
-    fun build(resultBuilder: JsObjectReader.ResultBuilder<T>): JsObjectReader<T> {
+    internal fun build(resultBuilder: ResultBuilder<T>): JsObjectReader<T> {
         val configuration = buildConfiguration(resultBuilder = resultBuilder)
         return JsObjectReader { context, location, input ->
             input.readAsObject(context, location) { c, l, i ->
@@ -90,7 +96,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         }
     }
 
-    private fun buildConfiguration(resultBuilder: JsObjectReader.ResultBuilder<T>): Configuration<T> {
+    private fun buildConfiguration(resultBuilder: ResultBuilder<T>): Configuration<T> {
         val properties: JsObjectProperties = propertiesBuilder.build(checkUniquePropertyPath)
         val validators = validation.build()
             .let {
@@ -106,10 +112,24 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         )
     }
 
+    public class Validation private constructor(
+        public val before: JsObjectValidatorBuilder.Before?,
+        public val after: JsObjectValidatorBuilder.After?
+    ) {
+
+        @AirfluxMarker
+        public class Builder(
+            public var before: JsObjectValidatorBuilder.Before? = null,
+            public var after: JsObjectValidatorBuilder.After? = null
+        ) {
+            internal fun build(): Validation = Validation(before, after)
+        }
+    }
+
     internal data class Configuration<T>(
         val properties: JsObjectProperties,
         val validators: Validators,
-        val resultBuilder: JsObjectReader.ResultBuilder<T>
+        val resultBuilder: ResultBuilder<T>
     ) {
         internal data class Validators(
             val before: JsObjectValidator.Before?,
@@ -117,7 +137,7 @@ internal class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfigurati
         )
     }
 
-    companion object {
+    internal companion object {
 
         internal fun <T> JsObject.read(
             context: JsReaderContext,
