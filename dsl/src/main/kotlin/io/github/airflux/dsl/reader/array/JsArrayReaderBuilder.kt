@@ -132,26 +132,23 @@ public class JsArrayReaderBuilder<T>(configuration: JsArrayReaderConfiguration) 
 
             val failures = mutableListOf<JsResult.Failure>()
 
-            val preValidationErrors = configuration.validators.before
-                ?.validation(context, this)
-            if (preValidationErrors != null) {
-                val failure = JsResult.Failure(location, preValidationErrors)
-                if (context.failFast) return failure
-                failures.add(failure)
+            val preValidationFailure = configuration.validators.before
+                ?.validation(context, location, this)
+            if (preValidationFailure != null) {
+                if (context.failFast) return preValidationFailure
+                failures.add(preValidationFailure)
             }
 
             configuration.resultBuilder(context, location, this)
                 .fold(
                     ifFailure = { failure -> failures.add(failure) },
                     ifSuccess = { success ->
-                        val postValidationErrors = configuration.validators.after
-                            ?.validation(context, this, success.value)
-                        if (postValidationErrors == null)
+                        val postValidationFailure = configuration.validators.after
+                            ?.validation(context, location, this, success.value)
+                        if (postValidationFailure == null)
                             return success
-                        else {
-                            val failure = JsResult.Failure(location, postValidationErrors)
-                            failures.add(failure)
-                        }
+                        else
+                            failures.add(postValidationFailure)
                     }
                 )
 

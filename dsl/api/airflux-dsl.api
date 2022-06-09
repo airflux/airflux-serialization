@@ -89,13 +89,13 @@ public abstract interface class io/github/airflux/dsl/reader/array/validator/JsA
 public abstract interface class io/github/airflux/dsl/reader/array/validator/JsArrayValidator$After : io/github/airflux/dsl/reader/array/validator/JsArrayValidator {
 	public fun and (Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$After;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$After;
 	public fun or (Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$After;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$After;
-	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/value/JsArray;Ljava/util/List;)Lio/github/airflux/core/reader/result/JsErrors;
+	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;Ljava/util/List;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public abstract interface class io/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before : io/github/airflux/dsl/reader/array/validator/JsArrayValidator {
 	public fun and (Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before;
 	public fun or (Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before;
-	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsErrors;
+	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public abstract interface class io/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder {
