@@ -23,10 +23,10 @@ import io.github.airflux.core.reader.validator.std.string.MinLengthStringValidat
 import io.github.airflux.core.reader.validator.std.string.PatternStringValidator
 import io.github.airflux.dsl.reader.context.JsReaderContextBuilder
 import io.github.airflux.dsl.reader.context.readerContext
-import io.github.airflux.dsl.reader.`object`.validator.std.AdditionalProperties
-import io.github.airflux.dsl.reader.`object`.validator.std.IsNotEmpty
-import io.github.airflux.dsl.reader.`object`.validator.std.MaxProperties
-import io.github.airflux.dsl.reader.`object`.validator.std.MinProperties
+import io.github.airflux.dsl.reader.`object`.validator.std.AdditionalPropertiesValidator
+import io.github.airflux.dsl.reader.`object`.validator.std.IsNotEmptyValidator
+import io.github.airflux.dsl.reader.`object`.validator.std.MaxPropertiesValidator
+import io.github.airflux.dsl.reader.`object`.validator.std.MinPropertiesValidator
 import io.github.airflux.quickstart.json.error.JsonErrors
 
 val DefaultReaderContext = readerContext {
@@ -54,10 +54,10 @@ fun JsReaderContextBuilder.ErrorsBuilder.readerErrorBuilders() {
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
-    +AdditionalProperties.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
-    +IsNotEmpty.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
-    +MinProperties.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
-    +MaxProperties.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
+    +AdditionalPropertiesValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
+    +IsNotEmptyValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
+    +MinPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
+    +MaxPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {

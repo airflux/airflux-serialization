@@ -8,8 +8,8 @@ import io.github.airflux.dsl.reader.array.item.specification.nonNullable
 import io.github.airflux.dsl.reader.arrayReader
 import io.github.airflux.dsl.reader.`object`.property.specification.required
 import io.github.airflux.dsl.reader.`object`.validator.and
-import io.github.airflux.dsl.reader.`object`.validator.std.AdditionalProperties
-import io.github.airflux.dsl.reader.`object`.validator.std.IsNotEmpty
+import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.additionalProperties
+import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.isNotEmpty
 import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
@@ -23,8 +23,8 @@ val LotReader = reader<Lot>(ObjectReaderConfiguration) {
     checkUniquePropertyPath = false
 
     validation {
-        before = before and AdditionalProperties
-        after = IsNotEmpty
+        before = before and additionalProperties
+        after = isNotEmpty
     }
 
     val id = property(identifierPropertySpec)

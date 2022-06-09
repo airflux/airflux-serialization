@@ -19,7 +19,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MaxPropertiesTest : FreeSpec() {
+internal class MaxPropertiesValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -64,13 +64,13 @@ internal class MaxPropertiesTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${MaxProperties.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MaxPropertiesValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    MaxProperties.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
+                    MaxPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
                 )
 
                 "when the object is empty" - {

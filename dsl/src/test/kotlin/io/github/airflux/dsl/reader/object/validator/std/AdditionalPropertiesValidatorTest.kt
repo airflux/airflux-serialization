@@ -20,7 +20,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class AdditionalPropertiesTest : FreeSpec() {
+internal class AdditionalPropertiesValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -55,13 +55,13 @@ internal class AdditionalPropertiesTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, input)
                     }
-                    exception.message shouldBe "Key '${AdditionalProperties.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${AdditionalPropertiesValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    AdditionalProperties.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
+                    AdditionalPropertiesValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
                 )
 
                 "when the object is empty" - {

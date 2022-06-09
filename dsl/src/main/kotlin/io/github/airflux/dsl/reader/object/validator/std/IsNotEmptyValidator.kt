@@ -19,22 +19,29 @@ package io.github.airflux.dsl.reader.`object`.validator.std
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-public object IsNotEmpty : JsObjectValidatorBuilder.After {
+public class IsNotEmptyValidator internal constructor() : JsObjectValidator.After {
 
-    private val validator = JsObjectValidator.After { context, location, _, values, _ ->
+    override fun validation(
+        context: JsReaderContext,
+        location: JsLocation,
+        properties: JsObjectProperties,
+        objectValuesMap: ObjectValuesMap,
+        input: JsObject
+    ): JsResult.Failure? {
         val errorBuilder = context.getValue(ErrorBuilder)
-        if (values.isEmpty)
+        return if (objectValuesMap.isEmpty)
             JsResult.Failure(location, errorBuilder.build())
         else
             null
     }
-
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 
     public class ErrorBuilder(private val function: () -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
@@ -42,7 +49,12 @@ public object IsNotEmpty : JsObjectValidatorBuilder.After {
         public fun build(): JsError = function()
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "IsNotEmptyErrorBuilder"
+            override val name: String = "IsNotEmptyValidatorErrorBuilder"
         }
     }
+}
+
+internal object IsNotEmptyValidatorBuilder : JsObjectValidatorBuilder.After {
+    private val validator = IsNotEmptyValidator()
+    override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 }

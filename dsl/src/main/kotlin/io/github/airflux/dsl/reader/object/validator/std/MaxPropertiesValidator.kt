@@ -19,21 +19,29 @@ package io.github.airflux.dsl.reader.`object`.validator.std
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-public class MinProperties internal constructor(private val value: Int) : JsObjectValidatorBuilder.After {
+public class MaxPropertiesValidator internal constructor(private val value: Int) : JsObjectValidator.After {
 
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After =
-        JsObjectValidator.After { context, location, _, values, _ ->
-            val errorBuilder = context.getValue(ErrorBuilder)
-            if (values.size < value)
-                JsResult.Failure(location, errorBuilder.build(value, values.size))
-            else
-                null
-        }
+    override fun validation(
+        context: JsReaderContext,
+        location: JsLocation,
+        properties: JsObjectProperties,
+        objectValuesMap: ObjectValuesMap,
+        input: JsObject
+    ): JsResult.Failure? {
+        val errorBuilder = context.getValue(ErrorBuilder)
+        return if (objectValuesMap.size > value)
+            JsResult.Failure(location, errorBuilder.build(value, objectValuesMap.size))
+        else
+            null
+    }
 
     public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
@@ -41,7 +49,11 @@ public class MinProperties internal constructor(private val value: Int) : JsObje
         public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "MinPropertiesErrorBuilder"
+            override val name: String = "MaxPropertiesValidatorErrorBuilder"
         }
     }
+}
+
+internal class MaxPropertiesValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder.After {
+    override fun build(properties: JsObjectProperties): JsObjectValidator.After = MaxPropertiesValidator(value)
 }
