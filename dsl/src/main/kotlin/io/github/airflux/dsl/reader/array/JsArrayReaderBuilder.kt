@@ -139,20 +139,24 @@ public class JsArrayReaderBuilder<T>(configuration: JsArrayReaderConfiguration) 
                 failures.add(preValidationFailure)
             }
 
-            configuration.resultBuilder(context, location, this)
+            return configuration.resultBuilder(context, location, this)
                 .fold(
-                    ifFailure = { failure -> failures.add(failure) },
+                    ifFailure = { failure ->
+                        if (context.failFast) return failure
+                        failures.add(failure)
+                        failures.merge()
+                    },
                     ifSuccess = { success ->
                         val postValidationFailure = configuration.validators.after
                             ?.validation(context, location, this, success.value)
-                        if (postValidationFailure == null)
-                            return success
-                        else
+                        if (postValidationFailure != null) {
+                            if (context.failFast) return postValidationFailure
                             failures.add(postValidationFailure)
+                        }
+
+                        if (failures.isNotEmpty()) failures.merge() else success
                     }
                 )
-
-            return failures.merge()
         }
     }
 }
