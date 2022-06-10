@@ -19,18 +19,19 @@ package io.github.airflux.core.reader.validator.std.string
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
 public class IsAStringValidator internal constructor(private val predicate: (String) -> Boolean) : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsErrors? =
-        if (!predicate(value)) {
-            val errorBuilder = context.getValue(ErrorBuilder)
-            JsErrors.of(errorBuilder.build(value))
-        } else
+    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+        if (predicate(value))
             null
+        else {
+            val errorBuilder = context.getValue(ErrorBuilder)
+            JsResult.Failure(location = location, error = errorBuilder.build(value))
+        }
 
     public class ErrorBuilder(private val function: (value: String) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {

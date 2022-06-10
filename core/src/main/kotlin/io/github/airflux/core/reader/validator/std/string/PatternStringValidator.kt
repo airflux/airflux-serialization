@@ -19,18 +19,19 @@ package io.github.airflux.core.reader.validator.std.string
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
 public class PatternStringValidator internal constructor(private val pattern: Regex) : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsErrors? =
-        if (!pattern.matches(value)) {
-            val errorBuilder = context.getValue(ErrorBuilder)
-            JsErrors.of(errorBuilder.build(value, pattern))
-        } else
+    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+        if (pattern.matches(value))
             null
+        else {
+            val errorBuilder = context.getValue(ErrorBuilder)
+            JsResult.Failure(location = location, error = errorBuilder.build(value, pattern))
+        }
 
     public class ErrorBuilder(private val function: (value: String, pattern: Regex) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {

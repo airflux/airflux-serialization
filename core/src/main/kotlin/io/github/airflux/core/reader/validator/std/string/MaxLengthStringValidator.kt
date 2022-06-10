@@ -19,18 +19,19 @@ package io.github.airflux.core.reader.validator.std.string
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
 public class MaxLengthStringValidator internal constructor(private val expected: Int) : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsErrors? =
-        if (value.length > expected) {
-            val errorBuilder = context.getValue(ErrorBuilder)
-            JsErrors.of(errorBuilder.build(expected, value.length))
-        } else
+    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+        if (value.length <= expected)
             null
+        else {
+            val errorBuilder = context.getValue(ErrorBuilder)
+            JsResult.Failure(location = location, error = errorBuilder.build(expected, value.length))
+        }
 
     public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {

@@ -35,8 +35,5 @@ public fun <T> JsResult<T>.validation(validator: JsValidator<T>): JsResult<T> =
 public fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
     fold(
         ifFailure = ::identity,
-        ifSuccess = { result ->
-            val errors = validator.validation(context, result.location, result.value)
-            if (errors != null) JsResult.Failure(location = result.location, errors = errors) else result
-        }
+        ifSuccess = { result -> validator.validation(context, result.location, result.value) ?: result }
     )

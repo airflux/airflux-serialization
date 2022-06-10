@@ -17,13 +17,13 @@
 package io.github.airflux.core.reader.validator
 
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 
 @Suppress("unused")
 public fun interface JsValidator<in T> {
 
-    public fun validation(context: JsReaderContext, location: JsLocation, value: T): JsErrors?
+    public fun validation(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure?
 }
 
 /*

@@ -382,7 +382,7 @@ public final class io/github/airflux/core/reader/result/extension/FilterExtensio
 }
 
 public abstract interface class io/github/airflux/core/reader/validator/JsValidator {
-	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public abstract fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/JsValidatorKt {
@@ -409,8 +409,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/Compar
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/EqComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/EqComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -424,8 +424,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/EqComp
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/GeComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/GeComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -439,8 +439,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/GeComp
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/GtComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/GtComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -454,8 +454,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/GtComp
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/LeComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/LeComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -469,8 +469,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/LeComp
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/LtComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/LtComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -484,8 +484,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/LtComp
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/MaxComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/MaxComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -499,8 +499,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/MaxCom
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/MinComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/MinComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -514,8 +514,8 @@ public final class io/github/airflux/core/reader/validator/std/comparable/MinCom
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/NeComparableValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsErrors;
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Number;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/comparable/NeComparableValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -534,8 +534,8 @@ public final class io/github/airflux/core/reader/validator/std/condition/Conditi
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/IsAStringValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsErrors;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/IsAStringValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -549,8 +549,8 @@ public final class io/github/airflux/core/reader/validator/std/string/IsAStringV
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/IsNotBlankStringValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsErrors;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/IsNotBlankStringValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -564,8 +564,8 @@ public final class io/github/airflux/core/reader/validator/std/string/IsNotBlank
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/IsNotEmptyStringValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsErrors;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/IsNotEmptyStringValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -579,8 +579,8 @@ public final class io/github/airflux/core/reader/validator/std/string/IsNotEmpty
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/MaxLengthStringValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsErrors;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/MaxLengthStringValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -594,8 +594,8 @@ public final class io/github/airflux/core/reader/validator/std/string/MaxLengthS
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/MinLengthStringValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsErrors;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/MinLengthStringValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
@@ -609,8 +609,8 @@ public final class io/github/airflux/core/reader/validator/std/string/MinLengthS
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/PatternStringValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsErrors;
+	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/String;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/core/reader/validator/std/string/PatternStringValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {

@@ -3,10 +3,10 @@ package io.github.airflux.core.reader.validator.std.string
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -72,11 +72,12 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                         val str = "   "
 
                         "then the validator should return an error" {
-                            val errors = validator.validation(context, LOCATION, str)
+                            val failure = validator.validation(context, LOCATION, str)
 
-                            errors.shouldNotBeNull()
-                            errors.items shouldContainExactly listOf(
-                                JsonErrors.Validation.Strings.MaxLength(
+                            failure.shouldNotBeNull()
+                            failure shouldBe JsResult.Failure(
+                                location = LOCATION,
+                                error = JsonErrors.Validation.Strings.MaxLength(
                                     expected = MAX_VALUE,
                                     actual = str.length
                                 )
@@ -109,11 +110,12 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                         val str = "abc"
 
                         "then the validator should return an error" {
-                            val errors = validator.validation(context, LOCATION, str)
+                            val failure = validator.validation(context, LOCATION, str)
 
-                            errors.shouldNotBeNull()
-                            errors.items shouldContainExactly listOf(
-                                JsonErrors.Validation.Strings.MaxLength(
+                            failure.shouldNotBeNull()
+                            failure shouldBe JsResult.Failure(
+                                location = LOCATION,
+                                error = JsonErrors.Validation.Strings.MaxLength(
                                     expected = MAX_VALUE,
                                     actual = str.length
                                 )

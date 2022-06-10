@@ -3,10 +3,10 @@ package io.github.airflux.core.reader.validator.std.comparable
 import io.github.airflux.core.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -52,11 +52,12 @@ internal class NeComparableValidatorTest : FreeSpec() {
                     val value = VALUE
 
                     "then the validator should return an error" {
-                        val errors = validator.validation(context, LOCATION, value)
+                        val failure = validator.validation(context, LOCATION, value)
 
-                        errors.shouldNotBeNull()
-                        errors.items shouldContainExactly listOf(
-                            JsonErrors.Validation.Numbers.Ne(expected = VALUE, actual = value)
+                        failure.shouldNotBeNull()
+                        failure shouldBe JsResult.Failure(
+                            location = LOCATION,
+                            error = JsonErrors.Validation.Numbers.Ne(expected = VALUE, actual = value)
                         )
                     }
                 }

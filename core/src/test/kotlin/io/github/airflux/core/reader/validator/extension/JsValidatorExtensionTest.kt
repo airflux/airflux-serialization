@@ -10,7 +10,6 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.`object`.readRequired
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
@@ -24,14 +23,14 @@ import kotlin.test.Test
 internal class JsValidatorExtensionTest {
 
     companion object {
-        private val context = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             listOf(
                 PathMissingErrorBuilder { JsonErrors.PathMissing },
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType)
             )
         )
-        private val isNotEmpty = JsValidator<String> { _, _, value ->
-            if (value.isNotEmpty()) null else JsErrors.of(JsonErrors.Validation.Strings.IsEmpty)
+        private val isNotEmpty = JsValidator<String> { _, location, value ->
+            if (value.isNotEmpty()) null else JsResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
         }
 
         val stringReader: JsReader<String> = JsReader { _, location, input ->
@@ -56,7 +55,7 @@ internal class JsValidatorExtensionTest {
                 readRequired(context = context, from = result, using = stringReader)
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsLocation.empty, json)
+            val result = reader.read(CONTEXT, JsLocation.empty, json)
 
             result.assertAsSuccess(location = JsLocation.empty.append("name"), value = "user")
         }
@@ -69,7 +68,7 @@ internal class JsValidatorExtensionTest {
                 readRequired(context = context, from = result, using = stringReader)
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsLocation.empty, json)
+            val result = reader.read(CONTEXT, JsLocation.empty, json)
 
             result.assertAsFailure(
                 JsResult.Failure.Cause(
@@ -87,7 +86,7 @@ internal class JsValidatorExtensionTest {
                 readRequired(context = context, from = result, using = stringReader)
             }.validation(isNotEmpty)
 
-            val result = reader.read(context, JsLocation.empty, json)
+            val result = reader.read(CONTEXT, JsLocation.empty, json)
 
             result.assertAsFailure(
                 JsResult.Failure.Cause(

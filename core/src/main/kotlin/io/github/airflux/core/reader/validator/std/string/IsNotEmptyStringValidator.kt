@@ -19,18 +19,19 @@ package io.github.airflux.core.reader.validator.std.string
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
 public class IsNotEmptyStringValidator internal constructor() : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsErrors? =
-        if (value.isEmpty()) {
-            val errorBuilder = context.getValue(ErrorBuilder)
-            JsErrors.of(errorBuilder.build())
-        } else
+    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+        if (value.isNotEmpty())
             null
+        else {
+            val errorBuilder = context.getValue(ErrorBuilder)
+            JsResult.Failure(location = location, error = errorBuilder.build())
+        }
 
     public class ErrorBuilder(private val function: () -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {

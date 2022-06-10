@@ -19,20 +19,20 @@ package io.github.airflux.core.reader.validator.std.comparable
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
 public class LtComparableValidator<T> internal constructor(private val expected: T) : JsValidator<T>
     where T : Number,
           T : Comparable<T> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: T): JsErrors? =
+    override fun validation(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure? =
         if (value < expected)
             null
         else {
             val errorBuilder = context.getValue(ErrorBuilder)
-            JsErrors.of(errorBuilder.build(expected, value))
+            JsResult.Failure(location = location, error = errorBuilder.build(expected, value))
         }
 
     public class ErrorBuilder(private val function: (expected: Number, actual: Number) -> JsError) :
