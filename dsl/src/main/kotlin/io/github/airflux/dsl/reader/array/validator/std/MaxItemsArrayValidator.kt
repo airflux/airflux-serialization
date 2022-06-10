@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.validator.std.array
+package io.github.airflux.dsl.reader.array.validator.std
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsErrors
 import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.reader.validator.JsValidator
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsArray
+import io.github.airflux.dsl.reader.array.validator.JsArrayValidator
+import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
 
-public class MinItemsArrayValidator<T> internal constructor(private val expected: Int) : JsValidator<Collection<T>> {
+public class MaxItemsArrayValidator internal constructor(private val expected: Int) : JsArrayValidator.Before {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: Collection<T>): JsErrors? =
-        if (value.size < expected) {
-            val errorBuilder = context.getValue(ErrorBuilder)
-            JsErrors.of(errorBuilder.build(expected, value.size))
-        } else
+    override fun validation(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? {
+        val errorBuilder = context.getValue(ErrorBuilder)
+        return if (input.size > expected)
+            JsResult.Failure(location, errorBuilder.build(expected, input.size))
+        else
             null
+    }
 
     public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
@@ -38,7 +41,11 @@ public class MinItemsArrayValidator<T> internal constructor(private val expected
         public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "MinItemsArrayValidatorErrorBuilder"
+            override val name: String = "MaxItemsArrayValidatorErrorBuilder"
         }
     }
+}
+
+internal class MaxItemsArrayValidatorBuilder(private val value: Int) : JsArrayValidatorBuilder.Before {
+    override fun build(): JsArrayValidator.Before = MaxItemsArrayValidator(value)
 }

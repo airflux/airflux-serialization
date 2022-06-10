@@ -396,58 +396,6 @@ public final class io/github/airflux/core/reader/validator/extension/JsValidator
 	public static final fun validation (Lio/github/airflux/core/reader/result/JsResult;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/result/JsResult;
 }
 
-public final class io/github/airflux/core/reader/validator/std/array/ArrayValidator {
-	public static final field INSTANCE Lio/github/airflux/core/reader/validator/std/array/ArrayValidator;
-	public final fun isUnique (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/reader/validator/JsValidator;
-	public final fun maxItems (I)Lio/github/airflux/core/reader/validator/JsValidator;
-	public final fun minItems (I)Lio/github/airflux/core/reader/validator/JsValidator;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/IsUniqueArrayValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/util/Collection;)Lio/github/airflux/core/reader/result/JsErrors;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/IsUniqueArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/validator/std/array/IsUniqueArrayValidator$ErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final fun build (ILjava/lang/Object;)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/IsUniqueArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/MaxItemsArrayValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/util/Collection;)Lio/github/airflux/core/reader/result/JsErrors;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/MaxItemsArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/validator/std/array/MaxItemsArrayValidator$ErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final fun build (II)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/MaxItemsArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/MinItemsArrayValidator : io/github/airflux/core/reader/validator/JsValidator {
-	public synthetic fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsErrors;
-	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Ljava/util/Collection;)Lio/github/airflux/core/reader/result/JsErrors;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/MinItemsArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/validator/std/array/MinItemsArrayValidator$ErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final fun build (II)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/validator/std/array/MinItemsArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
-}
-
 public final class io/github/airflux/core/reader/validator/std/comparable/ComparableValidator {
 	public static final field INSTANCE Lio/github/airflux/core/reader/validator/std/comparable/ComparableValidator;
 	public final fun eq (Ljava/lang/Number;)Lio/github/airflux/core/reader/validator/JsValidator;

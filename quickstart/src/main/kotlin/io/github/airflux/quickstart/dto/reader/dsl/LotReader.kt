@@ -5,6 +5,9 @@ import io.github.airflux.core.reader.result.success
 import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.core.reader.validator.std.string.StringValidator.isNotBlank
 import io.github.airflux.dsl.reader.array.item.specification.nonNullable
+import io.github.airflux.dsl.reader.array.validator.std.ArrayValidator.isUnique
+import io.github.airflux.dsl.reader.array.validator.std.ArrayValidator.maxItems
+import io.github.airflux.dsl.reader.array.validator.std.ArrayValidator.minItems
 import io.github.airflux.dsl.reader.arrayReader
 import io.github.airflux.dsl.reader.`object`.property.specification.required
 import io.github.airflux.dsl.reader.`object`.validator.and
@@ -37,5 +40,9 @@ val LotReader = reader<Lot>(ObjectReaderConfiguration) {
 }
 
 val LotsReader = arrayReader<Lot>(ArrayReaderConfiguration) {
+    validation {
+        before = maxItems(0)
+        after = isUnique { lot -> lot.id }
+    }
     returns(items = nonNullable(LotReader))
 }

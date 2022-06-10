@@ -12,5 +12,11 @@ internal sealed class JsonErrors : JsError {
             data class MinProperties(val expected: Int, val actual: Int) : Object()
             data class MaxProperties(val expected: Int, val actual: Int) : Object()
         }
+
+        sealed class Arrays : Validation() {
+            data class MinItems(val expected: Int, val actual: Int) : Arrays()
+            data class MaxItems(val expected: Int, val actual: Int) : Arrays()
+            data class Unique<T>(val value: T) : Arrays()
+        }
     }
 }

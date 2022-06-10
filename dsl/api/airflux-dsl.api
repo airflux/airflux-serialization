@@ -116,6 +116,55 @@ public final class io/github/airflux/dsl/reader/array/validator/JsArrayValidator
 	public static final fun or (Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;
 }
 
+public final class io/github/airflux/dsl/reader/array/validator/std/ArrayValidator {
+	public static final field INSTANCE Lio/github/airflux/dsl/reader/array/validator/std/ArrayValidator;
+	public final fun isUnique (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$After;
+	public final fun maxItems (I)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;
+	public final fun minItems (I)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/IsUniqueArrayValidator : io/github/airflux/dsl/reader/array/validator/JsArrayValidator$After {
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;Ljava/util/List;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/IsUniqueArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/array/validator/std/IsUniqueArrayValidator$ErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final fun build (Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/IsUniqueArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/MaxItemsArrayValidator : io/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before {
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/MaxItemsArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/array/validator/std/MaxItemsArrayValidator$ErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public final fun build (II)Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/MaxItemsArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/MinItemsArrayValidator : io/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before {
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/MinItemsArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/array/validator/std/MinItemsArrayValidator$ErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public final fun build (II)Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/MinItemsArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
+}
+
 public final class io/github/airflux/dsl/reader/context/JsReaderContextBuilder {
 	public fun <init> ()V
 	public final fun errorBuilders (Lkotlin/jvm/functions/Function1;)V

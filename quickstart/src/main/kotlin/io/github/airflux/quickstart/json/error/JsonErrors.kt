@@ -32,7 +32,7 @@ sealed class JsonErrors : JsError {
         sealed class Arrays : Validation() {
             class MinItems(val expected: Int, val actual: Int) : Arrays()
             class MaxItems(val expected: Int, val actual: Int) : Arrays()
-            class Unique<T>(val index: Int, val value: T) : Arrays()
+            class Unique<T>(val value: T) : Arrays()
         }
 
         sealed class Strings : Validation() {
