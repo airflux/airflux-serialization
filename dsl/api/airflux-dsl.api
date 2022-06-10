@@ -118,9 +118,24 @@ public final class io/github/airflux/dsl/reader/array/validator/JsArrayValidator
 
 public final class io/github/airflux/dsl/reader/array/validator/std/ArrayValidator {
 	public static final field INSTANCE Lio/github/airflux/dsl/reader/array/validator/std/ArrayValidator;
+	public final fun isNotEmpty ()Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;
 	public final fun isUnique (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$After;
 	public final fun maxItems (I)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;
 	public final fun minItems (I)Lio/github/airflux/dsl/reader/array/validator/JsArrayValidatorBuilder$Before;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/IsNotEmptyArrayValidator : io/github/airflux/dsl/reader/array/validator/JsArrayValidator$Before {
+	public fun validation (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/IsNotEmptyArrayValidator$ErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/dsl/reader/array/validator/std/IsNotEmptyArrayValidator$ErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/dsl/reader/array/validator/std/IsNotEmptyArrayValidator$ErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/dsl/reader/array/validator/std/IsUniqueArrayValidator : io/github/airflux/dsl/reader/array/validator/JsArrayValidator$After {

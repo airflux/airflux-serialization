@@ -11,6 +11,11 @@ public object ArrayValidator {
         IsUniqueArrayValidatorBuilder(keySelector)
 
     /**
+     * If the is empty then an error, otherwise a success.
+     */
+    public val isNotEmpty: JsArrayValidatorBuilder.Before = IsNotEmptyArrayValidatorBuilder
+
+    /**
      * If a number of elements in the array are less than an expected [value] then an error, otherwise a success.
      */
     public fun minItems(value: Int): JsArrayValidatorBuilder.Before = MinItemsArrayValidatorBuilder(value)

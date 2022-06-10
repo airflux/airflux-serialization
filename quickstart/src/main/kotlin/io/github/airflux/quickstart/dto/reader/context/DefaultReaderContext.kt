@@ -18,6 +18,7 @@ import io.github.airflux.core.reader.validator.std.string.IsNotEmptyStringValida
 import io.github.airflux.core.reader.validator.std.string.MaxLengthStringValidator
 import io.github.airflux.core.reader.validator.std.string.MinLengthStringValidator
 import io.github.airflux.core.reader.validator.std.string.PatternStringValidator
+import io.github.airflux.dsl.reader.array.validator.std.IsNotEmptyArrayValidator
 import io.github.airflux.dsl.reader.array.validator.std.IsUniqueArrayValidator
 import io.github.airflux.dsl.reader.array.validator.std.MaxItemsArrayValidator
 import io.github.airflux.dsl.reader.array.validator.std.MinItemsArrayValidator
@@ -62,8 +63,9 @@ fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
 
 fun JsReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {
     +IsUniqueArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::Unique)
+    +IsNotEmptyArrayValidator.ErrorBuilder { JsonErrors.Validation.Arrays.IsEmpty }
     +MinItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
-    +MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
+    +MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MaxItems)
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.stringValidationErrorBuilders() {

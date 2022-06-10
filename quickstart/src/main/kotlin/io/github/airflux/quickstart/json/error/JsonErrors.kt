@@ -30,6 +30,7 @@ sealed class JsonErrors : JsError {
         }
 
         sealed class Arrays : Validation() {
+            object IsEmpty : Arrays()
             class MinItems(val expected: Int, val actual: Int) : Arrays()
             class MaxItems(val expected: Int, val actual: Int) : Arrays()
             class Unique<T>(val value: T) : Arrays()
