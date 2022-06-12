@@ -11,7 +11,8 @@ import io.github.airflux.dsl.reader.`object`.ObjectValuesMapInstance
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull

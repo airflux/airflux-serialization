@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.validator.std
+package io.github.airflux.core.reader.validator.std.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsObjectValidator
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 public class MinPropertiesValidator internal constructor(private val value: Int) : JsObjectValidator.After {
 
@@ -52,8 +51,4 @@ public class MinPropertiesValidator internal constructor(private val value: Int)
             override val name: String = "MinPropertiesValidatorErrorBuilder"
         }
     }
-}
-
-internal class MinPropertiesValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder.After {
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = MinPropertiesValidator(value)
 }

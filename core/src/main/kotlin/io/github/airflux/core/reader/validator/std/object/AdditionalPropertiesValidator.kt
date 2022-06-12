@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.validator.std
+package io.github.airflux.core.reader.validator.std.`object`
 
-import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.context.option.failFast
@@ -24,11 +23,9 @@ import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.core.reader.validator.JsObjectValidator
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
-import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
 public class AdditionalPropertiesValidator internal constructor(
     private val names: Set<String>
@@ -62,25 +59,5 @@ public class AdditionalPropertiesValidator internal constructor(
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
             override val name: String = "AdditionalPropertiesValidatorErrorBuilder"
         }
-    }
-}
-
-internal object AdditionalPropertiesValidatorBuilder : JsObjectValidatorBuilder.Before {
-
-    override fun build(properties: JsObjectProperties): JsObjectValidator.Before {
-        val names: Set<String> = properties.names()
-        return AdditionalPropertiesValidator(names)
-    }
-
-    internal fun JsObjectProperties.names(): Set<String> {
-        fun JsObjectProperty.names(): List<String> = path.items
-            .mapNotNull { path ->
-                when (val element = path.elements.first()) {
-                    is PathElement.Key -> element.get
-                    is PathElement.Idx -> null
-                }
-            }
-
-        return flatMap { property -> property.names() }.toSet()
     }
 }

@@ -12,7 +12,8 @@ import io.github.airflux.common.JsonErrors
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesValidator
 import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.additionalProperties
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec

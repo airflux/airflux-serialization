@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.validator.std
+package io.github.airflux.core.reader.validator.std.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsObjectValidator
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-public class IsNotEmptyValidator internal constructor() : JsObjectValidator.After {
+public class MaxPropertiesValidator internal constructor(private val value: Int) : JsObjectValidator.After {
 
     override fun validation(
         context: JsReaderContext,
@@ -37,24 +36,19 @@ public class IsNotEmptyValidator internal constructor() : JsObjectValidator.Afte
         input: JsObject
     ): JsResult.Failure? {
         val errorBuilder = context.getValue(ErrorBuilder)
-        return if (objectValuesMap.isEmpty)
-            JsResult.Failure(location, errorBuilder.build())
+        return if (objectValuesMap.size > value)
+            JsResult.Failure(location, errorBuilder.build(value, objectValuesMap.size))
         else
             null
     }
 
-    public class ErrorBuilder(private val function: () -> JsError) :
+    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(): JsError = function()
+        public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "IsNotEmptyValidatorErrorBuilder"
+            override val name: String = "MaxPropertiesValidatorErrorBuilder"
         }
     }
-}
-
-internal object IsNotEmptyValidatorBuilder : JsObjectValidatorBuilder.After {
-    private val validator = IsNotEmptyValidator()
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 }

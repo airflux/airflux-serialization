@@ -32,7 +32,7 @@ import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectPropertySpec
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 import io.github.airflux.dsl.reader.configuration.JsObjectReaderConfiguration
 

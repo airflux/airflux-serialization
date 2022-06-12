@@ -16,6 +16,7 @@
 
 package io.github.airflux.dsl.reader.`object`.validator
 
+import io.github.airflux.core.reader.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.After
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder.Before

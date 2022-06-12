@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.validator
+package io.github.airflux.core.reader.validator
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
@@ -22,8 +22,8 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.After
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator.Before
+import io.github.airflux.core.reader.validator.JsObjectValidator.After
+import io.github.airflux.core.reader.validator.JsObjectValidator.Before
 
 @Suppress("unused")
 public sealed interface JsObjectValidator {

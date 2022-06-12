@@ -24,10 +24,10 @@ import io.github.airflux.core.reader.validator.std.array.MaxItemsArrayValidator
 import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
 import io.github.airflux.dsl.reader.context.JsReaderContextBuilder
 import io.github.airflux.dsl.reader.context.readerContext
-import io.github.airflux.dsl.reader.`object`.validator.std.AdditionalPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.IsNotEmptyValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.MaxPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.MinPropertiesValidator
+import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesValidator
+import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyValidator
+import io.github.airflux.core.reader.validator.std.`object`.MaxPropertiesValidator
+import io.github.airflux.core.reader.validator.std.`object`.MinPropertiesValidator
 import io.github.airflux.quickstart.json.error.JsonErrors
 
 val DefaultReaderContext = readerContext {
