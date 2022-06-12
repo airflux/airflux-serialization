@@ -6,6 +6,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsString
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull

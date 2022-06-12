@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.array.validator.std
+package io.github.airflux.core.reader.validator.std.array
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsArrayValidator
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidator
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
 
 public class MaxItemsArrayValidator internal constructor(private val expected: Int) : JsArrayValidator.Before {
 
@@ -44,8 +43,4 @@ public class MaxItemsArrayValidator internal constructor(private val expected: I
             override val name: String = "MaxItemsArrayValidatorErrorBuilder"
         }
     }
-}
-
-internal class MaxItemsArrayValidatorBuilder(private val value: Int) : JsArrayValidatorBuilder.Before {
-    override fun build(): JsArrayValidator.Before = MaxItemsArrayValidator(value)
 }

@@ -24,12 +24,12 @@ import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.fold
+import io.github.airflux.core.reader.validator.JsArrayValidator
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.extension.readAsArray
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.array.JsArrayReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.array.item.specification.JsArrayItemSpec
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidator
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
 import io.github.airflux.dsl.reader.configuration.JsArrayReaderConfiguration
 

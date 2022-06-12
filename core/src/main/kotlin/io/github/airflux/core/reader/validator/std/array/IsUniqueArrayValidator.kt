@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.array.validator.std
+package io.github.airflux.core.reader.validator.std.array
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
@@ -23,9 +23,8 @@ import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.core.reader.validator.JsArrayValidator
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidator
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
 
 public class IsUniqueArrayValidator<T, K : Any> internal constructor(
     private val keySelector: (T) -> K
@@ -62,11 +61,4 @@ public class IsUniqueArrayValidator<T, K : Any> internal constructor(
             override val name: String = "IsUniqueArrayValidatorErrorBuilder"
         }
     }
-}
-
-internal class IsUniqueArrayValidatorBuilder<T, K : Any>(
-    private val keySelector: (T) -> K
-) : JsArrayValidatorBuilder.After<T> {
-
-    override fun build(): JsArrayValidator.After<T> = IsUniqueArrayValidator(keySelector)
 }

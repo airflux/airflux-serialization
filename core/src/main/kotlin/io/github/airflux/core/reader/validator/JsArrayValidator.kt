@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.array.validator
+package io.github.airflux.core.reader.validator
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsArrayValidator.After
+import io.github.airflux.core.reader.validator.JsArrayValidator.Before
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidator.After
-import io.github.airflux.dsl.reader.array.validator.JsArrayValidator.Before
 
 @Suppress("unused")
 public sealed interface JsArrayValidator {

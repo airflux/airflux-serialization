@@ -16,6 +16,7 @@
 
 package io.github.airflux.dsl.reader.array.validator
 
+import io.github.airflux.core.reader.validator.JsArrayValidator
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder.After
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder.Before
 

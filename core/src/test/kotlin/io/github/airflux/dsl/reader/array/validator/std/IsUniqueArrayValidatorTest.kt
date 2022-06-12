@@ -1,13 +1,14 @@
 package io.github.airflux.dsl.reader.array.validator.std
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.core.reader.validator.std.array.IsUniqueArrayValidator
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsString
-import io.github.airflux.common.JsonErrors
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull

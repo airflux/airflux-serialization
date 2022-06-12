@@ -18,10 +18,10 @@ import io.github.airflux.core.reader.validator.std.string.IsNotEmptyStringValida
 import io.github.airflux.core.reader.validator.std.string.MaxLengthStringValidator
 import io.github.airflux.core.reader.validator.std.string.MinLengthStringValidator
 import io.github.airflux.core.reader.validator.std.string.PatternStringValidator
-import io.github.airflux.dsl.reader.array.validator.std.IsNotEmptyArrayValidator
-import io.github.airflux.dsl.reader.array.validator.std.IsUniqueArrayValidator
-import io.github.airflux.dsl.reader.array.validator.std.MaxItemsArrayValidator
-import io.github.airflux.dsl.reader.array.validator.std.MinItemsArrayValidator
+import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
+import io.github.airflux.core.reader.validator.std.array.IsUniqueArrayValidator
+import io.github.airflux.core.reader.validator.std.array.MaxItemsArrayValidator
+import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
 import io.github.airflux.dsl.reader.context.JsReaderContextBuilder
 import io.github.airflux.dsl.reader.context.readerContext
 import io.github.airflux.dsl.reader.`object`.validator.std.AdditionalPropertiesValidator
