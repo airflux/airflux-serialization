@@ -26,7 +26,7 @@ import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 
-public class MaxPropertiesValidator internal constructor(private val value: Int) : JsObjectValidator.After {
+public class MinPropertiesObjectValidator internal constructor(private val value: Int) : JsObjectValidator.After {
 
     override fun validation(
         context: JsReaderContext,
@@ -36,7 +36,7 @@ public class MaxPropertiesValidator internal constructor(private val value: Int)
         input: JsObject
     ): JsResult.Failure? {
         val errorBuilder = context.getValue(ErrorBuilder)
-        return if (objectValuesMap.size > value)
+        return if (objectValuesMap.size < value)
             JsResult.Failure(location, errorBuilder.build(value, objectValuesMap.size))
         else
             null
@@ -48,7 +48,7 @@ public class MaxPropertiesValidator internal constructor(private val value: Int)
         public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "MaxPropertiesValidatorErrorBuilder"
+            override val name: String = "MinPropertiesObjectValidatorErrorBuilder"
         }
     }
 }

@@ -5,22 +5,21 @@ import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.MinPropertiesObjectValidator
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMapInstance
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
-import io.github.airflux.core.reader.validator.JsObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.MinPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.minProperties
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MinPropertiesValidatorTest : FreeSpec() {
+internal class MinPropertiesObjectValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -51,7 +50,7 @@ internal class MinPropertiesValidatorTest : FreeSpec() {
     init {
 
         "The object validator MinProperties" - {
-            val validator: JsObjectValidator.After = minProperties(MIN_PROPERTIES).build(properties)
+            val validator: JsObjectValidator.After = ObjectValidator.minProperties(MIN_PROPERTIES).build(properties)
 
             "when the reader context does not contain the error builder" - {
                 val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
@@ -61,13 +60,13 @@ internal class MinPropertiesValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${MinPropertiesValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MinPropertiesObjectValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    MinPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
+                    MinPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
                 )
 
                 "when the object is empty" - {

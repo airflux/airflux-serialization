@@ -24,10 +24,10 @@ import io.github.airflux.core.reader.validator.std.array.MaxItemsArrayValidator
 import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
 import io.github.airflux.dsl.reader.context.JsReaderContextBuilder
 import io.github.airflux.dsl.reader.context.readerContext
-import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesValidator
-import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyValidator
-import io.github.airflux.core.reader.validator.std.`object`.MaxPropertiesValidator
-import io.github.airflux.core.reader.validator.std.`object`.MinPropertiesValidator
+import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.MaxPropertiesObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.MinPropertiesObjectValidator
 import io.github.airflux.quickstart.json.error.JsonErrors
 
 val DefaultReaderContext = readerContext {
@@ -55,10 +55,10 @@ fun JsReaderContextBuilder.ErrorsBuilder.readerErrorBuilders() {
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
-    +AdditionalPropertiesValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
-    +IsNotEmptyValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
-    +MinPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
-    +MaxPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
+    +AdditionalPropertiesObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
+    +IsNotEmptyObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
+    +MinPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
+    +MaxPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {

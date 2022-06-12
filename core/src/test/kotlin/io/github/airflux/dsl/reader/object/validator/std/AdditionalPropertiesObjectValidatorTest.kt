@@ -1,27 +1,26 @@
 package io.github.airflux.dsl.reader.`object`.validator.std
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.core.reader.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesObjectValidator
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
-import io.github.airflux.common.JsonErrors
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
-import io.github.airflux.core.reader.validator.JsObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.additionalProperties
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class AdditionalPropertiesValidatorTest : FreeSpec() {
+internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -43,7 +42,7 @@ internal class AdditionalPropertiesValidatorTest : FreeSpec() {
     init {
 
         "The object validator AdditionalProperties" - {
-            val validator: JsObjectValidator.Before = additionalProperties.build(properties)
+            val validator: JsObjectValidator.Before = ObjectValidator.additionalProperties.build(properties)
 
             "when the reader context does not contain the error builder" - {
                 val context: JsReaderContext = JsReaderContext()
@@ -56,13 +55,13 @@ internal class AdditionalPropertiesValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, input)
                     }
-                    exception.message shouldBe "Key '${AdditionalPropertiesValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${AdditionalPropertiesObjectValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    AdditionalPropertiesValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
+                    AdditionalPropertiesObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
                 )
 
                 "when the object is empty" - {

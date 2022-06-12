@@ -1,26 +1,25 @@
 package io.github.airflux.dsl.reader.`object`.validator.std
 
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.validator.JsObjectValidator
+import io.github.airflux.core.reader.validator.std.`object`.MaxPropertiesObjectValidator
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.common.JsonErrors
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMapInstance
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
-import io.github.airflux.core.reader.validator.JsObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.MaxPropertiesValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.maxProperties
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MaxPropertiesValidatorTest : FreeSpec() {
+internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -51,7 +50,7 @@ internal class MaxPropertiesValidatorTest : FreeSpec() {
     init {
 
         "The object validator MaxProperties" - {
-            val validator: JsObjectValidator.After = maxProperties(MAX_PROPERTIES).build(properties)
+            val validator: JsObjectValidator.After = ObjectValidator.maxProperties(MAX_PROPERTIES).build(properties)
 
             "when the reader context does not contain the error builder" - {
                 val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
@@ -65,13 +64,13 @@ internal class MaxPropertiesValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${MaxPropertiesValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MaxPropertiesObjectValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    MaxPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
+                    MaxPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
                 )
 
                 "when the object is empty" - {

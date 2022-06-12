@@ -2,16 +2,16 @@ package io.github.airflux.dsl.reader.`object`.validator.std
 
 import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.validator.JsObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesValidator
+import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesObjectValidator
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
 
-internal object AdditionalPropertiesValidatorBuilder : JsObjectValidatorBuilder.Before {
+internal object AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBuilder.Before {
 
     override fun build(properties: JsObjectProperties): JsObjectValidator.Before {
         val names: Set<String> = properties.names()
-        return AdditionalPropertiesValidator(names)
+        return AdditionalPropertiesObjectValidator(names)
     }
 
     internal fun JsObjectProperties.names(): Set<String> {

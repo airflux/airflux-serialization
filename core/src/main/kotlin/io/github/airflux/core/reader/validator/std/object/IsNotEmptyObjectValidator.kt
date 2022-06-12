@@ -18,37 +18,28 @@ package io.github.airflux.core.reader.validator.std.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.validator.JsObjectValidator
 import io.github.airflux.core.value.JsObject
+import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 
-public class AdditionalPropertiesValidator internal constructor(
-    private val names: Set<String>
-) : JsObjectValidator.Before {
+public class IsNotEmptyObjectValidator internal constructor() : JsObjectValidator.After {
 
     override fun validation(
         context: JsReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
+        objectValuesMap: ObjectValuesMap,
         input: JsObject
     ): JsResult.Failure? {
-        val failFast = context.failFast
         val errorBuilder = context.getValue(ErrorBuilder)
-
-        val failures = mutableListOf<JsResult.Failure>()
-        input.forEach { (name, _) ->
-            if (name !in names) {
-                val failure = JsResult.Failure(location.append(name), errorBuilder.build())
-                if (failFast) return failure
-                failures.add(failure)
-            }
-        }
-        return failures.takeIf { it.isNotEmpty() }?.merge()
+        return if (objectValuesMap.isEmpty)
+            JsResult.Failure(location, errorBuilder.build())
+        else
+            null
     }
 
     public class ErrorBuilder(private val function: () -> JsError) :
@@ -57,7 +48,7 @@ public class AdditionalPropertiesValidator internal constructor(
         public fun build(): JsError = function()
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "AdditionalPropertiesValidatorErrorBuilder"
+            override val name: String = "IsNotEmptyObjectValidatorErrorBuilder"
         }
     }
 }

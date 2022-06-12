@@ -12,14 +12,14 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
 import io.github.airflux.core.reader.validator.JsObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyValidator
+import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyObjectValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class IsNotEmptyValidatorTest : FreeSpec() {
+internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -48,13 +48,13 @@ internal class IsNotEmptyValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${IsNotEmptyValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${IsNotEmptyObjectValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    IsNotEmptyValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
+                    IsNotEmptyObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
                 )
 
                 "when the object is empty" - {
