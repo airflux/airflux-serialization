@@ -20,8 +20,8 @@ import io.github.airflux.dsl.reader.array.JsArrayReader
 import io.github.airflux.dsl.reader.array.JsArrayReaderBuilder
 import io.github.airflux.dsl.reader.`object`.JsObjectReader
 import io.github.airflux.dsl.reader.`object`.JsObjectReaderBuilder
-import io.github.airflux.dsl.reader.scope.JsArrayReaderConfiguration
-import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
+import io.github.airflux.dsl.reader.configuration.JsArrayReaderConfiguration
+import io.github.airflux.dsl.reader.configuration.JsObjectReaderConfiguration
 
 public fun <T> reader(
     configuration: JsObjectReaderConfiguration = JsObjectReaderConfiguration.DEFAULT,

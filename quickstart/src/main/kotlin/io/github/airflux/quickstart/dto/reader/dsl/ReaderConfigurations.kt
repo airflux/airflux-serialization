@@ -4,8 +4,8 @@ import io.github.airflux.dsl.reader.`object`.validator.and
 import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.additionalProperties
 import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.isNotEmpty
 import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.maxProperties
-import io.github.airflux.dsl.reader.scope.JsArrayReaderConfiguration
-import io.github.airflux.dsl.reader.scope.objectReaderConfiguration
+import io.github.airflux.dsl.reader.configuration.JsArrayReaderConfiguration
+import io.github.airflux.dsl.reader.configuration.objectReaderConfiguration
 
 val ObjectReaderConfiguration = objectReaderConfiguration {
 

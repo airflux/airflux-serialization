@@ -14,50 +14,46 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.scope
+package io.github.airflux.dsl.reader.configuration
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
+import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
 
-public fun objectReaderConfiguration(block: JsObjectReaderConfiguration.Builder.() -> Unit): JsObjectReaderConfiguration =
-    JsObjectReaderConfiguration.Builder().apply(block).build()
+@Suppress("unused")
+public fun arrayReaderConfiguration(block: JsArrayReaderConfiguration.Builder.() -> Unit): JsArrayReaderConfiguration =
+    JsArrayReaderConfiguration.Builder().apply(block).build()
 
-public class JsObjectReaderConfiguration private constructor(
-    public val checkUniquePropertyPath: Boolean,
+public class JsArrayReaderConfiguration private constructor(
     public val validation: Validation
 ) {
 
     @AirfluxMarker
     public class Builder {
-        public var checkUniquePropertyPath: Boolean = false
         private var validation: Validation.Builder = Validation.Builder()
 
         public fun validation(block: Validation.Builder.() -> Unit) {
             validation.block()
         }
 
-        internal fun build(): JsObjectReaderConfiguration =
-            JsObjectReaderConfiguration(
-                checkUniquePropertyPath = checkUniquePropertyPath,
+        internal fun build(): JsArrayReaderConfiguration =
+            JsArrayReaderConfiguration(
                 validation = validation.build()
             )
     }
 
     public class Validation private constructor(
-        public val before: JsObjectValidatorBuilder.Before?,
-        public val after: JsObjectValidatorBuilder.After?
+        public val before: JsArrayValidatorBuilder.Before?
     ) {
 
         @AirfluxMarker
         public class Builder(
-            public var before: JsObjectValidatorBuilder.Before? = null,
-            public var after: JsObjectValidatorBuilder.After? = null
+            public var before: JsArrayValidatorBuilder.Before? = null
         ) {
-            internal fun build(): Validation = Validation(before, after)
+            internal fun build(): Validation = Validation(before)
         }
     }
 
     public companion object {
-        public val DEFAULT: JsObjectReaderConfiguration = Builder().build()
+        public val DEFAULT: JsArrayReaderConfiguration = Builder().build()
     }
 }

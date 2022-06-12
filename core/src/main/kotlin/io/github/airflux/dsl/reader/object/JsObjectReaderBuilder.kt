@@ -34,7 +34,7 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.JsObjectPropertySpec
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidatorBuilder
-import io.github.airflux.dsl.reader.scope.JsObjectReaderConfiguration
+import io.github.airflux.dsl.reader.configuration.JsObjectReaderConfiguration
 
 @AirfluxMarker
 public class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfiguration) {

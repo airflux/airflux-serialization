@@ -31,7 +31,7 @@ import io.github.airflux.dsl.reader.array.JsArrayReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.array.item.specification.JsArrayItemSpec
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidator
 import io.github.airflux.dsl.reader.array.validator.JsArrayValidatorBuilder
-import io.github.airflux.dsl.reader.scope.JsArrayReaderConfiguration
+import io.github.airflux.dsl.reader.configuration.JsArrayReaderConfiguration
 
 @AirfluxMarker
 public class JsArrayReaderBuilder<T>(configuration: JsArrayReaderConfiguration) {
