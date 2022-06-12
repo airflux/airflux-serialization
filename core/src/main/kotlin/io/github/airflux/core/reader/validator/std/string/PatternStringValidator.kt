@@ -18,6 +18,7 @@ package io.github.airflux.core.reader.validator.std.string
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
@@ -39,7 +40,7 @@ public class PatternStringValidator internal constructor(private val pattern: Re
         public fun build(value: String, pattern: Regex): JsError = function(value, pattern)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "PatternStringValidatorErrorBuilder"
+            override val name: String = contextKeyName()
         }
     }
 }

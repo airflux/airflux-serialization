@@ -6,6 +6,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsString
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -33,7 +34,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, input)
                     }
-                    exception.message shouldBe "Key '${IsNotEmptyArrayValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${IsNotEmptyArrayValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
                 }
             }
 

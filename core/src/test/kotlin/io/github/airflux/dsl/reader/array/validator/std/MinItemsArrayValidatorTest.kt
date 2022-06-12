@@ -2,6 +2,7 @@ package io.github.airflux.dsl.reader.array.validator.std
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
@@ -34,7 +35,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, input)
                     }
-                    exception.message shouldBe "Key '${MinItemsArrayValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MinItemsArrayValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
                 }
             }
 

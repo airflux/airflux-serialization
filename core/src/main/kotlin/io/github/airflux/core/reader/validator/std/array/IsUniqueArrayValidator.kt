@@ -18,6 +18,7 @@ package io.github.airflux.core.reader.validator.std.array
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
@@ -58,7 +59,7 @@ public class IsUniqueArrayValidator<T, K : Any> internal constructor(
         public fun build(value: Any): JsError = function(value)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "IsUniqueArrayValidatorErrorBuilder"
+            override val name: String = contextKeyName()
         }
     }
 }

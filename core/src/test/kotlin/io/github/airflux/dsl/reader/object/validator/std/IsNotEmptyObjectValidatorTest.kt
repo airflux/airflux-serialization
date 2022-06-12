@@ -6,6 +6,7 @@ import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMapInstance
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
@@ -48,7 +49,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${IsNotEmptyObjectValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${IsNotEmptyObjectValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
                 }
             }
 

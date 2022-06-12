@@ -2,6 +2,7 @@ package io.github.airflux.core.reader.validator.std.comparable
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
@@ -30,7 +31,7 @@ internal class LeComparableValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, VALUE + 1)
                     }
-                    exception.message shouldBe "Key '${LeComparableValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${LeComparableValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
                 }
             }
 

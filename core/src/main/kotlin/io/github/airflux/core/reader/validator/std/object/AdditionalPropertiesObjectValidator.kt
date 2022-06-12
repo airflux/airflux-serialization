@@ -18,6 +18,7 @@ package io.github.airflux.core.reader.validator.std.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
@@ -57,7 +58,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
         public fun build(): JsError = function()
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "AdditionalPropertiesObjectValidatorErrorBuilder"
+            override val name: String = contextKeyName()
         }
     }
 }

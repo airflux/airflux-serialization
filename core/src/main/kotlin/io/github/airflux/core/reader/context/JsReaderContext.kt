@@ -28,7 +28,7 @@ public class JsReaderContext private constructor(private val elements: Map<Key<*
     public fun <E : Element> getOrNull(key: Key<E>): E? = elements[key]?.let { it as E }
 
     public fun <E : Element> getValue(key: Key<E>): E = getOrNull(key)
-        ?: throw NoSuchElementException("Key '${key.name}' is missing in the JsReaderContext.")
+        ?: throw NoSuchElementException("Key '${key.name}' is missing in the context of reading.")
 
     public operator fun <E : Element> contains(key: Key<E>): Boolean = elements.contains(key)
 
@@ -38,7 +38,6 @@ public class JsReaderContext private constructor(private val elements: Map<Key<*
     public val isNotEmpty: Boolean
         get() = !isEmpty
 
-    @Suppress("unused")
     public interface Key<E : Element> {
         public val name: String
     }

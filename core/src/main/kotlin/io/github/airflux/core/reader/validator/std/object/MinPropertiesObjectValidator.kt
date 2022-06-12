@@ -18,6 +18,7 @@ package io.github.airflux.core.reader.validator.std.`object`
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
@@ -48,7 +49,7 @@ public class MinPropertiesObjectValidator internal constructor(private val value
         public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "MinPropertiesObjectValidatorErrorBuilder"
+            override val name: String = contextKeyName()
         }
     }
 }

@@ -17,6 +17,7 @@
 package io.github.airflux.core.reader.validator.std.array
 
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
@@ -40,7 +41,7 @@ public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator.
         public fun build(): JsError = function()
 
         public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = "IsNotEmptyArrayValidatorErrorBuilder"
+            override val name: String = contextKeyName()
         }
     }
 }

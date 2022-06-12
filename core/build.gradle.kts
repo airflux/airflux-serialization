@@ -19,6 +19,7 @@ plugins {
 dependencies {
     /* Kotlin */
     implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
 
     /* Test */
     testImplementation(kotlin("test-junit5"))

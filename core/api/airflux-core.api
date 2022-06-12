@@ -187,6 +187,10 @@ public abstract interface class io/github/airflux/core/reader/context/JsReaderCo
 	public abstract fun getName ()Ljava/lang/String;
 }
 
+public final class io/github/airflux/core/reader/context/JsReaderContextOpsKt {
+	public static final fun contextKeyName (Ljava/lang/Class;)Ljava/lang/String;
+}
+
 public abstract class io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement : io/github/airflux/core/reader/context/error/ErrorBuilderContextElement {
 	public fun <init> (Lio/github/airflux/core/reader/context/JsReaderContext$Key;)V
 	public fun getKey ()Lio/github/airflux/core/reader/context/JsReaderContext$Key;

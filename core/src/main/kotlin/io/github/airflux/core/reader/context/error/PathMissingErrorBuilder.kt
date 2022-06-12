@@ -17,6 +17,7 @@
 package io.github.airflux.core.reader.context.error
 
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsError
 
 public class PathMissingErrorBuilder(private val builder: () -> JsError) :
@@ -25,6 +26,6 @@ public class PathMissingErrorBuilder(private val builder: () -> JsError) :
     public fun build(): JsError = builder()
 
     public companion object Key : JsReaderContext.Key<PathMissingErrorBuilder> {
-        override val name: String = "PathMissingErrorBuilder"
+        override val name: String = contextKeyName()
     }
 }

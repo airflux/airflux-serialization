@@ -3,6 +3,7 @@ package io.github.airflux.dsl.reader.`object`.validator.std
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsObjectValidator
@@ -64,7 +65,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${MaxPropertiesObjectValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MaxPropertiesObjectValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
                 }
             }
 

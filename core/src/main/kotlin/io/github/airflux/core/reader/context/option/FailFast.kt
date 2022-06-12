@@ -18,6 +18,7 @@ package io.github.airflux.core.reader.context.option
 
 import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 
 public val JsReaderContext.failFast: Boolean
     get() = getOrNull(FailFast)?.isTrue ?: true
@@ -25,6 +26,6 @@ public val JsReaderContext.failFast: Boolean
 public class FailFast(public val isTrue: Boolean) : JsReaderAbstractContextElement<FailFast>(key = FailFast) {
 
     public companion object Key : JsReaderContext.Key<FailFast> {
-        override val name: String = "FailFast"
+        override val name: String = contextKeyName()
     }
 }

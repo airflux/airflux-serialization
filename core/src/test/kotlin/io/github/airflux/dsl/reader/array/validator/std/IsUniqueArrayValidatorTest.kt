@@ -2,6 +2,7 @@ package io.github.airflux.dsl.reader.array.validator.std
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
@@ -36,7 +37,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, input, items)
                     }
-                    exception.message shouldBe "Key '${IsUniqueArrayValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${IsUniqueArrayValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
                 }
             }
 

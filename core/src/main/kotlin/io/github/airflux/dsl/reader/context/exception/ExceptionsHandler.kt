@@ -18,6 +18,7 @@ package io.github.airflux.dsl.reader.context.exception
 
 import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsLocation
 
@@ -29,6 +30,6 @@ public class ExceptionsHandler(
         handler(context, location, exception)
 
     public companion object Key : JsReaderContext.Key<ExceptionsHandler> {
-        override val name: String = "ExceptionsHandler"
+        override val name: String = contextKeyName()
     }
 }

@@ -79,7 +79,7 @@ internal class JsReaderContextTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         empty.getValue(OrderContext)
                     }
-                    exception.message shouldBe "Key '${OrderContext.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${OrderContext.contextKeyName()}' is missing in the context of reading."
                 }
 
                 "the function contains should return false by any key" {
@@ -153,7 +153,7 @@ internal class JsReaderContextTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         one.getValue(OrderContext)
                     }
-                    exception.message shouldBe "Key '${OrderContext.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${OrderContext.contextKeyName()}' is missing in the context of reading."
                 }
 
                 "when calling the function plus" - {
@@ -204,7 +204,7 @@ internal class JsReaderContextTest : FreeSpec() {
 
     class UserContext : JsReaderAbstractContextElement<UserContext>(Key) {
         companion object Key : JsReaderContext.Key<UserContext> {
-            override val name: String = "UserContext"
+            override val name: String = contextKeyName()
         }
 
         override fun toString(): String = name
@@ -214,7 +214,7 @@ internal class JsReaderContextTest : FreeSpec() {
 
     class OrderContext : JsReaderAbstractContextElement<OrderContext>(Key) {
         companion object Key : JsReaderContext.Key<OrderContext> {
-            override val name: String = "OrderContext"
+            override val name: String = contextKeyName()
         }
 
         override fun toString(): String = name
