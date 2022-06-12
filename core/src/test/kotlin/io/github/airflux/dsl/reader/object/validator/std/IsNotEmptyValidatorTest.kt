@@ -47,7 +47,7 @@ internal class IsNotEmptyValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${IsNotEmptyValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${IsNotEmptyValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 

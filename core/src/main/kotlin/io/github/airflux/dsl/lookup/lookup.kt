@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl
+package io.github.airflux.dsl.lookup
 
 import io.github.airflux.core.lookup.JsLookup
 

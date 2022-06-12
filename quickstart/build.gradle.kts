@@ -15,7 +15,6 @@ val jacksonVersion by extra { "2.12.4" }
 
 dependencies {
     implementation(project(":airflux-core"))
-    implementation(project(":airflux-dsl"))
     implementation(project(":airflux-jackson-parser"))
 
     /* Kotlin */

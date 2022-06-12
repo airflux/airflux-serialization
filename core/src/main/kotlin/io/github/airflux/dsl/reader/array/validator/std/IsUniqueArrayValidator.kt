@@ -68,5 +68,5 @@ internal class IsUniqueArrayValidatorBuilder<T, K : Any>(
     private val keySelector: (T) -> K
 ) : JsArrayValidatorBuilder.After<T> {
 
-    override fun build(): JsArrayValidator.After<T> = IsUniqueArrayValidator<T, K>(keySelector)
+    override fun build(): JsArrayValidator.After<T> = IsUniqueArrayValidator(keySelector)
 }

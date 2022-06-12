@@ -12,14 +12,14 @@ import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required
 import io.github.airflux.dsl.reader.`object`.validator.JsObjectValidator
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.maxProperties
+import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.minProperties
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MaxPropertiesValidatorTest : FreeSpec() {
+internal class MinPropertiesValidatorTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -28,7 +28,7 @@ internal class MaxPropertiesValidatorTest : FreeSpec() {
         private const val NAME_PROPERTY_VALUE = "property-name"
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
-        private const val MAX_PROPERTIES = 2
+        private const val MIN_PROPERTIES = 2
         private val LOCATION = JsLocation.empty
 
         private val input = JsObject()
@@ -49,67 +49,42 @@ internal class MaxPropertiesValidatorTest : FreeSpec() {
 
     init {
 
-        "The object validator MaxProperties" - {
-            val validator: JsObjectValidator.After = maxProperties(MAX_PROPERTIES).build(properties)
+        "The object validator MinProperties" - {
+            val validator: JsObjectValidator.After = minProperties(MIN_PROPERTIES).build(properties)
 
             "when the reader context does not contain the error builder" - {
-                val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
-                    this[idProperty] = ID_PROPERTY_NAME
-                    this[nameProperty] = NAME_PROPERTY_NAME
-                    this[titleProperty] = TITLE_PROPERTY_NAME
-                }
+                val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
                 val context: JsReaderContext = JsReaderContext()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, objectValuesMap, input)
                     }
-                    exception.message shouldBe "Key '${MaxPropertiesValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MinPropertiesValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context: JsReaderContext = JsReaderContext(
-                    MaxPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
+                    MinPropertiesValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
                 )
 
                 "when the object is empty" - {
                     val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
 
-                    "then the validator should do not return any errors" {
+                    "then the validator should return an error" {
                         val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
-                        errors.shouldBeNull()
+                        errors.shouldNotBeNull()
+                        errors shouldBe JsResult.Failure(
+                            location = LOCATION,
+                            error = JsonErrors.Validation.Object.MinProperties(expected = MIN_PROPERTIES, actual = 0)
+                        )
                     }
                 }
 
-                "when the object contains a number of properties less than the maximum" - {
-                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
-                        this[idProperty] = ID_PROPERTY_NAME
-                    }
-
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when the object contains a number of properties equal to the maximum" - {
+                "when the object contains a number of properties less than the minimum" - {
                     val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
                         this[idProperty] = ID_PROPERTY_VALUE
-                        this[nameProperty] = NAME_PROPERTY_VALUE
-                    }
-
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when the object contains a number of properties more than the maximum" - {
-                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
-                        this[idProperty] = ID_PROPERTY_VALUE
-                        this[nameProperty] = NAME_PROPERTY_VALUE
-                        this[titleProperty] = TITLE_PROPERTY_VALUE
                     }
 
                     "then the validator should return an error" {
@@ -117,8 +92,33 @@ internal class MaxPropertiesValidatorTest : FreeSpec() {
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
                             location = LOCATION,
-                            error = JsonErrors.Validation.Object.MaxProperties(expected = MAX_PROPERTIES, actual = 3)
+                            error = JsonErrors.Validation.Object.MinProperties(expected = MIN_PROPERTIES, actual = 1)
                         )
+                    }
+                }
+
+                "when the object contains a number of properties equal to the minimum" - {
+                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                        this[idProperty] = ID_PROPERTY_VALUE
+                        this[nameProperty] = NAME_PROPERTY_VALUE
+                    }
+
+                    "then the validator should do not return any errors" {
+                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        errors.shouldBeNull()
+                    }
+                }
+
+                "when the object contains a number of properties more than the minimum" - {
+                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                        this[idProperty] = ID_PROPERTY_VALUE
+                        this[nameProperty] = NAME_PROPERTY_VALUE
+                        this[titleProperty] = TITLE_PROPERTY_VALUE
+                    }
+
+                    "then the validator should do not return any errors" {
+                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        errors.shouldBeNull()
                     }
                 }
             }

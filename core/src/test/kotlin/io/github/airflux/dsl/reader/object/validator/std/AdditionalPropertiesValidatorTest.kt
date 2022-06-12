@@ -55,7 +55,7 @@ internal class AdditionalPropertiesValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, input)
                     }
-                    exception.message shouldBe "Key '${AdditionalPropertiesValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${AdditionalPropertiesValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 

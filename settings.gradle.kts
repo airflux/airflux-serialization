@@ -3,9 +3,6 @@ rootProject.name = "airflux"
 include(":airflux-core")
 project(":airflux-core").projectDir = file("./core")
 
-include(":airflux-dsl")
-project(":airflux-dsl").projectDir = file("./dsl")
-
 include(":airflux-jackson-parser")
 project(":airflux-jackson-parser").projectDir = file("./parser/jackson")
 

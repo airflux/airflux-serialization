@@ -35,7 +35,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, input, items)
                     }
-                    exception.message shouldBe "Key '${IsUniqueArrayValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${IsUniqueArrayValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 

@@ -34,7 +34,7 @@ internal class MinItemsValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, input)
                     }
-                    exception.message shouldBe "Key '${MinItemsArrayValidator.ErrorBuilder.Key.name}' is missing in the JsReaderContext."
+                    exception.message shouldBe "Key '${MinItemsArrayValidator.ErrorBuilder.name}' is missing in the JsReaderContext."
                 }
             }
 
