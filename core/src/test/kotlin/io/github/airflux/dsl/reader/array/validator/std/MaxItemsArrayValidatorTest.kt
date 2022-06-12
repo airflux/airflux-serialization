@@ -13,7 +13,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MaxItemsValidatorTest : FreeSpec() {
+internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
         private val LOCATION = JsLocation.empty

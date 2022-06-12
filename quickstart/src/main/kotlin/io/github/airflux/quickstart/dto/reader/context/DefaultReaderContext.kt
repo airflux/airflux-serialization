@@ -4,6 +4,7 @@ import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
 import io.github.airflux.core.reader.validator.std.comparable.EqComparableValidator
 import io.github.airflux.core.reader.validator.std.comparable.GeComparableValidator
 import io.github.airflux.core.reader.validator.std.comparable.GtComparableValidator
@@ -18,7 +19,6 @@ import io.github.airflux.core.reader.validator.std.string.IsNotEmptyStringValida
 import io.github.airflux.core.reader.validator.std.string.MaxLengthStringValidator
 import io.github.airflux.core.reader.validator.std.string.MinLengthStringValidator
 import io.github.airflux.core.reader.validator.std.string.PatternStringValidator
-import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
 import io.github.airflux.core.reader.validator.std.array.IsUniqueArrayValidator
 import io.github.airflux.core.reader.validator.std.array.MaxItemsArrayValidator
 import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator

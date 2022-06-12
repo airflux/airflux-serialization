@@ -7,14 +7,13 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsString
-import io.github.airflux.dsl.reader.array.validator.std.ArrayValidator.minItems
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MinItemsValidatorTest : FreeSpec() {
+internal class MinItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
         private val LOCATION = JsLocation.empty
@@ -24,7 +23,7 @@ internal class MinItemsValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator = minItems(MIN_ITEMS).build()
+            val validator = ArrayValidator.minItems(MIN_ITEMS).build()
 
             "when the reader context does not contain the error builder" - {
                 val context = JsReaderContext()
