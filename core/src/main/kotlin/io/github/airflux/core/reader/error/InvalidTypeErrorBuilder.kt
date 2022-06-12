@@ -14,18 +14,23 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.context.error
+package io.github.airflux.core.reader.error
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.contextKeyName
+import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.value.JsValue
 
-public class PathMissingErrorBuilder(private val builder: () -> JsError) :
-    AbstractErrorBuilderContextElement<PathMissingErrorBuilder>(key = PathMissingErrorBuilder) {
+/**
+ * The builder of an error that occurs when an element is an invalid type by the specified path.
+ */
+public class InvalidTypeErrorBuilder(private val builder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError) :
+    AbstractErrorBuilderContextElement<InvalidTypeErrorBuilder>(key = InvalidTypeErrorBuilder) {
 
-    public fun build(): JsError = builder()
+    public fun build(expected: JsValue.Type, actual: JsValue.Type): JsError = builder(expected, actual)
 
-    public companion object Key : JsReaderContext.Key<PathMissingErrorBuilder> {
+    public companion object Key : JsReaderContext.Key<InvalidTypeErrorBuilder> {
         override val name: String = contextKeyName()
     }
 }

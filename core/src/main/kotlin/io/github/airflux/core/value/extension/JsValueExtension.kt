@@ -17,7 +17,7 @@
 package io.github.airflux.core.value.extension
 
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray

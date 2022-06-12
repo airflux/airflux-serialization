@@ -1,9 +1,9 @@
 package io.github.airflux.quickstart.dto.reader.context
 
-import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
-import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
-import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.error.AdditionalItemsErrorBuilder
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
 import io.github.airflux.core.reader.validator.std.comparable.EqComparableValidator
 import io.github.airflux.core.reader.validator.std.comparable.GeComparableValidator

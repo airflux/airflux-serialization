@@ -18,7 +18,7 @@ package io.github.airflux.core.reader.base
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.failure

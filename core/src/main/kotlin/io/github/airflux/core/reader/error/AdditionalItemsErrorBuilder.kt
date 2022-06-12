@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.context.error
+package io.github.airflux.core.reader.error
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.contextKeyName
+import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.value.JsValue
 
-public class InvalidTypeErrorBuilder(private val builder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError) :
-    AbstractErrorBuilderContextElement<InvalidTypeErrorBuilder>(key = InvalidTypeErrorBuilder) {
+/**
+ * The builder of an error that occurs when an element appears in the array that is not described in prefixItems.
+ */
+public class AdditionalItemsErrorBuilder(private val builder: () -> JsError) :
+    AbstractErrorBuilderContextElement<AdditionalItemsErrorBuilder>(key = AdditionalItemsErrorBuilder) {
 
-    public fun build(expected: JsValue.Type, actual: JsValue.Type): JsError = builder(expected, actual)
+    public fun build(): JsError = builder()
 
-    public companion object Key : JsReaderContext.Key<InvalidTypeErrorBuilder> {
+    public companion object Key : JsReaderContext.Key<AdditionalItemsErrorBuilder> {
         override val name: String = contextKeyName()
     }
 }

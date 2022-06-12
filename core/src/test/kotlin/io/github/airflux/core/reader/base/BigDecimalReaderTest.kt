@@ -4,7 +4,7 @@ import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNumber

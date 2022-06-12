@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.context.error
+package io.github.airflux.core.reader.error
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.contextKeyName
+import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import kotlin.reflect.KClass
 
+/**
+ * The builder of an error that occurs when an element cannot be converted to the specified type.
+ */
 public class ValueCastErrorBuilder(private val builder: (value: String, target: KClass<*>) -> JsError) :
     AbstractErrorBuilderContextElement<ValueCastErrorBuilder>(key = ValueCastErrorBuilder) {
 

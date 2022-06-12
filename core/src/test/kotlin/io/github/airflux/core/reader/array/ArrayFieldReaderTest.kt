@@ -6,8 +6,8 @@ import io.github.airflux.core.reader.base.IntReader
 import io.github.airflux.core.reader.base.LongReader
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
-import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.error.AdditionalItemsErrorBuilder
+import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult

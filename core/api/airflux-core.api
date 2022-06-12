@@ -196,47 +196,7 @@ public abstract class io/github/airflux/core/reader/context/error/AbstractErrorB
 	public fun getKey ()Lio/github/airflux/core/reader/context/JsReaderContext$Key;
 }
 
-public final class io/github/airflux/core/reader/context/error/AdditionalItemsErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/context/error/AdditionalItemsErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function0;)V
-	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/context/error/AdditionalItemsErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
-}
-
 public abstract interface class io/github/airflux/core/reader/context/error/ErrorBuilderContextElement : io/github/airflux/core/reader/context/JsReaderContext$Element {
-}
-
-public final class io/github/airflux/core/reader/context/error/InvalidTypeErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/context/error/InvalidTypeErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final fun build (Lio/github/airflux/core/value/JsValue$Type;Lio/github/airflux/core/value/JsValue$Type;)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/context/error/InvalidTypeErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/core/reader/context/error/PathMissingErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/context/error/PathMissingErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function0;)V
-	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/context/error/PathMissingErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/core/reader/context/error/ValueCastErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/core/reader/context/error/ValueCastErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function2;)V
-	public final fun build (Ljava/lang/String;Lkotlin/reflect/KClass;)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/core/reader/context/error/ValueCastErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
-	public fun getName ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/core/reader/context/option/FailFast : io/github/airflux/core/reader/context/JsReaderAbstractContextElement {
@@ -251,6 +211,46 @@ public final class io/github/airflux/core/reader/context/option/FailFast$Key : i
 
 public final class io/github/airflux/core/reader/context/option/FailFastKt {
 	public static final fun getFailFast (Lio/github/airflux/core/reader/context/JsReaderContext;)Z
+}
+
+public final class io/github/airflux/core/reader/error/AdditionalItemsErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/core/reader/error/AdditionalItemsErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/core/reader/error/AdditionalItemsErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/core/reader/error/InvalidTypeErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/core/reader/error/InvalidTypeErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public final fun build (Lio/github/airflux/core/value/JsValue$Type;Lio/github/airflux/core/value/JsValue$Type;)Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/core/reader/error/InvalidTypeErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/core/reader/error/PathMissingErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/core/reader/error/PathMissingErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public final fun build ()Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/core/reader/error/PathMissingErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/core/reader/error/ValueCastErrorBuilder : io/github/airflux/core/reader/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/core/reader/error/ValueCastErrorBuilder$Key;
+	public fun <init> (Lkotlin/jvm/functions/Function2;)V
+	public final fun build (Ljava/lang/String;Lkotlin/reflect/KClass;)Lio/github/airflux/core/reader/result/JsError;
+}
+
+public final class io/github/airflux/core/reader/error/ValueCastErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
+	public fun getName ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/core/reader/extension/FilterExtensionKt {
