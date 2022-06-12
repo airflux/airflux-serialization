@@ -1,6 +1,6 @@
 package io.github.airflux.core.writer.extension
 
-import io.github.airflux.core.common.TestData
+import io.github.airflux.common.TestData
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.base.buildStringWriter

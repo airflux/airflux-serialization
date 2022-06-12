@@ -1,6 +1,6 @@
 package io.github.airflux.core.path
 
-import io.github.airflux.core.common.kotest.shouldBeEqualsContract
+import io.github.airflux.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainInOrder

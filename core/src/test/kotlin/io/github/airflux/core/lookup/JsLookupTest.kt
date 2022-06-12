@@ -1,7 +1,7 @@
 package io.github.airflux.core.lookup
 
-import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
-import io.github.airflux.core.common.TestData.USER_NAME_VALUE
+import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
+import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.result.JsLocation

@@ -1,6 +1,6 @@
 package io.github.airflux.core.reader.result
 
-import io.github.airflux.core.common.kotest.shouldBeEqualsContract
+import io.github.airflux.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

@@ -1,6 +1,6 @@
 package io.github.airflux.core.value
 
-import io.github.airflux.core.common.ObjectContract
+import io.github.airflux.common.ObjectContract
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.Test

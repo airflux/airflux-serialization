@@ -1,4 +1,4 @@
-package io.github.airflux.core.common.kotest
+package io.github.airflux.common.kotest
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue

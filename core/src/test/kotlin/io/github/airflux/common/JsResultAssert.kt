@@ -1,4 +1,4 @@
-package io.github.airflux.core.common
+package io.github.airflux.common
 
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult

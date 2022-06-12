@@ -1,8 +1,8 @@
 package io.github.airflux.core.value
 
-import io.github.airflux.core.common.ObjectContract
-import io.github.airflux.core.common.TestData.FIRST_PHONE_VALUE
-import io.github.airflux.core.common.TestData.SECOND_PHONE_VALUE
+import io.github.airflux.common.ObjectContract
+import io.github.airflux.common.TestData.FIRST_PHONE_VALUE
+import io.github.airflux.common.TestData.SECOND_PHONE_VALUE
 import io.github.airflux.core.path.PathElement
 import kotlin.test.Test
 import kotlin.test.assertContains

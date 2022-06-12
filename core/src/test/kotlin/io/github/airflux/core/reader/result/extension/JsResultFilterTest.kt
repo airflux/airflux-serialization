@@ -1,8 +1,8 @@
 package io.github.airflux.core.reader.result.extension
 
-import io.github.airflux.core.common.JsonErrors
-import io.github.airflux.core.common.assertAsFailure
-import io.github.airflux.core.common.assertAsSuccess
+import io.github.airflux.common.JsonErrors
+import io.github.airflux.common.assertAsFailure
+import io.github.airflux.common.assertAsSuccess
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsLocation

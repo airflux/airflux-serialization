@@ -1,12 +1,12 @@
 package io.github.airflux.dsl.extension
 
+import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.dsl.common.TestData.USER_NAME_VALUE
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

@@ -1,7 +1,7 @@
 package io.github.airflux.core.reader.result
 
-import io.github.airflux.core.common.JsonErrors
-import io.github.airflux.core.common.kotest.shouldBeEqualsContract
+import io.github.airflux.common.JsonErrors
+import io.github.airflux.common.kotest.shouldBeEqualsContract
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec

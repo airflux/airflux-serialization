@@ -1,4 +1,4 @@
-package io.github.airflux.core.common
+package io.github.airflux.common
 
 internal object TestData {
     const val USER_NAME_VALUE: String = "user"

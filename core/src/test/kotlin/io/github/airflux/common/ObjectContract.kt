@@ -1,4 +1,4 @@
-package io.github.airflux.core.common
+package io.github.airflux.common
 
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

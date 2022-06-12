@@ -1,7 +1,7 @@
 package io.github.airflux.core.reader.`object`
 
-import io.github.airflux.core.common.JsonErrors
-import io.github.airflux.core.common.TestData.USER_NAME_VALUE
+import io.github.airflux.common.JsonErrors
+import io.github.airflux.common.TestData.USER_NAME_VALUE
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext

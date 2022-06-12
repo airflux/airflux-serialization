@@ -5,7 +5,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.common.JsonErrors
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.ObjectValuesMapInstance
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties

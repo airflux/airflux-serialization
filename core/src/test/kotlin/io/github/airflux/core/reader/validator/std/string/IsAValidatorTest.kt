@@ -1,6 +1,6 @@
 package io.github.airflux.core.reader.validator.std.string
 
-import io.github.airflux.core.common.JsonErrors
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult

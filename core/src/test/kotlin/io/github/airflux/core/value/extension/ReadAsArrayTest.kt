@@ -1,6 +1,6 @@
 package io.github.airflux.core.value.extension
 
-import io.github.airflux.core.common.JsonErrors
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsLocation

@@ -8,7 +8,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
-import io.github.airflux.dsl.common.JsonErrors
+import io.github.airflux.common.JsonErrors
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.property.specification.required

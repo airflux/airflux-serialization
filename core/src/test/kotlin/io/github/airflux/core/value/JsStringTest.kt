@@ -1,6 +1,6 @@
 package io.github.airflux.core.value
 
-import io.github.airflux.core.common.ObjectContract
+import io.github.airflux.common.ObjectContract
 import kotlin.test.Test
 
 internal class JsStringTest {
