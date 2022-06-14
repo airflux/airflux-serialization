@@ -114,6 +114,11 @@ public final class io/github/airflux/core/reader/JsReaderKt {
 	public static final fun or (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/core/reader/JsReader;
 }
 
+public final class io/github/airflux/core/reader/JsReaderOpsKt {
+	public static final fun filter (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/core/reader/JsReader;
+	public static final fun validation (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/JsReader;
+}
+
 public final class io/github/airflux/core/reader/array/ArrayFieldReaderKt {
 	public static final fun readArray (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/core/reader/result/JsResult;
 	public static final fun readArray (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/result/JsLocation;Lio/github/airflux/core/value/JsArray;Ljava/util/List;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/core/reader/result/JsResult;
@@ -251,10 +256,6 @@ public final class io/github/airflux/core/reader/error/ValueCastErrorBuilder : i
 
 public final class io/github/airflux/core/reader/error/ValueCastErrorBuilder$Key : io/github/airflux/core/reader/context/JsReaderContext$Key {
 	public fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/core/reader/extension/FilterExtensionKt {
-	public static final fun filter (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/core/reader/JsReader;
 }
 
 public final class io/github/airflux/core/reader/object/NullableFieldReaderKt {
@@ -422,10 +423,6 @@ public abstract interface class io/github/airflux/core/reader/validator/JsValida
 public final class io/github/airflux/core/reader/validator/JsValidatorKt {
 	public static final fun and (Lio/github/airflux/core/reader/validator/JsValidator;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/validator/JsValidator;
 	public static final fun or (Lio/github/airflux/core/reader/validator/JsValidator;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/validator/JsValidator;
-}
-
-public final class io/github/airflux/core/reader/validator/extension/JsValidatorExtensionKt {
-	public static final fun validation (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/JsReader;
 }
 
 public final class io/github/airflux/core/reader/validator/std/array/IsNotEmptyArrayValidator : io/github/airflux/core/reader/validator/JsArrayValidator$Before {

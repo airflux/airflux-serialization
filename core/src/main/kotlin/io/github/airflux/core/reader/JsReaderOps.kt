@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.extension
+package io.github.airflux.core.reader
 
-import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.filter
+import io.github.airflux.core.reader.result.validation
+import io.github.airflux.core.reader.validator.JsValidator
 
 public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?> =
     JsReader { context, location, input ->
         this@filter.read(context, location, input)
             .filter(context, predicate)
+    }
+
+public infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
+    JsReader { context, location, input ->
+        this@validation.read(context, location, input)
+            .validation(context, validator)
     }

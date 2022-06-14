@@ -2,7 +2,7 @@ package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.result.success
-import io.github.airflux.core.reader.validator.extension.validation
+import io.github.airflux.core.reader.validation
 import io.github.airflux.core.reader.validator.std.string.StringValidator.isNotBlank
 import io.github.airflux.dsl.reader.`object`.property.specification.required
 import io.github.airflux.dsl.reader.`object`.validator.and
