@@ -380,9 +380,9 @@ public final class io/github/airflux/core/reader/result/JsResultKt {
 	public static final fun success (Ljava/lang/Object;Lio/github/airflux/core/reader/result/JsLocation;)Lio/github/airflux/core/reader/result/JsResult;
 }
 
-public final class io/github/airflux/core/reader/result/extension/FilterExtensionKt {
+public final class io/github/airflux/core/reader/result/JsResultOpsKt {
 	public static final fun filter (Lio/github/airflux/core/reader/result/JsResult;Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/core/reader/result/JsResult;
-	public static final fun filter (Lio/github/airflux/core/reader/result/JsResult;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/core/reader/result/JsResult;
+	public static final fun validation (Lio/github/airflux/core/reader/result/JsResult;Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/result/JsResult;
 }
 
 public abstract interface class io/github/airflux/core/reader/validator/JsArrayValidator {
@@ -426,8 +426,6 @@ public final class io/github/airflux/core/reader/validator/JsValidatorKt {
 
 public final class io/github/airflux/core/reader/validator/extension/JsValidatorExtensionKt {
 	public static final fun validation (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/JsReader;
-	public static final fun validation (Lio/github/airflux/core/reader/result/JsResult;Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/result/JsResult;
-	public static final fun validation (Lio/github/airflux/core/reader/result/JsResult;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/result/JsResult;
 }
 
 public final class io/github/airflux/core/reader/validator/std/array/IsNotEmptyArrayValidator : io/github/airflux/core/reader/validator/JsArrayValidator$Before {

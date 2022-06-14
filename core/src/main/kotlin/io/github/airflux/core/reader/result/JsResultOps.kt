@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.result.extension
+package io.github.airflux.core.reader.result
 
 import io.github.airflux.core.common.identity
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.fold
-
-public fun <T> JsResult<T?>.filter(predicate: JsPredicate<T>): JsResult<T?> =
-    filter(context = JsReaderContext(), predicate = predicate)
+import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T> JsResult<T?>.filter(context: JsReaderContext, predicate: JsPredicate<T>): JsResult<T?> =
     fold(
@@ -38,4 +34,10 @@ public fun <T> JsResult<T?>.filter(context: JsReaderContext, predicate: JsPredic
                     JsResult.Success(result.location, null)
             }
         }
+    )
+
+public fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
+    fold(
+        ifFailure = ::identity,
+        ifSuccess = { result -> validator.validation(context, result.location, result.value) ?: result }
     )

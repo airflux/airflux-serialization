@@ -18,8 +18,8 @@ package io.github.airflux.dsl.reader.array.item.specification
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.or
+import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
-import io.github.airflux.core.reader.validator.extension.validation
 
 internal class JsArrayNullableItemSpec<T>(override val reader: JsReader<T?>) : JsArrayItemSpec.Nullable<T> {
 

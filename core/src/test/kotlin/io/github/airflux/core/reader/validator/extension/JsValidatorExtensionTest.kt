@@ -96,46 +96,4 @@ internal class JsValidatorExtensionTest {
             )
         }
     }
-
-    @Nested
-    inner class Result {
-
-        @Test
-        fun `Testing of the extension-function the validation for JsResult`() {
-            val result: JsResult<String> = JsResult.Success(location = JsLocation.empty.append("name"), value = "user")
-
-            val validated = result.validation(isNotEmpty)
-
-            validated.assertAsSuccess(location = JsLocation.empty.append("name"), value = "user")
-        }
-
-        @Test
-        fun `Testing of the extension-function the validation for JsResult (error of validation)`() {
-            val result: JsResult<String> = JsResult.Success(location = JsLocation.empty.append("user"), value = "")
-
-            val validated = result.validation(isNotEmpty)
-
-            validated.assertAsFailure(
-                JsResult.Failure.Cause(
-                    location = JsLocation.empty.append("user"),
-                    error = JsonErrors.Validation.Strings.IsEmpty
-                )
-            )
-        }
-
-        @Test
-        fun `Testing of the extension-function the validation for JsResult (result is failure)`() {
-            val result: JsResult<String> =
-                JsResult.Failure(location = JsLocation.empty.append("user"), error = JsonErrors.PathMissing)
-
-            val validated = result.validation(isNotEmpty)
-
-            validated.assertAsFailure(
-                JsResult.Failure.Cause(
-                    location = JsLocation.empty.append("user"),
-                    error = JsonErrors.PathMissing
-                )
-            )
-        }
-    }
 }

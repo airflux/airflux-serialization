@@ -19,10 +19,10 @@ package io.github.airflux.dsl.reader.`object`.property.specification
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.`object`.readWithDefault
+import io.github.airflux.core.reader.or
+import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
-import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
 internal class JsObjectDefaultablePropertySpec<T : Any> private constructor(

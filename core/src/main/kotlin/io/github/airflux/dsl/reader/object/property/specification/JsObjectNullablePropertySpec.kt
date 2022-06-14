@@ -19,12 +19,12 @@ package io.github.airflux.dsl.reader.`object`.property.specification
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.`object`.readNullable
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.`object`.readNullable
-import io.github.airflux.core.reader.result.extension.filter
+import io.github.airflux.core.reader.result.filter
+import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
-import io.github.airflux.core.reader.validator.extension.validation
 import io.github.airflux.dsl.reader.`object`.property.path.JsPaths
 
 internal class JsObjectNullablePropertySpec<T : Any> private constructor(
