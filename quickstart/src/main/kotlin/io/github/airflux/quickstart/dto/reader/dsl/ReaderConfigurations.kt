@@ -1,13 +1,13 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
-import io.github.airflux.dsl.reader.`object`.validator.and
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.additionalProperties
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.isNotEmpty
-import io.github.airflux.dsl.reader.`object`.validator.std.ObjectValidator.maxProperties
-import io.github.airflux.dsl.reader.configuration.JsArrayReaderConfiguration
-import io.github.airflux.dsl.reader.configuration.objectReaderConfiguration
+import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
+import io.github.airflux.dsl.reader.config.objectReaderConfig
+import io.github.airflux.dsl.reader.`object`.builder.validator.and
+import io.github.airflux.std.validator.`object`.ObjectValidator.additionalProperties
+import io.github.airflux.std.validator.`object`.ObjectValidator.isNotEmpty
+import io.github.airflux.std.validator.`object`.ObjectValidator.maxProperties
 
-val ObjectReaderConfiguration = objectReaderConfiguration {
+val ObjectReaderConfiguration = objectReaderConfig {
 
     checkUniquePropertyPath = true
 
@@ -17,4 +17,4 @@ val ObjectReaderConfiguration = objectReaderConfiguration {
     }
 }
 
-val ArrayReaderConfiguration = JsArrayReaderConfiguration.DEFAULT
+val ArrayReaderConfiguration = JsArrayReaderConfig.DEFAULT

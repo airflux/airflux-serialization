@@ -1,9 +1,9 @@
 package io.github.airflux.quickstart.dto.reader.dsl.property
 
-import io.github.airflux.core.reader.base.StringReader
-import io.github.airflux.core.reader.validator.std.string.StringValidator.isNotBlank
-import io.github.airflux.dsl.reader.`object`.property.path.or
-import io.github.airflux.dsl.reader.`object`.property.specification.required
+import io.github.airflux.dsl.path.or
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
+import io.github.airflux.std.reader.StringReader
+import io.github.airflux.std.validator.string.StringValidator.isNotBlank
 
 val identifierPropertySpec =
     required("id" or "identifier", reader = StringReader)

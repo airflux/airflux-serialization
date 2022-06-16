@@ -1,7 +1,6 @@
 package io.github.airflux.core.reader
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.error.PathMissingErrorBuilder
@@ -11,6 +10,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
+import io.github.airflux.std.reader.StringReader
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

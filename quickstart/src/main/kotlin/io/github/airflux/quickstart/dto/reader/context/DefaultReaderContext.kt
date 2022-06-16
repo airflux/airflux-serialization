@@ -4,31 +4,30 @@ import io.github.airflux.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.error.ValueCastErrorBuilder
-import io.github.airflux.core.reader.validator.std.array.IsNotEmptyArrayValidator
-import io.github.airflux.core.reader.validator.std.comparable.EqComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.GeComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.GtComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.LeComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.LtComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.MaxComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.MinComparableValidator
-import io.github.airflux.core.reader.validator.std.comparable.NeComparableValidator
-import io.github.airflux.core.reader.validator.std.string.IsAStringValidator
-import io.github.airflux.core.reader.validator.std.string.IsNotBlankStringValidator
-import io.github.airflux.core.reader.validator.std.string.IsNotEmptyStringValidator
-import io.github.airflux.core.reader.validator.std.string.MaxLengthStringValidator
-import io.github.airflux.core.reader.validator.std.string.MinLengthStringValidator
-import io.github.airflux.core.reader.validator.std.string.PatternStringValidator
-import io.github.airflux.core.reader.validator.std.array.IsUniqueArrayValidator
-import io.github.airflux.core.reader.validator.std.array.MaxItemsArrayValidator
-import io.github.airflux.core.reader.validator.std.array.MinItemsArrayValidator
 import io.github.airflux.dsl.reader.context.JsReaderContextBuilder
 import io.github.airflux.dsl.reader.context.readerContext
-import io.github.airflux.core.reader.validator.std.`object`.AdditionalPropertiesObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.IsNotEmptyObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.MaxPropertiesObjectValidator
-import io.github.airflux.core.reader.validator.std.`object`.MinPropertiesObjectValidator
 import io.github.airflux.quickstart.json.error.JsonErrors
+import io.github.airflux.std.validator.array.IsNotEmptyArrayValidator
+import io.github.airflux.std.validator.array.IsUniqueArrayValidator
+import io.github.airflux.std.validator.array.MaxItemsArrayValidator
+import io.github.airflux.std.validator.array.MinItemsArrayValidator
+import io.github.airflux.std.validator.comparable.EqComparableValidator
+import io.github.airflux.std.validator.comparable.GeComparableValidator
+import io.github.airflux.std.validator.comparable.GtComparableValidator
+import io.github.airflux.std.validator.comparable.LeComparableValidator
+import io.github.airflux.std.validator.comparable.LtComparableValidator
+import io.github.airflux.std.validator.comparable.MaxComparableValidator
+import io.github.airflux.std.validator.comparable.MinComparableValidator
+import io.github.airflux.std.validator.comparable.NeComparableValidator
+import io.github.airflux.std.validator.`object`.AdditionalPropertiesObjectValidator
+import io.github.airflux.std.validator.`object`.IsNotEmptyObjectValidator
+import io.github.airflux.std.validator.`object`.MaxPropertiesObjectValidator
+import io.github.airflux.std.validator.`object`.MinPropertiesObjectValidator
+import io.github.airflux.std.validator.string.IsAStringValidator
+import io.github.airflux.std.validator.string.IsNotBlankStringValidator
+import io.github.airflux.std.validator.string.MaxLengthStringValidator
+import io.github.airflux.std.validator.string.MinLengthStringValidator
+import io.github.airflux.std.validator.string.PatternStringValidator
 
 val DefaultReaderContext = readerContext {
     failFast = false
@@ -69,7 +68,7 @@ fun JsReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.stringValidationErrorBuilders() {
-    +IsNotEmptyStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty }
+    +IsNotEmptyObjectValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty }
     +IsNotBlankStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsBlank }
     +MinLengthStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::MinLength)
     +MaxLengthStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::MaxLength)

@@ -1,8 +1,8 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.core.reader.result.success
-import io.github.airflux.dsl.reader.`object`.property.specification.optional
-import io.github.airflux.dsl.reader.`object`.property.specification.required
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.optional
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.dsl.reader.reader
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySpec

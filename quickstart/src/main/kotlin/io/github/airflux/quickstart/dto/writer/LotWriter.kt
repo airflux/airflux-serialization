@@ -2,7 +2,7 @@ package io.github.airflux.quickstart.dto.writer
 
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.JsWriter
-import io.github.airflux.core.writer.extension.arrayWriter
+import io.github.airflux.core.writer.arrayWriter
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.writer.base.PrimitiveWriter.stringWriter

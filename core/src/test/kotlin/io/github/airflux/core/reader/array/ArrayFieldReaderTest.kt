@@ -1,14 +1,10 @@
 package io.github.airflux.core.reader.array
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.base.BooleanReader
-import io.github.airflux.core.reader.base.IntReader
-import io.github.airflux.core.reader.base.LongReader
-import io.github.airflux.core.reader.base.StringReader
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.failure
@@ -18,6 +14,9 @@ import io.github.airflux.core.value.JsBoolean
 import io.github.airflux.core.value.JsNumber
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
+import io.github.airflux.std.reader.IntReader
+import io.github.airflux.std.reader.LongReader
+import io.github.airflux.std.reader.StringReader
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -231,7 +230,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             context = updatedContext,
                             location = LOCATION,
                             from = from,
-                            prefixItems = listOf(IntReader, BooleanReader),
+                            prefixItems = listOf(IntReader, io.github.airflux.std.reader.BooleanReader),
                             errorIfAdditionalItems = true
                         )
 

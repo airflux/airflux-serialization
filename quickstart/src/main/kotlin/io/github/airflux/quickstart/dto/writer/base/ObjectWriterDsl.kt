@@ -1,9 +1,9 @@
 package io.github.airflux.quickstart.dto.writer.base
 
-import io.github.airflux.dsl.writer.`object`.ObjectWriter
-import io.github.airflux.dsl.writer.`object`.ObjectWriterConfiguration
+import io.github.airflux.core.writer.`object`.ObjectWriter
+import io.github.airflux.dsl.writer.config.ObjectWriterConfig
 
-val DefaultObjectWriterConfiguration = ObjectWriterConfiguration.build {
+val DefaultObjectWriterConfiguration = ObjectWriterConfig.build {
     skipPropertyIfArrayIsEmpty = true
 }
 
