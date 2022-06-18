@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.std.writer
 
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.value.JsNumber
 import io.github.airflux.core.value.JsValue
+import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.context.JsWriterContext
 
-public fun interface JsWriter<in T> {
-
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
+/**
+ * Writer for primitive [Int] type.
+ */
+public object IntWriter : JsWriter<Int> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: Int): JsValue = JsNumber.valueOf(value)
 }

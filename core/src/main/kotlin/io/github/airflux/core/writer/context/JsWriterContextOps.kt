@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.core.writer.context
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
+import kotlin.reflect.full.companionObject
 
-public fun interface JsWriter<in T> {
+public inline fun <reified T : JsWriterContext.Key<*>> T.contextKeyName(): String = contextKeyName(T::class.java)
 
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
-}
+public fun <T : JsWriterContext.Key<*>> contextKeyName(javaClass: Class<T>): String =
+    (javaClass.enclosingClass?.takeIf { it.kotlin.companionObject?.java == javaClass } ?: javaClass).canonicalName

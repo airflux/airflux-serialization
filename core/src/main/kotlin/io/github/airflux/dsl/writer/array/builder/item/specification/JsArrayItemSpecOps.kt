@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+@file:Suppress("unused", "TooManyFunctions")
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
+package io.github.airflux.dsl.writer.array.builder.item.specification
 
-public fun interface JsWriter<in T> {
+import io.github.airflux.core.value.JsNull
+import io.github.airflux.core.writer.JsWriter
 
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
-}
+public fun <T : Any> nonNullable(writer: JsWriter<T>): JsArrayItemSpec.NonNullable<T> =
+    JsArrayNonNullableItemSpec(writer)
+
+public fun <T : Any> nullable(writer: JsWriter<T>): JsArrayItemSpec.Nullable<T?> = JsArrayNullableItemSpec(
+    writer = { context, location, value ->
+        if (value != null)
+            writer.write(context, location, value)
+        else
+            JsNull
+    }
+)

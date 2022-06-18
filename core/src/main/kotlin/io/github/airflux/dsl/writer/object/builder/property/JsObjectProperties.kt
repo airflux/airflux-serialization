@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.dsl.writer.`object`.builder.property
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
+public class JsObjectProperties<T : Any> internal constructor(
+    private val items: List<JsObjectProperty<T>>
+) : Collection<JsObjectProperty<T>> by items {
 
-public fun interface JsWriter<in T> {
+    internal class Builder<T : Any> {
+        private val properties = mutableListOf<JsObjectProperty<T>>()
 
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
+        fun add(property: JsObjectProperty<T>) {
+            properties.add(property)
+        }
+
+        internal fun build(): JsObjectProperties<T> = JsObjectProperties(properties)
+    }
 }

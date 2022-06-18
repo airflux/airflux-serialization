@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.core.writer.JsWriter
 
-public fun interface JsWriter<in T> {
-
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
-}
+internal class JsObjectRequiredPropertySpec<T : Any, P : Any>(
+    override val name: String,
+    override val from: (T) -> P,
+    override val writer: JsWriter<P>
+) : JsObjectPropertySpec.Required<T, P>

@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.core.writer.JsWriter
 
-public fun interface JsWriter<in T> {
-
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
-}
+internal class JsArrayNonNullableItemSpec<T>(override val writer: JsWriter<T>) : JsArrayItemSpec.NonNullable<T>

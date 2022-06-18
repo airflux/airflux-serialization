@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.core.writer.context
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
-
-public fun interface JsWriter<in T> {
-
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
-}
+public abstract class JsWriterAbstractContextElement<T : JsWriterContext.Element>(
+    override val key: JsWriterContext.Key<T>
+) : JsWriterContext.Element

@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.std.writer
 
 import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.value.JsBoolean
 import io.github.airflux.core.value.JsValue
+import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.context.JsWriterContext
 
-public fun interface JsWriter<in T> {
-
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
+/**
+ * Writer for primitive [Boolean] type.
+ */
+public object BooleanWriter : JsWriter<Boolean> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: Boolean): JsValue =
+        if (value) JsBoolean.True else JsBoolean.False
 }

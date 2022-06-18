@@ -1,8 +1,9 @@
 package io.github.airflux.quickstart.dto.writer
 
+import io.github.airflux.dsl.writer.`object`.builder.property.specification.required
+import io.github.airflux.dsl.writer.writer
 import io.github.airflux.quickstart.dto.Response
-import io.github.airflux.quickstart.dto.writer.base.writer
 
 val ResponseWriter = writer<Response> {
-    requiredProperty(name = "tender", from = Response::tender, writer = TenderWriter)
+    property(required(name = "tender", from = Response::tender, writer = TenderWriter))
 }

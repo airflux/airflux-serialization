@@ -1,10 +1,11 @@
 package io.github.airflux.quickstart
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.airflux.core.reader.result.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.`object`.serialization
 import io.github.airflux.dsl.value.deserialization
+import io.github.airflux.dsl.writer.serialization
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.quickstart.dto.Response
 import io.github.airflux.quickstart.dto.model.Lot
@@ -14,6 +15,7 @@ import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
+import io.github.airflux.quickstart.dto.writer.context.DefaultWriterContext
 import java.math.BigDecimal
 
 fun main() {
@@ -32,7 +34,7 @@ fun main() {
     val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
     val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
     val response = Response(tender = tender)
-    val output: JsValue = response.serialization(ResponseWriter)
+    val output: JsValue? = response.serialization(DefaultWriterContext, JsLocation.empty, ResponseWriter)
     println(output.toString())
 }
 

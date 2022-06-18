@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.dsl.writer.context
 
-import io.github.airflux.core.reader.result.JsLocation
-import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.dsl.AirfluxMarker
 
-public fun interface JsWriter<in T> {
+public fun writerContext(block: JsWriterContextBuilder.() -> Unit): JsWriterContext =
+    JsWriterContextBuilder().apply(block).build()
 
-    public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
+@AirfluxMarker
+public class JsWriterContextBuilder {
+
+    private val elements = mutableListOf<JsWriterContext.Element>()
+
+    internal fun build(): JsWriterContext {
+        return JsWriterContext(elements)
+    }
 }
