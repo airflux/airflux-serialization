@@ -16,11 +16,11 @@
 
 package io.github.airflux.dsl.reader.`object`.builder
 
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.JsObjectReader
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.failFast
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.failure
@@ -38,7 +38,7 @@ import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
 @AirfluxMarker
-public class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfig) {
+public class JsObjectReaderBuilder<T> internal constructor(configuration: JsObjectReaderConfig) {
 
     public fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, ObjectValuesMap) -> JsResult<T>
 
@@ -119,7 +119,7 @@ public class JsObjectReaderBuilder<T>(configuration: JsObjectReaderConfig) {
     ) {
 
         @AirfluxMarker
-        public class Builder(
+        public class Builder internal constructor(
             public var before: JsObjectValidatorBuilder.Before? = null,
             public var after: JsObjectValidatorBuilder.After? = null
         ) {

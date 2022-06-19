@@ -23,7 +23,7 @@ public fun writerContext(block: JsWriterContextBuilder.() -> Unit): JsWriterCont
     JsWriterContextBuilder().apply(block).build()
 
 @AirfluxMarker
-public class JsWriterContextBuilder {
+public class JsWriterContextBuilder internal constructor() {
 
     private val elements = mutableListOf<JsWriterContext.Element>()
 

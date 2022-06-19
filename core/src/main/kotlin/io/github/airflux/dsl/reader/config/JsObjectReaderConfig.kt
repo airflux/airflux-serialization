@@ -28,7 +28,7 @@ public class JsObjectReaderConfig private constructor(
 ) {
 
     @AirfluxMarker
-    public class Builder {
+    public class Builder internal constructor() {
         public var checkUniquePropertyPath: Boolean = false
         private var validation: Validation.Builder = Validation.Builder()
 
@@ -49,7 +49,7 @@ public class JsObjectReaderConfig private constructor(
     ) {
 
         @AirfluxMarker
-        public class Builder(
+        public class Builder internal constructor(
             public var before: JsObjectValidatorBuilder.Before? = null,
             public var after: JsObjectValidatorBuilder.After? = null
         ) {

@@ -26,7 +26,7 @@ public fun readerContext(block: JsReaderContextBuilder.() -> Unit): JsReaderCont
     JsReaderContextBuilder().apply(block).build()
 
 @AirfluxMarker
-public class JsReaderContextBuilder {
+public class JsReaderContextBuilder internal constructor() {
 
     private val elements = mutableListOf<JsReaderContext.Element>()
 
@@ -50,7 +50,7 @@ public class JsReaderContextBuilder {
     }
 
     @AirfluxMarker
-    public class ErrorsBuilder {
+    public class ErrorsBuilder internal constructor() {
         private val items = mutableListOf<ErrorBuilderContextElement>()
 
         public fun <E : ErrorBuilderContextElement> register(error: E) {

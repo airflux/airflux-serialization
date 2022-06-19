@@ -26,7 +26,7 @@ public fun arrayReaderConfig(block: JsArrayReaderConfig.Builder.() -> Unit): JsA
 public class JsArrayReaderConfig private constructor(public val validation: Validation) {
 
     @AirfluxMarker
-    public class Builder {
+    public class Builder internal constructor() {
         private var validation: Validation.Builder = Validation.Builder()
 
         public fun validation(block: Validation.Builder.() -> Unit) {
@@ -44,7 +44,7 @@ public class JsArrayReaderConfig private constructor(public val validation: Vali
     ) {
 
         @AirfluxMarker
-        public class Builder(
+        public class Builder internal constructor(
             public var before: JsArrayValidatorBuilder.Before? = null
         ) {
             internal fun build(): Validation = Validation(before)

@@ -16,12 +16,12 @@
 
 package io.github.airflux.dsl.reader.array.builder
 
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.JsArrayReader
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.array.readArray
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.failFast
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.fold
@@ -36,7 +36,7 @@ import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
 @AirfluxMarker
-public class JsArrayReaderBuilder<T>(configuration: JsArrayReaderConfig) {
+public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArrayReaderConfig) {
 
     public fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, JsArray<*>) -> JsResult<List<T>>
 
@@ -103,7 +103,7 @@ public class JsArrayReaderBuilder<T>(configuration: JsArrayReaderConfig) {
     ) {
 
         @AirfluxMarker
-        public class Builder<T>(
+        public class Builder<T> internal constructor(
             public var before: JsArrayValidatorBuilder.Before? = null,
             public var after: JsArrayValidatorBuilder.After<T>? = null
         ) {
