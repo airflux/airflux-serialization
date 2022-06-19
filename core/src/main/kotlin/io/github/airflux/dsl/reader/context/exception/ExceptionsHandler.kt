@@ -20,7 +20,7 @@ import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 
 public class ExceptionsHandler(
     private val handler: (context: JsReaderContext, location: JsLocation, exception: Throwable) -> JsError?

@@ -1,6 +1,6 @@
 package io.github.airflux.core.writer.predicate
 
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.writer.context.JsWriterContext
 import kotlin.test.Test
 import kotlin.test.assertFalse

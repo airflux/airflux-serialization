@@ -3,7 +3,7 @@ package io.github.airflux.std.validator.`object`
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap

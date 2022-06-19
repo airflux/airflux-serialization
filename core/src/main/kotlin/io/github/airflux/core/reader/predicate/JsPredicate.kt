@@ -17,7 +17,7 @@
 package io.github.airflux.core.reader.predicate
 
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 
 @Suppress("unused")
 public fun interface JsPredicate<T> {

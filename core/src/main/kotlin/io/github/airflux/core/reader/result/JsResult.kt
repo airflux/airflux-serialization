@@ -17,6 +17,7 @@
 package io.github.airflux.core.reader.result
 
 import io.github.airflux.core.common.identity
+import io.github.airflux.core.location.JsLocation
 
 @Suppress("unused")
 public sealed class JsResult<out T> {

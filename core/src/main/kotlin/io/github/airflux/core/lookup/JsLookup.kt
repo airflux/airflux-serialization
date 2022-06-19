@@ -18,7 +18,7 @@ package io.github.airflux.core.lookup
 
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.PathElement
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsValue

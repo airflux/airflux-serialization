@@ -5,7 +5,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.value.JsString

@@ -20,7 +20,7 @@ import io.github.airflux.core.reader.JsObjectReader
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.failFast
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.failure

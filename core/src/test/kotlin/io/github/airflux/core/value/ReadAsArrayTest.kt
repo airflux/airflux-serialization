@@ -3,7 +3,7 @@ package io.github.airflux.core.value
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe

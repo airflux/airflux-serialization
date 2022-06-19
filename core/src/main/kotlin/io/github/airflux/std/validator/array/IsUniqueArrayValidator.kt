@@ -21,7 +21,7 @@ import io.github.airflux.core.reader.context.contextKeyName
 import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsArray

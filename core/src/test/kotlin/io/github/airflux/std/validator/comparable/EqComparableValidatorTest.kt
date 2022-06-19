@@ -3,7 +3,7 @@ package io.github.airflux.std.validator.comparable
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.kotest.assertions.throwables.shouldThrow

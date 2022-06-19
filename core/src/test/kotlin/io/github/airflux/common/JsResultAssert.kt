@@ -1,6 +1,6 @@
 package io.github.airflux.common
 
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import kotlin.test.assertContains
 import kotlin.test.assertEquals

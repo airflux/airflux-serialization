@@ -18,6 +18,6 @@ package io.github.airflux.dsl.reader.context.exception
 
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 
 internal typealias ExceptionHandler = (JsReaderContext, JsLocation, Throwable) -> JsError

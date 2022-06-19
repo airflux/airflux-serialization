@@ -1,6 +1,7 @@
 package io.github.airflux.core.reader.result
 
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.validator.JsValidator

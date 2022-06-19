@@ -1,6 +1,6 @@
 package io.github.airflux.dsl.writer
 
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsArrayWriter
 import io.github.airflux.core.writer.JsObjectWriter

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.result
+package io.github.airflux.core.location
 
 import io.github.airflux.core.path.PathElement
 

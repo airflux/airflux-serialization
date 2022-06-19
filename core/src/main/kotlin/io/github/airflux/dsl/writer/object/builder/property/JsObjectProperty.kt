@@ -16,7 +16,7 @@
 
 package io.github.airflux.dsl.writer.`object`.builder.property
 
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.context.JsWriterContext

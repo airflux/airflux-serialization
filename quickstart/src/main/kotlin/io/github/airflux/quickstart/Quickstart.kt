@@ -1,7 +1,7 @@
 package io.github.airflux.quickstart
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.core.reader.result.JsLocation
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.dsl.value.deserialization
