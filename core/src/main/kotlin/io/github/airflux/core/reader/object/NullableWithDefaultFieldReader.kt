@@ -16,10 +16,11 @@
 
 package io.github.airflux.core.reader.`object`
 
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNull
 
@@ -49,7 +50,7 @@ public fun <T : Any> readNullable(
         is JsLookup.Defined -> readNullable(context, from, using)
         is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
         is JsLookup.Undefined.InvalidType -> {
-            val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+            val errorBuilder = context[InvalidTypeErrorBuilder]
             JsResult.Failure(
                 location = from.location,
                 error = errorBuilder.build(from.expected, from.actual)

@@ -16,32 +16,33 @@
 
 package io.github.airflux.std.validator.array
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.core.context.error.errorBuilderName
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
 public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator.Before {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? {
-        val errorBuilder = context.getValue(ErrorBuilder)
-        return if (input.isEmpty())
+    override fun validation(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
+        if (input.isEmpty()) {
+            val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build())
-        else
+        } else
             null
-    }
 
     public class ErrorBuilder(private val function: () -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
         public fun build(): JsError = function()
 
-        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = contextKeyName()
+        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+            override val name: String = errorBuilderName()
         }
     }
 }

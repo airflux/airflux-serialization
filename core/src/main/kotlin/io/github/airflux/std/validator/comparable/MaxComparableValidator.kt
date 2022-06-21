@@ -16,11 +16,13 @@
 
 package io.github.airflux.std.validator.comparable
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.context.error.errorBuilderName
+import io.github.airflux.core.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
@@ -32,7 +34,7 @@ public class MaxComparableValidator<T> internal constructor(private val expected
         if (value <= expected)
             null
         else {
-            val errorBuilder = context.getValue(ErrorBuilder)
+            val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location = location, error = errorBuilder.build(expected, value))
         }
 
@@ -41,8 +43,8 @@ public class MaxComparableValidator<T> internal constructor(private val expected
 
         public fun build(expected: Number, actual: Number): JsError = function(expected, actual)
 
-        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = contextKeyName()
+        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+            override val name: String = errorBuilderName()
         }
     }
 }

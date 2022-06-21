@@ -1,6 +1,6 @@
-package io.github.airflux.core.reader.context
+package io.github.airflux.context
 
-import io.kotest.assertions.throwables.shouldThrow
+import io.github.airflux.core.context.JsContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldContainExactly
@@ -8,7 +8,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsReaderContextTest : FreeSpec() {
+internal class JsContextTest : FreeSpec() {
 
     companion object {
         private val userContext = UserContext()
@@ -22,7 +22,7 @@ internal class JsReaderContextTest : FreeSpec() {
             "when calling the constructor" - {
 
                 "without parameters" - {
-                    val empty = JsReaderContext()
+                    val empty = JsContext()
 
                     "context should be is empty" {
                         empty.isEmpty shouldBe true
@@ -30,7 +30,7 @@ internal class JsReaderContextTest : FreeSpec() {
                 }
 
                 "with one parameters" - {
-                    val one = JsReaderContext(userContext)
+                    val one = JsContext(userContext)
 
                     "context should not be is empty" {
                         one.isEmpty shouldBe false
@@ -44,7 +44,7 @@ internal class JsReaderContextTest : FreeSpec() {
 
                 "with the collection of the parameters" - {
                     val elements = listOf(userContext, orderContext)
-                    val one = JsReaderContext(elements)
+                    val one = JsContext(elements)
 
                     "context should not be is empty" {
                         one.isEmpty shouldBe false
@@ -60,7 +60,7 @@ internal class JsReaderContextTest : FreeSpec() {
             }
 
             "when context is empty" - {
-                val empty = JsReaderContext()
+                val empty = JsContext()
 
                 "property isEmpty should return true" - {
                     empty.isEmpty shouldBe true
@@ -73,13 +73,6 @@ internal class JsReaderContextTest : FreeSpec() {
                 "the function getOrNull should return null by any key" {
                     val result = empty.getOrNull(UserContext)
                     result.shouldBeNull()
-                }
-
-                "the function getValue should throw exception by any key" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        empty.getValue(OrderContext)
-                    }
-                    exception.message shouldBe "Key '${OrderContext.contextKeyName()}' is missing in the context of reading."
                 }
 
                 "the function contains should return false by any key" {
@@ -113,7 +106,7 @@ internal class JsReaderContextTest : FreeSpec() {
             }
 
             "when context is not empty" - {
-                val one = JsReaderContext(userContext)
+                val one = JsContext(userContext)
 
                 "property isEmpty should return false" - {
                     one.isEmpty shouldBe false
@@ -134,11 +127,6 @@ internal class JsReaderContextTest : FreeSpec() {
                     result shouldBe userContext
                 }
 
-                "the function getValue should return value if data by the key contains in the context" {
-                    val result = one.getValue(UserContext)
-                    result shouldBe userContext
-                }
-
                 "the function contains should return false if data by the key does not contain in the context" {
                     val result = one.contains(OrderContext)
                     result shouldBe false
@@ -147,13 +135,6 @@ internal class JsReaderContextTest : FreeSpec() {
                 "the function getOrNull should return null if data by the key does not contain in the context" {
                     val result = one.getOrNull(OrderContext)
                     result.shouldBeNull()
-                }
-
-                "the function getValue should throw exception if data by the key does not contain in the context" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        one.getValue(OrderContext)
-                    }
-                    exception.message shouldBe "Key '${OrderContext.contextKeyName()}' is missing in the context of reading."
                 }
 
                 "when calling the function plus" - {
@@ -202,23 +183,23 @@ internal class JsReaderContextTest : FreeSpec() {
         }
     }
 
-    class UserContext : JsReaderAbstractContextElement<UserContext>(Key) {
-        companion object Key : JsReaderContext.Key<UserContext> {
-            override val name: String = contextKeyName()
-        }
-
-        override fun toString(): String = name
+    class UserContext : JsContext.Element {
+        override fun toString(): String = "UserContext"
         override fun equals(other: Any?): Boolean = this === other || other is UserContext
         override fun hashCode(): Int = Key.hashCode()
+
+        override val key: JsContext.Key<*> = Key
+
+        companion object Key : JsContext.Key<UserContext>
     }
 
-    class OrderContext : JsReaderAbstractContextElement<OrderContext>(Key) {
-        companion object Key : JsReaderContext.Key<OrderContext> {
-            override val name: String = contextKeyName()
-        }
-
-        override fun toString(): String = name
+    class OrderContext : JsContext.Element {
+        override fun toString(): String = "OrderContext"
         override fun equals(other: Any?): Boolean = this === other || other is OrderContext
         override fun hashCode(): Int = UserContext.hashCode()
+
+        override val key: JsContext.Key<*> = Key
+
+        companion object Key : JsContext.Key<OrderContext>
     }
 }

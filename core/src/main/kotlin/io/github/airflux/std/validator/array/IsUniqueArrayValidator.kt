@@ -16,12 +16,14 @@
 
 package io.github.airflux.std.validator.array
 
+import io.github.airflux.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.core.context.error.errorBuilderName
+import io.github.airflux.core.context.error.get
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsArray
@@ -38,7 +40,7 @@ public class IsUniqueArrayValidator<T, K : Any> internal constructor(
         items: List<T>
     ): JsResult.Failure? {
         val failFast = context.failFast
-        val errorBuilder = context.getValue(ErrorBuilder)
+        val errorBuilder = context[ErrorBuilder]
 
         val failures = mutableListOf<JsResult.Failure>()
         val unique = mutableSetOf<K>()
@@ -58,8 +60,8 @@ public class IsUniqueArrayValidator<T, K : Any> internal constructor(
 
         public fun build(value: Any): JsError = function(value)
 
-        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = contextKeyName()
+        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+            override val name: String = errorBuilderName()
         }
     }
 }

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.error
+package io.github.airflux.core.reader.context.error
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.core.context.error.errorBuilderName
+import io.github.airflux.core.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 
 /**
- * The builder of an error that occurs when an element appears in the array that is not described in prefixItems.
+ * The builder of an error that occurs when an element is missing by the specified path.
  */
-public class AdditionalItemsErrorBuilder(private val builder: () -> JsError) :
-    AbstractErrorBuilderContextElement<AdditionalItemsErrorBuilder>(key = AdditionalItemsErrorBuilder) {
+public class PathMissingErrorBuilder(private val builder: () -> JsError) :
+    AbstractErrorBuilderContextElement<PathMissingErrorBuilder>(key = PathMissingErrorBuilder) {
 
     public fun build(): JsError = builder()
 
-    public companion object Key : JsReaderContext.Key<AdditionalItemsErrorBuilder> {
-        override val name: String = contextKeyName()
+    public companion object Key : JsContextErrorBuilderKey<PathMissingErrorBuilder> {
+        override val name: String = errorBuilderName()
     }
 }

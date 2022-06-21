@@ -2,7 +2,7 @@ package io.github.airflux.std.validator.`object`
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
+import io.github.airflux.core.context.error.errorBuilderName
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
@@ -55,7 +55,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, properties, input)
                     }
-                    exception.message shouldBe "Key '${AdditionalPropertiesObjectValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
+                    exception.message shouldBe "The error builder '${AdditionalPropertiesObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
             }
 

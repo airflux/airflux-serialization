@@ -2,12 +2,12 @@ package io.github.airflux.core.reader.`object`
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.USER_NAME_VALUE
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldBe
 internal class RequiredFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext(
+        private val context: JsReaderContext = JsReaderContext(
             listOf(
                 PathMissingErrorBuilder { JsonErrors.PathMissing },
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType)

@@ -16,20 +16,19 @@
 
 package io.github.airflux.dsl.reader.context.exception
 
-import io.github.airflux.core.reader.context.JsReaderAbstractContextElement
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.context.JsContext
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsError
 
 public class ExceptionsHandler(
     private val handler: (context: JsReaderContext, location: JsLocation, exception: Throwable) -> JsError?
-) : JsReaderAbstractContextElement<ExceptionsHandler>(key = ExceptionsHandler) {
+) : JsContext.Element {
 
     public fun handleException(context: JsReaderContext, location: JsLocation, exception: Throwable): JsError? =
         handler(context, location, exception)
 
-    public companion object Key : JsReaderContext.Key<ExceptionsHandler> {
-        override val name: String = contextKeyName()
-    }
+    override val key: JsContext.Key<*> = Key
+
+    public companion object Key : JsContext.Key<ExceptionsHandler>
 }

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer.context
+package io.github.airflux.core.context.error
 
-public abstract class JsWriterAbstractContextElement<T : JsWriterContext.Element>(
-    override val key: JsWriterContext.Key<T>
-) : JsWriterContext.Element
+public abstract class AbstractErrorBuilderContextElement<T : JsContextErrorBuilderElement>(
+    override val key: JsContextErrorBuilderKey<T>
+) : JsContextErrorBuilderElement

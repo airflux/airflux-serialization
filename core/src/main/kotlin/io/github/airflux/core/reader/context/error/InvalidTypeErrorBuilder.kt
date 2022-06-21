@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader.error
+package io.github.airflux.core.reader.context.error
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.core.context.error.errorBuilderName
+import io.github.airflux.core.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.value.JsValue
 
@@ -30,7 +30,7 @@ public class InvalidTypeErrorBuilder(private val builder: (expected: JsValue.Typ
 
     public fun build(expected: JsValue.Type, actual: JsValue.Type): JsError = builder(expected, actual)
 
-    public companion object Key : JsReaderContext.Key<InvalidTypeErrorBuilder> {
-        override val name: String = contextKeyName()
+    public companion object Key : JsContextErrorBuilderKey<InvalidTypeErrorBuilder> {
+        override val name: String = errorBuilderName()
     }
 }

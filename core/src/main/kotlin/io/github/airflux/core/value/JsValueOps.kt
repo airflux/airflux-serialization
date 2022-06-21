@@ -16,16 +16,17 @@
 
 package io.github.airflux.core.value
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 
 public fun JsValue.readAsBoolean(context: JsReaderContext, location: JsLocation): JsResult<Boolean> =
     if (this is JsBoolean)
         JsResult.Success(location, this.get)
     else {
-        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        val errorBuilder = context[InvalidTypeErrorBuilder]
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.BOOLEAN, this.type))
     }
 
@@ -33,7 +34,7 @@ public fun JsValue.readAsString(context: JsReaderContext, location: JsLocation):
     if (this is JsString)
         JsResult.Success(location, this.get)
     else {
-        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        val errorBuilder = context[InvalidTypeErrorBuilder]
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.STRING, this.type))
     }
 
@@ -45,7 +46,7 @@ public fun <T : Number> JsValue.readAsNumber(
     if (this is JsNumber)
         reader(context, location, this.get)
     else {
-        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        val errorBuilder = context[InvalidTypeErrorBuilder]
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.NUMBER, this.type))
     }
 
@@ -57,7 +58,7 @@ public inline fun <T> JsValue.readAsObject(
     if (this is JsObject)
         reader(context, location, this)
     else {
-        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        val errorBuilder = context[InvalidTypeErrorBuilder]
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.OBJECT, this.type))
     }
 
@@ -69,6 +70,6 @@ public inline fun <T> JsValue.readAsArray(
     if (this is JsArray<*>)
         reader(context, location, this)
     else {
-        val errorBuilder = context.getValue(InvalidTypeErrorBuilder)
+        val errorBuilder = context[InvalidTypeErrorBuilder]
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.ARRAY, this.type))
     }

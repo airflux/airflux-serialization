@@ -3,16 +3,16 @@ package io.github.airflux.core.value
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsStringTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext(
+        private val context: JsReaderContext = JsReaderContext(
             InvalidTypeErrorBuilder(JsonErrors::InvalidType)
         )
         private val LOCATION = JsLocation.empty.append("user")

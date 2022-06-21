@@ -3,9 +3,9 @@ package io.github.airflux.std.reader
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNumber
 import io.github.airflux.core.value.JsString
@@ -17,7 +17,7 @@ import java.math.BigDecimal
 internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val context: JsReaderContext = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
     }
 
     init {

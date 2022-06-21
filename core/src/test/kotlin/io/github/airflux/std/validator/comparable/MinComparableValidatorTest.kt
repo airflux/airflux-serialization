@@ -2,7 +2,7 @@ package io.github.airflux.std.validator.comparable
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
+import io.github.airflux.core.context.error.errorBuilderName
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
@@ -31,7 +31,7 @@ internal class MinComparableValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, MIN_VALUE - 1)
                     }
-                    exception.message shouldBe "Key '${MinComparableValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
+                    exception.message shouldBe "The error builder '${MinComparableValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
             }
 

@@ -1,11 +1,11 @@
 package io.github.airflux.core.reader.array
 
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.FailFast
-import io.github.airflux.core.reader.error.AdditionalItemsErrorBuilder
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.failure
 import io.github.airflux.core.reader.result.success
@@ -67,7 +67,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     val from = JsArray(JsNumber.valueOf(10), JsBoolean.True)
 
                     "when fail-fast is true" {
-                        val updatedContext = context + FailFast(true)
+                        val updatedContext: JsReaderContext = context + FailFast(true)
 
                         val result: JsResult<List<String>> =
                             readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
@@ -85,7 +85,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" {
-                        val updatedContext = context + FailFast(false)
+                        val updatedContext: JsReaderContext = context + FailFast(false)
 
                         val result: JsResult<List<String>> =
                             readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
@@ -201,7 +201,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 "when read was some errors" - {
 
                     "when fail-fast is true" {
-                        val updatedContext = context + FailFast(true)
+                        val updatedContext: JsReaderContext = context + FailFast(true)
 
                         val result: JsResult<List<Number>> = readArray(
                             context = updatedContext,
@@ -224,7 +224,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" {
-                        val updatedContext = context + FailFast(false)
+                        val updatedContext: JsReaderContext = context + FailFast(false)
 
                         val result = readArray(
                             context = updatedContext,
@@ -293,7 +293,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 "when read was some errors" - {
 
                     "when fail-fast is true" {
-                        val updatedContext = context + FailFast(true)
+                        val updatedContext: JsReaderContext = context + FailFast(true)
 
                         val result: JsResult<List<Int>> = readArray(
                             context = updatedContext,
@@ -316,7 +316,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" {
-                        val updatedContext = context + FailFast(false)
+                        val updatedContext: JsReaderContext = context + FailFast(false)
 
                         val result = readArray(
                             context = updatedContext,

@@ -16,19 +16,21 @@
 
 package io.github.airflux.core.writer.context.option
 
-import io.github.airflux.core.writer.context.JsWriterAbstractContextElement
+import io.github.airflux.core.context.option.JsContextOptionElement
+import io.github.airflux.core.context.option.JsContextOptionKey
+import io.github.airflux.core.context.option.get
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.contextKeyName
 
 public val JsWriterContext.writeActionIfObjectIsEmpty: WriteActionIfObjectIsEmpty.Action
-    get() = getOrNull(WriteActionIfObjectIsEmpty)?.action ?: WriteActionIfObjectIsEmpty.Action.SKIP
+    get() = get(WriteActionIfObjectIsEmpty) { WriteActionIfObjectIsEmpty.Action.SKIP }
 
-public class WriteActionIfObjectIsEmpty(public val action: Action) :
-    JsWriterAbstractContextElement<WriteActionIfObjectIsEmpty>(key = WriteActionIfObjectIsEmpty) {
+public class WriteActionIfObjectIsEmpty(
+    override val value: Action
+) : JsContextOptionElement<WriteActionIfObjectIsEmpty.Action> {
+
+    override val key: JsContextOptionKey<Action, *> = Key
 
     public enum class Action { EMPTY, NULL, SKIP }
 
-    public companion object Key : JsWriterContext.Key<WriteActionIfObjectIsEmpty> {
-        override val name: String = contextKeyName()
-    }
+    public companion object Key : JsContextOptionKey<Action, WriteActionIfObjectIsEmpty>
 }

@@ -2,7 +2,7 @@ package io.github.airflux.std.validator.array
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
+import io.github.airflux.core.context.error.errorBuilderName
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
@@ -33,7 +33,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validation(context, LOCATION, input)
                     }
-                    exception.message shouldBe "Key '${IsNotEmptyArrayValidator.ErrorBuilder.contextKeyName()}' is missing in the context of reading."
+                    exception.message shouldBe "The error builder '${IsNotEmptyArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
             }
 

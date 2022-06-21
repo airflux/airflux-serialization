@@ -16,8 +16,9 @@
 
 package io.github.airflux.dsl.reader.context
 
+import io.github.airflux.core.context.JsContext
+import io.github.airflux.core.context.error.JsContextErrorBuilderElement
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.ErrorBuilderContextElement
 import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.context.exception.ExceptionsHandlerBuilder
@@ -28,7 +29,7 @@ public fun readerContext(block: JsReaderContextBuilder.() -> Unit): JsReaderCont
 @AirfluxMarker
 public class JsReaderContextBuilder internal constructor() {
 
-    private val elements = mutableListOf<JsReaderContext.Element>()
+    private val elements = mutableListOf<JsContext.Element>()
 
     public var failFast: Boolean? = null
 
@@ -43,7 +44,7 @@ public class JsReaderContextBuilder internal constructor() {
 
     internal fun build(): JsReaderContext {
         failFast?.let { isTrue ->
-            FailFast(isTrue = isTrue).also { elements.add(it) }
+            FailFast(value = isTrue).also { elements.add(it) }
         }
 
         return JsReaderContext(elements)
@@ -51,14 +52,14 @@ public class JsReaderContextBuilder internal constructor() {
 
     @AirfluxMarker
     public class ErrorsBuilder internal constructor() {
-        private val items = mutableListOf<ErrorBuilderContextElement>()
+        private val items = mutableListOf<JsContextErrorBuilderElement>()
 
-        public fun <E : ErrorBuilderContextElement> register(error: E) {
+        public fun <E : JsContextErrorBuilderElement> register(error: E) {
             items.add(error)
         }
 
-        public operator fun <E : ErrorBuilderContextElement> E.unaryPlus(): Unit = register(this)
+        public operator fun <E : JsContextErrorBuilderElement> E.unaryPlus(): Unit = register(this)
 
-        internal fun build(): List<JsReaderContext.Element> = items
+        internal fun build(): List<JsContext.Element> = items
     }
 }

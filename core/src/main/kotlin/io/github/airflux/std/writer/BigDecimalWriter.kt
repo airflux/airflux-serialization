@@ -16,17 +16,18 @@
 
 package io.github.airflux.std.writer
 
+import io.github.airflux.core.context.option.JsContextOptionElement
+import io.github.airflux.core.context.option.JsContextOptionKey
+import io.github.airflux.core.context.option.get
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsNumber
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsWriter
-import io.github.airflux.core.writer.context.JsWriterAbstractContextElement
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.contextKeyName
 import java.math.BigDecimal
 
 internal val JsWriterContext.stripTrailingZeros: Boolean
-    get() = this.getOrNull(BigDecimalWriter.StripTrailingZeros)?.isTrue ?: false
+    get() = get(BigDecimalWriter.StripTrailingZeros) { false }
 
 /**
  * Writer for primitive [BigDecimal] type.
@@ -38,11 +39,9 @@ public object BigDecimalWriter : JsWriter<BigDecimal> {
         return JsNumber.valueOf(text)!!
     }
 
-    public class StripTrailingZeros(public val isTrue: Boolean) :
-        JsWriterAbstractContextElement<StripTrailingZeros>(key = StripTrailingZeros) {
+    public class StripTrailingZeros(override val value: Boolean) : JsContextOptionElement<Boolean> {
+        override val key: JsContextOptionKey<Boolean, *> = Key
 
-        public companion object Key : JsWriterContext.Key<StripTrailingZeros> {
-            override val name: String = contextKeyName()
-        }
+        public companion object Key : JsContextOptionKey<Boolean, StripTrailingZeros>
     }
 }

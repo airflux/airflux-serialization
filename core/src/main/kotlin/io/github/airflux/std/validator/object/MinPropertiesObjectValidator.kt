@@ -16,11 +16,13 @@
 
 package io.github.airflux.std.validator.`object`
 
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.contextKeyName
-import io.github.airflux.core.reader.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.core.reader.result.JsError
+import io.github.airflux.core.context.error.AbstractErrorBuilderContextElement
+import io.github.airflux.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.core.context.error.errorBuilderName
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
@@ -35,21 +37,20 @@ public class MinPropertiesObjectValidator internal constructor(private val value
         properties: JsObjectProperties,
         objectValuesMap: ObjectValuesMap,
         input: JsObject
-    ): JsResult.Failure? {
-        val errorBuilder = context.getValue(ErrorBuilder)
-        return if (objectValuesMap.size < value)
+    ): JsResult.Failure? =
+        if (objectValuesMap.size < value) {
+            val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build(value, objectValuesMap.size))
-        else
+        } else
             null
-    }
 
     public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
         public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
-        public companion object Key : JsReaderContext.Key<ErrorBuilder> {
-            override val name: String = contextKeyName()
+        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+            override val name: String = errorBuilderName()
         }
     }
 }

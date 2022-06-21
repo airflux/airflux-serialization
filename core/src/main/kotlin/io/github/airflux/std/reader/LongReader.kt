@@ -16,10 +16,11 @@
 
 package io.github.airflux.std.reader
 
+import io.github.airflux.core.context.error.get
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.ValueCastErrorBuilder
-import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.failure
 import io.github.airflux.core.reader.result.success
@@ -31,11 +32,11 @@ import io.github.airflux.core.value.readAsNumber
  */
 public object LongReader : JsReader<Long> {
     override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Long> =
-        input.readAsNumber(context, location) { c, p, text ->
+        input.readAsNumber(context, location) { ctx, p, text ->
             try {
                 text.toLong().success(location = p)
             } catch (expected: NumberFormatException) {
-                val errorBuilder = c.getValue(ValueCastErrorBuilder)
+                val errorBuilder = ctx[ValueCastErrorBuilder]
                 errorBuilder.build(text, Long::class).failure(location = p)
             }
         }

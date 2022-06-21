@@ -2,11 +2,11 @@ package io.github.airflux.core.reader.`object`
 
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.TestData.USER_NAME_VALUE
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
@@ -16,7 +16,7 @@ import io.kotest.matchers.shouldBe
 internal class OptionalFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val context: JsReaderContext = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
             if (input is JsString)
                 JsResult.Success(location, input.get)
