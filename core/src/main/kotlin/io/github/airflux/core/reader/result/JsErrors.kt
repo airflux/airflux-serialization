@@ -33,11 +33,11 @@ public class JsErrors private constructor(public val items: List<JsError>) {
 
     public companion object {
 
-        public fun of(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
+        public operator fun invoke(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
             JsErrors(listOf(error))
         else
             JsErrors(listOf(error) + errors.asList())
 
-        public fun of(errors: List<JsError>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
+        public operator fun invoke(errors: List<JsError>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
     }
 }

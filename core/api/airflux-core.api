@@ -315,8 +315,8 @@ public final class io/github/airflux/core/reader/result/JsErrors {
 }
 
 public final class io/github/airflux/core/reader/result/JsErrors$Companion {
-	public final fun of (Lio/github/airflux/core/reader/result/JsError;[Lio/github/airflux/core/reader/result/JsError;)Lio/github/airflux/core/reader/result/JsErrors;
-	public final fun of (Ljava/util/List;)Lio/github/airflux/core/reader/result/JsErrors;
+	public final fun invoke (Lio/github/airflux/core/reader/result/JsError;[Lio/github/airflux/core/reader/result/JsError;)Lio/github/airflux/core/reader/result/JsErrors;
+	public final fun invoke (Ljava/util/List;)Lio/github/airflux/core/reader/result/JsErrors;
 }
 
 public abstract class io/github/airflux/core/reader/result/JsResult {

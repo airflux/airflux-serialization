@@ -54,7 +54,7 @@ public sealed class JsResult<out T> {
         }
 
         public data class Cause(val location: JsLocation, val errors: JsErrors) {
-            public constructor(location: JsLocation, error: JsError) : this(location, JsErrors.of(error))
+            public constructor(location: JsLocation, error: JsError) : this(location, JsErrors(error))
         }
 
         public companion object {
