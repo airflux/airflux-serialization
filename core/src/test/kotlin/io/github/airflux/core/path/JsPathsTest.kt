@@ -1,7 +1,7 @@
 package io.github.airflux.core.path
 
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainInOrder
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 internal class JsPathsTest : FreeSpec() {
@@ -28,7 +28,7 @@ internal class JsPathsTest : FreeSpec() {
                 }
 
                 "should have elements in the order they were passed" {
-                    paths.items shouldContainInOrder listOf(pathUser)
+                    paths.items shouldContainExactly listOf(pathUser)
                 }
 
                 "method 'toString() should return '[$pathUser]'" {
@@ -47,7 +47,7 @@ internal class JsPathsTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were passed" {
-                        updatedPaths.items shouldContainInOrder listOf(pathUser, pathId)
+                        updatedPaths.items shouldContainExactly listOf(pathUser, pathId)
                     }
 
                     "method 'toString() should return '[$pathUser, $pathId]'" {
@@ -67,7 +67,7 @@ internal class JsPathsTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were passed" {
-                        updatedPaths.items shouldContainInOrder listOf(pathUser, pathId, pathName)
+                        updatedPaths.items shouldContainExactly listOf(pathUser, pathId, pathName)
                     }
 
                     "method 'toString() should return '[$pathUser, $pathId, $pathName]'" {

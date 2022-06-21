@@ -3,7 +3,7 @@ package io.github.airflux.core.path
 import io.github.airflux.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldContainInOrder
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
@@ -15,8 +15,8 @@ internal class JsPathTest : FreeSpec() {
 
     init {
         "A 'JsPath' type" - {
-
             val keyUser = "user"
+
             "create from named path element '$keyUser'" - {
                 val path = JsPath(keyUser)
 
@@ -45,7 +45,7 @@ internal class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath.elements shouldContainInOrder listOf(
+                        updatedPath.elements shouldContainExactly listOf(
                             PathElement.Key(keyUser),
                             PathElement.Key(keyName)
                         )
@@ -73,7 +73,7 @@ internal class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath.elements shouldContainInOrder listOf(PathElement.Key(keyUser), PathElement.Idx(idx))
+                        updatedPath.elements shouldContainExactly listOf(PathElement.Key(keyUser), PathElement.Idx(idx))
                     }
 
                     "method 'toString() should return '#/$keyUser[$idx]'" {
@@ -119,7 +119,7 @@ internal class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath.elements shouldContainInOrder listOf(
+                        updatedPath.elements shouldContainExactly listOf(
                             PathElement.Idx(firstIdx),
                             PathElement.Key(keyName)
                         )
@@ -147,7 +147,7 @@ internal class JsPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath.elements shouldContainInOrder listOf(
+                        updatedPath.elements shouldContainExactly listOf(
                             PathElement.Idx(firstIdx),
                             PathElement.Idx(secondIdx)
                         )

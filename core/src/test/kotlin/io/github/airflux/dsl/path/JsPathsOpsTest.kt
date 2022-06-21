@@ -4,7 +4,6 @@ import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.JsPaths
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.collections.shouldContainInOrder
 
 internal class JsPathsOpsTest : FreeSpec() {
 
@@ -28,7 +27,7 @@ internal class JsPathsOpsTest : FreeSpec() {
                 val updatedPath = paths or pathId
 
                 "should have elements in the order they were passed element" {
-                    updatedPath.items shouldContainInOrder listOf(pathUser, pathId)
+                    updatedPath.items shouldContainExactly listOf(pathUser, pathId)
                 }
             }
 
@@ -36,7 +35,7 @@ internal class JsPathsOpsTest : FreeSpec() {
                 val updatedPath = paths or JsPaths(pathId, pathName)
 
                 "should have elements in the order they were passed element" {
-                    updatedPath.items shouldContainInOrder listOf(pathUser, pathId, pathName)
+                    updatedPath.items shouldContainExactly listOf(pathUser, pathId, pathName)
                 }
             }
         }

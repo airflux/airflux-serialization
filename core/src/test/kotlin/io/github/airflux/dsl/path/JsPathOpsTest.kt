@@ -3,7 +3,7 @@ package io.github.airflux.dsl.path
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.PathElement
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainInOrder
+import io.kotest.matchers.collections.shouldContainExactly
 
 internal class JsPathOpsTest : FreeSpec() {
 
@@ -15,7 +15,7 @@ internal class JsPathOpsTest : FreeSpec() {
                 val path = JsPath / "user"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainInOrder listOf(PathElement.Key("user"))
+                    path.elements shouldContainExactly listOf(PathElement.Key("user"))
                 }
             }
 
@@ -23,7 +23,7 @@ internal class JsPathOpsTest : FreeSpec() {
                 val path = JsPath / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainInOrder listOf(PathElement.Idx(0))
+                    path.elements shouldContainExactly listOf(PathElement.Idx(0))
                 }
             }
 
@@ -31,7 +31,7 @@ internal class JsPathOpsTest : FreeSpec() {
                 val path = JsPath / "user" / "name"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainInOrder listOf(PathElement.Key("user"), PathElement.Key("name"))
+                    path.elements shouldContainExactly listOf(PathElement.Key("user"), PathElement.Key("name"))
                 }
             }
 
@@ -39,7 +39,7 @@ internal class JsPathOpsTest : FreeSpec() {
                 val path = JsPath / "phones" / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainInOrder listOf(PathElement.Key("phones"), PathElement.Idx(0))
+                    path.elements shouldContainExactly listOf(PathElement.Key("phones"), PathElement.Idx(0))
                 }
             }
         }
