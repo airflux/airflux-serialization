@@ -757,16 +757,6 @@ public final class io/github/airflux/dsl/reader/context/JsReaderContextBuilderKt
 	public static final fun readerContext (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/context/JsContext;
 }
 
-public final class io/github/airflux/dsl/reader/context/exception/ExceptionsHandler : io/github/airflux/core/context/JsContext$Element {
-	public static final field Key Lio/github/airflux/dsl/reader/context/exception/ExceptionsHandler$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function3;)V
-	public fun getKey ()Lio/github/airflux/core/context/JsContext$Key;
-	public final fun handleException (Lio/github/airflux/core/context/JsContext;Lio/github/airflux/core/location/JsLocation;Ljava/lang/Throwable;)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/dsl/reader/context/exception/ExceptionsHandler$Key : io/github/airflux/core/context/JsContext$Key {
-}
-
 public final class io/github/airflux/dsl/reader/context/exception/ExceptionsHandlerBuilder {
 	public final fun exception (Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function3;)V
 }
