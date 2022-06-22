@@ -1,8 +1,8 @@
 package io.github.airflux.dsl.reader.validator
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsArray
@@ -16,7 +16,7 @@ import io.kotest.matchers.shouldBe
 internal class JsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT: JsReaderContext = JsReaderContext()
         private val LOCATION = JsLocation.empty
         private val VALUE = JsArray<JsString>()
     }
@@ -204,10 +204,10 @@ internal class JsArrayValidatorTest : FreeSpec() {
             "composition AND operator" - {
 
                 "when the left validator returns success" - {
-                    val leftValidator = JsArrayValidator.After<Unit> { _, location, _, _ -> null }
+                    val leftValidator = JsArrayValidator.After<Unit> { _, _, _, _ -> null }
 
                     "when the right validator returns success" - {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, location, _, _ -> null }
+                        val rightValidator = JsArrayValidator.After<Unit> { _, _, _, _ -> null }
 
                         "then success is returned" {
                             val composeValidator = leftValidator and rightValidator
