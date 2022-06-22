@@ -19,7 +19,6 @@ package io.github.airflux.dsl.reader.config
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
 
-@Suppress("unused")
 public fun arrayReaderConfig(block: JsArrayReaderConfig.Builder.() -> Unit): JsArrayReaderConfig =
     JsArrayReaderConfig.Builder().apply(block).build()
 
