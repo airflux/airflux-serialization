@@ -1,9 +1,9 @@
 package io.github.airflux.core.value
 
 import io.github.airflux.common.JsonErrors
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -11,10 +11,10 @@ import io.kotest.matchers.shouldBe
 internal class ReadAsArrayTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = JsLocation.empty.append("user")
-        private val reader = { _: JsReaderContext, location: JsLocation, input: JsArray<*> ->
+        private val READER = { _: JsReaderContext, location: JsLocation, input: JsArray<*> ->
             val result = input.map { (it as JsString).get }
             JsResult.Success(location, result)
         }
@@ -28,7 +28,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the collection of values" {
                     val json: JsValue = JsArray(JsString(USER_NAME))
 
-                    val result = json.readAsArray(context, LOCATION, reader)
+                    val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
                     result as JsResult.Success
                     result shouldBe JsResult.Success(location = LOCATION, value = listOf(USER_NAME))
@@ -40,7 +40,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the 'InvalidType' error" {
                     val json: JsValue = JsBoolean.valueOf(true)
 
-                    val result = json.readAsArray(context, LOCATION, reader)
+                    val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
                     result as JsResult.Failure
                     result shouldBe JsResult.Failure(

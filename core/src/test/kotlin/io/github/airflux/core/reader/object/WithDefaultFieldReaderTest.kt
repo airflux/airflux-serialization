@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldBe
 internal class WithDefaultFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val DEFAULT_VALUE = "Default value"
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
             JsResult.Success(location, (input as JsString).get)
@@ -34,7 +34,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
                     JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
                 val result: JsResult<String> =
-                    readWithDefault(context = context, from = from, using = stringReader, defaultValue = defaultValue)
+                    readWithDefault(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
             }
@@ -43,7 +43,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
                 val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
 
                 val result: JsResult<String> =
-                    readWithDefault(context = context, from = from, using = stringReader, defaultValue = defaultValue)
+                    readWithDefault(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
             }
@@ -52,7 +52,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
                 val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
                 val result: JsResult<String> =
-                    readWithDefault(context = context, from = from, using = stringReader, defaultValue = defaultValue)
+                    readWithDefault(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
             }
@@ -65,7 +65,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
                 )
 
                 val result: JsResult<String> =
-                    readWithDefault(context = context, from = from, using = stringReader, defaultValue = defaultValue)
+                    readWithDefault(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),

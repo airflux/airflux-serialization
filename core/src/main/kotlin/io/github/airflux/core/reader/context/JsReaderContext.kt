@@ -16,6 +16,25 @@
 
 package io.github.airflux.core.reader.context
 
+import io.github.airflux.core.context.JsAbstractContext
 import io.github.airflux.core.context.JsContext
 
-public typealias JsReaderContext = JsContext
+public class JsReaderContext private constructor(
+    override val elements: Map<JsContext.Key<*>, JsContext.Element>
+) : JsAbstractContext() {
+
+    public operator fun <E : JsContext.Element> plus(element: E): JsReaderContext = JsReaderContext(add(element))
+    public operator fun <E : JsContext.Element> plus(elements: Iterable<E>): JsReaderContext =
+        JsReaderContext(add(elements))
+
+    internal companion object {
+
+        operator fun invoke(): JsReaderContext = JsReaderContext(emptyMap())
+
+        operator fun <E : JsContext.Element> invoke(element: E): JsReaderContext =
+            JsReaderContext(mapOf(element.key to element))
+
+        operator fun <E : JsContext.Element> invoke(elements: Iterable<E>): JsReaderContext =
+            JsReaderContext(elements.associateBy { it.key })
+    }
+}

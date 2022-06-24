@@ -10,7 +10,7 @@ internal class WriteActionIfObjectIsEmptyTest : FreeSpec() {
         "The extension-function writeActionIfObjectIsEmpty" - {
 
             "when the writer context does not contain the WriteActionIfObjectIsEmpty option" - {
-                val context: JsWriterContext = JsWriterContext()
+                val context = JsWriterContext()
 
                 "should return the default value" {
                     val result = context.writeActionIfObjectIsEmpty

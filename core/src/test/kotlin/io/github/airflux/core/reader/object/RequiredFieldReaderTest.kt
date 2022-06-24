@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldBe
 internal class RequiredFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             listOf(
                 PathMissingErrorBuilder { JsonErrors.PathMissing },
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType)
@@ -36,7 +36,7 @@ internal class RequiredFieldReaderTest : FreeSpec() {
                 val from: JsLookup =
                     JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
-                val result: JsResult<String> = readRequired(context = context, from = from, using = stringReader)
+                val result: JsResult<String> = readRequired(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
             }
@@ -44,7 +44,7 @@ internal class RequiredFieldReaderTest : FreeSpec() {
             "should return the missing path error if did not find a node" {
                 val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
-                val result: JsResult<String> = readRequired(context = context, from = from, using = stringReader)
+                val result: JsResult<String> = readRequired(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),
@@ -59,7 +59,7 @@ internal class RequiredFieldReaderTest : FreeSpec() {
                     actual = JsValue.Type.STRING
                 )
 
-                val result: JsResult<String> = readRequired(context = context, from = from, using = stringReader)
+                val result: JsResult<String> = readRequired(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),

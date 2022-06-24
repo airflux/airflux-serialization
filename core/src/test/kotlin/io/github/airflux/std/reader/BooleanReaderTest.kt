@@ -15,7 +15,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
     }
 
     init {
@@ -24,19 +24,19 @@ internal class BooleanReaderTest : FreeSpec() {
 
             "should return value the true" {
                 val input: JsValue = JsBoolean.valueOf(true)
-                val result = BooleanReader.read(context, JsLocation.empty, input)
+                val result = BooleanReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsSuccess(location = JsLocation.empty, value = true)
             }
 
             "should return value the false" {
                 val input: JsValue = JsBoolean.valueOf(false)
-                val result = BooleanReader.read(context, JsLocation.empty, input)
+                val result = BooleanReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsSuccess(location = JsLocation.empty, value = false)
             }
 
             "should return the invalid type error" {
                 val input: JsValue = JsString("abc")
-                val result = BooleanReader.read(context, JsLocation.empty, input)
+                val result = BooleanReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,

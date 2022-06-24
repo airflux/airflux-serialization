@@ -16,7 +16,7 @@ import io.kotest.matchers.shouldBe
 internal class JsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT: JsReaderContext = JsReaderContext()
+        private val CONTEXT = JsReaderContext()
         private val LOCATION = JsLocation.empty
         private val VALUE = JsArray<JsString>()
     }

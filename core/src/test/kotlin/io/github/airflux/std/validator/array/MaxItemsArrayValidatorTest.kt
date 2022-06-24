@@ -1,9 +1,9 @@
 package io.github.airflux.std.validator.array
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.context.error.errorBuilderName
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsString
@@ -39,7 +39,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context: JsReaderContext = JsReaderContext(
+                val context = JsReaderContext(
                     MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MaxItems)
                 )
 

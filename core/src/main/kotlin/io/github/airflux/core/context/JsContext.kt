@@ -16,40 +16,21 @@
 
 package io.github.airflux.core.context
 
-public class JsContext private constructor(private val elements: Map<Key<*>, Element>) {
+public interface JsContext {
 
     public val isEmpty: Boolean
-        get() = elements.isEmpty()
 
     public val isNotEmpty: Boolean
         get() = !isEmpty
 
-    @Suppress("UNCHECKED_CAST")
-    public fun <E : Element> getOrNull(key: Key<E>): E? = elements[key]?.let { it as E }
+    public fun <E : Element> getOrNull(key: Key<E>): E?
 
-    public operator fun <E : Element> contains(key: Key<E>): Boolean = elements.contains(key)
-
-    public operator fun <E : Element> plus(element: E): JsContext =
-        JsContext(this.elements + (element.key to element))
-
-    public operator fun <E : Element> plus(elements: Iterable<E>): JsContext =
-        JsContext(this.elements + elements.map { it.key to it })
+    public operator fun <E : Element> contains(key: Key<E>): Boolean
 
     public interface Key<E : Element>
 
     public interface Element {
         public val key: Key<*>
         public operator fun <E : Element> plus(element: E): List<Element> = listOf(this, element)
-    }
-
-    public companion object {
-
-        public operator fun invoke(): JsContext = JsContext(emptyMap())
-
-        public operator fun <E : Element> invoke(element: E): JsContext =
-            JsContext(mapOf(element.key to element))
-
-        public operator fun <E : Element> invoke(elements: Iterable<E>): JsContext =
-            JsContext(elements.associateBy { it.key })
     }
 }

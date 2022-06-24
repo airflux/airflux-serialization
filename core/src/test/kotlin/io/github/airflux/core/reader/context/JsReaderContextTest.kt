@@ -1,4 +1,4 @@
-package io.github.airflux.context
+package io.github.airflux.core.reader.context
 
 import io.github.airflux.core.context.JsContext
 import io.kotest.core.spec.style.FreeSpec
@@ -8,7 +8,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsContextTest : FreeSpec() {
+internal class JsReaderContextTest : FreeSpec() {
 
     companion object {
         private val userContext = UserContext()
@@ -22,7 +22,7 @@ internal class JsContextTest : FreeSpec() {
             "when calling the constructor" - {
 
                 "without parameters" - {
-                    val empty = JsContext()
+                    val empty = JsReaderContext()
 
                     "context should be is empty" {
                         empty.isEmpty shouldBe true
@@ -30,7 +30,7 @@ internal class JsContextTest : FreeSpec() {
                 }
 
                 "with one parameters" - {
-                    val one = JsContext(userContext)
+                    val one = JsReaderContext(userContext)
 
                     "context should not be is empty" {
                         one.isEmpty shouldBe false
@@ -44,7 +44,7 @@ internal class JsContextTest : FreeSpec() {
 
                 "with the collection of the parameters" - {
                     val elements = listOf(userContext, orderContext)
-                    val one = JsContext(elements)
+                    val one = JsReaderContext(elements)
 
                     "context should not be is empty" {
                         one.isEmpty shouldBe false
@@ -60,7 +60,7 @@ internal class JsContextTest : FreeSpec() {
             }
 
             "when context is empty" - {
-                val empty = JsContext()
+                val empty = JsReaderContext()
 
                 "property isEmpty should return true" - {
                     empty.isEmpty shouldBe true
@@ -106,7 +106,7 @@ internal class JsContextTest : FreeSpec() {
             }
 
             "when context is not empty" - {
-                val one = JsContext(userContext)
+                val one = JsReaderContext(userContext)
 
                 "property isEmpty should return false" - {
                     one.isEmpty shouldBe false

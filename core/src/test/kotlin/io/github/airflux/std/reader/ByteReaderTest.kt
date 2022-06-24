@@ -17,7 +17,7 @@ import io.kotest.datatest.withData
 internal class ByteReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             listOf(
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType),
                 ValueCastErrorBuilder(JsonErrors::ValueCast)
@@ -38,14 +38,14 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val input: JsValue = JsNumber.valueOf(value)
-                    val result = ByteReader.read(context, JsLocation.empty, input)
+                    val result = ByteReader.read(CONTEXT, JsLocation.empty, input)
                     result.assertAsSuccess(location = JsLocation.empty, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val input: JsValue = JsString("abc")
-                val result = ByteReader.read(context, JsLocation.empty, input)
+                val result = ByteReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,
@@ -65,7 +65,7 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val input = JsNumber.valueOf(value)!!
-                    val result = ByteReader.read(context, JsLocation.empty, input)
+                    val result = ByteReader.read(CONTEXT, JsLocation.empty, input)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = JsLocation.empty,

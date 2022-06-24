@@ -12,7 +12,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsStringTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             InvalidTypeErrorBuilder(JsonErrors::InvalidType)
         )
         private val LOCATION = JsLocation.empty.append("user")
@@ -23,14 +23,14 @@ internal class ReadAsStringTest : FreeSpec() {
             "when called with a receiver of a 'JsString'" - {
                 "should return the string value" {
                     val json: JsValue = JsString("abc")
-                    val result = json.readAsString(context, LOCATION)
+                    val result = json.readAsString(CONTEXT, LOCATION)
                     result.assertAsSuccess(location = LOCATION, value = "abc")
                 }
             }
             "when called with a receiver of a not 'JsString'" - {
                 "should return the 'InvalidType' error" {
                     val json: JsValue = JsBoolean.valueOf(true)
-                    val result = json.readAsString(context, LOCATION)
+                    val result = json.readAsString(CONTEXT, LOCATION)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = LOCATION,

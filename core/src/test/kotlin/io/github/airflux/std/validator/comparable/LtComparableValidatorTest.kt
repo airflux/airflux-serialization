@@ -1,9 +1,9 @@
 package io.github.airflux.std.validator.comparable
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.context.error.errorBuilderName
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.kotest.assertions.throwables.shouldThrow
@@ -25,7 +25,7 @@ internal class LtComparableValidatorTest : FreeSpec() {
             val validator: JsValidator<Int> = ComparableValidator.lt(VALUE)
 
             "when the reader context does not contain the error builder" - {
-                val context: JsReaderContext = JsReaderContext()
+                val context = JsReaderContext()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
@@ -36,7 +36,7 @@ internal class LtComparableValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context: JsReaderContext = JsReaderContext(
+                val context = JsReaderContext(
                     LtComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Lt)
                 )
 

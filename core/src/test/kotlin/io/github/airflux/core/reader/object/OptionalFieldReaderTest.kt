@@ -16,7 +16,7 @@ import io.kotest.matchers.shouldBe
 internal class OptionalFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val stringReader: JsReader<String> = JsReader { _, location, input ->
             if (input is JsString)
                 JsResult.Success(location, input.get)
@@ -36,11 +36,7 @@ internal class OptionalFieldReaderTest : FreeSpec() {
                 val from: JsLookup =
                     JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
-                val result: JsResult<String?> = readOptional(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readOptional(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
             }
@@ -48,11 +44,7 @@ internal class OptionalFieldReaderTest : FreeSpec() {
             "should return the value null if did not find a node" {
                 val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
-                val result: JsResult<String?> = readOptional(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readOptional(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = null)
             }
@@ -64,11 +56,7 @@ internal class OptionalFieldReaderTest : FreeSpec() {
                     actual = JsValue.Type.STRING
                 )
 
-                val result: JsResult<String?> = readOptional(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readOptional(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),

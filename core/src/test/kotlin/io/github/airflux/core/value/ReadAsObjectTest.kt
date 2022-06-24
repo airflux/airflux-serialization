@@ -3,16 +3,16 @@ package io.github.airflux.core.value
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsObjectTest : FreeSpec() {
 
     companion object {
-        private val context = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = JsLocation.empty.append("user")
         private val reader = { _: JsReaderContext, location: JsLocation, input: JsObject ->
@@ -26,14 +26,14 @@ internal class ReadAsObjectTest : FreeSpec() {
             "when called with a receiver of a 'JsObject'" - {
                 "should return the DTO" {
                     val json: JsValue = JsObject("name" to JsString(USER_NAME))
-                    val result = json.readAsObject(context, LOCATION, reader)
+                    val result = json.readAsObject(CONTEXT, LOCATION, reader)
                     result.assertAsSuccess(location = LOCATION, value = DTO(name = USER_NAME))
                 }
             }
             "when called with a receiver of a not 'JsObject'" - {
                 "should return the 'InvalidType' error" {
                     val json: JsValue = JsBoolean.valueOf(true)
-                    val result = json.readAsObject(context, LOCATION, reader)
+                    val result = json.readAsObject(CONTEXT, LOCATION, reader)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = LOCATION,

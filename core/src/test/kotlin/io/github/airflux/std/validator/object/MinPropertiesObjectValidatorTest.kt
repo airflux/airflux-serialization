@@ -1,9 +1,9 @@
 package io.github.airflux.std.validator.`object`
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.context.error.errorBuilderName
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
@@ -54,7 +54,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
 
             "when the reader context does not contain the error builder" - {
                 val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
-                val context: JsReaderContext = JsReaderContext()
+                val context = JsReaderContext()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
@@ -65,7 +65,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context: JsReaderContext = JsReaderContext(
+                val context = JsReaderContext(
                     MinPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
                 )
 

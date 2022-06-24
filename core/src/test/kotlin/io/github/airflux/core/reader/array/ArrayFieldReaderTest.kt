@@ -3,9 +3,9 @@ package io.github.airflux.core.reader.array
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.failure
 import io.github.airflux.core.reader.result.success
@@ -27,7 +27,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
         private const val FIRST_PHONE_VALUE = "123"
         private const val SECOND_PHONE_VALUE = "456"
 
-        private val context = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             listOf(
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType),
                 AdditionalItemsErrorBuilder { JsonErrors.AdditionalItems }
@@ -44,7 +44,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 val from = JsArray<JsString>()
 
                 val result: JsResult<List<String>> =
-                    readArray(context = context, location = LOCATION, from = from, items = StringReader)
+                    readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
 
                 result shouldBe JsResult.Success(location = LOCATION, value = emptyList())
             }
@@ -55,7 +55,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     val from = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
                     val result: JsResult<List<String>> =
-                        readArray(context = context, location = LOCATION, from = from, items = StringReader)
+                        readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
 
                     result shouldBe JsResult.Success(
                         location = LOCATION,
@@ -67,7 +67,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     val from = JsArray(JsNumber.valueOf(10), JsBoolean.True)
 
                     "when fail-fast is true" {
-                        val updatedContext: JsReaderContext = context + FailFast(true)
+                        val updatedContext: JsReaderContext = CONTEXT + FailFast(true)
 
                         val result: JsResult<List<String>> =
                             readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
@@ -85,7 +85,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" {
-                        val updatedContext: JsReaderContext = context + FailFast(false)
+                        val updatedContext: JsReaderContext = CONTEXT + FailFast(false)
 
                         val result: JsResult<List<String>> =
                             readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
@@ -118,7 +118,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 val from = JsArray<JsString>()
 
                 val result: JsResult<List<String>> = readArray(
-                    context = context,
+                    context = CONTEXT,
                     location = LOCATION,
                     from = from,
                     prefixItems = listOf(StringReader),
@@ -136,7 +136,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
 
                     "when errorIfAdditionalItems is true" {
                         val result: JsResult<List<String>> = readArray(
-                            context = context,
+                            context = CONTEXT,
                             location = LOCATION,
                             from = from,
                             prefixItems = readers,
@@ -154,7 +154,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
 
                     "when errorIfAdditionalItems is false" {
                         val result: JsResult<List<String>> = readArray(
-                            context = context,
+                            context = CONTEXT,
                             location = LOCATION,
                             from = from,
                             prefixItems = readers,
@@ -170,7 +170,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
 
                 "when the number of readers is equal to the number of items" {
                     val result: JsResult<List<String>> = readArray(
-                        context = context,
+                        context = CONTEXT,
                         location = LOCATION,
                         from = from,
                         prefixItems = listOf(StringReader, StringReader),
@@ -185,7 +185,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
 
                 "when the number of readers is more than the number of items" {
                     val result: JsResult<List<String>> = readArray(
-                        context = context,
+                        context = CONTEXT,
                         location = LOCATION,
                         from = from,
                         prefixItems = listOf(StringReader, StringReader, StringReader),
@@ -201,7 +201,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 "when read was some errors" - {
 
                     "when fail-fast is true" {
-                        val updatedContext: JsReaderContext = context + FailFast(true)
+                        val updatedContext: JsReaderContext = CONTEXT + FailFast(true)
 
                         val result: JsResult<List<Number>> = readArray(
                             context = updatedContext,
@@ -224,7 +224,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" {
-                        val updatedContext: JsReaderContext = context + FailFast(false)
+                        val updatedContext: JsReaderContext = CONTEXT + FailFast(false)
 
                         val result = readArray(
                             context = updatedContext,
@@ -262,7 +262,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 val from = JsArray<JsString>()
 
                 val result: JsResult<List<String>> = readArray(
-                    context = context,
+                    context = CONTEXT,
                     location = LOCATION,
                     from = from,
                     prefixItems = listOf(StringReader),
@@ -277,7 +277,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
 
                 "when read was any errors" {
                     val result: JsResult<List<String>> = readArray(
-                        context = context,
+                        context = CONTEXT,
                         location = LOCATION,
                         from = from,
                         prefixItems = listOf(StringReader),
@@ -293,7 +293,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 "when read was some errors" - {
 
                     "when fail-fast is true" {
-                        val updatedContext: JsReaderContext = context + FailFast(true)
+                        val updatedContext: JsReaderContext = CONTEXT + FailFast(true)
 
                         val result: JsResult<List<Int>> = readArray(
                             context = updatedContext,
@@ -316,7 +316,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" {
-                        val updatedContext: JsReaderContext = context + FailFast(false)
+                        val updatedContext: JsReaderContext = CONTEXT + FailFast(false)
 
                         val result = readArray(
                             context = updatedContext,

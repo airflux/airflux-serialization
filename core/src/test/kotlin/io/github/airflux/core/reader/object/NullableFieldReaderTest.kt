@@ -18,7 +18,7 @@ import io.kotest.matchers.shouldBe
 internal class NullableFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             listOf(
                 PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }),
                 InvalidTypeErrorBuilder(builder = JsonErrors::InvalidType)
@@ -37,11 +37,7 @@ internal class NullableFieldReaderTest : FreeSpec() {
                 val from: JsLookup =
                     JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
 
-                val result: JsResult<String?> = readNullable(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
             }
@@ -49,11 +45,7 @@ internal class NullableFieldReaderTest : FreeSpec() {
             "should return a null value if found a JsNull node" {
                 val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
 
-                val result: JsResult<String?> = readNullable(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = null)
             }
@@ -61,11 +53,7 @@ internal class NullableFieldReaderTest : FreeSpec() {
             "should return the missing path error if did not find a node" {
                 val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
 
-                val result: JsResult<String?> = readNullable(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),
@@ -80,11 +68,7 @@ internal class NullableFieldReaderTest : FreeSpec() {
                     actual = JsValue.Type.STRING
                 )
 
-                val result: JsResult<String?> = readNullable(
-                    context = context,
-                    from = from,
-                    using = stringReader
-                )
+                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
 
                 result shouldBe JsResult.Failure(
                     location = JsLocation.empty.append("name"),

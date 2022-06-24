@@ -3,8 +3,8 @@ package io.github.airflux.core.reader
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.common.assertAsFailure
 import io.github.airflux.common.assertAsSuccess
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsValue
@@ -13,7 +13,7 @@ import kotlin.test.Test
 internal class JsReaderTest {
 
     companion object {
-        private val context = JsReaderContext()
+        private val CONTEXT = JsReaderContext()
         private val location = JsLocation.empty.append("user")
         private const val ID_VALUE = "10"
         private const val IDENTIFIER_VALUE = "100"
@@ -26,7 +26,7 @@ internal class JsReaderTest {
         }
         val transformedReader = reader.map { value -> value.toInt() }
 
-        val result = transformedReader.read(context, location, JsNull)
+        val result = transformedReader.read(CONTEXT, location, JsNull)
 
         result.assertAsSuccess(location = location.append("id"), value = ID_VALUE.toInt())
     }
@@ -41,7 +41,7 @@ internal class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(context, location, JsNull)
+        val result = composeReader.read(CONTEXT, location, JsNull)
 
         result.assertAsSuccess(location = location.append("id"), value = ID_VALUE)
     }
@@ -56,7 +56,7 @@ internal class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(context, location, JsNull)
+        val result = composeReader.read(CONTEXT, location, JsNull)
 
         result.assertAsSuccess(location = location.append("identifier"), value = IDENTIFIER_VALUE)
     }
@@ -74,7 +74,7 @@ internal class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(context, location, JsNull)
+        val result = composeReader.read(CONTEXT, location, JsNull)
 
         result.assertAsFailure(
             JsResult.Failure.Cause(location = location.append("id"), error = JsonErrors.PathMissing),

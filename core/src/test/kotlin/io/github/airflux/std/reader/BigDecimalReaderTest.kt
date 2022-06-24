@@ -17,7 +17,7 @@ import java.math.BigDecimal
 internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
     }
 
     init {
@@ -29,14 +29,14 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
                     val input: JsValue = JsNumber.valueOf(value)!!
-                    val result = BigDecimalReader.read(context, JsLocation.empty, input)
+                    val result = BigDecimalReader.read(CONTEXT, JsLocation.empty, input)
                     result.assertAsSuccess(location = JsLocation.empty, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val input: JsValue = JsString("abc")
-                val result = BigDecimalReader.read(context, JsLocation.empty, input)
+                val result = BigDecimalReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,

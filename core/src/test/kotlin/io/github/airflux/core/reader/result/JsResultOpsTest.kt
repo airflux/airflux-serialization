@@ -12,7 +12,7 @@ import io.kotest.matchers.shouldBe
 internal class JsResultOpsTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT: JsReaderContext = JsReaderContext()
+        private val CONTEXT = JsReaderContext()
         private val LOCATION = JsLocation.empty
     }
 

@@ -10,7 +10,7 @@ import io.kotest.matchers.shouldBe
 internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT: JsReaderContext = JsReaderContext()
+        private val CONTEXT = JsReaderContext()
         private val LOCATION = JsLocation.empty
         private val EXCEPTION = IllegalArgumentException()
     }

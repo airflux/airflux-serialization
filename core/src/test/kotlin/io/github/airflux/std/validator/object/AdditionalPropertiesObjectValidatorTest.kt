@@ -1,10 +1,10 @@
 package io.github.airflux.std.validator.`object`
 
 import io.github.airflux.common.JsonErrors
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.context.error.errorBuilderName
-import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.option.FailFast
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.value.JsObject
@@ -45,7 +45,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
             val validator: JsObjectValidator.Before = ObjectValidator.additionalProperties.build(properties)
 
             "when the reader context does not contain the error builder" - {
-                val context: JsReaderContext = JsReaderContext()
+                val context = JsReaderContext()
                 val input = JsObject(
                     ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
                     TITLE_PROPERTY_VALUE to JsString(TITLE_PROPERTY_NAME)
@@ -60,7 +60,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context: JsReaderContext = JsReaderContext(
+                val context = JsReaderContext(
                     AdditionalPropertiesObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
                 )
 

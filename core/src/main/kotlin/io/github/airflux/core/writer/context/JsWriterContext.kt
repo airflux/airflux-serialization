@@ -16,6 +16,25 @@
 
 package io.github.airflux.core.writer.context
 
+import io.github.airflux.core.context.JsAbstractContext
 import io.github.airflux.core.context.JsContext
 
-public typealias JsWriterContext = JsContext
+public class JsWriterContext private constructor(
+    override val elements: Map<JsContext.Key<*>, JsContext.Element>
+) : JsAbstractContext() {
+
+    public operator fun <E : JsContext.Element> plus(element: E): JsWriterContext = JsWriterContext(add(element))
+    public operator fun <E : JsContext.Element> plus(elements: Iterable<E>): JsWriterContext =
+        JsWriterContext(add(elements))
+
+    internal companion object {
+
+        operator fun invoke(): JsWriterContext = JsWriterContext(emptyMap())
+
+        operator fun <E : JsContext.Element> invoke(element: E): JsWriterContext =
+            JsWriterContext(mapOf(element.key to element))
+
+        operator fun <E : JsContext.Element> invoke(elements: Iterable<E>): JsWriterContext =
+            JsWriterContext(elements.associateBy { it.key })
+    }
+}

@@ -11,7 +11,7 @@ internal class FailFastTest : FreeSpec() {
         "The extension-function failFast" - {
 
             "when the writer context does not contain the FailFast option" - {
-                val context: JsReaderContext = JsReaderContext()
+                val context = JsReaderContext()
 
                 "should return the default value" {
                     val result = context.failFast

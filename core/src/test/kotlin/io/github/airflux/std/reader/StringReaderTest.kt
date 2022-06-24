@@ -15,7 +15,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val context: JsReaderContext = JsReaderContext(
+        private val CONTEXT = JsReaderContext(
             InvalidTypeErrorBuilder(JsonErrors::InvalidType)
         )
         private const val TEXT = "abc"
@@ -26,13 +26,13 @@ internal class StringReaderTest : FreeSpec() {
 
             "should return the string value" {
                 val input: JsValue = JsString(TEXT)
-                val result = StringReader.read(context, JsLocation.empty, input)
+                val result = StringReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsSuccess(location = JsLocation.empty, value = TEXT)
             }
 
             "should return the invalid type error" {
                 val input: JsValue = JsBoolean.valueOf(true)
-                val result = StringReader.read(context, JsLocation.empty, input)
+                val result = StringReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,
