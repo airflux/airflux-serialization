@@ -22,8 +22,11 @@ public class JsPaths private constructor(public val items: List<JsPath>) {
     public constructor(path: JsPath, vararg other: JsPath) : this(path, other.asList())
     public constructor(path: JsPath, other: List<JsPath>) : this(listOf(path) + other)
 
-    public fun append(path: JsPath): JsPaths = JsPaths(items + path)
-    public fun append(paths: JsPaths): JsPaths = JsPaths(items + paths.items)
+    public fun append(path: JsPath): JsPaths = if (path in items) this else JsPaths(items + path)
+    public fun append(paths: JsPaths): JsPaths {
+        val newPaths = paths.items.filter { path -> path !in items }
+        return if (newPaths.isEmpty()) this else JsPaths(items + newPaths)
+    }
 
     public inline fun <R> fold(initial: (JsPath) -> R, operation: (acc: R, JsPath) -> R): R {
         val iterator = items.iterator()

@@ -20,7 +20,7 @@ internal class JsPathsTest : FreeSpec() {
             "after creating" - {
 
                 "should be non-empty" {
-                    paths.items.isEmpty() shouldBe false
+                    paths.items.isNotEmpty() shouldBe true
                 }
 
                 "should have size 1" {
@@ -35,11 +35,11 @@ internal class JsPathsTest : FreeSpec() {
                     paths.toString() shouldBe "[$pathUser]"
                 }
 
-                "and adding some path" - {
+                "and adding a unique path" - {
                     val updatedPaths = paths.append(pathId)
 
                     "should be non-empty" {
-                        updatedPaths.items.isEmpty() shouldBe false
+                        updatedPaths.items.isNotEmpty() shouldBe true
                     }
 
                     "should have size 2" {
@@ -55,11 +55,19 @@ internal class JsPathsTest : FreeSpec() {
                     }
                 }
 
-                "and adding some paths" - {
+                "and adding a non-unique path" - {
+                    val updatedPaths = paths.append(pathUser)
+
+                    "should return origin instance" {
+                        updatedPaths shouldBe paths
+                    }
+                }
+
+                "and adding a unique paths" - {
                     val updatedPaths = paths.append(JsPaths(pathId, pathName))
 
                     "should be non-empty" {
-                        updatedPaths.items.isEmpty() shouldBe false
+                        updatedPaths.items.isNotEmpty() shouldBe true
                     }
 
                     "should have size 3" {
@@ -72,6 +80,37 @@ internal class JsPathsTest : FreeSpec() {
 
                     "method 'toString() should return '[$pathUser, $pathId, $pathName]'" {
                         updatedPaths.toString() shouldBe "[$pathUser, $pathId, $pathName]"
+                    }
+                }
+
+                "and adding a non-unique paths" - {
+
+                    "all adding elements is a non-unique" - {
+                        val updatedPaths = paths.append(JsPaths(pathUser))
+
+                        "should return origin instance" {
+                            updatedPaths shouldBe paths
+                        }
+                    }
+
+                    "some adding elements is a non-unique" - {
+                        val updatedPaths = paths.append(JsPaths(pathUser, pathId))
+
+                        "should be non-empty" {
+                            updatedPaths.items.isNotEmpty() shouldBe true
+                        }
+
+                        "should have size 2" {
+                            updatedPaths.items.size shouldBe 2
+                        }
+
+                        "should have elements in the order they were passed" {
+                            updatedPaths.items shouldContainExactly listOf(pathUser, pathId)
+                        }
+
+                        "method 'toString() should return '[$pathUser, $pathId]'" {
+                            updatedPaths.toString() shouldBe "[$pathUser, $pathId]"
+                        }
                     }
                 }
             }
