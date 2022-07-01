@@ -25,50 +25,56 @@ import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
-internal class JsObjectOptionalWithDefaultPropertySpec<T : Any> private constructor(
-    override val path: JsPaths,
-    override val reader: JsReader<T>
-) : JsObjectPropertySpec.OptionalWithDefault<T> {
+public fun <T : Any> optionalWithDefault(
+    name: String,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.OptionalWithDefault<T> =
+    optionalWithDefault(JsPath(name), reader, default)
 
-    override fun validation(validator: JsValidator<T>): JsObjectPropertySpec.OptionalWithDefault<T> =
-        JsObjectOptionalWithDefaultPropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).validation(context, validator)
-            }
-        )
+public fun <T : Any> optionalWithDefault(
+    path: JsPath,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.OptionalWithDefault<T> =
+    JsObjectPropertySpec.OptionalWithDefault(
+        path = JsPaths(path),
+        reader = { context, location, input ->
+            val lookup = JsLookup.apply(location, path, input)
+            readOptional(context, lookup, reader, default)
+        }
+    )
 
-    override fun or(alt: JsObjectPropertySpec.OptionalWithDefault<T>): JsObjectPropertySpec.OptionalWithDefault<T> =
-        JsObjectOptionalWithDefaultPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
-
-    companion object {
-
-        fun <T : Any> of(
-            path: JsPath,
-            reader: JsReader<T>,
-            default: () -> T
-        ): JsObjectPropertySpec.OptionalWithDefault<T> =
-            JsObjectOptionalWithDefaultPropertySpec(
-                path = JsPaths(path),
-                reader = buildReader(path, reader, default)
+public fun <T : Any> optionalWithDefault(
+    paths: JsPaths,
+    reader: JsReader<T>,
+    default: () -> T
+): JsObjectPropertySpec.OptionalWithDefault<T> =
+    JsObjectPropertySpec.OptionalWithDefault(
+        path = paths,
+        reader = { context, location, input ->
+            val lookup: JsLookup = paths.fold(
+                initial = { path -> JsLookup.apply(location, path, input) },
+                operation = { lookup, path ->
+                    if (lookup is JsLookup.Defined) return@fold lookup
+                    JsLookup.apply(location, path, input)
+                }
             )
+            readOptional(context, lookup, reader, default)
+        }
+    )
 
-        fun <T : Any> of(
-            paths: JsPaths,
-            reader: JsReader<T>,
-            default: () -> T
-        ): JsObjectPropertySpec.OptionalWithDefault<T> =
-            JsObjectOptionalWithDefaultPropertySpec(
-                path = paths,
-                reader = paths.items
-                    .map { path -> buildReader(path, reader, default) }
-                    .reduce { acc, element -> acc.or(element) }
-            )
+public infix fun <T : Any> JsObjectPropertySpec.OptionalWithDefault<T>.validation(
+    validator: JsValidator<T>
+): JsObjectPropertySpec.OptionalWithDefault<T> =
+    JsObjectPropertySpec.OptionalWithDefault(
+        path = path,
+        reader = { context, location, input ->
+            reader.read(context, location, input).validation(context, validator)
+        }
+    )
 
-        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>, default: () -> T) =
-            JsReader { context, location, input ->
-                val lookup = JsLookup.apply(location, path, input)
-                readOptional(context, lookup, reader, default)
-            }
-    }
-}
+public infix fun <T : Any> JsObjectPropertySpec.OptionalWithDefault<T>.or(
+    alt: JsObjectPropertySpec.OptionalWithDefault<T>
+): JsObjectPropertySpec.OptionalWithDefault<T> =
+    JsObjectPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)

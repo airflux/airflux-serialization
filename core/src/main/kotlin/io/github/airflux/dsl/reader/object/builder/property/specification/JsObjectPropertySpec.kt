@@ -18,43 +18,73 @@ package io.github.airflux.dsl.reader.`object`.builder.property.specification
 
 import io.github.airflux.core.path.JsPaths
 import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.validator.JsValidator
 
-public sealed interface JsObjectPropertySpec<T> {
+public sealed class JsObjectPropertySpec<T> {
+    public abstract val path: JsPaths
+    public abstract val reader: JsReader<T>
+
+    public class Required<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T>
+    ) : JsObjectPropertySpec<T>()
+
+    public class Defaultable<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T>
+    ) : JsObjectPropertySpec<T>()
+
+    public class Optional<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T?>
+    ) : JsObjectPropertySpec<T?>()
+
+    public class OptionalWithDefault<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T>
+    ) : JsObjectPropertySpec<T>()
+
+    public class Nullable<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T?>
+    ) : JsObjectPropertySpec<T?>()
+
+    public class NullableWithDefault<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T?>
+    ) : JsObjectPropertySpec<T?>()
+}
+
+/*public sealed interface JsObjectPropertySpec<T> {
     public val path: JsPaths
     public val reader: JsReader<T>
 
-    public sealed interface Required<T : Any> : JsObjectPropertySpec<T> {
-        public infix fun validation(validator: JsValidator<T>): Required<T>
-        public infix fun or(alt: Required<T>): Required<T>
-    }
+    public class Required<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T>
+    ) : JsObjectPropertySpec<T>
 
-    public sealed interface Defaultable<T : Any> : JsObjectPropertySpec<T> {
-        public infix fun validation(validator: JsValidator<T>): Defaultable<T>
-        public infix fun or(alt: Defaultable<T>): Defaultable<T>
-    }
+    public class Defaultable<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T>
+    ) : JsObjectPropertySpec<T>
 
-    public sealed interface Optional<T : Any> : JsObjectPropertySpec<T?> {
-        public infix fun validation(validator: JsValidator<T?>): Optional<T>
-        public infix fun filter(predicate: JsPredicate<T>): Optional<T>
-        public infix fun or(alt: Optional<T>): Optional<T>
-    }
+    public class Optional<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T?>
+    ) : JsObjectPropertySpec<T?>
 
-    public sealed interface OptionalWithDefault<T : Any> : JsObjectPropertySpec<T> {
-        public infix fun validation(validator: JsValidator<T>): OptionalWithDefault<T>
-        public infix fun or(alt: OptionalWithDefault<T>): OptionalWithDefault<T>
-    }
+    public class OptionalWithDefault<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T>
+    ) : JsObjectPropertySpec<T>
 
-    public sealed interface Nullable<T : Any> : JsObjectPropertySpec<T?> {
-        public infix fun validation(validator: JsValidator<T?>): Nullable<T>
-        public infix fun filter(predicate: JsPredicate<T>): Nullable<T>
-        public infix fun or(alt: Nullable<T>): Nullable<T>
-    }
+    public class Nullable<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T?>
+    ) : JsObjectPropertySpec<T?>
 
-    public sealed interface NullableWithDefault<T : Any> : JsObjectPropertySpec<T?> {
-        public infix fun validation(validator: JsValidator<T?>): NullableWithDefault<T>
-        public infix fun filter(predicate: JsPredicate<T>): NullableWithDefault<T>
-        public infix fun or(alt: NullableWithDefault<T>): NullableWithDefault<T>
-    }
-}
+    public class NullableWithDefault<T : Any> internal constructor(
+        override val path: JsPaths,
+        override val reader: JsReader<T?>
+    ) : JsObjectPropertySpec<T?>
+}*/

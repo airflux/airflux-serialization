@@ -27,50 +27,54 @@ import io.github.airflux.core.reader.result.filter
 import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
-internal class JsObjectOptionalPropertySpec<T : Any> private constructor(
-    override val path: JsPaths,
-    override val reader: JsReader<T?>
-) : JsObjectPropertySpec.Optional<T> {
+public fun <T : Any> optional(name: String, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
+    optional(JsPath(name), reader)
 
-    override fun validation(validator: JsValidator<T?>): JsObjectPropertySpec.Optional<T> =
-        JsObjectOptionalPropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).validation(context, validator)
-            }
-        )
+public fun <T : Any> optional(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
+    JsObjectPropertySpec.Optional(
+        path = JsPaths(path),
+        reader = { context, location, input ->
+            val lookup = JsLookup.apply(location, path, input)
+            readOptional(context, lookup, reader)
+        }
+    )
 
-    override fun filter(predicate: JsPredicate<T>): JsObjectPropertySpec.Optional<T> =
-        JsObjectOptionalPropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).filter(context, predicate)
-            }
-        )
-
-    override fun or(alt: JsObjectPropertySpec.Optional<T>): JsObjectPropertySpec.Optional<T> =
-        JsObjectOptionalPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
-
-    companion object {
-
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
-            JsObjectOptionalPropertySpec(
-                path = JsPaths(path),
-                reader = buildReader(path, reader)
+public fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
+    JsObjectPropertySpec.Optional(
+        path = paths,
+        reader = { context, location, input ->
+            val lookup: JsLookup = paths.fold(
+                initial = { path -> JsLookup.apply(location, path, input) },
+                operation = { lookup, path ->
+                    if (lookup is JsLookup.Defined) return@fold lookup
+                    JsLookup.apply(location, path, input)
+                }
             )
+            readOptional(context, lookup, reader)
+        }
+    )
 
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
-            JsObjectOptionalPropertySpec(
-                path = paths,
-                reader = paths.items
-                    .map { path -> buildReader(path, reader) }
-                    .reduce { acc, element -> acc.or(element) }
-            )
+public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.validation(
+    validator: JsValidator<T?>
+): JsObjectPropertySpec.Optional<T> =
+    JsObjectPropertySpec.Optional(
+        path = path,
+        reader = { context, location, input ->
+            reader.read(context, location, input).validation(context, validator)
+        }
+    )
 
-        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>) =
-            JsReader { context, location, input ->
-                val lookup = JsLookup.apply(location, path, input)
-                readOptional(context, lookup, reader)
-            }
-    }
-}
+public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.filter(
+    predicate: JsPredicate<T>
+): JsObjectPropertySpec.Optional<T> =
+    JsObjectPropertySpec.Optional(
+        path = path,
+        reader = { context, location, input ->
+            reader.read(context, location, input).filter(context, predicate)
+        }
+    )
+
+public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.or(
+    alt: JsObjectPropertySpec.Optional<T>
+): JsObjectPropertySpec.Optional<T> =
+    JsObjectPropertySpec.Optional(path = path.append(alt.path), reader = reader or alt.reader)

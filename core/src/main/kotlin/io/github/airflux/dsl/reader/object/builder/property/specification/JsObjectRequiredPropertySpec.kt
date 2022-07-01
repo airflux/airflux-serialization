@@ -16,50 +16,57 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.property.specification
 
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.JsPaths
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.`object`.readRequired
 import io.github.airflux.core.reader.or
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
-internal class JsObjectRequiredPropertySpec<T : Any> private constructor(
-    override val path: JsPaths,
-    override val reader: JsReader<T>
-) : JsObjectPropertySpec.Required<T> {
+public fun <T : Any> required(name: String, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
+    required(JsPath(name), reader)
 
-    override fun validation(validator: JsValidator<T>): JsObjectPropertySpec.Required<T> =
-        JsObjectRequiredPropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).validation(context, validator)
-            }
-        )
-
-    override fun or(alt: JsObjectPropertySpec.Required<T>): JsObjectPropertySpec.Required<T> =
-        JsObjectRequiredPropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
-
-    companion object {
-
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
-            JsObjectRequiredPropertySpec(
-                path = JsPaths(path),
-                reader = buildReader(path, reader)
-            )
-
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
-            JsObjectRequiredPropertySpec(
-                path = paths,
-                reader = paths.items
-                    .map { path -> buildReader(path, reader) }
-                    .reduce { acc, element -> acc.or(element) }
-            )
-
-        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>) = JsReader { context, location, input ->
+public fun <T : Any> required(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
+    JsObjectPropertySpec.Required(
+        path = JsPaths(path),
+        reader = { context, location, input ->
             val lookup = JsLookup.apply(location, path, input)
             readRequired(context, lookup, reader)
         }
-    }
-}
+    )
+
+public fun <T : Any> required(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
+    JsObjectPropertySpec.Required(
+        path = paths,
+        reader = JsReader { context, location, input ->
+            val errorBuilder = context[PathMissingErrorBuilder]
+            val failures = paths.items
+                .map { path ->
+                    val lookup = JsLookup.apply(location, path, input)
+                    if (lookup is JsLookup.Defined) return@JsReader readRequired(context, lookup, reader)
+                    JsResult.Failure(location = location.append(path), error = errorBuilder.build())
+                }
+            failures.merge()
+        }
+    )
+
+public infix fun <T : Any> JsObjectPropertySpec.Required<T>.validation(
+    validator: JsValidator<T>
+): JsObjectPropertySpec.Required<T> =
+    JsObjectPropertySpec.Required(
+        path = path,
+        reader = { context, location, input ->
+            reader.read(context, location, input).validation(context, validator)
+        }
+    )
+
+public infix fun <T : Any> JsObjectPropertySpec.Required<T>.or(
+    alt: JsObjectPropertySpec.Required<T>
+): JsObjectPropertySpec.Required<T> =
+    JsObjectPropertySpec.Required(path = path.append(alt.path), reader = reader or alt.reader)

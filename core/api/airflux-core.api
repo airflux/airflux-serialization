@@ -61,6 +61,7 @@ public final class io/github/airflux/core/context/option/JsContextOptionKt {
 public abstract class io/github/airflux/core/location/JsLocation {
 	public static final field Companion Lio/github/airflux/core/location/JsLocation$Companion;
 	public final fun append (I)Lio/github/airflux/core/location/JsLocation;
+	public final fun append (Lio/github/airflux/core/path/JsPath;)Lio/github/airflux/core/location/JsLocation;
 	public final fun append (Lio/github/airflux/core/path/PathElement;)Lio/github/airflux/core/location/JsLocation;
 	public final fun append (Ljava/lang/String;)Lio/github/airflux/core/location/JsLocation;
 	public abstract fun isEmpty ()Z
@@ -875,63 +876,90 @@ public final class io/github/airflux/dsl/reader/object/builder/property/JsObject
 	public final fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectDefaultablePropertySpecKt {
+	public static final fun defaultable (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
+	public static final fun defaultable (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
+	public static final fun defaultable (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
+	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
+	public static final fun validation (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
+}
+
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectNullablePropertySpecKt {
+	public static final fun filter (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+	public static final fun nullable (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+	public static final fun nullable (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+	public static final fun nullable (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+	public static final fun validation (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+}
+
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectNullableWithDefaultPropertySpecKt {
+	public static final fun filter (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+	public static final fun nullableWithDefault (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+	public static final fun nullableWithDefault (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+	public static final fun nullableWithDefault (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+	public static final fun validation (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+}
+
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectOptionalPropertySpecKt {
+	public static final fun filter (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+	public static final fun optional (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+	public static final fun optional (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+	public static final fun optional (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+	public static final fun validation (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+}
+
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectOptionalWithDefaultPropertySpecKt {
+	public static final fun optionalWithDefault (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+	public static final fun optionalWithDefault (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+	public static final fun optionalWithDefault (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+	public static final fun validation (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+}
+
+public abstract class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
 	public abstract fun getPath ()Lio/github/airflux/core/path/JsPaths;
 	public abstract fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+	public fun getPath ()Lio/github/airflux/core/path/JsPaths;
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun filter (Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public abstract fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+	public fun getPath ()Lio/github/airflux/core/path/JsPaths;
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun filter (Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
-	public abstract fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+	public fun getPath ()Lio/github/airflux/core/path/JsPaths;
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun filter (Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
-	public abstract fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+	public fun getPath ()Lio/github/airflux/core/path/JsPaths;
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+	public fun getPath ()Lio/github/airflux/core/path/JsPaths;
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required : io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec {
+	public fun getPath ()Lio/github/airflux/core/path/JsPaths;
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpecOpsKt {
-	public static final fun defaultable (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
-	public static final fun defaultable (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
-	public static final fun defaultable (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;
-	public static final fun nullable (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public static final fun nullable (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public static final fun nullable (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public static final fun nullableWithDefault (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
-	public static final fun nullableWithDefault (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
-	public static final fun nullableWithDefault (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;
-	public static final fun optional (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
-	public static final fun optional (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
-	public static final fun optional (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Optional;
-	public static final fun optionalWithDefault (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
-	public static final fun optionalWithDefault (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
-	public static final fun optionalWithDefault (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;
+public final class io/github/airflux/dsl/reader/object/builder/property/specification/JsObjectRequiredPropertySpecKt {
+	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
 	public static final fun required (Lio/github/airflux/core/path/JsPath;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
 	public static final fun required (Lio/github/airflux/core/path/JsPaths;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
 	public static final fun required (Ljava/lang/String;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
+	public static final fun validation (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;
 }
 
 public abstract interface class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder {

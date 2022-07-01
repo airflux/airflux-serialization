@@ -16,61 +16,69 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.property.specification
 
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.JsPaths
 import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.`object`.readNullable
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.predicate.JsPredicate
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.filter
 import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
-internal class JsObjectNullablePropertySpec<T : Any> private constructor(
-    override val path: JsPaths,
-    override val reader: JsReader<T?>
-) : JsObjectPropertySpec.Nullable<T> {
+public fun <T : Any> nullable(name: String, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
+    nullable(JsPath(name), reader)
 
-    override fun validation(validator: JsValidator<T?>): JsObjectPropertySpec.Nullable<T> =
-        JsObjectNullablePropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).validation(context, validator)
-            }
-        )
+public fun <T : Any> nullable(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
+    JsObjectPropertySpec.Nullable(
+        path = JsPaths(path),
+        reader = { context, location, input ->
+            val lookup = JsLookup.apply(location, path, input)
+            readNullable(context, lookup, reader)
+        }
+    )
 
-    override fun filter(predicate: JsPredicate<T>): JsObjectPropertySpec.Nullable<T> =
-        JsObjectNullablePropertySpec(
-            path = path,
-            reader = { context, location, input ->
-                reader.read(context, location, input).filter(context, predicate)
-            }
-        )
+public fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
+    JsObjectPropertySpec.Nullable(
+        path = paths,
+        reader = JsReader { context, location, input ->
+            val errorBuilder = context[PathMissingErrorBuilder]
+            val failures = paths.items
+                .map { path ->
+                    val lookup = JsLookup.apply(location, path, input)
+                    if (lookup is JsLookup.Defined) return@JsReader readNullable(context, lookup, reader)
+                    JsResult.Failure(location = location.append(path), error = errorBuilder.build())
+                }
+            failures.merge()
+        }
+    )
 
-    override fun or(alt: JsObjectPropertySpec.Nullable<T>): JsObjectPropertySpec.Nullable<T> =
-        JsObjectNullablePropertySpec(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <T : Any> JsObjectPropertySpec.Nullable<T>.validation(
+    validator: JsValidator<T?>
+): JsObjectPropertySpec.Nullable<T> =
+    JsObjectPropertySpec.Nullable(
+        path = path,
+        reader = { context, location, input ->
+            reader.read(context, location, input).validation(context, validator)
+        }
+    )
 
-    companion object {
+public infix fun <T : Any> JsObjectPropertySpec.Nullable<T>.filter(
+    predicate: JsPredicate<T>
+): JsObjectPropertySpec.Nullable<T> =
+    JsObjectPropertySpec.Nullable(
+        path = path,
+        reader = { context, location, input ->
+            reader.read(context, location, input).filter(context, predicate)
+        }
+    )
 
-        fun <T : Any> of(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
-            JsObjectNullablePropertySpec(
-                path = JsPaths(path),
-                reader = buildReader(path, reader)
-            )
-
-        fun <T : Any> of(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
-            JsObjectNullablePropertySpec(
-                path = paths,
-                reader = paths.items
-                    .map { path -> buildReader(path, reader) }
-                    .reduce { acc, element -> acc.or(element) }
-            )
-
-        private fun <T : Any> buildReader(path: JsPath, reader: JsReader<T>) =
-            JsReader { context, location, input ->
-                val lookup = JsLookup.apply(location, path, input)
-                readNullable(context, lookup, reader)
-            }
-    }
-}
+public infix fun <T : Any> JsObjectPropertySpec.Nullable<T>.or(
+    alt: JsObjectPropertySpec.Nullable<T>
+): JsObjectPropertySpec.Nullable<T> =
+    JsObjectPropertySpec.Nullable(path = path.append(alt.path), reader = reader or alt.reader)

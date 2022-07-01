@@ -16,6 +16,7 @@
 
 package io.github.airflux.core.location
 
+import io.github.airflux.core.path.JsPath
 import io.github.airflux.core.path.PathElement
 
 public sealed class JsLocation {
@@ -25,6 +26,7 @@ public sealed class JsLocation {
     public fun append(key: String): JsLocation = append(PathElement.Key(key))
     public fun append(idx: Int): JsLocation = append(PathElement.Idx(idx))
     public fun append(element: PathElement): JsLocation = Element(this, element)
+    public fun append(path: JsPath): JsLocation = path.elements.fold(this) { acc, p -> acc.append(p) }
 
     private object Empty : JsLocation() {
         override val isEmpty: Boolean = true
