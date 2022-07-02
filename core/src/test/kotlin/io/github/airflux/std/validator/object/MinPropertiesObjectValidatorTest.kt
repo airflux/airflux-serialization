@@ -60,7 +60,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 add(nameProperty)
                 add(titleProperty)
             }
-            .build(false)
+            .build()
     }
 
     init {

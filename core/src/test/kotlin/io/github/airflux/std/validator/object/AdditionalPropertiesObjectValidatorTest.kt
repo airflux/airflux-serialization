@@ -52,7 +52,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
 
         val properties: JsObjectProperties = JsObjectProperties.Builder()
             .apply { add(idProperty) }
-            .build(false)
+            .build()
     }
 
     init {

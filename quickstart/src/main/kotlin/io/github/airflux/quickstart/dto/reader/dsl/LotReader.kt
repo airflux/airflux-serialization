@@ -18,8 +18,6 @@ val LotStatusReader = StringReader.validation(isNotBlank).asEnum<LotStatus>()
 
 val LotReader = reader<Lot>(ObjectReaderConfiguration) {
 
-    checkUniquePropertyPath = false
-
     validation {
         before = before and additionalProperties
         after = isNotEmpty

@@ -46,8 +46,6 @@ public class JsObjectReaderBuilder<T> internal constructor(configuration: JsObje
         .let { Validation.Builder(before = it.before, after = it.after) }
     private val propertiesBuilder = JsObjectProperties.Builder()
 
-    public var checkUniquePropertyPath: Boolean = configuration.checkUniquePropertyPath
-
     public fun validation(block: Validation.Builder.() -> Unit) {
         validation.block()
     }
@@ -98,7 +96,7 @@ public class JsObjectReaderBuilder<T> internal constructor(configuration: JsObje
     }
 
     private fun buildConfiguration(resultBuilder: ResultBuilder<T>): Configuration<T> {
-        val properties: JsObjectProperties = propertiesBuilder.build(checkUniquePropertyPath)
+        val properties: JsObjectProperties = propertiesBuilder.build()
         val validators = validation.build()
             .let {
                 Configuration.Validators(

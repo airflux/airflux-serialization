@@ -23,13 +23,11 @@ public fun objectReaderConfig(block: JsObjectReaderConfig.Builder.() -> Unit): J
     JsObjectReaderConfig.Builder().apply(block).build()
 
 public class JsObjectReaderConfig private constructor(
-    public val checkUniquePropertyPath: Boolean,
     public val validation: Validation
 ) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
-        public var checkUniquePropertyPath: Boolean = false
         private var validation: Validation.Builder = Validation.Builder()
 
         public fun validation(block: Validation.Builder.() -> Unit) {
@@ -38,7 +36,6 @@ public class JsObjectReaderConfig private constructor(
 
         internal fun build(): JsObjectReaderConfig =
             JsObjectReaderConfig(
-                checkUniquePropertyPath = checkUniquePropertyPath,
                 validation = validation.build()
             )
     }

@@ -48,7 +48,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
             JsObjectProperty.Required(required(ID_PROPERTY_NAME, StringReader))
         private val properties: JsObjectProperties = JsObjectProperties.Builder()
             .apply { add(idProperty) }
-            .build(false)
+            .build()
     }
 
     init {

@@ -60,7 +60,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
                 add(nameProperty)
                 add(titleProperty)
             }
-            .build(false)
+            .build()
     }
 
     init {

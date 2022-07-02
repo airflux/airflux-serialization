@@ -9,8 +9,6 @@ import io.github.airflux.std.validator.`object`.ObjectValidator.maxProperties
 
 val ObjectReaderConfiguration = objectReaderConfig {
 
-    checkUniquePropertyPath = true
-
     validation {
         before = additionalProperties
         after = isNotEmpty and maxProperties(10)

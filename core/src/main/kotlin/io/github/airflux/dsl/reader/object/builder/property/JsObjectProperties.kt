@@ -16,8 +16,6 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.property
 
-import io.github.airflux.core.path.JsPath
-
 public class JsObjectProperties internal constructor(
     private val items: List<JsObjectProperty>
 ) : Collection<JsObjectProperty> by items {
@@ -29,19 +27,6 @@ public class JsObjectProperties internal constructor(
             properties.add(property)
         }
 
-        internal fun build(checkUniquePropertyPath: Boolean): JsObjectProperties {
-            if (checkUniquePropertyPath) checkingUniquePropertyPath(properties)
-            return JsObjectProperties(properties)
-        }
-
-        internal fun checkingUniquePropertyPath(properties: List<JsObjectProperty>) {
-            val paths = mutableSetOf<JsPath>()
-            properties.forEach { property ->
-                property.path.items.forEach { path ->
-                    if (path in paths)
-                        error("The path $path is already.")
-                }
-            }
-        }
+        internal fun build(): JsObjectProperties = JsObjectProperties(properties)
     }
 }

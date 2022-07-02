@@ -725,14 +725,11 @@ public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfigKt {
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig {
 	public static final field Companion Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Companion;
-	public synthetic fun <init> (ZLio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getCheckUniquePropertyPath ()Z
+	public synthetic fun <init> (Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getValidation ()Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Builder {
-	public final fun getCheckUniquePropertyPath ()Z
-	public final fun setCheckUniquePropertyPath (Z)V
 	public final fun validation (Lkotlin/jvm/functions/Function1;)V
 }
 
@@ -779,7 +776,6 @@ public final class io/github/airflux/dsl/reader/context/exception/ExceptionsHand
 }
 
 public final class io/github/airflux/dsl/reader/object/builder/JsObjectReaderBuilder {
-	public final fun getCheckUniquePropertyPath ()Z
 	public final fun property (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Defaultable;)Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperty$Defaultable;
 	public final fun property (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperty$Nullable;
 	public final fun property (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$NullableWithDefault;)Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperty$NullableWithDefault;
@@ -787,7 +783,6 @@ public final class io/github/airflux/dsl/reader/object/builder/JsObjectReaderBui
 	public final fun property (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$OptionalWithDefault;)Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperty$OptionalWithDefault;
 	public final fun property (Lio/github/airflux/dsl/reader/object/builder/property/specification/JsObjectPropertySpec$Required;)Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperty$Required;
 	public final fun returns (Lkotlin/jvm/functions/Function3;)Lio/github/airflux/dsl/reader/object/builder/JsObjectReaderBuilder$ResultBuilder;
-	public final fun setCheckUniquePropertyPath (Z)V
 	public final fun validation (Lkotlin/jvm/functions/Function1;)V
 }
 
