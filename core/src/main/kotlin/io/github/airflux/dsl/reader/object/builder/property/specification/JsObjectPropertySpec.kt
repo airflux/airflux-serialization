@@ -53,38 +53,3 @@ public sealed class JsObjectPropertySpec<T> {
         override val reader: JsReader<T?>
     ) : JsObjectPropertySpec<T?>()
 }
-
-/*public sealed interface JsObjectPropertySpec<T> {
-    public val path: JsPaths
-    public val reader: JsReader<T>
-
-    public class Required<T : Any> internal constructor(
-        override val path: JsPaths,
-        override val reader: JsReader<T>
-    ) : JsObjectPropertySpec<T>
-
-    public class Defaultable<T : Any> internal constructor(
-        override val path: JsPaths,
-        override val reader: JsReader<T>
-    ) : JsObjectPropertySpec<T>
-
-    public class Optional<T : Any> internal constructor(
-        override val path: JsPaths,
-        override val reader: JsReader<T?>
-    ) : JsObjectPropertySpec<T?>
-
-    public class OptionalWithDefault<T : Any> internal constructor(
-        override val path: JsPaths,
-        override val reader: JsReader<T>
-    ) : JsObjectPropertySpec<T>
-
-    public class Nullable<T : Any> internal constructor(
-        override val path: JsPaths,
-        override val reader: JsReader<T?>
-    ) : JsObjectPropertySpec<T?>
-
-    public class NullableWithDefault<T : Any> internal constructor(
-        override val path: JsPaths,
-        override val reader: JsReader<T?>
-    ) : JsObjectPropertySpec<T?>
-}*/
