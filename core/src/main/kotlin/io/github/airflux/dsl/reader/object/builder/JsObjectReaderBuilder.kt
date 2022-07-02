@@ -37,6 +37,15 @@ import io.github.airflux.dsl.reader.`object`.builder.property.specification.JsOb
 import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
+public fun <T> reader(
+    configuration: JsObjectReaderConfig = JsObjectReaderConfig.DEFAULT,
+    block: JsObjectReaderBuilder<T>.() -> ResultBuilder<T>
+): JsObjectReader<T> {
+    val readerBuilder = JsObjectReaderBuilder<T>(configuration)
+    val resultBuilder: ResultBuilder<T> = readerBuilder.block()
+    return readerBuilder.build(resultBuilder)
+}
+
 @AirfluxMarker
 public class JsObjectReaderBuilder<T> internal constructor(configuration: JsObjectReaderConfig) {
 
