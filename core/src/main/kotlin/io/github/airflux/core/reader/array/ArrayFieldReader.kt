@@ -18,11 +18,11 @@ package io.github.airflux.core.reader.array
 
 import io.github.airflux.core.common.identity
 import io.github.airflux.core.context.error.get
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.context.error.AdditionalItemsErrorBuilder
-import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsArray

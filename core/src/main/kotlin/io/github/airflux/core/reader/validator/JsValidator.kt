@@ -16,8 +16,8 @@
 
 package io.github.airflux.core.reader.validator
 
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 
 @Suppress("unused")

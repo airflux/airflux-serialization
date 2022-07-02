@@ -16,11 +16,11 @@
 
 package io.github.airflux.dsl.value
 
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsValue
 

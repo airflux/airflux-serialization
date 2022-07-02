@@ -16,8 +16,8 @@
 
 package io.github.airflux.std.validator.condition
 
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T> JsValidator<T>.applyIfNotNull(): JsValidator<T?> =

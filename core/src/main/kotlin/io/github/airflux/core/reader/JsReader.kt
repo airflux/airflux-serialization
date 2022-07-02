@@ -16,9 +16,9 @@
 
 package io.github.airflux.core.reader
 
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.recovery
 import io.github.airflux.core.value.JsValue

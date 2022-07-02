@@ -1,8 +1,8 @@
 package io.github.airflux.dsl.value
 
 import io.github.airflux.common.TestData.USER_NAME_VALUE
-import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.lookup.JsLookup
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString

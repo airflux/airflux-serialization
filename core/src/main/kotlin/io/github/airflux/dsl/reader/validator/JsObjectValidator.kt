@@ -16,8 +16,8 @@
 
 package io.github.airflux.dsl.reader.validator
 
-import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
