@@ -18,7 +18,6 @@ package io.github.airflux.dsl.reader.array.builder
 
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.JsArrayReader
-import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.array.readArray
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.option.failFast
@@ -52,27 +51,31 @@ public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArray
             readArray(context = context, location = location, from = input, items = items.reader)
         }
 
-    public fun returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<T> =
-        ResultBuilder { context, location, input ->
+    public fun returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<T> {
+        val prefixItemReaders = prefixItems.readers
+        return ResultBuilder { context, location, input ->
             readArray(
                 context = context,
                 location = location,
                 from = input,
-                prefixItems = prefixItems.readers(),
+                prefixItems = prefixItemReaders,
                 errorIfAdditionalItems = !items
             )
         }
+    }
 
-    public fun returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayItemSpec<T>): ResultBuilder<T> =
-        ResultBuilder { context, location, input ->
+    public fun returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayItemSpec<T>): ResultBuilder<T> {
+        val prefixItemReaders = prefixItems.readers
+        return ResultBuilder { context, location, input ->
             readArray(
                 context = context,
                 location = location,
                 from = input,
-                prefixItems = prefixItems.readers(),
+                prefixItems = prefixItemReaders,
                 items = items.reader
             )
         }
+    }
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsArrayReader<T> {
         val configuration = buildConfiguration(resultBuilder)
@@ -122,9 +125,6 @@ public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArray
     }
 
     internal companion object {
-
-        internal fun <T> JsArrayPrefixItemsSpec<T>.readers(): List<JsReader<T>> =
-            this.items.map { spec -> spec.reader }
 
         internal fun <T> JsArray<*>.read(
             context: JsReaderContext,

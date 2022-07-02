@@ -15,9 +15,8 @@ internal class JsArrayPrefixItemsSpecTest : FreeSpec() {
                 val first = nullable(StringReader)
                 val second = nullable(IntReader)
                 val specs = prefixItems(first, second)
-
                 "then it should have elements in the order they were passed element" {
-                    specs.items shouldContainExactly listOf(first, second)
+                    specs.readers shouldContainExactly listOf(first.reader, second.reader)
                 }
             }
         }

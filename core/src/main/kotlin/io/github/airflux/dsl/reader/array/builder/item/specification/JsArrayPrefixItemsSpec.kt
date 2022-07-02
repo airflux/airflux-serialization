@@ -16,18 +16,18 @@
 
 package io.github.airflux.dsl.reader.array.builder.item.specification
 
-public fun <T> prefixItems(
-    item: JsArrayItemSpec<T>,
-    vararg items: JsArrayItemSpec<T>
-): JsArrayPrefixItemsSpec<T> = JsArrayPrefixItemsSpec(item = item, items = items)
+import io.github.airflux.core.reader.JsReader
 
-public class JsArrayPrefixItemsSpec<out T> private constructor(public val items: List<JsArrayItemSpec<T>>) {
+public fun <T> prefixItems(item: JsArrayItemSpec<T>, vararg items: JsArrayItemSpec<T>): JsArrayPrefixItemsSpec<T> =
+    JsArrayPrefixItemsSpec(item = item, items = items)
+
+public class JsArrayPrefixItemsSpec<out T> private constructor(internal val readers: List<JsReader<T>>) {
 
     internal constructor(item: JsArrayItemSpec<T>, vararg items: JsArrayItemSpec<T>) : this(
-        mutableListOf<JsArrayItemSpec<T>>()
+        mutableListOf<JsReader<T>>()
             .apply {
-                this.add(item)
-                this.addAll(items)
+                add(item.reader)
+                items.forEach { add(it.reader) }
             }
     )
 }

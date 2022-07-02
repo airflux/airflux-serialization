@@ -670,7 +670,6 @@ public final class io/github/airflux/dsl/reader/array/builder/item/specification
 }
 
 public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayPrefixItemsSpec {
-	public final fun getItems ()Ljava/util/List;
 }
 
 public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayPrefixItemsSpecKt {
