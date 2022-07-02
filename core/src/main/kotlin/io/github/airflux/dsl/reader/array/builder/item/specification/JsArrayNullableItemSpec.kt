@@ -18,18 +18,31 @@ package io.github.airflux.dsl.reader.array.builder.item.specification
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.or
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
+import io.github.airflux.core.value.JsNull
 
-internal class JsArrayNullableItemSpec<T>(override val reader: JsReader<T?>) : JsArrayItemSpec.Nullable<T> {
+public fun <T : Any> nullable(reader: JsReader<T>): JsArrayItemSpec.Nullable<T?> =
+    JsArrayItemSpec.Nullable(
+        reader = { context, location, input ->
+            if (input is JsNull)
+                JsResult.Success(location = location, value = null)
+            else
+                reader.read(context, location, input)
+        }
+    )
 
-    override infix fun validation(validator: JsValidator<T?>): JsArrayItemSpec.Nullable<T> =
-        JsArrayNullableItemSpec(
-            reader = { context, location, input ->
-                reader.read(context, location, input).validation(context, validator)
-            }
-        )
+public infix fun <T> JsArrayItemSpec.Nullable<T>.validation(
+    validator: JsValidator<T?>
+): JsArrayItemSpec.Nullable<T> =
+    JsArrayItemSpec.Nullable(
+        reader = { context, location, input ->
+            reader.read(context, location, input).validation(context, validator)
+        }
+    )
 
-    override fun or(alt: JsArrayItemSpec.Nullable<T>): JsArrayItemSpec.Nullable<T> =
-        JsArrayNullableItemSpec(reader or alt.reader)
-}
+public infix fun <T> JsArrayItemSpec.Nullable<T>.or(
+    alt: JsArrayItemSpec.Nullable<T>
+): JsArrayItemSpec.Nullable<T> =
+    JsArrayItemSpec.Nullable(reader = reader or alt.reader)

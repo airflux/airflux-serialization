@@ -645,23 +645,28 @@ public final class io/github/airflux/dsl/reader/array/builder/JsArrayReaderBuild
 	public final fun setBefore (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;)V
 }
 
-public abstract interface class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {
+public abstract class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {
 	public abstract fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable : io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {
-	public abstract fun or (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;
+public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable : io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable : io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {
-	public abstract fun or (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;
-	public abstract fun validation (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;
+public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable : io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {
+	public fun getReader ()Lio/github/airflux/core/reader/JsReader;
 }
 
-public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpecOpsKt {
+public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayNonNullableItemSpecKt {
 	public static final fun nonNullable (Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;
+	public static final fun or (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;
+	public static final fun validation (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$NonNullable;
+}
+
+public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayNullableItemSpecKt {
 	public static final fun nullable (Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;
+	public static final fun or (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;
+	public static final fun validation (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec$Nullable;
 }
 
 public final class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayPrefixItemsSpec {

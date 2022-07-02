@@ -21,15 +21,19 @@ import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
-internal class JsArrayNonNullableItemSpec<T>(override val reader: JsReader<T>) : JsArrayItemSpec.NonNullable<T> {
+public fun <T : Any> nonNullable(reader: JsReader<T>): JsArrayItemSpec.NonNullable<T> =
+    JsArrayItemSpec.NonNullable(reader)
 
-    override infix fun validation(validator: JsValidator<T>): JsArrayItemSpec.NonNullable<T> =
-        JsArrayNonNullableItemSpec(
-            reader = { context, location, input ->
-                reader.read(context, location, input).validation(context, validator)
-            }
-        )
+public infix fun <T> JsArrayItemSpec.NonNullable<T>.validation(
+    validator: JsValidator<T>
+): JsArrayItemSpec.NonNullable<T> =
+    JsArrayItemSpec.NonNullable(
+        reader = { context, location, input ->
+            reader.read(context, location, input).validation(context, validator)
+        }
+    )
 
-    override fun or(alt: JsArrayItemSpec.NonNullable<T>): JsArrayItemSpec.NonNullable<T> =
-        JsArrayNonNullableItemSpec(reader or alt.reader)
-}
+public infix fun <T> JsArrayItemSpec.NonNullable<T>.or(
+    alt: JsArrayItemSpec.NonNullable<T>
+): JsArrayItemSpec.NonNullable<T> =
+    JsArrayItemSpec.NonNullable(reader = reader or alt.reader)
