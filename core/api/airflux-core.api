@@ -614,11 +614,6 @@ public final class io/github/airflux/dsl/path/JsPathsOpsKt {
 	public static final fun or (Ljava/lang/String;Ljava/lang/String;)Lio/github/airflux/core/path/JsPaths;
 }
 
-public final class io/github/airflux/dsl/reader/ReaderOpsKt {
-	public static final fun arrayReader (Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/reader/JsArrayReader;
-	public static synthetic fun arrayReader$default (Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/core/reader/JsArrayReader;
-}
-
 public final class io/github/airflux/dsl/reader/array/builder/JsArrayReaderBuilder {
 	public final fun returns (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec;)Lio/github/airflux/dsl/reader/array/builder/JsArrayReaderBuilder$ResultBuilder;
 	public final fun returns (Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayPrefixItemsSpec;Lio/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec;)Lio/github/airflux/dsl/reader/array/builder/JsArrayReaderBuilder$ResultBuilder;
@@ -641,6 +636,11 @@ public final class io/github/airflux/dsl/reader/array/builder/JsArrayReaderBuild
 	public final fun getBefore ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
 	public final fun setAfter (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;)V
 	public final fun setBefore (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;)V
+}
+
+public final class io/github/airflux/dsl/reader/array/builder/JsArrayReaderBuilderKt {
+	public static final fun arrayReader (Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/reader/JsArrayReader;
+	public static synthetic fun arrayReader$default (Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/core/reader/JsArrayReader;
 }
 
 public abstract class io/github/airflux/dsl/reader/array/builder/item/specification/JsArrayItemSpec {

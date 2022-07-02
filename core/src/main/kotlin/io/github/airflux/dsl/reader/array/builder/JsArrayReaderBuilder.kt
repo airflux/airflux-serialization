@@ -34,6 +34,15 @@ import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuil
 import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
+public fun <T> arrayReader(
+    configuration: JsArrayReaderConfig = JsArrayReaderConfig.DEFAULT,
+    block: JsArrayReaderBuilder<T>.() -> ResultBuilder<T>
+): JsArrayReader<T> {
+    val readerBuilder = JsArrayReaderBuilder<T>(configuration)
+    val resultBuilder: ResultBuilder<T> = readerBuilder.block()
+    return readerBuilder.build(resultBuilder)
+}
+
 @AirfluxMarker
 public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArrayReaderConfig) {
 
