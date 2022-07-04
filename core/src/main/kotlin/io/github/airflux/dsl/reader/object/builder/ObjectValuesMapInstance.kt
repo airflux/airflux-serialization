@@ -19,53 +19,49 @@ package io.github.airflux.dsl.reader.`object`.builder
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperty
 
 internal class ObjectValuesMapInstance : ObjectValuesMap {
-    private val items: MutableMap<JsObjectProperty, Any?> = mutableMapOf()
+    private val properties: MutableSet<JsObjectProperty> = mutableSetOf()
+    private val values: MutableMap<JsObjectProperty, Any> = mutableMapOf()
 
     override val isEmpty: Boolean
-        get() = items.isEmpty()
+        get() = values.isEmpty()
 
     override val isNotEmpty: Boolean
-        get() = items.isNotEmpty()
+        get() = values.isNotEmpty()
 
     override val size: Int
-        get() = items.size
+        get() = values.size
 
-    override infix operator fun <T : Any> get(property: JsObjectProperty.Required<T>): T =
-        items.getNonNullable(property)
-
-    override infix operator fun <T : Any> get(property: JsObjectProperty.Defaultable<T>): T =
-        items.getNonNullable(property)
-
-    override infix operator fun <T : Any> get(property: JsObjectProperty.Optional<T>): T? =
-        items.getNullable(property)
-
-    override infix operator fun <T : Any> get(property: JsObjectProperty.OptionalWithDefault<T>): T =
-        items.getNonNullable(property)
-
-    override infix operator fun <T : Any> get(property: JsObjectProperty.Nullable<T>): T? =
-        items.getNullable(property)
-
-    override infix operator fun <T : Any> get(property: JsObjectProperty.NullableWithDefault<T>): T? =
-        items.getNullable(property)
+    override operator fun <T : Any> get(property: JsObjectProperty.Required<T>): T = getNonNullable(property)
+    override operator fun <T : Any> get(property: JsObjectProperty.Defaultable<T>): T = getNonNullable(property)
+    override operator fun <T : Any> get(property: JsObjectProperty.Optional<T>): T? = getNullable(property)
+    override operator fun <T : Any> get(property: JsObjectProperty.OptionalWithDefault<T>): T = getNonNullable(property)
+    override operator fun <T : Any> get(property: JsObjectProperty.Nullable<T>): T? = getNullable(property)
+    override operator fun <T : Any> get(property: JsObjectProperty.NullableWithDefault<T>): T? = getNullable(property)
 
     operator fun set(property: JsObjectProperty, value: Any?) {
-        items[property] = value
+        if (value != null) values[property] = value
+        properties.add(property)
     }
 
-    companion object {
+    private fun <T> getNonNullable(property: JsObjectProperty): T {
+        val value = values[property]
+        return if (value != null)
+            @Suppress("UNCHECKED_CAST")
+            value as T
+        else
+            throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
+    }
 
-        private fun <T> Map<JsObjectProperty, Any?>.getNonNullable(property: JsObjectProperty): T =
-            getValue(property)
-                .let {
-                    @Suppress("UNCHECKED_CAST")
-                    checkNotNull(it) as T
-                }
-
-        private fun <T> Map<JsObjectProperty, Any?>.getNullable(property: JsObjectProperty): T? =
-            getValue(property)
-                ?.let {
-                    @Suppress("UNCHECKED_CAST")
-                    it as T
-                }
+    private fun <T> getNullable(property: JsObjectProperty): T? {
+        val value = values[property]
+        return if (value != null)
+            @Suppress("UNCHECKED_CAST")
+            value as T
+        else {
+            if (property in properties)
+                null
+            else
+                throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
+        }
     }
 }

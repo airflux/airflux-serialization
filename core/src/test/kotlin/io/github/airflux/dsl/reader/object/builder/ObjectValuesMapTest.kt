@@ -482,24 +482,24 @@ internal class ObjectValuesMapTest : FreeSpec() {
                         this[property] = null
                     }
 
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
+                    "then the property isEmpty should return true" {
+                        map.isEmpty shouldBe true
                     }
 
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
+                    "then the property isNotEmpty should return false" {
+                        map.isNotEmpty shouldBe false
                     }
 
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
+                    "then the property size should return 0" {
+                        map.size shouldBe 0
                     }
 
                     "the method 'get' should thrown an exception" {
-                        shouldThrow<IllegalStateException> { map[property] }
+                        shouldThrow<NoSuchElementException> { map[property] }
                     }
 
                     "the method 'unaryPlus' should thrown an exception" {
-                        shouldThrow<IllegalStateException> {
+                        shouldThrow<NoSuchElementException> {
                             with(map) {
                                 +property
                             }
@@ -514,24 +514,24 @@ internal class ObjectValuesMapTest : FreeSpec() {
                         this[property] = null
                     }
 
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
+                    "then the property isEmpty should return true" {
+                        map.isEmpty shouldBe true
                     }
 
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
+                    "then the property isNotEmpty should return false" {
+                        map.isNotEmpty shouldBe false
                     }
 
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
+                    "then the property size should return 0" {
+                        map.size shouldBe 0
                     }
 
                     "the method 'get' should thrown an exception" {
-                        shouldThrow<IllegalStateException> { map[property] }
+                        shouldThrow<NoSuchElementException> { map[property] }
                     }
 
                     "the method 'unaryPlus' should thrown an exception" {
-                        shouldThrow<IllegalStateException> {
+                        shouldThrow<NoSuchElementException> {
                             with(map) {
                                 +property
                             }
@@ -545,16 +545,16 @@ internal class ObjectValuesMapTest : FreeSpec() {
                         this[property] = null
                     }
 
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
+                    "then the property isEmpty should return true" {
+                        map.isEmpty shouldBe true
                     }
 
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
+                    "then the property isNotEmpty should return false" {
+                        map.isNotEmpty shouldBe false
                     }
 
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
+                    "then the property size should return 0" {
+                        map.size shouldBe 0
                     }
 
                     "then for known property" - {
@@ -597,24 +597,24 @@ internal class ObjectValuesMapTest : FreeSpec() {
                         this[property] = null
                     }
 
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
+                    "then the property isEmpty should return true" {
+                        map.isEmpty shouldBe true
                     }
 
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
+                    "then the property isNotEmpty should return false" {
+                        map.isNotEmpty shouldBe false
                     }
 
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
+                    "then the property size should return 0" {
+                        map.size shouldBe 0
                     }
 
                     "the method 'get' should thrown an exception" {
-                        shouldThrow<IllegalStateException> { map[property] }
+                        shouldThrow<NoSuchElementException> { map[property] }
                     }
 
                     "the method 'unaryPlus' should thrown an exception" {
-                        shouldThrow<IllegalStateException> {
+                        shouldThrow<NoSuchElementException> {
                             with(map) {
                                 +property
                             }
@@ -628,16 +628,16 @@ internal class ObjectValuesMapTest : FreeSpec() {
                         this[property] = null
                     }
 
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
+                    "then the property isEmpty should return true" {
+                        map.isEmpty shouldBe true
                     }
 
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
+                    "then the property isNotEmpty should return false" {
+                        map.isNotEmpty shouldBe false
                     }
 
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
+                    "then the property size should return 0" {
+                        map.size shouldBe 0
                     }
 
                     "then for known property" - {
@@ -680,16 +680,16 @@ internal class ObjectValuesMapTest : FreeSpec() {
                         this[property] = null
                     }
 
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
+                    "then the property isEmpty should return true" {
+                        map.isEmpty shouldBe true
                     }
 
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
+                    "then the property isNotEmpty should return false" {
+                        map.isNotEmpty shouldBe false
                     }
 
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
+                    "then the property size should return 0" {
+                        map.size shouldBe 0
                     }
 
                     "then for known property" - {
