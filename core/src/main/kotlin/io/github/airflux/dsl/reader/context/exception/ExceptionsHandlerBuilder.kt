@@ -41,7 +41,8 @@ public class ExceptionsHandlerBuilder internal constructor() {
     internal fun build(): ExceptionsHandler {
         val handlers = ExceptionHandlers(handlers)
         return ExceptionsHandler { context, location, exception ->
-            handlers[exception]?.invoke(context, location, exception)
+            val handler: ExceptionHandler = handlers[exception] ?: throw exception
+            handler.invoke(context, location, exception)
         }
     }
 }

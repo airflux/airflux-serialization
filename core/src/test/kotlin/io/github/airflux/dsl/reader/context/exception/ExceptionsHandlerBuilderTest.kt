@@ -19,8 +19,8 @@ package io.github.airflux.dsl.reader.context.exception
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class ExceptionsHandlerBuilderTest : FreeSpec() {
@@ -36,9 +36,10 @@ internal class ExceptionsHandlerBuilderTest : FreeSpec() {
         "when an exception handler is not registered in the builder" - {
             val exceptionsHandler: ExceptionsHandler = ExceptionsHandlerBuilder().build()
 
-            "then the handleException should return the null value" {
-                val error = exceptionsHandler.handleException(CONTEXT, LOCATION, EXCEPTION)
-                error.shouldBeNull()
+            "then the handleException should re-throw an exception" {
+                shouldThrow<IllegalArgumentException> {
+                    exceptionsHandler.handleException(CONTEXT, LOCATION, EXCEPTION)
+                }
             }
         }
 

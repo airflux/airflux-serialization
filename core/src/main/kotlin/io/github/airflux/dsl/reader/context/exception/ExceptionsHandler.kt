@@ -22,10 +22,10 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 
 internal class ExceptionsHandler(
-    private val handler: (context: JsReaderContext, location: JsLocation, exception: Throwable) -> JsError?
+    private val handler: (context: JsReaderContext, location: JsLocation, exception: Throwable) -> JsError
 ) : JsContext.Element {
 
-    fun handleException(context: JsReaderContext, location: JsLocation, exception: Throwable): JsError? =
+    fun handleException(context: JsReaderContext, location: JsLocation, exception: Throwable): JsError =
         handler(context, location, exception)
 
     override val key: JsContext.Key<*> = Key
