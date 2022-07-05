@@ -50,9 +50,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
         private val idProperty: JsObjectProperty.Required<String> =
             JsObjectProperty.Required(required(ID_PROPERTY_NAME, StringReader))
 
-        val properties: JsObjectProperties = JsObjectProperties.Builder()
-            .apply { add(idProperty) }
-            .build()
+        val properties: JsObjectProperties = JsObjectProperties(listOf(idProperty))
     }
 
     init {

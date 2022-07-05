@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.builder.property
+package io.github.airflux.common
 
-public class JsObjectProperties internal constructor(
-    private val items: List<JsObjectProperty>
-) : Collection<JsObjectProperty> by items
+import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.JsReader
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsValue
+
+internal class DummyReader<T>(val result: JsResult<T>) : JsReader<T> {
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> = result
+}

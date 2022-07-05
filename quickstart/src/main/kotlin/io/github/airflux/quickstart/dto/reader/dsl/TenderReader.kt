@@ -4,6 +4,7 @@ import io.github.airflux.core.reader.result.success
 import io.github.airflux.dsl.reader.`object`.builder.property.specification.optional
 import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.dsl.reader.`object`.builder.reader
+import io.github.airflux.dsl.reader.`object`.builder.returns
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySpec
 

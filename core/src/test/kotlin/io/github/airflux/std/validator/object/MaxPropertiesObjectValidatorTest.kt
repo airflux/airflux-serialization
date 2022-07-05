@@ -54,13 +54,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
             JsObjectProperty.Required(required(NAME_PROPERTY_NAME, StringReader))
         private val titleProperty: JsObjectProperty.Required<String> =
             JsObjectProperty.Required(required(TITLE_PROPERTY_NAME, StringReader))
-        val properties: JsObjectProperties = JsObjectProperties.Builder()
-            .apply {
-                add(idProperty)
-                add(nameProperty)
-                add(titleProperty)
-            }
-            .build()
+        val properties: JsObjectProperties = JsObjectProperties(listOf(idProperty, nameProperty, titleProperty))
     }
 
     init {
