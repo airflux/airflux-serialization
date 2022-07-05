@@ -75,10 +75,9 @@ public fun <T> returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) ->
         try {
             values.builder(context, location)
         } catch (expected: Throwable) {
-            context.getOrNull(ExceptionsHandler)
-                ?.handleException(context, location, expected)
-                ?.failure(location)
-                ?: throw expected
+            val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
+            handler.handleException(context, location, expected)
+                .failure(location)
         }
     }
 
