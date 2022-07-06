@@ -67,7 +67,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, properties, input)
+                        validator.validate(context, LOCATION, properties, input)
                     }
                     exception.message shouldBe "The error builder '${AdditionalPropertiesObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -82,7 +82,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                     val input = JsObject()
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, properties, input)
+                        val errors = validator.validate(context, LOCATION, properties, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -91,7 +91,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                     val input = JsObject(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, properties, input)
+                        val errors = validator.validate(context, LOCATION, properties, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -106,7 +106,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                     "when fail-fast is missing" - {
 
                         "then the validator should return an error" {
-                            val failure = validator.validation(context, LOCATION, properties, input)
+                            val failure = validator.validate(context, LOCATION, properties, input)
 
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(
@@ -120,7 +120,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                         val contextWithFailFast = context + FailFast(true)
 
                         "then the validator should return an error" {
-                            val failure = validator.validation(contextWithFailFast, LOCATION, properties, input)
+                            val failure = validator.validate(contextWithFailFast, LOCATION, properties, input)
 
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(
@@ -134,7 +134,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                         val contextWithFailFast = context + FailFast(false)
 
                         "then the validator should return an error" {
-                            val failure = validator.validation(contextWithFailFast, LOCATION, properties, input)
+                            val failure = validator.validate(contextWithFailFast, LOCATION, properties, input)
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(

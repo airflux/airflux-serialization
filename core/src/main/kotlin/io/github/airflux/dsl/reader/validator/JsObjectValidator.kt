@@ -30,7 +30,7 @@ public sealed interface JsObjectValidator {
 
     public fun interface Before : JsObjectValidator {
 
-        public fun validation(
+        public fun validate(
             context: JsReaderContext,
             location: JsLocation,
             properties: JsObjectProperties,
@@ -47,9 +47,9 @@ public sealed interface JsObjectValidator {
         public infix fun or(other: Before): Before {
             val self = this
             return Before { context, location, properties, input ->
-                self.validation(context, location, properties, input)
+                self.validate(context, location, properties, input)
                     ?.let { error ->
-                        other.validation(context, location, properties, input)
+                        other.validate(context, location, properties, input)
                             ?.let { error + it }
                     }
             }
@@ -65,15 +65,15 @@ public sealed interface JsObjectValidator {
         public infix fun and(other: Before): Before {
             val self = this
             return Before { context, location, properties, input ->
-                val result = self.validation(context, location, properties, input)
-                result ?: other.validation(context, location, properties, input)
+                val result = self.validate(context, location, properties, input)
+                result ?: other.validate(context, location, properties, input)
             }
         }
     }
 
     public fun interface After : JsObjectValidator {
 
-        public fun validation(
+        public fun validate(
             context: JsReaderContext,
             location: JsLocation,
             properties: JsObjectProperties,
@@ -91,9 +91,9 @@ public sealed interface JsObjectValidator {
         public infix fun or(other: After): After {
             val self = this
             return After { context, location, properties, objectValuesMap, input ->
-                self.validation(context, location, properties, objectValuesMap, input)
+                self.validate(context, location, properties, objectValuesMap, input)
                     ?.let { error ->
-                        other.validation(context, location, properties, objectValuesMap, input)
+                        other.validate(context, location, properties, objectValuesMap, input)
                             ?.let { error + it }
                     }
             }
@@ -109,8 +109,8 @@ public sealed interface JsObjectValidator {
         public infix fun and(other: After): After {
             val self = this
             return After { context, location, properties, objectValuesMap, input ->
-                val result = self.validation(context, location, properties, objectValuesMap, input)
-                result ?: other.validation(context, location, properties, objectValuesMap, input)
+                val result = self.validate(context, location, properties, objectValuesMap, input)
+                result ?: other.validate(context, location, properties, objectValuesMap, input)
             }
         }
     }

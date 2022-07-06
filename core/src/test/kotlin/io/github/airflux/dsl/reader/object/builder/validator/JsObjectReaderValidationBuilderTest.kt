@@ -156,7 +156,7 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
         override fun build(properties: JsObjectProperties): JsObjectValidator.Before = validator
 
         internal class Validator : JsObjectValidator.Before {
-            override fun validation(
+            override fun validate(
                 context: JsReaderContext,
                 location: JsLocation,
                 properties: JsObjectProperties,
@@ -170,7 +170,7 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
         override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 
         internal class Validator : JsObjectValidator.After {
-            override fun validation(
+            override fun validate(
                 context: JsReaderContext,
                 location: JsLocation,
                 properties: JsObjectProperties,

@@ -30,7 +30,7 @@ internal class DummyAfterObjectValidatorBuilder(result: JsResult.Failure?) : JsO
     override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
 
     internal class Validator(val result: JsResult.Failure?) : JsObjectValidator.After {
-        override fun validation(
+        override fun validate(
             context: JsReaderContext,
             location: JsLocation,
             properties: JsObjectProperties,

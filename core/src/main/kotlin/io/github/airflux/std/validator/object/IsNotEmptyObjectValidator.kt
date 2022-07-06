@@ -31,7 +31,7 @@ import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
 public class IsNotEmptyObjectValidator internal constructor() : JsObjectValidator.After {
 
-    override fun validation(
+    override fun validate(
         context: JsReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,

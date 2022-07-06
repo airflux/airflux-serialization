@@ -68,7 +68,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        validator.validate(context, LOCATION, properties, objectValuesMap, input)
                     }
                     exception.message shouldBe "The error builder '${MinPropertiesObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -83,7 +83,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                     val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
 
                     "then the validator should return an error" {
-                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        val errors = validator.validate(context, LOCATION, properties, objectValuesMap, input)
                         errors.shouldNotBeNull()
                         errors shouldBe JsResult.Failure(
                             location = LOCATION,
@@ -98,7 +98,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                     }
 
                     "then the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        val failure = validator.validate(context, LOCATION, properties, objectValuesMap, input)
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
                             location = LOCATION,
@@ -114,7 +114,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                     }
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        val errors = validator.validate(context, LOCATION, properties, objectValuesMap, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -127,7 +127,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                     }
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, properties, objectValuesMap, input)
+                        val errors = validator.validate(context, LOCATION, properties, objectValuesMap, input)
                         errors.shouldBeNull()
                     }
                 }

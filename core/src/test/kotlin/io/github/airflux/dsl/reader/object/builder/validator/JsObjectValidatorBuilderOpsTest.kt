@@ -59,7 +59,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilderBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val errors = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val errors = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
 
                             errors.shouldBeNull()
                         }
@@ -75,7 +75,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
 
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
@@ -97,7 +97,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
 
                         val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilderBuilder
                         val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                        val errors = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                        val errors = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
 
                         errors.shouldBeNull()
                     }
@@ -118,7 +118,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then failure of the left validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilderBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val errors = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val errors = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
 
                             errors.shouldBeNull()
                         }
@@ -140,7 +140,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then both errors are returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(
@@ -171,7 +171,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilderBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
                             failure.shouldBeNull()
                         }
                     }
@@ -186,7 +186,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilderBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
                         }
@@ -206,7 +206,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then success is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilderBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
                             failure.shouldBeNull()
                         }
                     }
@@ -221,7 +221,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then failure of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilderBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
                         }
@@ -250,7 +250,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
 
                         val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilderBuilder
                         val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                        val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, INPUT)
+                        val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, INPUT)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
@@ -274,7 +274,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val errors = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val errors = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
 
                             errors.shouldBeNull()
                         }
@@ -290,7 +290,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
 
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
@@ -312,7 +312,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
 
                         val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                         val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                        val errors = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                        val errors = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
 
                         errors.shouldBeNull()
                     }
@@ -333,7 +333,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then failure of the left validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val errors = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val errors = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
 
                             errors.shouldBeNull()
                         }
@@ -355,7 +355,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then both errors are returned" {
                             val composeValidatorBuilder = leftValidatorBuilder or rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(
@@ -386,7 +386,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
                             failure.shouldBeNull()
                         }
                     }
@@ -401,7 +401,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then the result of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
                         }
@@ -421,7 +421,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then success is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
                             failure.shouldBeNull()
                         }
                     }
@@ -436,7 +436,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
                         "then failure of the right validator is returned" {
                             val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilder
                             val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                            val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                            val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
                         }
@@ -465,7 +465,7 @@ internal class JsObjectValidatorBuilderOpsTest : FreeSpec() {
 
                         val composeValidatorBuilder = leftValidatorBuilder and rightValidatorBuilder
                         val composeValidator = composeValidatorBuilder.build(PROPERTIES)
-                        val failure = composeValidator.validation(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
+                        val failure = composeValidator.validate(CONTEXT, LOCATION, PROPERTIES, VALUES_MAP, INPUT)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)

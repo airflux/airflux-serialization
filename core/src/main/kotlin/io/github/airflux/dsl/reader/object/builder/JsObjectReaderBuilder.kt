@@ -99,7 +99,7 @@ internal fun <T> buildObjectReader(
         val failures = mutableListOf<JsResult.Failure>()
 
         if (validators.before != null) {
-            val failure = validators.before.validation(context, location, properties, input)
+            val failure = validators.before.validate(context, location, properties, input)
             if (failure != null) {
                 if (failFast) return@JsObjectReader failure
                 failures.add(failure)
@@ -124,7 +124,7 @@ internal fun <T> buildObjectReader(
 
         if (validators.after != null) {
             val failure =
-                validators.after.validation(context, location, properties, objectValuesMap, input)
+                validators.after.validate(context, location, properties, objectValuesMap, input)
             if (failure != null) {
                 if (failFast) return@JsObjectReader failure
                 failures.add(failure)

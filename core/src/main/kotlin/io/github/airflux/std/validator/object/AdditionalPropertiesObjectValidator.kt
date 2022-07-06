@@ -34,7 +34,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
     private val names: Set<String>
 ) : JsObjectValidator.Before {
 
-    override fun validation(
+    override fun validate(
         context: JsReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
