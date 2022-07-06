@@ -29,7 +29,7 @@ import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
 public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator.Before {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
+    override fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
         if (input.isEmpty()) {
             val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build())

@@ -28,7 +28,7 @@ public sealed interface JsArrayValidator {
 
     public fun interface Before : JsArrayValidator {
 
-        public fun validation(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure?
+        public fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure?
 
         /*
         * | This | Other  | Result |
@@ -40,9 +40,9 @@ public sealed interface JsArrayValidator {
         public infix fun or(alt: Before): Before {
             val self = this
             return Before { context, location, input ->
-                self.validation(context, location, input)
+                self.validate(context, location, input)
                     ?.let { error ->
-                        alt.validation(context, location, input)
+                        alt.validate(context, location, input)
                             ?.let { error + it }
                     }
             }
@@ -58,15 +58,15 @@ public sealed interface JsArrayValidator {
         public infix fun and(alt: Before): Before {
             val self = this
             return Before { context, location, input ->
-                val result = self.validation(context, location, input)
-                result ?: alt.validation(context, location, input)
+                val result = self.validate(context, location, input)
+                result ?: alt.validate(context, location, input)
             }
         }
     }
 
     public fun interface After<T> : JsArrayValidator {
 
-        public fun validation(
+        public fun validate(
             context: JsReaderContext,
             location: JsLocation,
             input: JsArray<*>,
@@ -83,9 +83,9 @@ public sealed interface JsArrayValidator {
         public infix fun or(alt: After<T>): After<T> {
             val self = this
             return After { context, location, input, items ->
-                self.validation(context, location, input, items)
+                self.validate(context, location, input, items)
                     ?.let { error ->
-                        alt.validation(context, location, input, items)
+                        alt.validate(context, location, input, items)
                             ?.let { error + it }
                     }
             }
@@ -101,8 +101,8 @@ public sealed interface JsArrayValidator {
         public infix fun and(alt: After<T>): After<T> {
             val self = this
             return After { context, location, input, items ->
-                val result = self.validation(context, location, input, items)
-                result ?: alt.validation(context, location, input, items)
+                val result = self.validate(context, location, input, items)
+                result ?: alt.validate(context, location, input, items)
             }
         }
     }

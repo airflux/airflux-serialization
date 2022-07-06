@@ -31,7 +31,7 @@ public class MinItemsArrayValidator internal constructor(
     private val expected: Int
 ) : JsArrayValidator.Before {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
+    override fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
         if (input.size < expected) {
             val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build(expected, input.size))

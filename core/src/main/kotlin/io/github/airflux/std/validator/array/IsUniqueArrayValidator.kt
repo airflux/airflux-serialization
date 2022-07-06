@@ -33,7 +33,7 @@ public class IsUniqueArrayValidator<T, K : Any> internal constructor(
     private val keySelector: (T) -> K
 ) : JsArrayValidator.After<T> {
 
-    override fun validation(
+    override fun validate(
         context: JsReaderContext,
         location: JsLocation,
         input: JsArray<*>,

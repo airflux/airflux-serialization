@@ -48,7 +48,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"), JsString("C"))
 
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, input)
+                        validator.validate(context, LOCATION, input)
                     }
                     exception.message shouldBe "The error builder '${MaxItemsArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -63,7 +63,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray()
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, input)
+                        val errors = validator.validate(context, LOCATION, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -72,7 +72,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, input)
+                        val errors = validator.validate(context, LOCATION, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -81,7 +81,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, input)
+                        val errors = validator.validate(context, LOCATION, input)
                         errors.shouldBeNull()
                     }
                 }
@@ -90,7 +90,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"), JsString("C"))
 
                     "the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, input)
+                        val failure = validator.validate(context, LOCATION, input)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(

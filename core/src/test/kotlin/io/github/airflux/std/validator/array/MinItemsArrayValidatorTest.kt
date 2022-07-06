@@ -48,7 +48,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"))
 
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, input)
+                        validator.validate(context, LOCATION, input)
                     }
                     exception.message shouldBe "The error builder '${MinItemsArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -63,7 +63,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray()
 
                     "the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, input)
+                        val failure = validator.validate(context, LOCATION, input)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
@@ -77,7 +77,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"))
 
                     "then the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, input)
+                        val failure = validator.validate(context, LOCATION, input)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
@@ -91,7 +91,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"))
 
                     "then the validator should do not return any errors" {
-                        val failure = validator.validation(context, LOCATION, input)
+                        val failure = validator.validate(context, LOCATION, input)
                         failure.shouldBeNull()
                     }
                 }
@@ -100,7 +100,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                     val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"), JsString("C"))
 
                     "then the validator should do not return any errors" {
-                        val failure = validator.validation(context, LOCATION, input)
+                        val failure = validator.validate(context, LOCATION, input)
                         failure.shouldBeNull()
                     }
                 }

@@ -144,7 +144,7 @@ public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArray
             val failures = mutableListOf<JsResult.Failure>()
 
             val preValidationFailure = configuration.validators.before
-                ?.validation(context, location, this)
+                ?.validate(context, location, this)
             if (preValidationFailure != null) {
                 if (context.failFast) return preValidationFailure
                 failures.add(preValidationFailure)
@@ -159,7 +159,7 @@ public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArray
                     },
                     ifSuccess = { success ->
                         val postValidationFailure = configuration.validators.after
-                            ?.validation(context, location, this, success.value)
+                            ?.validate(context, location, this, success.value)
                         if (postValidationFailure != null) {
                             if (context.failFast) return postValidationFailure
                             failures.add(postValidationFailure)

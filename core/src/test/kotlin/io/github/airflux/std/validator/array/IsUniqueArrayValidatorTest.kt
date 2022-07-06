@@ -50,7 +50,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                     val items: List<String> = listOf("A", "A")
 
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, input, items)
+                        validator.validate(context, LOCATION, input, items)
                     }
                     exception.message shouldBe "The error builder '${IsUniqueArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -66,7 +66,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                     val items: List<String> = emptyList()
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, input, items)
+                        val errors = validator.validate(context, LOCATION, input, items)
                         errors.shouldBeNull()
                     }
                 }
@@ -76,7 +76,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                     val items: List<String> = listOf("A", "B")
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validation(context, LOCATION, input, items)
+                        val errors = validator.validate(context, LOCATION, input, items)
                         errors.shouldBeNull()
                     }
                 }
@@ -89,7 +89,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                     "and fail-fast is missing" - {
 
                         "then the validator should return the first error" {
-                            val failure = validator.validation(context, LOCATION, input, items)
+                            val failure = validator.validate(context, LOCATION, input, items)
 
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(
@@ -103,7 +103,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                         val failFastContext = context + FailFast(true)
 
                         "then the validator should return the first error" {
-                            val failure = validator.validation(failFastContext, LOCATION, input, items)
+                            val failure = validator.validate(failFastContext, LOCATION, input, items)
 
                             failure.shouldNotBeNull()
                             failure shouldBe JsResult.Failure(
@@ -117,7 +117,7 @@ internal class IsUniqueArrayValidatorTest : FreeSpec() {
                         val failFastContext = context + FailFast(false)
 
                         "then the validator should return all errors" {
-                            val failure = validator.validation(failFastContext, LOCATION, input, items)
+                            val failure = validator.validate(failFastContext, LOCATION, input, items)
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(
