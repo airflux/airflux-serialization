@@ -46,7 +46,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
             val validator = isNotEmpty.applyIfNotNull()
 
             "should return the result of applying the validator to the value if it is not the null value" {
-                val failure = validator.validation(CONTEXT, LOCATION, "")
+                val failure = validator.validate(CONTEXT, LOCATION, "")
 
                 failure.shouldNotBeNull()
                 failure shouldBe JsResult.Failure(
@@ -56,7 +56,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
             }
 
             "should return the null value if the value is the null value" {
-                val errors = validator.validation(CONTEXT, LOCATION, null)
+                val errors = validator.validate(CONTEXT, LOCATION, null)
 
                 errors.shouldBeNull()
             }
@@ -67,7 +67,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
             "should return the result of applying the validator to the value if the predicate returns true" {
                 val validator = isNotEmpty.applyIf { _, _, _ -> true }
 
-                val failure = validator.validation(CONTEXT, LOCATION, "")
+                val failure = validator.validate(CONTEXT, LOCATION, "")
 
                 failure.shouldNotBeNull()
                 failure shouldBe JsResult.Failure(
@@ -79,7 +79,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
             "should return the null value if the predicate returns false" {
                 val validator = isNotEmpty.applyIf { _, _, _ -> false }
 
-                val errors = validator.validation(CONTEXT, LOCATION, "")
+                val errors = validator.validate(CONTEXT, LOCATION, "")
 
                 errors.shouldBeNull()
             }

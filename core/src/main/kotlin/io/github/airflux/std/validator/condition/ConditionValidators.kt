@@ -22,10 +22,10 @@ import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T> JsValidator<T>.applyIfNotNull(): JsValidator<T?> =
     JsValidator { context, location, value ->
-        if (value != null) validation(context, location, value) else null
+        if (value != null) validate(context, location, value) else null
     }
 
 public fun <T> JsValidator<T>.applyIf(predicate: (JsReaderContext, JsLocation, T) -> Boolean): JsValidator<T> =
     JsValidator { context, location, value ->
-        if (predicate(context, location, value)) validation(context, location, value) else null
+        if (predicate(context, location, value)) validate(context, location, value) else null
     }

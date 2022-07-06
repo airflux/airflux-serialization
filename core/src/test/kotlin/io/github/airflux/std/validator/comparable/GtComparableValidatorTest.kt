@@ -45,7 +45,7 @@ internal class GtComparableValidatorTest : FreeSpec() {
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, VALUE)
+                        validator.validate(context, LOCATION, VALUE)
                     }
                     exception.message shouldBe "The error builder '${GtComparableValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -60,7 +60,7 @@ internal class GtComparableValidatorTest : FreeSpec() {
                     val value = VALUE - 1
 
                     "then the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, value)
+                        val failure = validator.validate(context, LOCATION, value)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
@@ -74,7 +74,7 @@ internal class GtComparableValidatorTest : FreeSpec() {
                     val value = VALUE
 
                     "then the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, value)
+                        val failure = validator.validate(context, LOCATION, value)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
@@ -88,7 +88,7 @@ internal class GtComparableValidatorTest : FreeSpec() {
                     val value = VALUE + 1
 
                     "then the validator should return the null value" {
-                        val errors = validator.validation(context, LOCATION, value)
+                        val errors = validator.validate(context, LOCATION, value)
                         errors.shouldBeNull()
                     }
                 }

@@ -39,5 +39,5 @@ public fun <T> JsResult<T?>.filter(context: JsReaderContext, predicate: JsPredic
 public fun <T> JsResult<T>.validation(context: JsReaderContext, validator: JsValidator<T>): JsResult<T> =
     fold(
         ifFailure = ::identity,
-        ifSuccess = { result -> validator.validation(context, result.location, result.value) ?: result }
+        ifSuccess = { result -> validator.validate(context, result.location, result.value) ?: result }
     )

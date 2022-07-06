@@ -28,7 +28,7 @@ import io.github.airflux.core.reader.validator.JsValidator
 
 public class IsAStringValidator internal constructor(private val predicate: (String) -> Boolean) : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+    override fun validate(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
         if (predicate(value))
             null
         else {

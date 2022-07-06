@@ -44,7 +44,7 @@ internal class IsNotBlankValidatorTest : FreeSpec() {
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validation(context, LOCATION, "")
+                        validator.validate(context, LOCATION, "")
                     }
                     exception.message shouldBe "The error builder '${IsNotBlankStringValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -59,7 +59,7 @@ internal class IsNotBlankValidatorTest : FreeSpec() {
                     val str = ""
 
                     "then the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, str)
+                        val failure = validator.validate(context, LOCATION, str)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
@@ -73,7 +73,7 @@ internal class IsNotBlankValidatorTest : FreeSpec() {
                     val str = " "
 
                     "then the validator should return an error" {
-                        val failure = validator.validation(context, LOCATION, str)
+                        val failure = validator.validate(context, LOCATION, str)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
@@ -87,7 +87,7 @@ internal class IsNotBlankValidatorTest : FreeSpec() {
                     val str = " a "
 
                     "then the validator should return the null value" {
-                        val errors = validator.validation(context, LOCATION, str)
+                        val errors = validator.validate(context, LOCATION, str)
                         errors.shouldBeNull()
                     }
                 }

@@ -30,7 +30,7 @@ public class NeComparableValidator<T> internal constructor(private val expected:
     where T : Number,
           T : Comparable<T> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure? =
+    override fun validate(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure? =
         if (value != expected)
             null
         else {

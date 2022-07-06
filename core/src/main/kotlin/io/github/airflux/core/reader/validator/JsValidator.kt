@@ -23,7 +23,7 @@ import io.github.airflux.core.reader.result.JsResult
 @Suppress("unused")
 public fun interface JsValidator<in T> {
 
-    public fun validation(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure?
+    public fun validate(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure?
 }
 
 /*
@@ -36,9 +36,9 @@ public fun interface JsValidator<in T> {
 public infix fun <T> JsValidator<T>.or(other: JsValidator<T>): JsValidator<T> {
     val self = this
     return JsValidator { context, location, value ->
-        self.validation(context, location, value)
+        self.validate(context, location, value)
             ?.let { error ->
-                other.validation(context, location, value)
+                other.validate(context, location, value)
                     ?.let { error + it }
             }
     }
@@ -54,7 +54,7 @@ public infix fun <T> JsValidator<T>.or(other: JsValidator<T>): JsValidator<T> {
 public infix fun <T> JsValidator<T>.and(other: JsValidator<T>): JsValidator<T> {
     val self = this
     return JsValidator { context, location, value ->
-        val result = self.validation(context, location, value)
-        result ?: other.validation(context, location, value)
+        val result = self.validate(context, location, value)
+        result ?: other.validate(context, location, value)
     }
 }

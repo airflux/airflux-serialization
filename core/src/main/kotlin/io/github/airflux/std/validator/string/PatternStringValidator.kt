@@ -28,7 +28,7 @@ import io.github.airflux.core.reader.validator.JsValidator
 
 public class PatternStringValidator internal constructor(private val pattern: Regex) : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+    override fun validate(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
         if (pattern.matches(value))
             null
         else {

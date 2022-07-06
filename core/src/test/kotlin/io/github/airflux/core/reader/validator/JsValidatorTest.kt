@@ -47,7 +47,7 @@ internal class JsValidatorTest : FreeSpec() {
                     }
 
                     val composeValidator = leftValidator or rightValidator
-                    val errors = composeValidator.validation(CONTEXT, LOCATION, Unit)
+                    val errors = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                     errors.shouldBeNull()
                 }
@@ -61,7 +61,7 @@ internal class JsValidatorTest : FreeSpec() {
                         val rightValidator = JsValidator<Unit> { _, _, _ -> null }
 
                         val composeValidator = leftValidator or rightValidator
-                        val errors = composeValidator.validation(CONTEXT, LOCATION, Unit)
+                        val errors = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                         errors.shouldBeNull()
                     }
@@ -72,7 +72,7 @@ internal class JsValidatorTest : FreeSpec() {
                         }
 
                         val composeValidator = leftValidator or rightValidator
-                        val failure = composeValidator.validation(CONTEXT, LOCATION, Unit)
+                        val failure = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                         failure.shouldNotBeNull()
                         failure shouldBe listOf(
@@ -95,7 +95,7 @@ internal class JsValidatorTest : FreeSpec() {
                     }
 
                     val composeValidator = leftValidator and rightValidator
-                    val failure = composeValidator.validation(CONTEXT, LOCATION, Unit)
+                    val failure = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                     failure.shouldNotBeNull()
                     failure shouldBe JsResult.Failure(LOCATION, ValidationErrors.PathMissing)
@@ -108,7 +108,7 @@ internal class JsValidatorTest : FreeSpec() {
                         val rightValidator = JsValidator<Unit> { _, _, _ -> null }
 
                         val composeValidator = leftValidator and rightValidator
-                        val errors = composeValidator.validation(CONTEXT, LOCATION, Unit)
+                        val errors = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                         errors.shouldBeNull()
                     }
@@ -119,7 +119,7 @@ internal class JsValidatorTest : FreeSpec() {
                         }
 
                         val composeValidator = leftValidator and rightValidator
-                        val failure = composeValidator.validation(CONTEXT, LOCATION, Unit)
+                        val failure = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(LOCATION, ValidationErrors.PathMissing)

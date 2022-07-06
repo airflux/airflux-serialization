@@ -28,7 +28,7 @@ import io.github.airflux.core.reader.validator.JsValidator
 
 public class MinLengthStringValidator internal constructor(private val expected: Int) : JsValidator<String> {
 
-    override fun validation(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
+    override fun validate(context: JsReaderContext, location: JsLocation, value: String): JsResult.Failure? =
         if (value.length >= expected)
             null
         else {
