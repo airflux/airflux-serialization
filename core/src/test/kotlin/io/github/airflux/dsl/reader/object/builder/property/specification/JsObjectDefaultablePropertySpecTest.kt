@@ -269,7 +269,7 @@ internal class JsObjectDefaultablePropertySpecTest : FreeSpec() {
 
             "when the validator was added to the spec" - {
                 val spec = JsObjectPropertySpec.Defaultable(path = JsPaths(JsPath("id")), reader = StringReader)
-                val specWithValidator = spec.validation(StringValidator.isNotEmpty.applyIfNotNull())
+                val specWithValidator = spec.validate(StringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
 

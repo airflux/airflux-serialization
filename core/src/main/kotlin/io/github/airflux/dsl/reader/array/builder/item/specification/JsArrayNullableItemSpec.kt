@@ -19,7 +19,7 @@ package io.github.airflux.dsl.reader.array.builder.item.specification
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.reader.result.validation
+import io.github.airflux.core.reader.result.validate
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.value.JsNull
 
@@ -33,12 +33,12 @@ public fun <T : Any> nullable(reader: JsReader<T>): JsArrayItemSpec.Nullable<T?>
         }
     )
 
-public infix fun <T> JsArrayItemSpec.Nullable<T>.validation(
+public infix fun <T> JsArrayItemSpec.Nullable<T>.validate(
     validator: JsValidator<T?>
 ): JsArrayItemSpec.Nullable<T> =
     JsArrayItemSpec.Nullable(
         reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+            reader.read(context, location, input).validate(context, validator)
         }
     )
 

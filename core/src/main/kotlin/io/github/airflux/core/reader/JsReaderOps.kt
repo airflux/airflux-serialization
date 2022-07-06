@@ -18,7 +18,7 @@ package io.github.airflux.core.reader
 
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.filter
-import io.github.airflux.core.reader.result.validation
+import io.github.airflux.core.reader.result.validate
 import io.github.airflux.core.reader.validator.JsValidator
 
 public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?> =
@@ -27,8 +27,8 @@ public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?
             .filter(context, predicate)
     }
 
-public infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
+public infix fun <T> JsReader<T>.validate(validator: JsValidator<T>): JsReader<T> =
     JsReader { context, location, input ->
-        this@validation.read(context, location, input)
-            .validation(context, validator)
+        this@validate.read(context, location, input)
+            .validate(context, validator)
     }

@@ -77,7 +77,7 @@ internal class JsReaderOpsTest : FreeSpec() {
                 val json: JsValue = JsString("")
 
                 "then validator should return the failure" {
-                    val validated = reader.validation(isNotEmpty).read(CONTEXT, LOCATION, json)
+                    val validated = reader.validate(isNotEmpty).read(CONTEXT, LOCATION, json)
 
                     validated shouldBe JsResult.Failure(
                         location = LOCATION,
@@ -90,7 +90,7 @@ internal class JsReaderOpsTest : FreeSpec() {
                 val json: JsValue = JsString(VALUE)
 
                 "then validator should return the success" {
-                    val validated = reader.validation(isNotEmpty).read(CONTEXT, LOCATION, json)
+                    val validated = reader.validate(isNotEmpty).read(CONTEXT, LOCATION, json)
                     validated shouldBe JsResult.Success(location = LOCATION, value = VALUE)
                 }
             }

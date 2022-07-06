@@ -22,7 +22,7 @@ import io.github.airflux.core.path.JsPaths
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.`object`.readWithDefault
 import io.github.airflux.core.reader.or
-import io.github.airflux.core.reader.result.validation
+import io.github.airflux.core.reader.result.validate
 import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T : Any> defaultable(
@@ -64,13 +64,13 @@ public fun <T : Any> defaultable(
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Defaultable<T>.validation(
+public infix fun <T : Any> JsObjectPropertySpec.Defaultable<T>.validate(
     validator: JsValidator<T>
 ): JsObjectPropertySpec.Defaultable<T> =
     JsObjectPropertySpec.Defaultable(
         path = path,
         reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+            reader.read(context, location, input).validate(context, validator)
         }
     )
 

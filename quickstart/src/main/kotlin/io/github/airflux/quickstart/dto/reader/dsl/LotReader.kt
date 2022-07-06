@@ -1,7 +1,7 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.core.reader.result.success
-import io.github.airflux.core.reader.validation
+import io.github.airflux.core.reader.validate
 import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.dsl.reader.`object`.builder.reader
 import io.github.airflux.dsl.reader.`object`.builder.returns
@@ -15,7 +15,7 @@ import io.github.airflux.std.validator.`object`.ObjectValidator.additionalProper
 import io.github.airflux.std.validator.`object`.ObjectValidator.isNotEmpty
 import io.github.airflux.std.validator.string.StringValidator.isNotBlank
 
-val LotStatusReader = StringReader.validation(isNotBlank).asEnum<LotStatus>()
+val LotStatusReader = StringReader.validate(isNotBlank).asEnum<LotStatus>()
 
 val LotReader = reader<Lot>(ObjectReaderConfiguration) {
 

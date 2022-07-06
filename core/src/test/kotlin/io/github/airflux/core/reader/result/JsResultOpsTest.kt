@@ -92,7 +92,7 @@ internal class JsResultOpsTest : FreeSpec() {
                     val result: JsResult<String> = JsResult.Success(location = LOCATION, value = "")
 
                     "then validator should return an error" {
-                        val validated = result.validation(CONTEXT, isNotEmpty)
+                        val validated = result.validate(CONTEXT, isNotEmpty)
 
                         validated shouldBe JsResult.Failure(
                             location = LOCATION,
@@ -105,7 +105,7 @@ internal class JsResultOpsTest : FreeSpec() {
                     val result: JsResult<String> = JsResult.Success(location = LOCATION, value = "user")
 
                     "then validator should return the original value" {
-                        val validated = result.validation(CONTEXT, isNotEmpty)
+                        val validated = result.validate(CONTEXT, isNotEmpty)
                         validated shouldBe result
                     }
                 }
@@ -115,7 +115,7 @@ internal class JsResultOpsTest : FreeSpec() {
                 val result: JsResult<String> = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
-                    val validated = result.validation(CONTEXT, isNotEmpty)
+                    val validated = result.validate(CONTEXT, isNotEmpty)
                     validated shouldBe result
                 }
             }

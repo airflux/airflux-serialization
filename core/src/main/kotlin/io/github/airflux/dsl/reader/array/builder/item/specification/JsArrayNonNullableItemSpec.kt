@@ -18,18 +18,18 @@ package io.github.airflux.dsl.reader.array.builder.item.specification
 
 import io.github.airflux.core.reader.JsReader
 import io.github.airflux.core.reader.or
-import io.github.airflux.core.reader.result.validation
+import io.github.airflux.core.reader.result.validate
 import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T : Any> nonNullable(reader: JsReader<T>): JsArrayItemSpec.NonNullable<T> =
     JsArrayItemSpec.NonNullable(reader)
 
-public infix fun <T> JsArrayItemSpec.NonNullable<T>.validation(
+public infix fun <T> JsArrayItemSpec.NonNullable<T>.validate(
     validator: JsValidator<T>
 ): JsArrayItemSpec.NonNullable<T> =
     JsArrayItemSpec.NonNullable(
         reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+            reader.read(context, location, input).validate(context, validator)
         }
     )
 
