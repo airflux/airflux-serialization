@@ -16,158 +16,122 @@
 
 package io.github.airflux.dsl.reader.array.builder
 
+import io.github.airflux.core.context.error.get
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.JsArrayReader
 import io.github.airflux.core.reader.array.readArray
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.context.option.failFast
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.fold
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.core.value.readAsArray
+import io.github.airflux.core.value.JsValue
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.array.builder.JsArrayReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.array.builder.item.specification.JsArrayItemSpec
 import io.github.airflux.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidation
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidationBuilder
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidators
 import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
-import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
 public fun <T> arrayReader(
     configuration: JsArrayReaderConfig = JsArrayReaderConfig.DEFAULT,
     block: JsArrayReaderBuilder<T>.() -> ResultBuilder<T>
 ): JsArrayReader<T> {
-    val readerBuilder = JsArrayReaderBuilder<T>(configuration)
+    val readerBuilder: JsArrayReaderBuilder<T> = JsArrayReaderBuilder(JsArrayReaderValidationBuilder(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
-public class JsArrayReaderBuilder<T> internal constructor(configuration: JsArrayReaderConfig) {
+public class JsArrayReaderBuilder<T> internal constructor(
+    private val validationBuilder: JsArrayReaderValidationBuilder<T>
+) : JsArrayReaderValidation<T> by validationBuilder {
 
-    public fun interface ResultBuilder<T> : (JsReaderContext, JsLocation, JsArray<*>) -> JsResult<List<T>>
-
-    private val validation: Validation.Builder<T> = configuration.validation
-        .let { Validation.Builder(before = it.before) }
-
-    public fun validation(block: Validation.Builder<T>.() -> Unit) {
-        validation.block()
-    }
-
-    public fun returns(items: JsArrayItemSpec<T>): ResultBuilder<T> =
-        ResultBuilder { context, location, input ->
-            readArray(context = context, location = location, from = input, items = items.reader)
-        }
-
-    public fun returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<T> {
-        val prefixItemReaders = prefixItems.readers
-        return ResultBuilder { context, location, input ->
-            readArray(
-                context = context,
-                location = location,
-                from = input,
-                prefixItems = prefixItemReaders,
-                errorIfAdditionalItems = !items
-            )
-        }
-    }
-
-    public fun returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayItemSpec<T>): ResultBuilder<T> {
-        val prefixItemReaders = prefixItems.readers
-        return ResultBuilder { context, location, input ->
-            readArray(
-                context = context,
-                location = location,
-                from = input,
-                prefixItems = prefixItemReaders,
-                items = items.reader
-            )
-        }
+    public fun interface ResultBuilder<T> {
+        public fun build(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult<List<T>>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsArrayReader<T> {
-        val configuration = buildConfiguration(resultBuilder)
-        return JsArrayReader { context, location, input ->
-            input.readAsArray(context, location) { c, l, v ->
-                v.read(c, l, configuration)
-            }
-        }
-    }
-
-    private fun buildConfiguration(resultBuilder: ResultBuilder<T>): Configuration<T> {
-        val validators = validation.build()
-            .let {
-                Configuration.Validators(
-                    before = it.before?.build(),
-                    after = it.after?.build()
-                )
-            }
-        return Configuration(
-            validators = validators,
-            resultBuilder = resultBuilder
-        )
-    }
-
-    public class Validation<T> private constructor(
-        public val before: JsArrayValidatorBuilder.Before?,
-        public val after: JsArrayValidatorBuilder.After<T>?
-    ) {
-
-        @AirfluxMarker
-        public class Builder<T> internal constructor(
-            public var before: JsArrayValidatorBuilder.Before? = null,
-            public var after: JsArrayValidatorBuilder.After<T>? = null
-        ) {
-            internal fun build(): Validation<T> = Validation(before, after)
-        }
-    }
-
-    internal data class Configuration<T>(
-        val validators: Validators<T>,
-        val resultBuilder: ResultBuilder<T>
-    ) {
-        internal data class Validators<T>(
-            val before: JsArrayValidator.Before?,
-            val after: JsArrayValidator.After<T>?
-        )
-    }
-
-    internal companion object {
-
-        internal fun <T> JsArray<*>.read(
-            context: JsReaderContext,
-            location: JsLocation,
-            configuration: Configuration<T>
-        ): JsResult<List<T>> {
-
-            val failures = mutableListOf<JsResult.Failure>()
-
-            val preValidationFailure = configuration.validators.before
-                ?.validate(context, location, this)
-            if (preValidationFailure != null) {
-                if (context.failFast) return preValidationFailure
-                failures.add(preValidationFailure)
-            }
-
-            return configuration.resultBuilder(context, location, this)
-                .fold(
-                    ifFailure = { failure ->
-                        if (context.failFast) return failure
-                        failures.add(failure)
-                        failures.merge()
-                    },
-                    ifSuccess = { success ->
-                        val postValidationFailure = configuration.validators.after
-                            ?.validate(context, location, this, success.value)
-                        if (postValidationFailure != null) {
-                            if (context.failFast) return postValidationFailure
-                            failures.add(postValidationFailure)
-                        }
-
-                        if (failures.isNotEmpty()) failures.merge() else success
-                    }
-                )
-        }
+        val validators = validationBuilder.build()
+        return buildObjectReader(validators, resultBuilder)
     }
 }
+
+public fun <T> returns(items: JsArrayItemSpec<T>): ResultBuilder<T> =
+    ResultBuilder { context, location, input ->
+        readArray(context = context, location = location, from = input, items = items.reader)
+    }
+
+public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<T> {
+    val prefixItemReaders = prefixItems.readers
+    return ResultBuilder { context, location, input ->
+        readArray(
+            context = context,
+            location = location,
+            from = input,
+            prefixItems = prefixItemReaders,
+            errorIfAdditionalItems = !items
+        )
+    }
+}
+
+public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayItemSpec<T>): ResultBuilder<T> {
+    val prefixItemReaders = prefixItems.readers
+    return ResultBuilder { context, location, input ->
+        readArray(
+            context = context,
+            location = location,
+            from = input,
+            prefixItems = prefixItemReaders,
+            items = items.reader
+        )
+    }
+}
+
+internal fun <T> buildObjectReader(
+    validators: JsArrayValidators<T>,
+    resultBuilder: ResultBuilder<T>
+): JsArrayReader<T> =
+    JsArrayReader { context, location, input ->
+        if (input !is JsArray<*>) {
+            val errorBuilder = context[InvalidTypeErrorBuilder]
+            return@JsArrayReader JsResult.Failure(
+                location = location,
+                error = errorBuilder.build(JsValue.Type.ARRAY, input.type)
+            )
+        }
+
+        val failures = mutableListOf<JsResult.Failure>()
+
+        if (validators.before != null) {
+            val preValidationFailure = validators.before.validate(context, location, input)
+            if (preValidationFailure != null) {
+                if (context.failFast) return@JsArrayReader preValidationFailure
+                failures.add(preValidationFailure)
+            }
+        }
+
+        resultBuilder.build(context, location, input)
+            .fold(
+                ifFailure = { failure ->
+                    if (context.failFast) return@JsArrayReader failure
+                    failures.add(failure)
+                    failures.merge()
+                },
+                ifSuccess = { success ->
+                    if (validators.after != null) {
+                        val postValidationFailure = validators.after.validate(context, location, input, success.value)
+                        if (postValidationFailure != null) {
+                            if (context.failFast) return@JsArrayReader postValidationFailure
+                            failures.add(postValidationFailure)
+                        }
+                    }
+
+                    if (failures.isNotEmpty()) failures.merge() else success
+                }
+            )
+    }
