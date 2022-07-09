@@ -18,6 +18,8 @@ package io.github.airflux.core.value
 
 import io.github.airflux.core.context.error.get
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.path.JsPath
+import io.github.airflux.core.path.PathElement
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.core.reader.result.JsResult
@@ -73,3 +75,24 @@ public inline fun <T> JsValue.readAsArray(
         val errorBuilder = context[InvalidTypeErrorBuilder]
         JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.ARRAY, this.type))
     }
+
+internal fun JsValue.getOrNull(path: JsPath): JsValue? {
+    tailrec fun JsValue.getOrNull(path: JsPath, idxElement: Int): JsValue? {
+        if (idxElement == path.elements.size) return this
+        return when (val element = path.elements[idxElement]) {
+            is PathElement.Key -> if (this is JsObject)
+                this[element]?.getOrNull(path, idxElement + 1)
+            else
+                null
+
+            is PathElement.Idx -> if (this is JsArray<*>)
+                this[element]?.getOrNull(path, idxElement + 1)
+            else
+                null
+        }
+    }
+
+    return this.getOrNull(path, 0)
+}
+
+internal operator fun JsObject.contains(path: JsPath): Boolean = this.getOrNull(path) != null
