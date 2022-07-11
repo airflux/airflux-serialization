@@ -1141,15 +1141,22 @@ public abstract interface class io/github/airflux/dsl/writer/array/builder/item/
 	public abstract fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public abstract interface class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
+	public fun <init> (Lio/github/airflux/core/writer/JsWriter;)V
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public abstract interface class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
+	public fun <init> (Lio/github/airflux/core/writer/JsWriter;)V
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpecOpsKt {
-	public static final fun nonNullable (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable;
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayNonNullableItemSpecKt {
 	public static final fun nullable (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable;
+}
+
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayNullableItemSpecKt {
+	public static final fun nonNullable (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable;
 }
 
 public final class io/github/airflux/dsl/writer/context/JsWriterContextBuilder {

@@ -18,4 +18,5 @@ package io.github.airflux.dsl.writer.array.builder.item.specification
 
 import io.github.airflux.core.writer.JsWriter
 
-internal class JsArrayNullableItemSpec<T>(override val writer: JsWriter<T?>) : JsArrayItemSpec.Nullable<T>
+public fun <T : Any> nonNullable(writer: JsWriter<T>): JsArrayItemSpec.NonNullable<T> =
+    JsArrayItemSpec.NonNullable(writer)
