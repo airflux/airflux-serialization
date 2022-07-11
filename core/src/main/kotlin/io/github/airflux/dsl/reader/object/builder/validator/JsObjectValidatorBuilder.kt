@@ -17,7 +17,6 @@
 package io.github.airflux.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
 public interface JsObjectValidatorBuilder {
     public val key: Key<*>

@@ -25,7 +25,7 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.dsl.reader.validator.JsArrayValidator
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidator
 
 public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator {
 

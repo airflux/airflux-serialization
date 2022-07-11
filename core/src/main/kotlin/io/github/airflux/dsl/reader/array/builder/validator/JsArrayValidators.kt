@@ -16,8 +16,6 @@
 
 package io.github.airflux.dsl.reader.array.builder.validator
 
-import io.github.airflux.dsl.reader.validator.JsArrayValidator
-
 public class JsArrayValidators private constructor(items: List<JsArrayValidator>) : List<JsArrayValidator> by items {
 
     public companion object {

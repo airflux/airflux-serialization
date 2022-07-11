@@ -16,8 +16,6 @@
 
 package io.github.airflux.dsl.reader.array.builder.validator
 
-import io.github.airflux.dsl.reader.validator.JsArrayValidator
-
 public interface JsArrayValidatorBuilder {
     public val key: Key<*>
     public fun build(): JsArrayValidator

@@ -28,7 +28,7 @@ import io.github.airflux.core.value.JsString
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperty
 import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.std.reader.StringReader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec

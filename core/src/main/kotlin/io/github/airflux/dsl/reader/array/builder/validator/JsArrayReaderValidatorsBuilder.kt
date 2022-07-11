@@ -18,19 +18,21 @@ package io.github.airflux.dsl.reader.array.builder.validator
 
 import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
 
-public interface JsArrayReaderValidation {
-    public fun validation(block: JsArrayValidation.Builder.() -> Unit)
+public interface JsArrayReaderValidatorsBuilder {
+    public fun validation(block: JsArrayValidatorBuilders.Builder.() -> Unit)
 }
 
-internal class JsArrayReaderValidationInstance(configuration: JsArrayReaderConfig) : JsArrayReaderValidation {
-    private val builder: JsArrayValidation.Builder = JsArrayValidation.Builder(configuration.validation)
+internal class JsArrayReaderValidatorsBuilderInstance(
+    configuration: JsArrayReaderConfig
+) : JsArrayReaderValidatorsBuilder {
+    private val builder: JsArrayValidatorBuilders.Builder = JsArrayValidatorBuilders.Builder(configuration.validation)
 
-    override fun validation(block: JsArrayValidation.Builder.() -> Unit) {
+    override fun validation(block: JsArrayValidatorBuilders.Builder.() -> Unit) {
         builder.block()
     }
 
-    fun buildValidators(): JsArrayValidators {
-        val validation = builder.build()
-        return JsArrayValidators(validation.map { builder -> builder.build() })
+    fun build(): JsArrayValidators {
+        val builders = builder.build()
+        return JsArrayValidators(builders.map { builder -> builder.build() })
     }
 }

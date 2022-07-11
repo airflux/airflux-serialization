@@ -32,8 +32,8 @@ import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.reader.array.builder.JsArrayReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.array.builder.item.specification.JsArrayItemSpec
 import io.github.airflux.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidation
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidationInstance
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilder
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilderInstance
 import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidators
 import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
 
@@ -41,22 +41,23 @@ public fun <T> arrayReader(
     configuration: JsArrayReaderConfig = JsArrayReaderConfig.DEFAULT,
     block: JsArrayReaderBuilder<T>.() -> ResultBuilder<T>
 ): JsArrayReader<T> {
-    val readerBuilder: JsArrayReaderBuilder<T> = JsArrayReaderBuilder(JsArrayReaderValidationInstance(configuration))
+    val readerBuilder: JsArrayReaderBuilder<T> =
+        JsArrayReaderBuilder(JsArrayReaderValidatorsBuilderInstance(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
 public class JsArrayReaderBuilder<T> internal constructor(
-    private val validation: JsArrayReaderValidationInstance
-) : JsArrayReaderValidation by validation {
+    private val validatorsBuilder: JsArrayReaderValidatorsBuilderInstance
+) : JsArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
         public fun build(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult<List<T>>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsArrayReader<T> {
-        val validators = validation.buildValidators()
+        val validators = validatorsBuilder.build()
         return buildObjectReader(validators, resultBuilder)
     }
 }

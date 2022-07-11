@@ -21,8 +21,8 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
 internal class DummyObjectValidatorBuilder(
     override val key: JsObjectValidatorBuilder.Key<*>,

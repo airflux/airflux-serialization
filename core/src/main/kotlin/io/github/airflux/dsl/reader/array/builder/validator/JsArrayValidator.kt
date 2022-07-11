@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.validator
+package io.github.airflux.dsl.reader.array.builder.validator
 
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.core.value.JsArray
 
-public fun interface JsObjectValidator {
+public fun interface JsArrayValidator {
 
-    public fun validate(
-        context: JsReaderContext,
-        location: JsLocation,
-        properties: JsObjectProperties,
-        input: JsObject
-    ): JsResult.Failure?
+    public fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure?
 
     /*
     * | This | Other  | Result |
@@ -38,12 +32,12 @@ public fun interface JsObjectValidator {
     * | F    | S      | S      |
     * | F    | F`     | F + F` |
     */
-    public infix fun or(alt: JsObjectValidator): JsObjectValidator {
+    public infix fun or(alt: JsArrayValidator): JsArrayValidator {
         val self = this
-        return JsObjectValidator { context, location, properties, input ->
-            self.validate(context, location, properties, input)
+        return JsArrayValidator { context, location, input ->
+            self.validate(context, location, input)
                 ?.let { error ->
-                    alt.validate(context, location, properties, input)
+                    alt.validate(context, location, input)
                         ?.let { error + it }
                 }
         }
@@ -56,11 +50,11 @@ public fun interface JsObjectValidator {
      * | S    | F      | F      |
      * | F    | ignore | F      |
      */
-    public infix fun and(alt: JsObjectValidator): JsObjectValidator {
+    public infix fun and(alt: JsArrayValidator): JsArrayValidator {
         val self = this
-        return JsObjectValidator { context, location, properties, input ->
-            val result = self.validate(context, location, properties, input)
-            result ?: alt.validate(context, location, properties, input)
+        return JsArrayValidator { context, location, input ->
+            val result = self.validate(context, location, input)
+            result ?: alt.validate(context, location, input)
         }
     }
 }

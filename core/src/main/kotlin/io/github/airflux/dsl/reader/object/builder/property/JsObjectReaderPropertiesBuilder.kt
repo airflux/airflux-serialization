@@ -18,7 +18,7 @@ package io.github.airflux.dsl.reader.`object`.builder.property
 
 import io.github.airflux.dsl.reader.`object`.builder.property.specification.JsObjectPropertySpec
 
-public interface JsObjectReaderProperties {
+public interface JsObjectReaderPropertiesBuilder {
 
     public fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P>
 
@@ -37,7 +37,7 @@ public interface JsObjectReaderProperties {
     ): JsObjectProperty.NullableWithDefault<P>
 }
 
-internal class JsObjectReaderPropertiesBuilder : JsObjectReaderProperties {
+internal class JsObjectReaderPropertiesBuilderInstance : JsObjectReaderPropertiesBuilder {
     private val properties = mutableListOf<JsObjectProperty>()
 
     override fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P> =

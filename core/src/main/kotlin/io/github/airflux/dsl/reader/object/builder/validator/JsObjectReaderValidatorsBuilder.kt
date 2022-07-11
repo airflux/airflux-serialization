@@ -19,21 +19,21 @@ package io.github.airflux.dsl.reader.`object`.builder.validator
 import io.github.airflux.dsl.reader.config.JsObjectReaderConfig
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 
-public interface JsObjectReaderValidation {
-    public fun validation(block: JsObjectValidation.Builder.() -> Unit)
+public interface JsObjectReaderValidatorsBuilder {
+    public fun validation(block: JsObjectValidatorBuilders.Builder.() -> Unit)
 }
 
-internal class JsObjectReaderValidationInstance(
+internal class JsObjectReaderValidatorsBuilderInstance(
     configuration: JsObjectReaderConfig
-) : JsObjectReaderValidation {
-    private val builder: JsObjectValidation.Builder = JsObjectValidation.Builder(configuration.validation)
+) : JsObjectReaderValidatorsBuilder {
+    private val builder: JsObjectValidatorBuilders.Builder = JsObjectValidatorBuilders.Builder(configuration.validation)
 
-    override fun validation(block: JsObjectValidation.Builder.() -> Unit) {
+    override fun validation(block: JsObjectValidatorBuilders.Builder.() -> Unit) {
         builder.block()
     }
 
-    fun buildValidators(properties: JsObjectProperties): JsObjectValidators {
-        val validation = builder.build()
-        return JsObjectValidators(validation.map { builder -> builder.build(properties) })
+    fun build(properties: JsObjectProperties): JsObjectValidators {
+        val builders = builder.build()
+        return JsObjectValidators(builders.map { builder -> builder.build(properties) })
     }
 }

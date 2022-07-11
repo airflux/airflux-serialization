@@ -17,18 +17,18 @@
 package io.github.airflux.dsl.reader.config
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidation
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilders
 
 public fun objectReaderConfig(block: JsObjectReaderConfig.Builder.() -> Unit): JsObjectReaderConfig =
     JsObjectReaderConfig.Builder().apply(block).build()
 
-public class JsObjectReaderConfig private constructor(public val validation: JsObjectValidation) {
+public class JsObjectReaderConfig private constructor(public val validation: JsObjectValidatorBuilders) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
-        private var validation: JsObjectValidation.Builder = JsObjectValidation.Builder()
+        private var validation: JsObjectValidatorBuilders.Builder = JsObjectValidatorBuilders.Builder()
 
-        public fun validation(block: JsObjectValidation.Builder.() -> Unit) {
+        public fun validation(block: JsObjectValidatorBuilders.Builder.() -> Unit) {
             validation.block()
         }
 

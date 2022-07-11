@@ -17,18 +17,18 @@
 package io.github.airflux.dsl.reader.config
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidation
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilders
 
 public fun arrayReaderConfig(block: JsArrayReaderConfig.Builder.() -> Unit): JsArrayReaderConfig =
     JsArrayReaderConfig.Builder().apply(block).build()
 
-public class JsArrayReaderConfig private constructor(public val validation: JsArrayValidation) {
+public class JsArrayReaderConfig private constructor(public val validation: JsArrayValidatorBuilders) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
-        private var validation: JsArrayValidation.Builder = JsArrayValidation.Builder()
+        private var validation: JsArrayValidatorBuilders.Builder = JsArrayValidatorBuilders.Builder()
 
-        public fun validation(block: JsArrayValidation.Builder.() -> Unit) {
+        public fun validation(block: JsArrayValidatorBuilders.Builder.() -> Unit) {
             validation.block()
         }
 

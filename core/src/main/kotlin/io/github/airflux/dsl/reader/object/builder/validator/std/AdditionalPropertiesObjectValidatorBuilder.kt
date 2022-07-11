@@ -19,8 +19,8 @@ package io.github.airflux.dsl.reader.`object`.builder.validator.std
 import io.github.airflux.core.path.PathElement
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperty
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.github.airflux.std.validator.`object`.AdditionalPropertiesObjectValidator
 
 internal class AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBuilder {

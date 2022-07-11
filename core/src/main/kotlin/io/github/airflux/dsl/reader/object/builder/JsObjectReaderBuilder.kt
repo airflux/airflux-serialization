@@ -34,10 +34,10 @@ import io.github.airflux.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.dsl.reader.`object`.builder.JsObjectReaderBuilder.ResultBuilder
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperty
-import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectReaderProperties
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
-import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectReaderValidation
-import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectReaderValidationInstance
+import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilderInstance
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectReaderValidatorsBuilder
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectReaderValidatorsBuilderInstance
 import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidators
 
 public fun <T> reader(
@@ -45,8 +45,8 @@ public fun <T> reader(
     block: JsObjectReaderBuilder<T>.() -> ResultBuilder<T>
 ): JsObjectReader<T> {
     val readerBuilder = JsObjectReaderBuilder<T>(
-        JsObjectReaderPropertiesBuilder(),
-        JsObjectReaderValidationInstance(configuration)
+        JsObjectReaderPropertiesBuilderInstance(),
+        JsObjectReaderValidatorsBuilderInstance(configuration)
     )
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
@@ -54,10 +54,10 @@ public fun <T> reader(
 
 @AirfluxMarker
 public class JsObjectReaderBuilder<T> internal constructor(
-    private val propertiesBuilder: JsObjectReaderPropertiesBuilder,
-    private val validation: JsObjectReaderValidationInstance
-) : JsObjectReaderProperties by propertiesBuilder,
-    JsObjectReaderValidation by validation {
+    private val propertiesBuilder: JsObjectReaderPropertiesBuilderInstance,
+    private val validatorsBuilder: JsObjectReaderValidatorsBuilderInstance
+) : JsObjectReaderPropertiesBuilder by propertiesBuilder,
+    JsObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
         public fun build(context: JsReaderContext, location: JsLocation, objectValuesMap: ObjectValuesMap): JsResult<T>
@@ -65,7 +65,7 @@ public class JsObjectReaderBuilder<T> internal constructor(
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsObjectReader<T> {
         val properties: JsObjectProperties = propertiesBuilder.build()
-        val validators: JsObjectValidators = validation.buildValidators(properties)
+        val validators: JsObjectValidators = validatorsBuilder.build(properties)
         return buildObjectReader(validators, properties, resultBuilder)
     }
 }

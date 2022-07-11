@@ -17,7 +17,6 @@
 package io.github.airflux.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.common.DummyObjectValidator
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe

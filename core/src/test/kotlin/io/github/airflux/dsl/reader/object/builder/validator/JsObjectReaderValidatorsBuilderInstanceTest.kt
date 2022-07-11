@@ -24,7 +24,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
+internal class JsObjectReaderValidatorsBuilderInstanceTest : FreeSpec() {
 
     companion object {
         private val PROPERTIES = JsObjectProperties(emptyList())
@@ -32,14 +32,14 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsObjectReaderValidationBuilder type" - {
+        "The JsObjectReaderValidatorsBuilderInstance type" - {
 
             "when the config is not contained the object validator" - {
                 val config = JsObjectReaderConfig.Builder().build()
-                val validationBuilder = JsObjectReaderValidationInstance(config)
+                val validationBuilder = JsObjectReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
-                    val validators = validationBuilder.buildValidators(PROPERTIES)
+                    val validators = validationBuilder.build(PROPERTIES)
 
                     "then there is no validator" {
                         validators should beEmpty()
@@ -57,7 +57,7 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
                                 +someValidatorBuilder
                             }
                         }
-                        .buildValidators(PROPERTIES)
+                        .build(PROPERTIES)
 
                     "then the overridden validator is used" {
                         validators shouldContainExactly listOf(someValidatorBuilder.validator)
@@ -77,10 +77,10 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
                         }
                     }
                     .build()
-                val validationBuilder = JsObjectReaderValidationInstance(config)
+                val validationBuilder = JsObjectReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
-                    val validators = validationBuilder.buildValidators(PROPERTIES)
+                    val validators = validationBuilder.build(PROPERTIES)
 
                     "then the validator is used from the config" {
                         validators shouldContainExactly listOf(initValidatorBuilder.validator)
@@ -98,7 +98,7 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
                                 +someValidatorBuilder
                             }
                         }
-                        .buildValidators(PROPERTIES)
+                        .build(PROPERTIES)
 
                     "then the overridden validator is used" {
                         validators shouldContainExactly listOf(

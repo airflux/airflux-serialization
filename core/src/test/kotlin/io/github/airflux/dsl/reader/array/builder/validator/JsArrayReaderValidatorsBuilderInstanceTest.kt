@@ -23,18 +23,18 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class JsArrayReaderValidationBuilderTest : FreeSpec() {
+internal class JsArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
 
     init {
 
-        "The JsArrayReaderValidationBuilder type" - {
+        "The JsArrayReaderValidatorsBuilderInstance type" - {
 
             "when the config is not contained any object validators" - {
                 val config = JsArrayReaderConfig.Builder().build()
-                val validatorsBuilder = JsArrayReaderValidationInstance(config)
+                val validatorsBuilder = JsArrayReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
-                    val validators = validatorsBuilder.buildValidators()
+                    val validators = validatorsBuilder.build()
 
                     "then there is no validator" {
                         validators should beEmpty()
@@ -52,7 +52,7 @@ internal class JsArrayReaderValidationBuilderTest : FreeSpec() {
                                 +validatorBuilder
                             }
                         }
-                        .buildValidators()
+                        .build()
 
                     "then the overridden validator is used" {
                         validators shouldContainExactly listOf(validatorBuilder.validator)
@@ -72,10 +72,10 @@ internal class JsArrayReaderValidationBuilderTest : FreeSpec() {
                         }
                     }
                     .build()
-                val validatorsBuilder = JsArrayReaderValidationInstance(config)
+                val validatorsBuilder = JsArrayReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
-                    val validators = validatorsBuilder.buildValidators()
+                    val validators = validatorsBuilder.build()
 
                     "then the validator is used from the config" {
                         validators shouldContainExactly listOf(initValidatorBuilder.validator)
@@ -93,7 +93,7 @@ internal class JsArrayReaderValidationBuilderTest : FreeSpec() {
                                 +validatorBuilder
                             }
                         }
-                        .buildValidators()
+                        .build()
 
                     "then the overridden validator is used" {
                         validators shouldContainExactly listOf(

@@ -16,8 +16,6 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.validator
 
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
-
 public class JsObjectValidators private constructor(items: List<JsObjectValidator>) : List<JsObjectValidator> by items {
 
     public companion object {
