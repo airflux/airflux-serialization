@@ -21,28 +21,19 @@ import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
 
-internal class JsObjectNullablePropertySpec<T : Any, P : Any> private constructor(
-    override val name: String,
-    override val from: (T) -> P?,
-    override val writer: JsWriter<P?>
-) : JsObjectPropertySpec.Nullable<T, P> {
-
-    override fun filter(predicate: JsPredicate<P>): JsObjectPropertySpec.Nullable<T, P> =
-        JsObjectNullablePropertySpec(name = name, from = from, writer = writer.filter(predicate))
-
-    companion object {
-
-        fun <T : Any, P : Any> of(
-            name: String,
-            from: (T) -> P?,
-            writer: JsWriter<P>
-        ): JsObjectPropertySpec.Nullable<T, P> =
-            JsObjectNullablePropertySpec(
-                name = name,
-                from = from,
-                writer = { context, location, value ->
-                    if (value != null) writer.write(context, location, value) else JsNull
-                }
-            )
+public fun <T : Any, P : Any> nullable(
+    name: String,
+    from: (T) -> P?,
+    writer: JsWriter<P>
+): JsObjectPropertySpec.Nullable<T, P> = JsObjectPropertySpec.Nullable(
+    name = name,
+    from = from,
+    writer = { context, location, value ->
+        if (value != null) writer.write(context, location, value) else JsNull
     }
-}
+)
+
+public infix fun <T : Any, P : Any> JsObjectPropertySpec.Nullable<T, P>.filter(
+    predicate: JsPredicate<P>
+): JsObjectPropertySpec.Nullable<T, P> =
+    JsObjectPropertySpec.Nullable(name = name, from = from, writer = writer.filter(predicate))

@@ -1209,28 +1209,40 @@ public final class io/github/airflux/dsl/writer/object/builder/property/JsObject
 	public fun write (Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/value/JsValue;
 }
 
+public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectNullablePropertySpecKt {
+	public static final fun filter (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;
+}
+
+public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectOptionalPropertySpecKt {
+	public static final fun filter (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;
+	public static final fun optional (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;
+}
+
 public abstract interface class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
 	public abstract fun getName ()Ljava/lang/String;
 	public abstract fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public abstract interface class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable : io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun filter (Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public abstract fun getFrom ()Lkotlin/jvm/functions/Function1;
+public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable : io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
+	public final fun getFrom ()Lkotlin/jvm/functions/Function1;
+	public fun getName ()Ljava/lang/String;
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public abstract interface class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional : io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun filter (Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;
-	public abstract fun getFrom ()Lkotlin/jvm/functions/Function1;
+public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional : io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
+	public final fun getFrom ()Lkotlin/jvm/functions/Function1;
+	public fun getName ()Ljava/lang/String;
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public abstract interface class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Required : io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
-	public abstract fun getFrom ()Lkotlin/jvm/functions/Function1;
+public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Required : io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec {
+	public final fun getFrom ()Lkotlin/jvm/functions/Function1;
+	public fun getName ()Ljava/lang/String;
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpecOpsKt {
-	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;
-	public static final fun optional (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;
+public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectRequiredPropertySpecKt {
 	public static final fun required (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Required;
 }
 

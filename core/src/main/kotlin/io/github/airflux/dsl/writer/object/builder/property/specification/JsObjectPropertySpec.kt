@@ -17,25 +17,26 @@
 package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
 import io.github.airflux.core.writer.JsWriter
-import io.github.airflux.core.writer.predicate.JsPredicate
 
 public sealed interface JsObjectPropertySpec<T, P> {
     public val name: String
     public val writer: JsWriter<P>
 
-    public sealed interface Required<T : Any, P> : JsObjectPropertySpec<T, P> {
-        public val from: (T) -> P
-    }
+    public class Required<T : Any, P : Any> internal constructor(
+        override val name: String,
+        public val from: (T) -> P,
+        override val writer: JsWriter<P>
+    ) : JsObjectPropertySpec<T, P>
 
-    public sealed interface Optional<T : Any, P> : JsObjectPropertySpec<T, P?> {
-        public val from: (T) -> P?
+    public class Optional<T : Any, P : Any> internal constructor(
+        override val name: String,
+        public val from: (T) -> P?,
+        override val writer: JsWriter<P?>
+    ) : JsObjectPropertySpec<T, P?>
 
-        public infix fun filter(predicate: JsPredicate<P>): Optional<T, P>
-    }
-
-    public sealed interface Nullable<T : Any, P> : JsObjectPropertySpec<T, P?> {
-        public val from: (T) -> P?
-
-        public infix fun filter(predicate: JsPredicate<P>): Nullable<T, P>
-    }
+    public class Nullable<T : Any, P : Any> internal constructor(
+        override val name: String,
+        public val from: (T) -> P?,
+        override val writer: JsWriter<P?>
+    ) : JsObjectPropertySpec<T, P?>
 }

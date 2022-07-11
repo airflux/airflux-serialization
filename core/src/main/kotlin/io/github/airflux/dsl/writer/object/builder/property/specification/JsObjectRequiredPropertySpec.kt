@@ -18,8 +18,8 @@ package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
 import io.github.airflux.core.writer.JsWriter
 
-internal class JsObjectRequiredPropertySpec<T : Any, P : Any>(
-    override val name: String,
-    override val from: (T) -> P,
-    override val writer: JsWriter<P>
-) : JsObjectPropertySpec.Required<T, P>
+public fun <T : Any, P : Any> required(
+    name: String,
+    from: (T) -> P,
+    writer: JsWriter<P>
+): JsObjectPropertySpec.Required<T, P> = JsObjectPropertySpec.Required(name, from, writer)

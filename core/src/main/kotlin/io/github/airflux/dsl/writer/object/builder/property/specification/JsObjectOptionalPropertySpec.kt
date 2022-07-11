@@ -21,28 +21,20 @@ import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
 
-internal class JsObjectOptionalPropertySpec<T : Any, P : Any> private constructor(
-    override val name: String,
-    override val from: (T) -> P?,
-    override val writer: JsWriter<P?>
-) : JsObjectPropertySpec.Optional<T, P> {
+public fun <T : Any, P : Any> optional(
+    name: String,
+    from: (T) -> P?,
+    writer: JsWriter<P>
+): JsObjectPropertySpec.Optional<T, P> =
+    JsObjectPropertySpec.Optional(
+        name = name,
+        from = from,
+        writer = { context, location, value ->
+            if (value != null) writer.write(context, location, value) else JsNull
+        }
+    )
 
-    override fun filter(predicate: JsPredicate<P>): JsObjectPropertySpec.Optional<T, P> =
-        JsObjectOptionalPropertySpec(name = name, from = from, writer = writer.filter(predicate))
-
-    companion object {
-
-        fun <T : Any, P : Any> of(
-            name: String,
-            from: (T) -> P?,
-            writer: JsWriter<P>
-        ): JsObjectPropertySpec.Optional<T, P> =
-            JsObjectOptionalPropertySpec(
-                name = name,
-                from = from,
-                writer = { context, location, value ->
-                    if (value != null) writer.write(context, location, value) else JsNull
-                }
-            )
-    }
-}
+public infix fun <T : Any, P : Any> JsObjectPropertySpec.Optional<T, P>.filter(
+    predicate: JsPredicate<P>
+): JsObjectPropertySpec.Optional<T, P> =
+    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))
