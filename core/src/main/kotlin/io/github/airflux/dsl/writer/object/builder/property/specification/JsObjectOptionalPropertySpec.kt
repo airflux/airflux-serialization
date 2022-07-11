@@ -16,7 +16,6 @@
 
 package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
-import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
@@ -30,7 +29,7 @@ public fun <T : Any, P : Any> optional(
         name = name,
         from = from,
         writer = { context, location, value ->
-            if (value != null) writer.write(context, location, value) else JsNull
+            if (value != null) writer.write(context, location, value) else null
         }
     )
 
