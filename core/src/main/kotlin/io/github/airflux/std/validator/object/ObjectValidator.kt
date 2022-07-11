@@ -23,8 +23,8 @@ import io.github.airflux.dsl.reader.`object`.builder.validator.std.MaxProperties
 import io.github.airflux.dsl.reader.`object`.builder.validator.std.MinPropertiesObjectValidatorBuilder
 
 public object ObjectValidator {
-    public val additionalProperties: JsObjectValidatorBuilder.Before = AdditionalPropertiesObjectValidatorBuilder
-    public val isNotEmpty: JsObjectValidatorBuilder.After = IsNotEmptyObjectValidatorBuilder
-    public fun minProperties(value: Int): JsObjectValidatorBuilder.After = MinPropertiesObjectValidatorBuilder(value)
-    public fun maxProperties(value: Int): JsObjectValidatorBuilder.After = MaxPropertiesObjectValidatorBuilder(value)
+    public val additionalProperties: JsObjectValidatorBuilder = AdditionalPropertiesObjectValidatorBuilder()
+    public val isNotEmpty: JsObjectValidatorBuilder = IsNotEmptyObjectValidatorBuilder()
+    public fun minProperties(value: Int): JsObjectValidatorBuilder = MinPropertiesObjectValidatorBuilder(value)
+    public fun maxProperties(value: Int): JsObjectValidatorBuilder = MaxPropertiesObjectValidatorBuilder(value)
 }

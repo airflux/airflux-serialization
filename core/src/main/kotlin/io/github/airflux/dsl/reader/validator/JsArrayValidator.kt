@@ -20,90 +20,41 @@ import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.dsl.reader.validator.JsArrayValidator.After
-import io.github.airflux.dsl.reader.validator.JsArrayValidator.Before
 
-@Suppress("unused")
-public sealed interface JsArrayValidator {
+public fun interface JsArrayValidator {
 
-    public fun interface Before : JsArrayValidator {
+    public fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure?
 
-        public fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure?
-
-        /*
-        * | This | Other  | Result |
-        * |------|--------|--------|
-        * | S    | ignore | S      |
-        * | F    | S      | S      |
-        * | F    | F`     | F + F` |
-        */
-        public infix fun or(alt: Before): Before {
-            val self = this
-            return Before { context, location, input ->
-                self.validate(context, location, input)
-                    ?.let { error ->
-                        alt.validate(context, location, input)
-                            ?.let { error + it }
-                    }
-            }
-        }
-
-        /*
-         * | This | Other  | Result |
-         * |------|--------|--------|
-         * | S    | S      | S      |
-         * | S    | F      | F      |
-         * | F    | ignore | F      |
-         */
-        public infix fun and(alt: Before): Before {
-            val self = this
-            return Before { context, location, input ->
-                val result = self.validate(context, location, input)
-                result ?: alt.validate(context, location, input)
-            }
+    /*
+    * | This | Other  | Result |
+    * |------|--------|--------|
+    * | S    | ignore | S      |
+    * | F    | S      | S      |
+    * | F    | F`     | F + F` |
+    */
+    public infix fun or(alt: JsArrayValidator): JsArrayValidator {
+        val self = this
+        return JsArrayValidator { context, location, input ->
+            self.validate(context, location, input)
+                ?.let { error ->
+                    alt.validate(context, location, input)
+                        ?.let { error + it }
+                }
         }
     }
 
-    public fun interface After<T> : JsArrayValidator {
-
-        public fun validate(
-            context: JsReaderContext,
-            location: JsLocation,
-            input: JsArray<*>,
-            items: List<T>
-        ): JsResult.Failure?
-
-        /*
-        * | This | Other  | Result |
-        * |------|--------|--------|
-        * | S    | ignore | S      |
-        * | F    | S      | S      |
-        * | F    | F`     | F + F` |
-        */
-        public infix fun or(alt: After<T>): After<T> {
-            val self = this
-            return After { context, location, input, items ->
-                self.validate(context, location, input, items)
-                    ?.let { error ->
-                        alt.validate(context, location, input, items)
-                            ?.let { error + it }
-                    }
-            }
-        }
-
-        /*
-         * | This | Other  | Result |
-         * |------|--------|--------|
-         * | S    | S      | S      |
-         * | S    | F      | F      |
-         * | F    | ignore | F      |
-         */
-        public infix fun and(alt: After<T>): After<T> {
-            val self = this
-            return After { context, location, input, items ->
-                val result = self.validate(context, location, input, items)
-                result ?: alt.validate(context, location, input, items)
-            }
+    /*
+     * | This | Other  | Result |
+     * |------|--------|--------|
+     * | S    | S      | S      |
+     * | S    | F      | F      |
+     * | F    | ignore | F      |
+     */
+    public infix fun and(alt: JsArrayValidator): JsArrayValidator {
+        val self = this
+        return JsArrayValidator { context, location, input ->
+            val result = self.validate(context, location, input)
+            result ?: alt.validate(context, location, input)
         }
     }
 }

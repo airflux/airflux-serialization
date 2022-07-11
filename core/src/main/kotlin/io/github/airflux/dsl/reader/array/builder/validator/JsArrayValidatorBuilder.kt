@@ -18,45 +18,9 @@ package io.github.airflux.dsl.reader.array.builder.validator
 
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
-public sealed interface JsArrayValidatorBuilder {
+public interface JsArrayValidatorBuilder {
+    public val key: Key<*>
+    public fun build(): JsArrayValidator
 
-    public fun interface Before : JsArrayValidatorBuilder {
-        public fun build(): JsArrayValidator.Before
-    }
-
-    public fun interface After<T> : JsArrayValidatorBuilder {
-        public fun build(): JsArrayValidator.After<T>
-    }
+    public interface Key<E : JsArrayValidatorBuilder>
 }
-
-public infix fun JsArrayValidatorBuilder.Before?.or(
-    alt: JsArrayValidatorBuilder.Before
-): JsArrayValidatorBuilder.Before =
-    if (this != null)
-        JsArrayValidatorBuilder.Before { this.build().or(alt.build()) }
-    else
-        alt
-
-public infix fun JsArrayValidatorBuilder.Before?.and(
-    alt: JsArrayValidatorBuilder.Before
-): JsArrayValidatorBuilder.Before =
-    if (this != null)
-        JsArrayValidatorBuilder.Before { this.build().and(alt.build()) }
-    else
-        alt
-
-public infix fun <T : Any> JsArrayValidatorBuilder.After<T>?.or(
-    alt: JsArrayValidatorBuilder.After<T>
-): JsArrayValidatorBuilder.After<T> =
-    if (this != null)
-        JsArrayValidatorBuilder.After { this.build().or(alt.build()) }
-    else
-        alt
-
-public infix fun <T : Any> JsArrayValidatorBuilder.After<T>?.and(
-    alt: JsArrayValidatorBuilder.After<T>
-): JsArrayValidatorBuilder.After<T> =
-    if (this != null)
-        JsArrayValidatorBuilder.After { this.build().and(alt.build()) }
-    else
-        alt

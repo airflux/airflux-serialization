@@ -5,7 +5,6 @@ import io.github.airflux.core.reader.validate
 import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.dsl.reader.`object`.builder.reader
 import io.github.airflux.dsl.reader.`object`.builder.returns
-import io.github.airflux.dsl.reader.`object`.builder.validator.and
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.reader.base.asEnum
@@ -20,8 +19,8 @@ val LotStatusReader = StringReader.validate(isNotBlank).asEnum<LotStatus>()
 val LotReader = reader<Lot>(ObjectReaderConfiguration) {
 
     validation {
-        before = before and additionalProperties
-        after = isNotEmpty
+        +additionalProperties
+        +isNotEmpty
     }
 
     val id = property(identifierPropertySpec)

@@ -665,42 +665,104 @@ public abstract interface class io/github/airflux/dsl/reader/array/builder/valid
 	public abstract fun validation (Lkotlin/jvm/functions/Function1;)V
 }
 
-public abstract interface class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder {
+public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidation : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun add (ILio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)Z
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun clear ()V
+	public fun contains (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)Z
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public fun get (I)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun getSize ()I
+	public fun indexOf (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun lastIndexOf (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public fun remove (I)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;
+	public synthetic fun remove (I)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun replaceAll (Ljava/util/function/UnaryOperator;)V
+	public fun retainAll (Ljava/util/Collection;)Z
+	public fun set (ILio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun size ()I
+	public fun sort (Ljava/util/Comparator;)V
+	public fun subList (II)Ljava/util/List;
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After : io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder {
-	public abstract fun build ()Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;
-}
-
-public abstract interface class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before : io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder {
-	public abstract fun build ()Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;
-}
-
-public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilderKt {
-	public static final fun and (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;
-	public static final fun and (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-	public static final fun or (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;
-	public static final fun or (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-}
-
-public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidators {
-	public synthetic fun <init> (Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAfter ()Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;
-}
-
-public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidators$Builder {
+public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidation$Builder {
 	public fun <init> ()V
-	public final fun getAfter ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-	public final fun setAfter (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;)V
-	public final fun setBefore (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;)V
+	public final fun unaryMinus (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)V
+	public final fun unaryPlus (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;)V
+}
+
+public abstract interface class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder {
+	public abstract fun build ()Lio/github/airflux/dsl/reader/validator/JsArrayValidator;
+	public abstract fun getKey ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Key;
+}
+
+public abstract interface class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Key {
+}
+
+public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidators : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidators$Companion;
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun add (ILio/github/airflux/dsl/reader/validator/JsArrayValidator;)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (Lio/github/airflux/dsl/reader/validator/JsArrayValidator;)Z
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun clear ()V
+	public fun contains (Lio/github/airflux/dsl/reader/validator/JsArrayValidator;)Z
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public fun get (I)Lio/github/airflux/dsl/reader/validator/JsArrayValidator;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun getSize ()I
+	public fun indexOf (Lio/github/airflux/dsl/reader/validator/JsArrayValidator;)I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun lastIndexOf (Lio/github/airflux/dsl/reader/validator/JsArrayValidator;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public fun remove (I)Lio/github/airflux/dsl/reader/validator/JsArrayValidator;
+	public synthetic fun remove (I)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun replaceAll (Ljava/util/function/UnaryOperator;)V
+	public fun retainAll (Ljava/util/Collection;)Z
+	public fun set (ILio/github/airflux/dsl/reader/validator/JsArrayValidator;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun size ()I
+	public fun sort (Ljava/util/Comparator;)V
+	public fun subList (II)Ljava/util/List;
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
+}
+
+public final class io/github/airflux/dsl/reader/array/builder/validator/JsArrayValidators$Companion {
 }
 
 public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfig {
 	public static final field Companion Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig$Companion;
-	public synthetic fun <init> (Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig$Validation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getValidation ()Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig$Validation;
+	public synthetic fun <init> (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValidation ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidation;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfig$Builder {
@@ -711,25 +773,14 @@ public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfig$Compa
 	public final fun getDEFAULT ()Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;
 }
 
-public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfig$Validation {
-	public synthetic fun <init> (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-}
-
-public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfig$Validation$Builder {
-	public fun <init> ()V
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-	public final fun setBefore (Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;)V
-}
-
 public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfigKt {
 	public static final fun arrayReaderConfig (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig {
 	public static final field Companion Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Companion;
-	public synthetic fun <init> (Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getValidation ()Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation;
+	public synthetic fun <init> (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidation;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getValidation ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidation;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Builder {
@@ -738,20 +789,6 @@ public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Buil
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Companion {
 	public final fun getDEFAULT ()Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig;
-}
-
-public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation {
-	public synthetic fun <init> (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAfter ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;
-}
-
-public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Validation$Builder {
-	public fun <init> ()V
-	public final fun getAfter ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;
-	public final fun setAfter (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;)V
-	public final fun setBefore (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;)V
 }
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfigKt {
@@ -969,36 +1006,98 @@ public abstract interface class io/github/airflux/dsl/reader/object/builder/vali
 	public abstract fun validation (Lkotlin/jvm/functions/Function1;)V
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder {
+public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidation : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun add (ILio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)Z
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun clear ()V
+	public fun contains (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)Z
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public fun get (I)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun getSize ()I
+	public fun indexOf (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun lastIndexOf (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public fun remove (I)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
+	public synthetic fun remove (I)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun replaceAll (Ljava/util/function/UnaryOperator;)V
+	public fun retainAll (Ljava/util/Collection;)Z
+	public fun set (ILio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun size ()I
+	public fun sort (Ljava/util/Comparator;)V
+	public fun subList (II)Ljava/util/List;
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
 }
 
-public abstract interface class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After : io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder {
-	public abstract fun build (Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;
-}
-
-public abstract interface class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before : io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder {
-	public abstract fun build (Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;
-}
-
-public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilderKt {
-	public static final fun and (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public static final fun and (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;
-	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public static final fun or (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;
-}
-
-public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidators {
-	public synthetic fun <init> (Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAfter ()Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;
-}
-
-public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidators$Builder {
+public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidation$Builder {
 	public fun <init> ()V
-	public final fun getAfter ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public final fun getBefore ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;
-	public final fun setAfter (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;)V
-	public final fun setBefore (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;)V
+	public final fun unaryMinus (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)V
+	public final fun unaryPlus (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;)V
+}
+
+public abstract interface class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder {
+	public abstract fun build (Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator;
+	public abstract fun getKey ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Key;
+}
+
+public abstract interface class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Key {
+}
+
+public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidators : java/util/List, kotlin/jvm/internal/markers/KMappedMarker {
+	public static final field Companion Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidators$Companion;
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun add (ILio/github/airflux/dsl/reader/validator/JsObjectValidator;)V
+	public synthetic fun add (ILjava/lang/Object;)V
+	public fun add (Lio/github/airflux/dsl/reader/validator/JsObjectValidator;)Z
+	public synthetic fun add (Ljava/lang/Object;)Z
+	public fun addAll (ILjava/util/Collection;)Z
+	public fun addAll (Ljava/util/Collection;)Z
+	public fun clear ()V
+	public fun contains (Lio/github/airflux/dsl/reader/validator/JsObjectValidator;)Z
+	public final fun contains (Ljava/lang/Object;)Z
+	public fun containsAll (Ljava/util/Collection;)Z
+	public fun get (I)Lio/github/airflux/dsl/reader/validator/JsObjectValidator;
+	public synthetic fun get (I)Ljava/lang/Object;
+	public fun getSize ()I
+	public fun indexOf (Lio/github/airflux/dsl/reader/validator/JsObjectValidator;)I
+	public final fun indexOf (Ljava/lang/Object;)I
+	public fun isEmpty ()Z
+	public fun iterator ()Ljava/util/Iterator;
+	public fun lastIndexOf (Lio/github/airflux/dsl/reader/validator/JsObjectValidator;)I
+	public final fun lastIndexOf (Ljava/lang/Object;)I
+	public fun listIterator ()Ljava/util/ListIterator;
+	public fun listIterator (I)Ljava/util/ListIterator;
+	public fun remove (I)Lio/github/airflux/dsl/reader/validator/JsObjectValidator;
+	public synthetic fun remove (I)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;)Z
+	public fun removeAll (Ljava/util/Collection;)Z
+	public fun replaceAll (Ljava/util/function/UnaryOperator;)V
+	public fun retainAll (Ljava/util/Collection;)Z
+	public fun set (ILio/github/airflux/dsl/reader/validator/JsObjectValidator;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator;
+	public synthetic fun set (ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun size ()I
+	public fun sort (Ljava/util/Comparator;)V
+	public fun subList (II)Ljava/util/List;
+	public fun toArray ()[Ljava/lang/Object;
+	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
+}
+
+public final class io/github/airflux/dsl/reader/object/builder/validator/JsObjectValidators$Companion {
 }
 
 public final class io/github/airflux/dsl/reader/result/JsLocationOpsKt {
@@ -1008,32 +1107,14 @@ public final class io/github/airflux/dsl/reader/result/JsLocationOpsKt {
 }
 
 public abstract interface class io/github/airflux/dsl/reader/validator/JsArrayValidator {
-}
-
-public abstract interface class io/github/airflux/dsl/reader/validator/JsArrayValidator$After : io/github/airflux/dsl/reader/validator/JsArrayValidator {
-	public fun and (Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;
-	public fun or (Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator$After;
-	public abstract fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/value/JsArray;Ljava/util/List;)Lio/github/airflux/core/reader/result/JsResult$Failure;
-}
-
-public abstract interface class io/github/airflux/dsl/reader/validator/JsArrayValidator$Before : io/github/airflux/dsl/reader/validator/JsArrayValidator {
-	public fun and (Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;
-	public fun or (Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator$Before;
+	public fun and (Lio/github/airflux/dsl/reader/validator/JsArrayValidator;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator;
+	public fun or (Lio/github/airflux/dsl/reader/validator/JsArrayValidator;)Lio/github/airflux/dsl/reader/validator/JsArrayValidator;
 	public abstract fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public abstract interface class io/github/airflux/dsl/reader/validator/JsObjectValidator {
-}
-
-public abstract interface class io/github/airflux/dsl/reader/validator/JsObjectValidator$After : io/github/airflux/dsl/reader/validator/JsObjectValidator {
-	public fun and (Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;
-	public fun or (Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator$After;
-	public abstract fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/dsl/reader/object/builder/ObjectValuesMap;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
-}
-
-public abstract interface class io/github/airflux/dsl/reader/validator/JsObjectValidator$Before : io/github/airflux/dsl/reader/validator/JsObjectValidator {
-	public fun and (Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;
-	public fun or (Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator$Before;
+	public fun and (Lio/github/airflux/dsl/reader/validator/JsObjectValidator;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator;
+	public fun or (Lio/github/airflux/dsl/reader/validator/JsObjectValidator;)Lio/github/airflux/dsl/reader/validator/JsObjectValidator;
 	public abstract fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
@@ -1190,13 +1271,12 @@ public final class io/github/airflux/std/reader/StringReader : io/github/airflux
 
 public final class io/github/airflux/std/validator/array/ArrayValidator {
 	public static final field INSTANCE Lio/github/airflux/std/validator/array/ArrayValidator;
-	public final fun isNotEmpty ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-	public final fun isUnique (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$After;
-	public final fun maxItems (I)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
-	public final fun minItems (I)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder$Before;
+	public final fun isNotEmpty ()Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;
+	public final fun maxItems (I)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;
+	public final fun minItems (I)Lio/github/airflux/dsl/reader/array/builder/validator/JsArrayValidatorBuilder;
 }
 
-public final class io/github/airflux/std/validator/array/IsNotEmptyArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator$Before {
+public final class io/github/airflux/std/validator/array/IsNotEmptyArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator {
 	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
@@ -1210,21 +1290,7 @@ public final class io/github/airflux/std/validator/array/IsNotEmptyArrayValidato
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/std/validator/array/IsUniqueArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator$After {
-	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/value/JsArray;Ljava/util/List;)Lio/github/airflux/core/reader/result/JsResult$Failure;
-}
-
-public final class io/github/airflux/std/validator/array/IsUniqueArrayValidator$ErrorBuilder : io/github/airflux/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/std/validator/array/IsUniqueArrayValidator$ErrorBuilder$Key;
-	public fun <init> (Lkotlin/jvm/functions/Function1;)V
-	public final fun build (Ljava/lang/Object;)Lio/github/airflux/core/reader/result/JsError;
-}
-
-public final class io/github/airflux/std/validator/array/IsUniqueArrayValidator$ErrorBuilder$Key : io/github/airflux/core/context/error/JsContextErrorBuilderKey {
-	public fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/std/validator/array/MaxItemsArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator$Before {
+public final class io/github/airflux/std/validator/array/MaxItemsArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator {
 	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
@@ -1238,7 +1304,7 @@ public final class io/github/airflux/std/validator/array/MaxItemsArrayValidator$
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/std/validator/array/MinItemsArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator$Before {
+public final class io/github/airflux/std/validator/array/MinItemsArrayValidator : io/github/airflux/dsl/reader/validator/JsArrayValidator {
 	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/value/JsArray;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
@@ -1389,7 +1455,7 @@ public final class io/github/airflux/std/validator/condition/ConditionValidators
 	public static final fun applyIfNotNull (Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/validator/JsValidator;
 }
 
-public final class io/github/airflux/std/validator/object/AdditionalPropertiesObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator$Before {
+public final class io/github/airflux/std/validator/object/AdditionalPropertiesObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator {
 	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
@@ -1403,8 +1469,8 @@ public final class io/github/airflux/std/validator/object/AdditionalPropertiesOb
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/std/validator/object/IsNotEmptyObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator$After {
-	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/dsl/reader/object/builder/ObjectValuesMap;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+public final class io/github/airflux/std/validator/object/IsNotEmptyObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator {
+	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/std/validator/object/IsNotEmptyObjectValidator$ErrorBuilder : io/github/airflux/core/context/error/AbstractErrorBuilderContextElement {
@@ -1417,8 +1483,8 @@ public final class io/github/airflux/std/validator/object/IsNotEmptyObjectValida
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/std/validator/object/MaxPropertiesObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator$After {
-	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/dsl/reader/object/builder/ObjectValuesMap;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+public final class io/github/airflux/std/validator/object/MaxPropertiesObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator {
+	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/std/validator/object/MaxPropertiesObjectValidator$ErrorBuilder : io/github/airflux/core/context/error/AbstractErrorBuilderContextElement {
@@ -1431,8 +1497,8 @@ public final class io/github/airflux/std/validator/object/MaxPropertiesObjectVal
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/std/validator/object/MinPropertiesObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator$After {
-	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/dsl/reader/object/builder/ObjectValuesMap;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
+public final class io/github/airflux/std/validator/object/MinPropertiesObjectValidator : io/github/airflux/dsl/reader/validator/JsObjectValidator {
+	public fun validate (Lio/github/airflux/core/reader/context/JsReaderContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/dsl/reader/object/builder/property/JsObjectProperties;Lio/github/airflux/core/value/JsObject;)Lio/github/airflux/core/reader/result/JsResult$Failure;
 }
 
 public final class io/github/airflux/std/validator/object/MinPropertiesObjectValidator$ErrorBuilder : io/github/airflux/core/context/error/AbstractErrorBuilderContextElement {
@@ -1447,10 +1513,10 @@ public final class io/github/airflux/std/validator/object/MinPropertiesObjectVal
 
 public final class io/github/airflux/std/validator/object/ObjectValidator {
 	public static final field INSTANCE Lio/github/airflux/std/validator/object/ObjectValidator;
-	public final fun getAdditionalProperties ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$Before;
-	public final fun isNotEmpty ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public final fun maxProperties (I)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
-	public final fun minProperties (I)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder$After;
+	public final fun getAdditionalProperties ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
+	public final fun isNotEmpty ()Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
+	public final fun maxProperties (I)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
+	public final fun minProperties (I)Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilder;
 }
 
 public final class io/github/airflux/std/validator/string/IsAStringValidator : io/github/airflux/core/reader/validator/JsValidator {

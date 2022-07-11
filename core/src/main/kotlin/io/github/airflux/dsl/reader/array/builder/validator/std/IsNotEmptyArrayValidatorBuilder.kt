@@ -20,7 +20,11 @@ import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuil
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 import io.github.airflux.std.validator.array.IsNotEmptyArrayValidator
 
-internal object IsNotEmptyArrayValidatorBuilder : JsArrayValidatorBuilder.Before {
+internal class IsNotEmptyArrayValidatorBuilder : JsArrayValidatorBuilder {
+    override val key: JsArrayValidatorBuilder.Key<*> = Key
+    override fun build(): JsArrayValidator = validator
+
     private val validator = IsNotEmptyArrayValidator()
-    override fun build(): JsArrayValidator.Before = validator
+
+    companion object Key : JsArrayValidatorBuilder.Key<IsNotEmptyArrayValidatorBuilder>
 }

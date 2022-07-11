@@ -20,98 +20,47 @@ import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.dsl.reader.validator.JsObjectValidator.After
-import io.github.airflux.dsl.reader.validator.JsObjectValidator.Before
 
-@Suppress("unused")
-public sealed interface JsObjectValidator {
+public fun interface JsObjectValidator {
 
-    public fun interface Before : JsObjectValidator {
+    public fun validate(
+        context: JsReaderContext,
+        location: JsLocation,
+        properties: JsObjectProperties,
+        input: JsObject
+    ): JsResult.Failure?
 
-        public fun validate(
-            context: JsReaderContext,
-            location: JsLocation,
-            properties: JsObjectProperties,
-            input: JsObject
-        ): JsResult.Failure?
-
-        /*
-        * | This | Other  | Result |
-        * |------|--------|--------|
-        * | S    | ignore | S      |
-        * | F    | S      | S      |
-        * | F    | F`     | F + F` |
-        */
-        public infix fun or(other: Before): Before {
-            val self = this
-            return Before { context, location, properties, input ->
-                self.validate(context, location, properties, input)
-                    ?.let { error ->
-                        other.validate(context, location, properties, input)
-                            ?.let { error + it }
-                    }
-            }
-        }
-
-        /*
-         * | This | Other  | Result |
-         * |------|--------|--------|
-         * | S    | S      | S      |
-         * | S    | F      | F      |
-         * | F    | ignore | F      |
-         */
-        public infix fun and(other: Before): Before {
-            val self = this
-            return Before { context, location, properties, input ->
-                val result = self.validate(context, location, properties, input)
-                result ?: other.validate(context, location, properties, input)
-            }
+    /*
+    * | This | Other  | Result |
+    * |------|--------|--------|
+    * | S    | ignore | S      |
+    * | F    | S      | S      |
+    * | F    | F`     | F + F` |
+    */
+    public infix fun or(alt: JsObjectValidator): JsObjectValidator {
+        val self = this
+        return JsObjectValidator { context, location, properties, input ->
+            self.validate(context, location, properties, input)
+                ?.let { error ->
+                    alt.validate(context, location, properties, input)
+                        ?.let { error + it }
+                }
         }
     }
 
-    public fun interface After : JsObjectValidator {
-
-        public fun validate(
-            context: JsReaderContext,
-            location: JsLocation,
-            properties: JsObjectProperties,
-            objectValuesMap: ObjectValuesMap,
-            input: JsObject
-        ): JsResult.Failure?
-
-        /*
-        * | This | Other  | Result |
-        * |------|--------|--------|
-        * | S    | ignore | S      |
-        * | F    | S      | S      |
-        * | F    | F`     | F + F` |
-        */
-        public infix fun or(other: After): After {
-            val self = this
-            return After { context, location, properties, objectValuesMap, input ->
-                self.validate(context, location, properties, objectValuesMap, input)
-                    ?.let { error ->
-                        other.validate(context, location, properties, objectValuesMap, input)
-                            ?.let { error + it }
-                    }
-            }
-        }
-
-        /*
-         * | This | Other  | Result |
-         * |------|--------|--------|
-         * | S    | S      | S      |
-         * | S    | F      | F      |
-         * | F    | ignore | F      |
-         */
-        public infix fun and(other: After): After {
-            val self = this
-            return After { context, location, properties, objectValuesMap, input ->
-                val result = self.validate(context, location, properties, objectValuesMap, input)
-                result ?: other.validate(context, location, properties, objectValuesMap, input)
-            }
+    /*
+     * | This | Other  | Result |
+     * |------|--------|--------|
+     * | S    | S      | S      |
+     * | S    | F      | F      |
+     * | F    | ignore | F      |
+     */
+    public infix fun and(alt: JsObjectValidator): JsObjectValidator {
+        val self = this
+        return JsObjectValidator { context, location, properties, input ->
+            val result = self.validate(context, location, properties, input)
+            result ?: alt.validate(context, location, properties, input)
         }
     }
 }

@@ -39,15 +39,15 @@ internal class JsArrayValidatorTest : FreeSpec() {
 
     init {
 
-        "The JsArrayValidator#Before type" - {
+        "The JsArrayValidator type" - {
 
             "composition OR operator" - {
 
                 "when the left validator returns success" - {
-                    val leftValidator = JsArrayValidator.Before { _, _, _ -> null }
+                    val leftValidator = JsArrayValidator { _, _, _ -> null }
 
                     "then the right validator does not execute" {
-                        val rightValidator = JsArrayValidator.Before { _, location, _ ->
+                        val rightValidator = JsArrayValidator { _, location, _ ->
                             JsResult.Failure(location, JsonErrors.PathMissing)
                         }
 
@@ -59,12 +59,12 @@ internal class JsArrayValidatorTest : FreeSpec() {
                 }
 
                 "when the left validator returns failure" - {
-                    val leftValidator = JsArrayValidator.Before { _, location, _ ->
+                    val leftValidator = JsArrayValidator { _, location, _ ->
                         JsResult.Failure(location, JsonErrors.PathMissing)
                     }
 
                     "when the right validator returns success" - {
-                        val rightValidator = JsArrayValidator.Before { _, _, _ -> null }
+                        val rightValidator = JsArrayValidator { _, _, _ -> null }
 
                         "then failure of the left validator is returned" {
                             val composeValidator = leftValidator or rightValidator
@@ -75,7 +75,7 @@ internal class JsArrayValidatorTest : FreeSpec() {
                     }
 
                     "when the right validator returns failure" - {
-                        val rightValidator = JsArrayValidator.Before { _, location, _ ->
+                        val rightValidator = JsArrayValidator { _, location, _ ->
                             JsResult.Failure(
                                 location,
                                 JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
@@ -105,10 +105,10 @@ internal class JsArrayValidatorTest : FreeSpec() {
             "composition AND operator" - {
 
                 "when the left validator returns success" - {
-                    val leftValidator = JsArrayValidator.Before { _, _, _ -> null }
+                    val leftValidator = JsArrayValidator { _, _, _ -> null }
 
                     "when the right validator returns success" - {
-                        val rightValidator = JsArrayValidator.Before { _, _, _ -> null }
+                        val rightValidator = JsArrayValidator { _, _, _ -> null }
 
                         "then success is returned" {
                             val composeValidator = leftValidator and rightValidator
@@ -118,7 +118,7 @@ internal class JsArrayValidatorTest : FreeSpec() {
                     }
 
                     "when the right validator returns failure" - {
-                        val rightValidator = JsArrayValidator.Before { _, location, _ ->
+                        val rightValidator = JsArrayValidator { _, location, _ ->
                             JsResult.Failure(location, JsonErrors.PathMissing)
                         }
 
@@ -132,12 +132,12 @@ internal class JsArrayValidatorTest : FreeSpec() {
                 }
 
                 "when the left validator returns failure" - {
-                    val leftValidator = JsArrayValidator.Before { _, location, _ ->
+                    val leftValidator = JsArrayValidator { _, location, _ ->
                         JsResult.Failure(location, JsonErrors.PathMissing)
                     }
 
                     "then the right validator does not execute" - {
-                        val rightValidator = JsArrayValidator.Before { _, location, _ ->
+                        val rightValidator = JsArrayValidator { _, location, _ ->
                             JsResult.Failure(
                                 location,
                                 JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
@@ -146,121 +146,6 @@ internal class JsArrayValidatorTest : FreeSpec() {
 
                         val composeValidator = leftValidator and rightValidator
                         val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
-                    }
-                }
-            }
-        }
-
-        "The JsArrayValidator#After type" - {
-
-            "composition OR operator" - {
-
-                "when the left validator returns success" - {
-                    val leftValidator = JsArrayValidator.After<Unit> { _, _, _, _ -> null }
-
-                    "then the right validator does not execute" {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, location, _, _ ->
-                            JsResult.Failure(location, JsonErrors.PathMissing)
-                        }
-
-                        val composeValidator = leftValidator or rightValidator
-                        val errors = composeValidator.validate(CONTEXT, LOCATION, VALUE, listOf(Unit))
-
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when the left validator returns failure" - {
-                    val leftValidator = JsArrayValidator.After<Unit> { _, location, _, _ ->
-                        JsResult.Failure(location, JsonErrors.PathMissing)
-                    }
-
-                    "when the right validator returns success" - {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, _, _, _ -> null }
-
-                        "then failure of the left validator is returned" {
-                            val composeValidator = leftValidator or rightValidator
-                            val errors = composeValidator.validate(CONTEXT, LOCATION, VALUE, listOf(Unit))
-
-                            errors.shouldBeNull()
-                        }
-                    }
-
-                    "when the right validator returns failure" - {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, location, _, _ ->
-                            JsResult.Failure(
-                                location,
-                                JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                            )
-                        }
-
-                        "then both errors are returned" {
-                            val composeValidator = leftValidator or rightValidator
-                            val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE, listOf(Unit))
-
-                            failure.shouldNotBeNull()
-                            failure shouldBe listOf(
-                                JsResult.Failure(LOCATION, JsonErrors.PathMissing),
-                                JsResult.Failure(
-                                    location = LOCATION,
-                                    error = JsonErrors.InvalidType(
-                                        expected = JsValue.Type.STRING,
-                                        actual = JsValue.Type.BOOLEAN
-                                    )
-                                )
-                            ).merge()
-                        }
-                    }
-                }
-            }
-
-            "composition AND operator" - {
-
-                "when the left validator returns success" - {
-                    val leftValidator = JsArrayValidator.After<Unit> { _, _, _, _ -> null }
-
-                    "when the right validator returns success" - {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, _, _, _ -> null }
-
-                        "then success is returned" {
-                            val composeValidator = leftValidator and rightValidator
-                            val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE, listOf(Unit))
-                            failure.shouldBeNull()
-                        }
-                    }
-
-                    "when the right validator returns failure" - {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, location, _, _ ->
-                            JsResult.Failure(location, JsonErrors.PathMissing)
-                        }
-
-                        "then failure of the right validator is returned" {
-                            val composeValidator = leftValidator and rightValidator
-                            val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE, listOf(Unit))
-                            failure.shouldNotBeNull()
-                            failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
-                        }
-                    }
-                }
-
-                "when the left validator returns failure" - {
-                    val leftValidator = JsArrayValidator.After<Unit> { _, location, _, _ ->
-                        JsResult.Failure(location, JsonErrors.PathMissing)
-                    }
-
-                    "then the right validator does not execute" - {
-                        val rightValidator = JsArrayValidator.After<Unit> { _, location, _, _ ->
-                            JsResult.Failure(
-                                location,
-                                JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
-                            )
-                        }
-
-                        val composeValidator = leftValidator and rightValidator
-                        val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE, listOf(Unit))
 
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)

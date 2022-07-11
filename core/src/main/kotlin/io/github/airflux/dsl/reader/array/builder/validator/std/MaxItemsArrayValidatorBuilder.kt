@@ -20,6 +20,9 @@ import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuil
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 import io.github.airflux.std.validator.array.MaxItemsArrayValidator
 
-internal class MaxItemsArrayValidatorBuilder(private val value: Int) : JsArrayValidatorBuilder.Before {
-    override fun build(): JsArrayValidator.Before = MaxItemsArrayValidator(value)
+internal class MaxItemsArrayValidatorBuilder(private val value: Int) : JsArrayValidatorBuilder {
+    override val key: JsArrayValidatorBuilder.Key<*> = Key
+    override fun build(): JsArrayValidator = MaxItemsArrayValidator(value)
+
+    companion object Key : JsArrayValidatorBuilder.Key<MaxItemsArrayValidatorBuilder>
 }

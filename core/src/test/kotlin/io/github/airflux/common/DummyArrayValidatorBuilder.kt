@@ -23,12 +23,20 @@ import io.github.airflux.core.value.JsArray
 import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
-internal class DummyBeforeArrayValidatorBuilder(result: JsResult.Failure?) : JsArrayValidatorBuilder.Before {
-    val validator = Validator(result)
-    override fun build(): JsArrayValidator.Before = validator
+internal class DummyArrayValidatorBuilder(
+    override val key: JsArrayValidatorBuilder.Key<*>,
+    result: JsResult.Failure?
+) : JsArrayValidatorBuilder {
 
-    internal class Validator(val result: JsResult.Failure?) : JsArrayValidator.Before {
+    val validator = Validator(result)
+    override fun build(): JsArrayValidator = validator
+
+    internal class Validator(val result: JsResult.Failure?) : JsArrayValidator {
         override fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
             result
+    }
+
+    companion object {
+        fun <E : JsArrayValidatorBuilder> key() = object : JsArrayValidatorBuilder.Key<E> {}
     }
 }

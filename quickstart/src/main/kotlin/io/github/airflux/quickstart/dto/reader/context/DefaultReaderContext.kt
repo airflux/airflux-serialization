@@ -8,7 +8,6 @@ import io.github.airflux.dsl.reader.context.JsReaderContextBuilder
 import io.github.airflux.dsl.reader.context.readerContext
 import io.github.airflux.quickstart.json.error.JsonErrors
 import io.github.airflux.std.validator.array.IsNotEmptyArrayValidator
-import io.github.airflux.std.validator.array.IsUniqueArrayValidator
 import io.github.airflux.std.validator.array.MaxItemsArrayValidator
 import io.github.airflux.std.validator.array.MinItemsArrayValidator
 import io.github.airflux.std.validator.comparable.EqComparableValidator
@@ -61,7 +60,6 @@ fun JsReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
 }
 
 fun JsReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {
-    +IsUniqueArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::Unique)
     +IsNotEmptyArrayValidator.ErrorBuilder { JsonErrors.Validation.Arrays.IsEmpty }
     +MinItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
     +MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MaxItems)

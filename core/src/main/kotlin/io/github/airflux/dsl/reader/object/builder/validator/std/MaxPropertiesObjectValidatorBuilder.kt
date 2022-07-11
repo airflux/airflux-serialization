@@ -21,6 +21,11 @@ import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.github.airflux.std.validator.`object`.MaxPropertiesObjectValidator
 
-internal class MaxPropertiesObjectValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder.After {
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = MaxPropertiesObjectValidator(value)
+internal class MaxPropertiesObjectValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder {
+
+    override val key: JsObjectValidatorBuilder.Key<*> = Key
+
+    override fun build(properties: JsObjectProperties): JsObjectValidator = MaxPropertiesObjectValidator(value)
+
+    companion object Key : JsObjectValidatorBuilder.Key<MaxPropertiesObjectValidatorBuilder>
 }

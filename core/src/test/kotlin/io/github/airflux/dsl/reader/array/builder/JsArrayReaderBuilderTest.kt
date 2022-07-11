@@ -16,8 +16,7 @@
 
 package io.github.airflux.dsl.reader.array.builder
 
-import io.github.airflux.common.DummyAfterArrayValidatorBuilder
-import io.github.airflux.common.DummyBeforeArrayValidatorBuilder
+import io.github.airflux.common.DummyArrayValidatorBuilder
 import io.github.airflux.common.DummyReader
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.location.JsLocation
@@ -52,7 +51,6 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
         private val LOCATION = JsLocation.empty
 
         private val MinItemsError = JsonErrors.Validation.Arrays.MinItems(expected = 1, actual = 0)
-        private val MaxItemsError = JsonErrors.Validation.Arrays.MaxItems(expected = 2, actual = 1)
     }
 
     init {
@@ -62,8 +60,10 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
             "when no errors in the reader" - {
                 val reader = arrayReader<String> {
                     validation {
-                        before = DummyBeforeArrayValidatorBuilder(result = null)
-                        after = DummyAfterArrayValidatorBuilder(result = null)
+                        DummyArrayValidatorBuilder(
+                            key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                            result = null
+                        )
                     }
                     returns(items = itemSpec())
                 }
@@ -102,19 +102,14 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                 "when fail-fast is true" - {
                     val contextWithFailFastTrue = CONTEXT + FailFast(true)
 
-                    "when the before validator returns an error" - {
+                    "when the validator returns an error" - {
                         val reader = arrayReader<String> {
                             validation {
-                                before = DummyBeforeArrayValidatorBuilder(
+                                +DummyArrayValidatorBuilder(
+                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = JsResult.Failure(
                                         location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
-                                    )
-                                )
-                                after = DummyAfterArrayValidatorBuilder(
-                                    result = JsResult.Failure(
-                                        location = LOCATION.append(ATTRIBUTE_NAME),
-                                        error = MaxItemsError
                                     )
                                 )
                             }
@@ -134,15 +129,12 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                         }
                     }
 
-                    "when the reader of an property returns an error" - {
+                    "when the reader of items returns an error" - {
                         val reader = arrayReader<String> {
                             validation {
-                                before = DummyBeforeArrayValidatorBuilder(result = null)
-                                after = DummyAfterArrayValidatorBuilder(
-                                    result = JsResult.Failure(
-                                        location = LOCATION.append(ATTRIBUTE_NAME),
-                                        error = MaxItemsError
-                                    )
+                                +DummyArrayValidatorBuilder(
+                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                                    result = null
                                 )
                             }
                             returns(itemSpec(JsonErrors.PathMissing))
@@ -160,15 +152,19 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                             )
                         }
                     }
+                }
 
-                    "when the after validator returns an error" - {
+                "when fail-fast is false" - {
+
+                    "when only the validator returns an error" - {
+                        val contextWithFailFastFalse = CONTEXT + FailFast(false)
                         val reader = arrayReader<String> {
                             validation {
-                                before = DummyBeforeArrayValidatorBuilder(result = null)
-                                after = DummyAfterArrayValidatorBuilder(
+                                +DummyArrayValidatorBuilder(
+                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = JsResult.Failure(
                                         location = LOCATION.append(ATTRIBUTE_NAME),
-                                        error = MaxItemsError
+                                        error = MinItemsError
                                     )
                                 )
                             }
@@ -177,52 +173,47 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
 
                         "then the reader should return the validation error" {
                             val input = JsArray(JsString(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
+                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
                                 JsResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME),
-                                    error = MaxItemsError
-                                )
-                            )
-                        }
-                    }
-                }
-
-                "when fail-fast is false" - {
-                    val contextWithFailFastFalse = CONTEXT + FailFast(false)
-                    val reader = arrayReader<String> {
-                        validation {
-                            before = DummyBeforeArrayValidatorBuilder(
-                                result = JsResult.Failure(
-                                    location = LOCATION.append(ATTRIBUTE_NAME),
                                     error = MinItemsError
                                 )
                             )
-                            after = DummyAfterArrayValidatorBuilder(
-                                result = JsResult.Failure(
+                        }
+                    }
+
+                    "when the validator and the reader of items return errors" - {
+                        val contextWithFailFastFalse = CONTEXT + FailFast(false)
+                        val reader = arrayReader<String> {
+                            validation {
+                                +DummyArrayValidatorBuilder(
+                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                                    result = JsResult.Failure(
+                                        location = LOCATION.append(ATTRIBUTE_NAME),
+                                        error = MinItemsError
+                                    )
+                                )
+                            }
+                            returns(itemSpec(JsonErrors.PathMissing))
+                        }
+
+                        "then all error should be returns" {
+                            val input = JsArray(JsString(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
+                            result as JsResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                JsResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME),
-                                    error = MaxItemsError
+                                    error = MinItemsError
+                                ),
+                                JsResult.Failure.Cause(
+                                    location = LOCATION.append(ATTRIBUTE_NAME).append(0),
+                                    error = JsonErrors.PathMissing
                                 )
                             )
                         }
-                        returns(itemSpec(JsonErrors.PathMissing))
-                    }
-
-                    "then all error should be returns" {
-                        val input = JsArray(JsString(FIRST_ITEM))
-                        val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
-                        result as JsResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
-                                location = LOCATION.append(ATTRIBUTE_NAME),
-                                error = MinItemsError
-                            ),
-                            JsResult.Failure.Cause(
-                                location = LOCATION.append(ATTRIBUTE_NAME).append(0),
-                                error = JsonErrors.PathMissing
-                            )
-                        )
                     }
                 }
             }

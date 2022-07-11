@@ -17,37 +17,22 @@
 package io.github.airflux.dsl.reader.config
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidation
 
 public fun arrayReaderConfig(block: JsArrayReaderConfig.Builder.() -> Unit): JsArrayReaderConfig =
     JsArrayReaderConfig.Builder().apply(block).build()
 
-public class JsArrayReaderConfig private constructor(public val validation: Validation) {
+public class JsArrayReaderConfig private constructor(public val validation: JsArrayValidation) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
-        private var validation: Validation.Builder = Validation.Builder()
+        private var validation: JsArrayValidation.Builder = JsArrayValidation.Builder()
 
-        public fun validation(block: Validation.Builder.() -> Unit) {
+        public fun validation(block: JsArrayValidation.Builder.() -> Unit) {
             validation.block()
         }
 
-        internal fun build(): JsArrayReaderConfig =
-            JsArrayReaderConfig(
-                validation = validation.build()
-            )
-    }
-
-    public class Validation private constructor(
-        public val before: JsArrayValidatorBuilder.Before?
-    ) {
-
-        @AirfluxMarker
-        public class Builder internal constructor(
-            public var before: JsArrayValidatorBuilder.Before? = null
-        ) {
-            internal fun build(): Validation = Validation(before)
-        }
+        internal fun build(): JsArrayReaderConfig = JsArrayReaderConfig(validation = validation.build())
     }
 
     public companion object {

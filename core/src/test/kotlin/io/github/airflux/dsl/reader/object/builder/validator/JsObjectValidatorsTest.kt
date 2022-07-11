@@ -16,124 +16,35 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.validator
 
-import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
-import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.common.DummyObjectValidator
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 internal class JsObjectValidatorsTest : FreeSpec() {
-
-    companion object {
-        private val PROPERTIES = JsObjectProperties(emptyList())
-    }
 
     init {
 
         "The JsObjectValidators type" - {
 
-            "when the builder was not initialized with any values" - {
-                val builder = JsObjectValidators.Builder()
+            "when some validators was passed during initialize" - {
+                val firstValidatorBuilder: JsObjectValidator = DummyObjectValidator(result = null)
+                val secondValidatorBuilder: JsObjectValidator = DummyObjectValidator(result = null)
+                val validators = JsObjectValidators(listOf(firstValidatorBuilder, secondValidatorBuilder))
 
-                "when any object validators do not set in the builder" - {
-                    val validators = builder.build(PROPERTIES)
-
-                    "then the container of validators are not contained the before validator" {
-                        validators.before.shouldBeNull()
-                    }
-
-                    "then the container of validators are not contained the after validator" {
-                        validators.after.shouldBeNull()
-                    }
-                }
-
-                "when object validators do set in the builder" - {
-                    val beforeValidatorBuilder = BeforeObjectValidatorBuilder()
-                    val afterValidatorBuilder = AfterObjectValidatorBuilder()
-                    val validators = builder.apply {
-                        before = beforeValidatorBuilder
-                        after = afterValidatorBuilder
-                    }.build(PROPERTIES)
-
-                    "then the container of validators contains the before validator that was set in the builder" {
-                        validators.before shouldBe beforeValidatorBuilder.validator
-                    }
-
-                    "then the container of validators contains the after validator that was set in the builder" {
-                        validators.after shouldBe afterValidatorBuilder.validator
-                    }
+                "then the validators container should contain the passed validators" {
+                    validators shouldContainExactly listOf(firstValidatorBuilder, secondValidatorBuilder)
                 }
             }
 
-            "when the builder was initialized with validators" - {
-                val initBeforeValidatorBuilder = BeforeObjectValidatorBuilder()
-                val initAfterValidatorBuilder = AfterObjectValidatorBuilder()
-                val builder =
-                    JsObjectValidators.Builder(before = initBeforeValidatorBuilder, after = initAfterValidatorBuilder)
+            "when any validators was not passed during initialize" - {
+                val validators = JsObjectValidators(emptyList())
 
-                "when any object validators do not set in the builder" - {
-                    val validators = builder.build(PROPERTIES)
-
-                    "then the container of validators contains the before validator that was passed when the builder was initialized" {
-                        validators.before shouldBe initBeforeValidatorBuilder.validator
-                    }
-
-                    "then the container of validators contains the after validator that was passed when the builder was initialized" {
-                        validators.after shouldBe initAfterValidatorBuilder.validator
-                    }
-                }
-
-                "when object validators do set in the builder" - {
-                    val beforeValidatorBuilder = BeforeObjectValidatorBuilder()
-                    val afterValidatorBuilder = AfterObjectValidatorBuilder()
-                    val validators = builder.apply {
-                        before = beforeValidatorBuilder
-                        after = afterValidatorBuilder
-                    }.build(PROPERTIES)
-
-                    "then the container of validators contains the before validator that was set in the builder" {
-                        validators.before shouldBe beforeValidatorBuilder.validator
-                    }
-
-                    "then the container of validators contains the after validator that was set in the builder" {
-                        validators.after shouldBe afterValidatorBuilder.validator
-                    }
+                "then should be returns empty instance" {
+                    validators shouldBe JsObjectValidators(emptyList())
                 }
             }
-        }
-    }
-
-    internal class BeforeObjectValidatorBuilder : JsObjectValidatorBuilder.Before {
-        val validator = Validator()
-        override fun build(properties: JsObjectProperties): JsObjectValidator.Before = validator
-
-        internal class Validator : JsObjectValidator.Before {
-            override fun validate(
-                context: JsReaderContext,
-                location: JsLocation,
-                properties: JsObjectProperties,
-                input: JsObject
-            ): JsResult.Failure? = null
-        }
-    }
-
-    internal class AfterObjectValidatorBuilder : JsObjectValidatorBuilder.After {
-        val validator = Validator()
-        override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
-
-        internal class Validator : JsObjectValidator.After {
-            override fun validate(
-                context: JsReaderContext,
-                location: JsLocation,
-                properties: JsObjectProperties,
-                objectValuesMap: ObjectValuesMap,
-                input: JsObject
-            ): JsResult.Failure? = null
         }
     }
 }

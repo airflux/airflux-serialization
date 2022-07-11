@@ -16,17 +16,13 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.validator
 
-import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsObject
+import io.github.airflux.common.DummyObjectValidatorBuilder
 import io.github.airflux.dsl.reader.config.JsObjectReaderConfig
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.should
 
 internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
 
@@ -38,145 +34,80 @@ internal class JsObjectReaderValidationBuilderTest : FreeSpec() {
 
         "The JsObjectReaderValidationBuilder type" - {
 
-            "when the config is not contained any object validators" - {
+            "when the config is not contained the object validator" - {
                 val config = JsObjectReaderConfig.Builder().build()
-                val validatorsBuilder = JsObjectReaderValidationBuilder(config)
+                val validationBuilder = JsObjectReaderValidationInstance(config)
 
-                "when the before validator was not overridden" - {
-                    val validators = validatorsBuilder.build(PROPERTIES)
-
-                    "then there is no validator" {
-                        validators.before.shouldBeNull()
-                    }
-                }
-
-                "when the before validator was overridden" - {
-                    val validatorBuilder = BeforeObjectValidatorBuilder()
-                    val validators = validatorsBuilder
-                        .apply {
-                            validation {
-                                before = validatorBuilder
-                            }
-                        }
-                        .build(PROPERTIES)
-
-                    "then the overridden validator is used" {
-                        validators.before shouldBe validatorBuilder.validator
-                    }
-                }
-
-                "when the after validator was not overridden" - {
-                    val validators = validatorsBuilder.build(PROPERTIES)
+                "when the validator was not overridden" - {
+                    val validators = validationBuilder.buildValidators(PROPERTIES)
 
                     "then there is no validator" {
-                        validators.after.shouldBeNull()
+                        validators should beEmpty()
                     }
                 }
 
-                "when the after validator was overridden" - {
-                    val validatorBuilder = AfterObjectValidatorBuilder()
-                    val validators = validatorsBuilder
+                "when the validator was overridden" - {
+                    val someValidatorBuilder = DummyObjectValidatorBuilder(
+                        key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                        result = null
+                    )
+                    val validators = validationBuilder
                         .apply {
                             validation {
-                                after = validatorBuilder
+                                +someValidatorBuilder
                             }
                         }
-                        .build(PROPERTIES)
+                        .buildValidators(PROPERTIES)
 
                     "then the overridden validator is used" {
-                        validators.after shouldBe validatorBuilder.validator
+                        validators shouldContainExactly listOf(someValidatorBuilder.validator)
                     }
                 }
             }
 
-            "when the config contains object validators" - {
-                val initBeforeValidatorBuilder = BeforeObjectValidatorBuilder()
-                val initAfterValidatorBuilder = AfterObjectValidatorBuilder()
+            "when the config contains the object validator" - {
+                val initValidatorBuilder = DummyObjectValidatorBuilder(
+                    key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                    result = null
+                )
                 val config = JsObjectReaderConfig.Builder()
                     .apply {
                         validation {
-                            before = initBeforeValidatorBuilder
-                            after = initAfterValidatorBuilder
+                            +initValidatorBuilder
                         }
                     }
                     .build()
-                val validatorsBuilder = JsObjectReaderValidationBuilder(config)
+                val validationBuilder = JsObjectReaderValidationInstance(config)
 
-                "when the before validator was not overridden" - {
-                    val validators = validatorsBuilder.build(PROPERTIES)
-
-                    "then the validator is used from the config" {
-                        validators.before shouldBe initBeforeValidatorBuilder.validator
-                    }
-                }
-
-                "when the before validator was overridden" - {
-                    val validatorBuilder = BeforeObjectValidatorBuilder()
-                    val validators = validatorsBuilder
-                        .apply {
-                            validation {
-                                before = validatorBuilder
-                            }
-                        }
-                        .build(PROPERTIES)
-
-                    "then the overridden validator is used" {
-                        validators.before shouldBe validatorBuilder.validator
-                    }
-                }
-
-                "when the after validator was not overridden" - {
-                    val validators = validatorsBuilder.build(PROPERTIES)
+                "when the validator was not overridden" - {
+                    val validators = validationBuilder.buildValidators(PROPERTIES)
 
                     "then the validator is used from the config" {
-                        validators.after shouldBe initAfterValidatorBuilder.validator
+                        validators shouldContainExactly listOf(initValidatorBuilder.validator)
                     }
                 }
 
-                "when the after validator was overridden" - {
-                    val validatorBuilder = AfterObjectValidatorBuilder()
-                    val validators = validatorsBuilder
+                "when the validator was overridden" - {
+                    val someValidatorBuilder = DummyObjectValidatorBuilder(
+                        key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                        result = null
+                    )
+                    val validators = validationBuilder
                         .apply {
                             validation {
-                                after = validatorBuilder
+                                +someValidatorBuilder
                             }
                         }
-                        .build(PROPERTIES)
+                        .buildValidators(PROPERTIES)
 
                     "then the overridden validator is used" {
-                        validators.after shouldBe validatorBuilder.validator
+                        validators shouldContainExactly listOf(
+                            initValidatorBuilder.validator,
+                            someValidatorBuilder.validator
+                        )
                     }
                 }
             }
-        }
-    }
-
-    internal class BeforeObjectValidatorBuilder : JsObjectValidatorBuilder.Before {
-        val validator = Validator()
-        override fun build(properties: JsObjectProperties): JsObjectValidator.Before = validator
-
-        internal class Validator : JsObjectValidator.Before {
-            override fun validate(
-                context: JsReaderContext,
-                location: JsLocation,
-                properties: JsObjectProperties,
-                input: JsObject
-            ): JsResult.Failure? = null
-        }
-    }
-
-    internal class AfterObjectValidatorBuilder : JsObjectValidatorBuilder.After {
-        val validator = Validator()
-        override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
-
-        internal class Validator : JsObjectValidator.After {
-            override fun validate(
-                context: JsReaderContext,
-                location: JsLocation,
-                properties: JsObjectProperties,
-                objectValuesMap: ObjectValuesMap,
-                input: JsObject
-            ): JsResult.Failure? = null
         }
     }
 }

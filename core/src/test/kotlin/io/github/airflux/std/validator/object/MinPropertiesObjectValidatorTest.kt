@@ -22,13 +22,9 @@ import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMapInstance
+import io.github.airflux.core.value.JsString
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperty
-import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
-import io.github.airflux.std.reader.StringReader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -46,29 +42,21 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MIN_PROPERTIES = 2
         private val LOCATION = JsLocation.empty
-
-        private val input = JsObject()
-        private val idProperty: JsObjectProperty.Required<String> =
-            JsObjectProperty.Required(required(ID_PROPERTY_NAME, StringReader))
-        private val nameProperty: JsObjectProperty.Required<String> =
-            JsObjectProperty.Required(required(NAME_PROPERTY_NAME, StringReader))
-        private val titleProperty: JsObjectProperty.Required<String> =
-            JsObjectProperty.Required(required(TITLE_PROPERTY_NAME, StringReader))
-        val properties: JsObjectProperties = JsObjectProperties(listOf(idProperty, nameProperty, titleProperty))
+        private val PROPERTIES: JsObjectProperties = JsObjectProperties(emptyList())
     }
 
     init {
 
         "The object validator MinProperties" - {
-            val validator: JsObjectValidator.After = ObjectValidator.minProperties(MIN_PROPERTIES).build(properties)
+            val validator: JsObjectValidator = ObjectValidator.minProperties(MIN_PROPERTIES).build(PROPERTIES)
 
             "when the reader context does not contain the error builder" - {
-                val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
                 val context = JsReaderContext()
+                val input = JsObject()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, properties, objectValuesMap, input)
+                        validator.validate(context, LOCATION, PROPERTIES, input)
                     }
                     exception.message shouldBe "The error builder '${MinPropertiesObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -80,10 +68,10 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 )
 
                 "when the object is empty" - {
-                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
+                    val input = JsObject()
 
                     "then the validator should return an error" {
-                        val errors = validator.validate(context, LOCATION, properties, objectValuesMap, input)
+                        val errors = validator.validate(context, LOCATION, PROPERTIES, input)
                         errors.shouldNotBeNull()
                         errors shouldBe JsResult.Failure(
                             location = LOCATION,
@@ -93,12 +81,10 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties less than the minimum" - {
-                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
-                        this[idProperty] = ID_PROPERTY_VALUE
-                    }
+                    val input = JsObject(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, properties, objectValuesMap, input)
+                        val failure = validator.validate(context, LOCATION, PROPERTIES, input)
                         failure.shouldNotBeNull()
                         failure shouldBe JsResult.Failure(
                             location = LOCATION,
@@ -108,26 +94,26 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties equal to the minimum" - {
-                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
-                        this[idProperty] = ID_PROPERTY_VALUE
-                        this[nameProperty] = NAME_PROPERTY_VALUE
-                    }
+                    val input = JsObject(
+                        ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
+                        NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
+                    )
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, properties, objectValuesMap, input)
+                        val errors = validator.validate(context, LOCATION, PROPERTIES, input)
                         errors.shouldBeNull()
                     }
                 }
 
                 "when the object contains a number of properties more than the minimum" - {
-                    val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance().apply {
-                        this[idProperty] = ID_PROPERTY_VALUE
-                        this[nameProperty] = NAME_PROPERTY_VALUE
-                        this[titleProperty] = TITLE_PROPERTY_VALUE
-                    }
+                    val input = JsObject(
+                        ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
+                        NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
+                        TITLE_PROPERTY_NAME to JsString(TITLE_PROPERTY_VALUE)
+                    )
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, properties, objectValuesMap, input)
+                        val errors = validator.validate(context, LOCATION, PROPERTIES, input)
                         errors.shouldBeNull()
                     }
                 }

@@ -17,41 +17,22 @@
 package io.github.airflux.dsl.reader.config
 
 import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidation
 
 public fun objectReaderConfig(block: JsObjectReaderConfig.Builder.() -> Unit): JsObjectReaderConfig =
     JsObjectReaderConfig.Builder().apply(block).build()
 
-public class JsObjectReaderConfig private constructor(
-    public val validation: Validation
-) {
+public class JsObjectReaderConfig private constructor(public val validation: JsObjectValidation) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
-        private var validation: Validation.Builder = Validation.Builder()
+        private var validation: JsObjectValidation.Builder = JsObjectValidation.Builder()
 
-        public fun validation(block: Validation.Builder.() -> Unit) {
+        public fun validation(block: JsObjectValidation.Builder.() -> Unit) {
             validation.block()
         }
 
-        internal fun build(): JsObjectReaderConfig =
-            JsObjectReaderConfig(
-                validation = validation.build()
-            )
-    }
-
-    public class Validation private constructor(
-        public val before: JsObjectValidatorBuilder.Before?,
-        public val after: JsObjectValidatorBuilder.After?
-    ) {
-
-        @AirfluxMarker
-        public class Builder internal constructor(
-            public var before: JsObjectValidatorBuilder.Before? = null,
-            public var after: JsObjectValidatorBuilder.After? = null
-        ) {
-            internal fun build(): Validation = Validation(before, after)
-        }
+        internal fun build(): JsObjectReaderConfig = JsObjectReaderConfig(validation = validation.build())
     }
 
     public companion object {

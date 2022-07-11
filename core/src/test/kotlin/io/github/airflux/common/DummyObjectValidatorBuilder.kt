@@ -19,20 +19,29 @@ package io.github.airflux.common
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsArray
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
-import io.github.airflux.dsl.reader.validator.JsArrayValidator
+import io.github.airflux.core.value.JsObject
+import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
+import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
-internal class DummyAfterArrayValidatorBuilder<T>(result: JsResult.Failure?) : JsArrayValidatorBuilder.After<T> {
-    val validator = Validator<T>(result)
-    override fun build(): JsArrayValidator.After<T> = validator
+internal class DummyObjectValidatorBuilder(
+    override val key: JsObjectValidatorBuilder.Key<*>,
+    result: JsResult.Failure?
+) : JsObjectValidatorBuilder {
 
-    internal class Validator<T>(val result: JsResult.Failure?) : JsArrayValidator.After<T> {
+    val validator = Validator(result)
+    override fun build(properties: JsObjectProperties): JsObjectValidator = validator
+
+    internal class Validator(val result: JsResult.Failure?) : JsObjectValidator {
         override fun validate(
             context: JsReaderContext,
             location: JsLocation,
-            input: JsArray<*>,
-            items: List<T>
+            properties: JsObjectProperties,
+            input: JsObject
         ): JsResult.Failure? = result
+    }
+
+    companion object {
+        fun <E : JsObjectValidatorBuilder> key() = object : JsObjectValidatorBuilder.Key<E> {}
     }
 }

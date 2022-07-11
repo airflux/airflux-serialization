@@ -32,7 +32,7 @@ import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
 public class AdditionalPropertiesObjectValidator internal constructor(
     private val names: Set<String>
-) : JsObjectValidator.Before {
+) : JsObjectValidator {
 
     override fun validate(
         context: JsReaderContext,

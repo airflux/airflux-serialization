@@ -21,7 +21,12 @@ import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.github.airflux.std.validator.`object`.IsNotEmptyObjectValidator
 
-internal object IsNotEmptyObjectValidatorBuilder : JsObjectValidatorBuilder.After {
+internal class IsNotEmptyObjectValidatorBuilder : JsObjectValidatorBuilder {
+
+    override val key: JsObjectValidatorBuilder.Key<*> = Key
+    override fun build(properties: JsObjectProperties): JsObjectValidator = validator
+
     private val validator = IsNotEmptyObjectValidator()
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
+
+    companion object Key : JsObjectValidatorBuilder.Key<IsNotEmptyObjectValidatorBuilder>
 }

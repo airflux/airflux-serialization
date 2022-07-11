@@ -5,12 +5,10 @@ import io.github.airflux.dsl.reader.array.builder.item.specification.nonNullable
 import io.github.airflux.dsl.reader.array.builder.returns
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.std.validator.array.ArrayValidator.isNotEmpty
-import io.github.airflux.std.validator.array.ArrayValidator.isUnique
 
 val LotsReader = arrayReader<Lot>(ArrayReaderConfiguration) {
     validation {
-        before = isNotEmpty
-        after = isUnique { lot -> lot.id }
+        +isNotEmpty
     }
     returns(items = nonNullable(LotReader))
 }

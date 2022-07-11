@@ -16,41 +16,40 @@
 
 package io.github.airflux.dsl.reader.config
 
-import io.github.airflux.std.validator.`object`.ObjectValidator
+import io.github.airflux.common.DummyObjectValidatorBuilder
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.should
 
 internal class JsObjectReaderConfigTest : FreeSpec() {
+
+    companion object {
+        val validator = DummyObjectValidatorBuilder(
+            key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+            result = null
+        )
+    }
 
     init {
 
         "when any parameters are not set in the builder" - {
-            val config: JsObjectReaderConfig = objectReaderConfig({})
+            val config: JsObjectReaderConfig = objectReaderConfig {}
 
-            "then the validator before should be missing" {
-                config.validation.before.shouldBeNull()
-            }
-
-            "then the validator after should be missing" {
-                config.validation.after.shouldBeNull()
+            "then the validator should be missing" {
+                config.validation should beEmpty()
             }
         }
 
         "when some validators were set in the builder" - {
             val config: JsObjectReaderConfig = objectReaderConfig {
                 validation {
-                    before = ObjectValidator.additionalProperties
-                    after = ObjectValidator.isNotEmpty
+                    +validator
                 }
             }
 
-            "then the validator before should be present" {
-                config.validation.before shouldBe ObjectValidator.additionalProperties
-            }
-
-            "then the validator after should be present" {
-                config.validation.after shouldBe ObjectValidator.isNotEmpty
+            "then the validator should be present" {
+                config.validation shouldContainExactly listOf(validator)
             }
         }
     }

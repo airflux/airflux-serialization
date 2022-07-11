@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.array.builder.validator.std
+package io.github.airflux.common
 
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
+import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.value.JsArray
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
-import io.github.airflux.std.validator.array.IsUniqueArrayValidator
 
-internal class IsUniqueArrayValidatorBuilder<T, K : Any>(
-    private val keySelector: (T) -> K
-) : JsArrayValidatorBuilder.After<T> {
+internal class DummyArrayValidator(val result: JsResult.Failure?) : JsArrayValidator {
 
-    override fun build(): JsArrayValidator.After<T> = IsUniqueArrayValidator(keySelector)
+    override fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? = result
 }

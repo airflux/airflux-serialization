@@ -21,6 +21,11 @@ import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.github.airflux.std.validator.`object`.MinPropertiesObjectValidator
 
-internal class MinPropertiesObjectValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder.After {
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = MinPropertiesObjectValidator(value)
+internal class MinPropertiesObjectValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder {
+
+    override val key: JsObjectValidatorBuilder.Key<*> = Key
+
+    override fun build(properties: JsObjectProperties): JsObjectValidator = MinPropertiesObjectValidator(value)
+
+    companion object Key : JsObjectValidatorBuilder.Key<MinPropertiesObjectValidatorBuilder>
 }

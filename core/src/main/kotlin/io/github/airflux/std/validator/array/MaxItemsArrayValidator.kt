@@ -27,7 +27,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
-public class MaxItemsArrayValidator internal constructor(private val expected: Int) : JsArrayValidator.Before {
+public class MaxItemsArrayValidator internal constructor(private val expected: Int) : JsArrayValidator {
 
     override fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
         if (input.size > expected) {

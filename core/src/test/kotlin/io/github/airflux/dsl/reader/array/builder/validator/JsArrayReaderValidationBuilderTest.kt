@@ -16,12 +16,12 @@
 
 package io.github.airflux.dsl.reader.array.builder.validator
 
-import io.github.airflux.common.DummyAfterArrayValidatorBuilder
-import io.github.airflux.common.DummyBeforeArrayValidatorBuilder
+import io.github.airflux.common.DummyArrayValidatorBuilder
 import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.should
 
 internal class JsArrayReaderValidationBuilderTest : FreeSpec() {
 
@@ -31,109 +31,75 @@ internal class JsArrayReaderValidationBuilderTest : FreeSpec() {
 
             "when the config is not contained any object validators" - {
                 val config = JsArrayReaderConfig.Builder().build()
-                val validatorsBuilder = JsArrayReaderValidationBuilder<String>(config)
+                val validatorsBuilder = JsArrayReaderValidationInstance(config)
 
-                "when the before validator was not overridden" - {
-                    val validators = validatorsBuilder.build()
+                "when the validator was not overridden" - {
+                    val validators = validatorsBuilder.buildValidators()
 
                     "then there is no validator" {
-                        validators.before.shouldBeNull()
+                        validators should beEmpty()
                     }
                 }
 
-                "when the before validator was overridden" - {
-                    val validatorBuilder = DummyBeforeArrayValidatorBuilder(result = null)
+                "when the validator was overridden" - {
+                    val validatorBuilder = DummyArrayValidatorBuilder(
+                        key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                        result = null
+                    )
                     val validators = validatorsBuilder
                         .apply {
                             validation {
-                                before = validatorBuilder
+                                +validatorBuilder
                             }
                         }
-                        .build()
+                        .buildValidators()
 
                     "then the overridden validator is used" {
-                        validators.before shouldBe validatorBuilder.validator
-                    }
-                }
-
-                "when the after validator was not overridden" - {
-                    val validators = validatorsBuilder.build()
-
-                    "then there is no validator" {
-                        validators.after.shouldBeNull()
-                    }
-                }
-
-                "when the after validator was overridden" - {
-                    val validatorBuilder = DummyAfterArrayValidatorBuilder<String>(result = null)
-                    val validators = validatorsBuilder
-                        .apply {
-                            validation {
-                                after = validatorBuilder
-                            }
-                        }
-                        .build()
-
-                    "then the overridden validator is used" {
-                        validators.after shouldBe validatorBuilder.validator
+                        validators shouldContainExactly listOf(validatorBuilder.validator)
                     }
                 }
             }
 
             "when the config contains object validators" - {
-                val initBeforeValidatorBuilder = DummyBeforeArrayValidatorBuilder(result = null)
+                val initValidatorBuilder = DummyArrayValidatorBuilder(
+                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                    result = null
+                )
                 val config = JsArrayReaderConfig.Builder()
                     .apply {
                         validation {
-                            before = initBeforeValidatorBuilder
+                            +initValidatorBuilder
                         }
                     }
                     .build()
-                val validatorsBuilder = JsArrayReaderValidationBuilder<String>(config)
+                val validatorsBuilder = JsArrayReaderValidationInstance(config)
 
-                "when the before validator was not overridden" - {
-                    val validators = validatorsBuilder.build()
+                "when the validator was not overridden" - {
+                    val validators = validatorsBuilder.buildValidators()
 
                     "then the validator is used from the config" {
-                        validators.before shouldBe initBeforeValidatorBuilder.validator
+                        validators shouldContainExactly listOf(initValidatorBuilder.validator)
                     }
                 }
 
-                "when the before validator was overridden" - {
-                    val validatorBuilder = DummyBeforeArrayValidatorBuilder(result = null)
+                "when the validator was overridden" - {
+                    val validatorBuilder = DummyArrayValidatorBuilder(
+                        key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                        result = null
+                    )
                     val validators = validatorsBuilder
                         .apply {
                             validation {
-                                before = validatorBuilder
+                                +validatorBuilder
                             }
                         }
-                        .build()
+                        .buildValidators()
 
                     "then the overridden validator is used" {
-                        validators.before shouldBe validatorBuilder.validator
-                    }
-                }
-
-                "when the after validator was not overridden" - {
-                    val validators = validatorsBuilder.build()
-
-                    "then the validator is used from the config" {
-                        validators.after.shouldBeNull()
-                    }
-                }
-
-                "when the after validator was overridden" - {
-                    val validatorBuilder = DummyAfterArrayValidatorBuilder<String>(result = null)
-                    val validators = validatorsBuilder
-                        .apply {
-                            validation {
-                                after = validatorBuilder
-                            }
-                        }
-                        .build()
-
-                    "then the overridden validator is used" {
-                        validators.after shouldBe validatorBuilder.validator
+                        validators shouldContainExactly listOf(
+                            initValidatorBuilder.validator,
+                            validatorBuilder.validator
+                        )
                     }
                 }
             }

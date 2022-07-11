@@ -16,8 +16,7 @@
 
 package io.github.airflux.dsl.reader.`object`.builder
 
-import io.github.airflux.common.DummyAfterObjectValidatorBuilder
-import io.github.airflux.common.DummyBeforeObjectValidatorBuilder
+import io.github.airflux.common.DummyObjectValidatorBuilder
 import io.github.airflux.common.DummyReader
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.location.JsLocation
@@ -55,7 +54,6 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
         private val LOCATION = JsLocation.empty
 
         private val MinPropertiesError = JsonErrors.Validation.Object.MinProperties(expected = 1, actual = 0)
-        private val MaxPropertiesError = JsonErrors.Validation.Object.MaxProperties(expected = 2, actual = 1)
     }
 
     init {
@@ -63,10 +61,13 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
         "The JsObjectReaderBuilder type" - {
 
             "when no errors in the reader" - {
+                val validator = DummyObjectValidatorBuilder(
+                    key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                    result = null
+                )
                 val reader = reader<DTO> {
                     validation {
-                        before = DummyBeforeObjectValidatorBuilder(result = null)
-                        after = DummyAfterObjectValidatorBuilder(result = null)
+                        +validator
                     }
                     val name = property(propertySpec(value = USER_NAME))
                     returns { _, location ->
@@ -111,12 +112,14 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                 "when fail-fast is true" - {
                     val contextWithFailFastTrue = CONTEXT + FailFast(true)
 
-                    "when the before validator returns an error" - {
+                    "when the validator returns an error" - {
+                        val validator = DummyObjectValidatorBuilder(
+                            key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                            result = JsResult.Failure(location = LOCATION, error = MinPropertiesError)
+                        )
                         val reader = reader<DTO> {
                             validation {
-                                before = DummyBeforeObjectValidatorBuilder(
-                                    result = JsResult.Failure(location = LOCATION, error = MinPropertiesError)
-                                )
+                                +validator
                             }
                             val name = property(propertySpec(value = USER_NAME))
                             returns { _, location ->
@@ -135,10 +138,13 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "when the reader of an property returns an error" - {
+                        val validator = DummyObjectValidatorBuilder(
+                            key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                            result = null
+                        )
                         val reader = reader<DTO> {
                             validation {
-                                before = DummyBeforeObjectValidatorBuilder(result = null)
-                                after = DummyAfterObjectValidatorBuilder(result = null)
+                                +validator
                             }
                             val name: JsObjectProperty.Required<String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
@@ -159,42 +165,17 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                             )
                         }
                     }
-
-                    "when the after validator returns an error" - {
-                        val reader = reader<DTO> {
-                            validation {
-                                before = DummyBeforeObjectValidatorBuilder(null)
-                                after = DummyAfterObjectValidatorBuilder(
-                                    result = JsResult.Failure(location = LOCATION, error = MaxPropertiesError)
-                                )
-                            }
-                            val name = property(propertySpec(value = USER_NAME))
-                            returns { _, location ->
-                                DTO(name = +name).success(location)
-                            }
-                        }
-
-                        "then the reader should return the validation error" {
-                            val input = JsObject(ATTRIBUTE_NAME to JsString(USER_NAME))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
-                            result as JsResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(location = LOCATION, error = MaxPropertiesError)
-                            )
-                        }
-                    }
                 }
 
                 "when fail-fast is false" - {
                     val contextWithFailFastFalse = CONTEXT + FailFast(false)
+                    val validator = DummyObjectValidatorBuilder(
+                        key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                        result = JsResult.Failure(location = LOCATION, error = MinPropertiesError)
+                    )
                     val reader = reader<DTO> {
                         validation {
-                            before = DummyBeforeObjectValidatorBuilder(
-                                result = JsResult.Failure(location = LOCATION, error = MinPropertiesError)
-                            )
-                            after = DummyAfterObjectValidatorBuilder(
-                                result = JsResult.Failure(location = LOCATION, error = MaxPropertiesError)
-                            )
+                            +validator
                         }
                         val name: JsObjectProperty.Required<String> =
                             property(propertySpec(error = JsonErrors.PathMissing))
@@ -212,8 +193,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(ATTRIBUTE_NAME),
                                 error = JsonErrors.PathMissing
-                            ),
-                            JsResult.Failure.Cause(location = LOCATION, error = MaxPropertiesError)
+                            )
                         )
                     }
                 }

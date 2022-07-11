@@ -16,32 +16,40 @@
 
 package io.github.airflux.dsl.reader.config
 
-import io.github.airflux.std.validator.array.ArrayValidator
+import io.github.airflux.common.DummyArrayValidatorBuilder
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.should
 
 internal class JsArrayReaderConfigTest : FreeSpec() {
+
+    companion object {
+        val validator = DummyArrayValidatorBuilder(
+            key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+            result = null
+        )
+    }
 
     init {
 
         "when any validator is not registered in the configuration builder" - {
-            val config: JsArrayReaderConfig = arrayReaderConfig({})
+            val config: JsArrayReaderConfig = arrayReaderConfig {}
 
             "then validator should miss in the configuration" {
-                config.validation.before.shouldBeNull()
+                config.validation should beEmpty()
             }
         }
 
         "when some validator is registered in the configuration builder" - {
             val config: JsArrayReaderConfig = arrayReaderConfig {
                 this.validation {
-                    this.before = ArrayValidator.isNotEmpty
+                    +validator
                 }
             }
 
             "then validator should present in the configuration" {
-                config.validation.before.shouldNotBeNull()
+                config.validation.shouldNotBeNull()
             }
         }
     }

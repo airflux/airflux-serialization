@@ -33,7 +33,7 @@ import io.github.airflux.dsl.reader.array.builder.JsArrayReaderBuilder.ResultBui
 import io.github.airflux.dsl.reader.array.builder.item.specification.JsArrayItemSpec
 import io.github.airflux.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
 import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidation
-import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidationBuilder
+import io.github.airflux.dsl.reader.array.builder.validator.JsArrayReaderValidationInstance
 import io.github.airflux.dsl.reader.array.builder.validator.JsArrayValidators
 import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
 
@@ -41,22 +41,22 @@ public fun <T> arrayReader(
     configuration: JsArrayReaderConfig = JsArrayReaderConfig.DEFAULT,
     block: JsArrayReaderBuilder<T>.() -> ResultBuilder<T>
 ): JsArrayReader<T> {
-    val readerBuilder: JsArrayReaderBuilder<T> = JsArrayReaderBuilder(JsArrayReaderValidationBuilder(configuration))
+    val readerBuilder: JsArrayReaderBuilder<T> = JsArrayReaderBuilder(JsArrayReaderValidationInstance(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
 public class JsArrayReaderBuilder<T> internal constructor(
-    private val validationBuilder: JsArrayReaderValidationBuilder<T>
-) : JsArrayReaderValidation<T> by validationBuilder {
+    private val validation: JsArrayReaderValidationInstance
+) : JsArrayReaderValidation by validation {
 
     public fun interface ResultBuilder<T> {
         public fun build(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult<List<T>>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsArrayReader<T> {
-        val validators = validationBuilder.build()
+        val validators = validation.buildValidators()
         return buildObjectReader(validators, resultBuilder)
     }
 }
@@ -93,7 +93,7 @@ public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayIte
 }
 
 internal fun <T> buildObjectReader(
-    validators: JsArrayValidators<T>,
+    validators: JsArrayValidators,
     resultBuilder: ResultBuilder<T>
 ): JsArrayReader<T> =
     JsArrayReader { context, location, input ->
@@ -107,11 +107,11 @@ internal fun <T> buildObjectReader(
 
         val failures = mutableListOf<JsResult.Failure>()
 
-        if (validators.before != null) {
-            val preValidationFailure = validators.before.validate(context, location, input)
-            if (preValidationFailure != null) {
-                if (context.failFast) return@JsArrayReader preValidationFailure
-                failures.add(preValidationFailure)
+        validators.forEach { validator ->
+            val failure = validator.validate(context, location, input)
+            if (failure != null) {
+                if (context.failFast) return@JsArrayReader failure
+                failures.add(failure)
             }
         }
 
@@ -123,14 +123,6 @@ internal fun <T> buildObjectReader(
                     failures.merge()
                 },
                 ifSuccess = { success ->
-                    if (validators.after != null) {
-                        val postValidationFailure = validators.after.validate(context, location, input, success.value)
-                        if (postValidationFailure != null) {
-                            if (context.failFast) return@JsArrayReader postValidationFailure
-                            failures.add(postValidationFailure)
-                        }
-                    }
-
                     if (failures.isNotEmpty()) failures.merge() else success
                 }
             )

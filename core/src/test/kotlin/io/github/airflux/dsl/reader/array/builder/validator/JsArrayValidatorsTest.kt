@@ -16,10 +16,10 @@
 
 package io.github.airflux.dsl.reader.array.builder.validator
 
-import io.github.airflux.common.DummyAfterArrayValidatorBuilder
-import io.github.airflux.common.DummyBeforeArrayValidatorBuilder
+import io.github.airflux.common.DummyArrayValidator
+import io.github.airflux.dsl.reader.validator.JsArrayValidator
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 internal class JsArrayValidatorsTest : FreeSpec() {
@@ -28,72 +28,21 @@ internal class JsArrayValidatorsTest : FreeSpec() {
 
         "The JsArrayValidators type" - {
 
-            "when the builder was not initialized with any values" - {
-                val builder = JsArrayValidators.Builder<String>()
+            "when some validators was passed during initialize" - {
+                val firstValidatorBuilder: JsArrayValidator = DummyArrayValidator(result = null)
+                val secondValidatorBuilder: JsArrayValidator = DummyArrayValidator(result = null)
+                val validators = JsArrayValidators(listOf(firstValidatorBuilder, secondValidatorBuilder))
 
-                "when any object validators do not set in the builder" - {
-                    val validators = builder.build()
-
-                    "then the container of validators are not contained the before validator" {
-                        validators.before.shouldBeNull()
-                    }
-
-                    "then the container of validators are not contained the after validator" {
-                        validators.after.shouldBeNull()
-                    }
-                }
-
-                "when object validators do set in the builder" - {
-                    val beforeValidatorBuilder = DummyBeforeArrayValidatorBuilder(result = null)
-                    val afterValidatorBuilder = DummyAfterArrayValidatorBuilder<String>(result = null)
-                    val validators = builder.apply {
-                        before = beforeValidatorBuilder
-                        after = afterValidatorBuilder
-                    }.build()
-
-                    "then the container of validators contains the before validator that was set in the builder" {
-                        validators.before shouldBe beforeValidatorBuilder.validator
-                    }
-
-                    "then the container of validators contains the after validator that was set in the builder" {
-                        validators.after shouldBe afterValidatorBuilder.validator
-                    }
+                "then the validators container should contain the passed validators" {
+                    validators shouldContainExactly listOf(firstValidatorBuilder, secondValidatorBuilder)
                 }
             }
 
-            "when the builder was initialized with validators" - {
-                val initBeforeValidatorBuilder = DummyBeforeArrayValidatorBuilder(result = null)
-                val initAfterValidatorBuilder = DummyAfterArrayValidatorBuilder<String>(result = null)
-                val builder =
-                    JsArrayValidators.Builder(before = initBeforeValidatorBuilder, after = initAfterValidatorBuilder)
+            "when any validators was not passed during initialize" - {
+                val validators = JsArrayValidators(emptyList())
 
-                "when any object validators do not set in the builder" - {
-                    val validators = builder.build()
-
-                    "then the container of validators contains the before validator that was passed when the builder was initialized" {
-                        validators.before shouldBe initBeforeValidatorBuilder.validator
-                    }
-
-                    "then the container of validators contains the after validator that was passed when the builder was initialized" {
-                        validators.after shouldBe initAfterValidatorBuilder.validator
-                    }
-                }
-
-                "when object validators do set in the builder" - {
-                    val beforeValidatorBuilder = DummyBeforeArrayValidatorBuilder(result = null)
-                    val afterValidatorBuilder = DummyAfterArrayValidatorBuilder<String>(result = null)
-                    val validators = builder.apply {
-                        before = beforeValidatorBuilder
-                        after = afterValidatorBuilder
-                    }.build()
-
-                    "then the container of validators contains the before validator that was set in the builder" {
-                        validators.before shouldBe beforeValidatorBuilder.validator
-                    }
-
-                    "then the container of validators contains the after validator that was set in the builder" {
-                        validators.after shouldBe afterValidatorBuilder.validator
-                    }
+                "then should be returns empty instance" {
+                    validators shouldBe JsArrayValidators(emptyList())
                 }
             }
         }

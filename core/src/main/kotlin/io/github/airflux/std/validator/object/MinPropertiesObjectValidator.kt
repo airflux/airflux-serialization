@@ -25,22 +25,20 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
-public class MinPropertiesObjectValidator internal constructor(private val value: Int) : JsObjectValidator.After {
+public class MinPropertiesObjectValidator internal constructor(private val value: Int) : JsObjectValidator {
 
     override fun validate(
         context: JsReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
-        objectValuesMap: ObjectValuesMap,
         input: JsObject
     ): JsResult.Failure? =
-        if (objectValuesMap.size < value) {
+        if (input.count < value) {
             val errorBuilder = context[ErrorBuilder]
-            JsResult.Failure(location, errorBuilder.build(value, objectValuesMap.size))
+            JsResult.Failure(location, errorBuilder.build(value, input.count))
         } else
             null
 

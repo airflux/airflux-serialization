@@ -16,22 +16,15 @@
 
 package io.github.airflux.dsl.reader.`object`.builder.validator
 
-import io.github.airflux.dsl.AirfluxMarker
-import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
-public class JsObjectValidators private constructor(
-    public val before: JsObjectValidator.Before?,
-    public val after: JsObjectValidator.After?
-) {
+public class JsObjectValidators private constructor(items: List<JsObjectValidator>) : List<JsObjectValidator> by items {
 
-    @AirfluxMarker
-    public class Builder internal constructor(
-        public var before: JsObjectValidatorBuilder.Before? = null,
-        public var after: JsObjectValidatorBuilder.After? = null
-    ) {
+    public companion object {
 
-        internal fun build(properties: JsObjectProperties): JsObjectValidators =
-            JsObjectValidators(before = before?.build(properties), after = after?.build(properties))
+        private val EMPTY = JsObjectValidators(emptyList())
+
+        internal operator fun invoke(items: List<JsObjectValidator>): JsObjectValidators =
+            if (items.isEmpty()) EMPTY else JsObjectValidators(items)
     }
 }

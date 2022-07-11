@@ -23,9 +23,11 @@ import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 import io.github.airflux.std.validator.`object`.AdditionalPropertiesObjectValidator
 
-internal object AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBuilder.Before {
+internal class AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBuilder {
 
-    override fun build(properties: JsObjectProperties): JsObjectValidator.Before {
+    override val key: JsObjectValidatorBuilder.Key<*> = Key
+
+    override fun build(properties: JsObjectProperties): JsObjectValidator {
         val names: Set<String> = properties.names()
         return AdditionalPropertiesObjectValidator(names)
     }
@@ -41,4 +43,6 @@ internal object AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBu
 
         return flatMap { property -> property.names() }.toSet()
     }
+
+    companion object Key : JsObjectValidatorBuilder.Key<AdditionalPropertiesObjectValidatorBuilder>
 }

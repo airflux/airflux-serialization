@@ -25,20 +25,18 @@ import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
-public class IsNotEmptyObjectValidator internal constructor() : JsObjectValidator.After {
+public class IsNotEmptyObjectValidator internal constructor() : JsObjectValidator {
 
     override fun validate(
         context: JsReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
-        objectValuesMap: ObjectValuesMap,
         input: JsObject
     ): JsResult.Failure? =
-        if (objectValuesMap.isEmpty) {
+        if (input.isEmpty()) {
             val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build())
         } else

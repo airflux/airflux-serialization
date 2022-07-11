@@ -19,53 +19,9 @@ package io.github.airflux.dsl.reader.`object`.builder.validator
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
-public sealed interface JsObjectValidatorBuilder {
+public interface JsObjectValidatorBuilder {
+    public val key: Key<*>
+    public fun build(properties: JsObjectProperties): JsObjectValidator
 
-    public fun interface Before : JsObjectValidatorBuilder {
-        public fun build(properties: JsObjectProperties): JsObjectValidator.Before
-    }
-
-    public fun interface After : JsObjectValidatorBuilder {
-        public fun build(properties: JsObjectProperties): JsObjectValidator.After
-    }
+    public interface Key<E : JsObjectValidatorBuilder>
 }
-
-public infix fun JsObjectValidatorBuilder.Before?.or(
-    alt: JsObjectValidatorBuilder.Before
-): JsObjectValidatorBuilder.Before =
-    if (this != null)
-        JsObjectValidatorBuilder.Before { properties ->
-            this.build(properties).or(alt.build(properties))
-        }
-    else
-        alt
-
-public infix fun JsObjectValidatorBuilder.Before?.and(
-    alt: JsObjectValidatorBuilder.Before
-): JsObjectValidatorBuilder.Before =
-    if (this != null)
-        JsObjectValidatorBuilder.Before { properties ->
-            this.build(properties).and(alt.build(properties))
-        }
-    else
-        alt
-
-public infix fun JsObjectValidatorBuilder.After?.or(
-    alt: JsObjectValidatorBuilder.After
-): JsObjectValidatorBuilder.After =
-    if (this != null)
-        JsObjectValidatorBuilder.After { properties ->
-            this.build(properties).or(alt.build(properties))
-        }
-    else
-        alt
-
-public infix fun JsObjectValidatorBuilder.After?.and(
-    alt: JsObjectValidatorBuilder.After
-): JsObjectValidatorBuilder.After =
-    if (this != null)
-        JsObjectValidatorBuilder.After { properties ->
-            this.build(properties).and(alt.build(properties))
-        }
-    else
-        alt

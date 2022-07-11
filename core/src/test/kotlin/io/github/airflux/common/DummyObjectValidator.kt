@@ -20,22 +20,15 @@ import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsObject
-import io.github.airflux.dsl.reader.`object`.builder.ObjectValuesMap
 import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
 import io.github.airflux.dsl.reader.validator.JsObjectValidator
 
-internal class DummyAfterObjectValidatorBuilder(result: JsResult.Failure?) : JsObjectValidatorBuilder.After {
-    val validator = Validator(result)
-    override fun build(properties: JsObjectProperties): JsObjectValidator.After = validator
+internal class DummyObjectValidator(val result: JsResult.Failure?) : JsObjectValidator {
 
-    internal class Validator(val result: JsResult.Failure?) : JsObjectValidator.After {
-        override fun validate(
-            context: JsReaderContext,
-            location: JsLocation,
-            properties: JsObjectProperties,
-            objectValuesMap: ObjectValuesMap,
-            input: JsObject
-        ): JsResult.Failure? = result
-    }
+    override fun validate(
+        context: JsReaderContext,
+        location: JsLocation,
+        properties: JsObjectProperties,
+        input: JsObject
+    ): JsResult.Failure? = result
 }

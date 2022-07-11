@@ -27,7 +27,7 @@ import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.dsl.reader.validator.JsArrayValidator
 
-public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator.Before {
+public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator {
 
     override fun validate(context: JsReaderContext, location: JsLocation, input: JsArray<*>): JsResult.Failure? =
         if (input.isEmpty()) {
