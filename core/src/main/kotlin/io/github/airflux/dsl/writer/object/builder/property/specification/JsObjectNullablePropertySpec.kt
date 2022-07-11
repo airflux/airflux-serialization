@@ -25,13 +25,14 @@ public fun <T : Any, P : Any> nullable(
     name: String,
     from: (T) -> P?,
     writer: JsWriter<P>
-): JsObjectPropertySpec.Nullable<T, P> = JsObjectPropertySpec.Nullable(
-    name = name,
-    from = from,
-    writer = { context, location, value ->
-        if (value != null) writer.write(context, location, value) else JsNull
-    }
-)
+): JsObjectPropertySpec.Nullable<T, P> =
+    JsObjectPropertySpec.Nullable(
+        name = name,
+        from = from,
+        writer = { context, location, value ->
+            if (value != null) writer.write(context, location, value) else JsNull
+        }
+    )
 
 public infix fun <T : Any, P : Any> JsObjectPropertySpec.Nullable<T, P>.filter(
     predicate: JsPredicate<P>
