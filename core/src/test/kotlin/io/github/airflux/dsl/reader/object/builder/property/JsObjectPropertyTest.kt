@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.reader.`object`.builder.property.specification
+package io.github.airflux.dsl.reader.`object`.builder.property
 
-import io.github.airflux.dsl.reader.`object`.builder.property.JsObjectProperty
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.defaultable
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.nullable
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.nullableWithDefault
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.optional
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.optionalWithDefault
+import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.std.reader.StringReader
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -31,7 +36,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
         "The JsObjectProperty type" - {
 
-            "when creating instance of the Required type" - {
+            "when created an instance of the required property" - {
                 val spec = required(name = "id", reader = StringReader)
                 val property = JsObjectProperty.Required(spec)
 
@@ -44,7 +49,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
                 }
             }
 
-            "when creating instance of the Defaultable type" - {
+            "when created an instance of the defaultable property" - {
                 val spec = defaultable(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
                 val property = JsObjectProperty.Defaultable(spec)
 
@@ -57,7 +62,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
                 }
             }
 
-            "when creating instance of the Optional type" - {
+            "when created an instance of the optional property" - {
                 val spec = optional(name = "id", reader = StringReader)
                 val property = JsObjectProperty.Optional(spec)
 
@@ -70,7 +75,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
                 }
             }
 
-            "when creating instance of the OptionalWithDefault type" - {
+            "when created an instance of the optional with default property" - {
                 val spec = optionalWithDefault(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
                 val property = JsObjectProperty.OptionalWithDefault(spec)
 
@@ -83,7 +88,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
                 }
             }
 
-            "when creating instance of the Nullable type" - {
+            "when created an instance of the nullable property" - {
                 val spec = nullable(name = "id", reader = StringReader)
                 val property = JsObjectProperty.Nullable(spec)
 
@@ -96,7 +101,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
                 }
             }
 
-            "when creating instance of the NullableWithDefault type" - {
+            "when created an instance of the nullable with default property" - {
                 val spec = nullableWithDefault(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
                 val property = JsObjectProperty.NullableWithDefault(spec)
 
