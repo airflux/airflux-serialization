@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.writer
+package io.github.airflux.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsWriter
-import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.core.writer.filter
+import io.github.airflux.core.writer.predicate.JsPredicate
 
-public fun <T : Any> T.serialization(context: JsWriterContext, location: JsLocation, writer: JsWriter<T>): JsValue? =
-    writer.write(context, location, this)
+public fun <T : Any> optional(writer: JsWriter<T>): JsArrayItemSpec.Optional<T?> =
+    JsArrayItemSpec.Optional { context, location, value ->
+        if (value != null) writer.write(context, location, value) else null
+    }
+
+public infix fun <T : Any> JsArrayItemSpec.Optional<T?>.filter(
+    predicate: JsPredicate<T>
+): JsArrayItemSpec.Optional<T?> =
+    JsArrayItemSpec.Optional(writer = writer.filter(predicate))

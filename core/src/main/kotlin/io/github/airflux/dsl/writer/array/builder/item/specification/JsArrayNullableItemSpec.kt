@@ -16,7 +16,17 @@
 
 package io.github.airflux.dsl.writer.array.builder.item.specification
 
+import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.core.writer.filter
+import io.github.airflux.core.writer.predicate.JsPredicate
 
-public fun <T : Any> nonNullable(writer: JsWriter<T>): JsArrayItemSpec.NonNullable<T> =
-    JsArrayItemSpec.NonNullable(writer)
+public fun <T : Any> nullable(writer: JsWriter<T>): JsArrayItemSpec.Nullable<T?> =
+    JsArrayItemSpec.Nullable { context, location, value ->
+        if (value != null) writer.write(context, location, value) else JsNull
+    }
+
+public infix fun <T : Any> JsArrayItemSpec.Nullable<T?>.filter(
+    predicate: JsPredicate<T>
+): JsArrayItemSpec.Nullable<T?> =
+    JsArrayItemSpec.Nullable(writer = writer.filter(predicate))

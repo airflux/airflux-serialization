@@ -18,7 +18,6 @@ package io.github.airflux.dsl.writer.array.builder
 
 import io.github.airflux.core.value.JsArray
 import io.github.airflux.core.value.JsNull
-import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsArrayWriter
 import io.github.airflux.core.writer.context.JsWriterContext
@@ -27,32 +26,34 @@ import io.github.airflux.core.writer.context.option.writeActionIfArrayIsEmpty
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.writer.array.builder.item.specification.JsArrayItemSpec
 
+public fun <T> arrayWriter(
+    block: JsArrayWriterBuilder.() -> JsArrayWriterBuilder.WriterBuilder<T>
+): JsArrayWriter<T> =
+    JsArrayWriterBuilder().block().build()
+
 @AirfluxMarker
-public class JsArrayWriterBuilder<T> internal constructor() {
+public class JsArrayWriterBuilder internal constructor() {
 
-    public class WriterBuilder<T> internal constructor(internal val build: () -> JsArrayWriter<T>)
-
-    public fun returns(items: JsArrayItemSpec<T>): WriterBuilder<T> {
-        val writer = items.writer
-        return WriterBuilder(
-            build = {
-                JsArrayWriter { context, location, value ->
-                    val values = value.mapNotNull { item -> writer.write(context, location, item) }
-                    if (values.isNotEmpty())
-                        JsArray(items = values)
-                    else
-                        valueIfArrayIsEmpty(context)
-                }
-            }
-        )
-    }
-
-    internal companion object {
-        internal fun valueIfArrayIsEmpty(context: JsWriterContext): JsValue? =
-            when (context.writeActionIfArrayIsEmpty) {
-                WriteActionIfArrayIsEmpty.Action.EMPTY -> JsObject()
-                WriteActionIfArrayIsEmpty.Action.NULL -> JsNull
-                WriteActionIfArrayIsEmpty.Action.SKIP -> null
-            }
+    public fun interface WriterBuilder<T> {
+        public fun build(): JsArrayWriter<T>
     }
 }
+
+public fun <T> returns(items: JsArrayItemSpec<T>): JsArrayWriterBuilder.WriterBuilder<T> {
+    val writer = items.writer
+    return JsArrayWriterBuilder.WriterBuilder {
+        JsArrayWriter { context, location, values ->
+            values.mapNotNull { value -> writer.write(context, location, value) }
+                .takeIf { it.isNotEmpty() }
+                ?.let { JsArray(items = it) }
+                ?: valueIfArrayIsEmpty(context)
+        }
+    }
+}
+
+internal fun valueIfArrayIsEmpty(context: JsWriterContext): JsValue? =
+    when (context.writeActionIfArrayIsEmpty) {
+        WriteActionIfArrayIsEmpty.Action.EMPTY -> JsArray<JsValue>()
+        WriteActionIfArrayIsEmpty.Action.NULL -> JsNull
+        WriteActionIfArrayIsEmpty.Action.SKIP -> null
+    }

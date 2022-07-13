@@ -2,8 +2,9 @@ package io.github.airflux.quickstart.dto.writer
 
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.JsWriter
-import io.github.airflux.dsl.writer.array.builder.item.specification.nonNullable
-import io.github.airflux.dsl.writer.arrayWriter
+import io.github.airflux.dsl.writer.array.builder.arrayWriter
+import io.github.airflux.dsl.writer.array.builder.item.specification.nullable
+import io.github.airflux.dsl.writer.array.builder.returns
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.required
 import io.github.airflux.dsl.writer.`object`.builder.writer
 import io.github.airflux.quickstart.dto.model.Lot
@@ -20,6 +21,6 @@ val LotWriter = writer<Lot> {
     property(required(name = "value", from = Lot::value, writer = ValueWriter))
 }
 
-val LotsWriter = arrayWriter<Lot> {
-    returns(items = nonNullable(LotWriter))
+val LotsWriter = arrayWriter<Lot?> {
+    returns(items = nullable(LotWriter))
 }

@@ -1125,24 +1125,23 @@ public final class io/github/airflux/dsl/value/JsValueOpsKt {
 }
 
 public final class io/github/airflux/dsl/writer/WriterOpsKt {
-	public static final fun arrayWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsArrayWriter;
 	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/core/value/JsValue;
 }
 
 public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder {
-	public final fun returns (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec;)Lio/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder;
 }
 
-public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder {
+public abstract interface class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder {
+	public abstract fun build ()Lio/github/airflux/core/writer/JsArrayWriter;
+}
+
+public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilderKt {
+	public static final fun arrayWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsArrayWriter;
+	public static final fun returns (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec;)Lio/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder;
 }
 
 public abstract interface class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
 	public abstract fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
-}
-
-public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
-	public fun <init> (Lio/github/airflux/core/writer/JsWriter;)V
-	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
 public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
@@ -1150,12 +1149,28 @@ public final class io/github/airflux/dsl/writer/array/builder/item/specification
 	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayNonNullableItemSpecKt {
-	public static final fun nullable (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable;
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Optional : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
+	public fun <init> (Lio/github/airflux/core/writer/JsWriter;)V
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
+}
+
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Required : io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec {
+	public fun <init> (Lio/github/airflux/core/writer/JsWriter;)V
+	public fun getWriter ()Lio/github/airflux/core/writer/JsWriter;
 }
 
 public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayNullableItemSpecKt {
-	public static final fun nonNullable (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable;
+	public static final fun filter (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable;Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable;
+	public static final fun nullable (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable;
+}
+
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayOptionalItemSpecKt {
+	public static final fun filter (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Optional;Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Optional;
+	public static final fun optional (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Optional;
+}
+
+public final class io/github/airflux/dsl/writer/array/builder/item/specification/JsArrayRequiredItemSpecKt {
+	public static final fun required (Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Required;
 }
 
 public final class io/github/airflux/dsl/writer/context/JsWriterContextBuilder {

@@ -21,6 +21,7 @@ import io.github.airflux.core.writer.JsWriter
 public sealed interface JsArrayItemSpec<T> {
     public val writer: JsWriter<T>
 
-    public class NonNullable<T>(override val writer: JsWriter<T>) : JsArrayItemSpec<T>
-    public class Nullable<T>(override val writer: JsWriter<T?>) : JsArrayItemSpec<T?>
+    public class Required<T : Any>(override val writer: JsWriter<T>) : JsArrayItemSpec<T>
+    public class Optional<T : Any?>(override val writer: JsWriter<T?>) : JsArrayItemSpec<T?>
+    public class Nullable<T : Any?>(override val writer: JsWriter<T?>) : JsArrayItemSpec<T?>
 }
