@@ -28,8 +28,8 @@ public sealed class JsObjectProperty<T : Any> {
 
     public class Required<T : Any, P : Any> private constructor(
         override val name: String,
-        private val from: (T) -> P,
-        private val writer: JsWriter<P>
+        internal val from: (T) -> P,
+        internal val writer: JsWriter<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Required<T, P>) : this(spec.name, spec.from, spec.writer)
@@ -40,8 +40,8 @@ public sealed class JsObjectProperty<T : Any> {
 
     public class Optional<T : Any, P : Any> private constructor(
         override val name: String,
-        private val from: (T) -> P?,
-        private val writer: JsWriter<P?>
+        internal val from: (T) -> P?,
+        internal val writer: JsWriter<P?>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Optional<T, P>) : this(spec.name, spec.from, spec.writer)
@@ -52,8 +52,8 @@ public sealed class JsObjectProperty<T : Any> {
 
     public class Nullable<T : Any, P : Any> private constructor(
         override val name: String,
-        private val from: (T) -> P?,
-        private val writer: JsWriter<P?>
+        internal val from: (T) -> P?,
+        internal val writer: JsWriter<P?>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Nullable<T, P>) : this(spec.name, spec.from, spec.writer)

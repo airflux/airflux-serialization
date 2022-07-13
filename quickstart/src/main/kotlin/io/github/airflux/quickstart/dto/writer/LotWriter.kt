@@ -5,7 +5,7 @@ import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.dsl.writer.array.builder.item.specification.nonNullable
 import io.github.airflux.dsl.writer.arrayWriter
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.required
-import io.github.airflux.dsl.writer.writer
+import io.github.airflux.dsl.writer.`object`.builder.writer
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.std.writer.StringWriter

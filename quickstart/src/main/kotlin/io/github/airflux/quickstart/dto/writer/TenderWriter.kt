@@ -2,7 +2,7 @@ package io.github.airflux.quickstart.dto.writer
 
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.optional
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.required
-import io.github.airflux.dsl.writer.writer
+import io.github.airflux.dsl.writer.`object`.builder.writer
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.std.writer.StringWriter
 

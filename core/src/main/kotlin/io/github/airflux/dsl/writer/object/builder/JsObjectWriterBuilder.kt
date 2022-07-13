@@ -25,49 +25,44 @@ import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty.A
 import io.github.airflux.core.writer.context.option.writeActionIfObjectIsEmpty
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.writer.`object`.builder.property.JsObjectProperties
-import io.github.airflux.dsl.writer.`object`.builder.property.JsObjectProperty
-import io.github.airflux.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
+import io.github.airflux.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilder
+import io.github.airflux.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilderInstance
+
+public fun <T : Any> writer(block: JsObjectWriterBuilder<T>.() -> Unit): JsObjectWriter<T> =
+    JsObjectWriterBuilder<T>(JsObjectWriterPropertiesBuilderInstance())
+        .apply(block).build()
 
 @AirfluxMarker
-public class JsObjectWriterBuilder<T : Any> internal constructor() {
-
-    private val propertiesBuilder = JsObjectProperties.Builder<T>()
-
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Required<T, P>): JsObjectProperty.Required<T, P> =
-        JsObjectProperty.Required(spec)
-            .also { propertiesBuilder.add(it) }
-
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Optional<T, P>): JsObjectProperty.Optional<T, P> =
-        JsObjectProperty.Optional(spec)
-            .also { propertiesBuilder.add(it) }
-
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<T, P>): JsObjectProperty.Nullable<T, P> =
-        JsObjectProperty.Nullable(spec)
-            .also { propertiesBuilder.add(it) }
+public class JsObjectWriterBuilder<T : Any> internal constructor(
+    private val propertiesBuilder: JsObjectWriterPropertiesBuilderInstance<T>
+) : JsObjectWriterPropertiesBuilder<T> by propertiesBuilder {
 
     internal fun build(): JsObjectWriter<T> {
-        val properties = propertiesBuilder.build()
-        return JsObjectWriter { context, location, input ->
-            val items = properties.mapNotNull { property ->
-                val currentLocation = location.append(property.name)
-                property.write(context, currentLocation, input)
-                    ?.let { value -> property.name to value }
-            }
-
-            if (items.isNotEmpty())
-                JsObject(items.toMap())
-            else
-                valueIfObjectIsEmpty(context)
-        }
-    }
-
-    internal companion object {
-
-        internal fun valueIfObjectIsEmpty(context: JsWriterContext): JsValue? =
-            when (context.writeActionIfObjectIsEmpty) {
-                Action.EMPTY -> JsObject()
-                Action.NULL -> JsNull
-                Action.SKIP -> null
-            }
+        val properties: JsObjectProperties<T> = propertiesBuilder.build()
+        return buildObjectWriter(properties)
     }
 }
+
+internal fun <T : Any> buildObjectWriter(properties: JsObjectProperties<T>): JsObjectWriter<T> =
+    JsObjectWriter { context, location, input ->
+        val items: Map<String, JsValue> = mutableMapOf<String, JsValue>()
+            .apply {
+                properties.forEach { property ->
+                    val currentLocation = location.append(property.name)
+                    property.write(context, currentLocation, input)
+                        ?.let { value -> this[property.name] = value }
+                }
+            }
+
+        if (items.isNotEmpty())
+            JsObject(items.toMap())
+        else
+            valueIfObjectIsEmpty(context)
+    }
+
+internal fun valueIfObjectIsEmpty(context: JsWriterContext): JsValue? =
+    when (context.writeActionIfObjectIsEmpty) {
+        Action.EMPTY -> JsObject()
+        Action.NULL -> JsNull
+        Action.SKIP -> null
+    }

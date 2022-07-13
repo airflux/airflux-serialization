@@ -1127,7 +1127,6 @@ public final class io/github/airflux/dsl/value/JsValueOpsKt {
 public final class io/github/airflux/dsl/writer/WriterOpsKt {
 	public static final fun arrayWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsArrayWriter;
 	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/core/value/JsValue;
-	public static final fun writer (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsObjectWriter;
 }
 
 public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder {
@@ -1170,10 +1169,14 @@ public final class io/github/airflux/dsl/writer/context/JsWriterContextBuilderKt
 	public static final fun writerContext (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/context/JsWriterContext;
 }
 
-public final class io/github/airflux/dsl/writer/object/builder/JsObjectWriterBuilder {
-	public final fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Nullable;
-	public final fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Optional;
-	public final fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Required;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Required;
+public final class io/github/airflux/dsl/writer/object/builder/JsObjectWriterBuilder : io/github/airflux/dsl/writer/object/builder/property/JsObjectWriterPropertiesBuilder {
+	public fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Nullable;
+	public fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Optional;
+	public fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Required;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Required;
+}
+
+public final class io/github/airflux/dsl/writer/object/builder/JsObjectWriterBuilderKt {
+	public static final fun writer (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsObjectWriter;
 }
 
 public final class io/github/airflux/dsl/writer/object/builder/property/JsObjectProperties : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker {
@@ -1214,6 +1217,12 @@ public final class io/github/airflux/dsl/writer/object/builder/property/JsObject
 public final class io/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Required : io/github/airflux/dsl/writer/object/builder/property/JsObjectProperty {
 	public fun getName ()Ljava/lang/String;
 	public fun write (Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/value/JsValue;
+}
+
+public abstract interface class io/github/airflux/dsl/writer/object/builder/property/JsObjectWriterPropertiesBuilder {
+	public abstract fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Nullable;
+	public abstract fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Optional;
+	public abstract fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Required;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Required;
 }
 
 public final class io/github/airflux/dsl/writer/object/builder/property/specification/JsObjectNullablePropertySpecKt {

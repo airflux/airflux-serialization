@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.writer
+package io.github.airflux.common
 
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.JsArrayWriter
 import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.dsl.writer.array.builder.JsArrayWriterBuilder
 
-public fun <T : Any> T.serialization(context: JsWriterContext, location: JsLocation, writer: JsWriter<T>): JsValue? =
-    writer.write(context, location, this)
-
-public fun <T : Any> arrayWriter(
-    block: JsArrayWriterBuilder<T>.() -> JsArrayWriterBuilder.WriterBuilder<T>
-): JsArrayWriter<T> =
-    JsArrayWriterBuilder<T>().block().build()
+internal class DummyWriter<T>(val result: (T) -> JsValue?) : JsWriter<T> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? = result(value)
+}

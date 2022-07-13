@@ -18,15 +18,4 @@ package io.github.airflux.dsl.writer.`object`.builder.property
 
 public class JsObjectProperties<T : Any> internal constructor(
     private val items: List<JsObjectProperty<T>>
-) : Collection<JsObjectProperty<T>> by items {
-
-    internal class Builder<T : Any> {
-        private val properties = mutableListOf<JsObjectProperty<T>>()
-
-        fun add(property: JsObjectProperty<T>) {
-            properties.add(property)
-        }
-
-        internal fun build(): JsObjectProperties<T> = JsObjectProperties(properties)
-    }
-}
+) : Collection<JsObjectProperty<T>> by items
