@@ -16,13 +16,9 @@
 
 package io.github.airflux.dsl.writer.`object`.builder
 
-import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsObjectWriter
-import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty.Action
-import io.github.airflux.core.writer.context.option.writeActionIfObjectIsEmpty
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.writer.`object`.builder.property.JsObjectProperties
 import io.github.airflux.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilder
@@ -53,16 +49,5 @@ internal fun <T : Any> buildObjectWriter(properties: JsObjectProperties<T>): JsO
                         ?.let { value -> this[property.name] = value }
                 }
             }
-
-        if (items.isNotEmpty())
-            JsObject(items.toMap())
-        else
-            valueIfObjectIsEmpty(context)
-    }
-
-internal fun valueIfObjectIsEmpty(context: JsWriterContext): JsValue? =
-    when (context.writeActionIfObjectIsEmpty) {
-        Action.EMPTY -> JsObject()
-        Action.NULL -> JsNull
-        Action.SKIP -> null
+        JsObject(items)
     }

@@ -16,7 +16,6 @@
 
 package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
-import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
@@ -26,15 +25,9 @@ public fun <T : Any, P : Any> nullable(
     from: (T) -> P?,
     writer: JsWriter<P>
 ): JsObjectPropertySpec.Nullable<T, P> =
-    JsObjectPropertySpec.Nullable(
-        name = name,
-        from = from,
-        writer = { context, location, value ->
-            if (value != null) writer.write(context, location, value) else JsNull
-        }
-    )
+    JsObjectPropertySpec.Nullable(name = name, from = from, writer = writer)
 
 public infix fun <T : Any, P : Any> JsObjectPropertySpec.Nullable<T, P>.filter(
     predicate: JsPredicate<P>
-): JsObjectPropertySpec.Nullable<T, P> =
-    JsObjectPropertySpec.Nullable(name = name, from = from, writer = writer.filter(predicate))
+): JsObjectPropertySpec.Optional<T, P> =
+    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

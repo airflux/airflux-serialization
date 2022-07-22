@@ -23,15 +23,10 @@ import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.option.WriteActionIfArrayIsEmpty
-import io.github.airflux.core.writer.context.option.WriteActionIfArrayIsEmpty.Action.EMPTY
-import io.github.airflux.core.writer.context.option.WriteActionIfArrayIsEmpty.Action.NULL
-import io.github.airflux.core.writer.context.option.WriteActionIfArrayIsEmpty.Action.SKIP
+import io.github.airflux.dsl.writer.array.builder.item.specification.nonNullable
 import io.github.airflux.dsl.writer.array.builder.item.specification.nullable
 import io.github.airflux.dsl.writer.array.builder.item.specification.optional
-import io.github.airflux.dsl.writer.array.builder.item.specification.required
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class JsArrayWriterBuilderTest : FreeSpec() {
@@ -50,7 +45,7 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
             "when have some required items for writing to an array" - {
                 val writer = arrayWriter<String> {
-                    returns(items = required(writer = DummyWriter { JsString(it) }))
+                    items(nonNullable(writer = DummyWriter { JsString(it) }))
                 }
                 val value = listOf(FIRST_ITEM, SECOND_ITEM)
                 val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
@@ -63,7 +58,7 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
             "when have some optional items for writing to an array" - {
                 val writer = arrayWriter<String?> {
-                    returns(items = optional(writer = DummyWriter { JsString(it) }))
+                    items(optional(writer = DummyWriter { JsString(it) }))
                 }
                 val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
                 val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
@@ -76,7 +71,7 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
             "when have some nullable items for writing to an array" - {
                 val writer = arrayWriter<String?> {
-                    returns(items = nullable(writer = DummyWriter { JsString(it) }))
+                    items(nullable(writer = DummyWriter { JsString(it) }))
                 }
                 val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
                 val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
@@ -89,45 +84,13 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
             "when no items for writing to an array" - {
                 val writer = arrayWriter<String> {
-                    returns(items = required(writer = DummyWriter { JsString(it) }))
+                    items(nonNullable(writer = DummyWriter { JsString(it) }))
                 }
                 val value = emptyList<String>()
 
-                "if valueIfArrayIsEmpty equals EMPTY" - {
-                    val result = writer.write(
-                        context = CONTEXT + WriteActionIfArrayIsEmpty(value = EMPTY),
-                        location = LOCATION,
-                        value = value
-                    )
-
-                    "then should returns the empty JsArray" {
-                        result as JsArray<*>
-                        result shouldBe JsArray<JsValue>()
-                    }
-                }
-
-                "if valueIfArrayIsEmpty equals NULL" - {
-                    val result = writer.write(
-                        context = CONTEXT + WriteActionIfArrayIsEmpty(value = NULL),
-                        location = LOCATION,
-                        value = value
-                    )
-
-                    "then should returns the JsNull value" {
-                        result shouldBe JsNull
-                    }
-                }
-
-                "if valueIfArrayIsEmpty equals SKIP" - {
-                    val result = writer.write(
-                        context = CONTEXT + WriteActionIfArrayIsEmpty(value = SKIP),
-                        location = LOCATION,
-                        value = value
-                    )
-
-                    "then should returns the null value" {
-                        result.shouldBeNull()
-                    }
+                "then should returns the empty JsArray" {
+                    val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                    result shouldBe JsArray<JsValue>()
                 }
             }
         }

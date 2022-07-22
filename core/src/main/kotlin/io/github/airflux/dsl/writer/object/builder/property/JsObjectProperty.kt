@@ -17,6 +17,7 @@
 package io.github.airflux.dsl.writer.`object`.builder.property
 
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.context.JsWriterContext
@@ -28,8 +29,8 @@ public sealed class JsObjectProperty<T : Any> {
 
     public class Required<T : Any, P : Any> private constructor(
         override val name: String,
-        internal val from: (T) -> P,
-        internal val writer: JsWriter<P>
+        private val from: (T) -> P,
+        private val writer: JsWriter<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Required<T, P>) : this(spec.name, spec.from, spec.writer)
@@ -40,25 +41,35 @@ public sealed class JsObjectProperty<T : Any> {
 
     public class Optional<T : Any, P : Any> private constructor(
         override val name: String,
-        internal val from: (T) -> P?,
-        internal val writer: JsWriter<P?>
+        private val from: (T) -> P?,
+        private val writer: JsWriter<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Optional<T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: JsWriterContext, location: JsLocation, input: T): JsValue? =
-            writer.write(context, location, from(input))
+        override fun write(context: JsWriterContext, location: JsLocation, input: T): JsValue? {
+            val value = from(input)
+            return if (value != null)
+                writer.write(context, location, value)
+            else
+                null
+        }
     }
 
     public class Nullable<T : Any, P : Any> private constructor(
         override val name: String,
-        internal val from: (T) -> P?,
-        internal val writer: JsWriter<P?>
+        private val from: (T) -> P?,
+        private val writer: JsWriter<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Nullable<T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: JsWriterContext, location: JsLocation, input: T): JsValue? =
-            writer.write(context, location, from(input))
+        override fun write(context: JsWriterContext, location: JsLocation, input: T): JsValue? {
+            val value = from(input)
+            return if (value != null)
+                writer.write(context, location, value)
+            else
+                JsNull
+        }
     }
 }

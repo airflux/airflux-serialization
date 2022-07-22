@@ -18,25 +18,24 @@ package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
 import io.github.airflux.core.writer.JsWriter
 
-public sealed interface JsObjectPropertySpec<T, P> {
+public sealed interface JsObjectPropertySpec<T : Any, P : Any> {
     public val name: String
-    public val writer: JsWriter<P>
 
     public class Required<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P,
-        override val writer: JsWriter<P>
+        public val writer: JsWriter<P>
     ) : JsObjectPropertySpec<T, P>
 
     public class Optional<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
-        override val writer: JsWriter<P?>
-    ) : JsObjectPropertySpec<T, P?>
+        public val writer: JsWriter<P>
+    ) : JsObjectPropertySpec<T, P>
 
     public class Nullable<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
-        override val writer: JsWriter<P?>
-    ) : JsObjectPropertySpec<T, P?>
+        public val writer: JsWriter<P>
+    ) : JsObjectPropertySpec<T, P>
 }

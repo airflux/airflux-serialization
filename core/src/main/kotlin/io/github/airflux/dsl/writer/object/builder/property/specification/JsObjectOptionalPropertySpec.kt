@@ -25,13 +25,7 @@ public fun <T : Any, P : Any> optional(
     from: (T) -> P?,
     writer: JsWriter<P>
 ): JsObjectPropertySpec.Optional<T, P> =
-    JsObjectPropertySpec.Optional(
-        name = name,
-        from = from,
-        writer = { context, location, value ->
-            if (value != null) writer.write(context, location, value) else null
-        }
-    )
+    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer)
 
 public infix fun <T : Any, P : Any> JsObjectPropertySpec.Optional<T, P>.filter(
     predicate: JsPredicate<P>

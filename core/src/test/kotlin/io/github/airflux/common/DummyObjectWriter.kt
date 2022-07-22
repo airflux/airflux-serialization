@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.writer.array.builder.item.specification
+package io.github.airflux.common
 
-import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.value.JsValue
+import io.github.airflux.core.writer.JsObjectWriter
+import io.github.airflux.core.writer.context.JsWriterContext
 
-public fun <T : Any> required(writer: JsWriter<T>): JsArrayItemSpec.Required<T> = JsArrayItemSpec.Required(writer)
+internal class DummyObjectWriter<T : Any>(val result: (T) -> JsValue?) : JsObjectWriter<T> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? = result(value)
+}

@@ -20,28 +20,28 @@ import io.github.airflux.core.writer.context.JsWriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class WriteActionIfObjectIsEmptyTest : FreeSpec() {
+internal class ActionOfWriterIfObjectIsEmptyTest : FreeSpec() {
 
     init {
-        "The extension-function writeActionIfObjectIsEmpty" - {
+        "The actionOfWriterIfObjectIsEmpty extension-property" - {
 
-            "when the writer context does not contain the WriteActionIfObjectIsEmpty option" - {
+            "when the writer context does not contain the ActionOfWriterIfObjectIsEmpty option" - {
                 val context = JsWriterContext()
 
                 "should return the default value" {
-                    val result = context.writeActionIfObjectIsEmpty
-                    result shouldBe WriteActionIfObjectIsEmpty.Action.SKIP
+                    val result = context.actionOfWriterIfObjectIsEmpty
+                    result shouldBe ActionOfWriterIfObjectIsEmpty.Action.SKIP
                 }
             }
 
-            "when the writer context contain the WriteActionIfObjectIsEmpty option" - {
+            "when the writer context contain the ActionOfWriterIfObjectIsEmpty option" - {
                 val context = JsWriterContext(
-                    WriteActionIfObjectIsEmpty(WriteActionIfObjectIsEmpty.Action.NULL)
+                    ActionOfWriterIfObjectIsEmpty(ActionOfWriterIfObjectIsEmpty.Action.NULL)
                 )
 
                 "should return the option value" {
-                    val result = context.writeActionIfObjectIsEmpty
-                    result shouldBe WriteActionIfObjectIsEmpty.Action.NULL
+                    val result = context.actionOfWriterIfObjectIsEmpty
+                    result shouldBe ActionOfWriterIfObjectIsEmpty.Action.NULL
                 }
             }
         }

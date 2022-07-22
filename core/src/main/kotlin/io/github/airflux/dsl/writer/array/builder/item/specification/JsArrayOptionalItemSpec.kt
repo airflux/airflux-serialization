@@ -20,12 +20,9 @@ import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
 
-public fun <T : Any> optional(writer: JsWriter<T>): JsArrayItemSpec.Optional<T?> =
-    JsArrayItemSpec.Optional { context, location, value ->
-        if (value != null) writer.write(context, location, value) else null
-    }
+public fun <T> optional(writer: JsWriter<T & Any>): JsArrayItemSpec.Optional<T> = JsArrayItemSpec.Optional(writer)
 
-public infix fun <T : Any> JsArrayItemSpec.Optional<T?>.filter(
-    predicate: JsPredicate<T>
-): JsArrayItemSpec.Optional<T?> =
+public infix fun <T> JsArrayItemSpec.Optional<T>.filter(
+    predicate: JsPredicate<T & Any>
+): JsArrayItemSpec.Optional<T> =
     JsArrayItemSpec.Optional(writer = writer.filter(predicate))

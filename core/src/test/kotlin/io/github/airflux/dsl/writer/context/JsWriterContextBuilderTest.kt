@@ -17,8 +17,8 @@
 package io.github.airflux.dsl.writer.context
 
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.option.WriteActionIfArrayIsEmpty
-import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty
+import io.github.airflux.core.writer.context.option.ActionOfWriterIfArrayIsEmpty
+import io.github.airflux.core.writer.context.option.ActionOfWriterIfObjectIsEmpty
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -36,21 +36,21 @@ internal class JsWriterContextBuilderTest : FreeSpec() {
 
         "when writeActionIfArrayIsEmpty parameter is set in the builder" - {
             val context: JsWriterContext = writerContext {
-                writeActionIfArrayIsEmpty = WriteActionIfArrayIsEmpty.Action.EMPTY
+                actionOfWriterIfArrayIsEmpty = ActionOfWriterIfArrayIsEmpty.Action.NONE
             }
 
-            "then the context should contain the WriteActionIfArrayIsEmpty option" {
-                context.contains(WriteActionIfArrayIsEmpty) shouldBe true
+            "then the context should contain the ActionOfWriterIfArrayIsEmpty option" {
+                context.contains(ActionOfWriterIfArrayIsEmpty) shouldBe true
             }
         }
 
         "when writeActionIfObjectIsEmpty parameter is set in the builder" - {
             val context: JsWriterContext = writerContext {
-                writeActionIfObjectIsEmpty = WriteActionIfObjectIsEmpty.Action.EMPTY
+                actionOfWriterIfObjectIsEmpty = ActionOfWriterIfObjectIsEmpty.Action.NONE
             }
 
-            "then the context should contain the WriteActionIfObjectIsEmpty option" {
-                context.contains(WriteActionIfObjectIsEmpty) shouldBe true
+            "then the context should contain the ActionOfWriterIfObjectIsEmpty option" {
+                context.contains(ActionOfWriterIfObjectIsEmpty) shouldBe true
             }
         }
     }

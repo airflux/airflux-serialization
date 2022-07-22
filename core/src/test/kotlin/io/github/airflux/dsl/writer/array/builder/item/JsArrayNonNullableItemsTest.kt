@@ -14,38 +14,44 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.writer.array.builder.item.specification
+package io.github.airflux.dsl.writer.array.builder.item
 
 import io.github.airflux.common.DummyWriter
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.dsl.writer.array.builder.item.specification.JsArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayRequiredItemSpecTest : FreeSpec() {
+internal class JsArrayNonNullableItemsTest : FreeSpec() {
 
     companion object {
-        private const val VALUE = "value"
+        private const val ITEM_VALUE = "value"
 
         private val CONTEXT = JsWriterContext()
         private val LOCATION = JsLocation.empty
     }
 
     init {
-        "The JsArrayItemSpec#Required" - {
+        "The JsArrayItems#NonNullable" - {
 
-            "when created the instance of a spec of the required item" - {
-                val spec = required(writer = DummyWriter<String> { JsString(it) })
+            "when created an instance of the non-nullable item" - {
+                val writer = DummyWriter<String> { JsString(it) }
+                val items: JsArrayItems.NonNullable<String> = createItems(writer = writer)
 
-                "when a writer was initialized" - {
+                "when an item is the not null value" - {
+                    val value = "value"
 
-                    "then the writer should return a non-null item value if the value being written is non-null" {
-                        val result = spec.writer.write(CONTEXT, LOCATION, VALUE)
-                        result shouldBe JsString(VALUE)
+                    "then the method write should return the null value" {
+                        val result = items.write(CONTEXT, LOCATION, value)
+                        result shouldBe JsString(ITEM_VALUE)
                     }
                 }
             }
         }
     }
+
+    private fun <T : Any> createItems(writer: DummyWriter<T>): JsArrayItems.NonNullable<T> =
+        JsArrayItems.NonNullable(JsArrayItemSpec.NonNullable(writer = writer))
 }

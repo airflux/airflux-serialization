@@ -38,45 +38,49 @@ internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
 
         "The JsObjectPropertySpec#Optional" - {
 
-            "when created the instance of a spec of the optional property" - {
-                val spec = optional(name = "id", from = DTO::value, writer = DummyWriter { JsString(it) })
+            "when created the instance of a spec of the nullable property" - {
+                val from: (String) -> String? = { it }
+                val writer = DummyWriter<String> { JsString(it) }
+                val spec = optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
 
-                "then the attribute name parameter should equals the passed attribute name" {
+                "then the attribute name should equal the passed attribute name" {
                     spec.name shouldBe ATTRIBUTE_NAME
                 }
 
-                "when a writer was initialized" - {
+                "then the value extractor should equals the passed the value extractor" {
+                    spec.from shouldBe from
+                }
 
-                    "then the writer should return a non-null attribute value if the value being written is non-null" {
-                        val input = DTO(value = ATTRIBUTE_VALUE)
-                        val result = spec.writer.write(CONTEXT, LOCATION, spec.from(input))
-                        result shouldBe JsString(ATTRIBUTE_VALUE)
-                    }
-
-                    "then the writer should return the null value if the value being written is the null" {
-                        val input = DTO(value = null)
-                        val result = spec.writer.write(CONTEXT, LOCATION, spec.from(input))
-                        result.shouldBeNull()
-                    }
+                "then the initialized writer should return a attribute value" {
+                    val result = spec.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
+                    result shouldBe JsString(ATTRIBUTE_VALUE)
                 }
             }
 
             "when the filter was added to the spec" - {
-                val spec = optional(name = "id", from = DTO::value, writer = DummyWriter { JsString(it) })
+                val from: (String) -> String? = { it }
+                val writer = DummyWriter<String> { JsString(it) }
+                val spec = optional(name = "id", from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
-                "if the value was not filtered" - {
-                    val input = DTO(value = ATTRIBUTE_VALUE)
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, spec.from(input))
+                "then the attribute name should equal the passed attribute name" {
+                    spec.name shouldBe ATTRIBUTE_NAME
+                }
 
-                    "then a non-null attribute value value should be returned" {
+                "then the value extractor should equals the passed the value extractor" {
+                    spec.from shouldBe from
+                }
+
+                "when passing a value that satisfies the predicate for filtering" - {
+                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
+
+                    "then a non-null attribute value should be returned" {
                         result shouldBe JsString(ATTRIBUTE_VALUE)
                     }
                 }
 
-                "if the value was filtered" - {
-                    val input = DTO(value = "")
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, spec.from(input))
+                "when passing a value that does not satisfy the filter predicate" - {
+                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, "")
 
                     "then the null value should be returned" {
                         result.shouldBeNull()
@@ -85,6 +89,4 @@ internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
             }
         }
     }
-
-    internal data class DTO(val value: String?)
 }

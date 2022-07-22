@@ -21,16 +21,16 @@ import io.github.airflux.core.context.option.JsContextOptionKey
 import io.github.airflux.core.context.option.get
 import io.github.airflux.core.writer.context.JsWriterContext
 
-public val JsWriterContext.writeActionIfArrayIsEmpty: WriteActionIfArrayIsEmpty.Action
-    get() = get(WriteActionIfArrayIsEmpty) { WriteActionIfArrayIsEmpty.Action.SKIP }
+public val JsWriterContext.actionOfWriterIfObjectIsEmpty: ActionOfWriterIfObjectIsEmpty.Action
+    get() = get(ActionOfWriterIfObjectIsEmpty) { ActionOfWriterIfObjectIsEmpty.Action.SKIP }
 
-public class WriteActionIfArrayIsEmpty(
+public class ActionOfWriterIfObjectIsEmpty(
     override val value: Action
-) : JsContextOptionElement<WriteActionIfArrayIsEmpty.Action> {
+) : JsContextOptionElement<ActionOfWriterIfObjectIsEmpty.Action> {
 
     override val key: JsContextOptionKey<Action, *> = Key
 
-    public enum class Action { EMPTY, NULL, SKIP }
+    public enum class Action { NONE, NULL, SKIP }
 
-    public companion object Key : JsContextOptionKey<Action, WriteActionIfArrayIsEmpty>
+    public companion object Key : JsContextOptionKey<Action, ActionOfWriterIfObjectIsEmpty>
 }

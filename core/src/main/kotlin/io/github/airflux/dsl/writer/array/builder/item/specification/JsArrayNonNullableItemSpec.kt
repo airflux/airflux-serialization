@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.core.writer.predicate.JsPredicate
+import io.github.airflux.core.writer.JsWriter
 
-public fun <T : Any> JsWriter<T>.filter(predicate: JsPredicate<T>): JsWriter<T?> =
-    JsWriter { context, location, value ->
-        if (value != null && predicate.test(context, location, value))
-            this@filter.write(context, location, value)
-        else
-            null
-    }
+public fun <T : Any> nonNullable(writer: JsWriter<T>): JsArrayItemSpec.NonNullable<T> =
+    JsArrayItemSpec.NonNullable(writer)

@@ -16,19 +16,16 @@
 
 package io.github.airflux.dsl.writer.array.builder
 
+import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsArray
-import io.github.airflux.core.value.JsNull
-import io.github.airflux.core.value.JsValue
 import io.github.airflux.core.writer.JsArrayWriter
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.option.WriteActionIfArrayIsEmpty
-import io.github.airflux.core.writer.context.option.writeActionIfArrayIsEmpty
 import io.github.airflux.dsl.AirfluxMarker
+import io.github.airflux.dsl.writer.array.builder.JsArrayWriterBuilder.WriterBuilder
+import io.github.airflux.dsl.writer.array.builder.item.JsArrayItems
 import io.github.airflux.dsl.writer.array.builder.item.specification.JsArrayItemSpec
 
-public fun <T> arrayWriter(
-    block: JsArrayWriterBuilder.() -> JsArrayWriterBuilder.WriterBuilder<T>
-): JsArrayWriter<T> =
+public fun <T> arrayWriter(block: JsArrayWriterBuilder.() -> WriterBuilder<T>): JsArrayWriter<T> =
     JsArrayWriterBuilder().block().build()
 
 @AirfluxMarker
@@ -37,23 +34,24 @@ public class JsArrayWriterBuilder internal constructor() {
     public fun interface WriterBuilder<T> {
         public fun build(): JsArrayWriter<T>
     }
-}
 
-public fun <T> returns(items: JsArrayItemSpec<T>): JsArrayWriterBuilder.WriterBuilder<T> {
-    val writer = items.writer
-    return JsArrayWriterBuilder.WriterBuilder {
-        JsArrayWriter { context, location, values ->
-            values.mapNotNull { value -> writer.write(context, location, value) }
-                .takeIf { it.isNotEmpty() }
-                ?.let { JsArray(items = it) }
-                ?: valueIfArrayIsEmpty(context)
+    public fun <T : Any> items(spec: JsArrayItemSpec.NonNullable<T>): WriterBuilder<T> =
+        WriterBuilder {
+            buildArrayWriter(JsArrayItems.NonNullable(spec))
         }
-    }
-}
 
-internal fun valueIfArrayIsEmpty(context: JsWriterContext): JsValue? =
-    when (context.writeActionIfArrayIsEmpty) {
-        WriteActionIfArrayIsEmpty.Action.EMPTY -> JsArray<JsValue>()
-        WriteActionIfArrayIsEmpty.Action.NULL -> JsNull
-        WriteActionIfArrayIsEmpty.Action.SKIP -> null
-    }
+    public fun <T> items(spec: JsArrayItemSpec.Optional<T>): WriterBuilder<T> =
+        WriterBuilder {
+            buildArrayWriter(JsArrayItems.Optional(spec))
+        }
+
+    public fun <T> items(spec: JsArrayItemSpec.Nullable<T>): WriterBuilder<T> =
+        WriterBuilder {
+            buildArrayWriter(JsArrayItems.Nullable(spec))
+        }
+
+    private fun <T> buildArrayWriter(items: JsArrayItems<T>): JsArrayWriter<T> =
+        JsArrayWriter { context: JsWriterContext, location: JsLocation, values ->
+            JsArray(items = values.mapNotNull { value -> items.write(context, location, value) })
+        }
+}

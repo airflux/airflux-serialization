@@ -16,17 +16,13 @@
 
 package io.github.airflux.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
 
-public fun <T : Any> nullable(writer: JsWriter<T>): JsArrayItemSpec.Nullable<T?> =
-    JsArrayItemSpec.Nullable { context, location, value ->
-        if (value != null) writer.write(context, location, value) else JsNull
-    }
+public fun <T> nullable(writer: JsWriter<T & Any>): JsArrayItemSpec.Nullable<T> = JsArrayItemSpec.Nullable(writer)
 
-public infix fun <T : Any> JsArrayItemSpec.Nullable<T?>.filter(
-    predicate: JsPredicate<T>
-): JsArrayItemSpec.Nullable<T?> =
-    JsArrayItemSpec.Nullable(writer = writer.filter(predicate))
+public infix fun <T> JsArrayItemSpec.Nullable<T>.filter(
+    predicate: JsPredicate<T & Any>
+): JsArrayItemSpec.Optional<T> =
+    JsArrayItemSpec.Optional(writer = writer.filter(predicate))

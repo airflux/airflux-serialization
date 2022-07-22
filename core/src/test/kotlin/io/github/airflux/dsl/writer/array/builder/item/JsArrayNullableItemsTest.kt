@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.dsl.writer.array.builder.item.specification
+package io.github.airflux.dsl.writer.array.builder.item
 
 import io.github.airflux.common.DummyWriter
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.dsl.writer.array.builder.item.specification.JsArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayOptionalItemSpecTest : FreeSpec() {
+internal class JsArrayNullableItemsTest : FreeSpec() {
 
     companion object {
         private const val ITEM_VALUE = "value"
@@ -35,38 +36,33 @@ internal class JsArrayOptionalItemSpecTest : FreeSpec() {
 
     init {
 
-        "The JsArrayItemSpec#Optional" - {
+        "The JsArrayItems#Nullable" - {
 
-            "when created the instance of a spec of the optional item" - {
+            "when created an instance of the nullable item" - {
                 val writer = DummyWriter<String> { JsString(it) }
-                val spec = optional(writer = writer)
+                val items: JsArrayItems.Nullable<String?> = createItems(writer = writer)
 
-                "then the instance should contain the writer passed during initialization" {
-                    spec.writer shouldBe writer
-                }
-            }
+                "when an item is the not null value" - {
+                    val value = "value"
 
-            "when the filter was added to the spec" - {
-                val writer = DummyWriter<String> { JsString(it) }
-                val spec = optional(writer = writer)
-                val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
-
-                "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, ITEM_VALUE)
-
-                    "then the not null value should be returned" {
+                    "then the method write should return the null value" {
+                        val result = items.write(CONTEXT, LOCATION, value)
                         result shouldBe JsString(ITEM_VALUE)
                     }
                 }
 
-                "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, "")
+                "when an item is the null value" - {
+                    val value: String? = null
 
-                    "then the null value should be returned" {
-                        result.shouldBeNull()
+                    "then the method write should return the JsNull value" {
+                        val result = items.write(CONTEXT, LOCATION, value)
+                        result shouldBe JsNull
                     }
                 }
             }
         }
     }
+
+    private fun <T> createItems(writer: DummyWriter<T & Any>): JsArrayItems.Nullable<T> =
+        JsArrayItems.Nullable(JsArrayItemSpec.Nullable(writer = writer))
 }

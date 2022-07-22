@@ -18,17 +18,12 @@ package io.github.airflux.dsl.writer.`object`.builder
 
 import io.github.airflux.common.DummyWriter
 import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty
-import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty.Action.EMPTY
-import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty.Action.NULL
-import io.github.airflux.core.writer.context.option.WriteActionIfObjectIsEmpty.Action.SKIP
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.optional
+import io.github.airflux.dsl.writer.`object`.builder.property.specification.required
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class JsObjectWriterBuilderTest : FreeSpec() {
@@ -44,62 +39,30 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
     init {
 
         "The JsObjectWriterBuilder type" - {
-            val writer = writer<DTO> {
-                property(optional(name = ATTRIBUTE_NAME, from = DTO::value, writer = DummyWriter { JsString(it) }))
-            }
 
             "when have some attributes for writing to an object" - {
-                val value = DTO(value = ATTRIBUTE_VALUE)
-                val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                val from: (String) -> String = { it }
+                val writer = writer {
+                    property(required(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { JsString(it) }))
+                }
 
                 "then should returns the object with some attributes" {
-                    result as JsObject
+                    val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
                     result shouldBe JsObject(ATTRIBUTE_NAME to JsString(ATTRIBUTE_VALUE))
                 }
             }
 
             "when no attributes for writing to an object" - {
-                val value = DTO(value = null)
-
-                "if valueIfObjectIsEmpty equals EMPTY" - {
-                    val result = writer.write(
-                        context = CONTEXT + WriteActionIfObjectIsEmpty(value = EMPTY),
-                        location = LOCATION,
-                        value = value
-                    )
-
-                    "then should returns the empty JsObject" {
-                        result as JsObject
-                        result shouldBe JsObject()
-                    }
+                val from: (String) -> String? = { null }
+                val writer = writer {
+                    property(optional(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { JsString(it) }))
                 }
 
-                "if valueIfObjectIsEmpty equals NULL" - {
-                    val result = writer.write(
-                        context = CONTEXT + WriteActionIfObjectIsEmpty(value = NULL),
-                        location = LOCATION,
-                        value = value
-                    )
-
-                    "then should returns the JsNull value" {
-                        result shouldBe JsNull
-                    }
-                }
-
-                "if valueIfObjectIsEmpty equals SKIP" - {
-                    val result = writer.write(
-                        context = CONTEXT + WriteActionIfObjectIsEmpty(value = SKIP),
-                        location = LOCATION,
-                        value = value
-                    )
-
-                    "then should returns the null value" {
-                        result.shouldBeNull()
-                    }
+                "then should returns the empty JsObject" {
+                    val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                    result shouldBe JsObject()
                 }
             }
         }
     }
-
-    internal data class DTO(val value: String?)
 }

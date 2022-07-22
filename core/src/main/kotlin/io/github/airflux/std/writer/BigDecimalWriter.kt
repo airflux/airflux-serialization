@@ -34,7 +34,7 @@ internal val JsWriterContext.stripTrailingZeros: Boolean
  */
 public object BigDecimalWriter : JsWriter<BigDecimal> {
 
-    override fun write(context: JsWriterContext, location: JsLocation, value: BigDecimal): JsValue? {
+    override fun write(context: JsWriterContext, location: JsLocation, value: BigDecimal): JsValue {
         val text = if (context.stripTrailingZeros) value.stripTrailingZeros().toPlainString() else value.toPlainString()
         return JsNumber.valueOf(text)!!
     }

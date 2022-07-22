@@ -16,11 +16,24 @@
 
 package io.github.airflux.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.common.DummyWriter
+import io.github.airflux.core.value.JsString
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
-public sealed interface JsArrayItemSpec<in T> {
+internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
 
-    public class NonNullable<T : Any> internal constructor(public val writer: JsWriter<T>) : JsArrayItemSpec<T>
-    public class Optional<T> internal constructor(public val writer: JsWriter<T & Any>) : JsArrayItemSpec<T>
-    public class Nullable<T> internal constructor(public val writer: JsWriter<T & Any>) : JsArrayItemSpec<T>
+    init {
+        "The JsArrayItemSpec#NonNullable" - {
+
+            "when created the instance of a spec of the non-nullable item" - {
+                val writer = DummyWriter<String> { JsString(it) }
+                val spec = nonNullable(writer = writer)
+
+                "then the instance should contain the writer passed during initialization" {
+                    spec.writer shouldBe writer
+                }
+            }
+        }
+    }
 }

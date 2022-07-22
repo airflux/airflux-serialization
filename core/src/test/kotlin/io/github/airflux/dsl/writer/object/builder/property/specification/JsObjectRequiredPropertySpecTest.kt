@@ -21,6 +21,7 @@ import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.context.JsWriterContext
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
@@ -37,24 +38,55 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
 
         "The JsObjectPropertySpec#Required" - {
 
-            "when created the instance of a spec of the required property" - {
-                val spec = required(name = "id", from = DTO::value, writer = DummyWriter { JsString(it) })
+            "when created the instance of a spec of the nullable property" - {
+                val from: (String) -> String = { it }
+                val writer = DummyWriter<String> { JsString(it) }
+                val spec = required(name = ATTRIBUTE_NAME, from = from, writer = writer)
 
-                "then the attribute name parameter should equals the passed attribute name" {
+                "then the attribute name should equal the passed attribute name" {
                     spec.name shouldBe ATTRIBUTE_NAME
                 }
 
-                "when a writer was initialized" - {
+                "then the value extractor should equals the passed the value extractor" {
+                    spec.from shouldBe from
+                }
 
-                    "then the writer should return a non-null attribute value if the value being written is non-null" {
-                        val input = DTO(value = ATTRIBUTE_VALUE)
-                        val result = spec.writer.write(CONTEXT, LOCATION, spec.from(input))
+                "then the initialized writer should return a attribute value" {
+                    val result = spec.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
+                    result shouldBe JsString(ATTRIBUTE_VALUE)
+                }
+            }
+
+            "when the filter was added to the spec" - {
+                val from: (String) -> String = { it }
+                val writer = DummyWriter<String> { JsString(it) }
+                val spec = required(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
+
+                "then the attribute name should equal the passed attribute name" {
+                    spec.name shouldBe ATTRIBUTE_NAME
+                }
+
+                "then the value extractor should equals the passed the value extractor" {
+                    spec.from shouldBe from
+                }
+
+                "when passing a value that satisfies the predicate for filtering" - {
+                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
+
+                    "then a non-null attribute value should be returned" {
                         result shouldBe JsString(ATTRIBUTE_VALUE)
+                    }
+                }
+
+                "when passing a value that does not satisfy the filter predicate" - {
+                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, "")
+
+                    "then the null value should be returned" {
+                        result.shouldBeNull()
                     }
                 }
             }
         }
     }
-
-    internal data class DTO(val value: String)
 }

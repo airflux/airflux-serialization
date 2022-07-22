@@ -17,9 +17,17 @@
 package io.github.airflux.dsl.writer.`object`.builder.property.specification
 
 import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.core.writer.filter
+import io.github.airflux.core.writer.predicate.JsPredicate
 
 public fun <T : Any, P : Any> required(
     name: String,
     from: (T) -> P,
     writer: JsWriter<P>
-): JsObjectPropertySpec.Required<T, P> = JsObjectPropertySpec.Required(name, from, writer)
+): JsObjectPropertySpec.Required<T, P> =
+    JsObjectPropertySpec.Required(name = name, from = from, writer = writer)
+
+public infix fun <T : Any, P : Any> JsObjectPropertySpec.Required<T, P>.filter(
+    predicate: JsPredicate<P>
+): JsObjectPropertySpec.Optional<T, P> =
+    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

@@ -18,9 +18,9 @@ package io.github.airflux.common
 
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.JsWriter
+import io.github.airflux.core.writer.JsArrayWriter
 import io.github.airflux.core.writer.context.JsWriterContext
 
-internal class DummyWriter<T : Any>(val result: (T) -> JsValue?) : JsWriter<T> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? = result(value)
+internal class DummyArrayWriter<T : Any>(val result: (Collection<T>) -> JsValue?) : JsArrayWriter<T> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: List<T>): JsValue? = result(value)
 }
