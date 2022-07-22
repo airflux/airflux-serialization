@@ -63,7 +63,7 @@ object Configuration {
         }
 
         object JaCoCo {
-            const val Tool = "0.8.7"
+            const val Tool = "0.8.8"
         }
 
         object Test {
