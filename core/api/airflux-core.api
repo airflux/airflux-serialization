@@ -540,10 +540,6 @@ public abstract interface class io/github/airflux/core/writer/JsWriter {
 	public abstract fun write (Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/core/value/JsValue;
 }
 
-public final class io/github/airflux/core/writer/JsWriterKt {
-	public static final fun filter (Lio/github/airflux/core/writer/JsWriter;Lio/github/airflux/core/writer/predicate/JsPredicate;)Lio/github/airflux/core/writer/JsWriter;
-}
-
 public final class io/github/airflux/core/writer/context/JsWriterContext : io/github/airflux/core/context/JsAbstractContext {
 	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun plus (Lio/github/airflux/core/context/JsContext$Element;)Lio/github/airflux/core/writer/context/JsWriterContext;

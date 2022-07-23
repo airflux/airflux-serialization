@@ -26,7 +26,7 @@ public fun interface JsWriter<in T : Any> {
     public fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue?
 }
 
-public fun <T : Any> JsWriter<T>.filter(predicate: JsPredicate<T>): JsWriter<T> =
+internal fun <T : Any> JsWriter<T>.filter(predicate: JsPredicate<T>): JsWriter<T> =
     JsWriter { context, location, value ->
         if (predicate.test(context, location, value))
             this@filter.write(context, location, value)
