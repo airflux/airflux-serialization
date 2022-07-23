@@ -26,7 +26,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectRequiredPropertyTest : FreeSpec() {
+internal class JsObjectNonNullablePropertyTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "id"
@@ -37,13 +37,13 @@ internal class JsObjectRequiredPropertyTest : FreeSpec() {
 
     init {
 
-        "The JsObjectProperty#Required type" - {
+        "The JsObjectProperty#NonNullable type" - {
 
-            "when created an instance of the required property" - {
+            "when created an instance of the non-nullable property" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { JsString(it) }
-                val spec = JsObjectPropertySpec.Required(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val property = JsObjectProperty.Required(spec)
+                val spec = JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val property = JsObjectProperty.NonNullable(spec)
 
                 "then the attribute name should equal the attribute name from the spec" {
                     property.name shouldBe spec.name
@@ -79,8 +79,8 @@ internal class JsObjectRequiredPropertyTest : FreeSpec() {
     private fun <T : Any, P : Any> createProperty(
         from: (T) -> P,
         writer: JsWriter<P>
-    ): JsObjectProperty.Required<T, P> =
-        JsObjectProperty.Required(
-            JsObjectPropertySpec.Required(name = ATTRIBUTE_NAME, from = from, writer = writer)
+    ): JsObjectProperty.NonNullable<T, P> =
+        JsObjectProperty.NonNullable(
+            JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
         )
 }

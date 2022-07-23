@@ -43,7 +43,7 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
         "The JsArrayWriterBuilder type" - {
 
-            "when have some required items for writing to an array" - {
+            "when have some non-nullable items for writing to an array" - {
                 val writer = arrayWriter<String> {
                     items(nonNullable(writer = DummyWriter { JsString(it) }))
                 }

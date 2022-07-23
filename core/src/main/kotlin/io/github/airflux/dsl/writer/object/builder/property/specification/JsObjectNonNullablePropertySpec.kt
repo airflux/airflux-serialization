@@ -20,14 +20,14 @@ import io.github.airflux.core.writer.JsWriter
 import io.github.airflux.core.writer.filter
 import io.github.airflux.core.writer.predicate.JsPredicate
 
-public fun <T : Any, P : Any> required(
+public fun <T : Any, P : Any> nonNullable(
     name: String,
     from: (T) -> P,
     writer: JsWriter<P>
-): JsObjectPropertySpec.Required<T, P> =
-    JsObjectPropertySpec.Required(name = name, from = from, writer = writer)
+): JsObjectPropertySpec.NonNullable<T, P> =
+    JsObjectPropertySpec.NonNullable(name = name, from = from, writer = writer)
 
-public infix fun <T : Any, P : Any> JsObjectPropertySpec.Required<T, P>.filter(
+public infix fun <T : Any, P : Any> JsObjectPropertySpec.NonNullable<T, P>.filter(
     predicate: JsPredicate<P>
 ): JsObjectPropertySpec.Optional<T, P> =
     JsObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

@@ -21,7 +21,7 @@ import io.github.airflux.core.writer.JsWriter
 public sealed interface JsObjectPropertySpec<T : Any, P : Any> {
     public val name: String
 
-    public class Required<T : Any, P : Any> internal constructor(
+    public class NonNullable<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P,
         public val writer: JsWriter<P>

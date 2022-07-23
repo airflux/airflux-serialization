@@ -49,19 +49,19 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 }
             }
 
-            "when a required property were added to the builder" - {
+            "when a non-nullable property were added to the builder" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { JsString(it) }
-                val spec = JsObjectPropertySpec.Required(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
                     .build()
 
-                "then the required property should contain in the container" {
+                "then the non-nullable property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Required<*, *>>()
+                        it.shouldBeInstanceOf<JsObjectProperty.NonNullable<*, *>>()
                         it.name shouldBe spec.name
                         it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe JsString(ATTRIBUTE_VALUE)
                     }

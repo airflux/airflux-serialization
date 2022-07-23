@@ -27,13 +27,13 @@ public sealed class JsObjectProperty<T : Any> {
     public abstract val name: String
     public abstract fun write(context: JsWriterContext, location: JsLocation, input: T): JsValue?
 
-    public class Required<T : Any, P : Any> private constructor(
+    public class NonNullable<T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P,
         private val writer: JsWriter<P>
     ) : JsObjectProperty<T>() {
 
-        internal constructor(spec: JsObjectPropertySpec.Required<T, P>) : this(spec.name, spec.from, spec.writer)
+        internal constructor(spec: JsObjectPropertySpec.NonNullable<T, P>) : this(spec.name, spec.from, spec.writer)
 
         override fun write(context: JsWriterContext, location: JsLocation, input: T): JsValue? =
             writer.write(context, location, from(input))

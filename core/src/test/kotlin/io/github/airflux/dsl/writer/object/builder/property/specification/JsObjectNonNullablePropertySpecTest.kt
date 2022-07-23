@@ -24,7 +24,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
+internal class JsObjectNonNullablePropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "id"
@@ -36,12 +36,12 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The JsObjectPropertySpec#Required" - {
+        "The JsObjectPropertySpec#NonNullable" - {
 
-            "when created the instance of a spec of the nullable property" - {
+            "when created the instance of a spec of the non-nullable property" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { JsString(it) }
-                val spec = required(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = nonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
 
                 "then the attribute name should equal the passed attribute name" {
                     spec.name shouldBe ATTRIBUTE_NAME
@@ -60,7 +60,7 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
             "when the filter was added to the spec" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { JsString(it) }
-                val spec = required(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = nonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "then the attribute name should equal the passed attribute name" {

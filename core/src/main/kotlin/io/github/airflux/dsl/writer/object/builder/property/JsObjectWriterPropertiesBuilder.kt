@@ -19,7 +19,7 @@ package io.github.airflux.dsl.writer.`object`.builder.property
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
 
 public interface JsObjectWriterPropertiesBuilder<T : Any> {
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Required<T, P>): JsObjectProperty.Required<T, P>
+    public fun <P : Any> property(spec: JsObjectPropertySpec.NonNullable<T, P>): JsObjectProperty.NonNullable<T, P>
     public fun <P : Any> property(spec: JsObjectPropertySpec.Optional<T, P>): JsObjectProperty.Optional<T, P>
     public fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<T, P>): JsObjectProperty.Nullable<T, P>
 }
@@ -27,8 +27,8 @@ public interface JsObjectWriterPropertiesBuilder<T : Any> {
 internal class JsObjectWriterPropertiesBuilderInstance<T : Any> : JsObjectWriterPropertiesBuilder<T> {
     private val properties = mutableListOf<JsObjectProperty<T>>()
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Required<T, P>): JsObjectProperty.Required<T, P> =
-        JsObjectProperty.Required(spec)
+    override fun <P : Any> property(spec: JsObjectPropertySpec.NonNullable<T, P>): JsObjectProperty.NonNullable<T, P> =
+        JsObjectProperty.NonNullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(spec: JsObjectPropertySpec.Optional<T, P>): JsObjectProperty.Optional<T, P> =

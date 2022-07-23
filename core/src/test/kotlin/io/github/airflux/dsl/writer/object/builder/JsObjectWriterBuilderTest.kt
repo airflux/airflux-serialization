@@ -21,8 +21,8 @@ import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.context.JsWriterContext
+import io.github.airflux.dsl.writer.`object`.builder.property.specification.nonNullable
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.optional
-import io.github.airflux.dsl.writer.`object`.builder.property.specification.required
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -43,7 +43,7 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
             "when have some attributes for writing to an object" - {
                 val from: (String) -> String = { it }
                 val writer = writer {
-                    property(required(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { JsString(it) }))
+                    property(nonNullable(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { JsString(it) }))
                 }
 
                 "then should returns the object with some attributes" {
