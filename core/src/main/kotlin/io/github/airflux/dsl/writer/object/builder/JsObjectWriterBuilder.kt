@@ -38,7 +38,7 @@ public fun <T : Any> writer(
 ): JsObjectWriter<T> =
     JsObjectWriterBuilder<T>(
         JsObjectWriterPropertiesBuilderInstance(),
-        WriterActionConfiguratorInstance(config.actionIfEmpty)
+        WriterActionConfiguratorInstance(config.options.actionIfEmpty)
     ).apply(block).build()
 
 @AirfluxMarker

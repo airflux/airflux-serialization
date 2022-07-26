@@ -37,7 +37,7 @@ public fun <T> arrayWriter(
     config: JsArrayWriterConfig = JsArrayWriterConfig.DEFAULT,
     block: JsArrayWriterBuilder.() -> WriterBuilder<T>
 ): JsArrayWriter<T> =
-    JsArrayWriterBuilder(WriterActionConfiguratorInstance(config.actionIfEmpty)).block().build()
+    JsArrayWriterBuilder(WriterActionConfiguratorInstance(config.options.actionIfEmpty)).block().build()
 
 @AirfluxMarker
 public class JsArrayWriterBuilder internal constructor(

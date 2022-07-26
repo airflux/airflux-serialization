@@ -24,20 +24,26 @@ public fun objectWriterConfig(block: JsObjectWriterConfig.Builder.() -> Unit): J
     JsObjectWriterConfig.Builder().apply(block).build()
 
 public class JsObjectWriterConfig private constructor(
-    public val actionIfEmpty: WriterActionBuilderIfResultIsEmpty
+    public val options: Options
 ) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
         public var actionIfEmpty: WriterActionBuilderIfResultIsEmpty = defaultActionIfResultIsEmpty
 
-        internal fun build(): JsObjectWriterConfig = JsObjectWriterConfig(actionIfEmpty = actionIfEmpty)
+        internal fun build(): JsObjectWriterConfig = JsObjectWriterConfig(
+            options = Options(actionIfEmpty = actionIfEmpty)
+        )
 
         internal companion object {
             private val defaultActionIfResultIsEmpty: WriterActionBuilderIfResultIsEmpty =
                 { _, _ -> WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE }
         }
     }
+
+    public class Options internal constructor(
+        public val actionIfEmpty: WriterActionBuilderIfResultIsEmpty
+    )
 
     public companion object {
         public val DEFAULT: JsObjectWriterConfig = Builder().build()

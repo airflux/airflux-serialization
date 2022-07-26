@@ -16,8 +16,6 @@
 
 package io.github.airflux.dsl.reader.config
 
-import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.writer.context.JsWriterContext
 import io.github.airflux.dsl.AirfluxMarker
 import io.github.airflux.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.dsl.writer.WriterActionIfResultIsEmpty
@@ -26,20 +24,26 @@ public fun arrayWriterConfig(block: JsArrayWriterConfig.Builder.() -> Unit): JsA
     JsArrayWriterConfig.Builder().apply(block).build()
 
 public class JsArrayWriterConfig private constructor(
-    public val actionIfEmpty: (JsWriterContext, JsLocation) -> WriterActionIfResultIsEmpty
+    public val options: Options
 ) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
         public var actionIfEmpty: WriterActionBuilderIfResultIsEmpty = returnEmptyValue
 
-        internal fun build(): JsArrayWriterConfig = JsArrayWriterConfig(actionIfEmpty = actionIfEmpty)
+        internal fun build(): JsArrayWriterConfig = JsArrayWriterConfig(
+            options = Options(actionIfEmpty = actionIfEmpty)
+        )
 
         internal companion object {
             private val returnEmptyValue: WriterActionBuilderIfResultIsEmpty =
                 { _, _ -> WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE }
         }
     }
+
+    public class Options internal constructor(
+        public val actionIfEmpty: WriterActionBuilderIfResultIsEmpty
+    )
 
     public companion object {
         public val DEFAULT: JsArrayWriterConfig = Builder().build()

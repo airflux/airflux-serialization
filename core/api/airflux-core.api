@@ -734,8 +734,8 @@ public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfigKt {
 
 public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig {
 	public static final field Companion Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig$Companion;
-	public synthetic fun <init> (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
+	public synthetic fun <init> (Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig$Options;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getOptions ()Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig$Options;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig$Builder {
@@ -745,6 +745,10 @@ public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig$Build
 
 public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig$Companion {
 	public final fun getDEFAULT ()Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig$Options {
+	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfigKt {
@@ -771,8 +775,8 @@ public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfigKt {
 
 public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig {
 	public static final field Companion Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig$Companion;
-	public synthetic fun <init> (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
+	public synthetic fun <init> (Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig$Options;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getOptions ()Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig$Options;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig$Builder {
@@ -782,6 +786,10 @@ public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig$Buil
 
 public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig$Companion {
 	public final fun getDEFAULT ()Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig$Options {
+	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfigKt {
