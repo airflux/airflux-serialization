@@ -18,30 +18,14 @@ package io.github.airflux.dsl.writer.context
 
 import io.github.airflux.core.context.JsContext
 import io.github.airflux.core.writer.context.JsWriterContext
-import io.github.airflux.core.writer.context.option.ActionOfWriterIfArrayIsEmpty
-import io.github.airflux.core.writer.context.option.ActionOfWriterIfObjectIsEmpty
 import io.github.airflux.dsl.AirfluxMarker
 
-public fun writerContext(block: JsWriterContextBuilder.() -> Unit): JsWriterContext =
+public fun writerContext(block: JsWriterContextBuilder.() -> Unit = {}): JsWriterContext =
     JsWriterContextBuilder().apply(block).build()
 
 @AirfluxMarker
 public class JsWriterContextBuilder internal constructor() {
-
     private val elements = mutableListOf<JsContext.Element>()
 
-    public var actionOfWriterIfArrayIsEmpty: ActionOfWriterIfArrayIsEmpty.Action? = null
-    public var actionOfWriterIfObjectIsEmpty: ActionOfWriterIfObjectIsEmpty.Action? = null
-
-    internal fun build(): JsWriterContext {
-        actionOfWriterIfArrayIsEmpty?.let { action ->
-            ActionOfWriterIfArrayIsEmpty(value = action).also { elements.add(it) }
-        }
-
-        actionOfWriterIfObjectIsEmpty?.let { action ->
-            ActionOfWriterIfObjectIsEmpty(value = action).also { elements.add(it) }
-        }
-
-        return JsWriterContext(elements)
-    }
+    internal fun build(): JsWriterContext = JsWriterContext(elements)
 }

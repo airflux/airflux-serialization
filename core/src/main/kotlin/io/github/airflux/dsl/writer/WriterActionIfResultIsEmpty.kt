@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.writer
+package io.github.airflux.dsl.writer
 
-import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.core.writer.context.JsWriterContext
-
-public fun interface JsArrayWriter<in T> : JsWriter<List<T>> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: List<T>): JsValue?
+public enum class WriterActionIfResultIsEmpty {
+    RETURN_EMPTY_VALUE,
+    RETURN_NOTHING,
+    RETURN_NULL_VALUE
 }

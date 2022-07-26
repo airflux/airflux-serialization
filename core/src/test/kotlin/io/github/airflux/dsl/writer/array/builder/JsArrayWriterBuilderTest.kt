@@ -27,6 +27,7 @@ import io.github.airflux.dsl.writer.array.builder.item.specification.nonNullable
 import io.github.airflux.dsl.writer.array.builder.item.specification.nullable
 import io.github.airflux.dsl.writer.array.builder.item.specification.optional
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class JsArrayWriterBuilderTest : FreeSpec() {
@@ -83,14 +84,53 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
             }
 
             "when no items for writing to an array" - {
-                val writer = arrayWriter<String> {
-                    items(nonNullable(writer = DummyWriter { JsString(it) }))
-                }
                 val value = emptyList<String>()
 
-                "then should returns the empty JsArray" {
-                    val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
-                    result shouldBe JsArray<JsValue>()
+                "when the action of the writer was not set" - {
+                    val writer = arrayWriter<String> {
+                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the empty JsArray" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        result shouldBe JsArray<JsValue>()
+                    }
+                }
+
+                "when the action of the writer was set to return empty value" - {
+                    val writer = arrayWriter<String> {
+                        actionIfEmpty = returnEmptyValue()
+                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the empty JsArray" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        result shouldBe JsArray<JsValue>()
+                    }
+                }
+
+                "when the action of the writer was set to return nothing" - {
+                    val writer = arrayWriter<String> {
+                        actionIfEmpty = returnNothing()
+                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the null value" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        result.shouldBeNull()
+                    }
+                }
+
+                "when the action of the writer was set to return null value" - {
+                    val writer = arrayWriter<String> {
+                        actionIfEmpty = returnNullValue()
+                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the JsNull" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        result shouldBe JsNull
+                    }
                 }
             }
         }

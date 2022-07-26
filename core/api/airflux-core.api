@@ -523,17 +523,7 @@ public abstract interface class io/github/airflux/core/writer/JsArrayWriter : io
 	public abstract fun write (Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Ljava/util/List;)Lio/github/airflux/core/value/JsValue;
 }
 
-public final class io/github/airflux/core/writer/JsArrayWriterKt {
-	public static final fun actionIfEmpty (Lio/github/airflux/core/writer/JsArrayWriter;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/core/writer/JsArrayWriter;
-	public static synthetic fun actionIfEmpty$default (Lio/github/airflux/core/writer/JsArrayWriter;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lio/github/airflux/core/writer/JsArrayWriter;
-}
-
 public abstract interface class io/github/airflux/core/writer/JsObjectWriter : io/github/airflux/core/writer/JsWriter {
-}
-
-public final class io/github/airflux/core/writer/JsObjectWriterKt {
-	public static final fun actionIfEmpty (Lio/github/airflux/core/writer/JsObjectWriter;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/core/writer/JsObjectWriter;
-	public static synthetic fun actionIfEmpty$default (Lio/github/airflux/core/writer/JsObjectWriter;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lio/github/airflux/core/writer/JsObjectWriter;
 }
 
 public abstract interface class io/github/airflux/core/writer/JsWriter {
@@ -544,54 +534,6 @@ public final class io/github/airflux/core/writer/context/JsWriterContext : io/gi
 	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun plus (Lio/github/airflux/core/context/JsContext$Element;)Lio/github/airflux/core/writer/context/JsWriterContext;
 	public final fun plus (Ljava/lang/Iterable;)Lio/github/airflux/core/writer/context/JsWriterContext;
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty : io/github/airflux/core/context/option/JsContextOptionElement {
-	public static final field Key Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Key;
-	public fun <init> (Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;)V
-	public synthetic fun getKey ()Lio/github/airflux/core/context/JsContext$Key;
-	public fun getKey ()Lio/github/airflux/core/context/option/JsContextOptionKey;
-	public fun getValue ()Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-	public synthetic fun getValue ()Ljava/lang/Object;
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action : java/lang/Enum {
-	public static final field NONE Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-	public static final field NULL Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-	public static final field SKIP Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-	public static fun values ()[Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Key : io/github/airflux/core/context/option/JsContextOptionKey {
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmptyKt {
-	public static final fun getActionOfWriterIfArrayIsEmpty (Lio/github/airflux/core/writer/context/JsWriterContext;)Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty : io/github/airflux/core/context/option/JsContextOptionElement {
-	public static final field Key Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Key;
-	public fun <init> (Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;)V
-	public synthetic fun getKey ()Lio/github/airflux/core/context/JsContext$Key;
-	public fun getKey ()Lio/github/airflux/core/context/option/JsContextOptionKey;
-	public fun getValue ()Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-	public synthetic fun getValue ()Ljava/lang/Object;
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action : java/lang/Enum {
-	public static final field NONE Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-	public static final field NULL Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-	public static final field SKIP Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-	public static fun values ()[Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Key : io/github/airflux/core/context/option/JsContextOptionKey {
-}
-
-public final class io/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmptyKt {
-	public static final fun getActionOfWriterIfObjectIsEmpty (Lio/github/airflux/core/writer/context/JsWriterContext;)Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
 }
 
 public abstract interface class io/github/airflux/core/writer/predicate/JsPredicate {
@@ -790,6 +732,25 @@ public final class io/github/airflux/dsl/reader/config/JsArrayReaderConfigKt {
 	public static final fun arrayReaderConfig (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/config/JsArrayReaderConfig;
 }
 
+public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig {
+	public static final field Companion Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig$Companion;
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig$Builder {
+	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
+	public final fun setActionIfEmpty (Lkotlin/jvm/functions/Function2;)V
+}
+
+public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfig$Companion {
+	public final fun getDEFAULT ()Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsArrayWriterConfigKt {
+	public static final fun arrayWriterConfig (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig;
+}
+
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig {
 	public static final field Companion Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig$Companion;
 	public synthetic fun <init> (Lio/github/airflux/dsl/reader/object/builder/validator/JsObjectValidatorBuilders;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -806,6 +767,25 @@ public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfig$Comp
 
 public final class io/github/airflux/dsl/reader/config/JsObjectReaderConfigKt {
 	public static final fun objectReaderConfig (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/config/JsObjectReaderConfig;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig {
+	public static final field Companion Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig$Companion;
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function2;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig$Builder {
+	public final fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
+	public final fun setActionIfEmpty (Lkotlin/jvm/functions/Function2;)V
+}
+
+public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfig$Companion {
+	public final fun getDEFAULT ()Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig;
+}
+
+public final class io/github/airflux/dsl/reader/config/JsObjectWriterConfigKt {
+	public static final fun objectWriterConfig (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig;
 }
 
 public final class io/github/airflux/dsl/reader/context/JsReaderContextBuilder {
@@ -1131,14 +1111,27 @@ public final class io/github/airflux/dsl/value/JsValueOpsKt {
 	public static final fun div (Lio/github/airflux/core/value/JsValue;Ljava/lang/String;)Lio/github/airflux/core/lookup/JsLookup;
 }
 
+public final class io/github/airflux/dsl/writer/WriterActionIfResultIsEmpty : java/lang/Enum {
+	public static final field RETURN_EMPTY_VALUE Lio/github/airflux/dsl/writer/WriterActionIfResultIsEmpty;
+	public static final field RETURN_NOTHING Lio/github/airflux/dsl/writer/WriterActionIfResultIsEmpty;
+	public static final field RETURN_NULL_VALUE Lio/github/airflux/dsl/writer/WriterActionIfResultIsEmpty;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/dsl/writer/WriterActionIfResultIsEmpty;
+	public static fun values ()[Lio/github/airflux/dsl/writer/WriterActionIfResultIsEmpty;
+}
+
 public final class io/github/airflux/dsl/writer/WriterOpsKt {
 	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/core/writer/context/JsWriterContext;Lio/github/airflux/core/location/JsLocation;Lio/github/airflux/core/writer/JsWriter;)Lio/github/airflux/core/value/JsValue;
 }
 
-public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder {
+public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder : io/github/airflux/dsl/writer/WriterActionConfigurator {
+	public fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
 	public final fun items (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$NonNullable;)Lio/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder;
 	public final fun items (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Nullable;)Lio/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder;
 	public final fun items (Lio/github/airflux/dsl/writer/array/builder/item/specification/JsArrayItemSpec$Optional;)Lio/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder;
+	public fun returnEmptyValue ()Lkotlin/jvm/functions/Function2;
+	public fun returnNothing ()Lkotlin/jvm/functions/Function2;
+	public fun returnNullValue ()Lkotlin/jvm/functions/Function2;
+	public fun setActionIfEmpty (Lkotlin/jvm/functions/Function2;)V
 }
 
 public abstract interface class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilder$WriterBuilder {
@@ -1146,7 +1139,8 @@ public abstract interface class io/github/airflux/dsl/writer/array/builder/JsArr
 }
 
 public final class io/github/airflux/dsl/writer/array/builder/JsArrayWriterBuilderKt {
-	public static final fun arrayWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsArrayWriter;
+	public static final fun arrayWriter (Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsArrayWriter;
+	public static synthetic fun arrayWriter$default (Lio/github/airflux/dsl/reader/config/JsArrayWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/core/writer/JsArrayWriter;
 }
 
 public abstract class io/github/airflux/dsl/writer/array/builder/item/JsArrayItems {
@@ -1195,24 +1189,27 @@ public final class io/github/airflux/dsl/writer/array/builder/item/specification
 }
 
 public final class io/github/airflux/dsl/writer/context/JsWriterContextBuilder {
-	public final fun getActionOfWriterIfArrayIsEmpty ()Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;
-	public final fun getActionOfWriterIfObjectIsEmpty ()Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;
-	public final fun setActionOfWriterIfArrayIsEmpty (Lio/github/airflux/core/writer/context/option/ActionOfWriterIfArrayIsEmpty$Action;)V
-	public final fun setActionOfWriterIfObjectIsEmpty (Lio/github/airflux/core/writer/context/option/ActionOfWriterIfObjectIsEmpty$Action;)V
 }
 
 public final class io/github/airflux/dsl/writer/context/JsWriterContextBuilderKt {
 	public static final fun writerContext (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/context/JsWriterContext;
+	public static synthetic fun writerContext$default (Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/core/writer/context/JsWriterContext;
 }
 
-public final class io/github/airflux/dsl/writer/object/builder/JsObjectWriterBuilder : io/github/airflux/dsl/writer/object/builder/property/JsObjectWriterPropertiesBuilder {
+public final class io/github/airflux/dsl/writer/object/builder/JsObjectWriterBuilder : io/github/airflux/dsl/writer/WriterActionConfigurator, io/github/airflux/dsl/writer/object/builder/property/JsObjectWriterPropertiesBuilder {
+	public fun getActionIfEmpty ()Lkotlin/jvm/functions/Function2;
 	public fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$NonNullable;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$NonNullable;
 	public fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Nullable;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Nullable;
 	public fun property (Lio/github/airflux/dsl/writer/object/builder/property/specification/JsObjectPropertySpec$Optional;)Lio/github/airflux/dsl/writer/object/builder/property/JsObjectProperty$Optional;
+	public fun returnEmptyValue ()Lkotlin/jvm/functions/Function2;
+	public fun returnNothing ()Lkotlin/jvm/functions/Function2;
+	public fun returnNullValue ()Lkotlin/jvm/functions/Function2;
+	public fun setActionIfEmpty (Lkotlin/jvm/functions/Function2;)V
 }
 
 public final class io/github/airflux/dsl/writer/object/builder/JsObjectWriterBuilderKt {
-	public static final fun writer (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsObjectWriter;
+	public static final fun writer (Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/core/writer/JsObjectWriter;
+	public static synthetic fun writer$default (Lio/github/airflux/dsl/reader/config/JsObjectWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/core/writer/JsObjectWriter;
 }
 
 public final class io/github/airflux/dsl/writer/object/builder/property/JsObjectProperties : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker {

@@ -18,12 +18,14 @@ package io.github.airflux.dsl.writer.`object`.builder
 
 import io.github.airflux.common.DummyWriter
 import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.value.JsNull
 import io.github.airflux.core.value.JsObject
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.writer.context.JsWriterContext
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.nonNullable
 import io.github.airflux.dsl.writer.`object`.builder.property.specification.optional
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class JsObjectWriterBuilderTest : FreeSpec() {
@@ -54,13 +56,52 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
 
             "when no attributes for writing to an object" - {
                 val from: (String) -> String? = { null }
-                val writer = writer {
-                    property(optional(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { JsString(it) }))
+
+                "when the action of the writer was not set" - {
+                    val writer = writer {
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the empty JsObject" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        result shouldBe JsObject()
+                    }
                 }
 
-                "then should returns the empty JsObject" {
-                    val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
-                    result shouldBe JsObject()
+                "when the action of the writer was set to return empty value" - {
+                    val writer = writer {
+                        actionIfEmpty = returnEmptyValue()
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the empty JsObject" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        result shouldBe JsObject()
+                    }
+                }
+
+                "when the action of the writer was set to return nothing" - {
+                    val writer = writer {
+                        actionIfEmpty = returnNothing()
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the null value" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        result.shouldBeNull()
+                    }
+                }
+
+                "when the action of the writer was set to return null value" - {
+                    val writer = writer {
+                        actionIfEmpty = returnNullValue()
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                    }
+
+                    "then should returns the JsNull" {
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        result shouldBe JsNull
+                    }
                 }
             }
         }
