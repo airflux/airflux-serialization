@@ -18,9 +18,13 @@ package io.github.airflux.core.reader
 
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
+import io.github.airflux.core.reader.result.filter
 import io.github.airflux.core.reader.result.recovery
+import io.github.airflux.core.reader.result.validate
+import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.value.JsValue
 
 @Suppress("unused")
@@ -58,3 +62,15 @@ public infix fun <T> JsReader<T>.or(other: JsReader<T>): JsReader<T> = JsReader 
                 .recovery { alternative -> failure + alternative }
         }
 }
+
+public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?> =
+    JsReader { context, location, input ->
+        this@filter.read(context, location, input)
+            .filter(context, predicate)
+    }
+
+public infix fun <T> JsReader<T>.validate(validator: JsValidator<T>): JsReader<T> =
+    JsReader { context, location, input ->
+        this@validate.read(context, location, input)
+            .validate(context, validator)
+    }

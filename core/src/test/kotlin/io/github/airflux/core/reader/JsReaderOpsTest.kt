@@ -16,82 +16,116 @@
 
 package io.github.airflux.core.reader
 
+import io.github.airflux.common.DummyReader
+import io.github.airflux.common.DummyReaderPredicate
+import io.github.airflux.common.DummyValidator
 import io.github.airflux.common.JsonErrors
 import io.github.airflux.core.location.JsLocation
 import io.github.airflux.core.reader.context.JsReaderContext
-import io.github.airflux.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.value.JsString
 import io.github.airflux.core.value.JsValue
-import io.github.airflux.std.reader.StringReader
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class JsReaderOpsTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext(
-            listOf(
-                PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }),
-                InvalidTypeErrorBuilder(builder = JsonErrors::InvalidType)
-            )
-        )
+        private val CONTEXT = JsReaderContext()
         private val LOCATION = JsLocation.empty
         private const val VALUE = "ABC"
+        private val JSON_VALUE: JsValue = JsString(VALUE)
     }
 
     init {
-        val reader = StringReader
 
         "The extension-function the filter" - {
-            val isNotBlank = JsPredicate<String> { _, _, value -> value.isNotBlank() }
 
-            "when the value satisfies the predicate" - {
-                val json: JsValue = JsString("  ")
+            "when an original reader returns a result as a success" - {
+                val reader: JsReader<String> = DummyReader(
+                    result = JsResult.Success(location = LOCATION, value = VALUE)
+                )
 
-                "then filter should return the null value" {
-                    val filtered = reader.filter(isNotBlank).read(CONTEXT, LOCATION, json)
-                    filtered shouldBe JsResult.Success(location = LOCATION, value = null)
+                "when the value satisfies the predicate" - {
+                    val predicate: JsPredicate<String> = DummyReaderPredicate(result = false)
+
+                    "then filter should return the null value" {
+                        val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
+                        filtered shouldBe JsResult.Success(location = LOCATION, value = null)
+                    }
+                }
+
+                "when the value does not satisfy the predicate" - {
+                    val predicate: JsPredicate<String> = DummyReaderPredicate(result = true)
+
+                    "then filter should return the original value" {
+                        val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
+                        filtered shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                    }
                 }
             }
 
-            "when the value does not satisfy the predicate" - {
-                val json: JsValue = JsString(VALUE)
+            "when an original reader returns a result as a failure" - {
+                val reader: JsReader<String> = DummyReader(
+                    result = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                )
 
-                "then filter should return the original value" {
-                    val filtered = reader.filter(isNotBlank).read(CONTEXT, LOCATION, json)
-                    filtered shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                "then filtering does not execute and the original result should be returned" {
+                    val predicate: JsPredicate<String> = DummyReaderPredicate(result = false)
+                    val validated = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
+                    validated shouldBe JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 }
             }
         }
 
         "The extension-function the validation" - {
-            val isNotEmpty = JsValidator<String> { _, location, value ->
-                if (value.isNotEmpty()) null else JsResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
-            }
 
-            "when the value is invalid" - {
-                val json: JsValue = JsString("")
+            "when an original reader returns a result as a success" - {
+                val reader: JsReader<String> = DummyReader(
+                    result = JsResult.Success(location = LOCATION, value = VALUE)
+                )
 
-                "then validator should return the failure" {
-                    val validated = reader.validate(isNotEmpty).read(CONTEXT, LOCATION, json)
+                "when validation is a success" - {
+                    val validator: JsValidator<String> = DummyValidator(result = null)
 
-                    validated shouldBe JsResult.Failure(
-                        location = LOCATION,
-                        error = JsonErrors.Validation.Strings.IsEmpty
+                    "then should return the original result" {
+                        val validated = reader.validate(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                        validated shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                    }
+                }
+
+                "when validation is a failure" - {
+                    val validator: JsValidator<String> = DummyValidator(
+                        result = JsResult.Failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
                     )
+
+                    "then should return the result of a validation" {
+                        val validated = reader.validate(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+
+                        validated shouldBe JsResult.Failure(
+                            location = LOCATION,
+                            error = JsonErrors.Validation.Strings.IsEmpty
+                        )
+                    }
                 }
             }
 
-            "when the value is valid" - {
-                val json: JsValue = JsString(VALUE)
+            "when an original reader returns a result as a failure" - {
+                val reader: JsReader<String> = DummyReader(
+                    result = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                )
 
-                "then validator should return the success" {
-                    val validated = reader.validate(isNotEmpty).read(CONTEXT, LOCATION, json)
-                    validated shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                "then validation does not execute and the original result should be returned" {
+                    val validator: JsValidator<String> = DummyValidator(
+                        result = JsResult.Failure(location = LOCATION, error = JsonErrors.Validation.Object.IsEmpty)
+                    )
+                    val validated = reader.validate(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                    validated shouldBe JsResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.PathMissing
+                    )
                 }
             }
         }

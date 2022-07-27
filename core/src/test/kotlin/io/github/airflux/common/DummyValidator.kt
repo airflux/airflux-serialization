@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.airflux.core.reader
+package io.github.airflux.common
 
-import io.github.airflux.core.reader.predicate.JsPredicate
-import io.github.airflux.core.reader.result.filter
-import io.github.airflux.core.reader.result.validate
+import io.github.airflux.core.location.JsLocation
+import io.github.airflux.core.reader.context.JsReaderContext
+import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.validator.JsValidator
 
-public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?> =
-    JsReader { context, location, input ->
-        this@filter.read(context, location, input)
-            .filter(context, predicate)
-    }
-
-public infix fun <T> JsReader<T>.validate(validator: JsValidator<T>): JsReader<T> =
-    JsReader { context, location, input ->
-        this@validate.read(context, location, input)
-            .validate(context, validator)
-    }
+internal class DummyValidator<T>(val result: JsResult.Failure?) : JsValidator<T> {
+    override fun validate(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure? = result
+}

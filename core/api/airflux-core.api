@@ -202,11 +202,8 @@ public abstract interface class io/github/airflux/core/reader/JsReader {
 }
 
 public final class io/github/airflux/core/reader/JsReaderKt {
-	public static final fun or (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/core/reader/JsReader;
-}
-
-public final class io/github/airflux/core/reader/JsReaderOpsKt {
 	public static final fun filter (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/predicate/JsPredicate;)Lio/github/airflux/core/reader/JsReader;
+	public static final fun or (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/JsReader;)Lio/github/airflux/core/reader/JsReader;
 	public static final fun validate (Lio/github/airflux/core/reader/JsReader;Lio/github/airflux/core/reader/validator/JsValidator;)Lio/github/airflux/core/reader/JsReader;
 }
 
