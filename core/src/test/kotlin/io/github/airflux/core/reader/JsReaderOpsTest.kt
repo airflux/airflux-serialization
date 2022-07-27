@@ -91,7 +91,7 @@ internal class JsReaderOpsTest : FreeSpec() {
                     val validator: JsValidator<String> = DummyValidator(result = null)
 
                     "then should return the original result" {
-                        val validated = reader.validate(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                        val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
                         validated shouldBe JsResult.Success(location = LOCATION, value = VALUE)
                     }
                 }
@@ -102,7 +102,7 @@ internal class JsReaderOpsTest : FreeSpec() {
                     )
 
                     "then should return the result of a validation" {
-                        val validated = reader.validate(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                        val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
 
                         validated shouldBe JsResult.Failure(
                             location = LOCATION,
@@ -121,7 +121,7 @@ internal class JsReaderOpsTest : FreeSpec() {
                     val validator: JsValidator<String> = DummyValidator(
                         result = JsResult.Failure(location = LOCATION, error = JsonErrors.Validation.Object.IsEmpty)
                     )
-                    val validated = reader.validate(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                    val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
                     validated shouldBe JsResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.PathMissing

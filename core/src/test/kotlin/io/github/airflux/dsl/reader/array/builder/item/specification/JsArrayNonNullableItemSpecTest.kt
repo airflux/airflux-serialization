@@ -91,7 +91,7 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
 
             "when the validator was added to the spec" - {
                 val spec = JsArrayItemSpec.NonNullable(reader = StringReader)
-                val specWithValidator = spec.validate(StringValidator.isNotEmpty)
+                val specWithValidator = spec.validation(StringValidator.isNotEmpty)
 
                 "when the reader has successfully read" - {
 

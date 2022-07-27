@@ -26,7 +26,7 @@ import io.github.airflux.core.reader.`object`.readRequired
 import io.github.airflux.core.reader.or
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
-import io.github.airflux.core.reader.result.validate
+import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T : Any> required(name: String, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
@@ -56,13 +56,13 @@ public fun <T : Any> required(paths: JsPaths, reader: JsReader<T>): JsObjectProp
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Required<T>.validate(
+public infix fun <T : Any> JsObjectPropertySpec.Required<T>.validation(
     validator: JsValidator<T>
 ): JsObjectPropertySpec.Required<T> =
     JsObjectPropertySpec.Required(
         path = path,
         reader = { context, location, input ->
-            reader.read(context, location, input).validate(context, validator)
+            reader.read(context, location, input).validation(context, validator)
         }
     )
 

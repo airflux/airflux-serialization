@@ -28,7 +28,7 @@ import io.github.airflux.core.reader.predicate.JsPredicate
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.core.reader.result.filter
-import io.github.airflux.core.reader.result.validate
+import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 
 public fun <T : Any> nullable(name: String, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
@@ -58,13 +58,13 @@ public fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>): JsObjectProp
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Nullable<T>.validate(
+public infix fun <T : Any> JsObjectPropertySpec.Nullable<T>.validation(
     validator: JsValidator<T?>
 ): JsObjectPropertySpec.Nullable<T> =
     JsObjectPropertySpec.Nullable(
         path = path,
         reader = { context, location, input ->
-            reader.read(context, location, input).validate(context, validator)
+            reader.read(context, location, input).validation(context, validator)
         }
     )
 

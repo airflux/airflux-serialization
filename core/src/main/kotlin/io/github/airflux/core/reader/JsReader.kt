@@ -23,7 +23,7 @@ import io.github.airflux.core.reader.result.JsError
 import io.github.airflux.core.reader.result.JsResult
 import io.github.airflux.core.reader.result.filter
 import io.github.airflux.core.reader.result.recovery
-import io.github.airflux.core.reader.result.validate
+import io.github.airflux.core.reader.result.validation
 import io.github.airflux.core.reader.validator.JsValidator
 import io.github.airflux.core.value.JsValue
 
@@ -69,8 +69,8 @@ public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?
             .filter(context, predicate)
     }
 
-public infix fun <T> JsReader<T>.validate(validator: JsValidator<T>): JsReader<T> =
+public infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
     JsReader { context, location, input ->
-        this@validate.read(context, location, input)
-            .validate(context, validator)
+        this@validation.read(context, location, input)
+            .validation(context, validator)
     }
