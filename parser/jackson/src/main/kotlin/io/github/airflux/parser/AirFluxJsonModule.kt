@@ -31,13 +31,13 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.Serializers
-import io.github.airflux.core.value.JsArray
-import io.github.airflux.core.value.JsBoolean
-import io.github.airflux.core.value.JsNull
-import io.github.airflux.core.value.JsNumber
-import io.github.airflux.core.value.JsObject
-import io.github.airflux.core.value.JsString
-import io.github.airflux.core.value.JsValue
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsNumber
+import io.github.airflux.serialization.core.value.JsObject
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import java.util.*
 
 public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {

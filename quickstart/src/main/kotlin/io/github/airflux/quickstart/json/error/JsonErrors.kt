@@ -1,7 +1,7 @@
 package io.github.airflux.quickstart.json.error
 
-import io.github.airflux.core.reader.result.JsError
-import io.github.airflux.core.value.JsValue
+import io.github.airflux.serialization.core.reader.result.JsError
+import io.github.airflux.serialization.core.value.JsValue
 import kotlin.reflect.KClass
 
 sealed class JsonErrors : JsError {

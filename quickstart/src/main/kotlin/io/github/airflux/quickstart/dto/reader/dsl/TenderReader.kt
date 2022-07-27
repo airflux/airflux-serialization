@@ -1,12 +1,12 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
-import io.github.airflux.core.reader.result.success
-import io.github.airflux.dsl.reader.`object`.builder.property.specification.optional
-import io.github.airflux.dsl.reader.`object`.builder.property.specification.required
-import io.github.airflux.dsl.reader.`object`.builder.reader
-import io.github.airflux.dsl.reader.`object`.builder.returns
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySpec
+import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.optional
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.required
+import io.github.airflux.serialization.dsl.reader.`object`.builder.reader
+import io.github.airflux.serialization.dsl.reader.`object`.builder.returns
 
 val TenderReader = reader<Tender>(ObjectReaderConfiguration) {
     val id = property(identifierPropertySpec)

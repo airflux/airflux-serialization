@@ -1,11 +1,6 @@
 package io.github.airflux.quickstart
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.core.location.JsLocation
-import io.github.airflux.core.reader.result.JsResult
-import io.github.airflux.core.value.JsValue
-import io.github.airflux.dsl.value.deserialization
-import io.github.airflux.dsl.writer.serialization
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.quickstart.dto.Response
 import io.github.airflux.quickstart.dto.model.Lot
@@ -16,6 +11,11 @@ import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
 import io.github.airflux.quickstart.dto.writer.context.DefaultWriterContext
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.dsl.value.deserialization
+import io.github.airflux.serialization.dsl.writer.serialization
 import java.math.BigDecimal
 
 fun main() {

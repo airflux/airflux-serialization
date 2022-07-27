@@ -1,10 +1,10 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
-import io.github.airflux.dsl.reader.config.JsArrayReaderConfig
-import io.github.airflux.dsl.reader.config.objectReaderConfig
-import io.github.airflux.std.validator.`object`.ObjectValidator.additionalProperties
-import io.github.airflux.std.validator.`object`.ObjectValidator.isNotEmpty
-import io.github.airflux.std.validator.`object`.ObjectValidator.maxProperties
+import io.github.airflux.serialization.dsl.reader.config.JsArrayReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.objectReaderConfig
+import io.github.airflux.serialization.std.validator.`object`.ObjectValidator.additionalProperties
+import io.github.airflux.serialization.std.validator.`object`.ObjectValidator.isNotEmpty
+import io.github.airflux.serialization.std.validator.`object`.ObjectValidator.maxProperties
 
 val ObjectReaderConfiguration = objectReaderConfig {
 

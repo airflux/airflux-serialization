@@ -1,8 +1,8 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
-import io.github.airflux.core.reader.JsReader
-import io.github.airflux.core.reader.validation
-import io.github.airflux.std.reader.StringReader
-import io.github.airflux.std.validator.string.StringValidator.isNotBlank
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.validation
+import io.github.airflux.serialization.std.reader.StringReader
+import io.github.airflux.serialization.std.validator.string.StringValidator.isNotBlank
 
 val CurrencyReader: JsReader<String> = StringReader.validation(isNotBlank)

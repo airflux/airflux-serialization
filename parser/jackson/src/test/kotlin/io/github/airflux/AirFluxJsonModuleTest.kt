@@ -17,14 +17,14 @@
 package io.github.airflux
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.core.value.JsArray
-import io.github.airflux.core.value.JsBoolean
-import io.github.airflux.core.value.JsNull
-import io.github.airflux.core.value.JsNumber
-import io.github.airflux.core.value.JsObject
-import io.github.airflux.core.value.JsString
-import io.github.airflux.core.value.JsValue
 import io.github.airflux.parser.AirFluxJsonModule
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsNumber
+import io.github.airflux.serialization.core.value.JsObject
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
