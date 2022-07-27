@@ -16,7 +16,7 @@ dependencies {
     /* Kotlin */
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation(project(":airflux-core"))
+    implementation(project(":airflux-serialization"))
 
     /* JSON */
     implementation("com.fasterxml.jackson.core:jackson-core:${Versions.Jackson}")

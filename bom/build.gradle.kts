@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     constraints {
-        api(project(":airflux-core"))
+        api(project(":airflux-serialization"))
         api(project(":airflux-jackson-parser"))
     }
 }
