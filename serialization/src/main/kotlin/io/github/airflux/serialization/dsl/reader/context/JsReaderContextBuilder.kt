@@ -20,12 +20,13 @@ import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderElement
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
 
 public fun readerContext(block: JsReaderContextBuilder.() -> Unit = {}): JsReaderContext =
     JsReaderContextBuilder().apply(block).build()
 
-@io.github.airflux.serialization.dsl.AirfluxMarker
+@AirfluxMarker
 public class JsReaderContextBuilder internal constructor() {
 
     private val elements = mutableListOf<JsContext.Element>()
@@ -49,7 +50,7 @@ public class JsReaderContextBuilder internal constructor() {
         return JsReaderContext(elements)
     }
 
-    @io.github.airflux.serialization.dsl.AirfluxMarker
+    @AirfluxMarker
     public class ErrorsBuilder internal constructor() {
         private val items = mutableListOf<JsContextErrorBuilderElement>()
 

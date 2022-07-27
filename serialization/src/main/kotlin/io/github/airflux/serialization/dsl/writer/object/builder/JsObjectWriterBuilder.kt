@@ -20,6 +20,7 @@ import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsObject
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsObjectWriter
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
 import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstance
@@ -40,7 +41,7 @@ public fun <T : Any> writer(
         WriterActionConfiguratorInstance(config.options.actionIfEmpty)
     ).apply(block).build()
 
-@io.github.airflux.serialization.dsl.AirfluxMarker
+@AirfluxMarker
 public class JsObjectWriterBuilder<T : Any> internal constructor(
     private val propertiesBuilder: JsObjectWriterPropertiesBuilderInstance<T>,
     private val actionConfigurator: WriterActionConfiguratorInstance

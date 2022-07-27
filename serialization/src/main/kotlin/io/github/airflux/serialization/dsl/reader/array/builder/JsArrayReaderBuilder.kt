@@ -28,6 +28,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Compa
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayItemSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
@@ -46,7 +47,7 @@ public fun <T> arrayReader(
     return readerBuilder.build(resultBuilder)
 }
 
-@io.github.airflux.serialization.dsl.AirfluxMarker
+@AirfluxMarker
 public class JsArrayReaderBuilder<T> internal constructor(
     private val validatorsBuilder: JsArrayReaderValidatorsBuilderInstance
 ) : JsArrayReaderValidatorsBuilder by validatorsBuilder {

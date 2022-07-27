@@ -21,6 +21,7 @@ import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.writer.JsArrayWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
 import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstance
@@ -38,7 +39,7 @@ public fun <T> arrayWriter(
 ): JsArrayWriter<T> =
     JsArrayWriterBuilder(WriterActionConfiguratorInstance(config.options.actionIfEmpty)).block().build()
 
-@io.github.airflux.serialization.dsl.AirfluxMarker
+@AirfluxMarker
 public class JsArrayWriterBuilder internal constructor(
     private val actionConfigurator: WriterActionConfiguratorInstance
 ) : WriterActionConfigurator by actionConfigurator {

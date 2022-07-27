@@ -19,9 +19,10 @@ package io.github.airflux.serialization.dsl.reader.context.exception
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import kotlin.reflect.KClass
 
-@io.github.airflux.serialization.dsl.AirfluxMarker
+@AirfluxMarker
 public class ExceptionsHandlerBuilder internal constructor() {
 
     private val handlers = mutableListOf<Pair<KClass<*>, ExceptionHandler>>()

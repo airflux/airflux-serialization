@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.config
 
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
 
@@ -26,7 +27,7 @@ public class JsArrayWriterConfig private constructor(
     public val options: Options
 ) {
 
-    @io.github.airflux.serialization.dsl.AirfluxMarker
+    @AirfluxMarker
     public class Builder internal constructor() {
         public var actionIfEmpty: WriterActionBuilderIfResultIsEmpty = returnEmptyValue
 

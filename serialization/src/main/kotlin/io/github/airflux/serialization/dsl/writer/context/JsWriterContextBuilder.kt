@@ -18,11 +18,12 @@ package io.github.airflux.serialization.dsl.writer.context
 
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.dsl.AirfluxMarker
 
 public fun writerContext(block: JsWriterContextBuilder.() -> Unit = {}): JsWriterContext =
     JsWriterContextBuilder().apply(block).build()
 
-@io.github.airflux.serialization.dsl.AirfluxMarker
+@AirfluxMarker
 public class JsWriterContextBuilder internal constructor() {
     private val elements = mutableListOf<JsContext.Element>()
 

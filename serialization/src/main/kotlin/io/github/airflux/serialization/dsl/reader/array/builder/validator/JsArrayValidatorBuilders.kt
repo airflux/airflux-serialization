@@ -16,11 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.validator
 
+import io.github.airflux.serialization.dsl.AirfluxMarker
+
 public class JsArrayValidatorBuilders private constructor(
     items: List<JsArrayValidatorBuilder>
 ) : List<JsArrayValidatorBuilder> by items {
 
-    @io.github.airflux.serialization.dsl.AirfluxMarker
+    @AirfluxMarker
     public class Builder internal constructor(items: List<JsArrayValidatorBuilder> = emptyList()) {
         private val builders = mutableListOf<JsArrayValidatorBuilder>().apply { addAll(items) }
 
