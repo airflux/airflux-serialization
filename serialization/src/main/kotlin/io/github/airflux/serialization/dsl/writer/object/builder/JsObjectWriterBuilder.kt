@@ -20,13 +20,13 @@ import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsObject
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsObjectWriter
-import io.github.airflux.serialization.dsl.reader.config.JsObjectWriterConfig
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
 import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstance
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
+import io.github.airflux.serialization.dsl.writer.config.JsObjectWriterConfig
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilder
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilderInstance

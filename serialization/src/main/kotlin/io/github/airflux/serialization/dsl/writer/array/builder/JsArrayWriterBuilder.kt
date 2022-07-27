@@ -21,7 +21,6 @@ import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.writer.JsArrayWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
-import io.github.airflux.serialization.dsl.reader.config.JsArrayWriterConfig
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
 import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstance
@@ -31,6 +30,7 @@ import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RE
 import io.github.airflux.serialization.dsl.writer.array.builder.JsArrayWriterBuilder.WriterBuilder
 import io.github.airflux.serialization.dsl.writer.array.builder.item.JsArrayItems
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.JsArrayItemSpec
+import io.github.airflux.serialization.dsl.writer.config.JsArrayWriterConfig
 
 public fun <T> arrayWriter(
     config: JsArrayWriterConfig = JsArrayWriterConfig.DEFAULT,

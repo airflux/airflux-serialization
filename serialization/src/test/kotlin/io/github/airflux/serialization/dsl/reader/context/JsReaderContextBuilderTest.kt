@@ -28,8 +28,16 @@ internal class JsReaderContextBuilderTest : FreeSpec() {
 
     init {
 
+        "when the context is not initialized" - {
+            val context: JsReaderContext = readerContext()
+
+            "then context is empty" {
+                context.isEmpty shouldBe true
+            }
+        }
+
         "when any parameters are not set in the builder" - {
-            val context: JsReaderContext = readerContext({})
+            val context: JsReaderContext = readerContext {}
 
             "then the context is empty" {
                 context.isEmpty shouldBe true

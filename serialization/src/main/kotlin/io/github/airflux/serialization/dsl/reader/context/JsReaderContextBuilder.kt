@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
 
-public fun readerContext(block: JsReaderContextBuilder.() -> Unit): JsReaderContext =
+public fun readerContext(block: JsReaderContextBuilder.() -> Unit = {}): JsReaderContext =
     JsReaderContextBuilder().apply(block).build()
 
 @io.github.airflux.serialization.dsl.AirfluxMarker
