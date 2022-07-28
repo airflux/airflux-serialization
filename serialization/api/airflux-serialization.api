@@ -533,6 +533,18 @@ public final class io/github/airflux/serialization/core/writer/context/JsWriterC
 	public final fun plus (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/writer/context/JsWriterContext;
 }
 
+public final class io/github/airflux/serialization/core/writer/object/NonNullableFieldWriterKt {
+	public static final fun writeNonNullable (Lio/github/airflux/serialization/core/writer/context/JsWriterContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/writer/JsWriter;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
+}
+
+public final class io/github/airflux/serialization/core/writer/object/NullableFieldWriterKt {
+	public static final fun writeNullable (Lio/github/airflux/serialization/core/writer/context/JsWriterContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/writer/JsWriter;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
+}
+
+public final class io/github/airflux/serialization/core/writer/object/OptionalFieldWriterKt {
+	public static final fun writeOptional (Lio/github/airflux/serialization/core/writer/context/JsWriterContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/writer/JsWriter;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
+}
+
 public abstract interface class io/github/airflux/serialization/core/writer/predicate/JsPredicate {
 	public fun and (Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;
 	public fun or (Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;

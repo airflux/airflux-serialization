@@ -17,10 +17,12 @@
 package io.github.airflux.serialization.dsl.writer.array.builder.item
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.`object`.writeNonNullable
+import io.github.airflux.serialization.core.writer.`object`.writeNullable
+import io.github.airflux.serialization.core.writer.`object`.writeOptional
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.JsArrayItemSpec
 
 public sealed class JsArrayItems<T> {
@@ -32,7 +34,7 @@ public sealed class JsArrayItems<T> {
         internal constructor(spec: JsArrayItemSpec.NonNullable<T>) : this(spec.writer)
 
         override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? =
-            writer.write(context, location, value)
+            writeNonNullable(context = context, location = location, using = writer, value = value)
     }
 
     public class Optional<T> private constructor(private val writer: JsWriter<T & Any>) : JsArrayItems<T>() {
@@ -40,7 +42,7 @@ public sealed class JsArrayItems<T> {
         internal constructor(spec: JsArrayItemSpec.Optional<T>) : this(spec.writer)
 
         override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? =
-            if (value != null) writer.write(context, location, value) else null
+            writeOptional(context = context, location = location, using = writer, value = value)
     }
 
     public class Nullable<T> private constructor(private val writer: JsWriter<T & Any>) : JsArrayItems<T>() {
@@ -48,6 +50,6 @@ public sealed class JsArrayItems<T> {
         internal constructor(spec: JsArrayItemSpec.Nullable<T>) : this(spec.writer)
 
         override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? =
-            if (value != null) writer.write(context, location, value) else JsNull
+            writeNullable(context = context, location = location, using = writer, value = value)
     }
 }
