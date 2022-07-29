@@ -20,6 +20,6 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 
-public fun interface JsArrayWriter<in T> : JsWriter<List<T>> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: List<T>): JsValue?
+public fun interface JsArrayWriter<in T> : JsWriter<Iterable<T>> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: Iterable<T>): JsValue?
 }

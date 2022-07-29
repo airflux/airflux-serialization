@@ -21,6 +21,6 @@ import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsArrayWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 
-internal class DummyArrayWriter<T : Any>(val result: (Collection<T>) -> JsValue?) : JsArrayWriter<T> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: List<T>): JsValue? = result(value)
+internal class DummyArrayWriter<T : Any>(val result: (Iterable<T>) -> JsValue?) : JsArrayWriter<T> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: Iterable<T>): JsValue? = result(value)
 }

@@ -499,7 +499,7 @@ public final class io/github/airflux/serialization/core/value/JsValueOpsKt {
 }
 
 public abstract interface class io/github/airflux/serialization/core/writer/JsArrayWriter : io/github/airflux/serialization/core/writer/JsWriter {
-	public abstract fun write (Lio/github/airflux/serialization/core/writer/context/JsWriterContext;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;)Lio/github/airflux/serialization/core/value/JsValue;
+	public abstract fun write (Lio/github/airflux/serialization/core/writer/context/JsWriterContext;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsValue;
 }
 
 public abstract interface class io/github/airflux/serialization/core/writer/JsObjectWriter : io/github/airflux/serialization/core/writer/JsWriter {
