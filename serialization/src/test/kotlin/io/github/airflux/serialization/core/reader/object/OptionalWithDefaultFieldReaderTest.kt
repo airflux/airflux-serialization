@@ -16,73 +16,52 @@
 
 package io.github.airflux.serialization.core.reader.`object`
 
-import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.TestData.DEFAULT_VALUE
-import io.github.airflux.serialization.common.TestData.USER_NAME_VALUE
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
-        private val stringReader: JsReader<String> = JsReader { _, location, input ->
-            if (input is JsString)
-                JsResult.Success(location, input.get)
-            else
-                JsResult.Failure(
-                    location = location,
-                    error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = input.type)
-                )
-        }
-        private val defaultValue = { DEFAULT_VALUE }
+        private val CONTEXT = JsReaderContext()
+        private val LOCATION = JsLocation.empty.append("name")
+        private const val VALUE = "user-1"
+        private const val DEFAULT_VALUE = "default-user"
+        private val READER: JsReader<String> =
+            DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }
+        private val DEFAULT = { DEFAULT_VALUE }
     }
 
     init {
 
         "The readOptional (with default) function" - {
 
-            "should return the result of applying the reader to a node if found it" {
-                val from: JsLookup =
-                    JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
+            "when the element is defined" - {
+                val from: JsLookup = JsLookup.Defined(location = LOCATION, value = JsString(VALUE))
 
-                val result: JsResult<String?> =
-                    readOptional(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
+                "then should return the result of applying the reader" {
+                    val result: JsResult<String?> =
+                        readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
 
-                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
+                    result shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                }
             }
 
-            "should return default value if did not find a node" {
-                val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
+            "when the element is undefined" - {
+                val from: JsLookup = JsLookup.Undefined(location = LOCATION)
 
-                val result: JsResult<String?> =
-                    readOptional(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
+                "then should return the default value" {
+                    val result: JsResult<String?> =
+                        readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
 
-                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = DEFAULT_VALUE)
-            }
-
-            "should return invalid type error if a node is not an object" {
-                val from: JsLookup = JsLookup.Undefined.InvalidType(
-                    location = JsLocation.empty.append("name"),
-                    expected = JsValue.Type.OBJECT,
-                    actual = JsValue.Type.STRING
-                )
-
-                val result: JsResult<String?> =
-                    readOptional(context = CONTEXT, from = from, using = stringReader, defaultValue = defaultValue)
-
-                result shouldBe JsResult.Failure(
-                    location = JsLocation.empty.append("name"),
-                    error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
-                )
+                    result shouldBe JsResult.Success(location = LOCATION, value = DEFAULT_VALUE)
+                }
             }
         }
     }

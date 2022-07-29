@@ -22,6 +22,10 @@ import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.JsValue
 
-internal class DummyReader<T>(val result: JsResult<T>) : JsReader<T> {
-    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> = result
+internal class DummyReader<T>(val result: (JsReaderContext, JsLocation) -> JsResult<T>) : JsReader<T> {
+
+    constructor(result: JsResult<T>) : this({ _, _ -> result })
+
+    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T> =
+        result(context, location)
 }

@@ -16,31 +16,24 @@
 
 package io.github.airflux.serialization.core.reader.`object`
 
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 
 /**
  * Reads optional field or return default if a field is not found.
  *
  * - If a node is found ([from] is [JsLookup.Defined]) then applies [reader]
- * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then returns [defaultValue]
- * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
- *   that was build using [InvalidTypeErrorBuilder]
+ * - If a node is not found ([from] is [JsLookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readOptional(
     context: JsReaderContext,
     from: JsLookup,
     using: JsReader<T>,
     defaultValue: () -> T
-): JsResult<T> = when (from) {
-    is JsLookup.Defined -> using.read(context, from.location, from.value)
-    is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
-    is JsLookup.Undefined.InvalidType -> {
-        val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = from.location, error = errorBuilder.build(from.expected, from.actual))
+): JsResult<T> =
+    when (from) {
+        is JsLookup.Defined -> using.read(context, from.location, from.value)
+        is JsLookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
     }
-}

@@ -28,6 +28,10 @@ public sealed class JsLocation {
     public fun append(element: PathElement): JsLocation = Element(this, element)
     public fun append(path: JsPath): JsLocation = path.elements.fold(this) { acc, p -> acc.append(p) }
 
+    public fun append(elements: Iterable<PathElement>): JsLocation = elements.fold(this) { location, pathElement ->
+        location.append(pathElement)
+    }
+
     private object Empty : JsLocation() {
         override val isEmpty: Boolean = true
         override fun toString(): String = "#"
@@ -48,6 +52,7 @@ public sealed class JsLocation {
             tailrec fun listEq(self: JsLocation, other: JsLocation): Boolean = when {
                 self is Element && other is Element ->
                     if (self.value == other.value) listEq(self.begin, other.begin) else false
+
                 self is Empty && other is Empty -> true
                 else -> false
             }

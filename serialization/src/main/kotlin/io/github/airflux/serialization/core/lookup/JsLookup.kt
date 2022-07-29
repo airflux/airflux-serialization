@@ -34,64 +34,52 @@ public sealed class JsLookup {
     public abstract fun apply(idx: PathElement.Idx): JsLookup
 
     public data class Defined(override val location: JsLocation, val value: JsValue) : JsLookup() {
-        override fun apply(key: PathElement.Key): JsLookup = apply(location, key, value)
-        override fun apply(idx: PathElement.Idx): JsLookup = apply(location, idx, value)
+        override fun apply(key: PathElement.Key): JsLookup = value.lookup(location, key)
+        override fun apply(idx: PathElement.Idx): JsLookup = value.lookup(location, idx)
     }
 
-    public sealed class Undefined : JsLookup() {
+    public data class Undefined(override val location: JsLocation) : JsLookup() {
         override fun apply(key: PathElement.Key): JsLookup = this
         override fun apply(idx: PathElement.Idx): JsLookup = this
-
-        public data class PathMissing(override val location: JsLocation) : Undefined()
-
-        public data class InvalidType(
-            override val location: JsLocation,
-            val expected: JsValue.Type,
-            val actual: JsValue.Type
-        ) : Undefined()
     }
+}
 
-    public companion object {
+public fun JsValue.lookup(location: JsLocation, key: PathElement.Key): JsLookup =
+    if (this is JsObject)
+        this[key]
+            ?.let { JsLookup.Defined(location = location.append(key), value = it) }
+            ?: JsLookup.Undefined(location = location.append(key))
+    else
+        JsLookup.Undefined(location = location.append(key))
 
-        public fun apply(location: JsLocation, key: PathElement.Key, value: JsValue): JsLookup =
-            if (value is JsObject)
-                value[key]
-                    ?.let { Defined(location = location.append(key), value = it) }
-                    ?: Undefined.PathMissing(location = location.append(key))
-            else
-                Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
+public fun JsValue.lookup(location: JsLocation, idx: PathElement.Idx): JsLookup =
+    if (this is JsArray<*>)
+        this[idx]
+            ?.let { JsLookup.Defined(location = location.append(idx), value = it) }
+            ?: JsLookup.Undefined(location = location.append(idx))
+    else
+        JsLookup.Undefined(location = location.append(idx))
 
-        public fun apply(location: JsLocation, idx: PathElement.Idx, value: JsValue): JsLookup =
-            if (value is JsArray<*>)
-                value[idx]
-                    ?.let { Defined(location = location.append(idx), value = it) }
-                    ?: Undefined.PathMissing(location = location.append(idx))
-            else
-                Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
+public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookup {
 
-        public fun apply(location: JsLocation, path: JsPath, value: JsValue): JsLookup {
-            tailrec fun apply(location: JsLocation, path: JsPath, idxElement: Int, value: JsValue): JsLookup {
-                if (idxElement == path.elements.size) return Defined(location, value)
-                return when (val element = path.elements[idxElement]) {
-                    is PathElement.Key -> if (value is JsObject) {
-                        val currentLocation = location.append(element)
-                        val currentValue = value[element]
-                            ?: return Undefined.PathMissing(location = currentLocation)
-                        apply(currentLocation, path, idxElement + 1, currentValue)
-                    } else
-                        Undefined.InvalidType(location = location, expected = JsValue.Type.OBJECT, actual = value.type)
+    tailrec fun lookup(location: JsLocation, path: JsPath, idxElement: Int, value: JsValue): JsLookup {
+        if (idxElement == path.elements.size) return JsLookup.Defined(location, value)
+        return when (val element = path.elements[idxElement]) {
+            is PathElement.Key -> if (value is JsObject) {
+                val currentValue = value[element]
+                    ?: return JsLookup.Undefined(location.append(path.elements.subList(idxElement, path.elements.size)))
+                lookup(location.append(element), path, idxElement + 1, currentValue)
+            } else
+                JsLookup.Undefined(location = location.append(path.elements.subList(idxElement, path.elements.size)))
 
-                    is PathElement.Idx -> if (value is JsArray<*>) {
-                        val currentLocation = location.append(element)
-                        val currentValue = value[element]
-                            ?: return Undefined.PathMissing(location = currentLocation)
-                        apply(currentLocation, path, idxElement + 1, currentValue)
-                    } else
-                        Undefined.InvalidType(location = location, expected = JsValue.Type.ARRAY, actual = value.type)
-                }
-            }
-
-            return apply(location, path, 0, value)
+            is PathElement.Idx -> if (value is JsArray<*>) {
+                val currentValue = value[element]
+                    ?: return JsLookup.Undefined(location.append(path.elements.subList(idxElement, path.elements.size)))
+                lookup(location.append(element), path, idxElement + 1, currentValue)
+            } else
+                JsLookup.Undefined(location = location.append(path.elements.subList(idxElement, path.elements.size)))
         }
     }
+
+    return lookup(location, path, 0, this)
 }

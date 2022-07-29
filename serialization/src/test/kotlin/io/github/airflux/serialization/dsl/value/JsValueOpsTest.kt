@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.value
 
-import io.github.airflux.serialization.common.TestData.USER_NAME_VALUE
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.value.JsArray
@@ -28,60 +27,61 @@ import io.kotest.matchers.shouldBe
 
 internal class JsValueOpsTest : FreeSpec() {
 
+    companion object {
+        private const val KEY_NAME = "id"
+        private const val UNKNOWN_KEY_NAME = "identifier"
+
+        private const val IDX = 0
+        private const val UNKNOWN_IDX = 1
+
+        private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
+
+        private val LOCATION = JsLocation.empty
+    }
+
     init {
-        "The 'div' extension-function" - {
-            "called with a parameter of a key path element" - {
-                "returns the 'JsLookup.Defined' if a node is found" {
-                    val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
 
-                    val lookup = json / "name"
+        "The JsValue#div" - {
 
-                    lookup shouldBe JsLookup.Defined(JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
+            "when lookup by a key element of the path" - {
+
+                "when the value contains the finding key" - {
+                    val json: JsValue = JsObject(KEY_NAME to JsString(VALUE))
+
+                    "then should return the value as an instance of type Defined" {
+                        val lookup = json / KEY_NAME
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
+                    }
                 }
-                "returns the 'JsLookup.Undefined.PathMissing' if a node is not found" {
-                    val json: JsValue = JsObject("name" to JsString(USER_NAME_VALUE))
 
-                    val lookup = json / "user"
+                "when the value does not contain the finding key" - {
+                    val json: JsValue = JsObject(KEY_NAME to JsString(VALUE))
 
-                    lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append("user"))
-                }
-                "returns the 'JsLookup.Undefined.InvalidType' if a node element is invalid type" {
-                    val json: JsValue = JsString(USER_NAME_VALUE)
-
-                    val lookup = json / "user"
-
-                    lookup shouldBe JsLookup.Undefined.InvalidType(
-                        location = JsLocation.empty,
-                        expected = JsValue.Type.OBJECT,
-                        actual = JsValue.Type.STRING
-                    )
+                    "then should return the value as an instance of type Undefined" {
+                        val lookup = json / UNKNOWN_KEY_NAME
+                        lookup shouldBe JsLookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                    }
                 }
             }
-            "called with a parameter of an idx path element" - {
-                "returns the 'JsLookup.Defined' if a node is found" {
-                    val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
 
-                    val lookup = json / 0
+            "when lookup by an index element of the path" - {
 
-                    lookup shouldBe JsLookup.Defined(JsLocation.empty.append(0), JsString(USER_NAME_VALUE))
+                "when the value contains the finding key" - {
+                    val json: JsValue = JsArray(JsString(VALUE))
+
+                    "then should return the value as an instance of type Defined" {
+                        val lookup = json / IDX
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
+                    }
                 }
-                "returns the 'JsLookup.Undefined.PathMissing' if a node is not found return" {
-                    val json: JsValue = JsArray(JsString(USER_NAME_VALUE))
 
-                    val lookup = json / 1
+                "when the value does not contain the finding key" - {
+                    val json: JsValue = JsArray(JsString(VALUE))
 
-                    lookup shouldBe JsLookup.Undefined.PathMissing(JsLocation.empty.append(1))
-                }
-                "returns the 'JsLookup.Undefined.InvalidType' if a node element is invalid type" {
-                    val json: JsValue = JsString(USER_NAME_VALUE)
-
-                    val lookup = json / 0
-
-                    lookup shouldBe JsLookup.Undefined.InvalidType(
-                        location = JsLocation.empty,
-                        expected = JsValue.Type.ARRAY,
-                        actual = JsValue.Type.STRING
-                    )
+                    "then should return the value as an instance of type Undefined" {
+                        val lookup = json / UNKNOWN_IDX
+                        lookup shouldBe JsLookup.Undefined(LOCATION.append(UNKNOWN_IDX))
+                    }
                 }
             }
         }

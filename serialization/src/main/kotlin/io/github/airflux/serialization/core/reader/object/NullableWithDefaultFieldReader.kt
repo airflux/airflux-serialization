@@ -16,11 +16,9 @@
 
 package io.github.airflux.serialization.core.reader.`object`
 
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.JsNull
 
@@ -29,9 +27,7 @@ import io.github.airflux.serialization.core.value.JsNull
  *
  * - If a node is found with a value no 'null' ([from] is [JsLookup.Defined]) then applies [reader]
  * - If a node is found with a value 'null' ([from] is [JsLookup.Defined]) then returns 'null'
- * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then returns [defaultValue]
- * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
- *   that was build using [InvalidTypeErrorBuilder]
+ * - If a node is not found ([from] is [JsLookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readNullable(
     context: JsReaderContext,
@@ -48,13 +44,6 @@ public fun <T : Any> readNullable(
 
     return when (from) {
         is JsLookup.Defined -> readNullable(context, from, using)
-        is JsLookup.Undefined.PathMissing -> JsResult.Success(location = from.location, value = defaultValue())
-        is JsLookup.Undefined.InvalidType -> {
-            val errorBuilder = context[InvalidTypeErrorBuilder]
-            JsResult.Failure(
-                location = from.location,
-                error = errorBuilder.build(from.expected, from.actual)
-            )
-        }
+        is JsLookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
     }
 }

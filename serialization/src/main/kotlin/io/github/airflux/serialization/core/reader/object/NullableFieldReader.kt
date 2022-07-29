@@ -20,7 +20,6 @@ import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.JsNull
@@ -30,10 +29,8 @@ import io.github.airflux.serialization.core.value.JsNull
  *
  * - If a node is found with a value no 'null' ([from] is [JsLookup.Defined]) then applies [reader]
  * - If a node is found with a value 'null' ([from] is [JsLookup.Defined]) then returns 'null'
- * - If a node is not found ([from] is [JsLookup.Undefined.PathMissing]) then an error is returned
+ * - If a node is not found ([from] is [JsLookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
- * - If a node is not an object ([from] is [JsLookup.Undefined.InvalidType]) then an error is returned
- *   that was build using [InvalidTypeErrorBuilder]
  */
 public fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> {
 
@@ -45,16 +42,9 @@ public fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup, usin
 
     return when (from) {
         is JsLookup.Defined -> readNullable(context, from, using)
-        is JsLookup.Undefined.PathMissing -> {
+        is JsLookup.Undefined -> {
             val errorBuilder = context[PathMissingErrorBuilder]
             JsResult.Failure(location = from.location, error = errorBuilder.build())
-        }
-        is JsLookup.Undefined.InvalidType -> {
-            val errorBuilder = context[InvalidTypeErrorBuilder]
-            JsResult.Failure(
-                location = from.location,
-                error = errorBuilder.build(from.expected, from.actual)
-            )
         }
     }
 }

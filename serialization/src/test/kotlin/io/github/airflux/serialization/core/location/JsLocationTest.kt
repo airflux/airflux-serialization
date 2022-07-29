@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.result
+package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
 import io.kotest.core.spec.style.FreeSpec
@@ -52,6 +51,20 @@ internal class JsLocationTest : FreeSpec() {
 
                 "the append() method with the JsPath type parameter" {
                     val path = JsPath("users").append(0).append("phone")
+                    val newLocation = location.append(path)
+
+                    val result: List<PathElement> = JsLocation.foldLeft(mutableListOf(), newLocation) { acc, elem ->
+                        acc.apply { add(elem) }
+                    }
+                    result shouldContainExactly listOf(
+                        PathElement.Key("users"),
+                        PathElement.Idx(0),
+                        PathElement.Key("phone")
+                    )
+                }
+
+                "the append() method with the parameter of path element collection type" {
+                    val path = listOf(PathElement.Key("users"), PathElement.Idx(0), PathElement.Key("phone"))
                     val newLocation = location.append(path)
 
                     val result: List<PathElement> = JsLocation.foldLeft(mutableListOf(), newLocation) { acc, elem ->
@@ -118,6 +131,23 @@ internal class JsLocationTest : FreeSpec() {
                         PathElement.Idx(0),
                         PathElement.Key("phone"),
                         PathElement.Key("mobile"),
+                        PathElement.Key("title")
+                    )
+                }
+
+                "the append() method with the parameter of path element collection type" {
+                    val path = listOf(PathElement.Key("mobile"), PathElement.Idx(0), PathElement.Key("title"))
+                    val newLocation = location.append(path)
+
+                    val result: List<PathElement> = JsLocation.foldLeft(mutableListOf(), newLocation) { acc, elem ->
+                        acc.apply { add(elem) }
+                    }
+                    result shouldContainExactly listOf(
+                        PathElement.Key("users"),
+                        PathElement.Idx(0),
+                        PathElement.Key("phone"),
+                        PathElement.Key("mobile"),
+                        PathElement.Idx(0),
                         PathElement.Key("title")
                     )
                 }

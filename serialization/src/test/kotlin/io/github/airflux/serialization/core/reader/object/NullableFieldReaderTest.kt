@@ -16,80 +16,63 @@
 
 package io.github.airflux.serialization.core.reader.`object`
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.TestData.USER_NAME_VALUE
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class NullableFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext(
-            listOf(
-                PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }),
-                InvalidTypeErrorBuilder(builder = JsonErrors::InvalidType)
-            )
-        )
-        private val stringReader: JsReader<String> = JsReader { _, location, input ->
-            JsResult.Success(location, (input as JsString).get)
-        }
+        private val CONTEXT = JsReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
+        private val LOCATION = JsLocation.empty.append("name")
+        private const val VALUE = "user-1"
+        private val READER: JsReader<String> =
+            DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }
     }
 
     init {
 
         "The readNullable function" - {
 
-            "should return the result of applying the reader to the node if it is not the JsNull node" {
-                val from: JsLookup =
-                    JsLookup.Defined(location = JsLocation.empty.append("name"), JsString(USER_NAME_VALUE))
+            "when the element is defined" - {
 
-                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
+                "when the value of the element is not the JsNull" - {
+                    val from: JsLookup = JsLookup.Defined(location = LOCATION, value = JsString(VALUE))
 
-                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = USER_NAME_VALUE)
+                    "then should return the result of applying the reader" {
+                        val result: JsResult<String?> =
+                            readNullable(context = CONTEXT, from = from, using = READER)
+                        result shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                    }
+                }
+
+                "when the value of the element is the JsNull" - {
+                    val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
+
+                    "then should return a null value" {
+                        val result: JsResult<String?> =
+                            readNullable(context = CONTEXT, from = from, using = READER)
+                        result shouldBe JsResult.Success(location = LOCATION, value = null)
+                    }
+                }
             }
 
-            "should return a null value if found a JsNull node" {
-                val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
+            "when the element is undefined" - {
+                val from: JsLookup = JsLookup.Undefined(location = LOCATION)
 
-                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
-
-                result shouldBe JsResult.Success(location = JsLocation.empty.append("name"), value = null)
-            }
-
-            "should return the missing path error if did not find a node" {
-                val from: JsLookup = JsLookup.Undefined.PathMissing(location = JsLocation.empty.append("name"))
-
-                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
-
-                result shouldBe JsResult.Failure(
-                    location = JsLocation.empty.append("name"),
-                    error = JsonErrors.PathMissing
-                )
-            }
-
-            "should return the invalid type error if a node is not an object" {
-                val from: JsLookup = JsLookup.Undefined.InvalidType(
-                    location = JsLocation.empty.append("name"),
-                    expected = JsValue.Type.OBJECT,
-                    actual = JsValue.Type.STRING
-                )
-
-                val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = stringReader)
-
-                result shouldBe JsResult.Failure(
-                    location = JsLocation.empty.append("name"),
-                    error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
-                )
+                "then should return the missing path error" {
+                    val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = READER)
+                    result shouldBe JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                }
             }
         }
     }

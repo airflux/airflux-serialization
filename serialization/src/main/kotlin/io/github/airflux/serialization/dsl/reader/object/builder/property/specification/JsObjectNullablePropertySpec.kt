@@ -18,6 +18,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.JsReader
@@ -38,7 +39,7 @@ public fun <T : Any> nullable(path: JsPath, reader: JsReader<T>): JsObjectProper
     JsObjectPropertySpec.Nullable(
         path = JsPaths(path),
         reader = { context, location, input ->
-            val lookup = JsLookup.apply(location, path, input)
+            val lookup = input.lookup(location, path)
             readNullable(context, lookup, reader)
         }
     )
@@ -50,7 +51,7 @@ public fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>): JsObjectProp
             val errorBuilder = context[PathMissingErrorBuilder]
             val failures = paths.items
                 .map { path ->
-                    val lookup = JsLookup.apply(location, path, input)
+                    val lookup = input.lookup(location, path)
                     if (lookup is JsLookup.Defined) return@JsReader readNullable(context, lookup, reader)
                     JsResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }

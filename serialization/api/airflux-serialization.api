@@ -63,6 +63,7 @@ public abstract class io/github/airflux/serialization/core/location/JsLocation {
 	public final fun append (I)Lio/github/airflux/serialization/core/location/JsLocation;
 	public final fun append (Lio/github/airflux/serialization/core/path/JsPath;)Lio/github/airflux/serialization/core/location/JsLocation;
 	public final fun append (Lio/github/airflux/serialization/core/path/PathElement;)Lio/github/airflux/serialization/core/location/JsLocation;
+	public final fun append (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/location/JsLocation;
 	public final fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/location/JsLocation;
 	public abstract fun isEmpty ()Z
 }
@@ -74,18 +75,11 @@ public final class io/github/airflux/serialization/core/location/JsLocation$Comp
 }
 
 public abstract class io/github/airflux/serialization/core/lookup/JsLookup {
-	public static final field Companion Lio/github/airflux/serialization/core/lookup/JsLookup$Companion;
 	public final fun apply (I)Lio/github/airflux/serialization/core/lookup/JsLookup;
 	public abstract fun apply (Lio/github/airflux/serialization/core/path/PathElement$Idx;)Lio/github/airflux/serialization/core/lookup/JsLookup;
 	public abstract fun apply (Lio/github/airflux/serialization/core/path/PathElement$Key;)Lio/github/airflux/serialization/core/lookup/JsLookup;
 	public final fun apply (Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/JsLookup;
 	public abstract fun getLocation ()Lio/github/airflux/serialization/core/location/JsLocation;
-}
-
-public final class io/github/airflux/serialization/core/lookup/JsLookup$Companion {
-	public final fun apply (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/lookup/JsLookup;
-	public final fun apply (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/path/PathElement$Idx;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/lookup/JsLookup;
-	public final fun apply (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/path/PathElement$Key;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/lookup/JsLookup;
 }
 
 public final class io/github/airflux/serialization/core/lookup/JsLookup$Defined : io/github/airflux/serialization/core/lookup/JsLookup {
@@ -103,35 +97,23 @@ public final class io/github/airflux/serialization/core/lookup/JsLookup$Defined 
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract class io/github/airflux/serialization/core/lookup/JsLookup$Undefined : io/github/airflux/serialization/core/lookup/JsLookup {
+public final class io/github/airflux/serialization/core/lookup/JsLookup$Undefined : io/github/airflux/serialization/core/lookup/JsLookup {
+	public fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;)V
 	public fun apply (Lio/github/airflux/serialization/core/path/PathElement$Idx;)Lio/github/airflux/serialization/core/lookup/JsLookup;
 	public fun apply (Lio/github/airflux/serialization/core/path/PathElement$Key;)Lio/github/airflux/serialization/core/lookup/JsLookup;
-}
-
-public final class io/github/airflux/serialization/core/lookup/JsLookup$Undefined$InvalidType : io/github/airflux/serialization/core/lookup/JsLookup$Undefined {
-	public fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;)V
 	public final fun component1 ()Lio/github/airflux/serialization/core/location/JsLocation;
-	public final fun component2 ()Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public final fun component3 ()Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public final fun copy (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;)Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined$InvalidType;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined$InvalidType;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined$InvalidType;
+	public final fun copy (Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined;Lio/github/airflux/serialization/core/location/JsLocation;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getActual ()Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public final fun getExpected ()Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public fun getLocation ()Lio/github/airflux/serialization/core/location/JsLocation;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/core/lookup/JsLookup$Undefined$PathMissing : io/github/airflux/serialization/core/lookup/JsLookup$Undefined {
-	public fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;)V
-	public final fun component1 ()Lio/github/airflux/serialization/core/location/JsLocation;
-	public final fun copy (Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined$PathMissing;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined$PathMissing;Lio/github/airflux/serialization/core/location/JsLocation;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/JsLookup$Undefined$PathMissing;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getLocation ()Lio/github/airflux/serialization/core/location/JsLocation;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public final class io/github/airflux/serialization/core/lookup/JsLookupKt {
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/path/JsPath;)Lio/github/airflux/serialization/core/lookup/JsLookup;
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/path/PathElement$Idx;)Lio/github/airflux/serialization/core/lookup/JsLookup;
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/path/PathElement$Key;)Lio/github/airflux/serialization/core/lookup/JsLookup;
 }
 
 public final class io/github/airflux/serialization/core/path/JsPath {
