@@ -32,9 +32,9 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.`object`.builder.ObjectReaderBuilder.ResultBuilder
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilderInstance
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilderInstance
@@ -64,7 +64,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): ObjectReader<T> {
-        val properties: JsObjectProperties = propertiesBuilder.build()
+        val properties: ObjectProperties = propertiesBuilder.build()
         val validators: ObjectValidators = validatorsBuilder.build(properties)
         return buildObjectReader(validators, properties, resultBuilder)
     }
@@ -83,7 +83,7 @@ public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, JsLocation) -> J
 
 internal fun <T> buildObjectReader(
     validators: ObjectValidators,
-    properties: JsObjectProperties,
+    properties: ObjectProperties,
     resultBuilder: ResultBuilder<T>
 ): ObjectReader<T> =
     ObjectReader { context, location, input ->

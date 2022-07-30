@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std
 
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.std.validator.`object`.IsNotEmptyObjectValidator
@@ -24,7 +24,7 @@ import io.github.airflux.serialization.std.validator.`object`.IsNotEmptyObjectVa
 internal class IsNotEmptyObjectValidatorBuilder : ObjectValidatorBuilder {
 
     override val key: ObjectValidatorBuilder.Key<*> = Key
-    override fun build(properties: JsObjectProperties): ObjectValidator = validator
+    override fun build(properties: ObjectProperties): ObjectValidator = validator
 
     private val validator = IsNotEmptyObjectValidator()
 

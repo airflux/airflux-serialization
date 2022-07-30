@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 
 public fun interface ObjectValidator {
 
     public fun validate(
         context: ReaderContext,
         location: JsLocation,
-        properties: JsObjectProperties,
+        properties: ObjectProperties,
         input: StructNode
     ): JsResult.Failure?
 

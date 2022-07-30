@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 
 public interface ObjectReaderValidatorsBuilder {
     public fun validation(block: ObjectValidatorBuilders.Builder.() -> Unit)
@@ -32,7 +32,7 @@ internal class ObjectReaderValidatorsBuilderInstance(
         builder.block()
     }
 
-    fun build(properties: JsObjectProperties): ObjectValidators {
+    fun build(properties: ObjectProperties): ObjectValidators {
         val builders = builder.build()
         return ObjectValidators(builders.map { builder -> builder.build(properties) })
     }

@@ -62,7 +62,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
             }
 
             "when some properties were added to the builder" - {
-                val properties: JsObjectProperties = JsObjectReaderPropertiesBuilderInstance()
+                val properties: ObjectProperties = JsObjectReaderPropertiesBuilderInstance()
                     .apply {
                         property(ObjectPropertySpec.Required(path = REQUIRED_PATH, reader = REQUIRED_READER))
                         property(ObjectPropertySpec.Defaultable(path = DEFAULTABLE_PATH, reader = DEFAULTABLE_READER))

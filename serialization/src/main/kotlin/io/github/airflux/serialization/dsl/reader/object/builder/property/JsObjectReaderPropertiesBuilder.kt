@@ -68,5 +68,5 @@ internal class JsObjectReaderPropertiesBuilderInstance : JsObjectReaderPropertie
         ObjectProperty.NullableWithDefault(spec)
             .also { properties.add(it) }
 
-    fun build(): JsObjectProperties = JsObjectProperties(properties)
+    fun build(): ObjectProperties = ObjectProperties(properties)
 }

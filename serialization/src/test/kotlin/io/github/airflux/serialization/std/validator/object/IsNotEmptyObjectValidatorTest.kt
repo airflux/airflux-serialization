@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -37,7 +37,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "property-id"
         private val LOCATION = JsLocation.empty
-        private val PROPERTIES: JsObjectProperties = JsObjectProperties(emptyList())
+        private val PROPERTIES: ObjectProperties = ObjectProperties(emptyList())
     }
 
     init {

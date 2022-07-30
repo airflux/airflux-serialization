@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -35,7 +35,7 @@ internal class ObjectValidatorTest : FreeSpec() {
         private val CONTEXT = ReaderContext()
         private val LOCATION = JsLocation.empty
         private val VALUE = StructNode()
-        private val PROPERTIES = JsObjectProperties(emptyList())
+        private val PROPERTIES = ObjectProperties(emptyList())
     }
 
     init {

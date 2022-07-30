@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 
 public class AdditionalPropertiesObjectValidator internal constructor(
@@ -37,7 +37,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
     override fun validate(
         context: ReaderContext,
         location: JsLocation,
-        properties: JsObjectProperties,
+        properties: ObjectProperties,
         input: StructNode
     ): JsResult.Failure? {
         val failFast = context.failFast

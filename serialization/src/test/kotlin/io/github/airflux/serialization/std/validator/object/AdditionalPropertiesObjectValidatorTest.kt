@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.required
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
@@ -50,7 +50,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
         private val idProperty: ObjectProperty.Required<String> =
             ObjectProperty.Required(required(ID_PROPERTY_NAME, StringReader))
 
-        val properties: JsObjectProperties = JsObjectProperties(listOf(idProperty))
+        val properties: ObjectProperties = ObjectProperties(listOf(idProperty))
     }
 
     init {

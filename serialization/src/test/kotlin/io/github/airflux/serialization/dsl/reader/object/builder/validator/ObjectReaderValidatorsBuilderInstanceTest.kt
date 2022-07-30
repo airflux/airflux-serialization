@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.serialization.common.DummyObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -27,7 +27,7 @@ import io.kotest.matchers.should
 internal class ObjectReaderValidatorsBuilderInstanceTest : FreeSpec() {
 
     companion object {
-        private val PROPERTIES = JsObjectProperties(emptyList())
+        private val PROPERTIES = ObjectProperties(emptyList())
     }
 
     init {
