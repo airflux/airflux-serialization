@@ -20,7 +20,7 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsOb
 
 public interface JsObjectValidatorBuilder {
     public val key: Key<*>
-    public fun build(properties: JsObjectProperties): JsObjectValidator
+    public fun build(properties: JsObjectProperties): ObjectValidator
 
     public interface Key<E : JsObjectValidatorBuilder>
 }

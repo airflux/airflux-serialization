@@ -19,15 +19,15 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.validator.st
 import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 import io.github.airflux.serialization.std.validator.`object`.AdditionalPropertiesObjectValidator
 
 internal class AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBuilder {
 
     override val key: JsObjectValidatorBuilder.Key<*> = Key
 
-    override fun build(properties: JsObjectProperties): JsObjectValidator {
+    override fun build(properties: JsObjectProperties): ObjectValidator {
         val names: Set<String> = properties.names()
         return AdditionalPropertiesObjectValidator(names)
     }

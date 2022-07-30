@@ -28,8 +28,8 @@ internal class JsObjectValidatorsTest : FreeSpec() {
         "The JsObjectValidators type" - {
 
             "when some validators was passed during initialize" - {
-                val firstValidatorBuilder: JsObjectValidator = DummyObjectValidator(result = null)
-                val secondValidatorBuilder: JsObjectValidator = DummyObjectValidator(result = null)
+                val firstValidatorBuilder: ObjectValidator = DummyObjectValidator(result = null)
+                val secondValidatorBuilder: ObjectValidator = DummyObjectValidator(result = null)
                 val validators = JsObjectValidators(listOf(firstValidatorBuilder, secondValidatorBuilder))
 
                 "then the validators container should contain the passed validators" {

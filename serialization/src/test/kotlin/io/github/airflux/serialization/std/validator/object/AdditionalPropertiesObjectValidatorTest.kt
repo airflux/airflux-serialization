@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 import io.github.airflux.serialization.std.reader.StringReader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -56,7 +56,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
     init {
 
         "The object validator AdditionalProperties" - {
-            val validator: JsObjectValidator = StdObjectValidator.additionalProperties.build(properties)
+            val validator: ObjectValidator = StdObjectValidator.additionalProperties.build(properties)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

@@ -17,14 +17,14 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std
 
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 import io.github.airflux.serialization.std.validator.`object`.IsNotEmptyObjectValidator
 
 internal class IsNotEmptyObjectValidatorBuilder : JsObjectValidatorBuilder {
 
     override val key: JsObjectValidatorBuilder.Key<*> = Key
-    override fun build(properties: JsObjectProperties): JsObjectValidator = validator
+    override fun build(properties: JsObjectProperties): ObjectValidator = validator
 
     private val validator = IsNotEmptyObjectValidator()
 

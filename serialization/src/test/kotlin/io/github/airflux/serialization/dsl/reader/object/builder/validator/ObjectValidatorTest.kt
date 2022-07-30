@@ -29,7 +29,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectValidatorTest : FreeSpec() {
+internal class ObjectValidatorTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
@@ -40,15 +40,15 @@ internal class JsObjectValidatorTest : FreeSpec() {
 
     init {
 
-        "The JsObjectValidator type" - {
+        "The ObjectValidator type" - {
 
             "composition OR operator" - {
 
                 "when the left validator returns success" - {
-                    val leftValidator = JsObjectValidator { _, _, _, _ -> null }
+                    val leftValidator = ObjectValidator { _, _, _, _ -> null }
 
                     "then the right validator does not execute" {
-                        val rightValidator = JsObjectValidator { _, location, _, _ ->
+                        val rightValidator = ObjectValidator { _, location, _, _ ->
                             JsResult.Failure(location, JsonErrors.PathMissing)
                         }
 
@@ -60,12 +60,12 @@ internal class JsObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the left validator returns failure" - {
-                    val leftValidator = JsObjectValidator { _, location, _, _ ->
+                    val leftValidator = ObjectValidator { _, location, _, _ ->
                         JsResult.Failure(location, JsonErrors.PathMissing)
                     }
 
                     "when the right validator returns success" - {
-                        val rightValidator = JsObjectValidator { _, _, _, _ -> null }
+                        val rightValidator = ObjectValidator { _, _, _, _ -> null }
 
                         "then failure of the left validator is returned" {
                             val composeValidator = leftValidator or rightValidator
@@ -76,7 +76,7 @@ internal class JsObjectValidatorTest : FreeSpec() {
                     }
 
                     "when the right validator returns failure" - {
-                        val rightValidator = JsObjectValidator { _, location, _, _ ->
+                        val rightValidator = ObjectValidator { _, location, _, _ ->
                             JsResult.Failure(
                                 location,
                                 JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
@@ -106,10 +106,10 @@ internal class JsObjectValidatorTest : FreeSpec() {
             "composition AND operator" - {
 
                 "when the left validator returns success" - {
-                    val leftValidator = JsObjectValidator { _, _, _, _ -> null }
+                    val leftValidator = ObjectValidator { _, _, _, _ -> null }
 
                     "when the right validator returns success" - {
-                        val rightValidator = JsObjectValidator { _, _, _, _ -> null }
+                        val rightValidator = ObjectValidator { _, _, _, _ -> null }
 
                         "then success is returned" {
                             val composeValidator = leftValidator and rightValidator
@@ -119,7 +119,7 @@ internal class JsObjectValidatorTest : FreeSpec() {
                     }
 
                     "when the right validator returns failure" - {
-                        val rightValidator = JsObjectValidator { _, location, _, _ ->
+                        val rightValidator = ObjectValidator { _, location, _, _ ->
                             JsResult.Failure(location, JsonErrors.PathMissing)
                         }
 
@@ -133,12 +133,12 @@ internal class JsObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the left validator returns failure" - {
-                    val leftValidator = JsObjectValidator { _, location, _, _ ->
+                    val leftValidator = ObjectValidator { _, location, _, _ ->
                         JsResult.Failure(location, JsonErrors.PathMissing)
                     }
 
                     "then the right validator does not execute" - {
-                        val rightValidator = JsObjectValidator { _, location, _, _ ->
+                        val rightValidator = ObjectValidator { _, location, _, _ ->
                             JsResult.Failure(
                                 location,
                                 JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)

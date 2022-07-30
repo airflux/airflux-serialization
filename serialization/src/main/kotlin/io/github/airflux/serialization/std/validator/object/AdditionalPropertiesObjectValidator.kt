@@ -28,11 +28,11 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 
 public class AdditionalPropertiesObjectValidator internal constructor(
     private val names: Set<String>
-) : JsObjectValidator {
+) : ObjectValidator {
 
     override fun validate(
         context: ReaderContext,

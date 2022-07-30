@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 
-public fun interface JsObjectValidator {
+public fun interface ObjectValidator {
 
     public fun validate(
         context: ReaderContext,
@@ -38,9 +38,9 @@ public fun interface JsObjectValidator {
     * | F    | S      | S      |
     * | F    | F`     | F + F` |
     */
-    public infix fun or(alt: JsObjectValidator): JsObjectValidator {
+    public infix fun or(alt: ObjectValidator): ObjectValidator {
         val self = this
-        return JsObjectValidator { context, location, properties, input ->
+        return ObjectValidator { context, location, properties, input ->
             self.validate(context, location, properties, input)
                 ?.let { error ->
                     alt.validate(context, location, properties, input)
@@ -56,9 +56,9 @@ public fun interface JsObjectValidator {
      * | S    | F      | F      |
      * | F    | ignore | F      |
      */
-    public infix fun and(alt: JsObjectValidator): JsObjectValidator {
+    public infix fun and(alt: ObjectValidator): ObjectValidator {
         val self = this
-        return JsObjectValidator { context, location, properties, input ->
+        return ObjectValidator { context, location, properties, input ->
             val result = self.validate(context, location, properties, input)
             result ?: alt.validate(context, location, properties, input)
         }

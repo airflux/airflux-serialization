@@ -21,9 +21,9 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 
-internal class DummyObjectValidator(val result: JsResult.Failure?) : JsObjectValidator {
+internal class DummyObjectValidator(val result: JsResult.Failure?) : ObjectValidator {
 
     override fun validate(
         context: ReaderContext,

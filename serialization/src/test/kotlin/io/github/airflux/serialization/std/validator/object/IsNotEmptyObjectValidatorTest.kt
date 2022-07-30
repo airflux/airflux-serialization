@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -43,7 +43,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
     init {
 
         "The object validator IsNotEmpty" - {
-            val validator: JsObjectValidator = StdObjectValidator.isNotEmpty.build(PROPERTIES)
+            val validator: ObjectValidator = StdObjectValidator.isNotEmpty.build(PROPERTIES)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
