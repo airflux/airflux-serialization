@@ -16,4 +16,4 @@
 
 package io.github.airflux.serialization.core.writer
 
-public fun interface JsObjectWriter<in T : Any> : Writer<T>
+public fun interface ObjectWriter<in T : Any> : Writer<T>
