@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.NullNode
 
 public fun <T : Any> nullable(reader: Reader<T>): JsArrayItemSpec.Nullable<T?> =
@@ -34,7 +34,7 @@ public fun <T : Any> nullable(reader: Reader<T>): JsArrayItemSpec.Nullable<T?> =
     )
 
 public infix fun <T> JsArrayItemSpec.Nullable<T>.validation(
-    validator: JsValidator<T?>
+    validator: Validator<T?>
 ): JsArrayItemSpec.Nullable<T> =
     JsArrayItemSpec.Nullable(
         reader = { context, location, input ->

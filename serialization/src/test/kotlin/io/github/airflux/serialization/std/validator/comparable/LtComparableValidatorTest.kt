@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -38,7 +38,7 @@ internal class LtComparableValidatorTest : FreeSpec() {
     init {
 
         "The string validator Gt" - {
-            val validator: JsValidator<Int> = ComparableValidator.lt(VALUE)
+            val validator: Validator<Int> = ComparableValidator.lt(VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

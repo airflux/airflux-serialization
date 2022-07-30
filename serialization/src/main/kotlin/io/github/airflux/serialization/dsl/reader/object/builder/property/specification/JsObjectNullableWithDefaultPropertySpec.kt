@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <T : Any> nullableWithDefault(
     name: String,
@@ -68,7 +68,7 @@ public fun <T : Any> nullableWithDefault(
     )
 
 public infix fun <T : Any> JsObjectPropertySpec.NullableWithDefault<T>.validation(
-    validator: JsValidator<T?>
+    validator: Validator<T?>
 ): JsObjectPropertySpec.NullableWithDefault<T> =
     JsObjectPropertySpec.NullableWithDefault(
         path = path,

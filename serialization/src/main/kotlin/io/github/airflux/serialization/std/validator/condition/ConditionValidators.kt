@@ -18,14 +18,14 @@ package io.github.airflux.serialization.std.validator.condition
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T> JsValidator<T>.applyIfNotNull(): JsValidator<T?> =
-    JsValidator { context, location, value ->
+public fun <T> Validator<T>.applyIfNotNull(): Validator<T?> =
+    Validator { context, location, value ->
         if (value != null) validate(context, location, value) else null
     }
 
-public fun <T> JsValidator<T>.applyIf(predicate: (ReaderContext, JsLocation, T) -> Boolean): JsValidator<T> =
-    JsValidator { context, location, value ->
+public fun <T> Validator<T>.applyIf(predicate: (ReaderContext, JsLocation, T) -> Boolean): Validator<T> =
+    Validator { context, location, value ->
         if (predicate(context, location, value)) validate(context, location, value) else null
     }

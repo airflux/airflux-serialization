@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 
 @Suppress("unused")
@@ -69,7 +69,7 @@ public infix fun <T> Reader<T?>.filter(predicate: JsPredicate<T>): Reader<T?> =
             .filter(context, predicate)
     }
 
-public infix fun <T> Reader<T>.validation(validator: JsValidator<T>): Reader<T> =
+public infix fun <T> Reader<T>.validation(validator: Validator<T>): Reader<T> =
     Reader { context, location, input ->
         this@validation.read(context, location, input)
             .validation(context, validator)

@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readWithDefault
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <T : Any> defaultable(
     name: String,
@@ -66,7 +66,7 @@ public fun <T : Any> defaultable(
     )
 
 public infix fun <T : Any> JsObjectPropertySpec.Defaultable<T>.validation(
-    validator: JsValidator<T>
+    validator: Validator<T>
 ): JsObjectPropertySpec.Defaultable<T> =
     JsObjectPropertySpec.Defaultable(
         path = path,

@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <T : Any> required(name: String, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
     required(JsPath(name), reader)
@@ -58,7 +58,7 @@ public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): JsObjectProper
     )
 
 public infix fun <T : Any> JsObjectPropertySpec.Required<T>.validation(
-    validator: JsValidator<T>
+    validator: Validator<T>
 ): JsObjectPropertySpec.Required<T> =
     JsObjectPropertySpec.Required(
         path = path,

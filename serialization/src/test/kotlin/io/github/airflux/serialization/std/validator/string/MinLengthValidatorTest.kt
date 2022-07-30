@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -38,7 +38,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: JsValidator<String> = StringValidator.minLength(MIN_VALUE)
+            val validator: Validator<String> = StringValidator.minLength(MIN_VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

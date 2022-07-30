@@ -24,9 +24,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class IsAStringValidator internal constructor(private val predicate: (String) -> Boolean) : JsValidator<String> {
+public class IsAStringValidator internal constructor(private val predicate: (String) -> Boolean) : Validator<String> {
 
     override fun validate(context: ReaderContext, location: JsLocation, value: String): JsResult.Failure? =
         if (predicate(value))

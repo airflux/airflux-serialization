@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
@@ -88,7 +88,7 @@ internal class ReaderOpsTest : FreeSpec() {
                 )
 
                 "when validation is a success" - {
-                    val validator: JsValidator<String> = DummyValidator(result = null)
+                    val validator: Validator<String> = DummyValidator(result = null)
 
                     "then should return the original result" {
                         val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
@@ -97,7 +97,7 @@ internal class ReaderOpsTest : FreeSpec() {
                 }
 
                 "when validation is a failure" - {
-                    val validator: JsValidator<String> = DummyValidator(
+                    val validator: Validator<String> = DummyValidator(
                         result = JsResult.Failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
                     )
 
@@ -118,7 +118,7 @@ internal class ReaderOpsTest : FreeSpec() {
                 )
 
                 "then validation does not execute and the original result should be returned" {
-                    val validator: JsValidator<String> = DummyValidator(
+                    val validator: Validator<String> = DummyValidator(
                         result = JsResult.Failure(location = LOCATION, error = JsonErrors.Validation.Object.IsEmpty)
                     )
                     val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)

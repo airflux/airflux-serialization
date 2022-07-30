@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -82,7 +82,7 @@ internal class JsResultOpsTest : FreeSpec() {
         }
 
         "The extension-function the validation" - {
-            val isNotEmpty = JsValidator<String> { _, location, value ->
+            val isNotEmpty = Validator<String> { _, location, value ->
                 if (value.isNotEmpty()) null else JsResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
             }
 

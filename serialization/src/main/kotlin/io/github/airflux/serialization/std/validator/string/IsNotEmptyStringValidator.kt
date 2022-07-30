@@ -24,9 +24,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class IsNotEmptyStringValidator internal constructor() : JsValidator<String> {
+public class IsNotEmptyStringValidator internal constructor() : Validator<String> {
 
     override fun validate(context: ReaderContext, location: JsLocation, value: String): JsResult.Failure? =
         if (value.isNotEmpty())

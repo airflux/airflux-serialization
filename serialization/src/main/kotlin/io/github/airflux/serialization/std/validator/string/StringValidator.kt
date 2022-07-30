@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public object StringValidator {
-    public val isNotEmpty: JsValidator<String> = IsNotEmptyStringValidator()
-    public val isNotBlank: JsValidator<String> = IsNotBlankStringValidator()
-    public fun pattern(pattern: Regex): JsValidator<String> = PatternStringValidator(pattern)
-    public fun minLength(value: Int): JsValidator<String> = MinLengthStringValidator(value)
-    public fun maxLength(value: Int): JsValidator<String> = MaxLengthStringValidator(value)
-    public fun isA(predicate: (String) -> Boolean): JsValidator<String> = IsAStringValidator(predicate)
+    public val isNotEmpty: Validator<String> = IsNotEmptyStringValidator()
+    public val isNotBlank: Validator<String> = IsNotBlankStringValidator()
+    public fun pattern(pattern: Regex): Validator<String> = PatternStringValidator(pattern)
+    public fun minLength(value: Int): Validator<String> = MinLengthStringValidator(value)
+    public fun maxLength(value: Int): Validator<String> = MaxLengthStringValidator(value)
+    public fun isA(predicate: (String) -> Boolean): Validator<String> = IsAStringValidator(predicate)
 }

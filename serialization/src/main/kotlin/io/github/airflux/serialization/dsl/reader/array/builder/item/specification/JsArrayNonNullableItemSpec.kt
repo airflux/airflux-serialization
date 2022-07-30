@@ -19,13 +19,13 @@ package io.github.airflux.serialization.dsl.reader.array.builder.item.specificat
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <T : Any> nonNullable(reader: Reader<T>): JsArrayItemSpec.NonNullable<T> =
     JsArrayItemSpec.NonNullable(reader)
 
 public infix fun <T> JsArrayItemSpec.NonNullable<T>.validation(
-    validator: JsValidator<T>
+    validator: Validator<T>
 ): JsArrayItemSpec.NonNullable<T> =
     JsArrayItemSpec.NonNullable(
         reader = { context, location, input ->

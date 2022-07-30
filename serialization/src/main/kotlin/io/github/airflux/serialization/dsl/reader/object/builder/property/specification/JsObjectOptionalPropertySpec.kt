@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <T : Any> optional(name: String, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
     optional(JsPath(name), reader)
@@ -56,7 +56,7 @@ public fun <T : Any> optional(paths: JsPaths, reader: Reader<T>): JsObjectProper
     )
 
 public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.validation(
-    validator: JsValidator<T?>
+    validator: Validator<T?>
 ): JsObjectPropertySpec.Optional<T> =
     JsObjectPropertySpec.Optional(
         path = path,

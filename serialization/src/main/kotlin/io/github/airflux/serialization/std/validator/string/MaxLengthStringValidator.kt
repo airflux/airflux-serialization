@@ -24,9 +24,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class MaxLengthStringValidator internal constructor(private val expected: Int) : JsValidator<String> {
+public class MaxLengthStringValidator internal constructor(private val expected: Int) : Validator<String> {
 
     override fun validate(context: ReaderContext, location: JsLocation, value: String): JsResult.Failure? =
         if (value.length <= expected)

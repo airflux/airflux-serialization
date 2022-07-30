@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 
 @Suppress("unused")
-public fun interface JsValidator<in T> {
+public fun interface Validator<in T> {
 
     public fun validate(context: ReaderContext, location: JsLocation, value: T): JsResult.Failure?
 }
@@ -33,9 +33,9 @@ public fun interface JsValidator<in T> {
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-public infix fun <T> JsValidator<T>.or(other: JsValidator<T>): JsValidator<T> {
+public infix fun <T> Validator<T>.or(other: Validator<T>): Validator<T> {
     val self = this
-    return JsValidator { context, location, value ->
+    return Validator { context, location, value ->
         self.validate(context, location, value)
             ?.let { error ->
                 other.validate(context, location, value)
@@ -51,9 +51,9 @@ public infix fun <T> JsValidator<T>.or(other: JsValidator<T>): JsValidator<T> {
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-public infix fun <T> JsValidator<T>.and(other: JsValidator<T>): JsValidator<T> {
+public infix fun <T> Validator<T>.and(other: Validator<T>): Validator<T> {
     val self = this
-    return JsValidator { context, location, value ->
+    return Validator { context, location, value ->
         val result = self.validate(context, location, value)
         result ?: other.validate(context, location, value)
     }

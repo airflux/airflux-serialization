@@ -24,9 +24,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.validator.JsValidator
+import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class NeComparableValidator<T> internal constructor(private val expected: T) : JsValidator<T>
+public class NeComparableValidator<T> internal constructor(private val expected: T) : Validator<T>
     where T : Number,
           T : Comparable<T> {
 
