@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.array.builder.validator
 
 import io.github.airflux.serialization.common.DummyArrayValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.config.JsArrayReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -30,7 +30,7 @@ internal class JsArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
         "The JsArrayReaderValidatorsBuilderInstance type" - {
 
             "when the config is not contained any object validators" - {
-                val config = JsArrayReaderConfig.Builder().build()
+                val config = ArrayReaderConfig.Builder().build()
                 val validatorsBuilder = JsArrayReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
@@ -65,7 +65,7 @@ internal class JsArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                     result = null
                 )
-                val config = JsArrayReaderConfig.Builder()
+                val config = ArrayReaderConfig.Builder()
                     .apply {
                         validation {
                             +initValidatorBuilder

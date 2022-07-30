@@ -22,7 +22,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
-internal class JsArrayReaderConfigTest : FreeSpec() {
+internal class ArrayReaderConfigTest : FreeSpec() {
 
     companion object {
         val validator = DummyArrayValidatorBuilder(
@@ -34,7 +34,7 @@ internal class JsArrayReaderConfigTest : FreeSpec() {
     init {
 
         "when any validator is not registered in the configuration builder" - {
-            val config: JsArrayReaderConfig = arrayReaderConfig {}
+            val config: ArrayReaderConfig = arrayReaderConfig {}
 
             "then validator should miss in the configuration" {
                 config.validation should beEmpty()
@@ -42,7 +42,7 @@ internal class JsArrayReaderConfigTest : FreeSpec() {
         }
 
         "when some validator is registered in the configuration builder" - {
-            val config: JsArrayReaderConfig = arrayReaderConfig {
+            val config: ArrayReaderConfig = arrayReaderConfig {
                 this.validation {
                     +validator
                 }

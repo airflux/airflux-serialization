@@ -16,14 +16,14 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.validator
 
-import io.github.airflux.serialization.dsl.reader.config.JsArrayReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 
 public interface JsArrayReaderValidatorsBuilder {
     public fun validation(block: JsArrayValidatorBuilders.Builder.() -> Unit)
 }
 
 internal class JsArrayReaderValidatorsBuilderInstance(
-    configuration: JsArrayReaderConfig
+    configuration: ArrayReaderConfig
 ) : JsArrayReaderValidatorsBuilder {
     private val builder: JsArrayValidatorBuilders.Builder = JsArrayValidatorBuilders.Builder(configuration.validation)
 

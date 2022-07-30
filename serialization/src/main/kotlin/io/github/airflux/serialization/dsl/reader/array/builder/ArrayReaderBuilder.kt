@@ -35,10 +35,10 @@ import io.github.airflux.serialization.dsl.reader.array.builder.item.specificati
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidators
-import io.github.airflux.serialization.dsl.reader.config.JsArrayReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 
 public fun <T> arrayReader(
-    configuration: JsArrayReaderConfig = JsArrayReaderConfig.DEFAULT,
+    configuration: ArrayReaderConfig = ArrayReaderConfig.DEFAULT,
     block: ArrayReaderBuilder<T>.() -> ResultBuilder<T>
 ): ArrayReader<T> {
     val readerBuilder: ArrayReaderBuilder<T> =

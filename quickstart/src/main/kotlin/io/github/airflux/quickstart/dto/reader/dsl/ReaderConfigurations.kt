@@ -1,6 +1,6 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
-import io.github.airflux.serialization.dsl.reader.config.JsArrayReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 import io.github.airflux.serialization.dsl.reader.config.objectReaderConfig
 import io.github.airflux.serialization.std.validator.`object`.ObjectValidator.additionalProperties
 import io.github.airflux.serialization.std.validator.`object`.ObjectValidator.isNotEmpty
@@ -15,4 +15,4 @@ val ObjectReaderConfiguration = objectReaderConfig {
     }
 }
 
-val ArrayReaderConfiguration = JsArrayReaderConfig.DEFAULT
+val ArrayReaderConfiguration = ArrayReaderConfig.DEFAULT

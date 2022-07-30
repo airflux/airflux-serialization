@@ -19,10 +19,10 @@ package io.github.airflux.serialization.dsl.reader.config
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidatorBuilders
 
-public fun arrayReaderConfig(block: JsArrayReaderConfig.Builder.() -> Unit): JsArrayReaderConfig =
-    JsArrayReaderConfig.Builder().apply(block).build()
+public fun arrayReaderConfig(block: ArrayReaderConfig.Builder.() -> Unit): ArrayReaderConfig =
+    ArrayReaderConfig.Builder().apply(block).build()
 
-public class JsArrayReaderConfig private constructor(public val validation: JsArrayValidatorBuilders) {
+public class ArrayReaderConfig private constructor(public val validation: JsArrayValidatorBuilders) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
@@ -32,10 +32,10 @@ public class JsArrayReaderConfig private constructor(public val validation: JsAr
             validation.block()
         }
 
-        internal fun build(): JsArrayReaderConfig = JsArrayReaderConfig(validation = validation.build())
+        internal fun build(): ArrayReaderConfig = ArrayReaderConfig(validation = validation.build())
     }
 
     public companion object {
-        public val DEFAULT: JsArrayReaderConfig = Builder().build()
+        public val DEFAULT: ArrayReaderConfig = Builder().build()
     }
 }
