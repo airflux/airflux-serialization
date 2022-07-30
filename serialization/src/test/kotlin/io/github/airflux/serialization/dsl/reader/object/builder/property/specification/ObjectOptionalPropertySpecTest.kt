@@ -38,7 +38,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
+internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
@@ -56,7 +56,7 @@ internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The JsObjectPropertySpec#Optional" - {
+        "The ObjectPropertySpec#Optional type" - {
 
             "when creating the instance by a attribute name" - {
                 val spec = optional(name = "id", reader = StringReader)
@@ -210,7 +210,7 @@ internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = JsObjectPropertySpec.Optional(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.Optional(path = JsPaths(JsPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
@@ -258,7 +258,7 @@ internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val spec = JsObjectPropertySpec.Optional(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.Optional(path = JsPaths(JsPath("id")), reader = StringReader)
                 val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when the reader has successfully read" - {

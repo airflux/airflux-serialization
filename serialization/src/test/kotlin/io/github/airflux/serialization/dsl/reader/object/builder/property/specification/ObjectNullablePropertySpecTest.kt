@@ -22,8 +22,10 @@ import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -38,42 +40,54 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
+internal class ObjectNullablePropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
-        private const val DEFAULT_VALUE = "none"
 
         private val CONTEXT =
             ReaderContext(
                 listOf(
                     IsNotEmptyStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty },
+                    PathMissingErrorBuilder { JsonErrors.PathMissing },
                     InvalidTypeErrorBuilder(JsonErrors::InvalidType)
                 )
             )
         private val LOCATION = JsLocation.empty
-        private val DEFAULT = { DEFAULT_VALUE }
     }
 
     init {
 
-        "The JsObjectPropertySpec#NullableWithDefault" - {
+        "The ObjectPropertySpec#Nullable type" - {
 
             "when creating the instance by a attribute name" - {
-                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
+                val spec = nullable(name = "id", reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(JsPath("id"))
                 }
 
                 "when the reader has read an attribute named id" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe ID_VALUE_AS_UUID
+                    "if the attribute value is not the null type" - {
+                        val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the not-null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value shouldBe ID_VALUE_AS_UUID
+                        }
+                    }
+
+                    "if the attribute value is the null type" - {
+                        val input = StructNode("id" to NullNode)
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value.shouldBeNull()
+                        }
                     }
                 }
 
@@ -81,9 +95,14 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a default value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe DEFAULT_VALUE
+                    "then an error should be returned" {
+                        result as JsResult.Failure
+                        result.causes shouldContainExactly listOf(
+                            JsResult.Failure.Cause(
+                                location = LOCATION.append("id"),
+                                error = JsonErrors.PathMissing
+                            )
+                        )
                     }
                 }
 
@@ -108,19 +127,32 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
 
             "when creating the instance by a single-path" - {
                 val path = JsPath("id")
-                val spec = nullableWithDefault(path = path, reader = StringReader, default = DEFAULT)
+                val spec = nullable(path = path, reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(path)
                 }
 
                 "when the reader has read an attribute named id" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe ID_VALUE_AS_UUID
+                    "if the attribute value is not the null type" - {
+                        val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the not-null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value shouldBe ID_VALUE_AS_UUID
+                        }
+                    }
+
+                    "if the attribute value is the null type" - {
+                        val input = StructNode("id" to NullNode)
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value.shouldBeNull()
+                        }
                     }
                 }
 
@@ -128,9 +160,14 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a default value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe DEFAULT_VALUE
+                    "then an error should be returned" {
+                        result as JsResult.Failure
+                        result.causes shouldContainExactly listOf(
+                            JsResult.Failure.Cause(
+                                location = LOCATION.append("id"),
+                                error = JsonErrors.PathMissing
+                            )
+                        )
                     }
                 }
 
@@ -156,33 +193,55 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
             "when creating the instance by a multi-path" - {
                 val idPath = JsPath("id")
                 val identifierPath = JsPath("identifier")
-                val spec = nullableWithDefault(
-                    paths = JsPaths(idPath, identifierPath),
-                    reader = StringReader,
-                    default = DEFAULT
-                )
+                val spec = nullable(paths = JsPaths(idPath, identifierPath), reader = StringReader)
 
                 "then the paths parameter must contain only the passed paths" {
                     spec.path.items shouldContainExactly listOf(idPath, identifierPath)
                 }
 
                 "when the reader has read an attribute named id" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe ID_VALUE_AS_UUID
+                    "if the attribute value is not the null type" - {
+                        val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the not-null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value shouldBe ID_VALUE_AS_UUID
+                        }
+                    }
+
+                    "if the attribute value is the null type" - {
+                        val input = StructNode("id" to NullNode)
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value.shouldBeNull()
+                        }
                     }
                 }
 
                 "when the reader has read an attribute named identifier" - {
-                    val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe ID_VALUE_AS_UUID
+                    "if the attribute value is not the null type" - {
+                        val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the not-null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value shouldBe ID_VALUE_AS_UUID
+                        }
+                    }
+
+                    "if the attribute value is the null type" - {
+                        val input = StructNode("identifier" to NullNode)
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                        "then the null value should be returned" {
+                            result as JsResult.Success<String?>
+                            result.value.shouldBeNull()
+                        }
                     }
                 }
 
@@ -190,9 +249,18 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then a default value should be returned" {
-                        result as JsResult.Success<String?>
-                        result.value shouldBe DEFAULT_VALUE
+                    "then all errors should be returned" {
+                        result as JsResult.Failure
+                        result.causes shouldContainExactly listOf(
+                            JsResult.Failure.Cause(
+                                location = LOCATION.append("id"),
+                                error = JsonErrors.PathMissing
+                            ),
+                            JsResult.Failure.Cause(
+                                location = LOCATION.append("identifier"),
+                                error = JsonErrors.PathMissing
+                            )
+                        )
                     }
                 }
 
@@ -216,7 +284,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = JsObjectPropertySpec.NullableWithDefault(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.Nullable(path = JsPaths(JsPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
@@ -264,7 +332,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val spec = JsObjectPropertySpec.NullableWithDefault(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.Nullable(path = JsPaths(JsPath("id")), reader = StringReader)
                 val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when the reader has successfully read" - {
@@ -310,12 +378,8 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when an alternative spec was added" - {
-                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
-                val alt = nullableWithDefault(
-                    name = "id",
-                    reader = IntReader.map { it.toString() },
-                    default = DEFAULT
-                )
+                val spec = nullable(name = "id", reader = StringReader)
+                val alt = nullable(name = "id", reader = IntReader.map { it.toString() })
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {

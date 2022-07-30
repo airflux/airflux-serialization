@@ -16,54 +16,54 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property
 
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.JsObjectPropertySpec
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.ObjectPropertySpec
 
 public interface JsObjectReaderPropertiesBuilder {
 
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Required<P>): JsObjectProperty.Required<P>
 
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P>
 
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P>
 
     public fun <P : Any> property(
-        spec: JsObjectPropertySpec.OptionalWithDefault<P>
+        spec: ObjectPropertySpec.OptionalWithDefault<P>
     ): JsObjectProperty.OptionalWithDefault<P>
 
-    public fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P>
 
     public fun <P : Any> property(
-        spec: JsObjectPropertySpec.NullableWithDefault<P>
+        spec: ObjectPropertySpec.NullableWithDefault<P>
     ): JsObjectProperty.NullableWithDefault<P>
 }
 
 internal class JsObjectReaderPropertiesBuilderInstance : JsObjectReaderPropertiesBuilder {
     private val properties = mutableListOf<JsObjectProperty>()
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Required<P>): JsObjectProperty.Required<P> =
+    override fun <P : Any> property(spec: ObjectPropertySpec.Required<P>): JsObjectProperty.Required<P> =
         JsObjectProperty.Required(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P> =
+    override fun <P : Any> property(spec: ObjectPropertySpec.Defaultable<P>): JsObjectProperty.Defaultable<P> =
         JsObjectProperty.Defaultable(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P> =
+    override fun <P : Any> property(spec: ObjectPropertySpec.Optional<P>): JsObjectProperty.Optional<P> =
         JsObjectProperty.Optional(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
-        spec: JsObjectPropertySpec.OptionalWithDefault<P>
+        spec: ObjectPropertySpec.OptionalWithDefault<P>
     ): JsObjectProperty.OptionalWithDefault<P> =
         JsObjectProperty.OptionalWithDefault(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: JsObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P> =
+    override fun <P : Any> property(spec: ObjectPropertySpec.Nullable<P>): JsObjectProperty.Nullable<P> =
         JsObjectProperty.Nullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
-        spec: JsObjectPropertySpec.NullableWithDefault<P>
+        spec: ObjectPropertySpec.NullableWithDefault<P>
     ): JsObjectProperty.NullableWithDefault<P> =
         JsObjectProperty.NullableWithDefault(spec)
             .also { properties.add(it) }

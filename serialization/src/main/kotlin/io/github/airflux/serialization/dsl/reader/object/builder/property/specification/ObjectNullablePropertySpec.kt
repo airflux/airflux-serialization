@@ -16,66 +16,70 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification
 
+import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.`object`.readOptional
+import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.`object`.readNullable
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> optional(name: String, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
-    optional(JsPath(name), reader)
+public fun <T : Any> nullable(name: String, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
+    nullable(JsPath(name), reader)
 
-public fun <T : Any> optional(path: JsPath, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
-    JsObjectPropertySpec.Optional(
+public fun <T : Any> nullable(path: JsPath, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
+    ObjectPropertySpec.Nullable(
         path = JsPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
-            readOptional(context, lookup, reader)
+            readNullable(context, lookup, reader)
         }
     )
 
-public fun <T : Any> optional(paths: JsPaths, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
-    JsObjectPropertySpec.Optional(
+public fun <T : Any> nullable(paths: JsPaths, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
+    ObjectPropertySpec.Nullable(
         path = paths,
-        reader = { context, location, input ->
-            val lookup: JsLookup = paths.fold(
-                initial = { path -> input.lookup(location, path) },
-                operation = { lookup, path ->
-                    if (lookup is JsLookup.Defined) return@fold lookup
-                    input.lookup(location, path)
+        reader = Reader { context, location, input ->
+            val errorBuilder = context[PathMissingErrorBuilder]
+            val failures = paths.items
+                .map { path ->
+                    val lookup = input.lookup(location, path)
+                    if (lookup is JsLookup.Defined) return@Reader readNullable(context, lookup, reader)
+                    JsResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
-            )
-            readOptional(context, lookup, reader)
+            failures.merge()
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.validation(
+public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.validation(
     validator: Validator<T?>
-): JsObjectPropertySpec.Optional<T> =
-    JsObjectPropertySpec.Optional(
+): ObjectPropertySpec.Nullable<T> =
+    ObjectPropertySpec.Nullable(
         path = path,
         reader = { context, location, input ->
             reader.read(context, location, input).validation(context, validator)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.filter(
+public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.filter(
     predicate: JsPredicate<T>
-): JsObjectPropertySpec.Optional<T> =
-    JsObjectPropertySpec.Optional(
+): ObjectPropertySpec.Nullable<T> =
+    ObjectPropertySpec.Nullable(
         path = path,
         reader = { context, location, input ->
             reader.read(context, location, input).filter(context, predicate)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Optional<T>.or(
-    alt: JsObjectPropertySpec.Optional<T>
-): JsObjectPropertySpec.Optional<T> =
-    JsObjectPropertySpec.Optional(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.or(
+    alt: ObjectPropertySpec.Nullable<T>
+): ObjectPropertySpec.Nullable<T> =
+    ObjectPropertySpec.Nullable(path = path.append(alt.path), reader = reader or alt.reader)

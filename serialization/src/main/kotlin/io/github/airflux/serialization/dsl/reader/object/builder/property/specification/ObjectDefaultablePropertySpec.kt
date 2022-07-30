@@ -21,37 +21,37 @@ import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.`object`.readOptional
+import io.github.airflux.serialization.core.reader.`object`.readWithDefault
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> optionalWithDefault(
+public fun <T : Any> defaultable(
     name: String,
     reader: Reader<T>,
     default: () -> T
-): JsObjectPropertySpec.OptionalWithDefault<T> =
-    optionalWithDefault(JsPath(name), reader, default)
+): ObjectPropertySpec.Defaultable<T> =
+    defaultable(JsPath(name), reader, default)
 
-public fun <T : Any> optionalWithDefault(
+public fun <T : Any> defaultable(
     path: JsPath,
     reader: Reader<T>,
     default: () -> T
-): JsObjectPropertySpec.OptionalWithDefault<T> =
-    JsObjectPropertySpec.OptionalWithDefault(
+): ObjectPropertySpec.Defaultable<T> =
+    ObjectPropertySpec.Defaultable(
         path = JsPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
-            readOptional(context, lookup, reader, default)
+            readWithDefault(context, lookup, reader, default)
         }
     )
 
-public fun <T : Any> optionalWithDefault(
+public fun <T : Any> defaultable(
     paths: JsPaths,
     reader: Reader<T>,
     default: () -> T
-): JsObjectPropertySpec.OptionalWithDefault<T> =
-    JsObjectPropertySpec.OptionalWithDefault(
+): ObjectPropertySpec.Defaultable<T> =
+    ObjectPropertySpec.Defaultable(
         path = paths,
         reader = { context, location, input ->
             val lookup: JsLookup = paths.fold(
@@ -61,21 +61,21 @@ public fun <T : Any> optionalWithDefault(
                     input.lookup(location, path)
                 }
             )
-            readOptional(context, lookup, reader, default)
+            readWithDefault(context, lookup, reader, default)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.OptionalWithDefault<T>.validation(
+public infix fun <T : Any> ObjectPropertySpec.Defaultable<T>.validation(
     validator: Validator<T>
-): JsObjectPropertySpec.OptionalWithDefault<T> =
-    JsObjectPropertySpec.OptionalWithDefault(
+): ObjectPropertySpec.Defaultable<T> =
+    ObjectPropertySpec.Defaultable(
         path = path,
         reader = { context, location, input ->
             reader.read(context, location, input).validation(context, validator)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.OptionalWithDefault<T>.or(
-    alt: JsObjectPropertySpec.OptionalWithDefault<T>
-): JsObjectPropertySpec.OptionalWithDefault<T> =
-    JsObjectPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <T : Any> ObjectPropertySpec.Defaultable<T>.or(
+    alt: ObjectPropertySpec.Defaultable<T>
+): ObjectPropertySpec.Defaultable<T> =
+    ObjectPropertySpec.Defaultable(path = path.append(alt.path), reader = reader or alt.reader)

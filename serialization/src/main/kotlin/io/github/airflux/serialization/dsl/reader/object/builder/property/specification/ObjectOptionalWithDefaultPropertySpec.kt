@@ -21,39 +21,37 @@ import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.`object`.readNullable
+import io.github.airflux.serialization.core.reader.`object`.readOptional
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> nullableWithDefault(
+public fun <T : Any> optionalWithDefault(
     name: String,
     reader: Reader<T>,
     default: () -> T
-): JsObjectPropertySpec.NullableWithDefault<T> =
-    nullableWithDefault(JsPath(name), reader, default)
+): ObjectPropertySpec.OptionalWithDefault<T> =
+    optionalWithDefault(JsPath(name), reader, default)
 
-public fun <T : Any> nullableWithDefault(
+public fun <T : Any> optionalWithDefault(
     path: JsPath,
     reader: Reader<T>,
     default: () -> T
-): JsObjectPropertySpec.NullableWithDefault<T> =
-    JsObjectPropertySpec.NullableWithDefault(
+): ObjectPropertySpec.OptionalWithDefault<T> =
+    ObjectPropertySpec.OptionalWithDefault(
         path = JsPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
-            readNullable(context, lookup, reader, default)
+            readOptional(context, lookup, reader, default)
         }
     )
 
-public fun <T : Any> nullableWithDefault(
+public fun <T : Any> optionalWithDefault(
     paths: JsPaths,
     reader: Reader<T>,
     default: () -> T
-): JsObjectPropertySpec.NullableWithDefault<T> =
-    JsObjectPropertySpec.NullableWithDefault(
+): ObjectPropertySpec.OptionalWithDefault<T> =
+    ObjectPropertySpec.OptionalWithDefault(
         path = paths,
         reader = { context, location, input ->
             val lookup: JsLookup = paths.fold(
@@ -63,31 +61,21 @@ public fun <T : Any> nullableWithDefault(
                     input.lookup(location, path)
                 }
             )
-            readNullable(context, lookup, reader, default)
+            readOptional(context, lookup, reader, default)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.NullableWithDefault<T>.validation(
-    validator: Validator<T?>
-): JsObjectPropertySpec.NullableWithDefault<T> =
-    JsObjectPropertySpec.NullableWithDefault(
+public infix fun <T : Any> ObjectPropertySpec.OptionalWithDefault<T>.validation(
+    validator: Validator<T>
+): ObjectPropertySpec.OptionalWithDefault<T> =
+    ObjectPropertySpec.OptionalWithDefault(
         path = path,
         reader = { context, location, input ->
             reader.read(context, location, input).validation(context, validator)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.NullableWithDefault<T>.filter(
-    predicate: JsPredicate<T>
-): JsObjectPropertySpec.NullableWithDefault<T> =
-    JsObjectPropertySpec.NullableWithDefault(
-        path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).filter(context, predicate)
-        }
-    )
-
-public infix fun <T : Any> JsObjectPropertySpec.NullableWithDefault<T>.or(
-    alt: JsObjectPropertySpec.NullableWithDefault<T>
-): JsObjectPropertySpec.NullableWithDefault<T> =
-    JsObjectPropertySpec.NullableWithDefault(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <T : Any> ObjectPropertySpec.OptionalWithDefault<T>.or(
+    alt: ObjectPropertySpec.OptionalWithDefault<T>
+): ObjectPropertySpec.OptionalWithDefault<T> =
+    ObjectPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)

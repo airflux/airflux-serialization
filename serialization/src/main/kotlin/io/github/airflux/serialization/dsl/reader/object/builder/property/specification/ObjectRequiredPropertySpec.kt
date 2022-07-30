@@ -30,11 +30,11 @@ import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Compa
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> required(name: String, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
+public fun <T : Any> required(name: String, reader: Reader<T>): ObjectPropertySpec.Required<T> =
     required(JsPath(name), reader)
 
-public fun <T : Any> required(path: JsPath, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
-    JsObjectPropertySpec.Required(
+public fun <T : Any> required(path: JsPath, reader: Reader<T>): ObjectPropertySpec.Required<T> =
+    ObjectPropertySpec.Required(
         path = JsPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
@@ -42,8 +42,8 @@ public fun <T : Any> required(path: JsPath, reader: Reader<T>): JsObjectProperty
         }
     )
 
-public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
-    JsObjectPropertySpec.Required(
+public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): ObjectPropertySpec.Required<T> =
+    ObjectPropertySpec.Required(
         path = paths,
         reader = Reader { context, location, input ->
             val errorBuilder = context[PathMissingErrorBuilder]
@@ -57,17 +57,17 @@ public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): JsObjectProper
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Required<T>.validation(
+public infix fun <T : Any> ObjectPropertySpec.Required<T>.validation(
     validator: Validator<T>
-): JsObjectPropertySpec.Required<T> =
-    JsObjectPropertySpec.Required(
+): ObjectPropertySpec.Required<T> =
+    ObjectPropertySpec.Required(
         path = path,
         reader = { context, location, input ->
             reader.read(context, location, input).validation(context, validator)
         }
     )
 
-public infix fun <T : Any> JsObjectPropertySpec.Required<T>.or(
-    alt: JsObjectPropertySpec.Required<T>
-): JsObjectPropertySpec.Required<T> =
-    JsObjectPropertySpec.Required(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <T : Any> ObjectPropertySpec.Required<T>.or(
+    alt: ObjectPropertySpec.Required<T>
+): ObjectPropertySpec.Required<T> =
+    ObjectPropertySpec.Required(path = path.append(alt.path), reader = reader or alt.reader)

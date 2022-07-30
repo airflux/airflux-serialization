@@ -22,7 +22,6 @@ import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumberNode
@@ -36,46 +35,45 @@ import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringVali
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
+internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
+        private const val DEFAULT_VALUE = "none"
 
         private val CONTEXT =
             ReaderContext(
                 listOf(
                     IsNotEmptyStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty },
-                    PathMissingErrorBuilder { JsonErrors.PathMissing },
                     InvalidTypeErrorBuilder(JsonErrors::InvalidType)
                 )
             )
         private val LOCATION = JsLocation.empty
+        private val DEFAULT = { DEFAULT_VALUE }
     }
 
     init {
 
-        "The JsObjectPropertySpec#Defaultable" - {
+        "The ObjectPropertySpec#NullableWithDefault type" - {
 
             "when creating the instance by a attribute name" - {
-                val spec = required(name = "id", reader = StringReader)
+                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(JsPath("id"))
                 }
 
                 "when the reader has read an attribute named id" - {
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "if the attribute value is not the null type" - {
-                        val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                        val result = spec.reader.read(CONTEXT, LOCATION, input)
-
-                        "then the not-null value should be returned" {
-                            result as JsResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
-                        }
+                    "then a value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
 
@@ -83,11 +81,9 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then an error should be returned" {
-                        result as JsResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
-                        )
+                    "then a default value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe DEFAULT_VALUE
                     }
                 }
 
@@ -112,22 +108,19 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
 
             "when creating the instance by a single-path" - {
                 val path = JsPath("id")
-                val spec = required(path = path, reader = StringReader)
+                val spec = nullableWithDefault(path = path, reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(path)
                 }
 
                 "when the reader has read an attribute named id" - {
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "if the attribute value is not the null type" - {
-                        val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                        val result = spec.reader.read(CONTEXT, LOCATION, input)
-
-                        "then the not-null value should be returned" {
-                            result as JsResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
-                        }
+                    "then a value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
 
@@ -135,11 +128,9 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then an error should be returned" {
-                        result as JsResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
-                        )
+                    "then a default value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe DEFAULT_VALUE
                     }
                 }
 
@@ -165,35 +156,33 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
             "when creating the instance by a multi-path" - {
                 val idPath = JsPath("id")
                 val identifierPath = JsPath("identifier")
-                val spec = required(paths = JsPaths(idPath, identifierPath), reader = StringReader)
+                val spec = nullableWithDefault(
+                    paths = JsPaths(idPath, identifierPath),
+                    reader = StringReader,
+                    default = DEFAULT
+                )
 
                 "then the paths parameter must contain only the passed paths" {
                     spec.path.items shouldContainExactly listOf(idPath, identifierPath)
                 }
 
                 "when the reader has read an attribute named id" - {
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "if the attribute value is not the null type" - {
-                        val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                        val result = spec.reader.read(CONTEXT, LOCATION, input)
-
-                        "then the not-null value should be returned" {
-                            result as JsResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
-                        }
+                    "then a value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
 
                 "when the reader has read an attribute named identifier" - {
+                    val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "if the attribute value is not the null type" - {
-                        val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
-                        val result = spec.reader.read(CONTEXT, LOCATION, input)
-
-                        "then the not-null value should be returned" {
-                            result as JsResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
-                        }
+                    "then a value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
 
@@ -201,18 +190,9 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                    "then all errors should be returned" {
-                        result as JsResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
-                                location = LOCATION.append("id"),
-                                error = JsonErrors.PathMissing
-                            ),
-                            JsResult.Failure.Cause(
-                                location = LOCATION.append("identifier"),
-                                error = JsonErrors.PathMissing
-                            )
-                        )
+                    "then a default value should be returned" {
+                        result as JsResult.Success<String?>
+                        result.value shouldBe DEFAULT_VALUE
                     }
                 }
 
@@ -236,7 +216,7 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = JsObjectPropertySpec.Required(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.NullableWithDefault(path = JsPaths(JsPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
@@ -246,7 +226,7 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Success<String>
+                        result as JsResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
 
@@ -283,9 +263,59 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
                 }
             }
 
+            "when the filter was added to the spec" - {
+                val spec = ObjectPropertySpec.NullableWithDefault(path = JsPaths(JsPath("id")), reader = StringReader)
+                val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
+
+                "when the reader has successfully read" - {
+
+                    "then a value should be returned if the result was not filtered" {
+                        val input = StringNode(ID_VALUE_AS_UUID)
+
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
+
+                        result as JsResult.Success<String?>
+                        result.value shouldBe ID_VALUE_AS_UUID
+                    }
+
+                    "then the null value should be returned if the result was filtered" {
+                        val input = StringNode("")
+
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
+
+                        result as JsResult.Success<String?>
+                        result.value.shouldBeNull()
+                    }
+                }
+
+                "when an error occurs while reading" - {
+
+                    "then should be returned a read error" {
+                        val input = NumberNode.valueOf(10)
+
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
+
+                        result as JsResult.Failure
+                        result.causes shouldContainExactly listOf(
+                            JsResult.Failure.Cause(
+                                location = LOCATION,
+                                error = JsonErrors.InvalidType(
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+
             "when an alternative spec was added" - {
-                val spec = required(name = "id", reader = StringReader)
-                val alt = required(name = "id", reader = IntReader.map { it.toString() })
+                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
+                val alt = nullableWithDefault(
+                    name = "id",
+                    reader = IntReader.map { it.toString() },
+                    default = DEFAULT
+                )
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
@@ -298,7 +328,7 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
 
                     "then a value should be returned" {
                         println(result)
-                        result as JsResult.Success<String>
+                        result as JsResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -308,7 +338,7 @@ internal class JsObjectRequiredPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned from the alternative reader" {
-                        result as JsResult.Success<String>
+                        result as JsResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_INT
                     }
                 }

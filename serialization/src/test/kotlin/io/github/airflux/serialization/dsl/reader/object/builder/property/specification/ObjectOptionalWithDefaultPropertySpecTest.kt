@@ -36,7 +36,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
+internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
@@ -56,7 +56,7 @@ internal class JsObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The JsObjectPropertySpec#OptionalWithDefault" - {
+        "The ObjectPropertySpec#OptionalWithDefault type" - {
 
             "when creating the instance by a attribute name" - {
                 val spec = optionalWithDefault(name = "id", reader = StringReader, default = DEFAULT)
@@ -214,7 +214,7 @@ internal class JsObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = JsObjectPropertySpec.OptionalWithDefault(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.OptionalWithDefault(path = JsPaths(JsPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty)
 
                 "when the reader has successfully read" - {

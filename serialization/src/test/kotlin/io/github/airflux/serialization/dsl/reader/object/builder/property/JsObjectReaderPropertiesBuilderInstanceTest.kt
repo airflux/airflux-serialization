@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.JsObjectPropertySpec
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.ObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.shouldContainExactly
@@ -64,18 +64,18 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
             "when some properties were added to the builder" - {
                 val properties: JsObjectProperties = JsObjectReaderPropertiesBuilderInstance()
                     .apply {
-                        property(JsObjectPropertySpec.Required(path = REQUIRED_PATH, reader = REQUIRED_READER))
-                        property(JsObjectPropertySpec.Defaultable(path = DEFAULTABLE_PATH, reader = DEFAULTABLE_READER))
-                        property(JsObjectPropertySpec.Optional(path = OPTIONAL_PATH, reader = OPTIONAL_READER))
+                        property(ObjectPropertySpec.Required(path = REQUIRED_PATH, reader = REQUIRED_READER))
+                        property(ObjectPropertySpec.Defaultable(path = DEFAULTABLE_PATH, reader = DEFAULTABLE_READER))
+                        property(ObjectPropertySpec.Optional(path = OPTIONAL_PATH, reader = OPTIONAL_READER))
                         property(
-                            JsObjectPropertySpec.OptionalWithDefault(
+                            ObjectPropertySpec.OptionalWithDefault(
                                 path = OPTIONAL_WITH_DEFAULT_PATH,
                                 reader = OPTIONAL_WITH_DEFAULT_READER
                             )
                         )
-                        property(JsObjectPropertySpec.Nullable(path = NULLABLE_PATH, reader = NULLABLE_READER))
+                        property(ObjectPropertySpec.Nullable(path = NULLABLE_PATH, reader = NULLABLE_READER))
                         property(
-                            JsObjectPropertySpec.NullableWithDefault(
+                            ObjectPropertySpec.NullableWithDefault(
                                 path = NULLABLE_WITH_DEFAULT_PATH,
                                 reader = NULLABLE_WITH_DEFAULT_READER
                             )
