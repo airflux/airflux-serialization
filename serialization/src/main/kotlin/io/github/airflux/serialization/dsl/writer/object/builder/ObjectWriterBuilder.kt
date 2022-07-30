@@ -28,9 +28,9 @@ import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.config.JsObjectWriterConfig
-import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilder
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilderInstance
+import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectProperties
 
 public fun <T : Any> writer(
     config: JsObjectWriterConfig = JsObjectWriterConfig.DEFAULT,
@@ -49,14 +49,14 @@ public class ObjectWriterBuilder<T : Any> internal constructor(
     WriterActionConfigurator by actionConfigurator {
 
     internal fun build(): ObjectWriter<T> {
-        val properties: JsObjectProperties<T> = propertiesBuilder.build()
+        val properties: ObjectProperties<T> = propertiesBuilder.build()
         return buildObjectWriter(actionIfEmpty, properties)
     }
 }
 
 internal fun <T : Any> buildObjectWriter(
     actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
-    properties: JsObjectProperties<T>
+    properties: ObjectProperties<T>
 ): ObjectWriter<T> =
     ObjectWriter { context, location, input ->
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()

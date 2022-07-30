@@ -39,5 +39,5 @@ internal class JsObjectWriterPropertiesBuilderInstance<T : Any> : JsObjectWriter
         ObjectProperty.Nullable(spec)
             .also { properties.add(it) }
 
-    internal fun build(): JsObjectProperties<T> = JsObjectProperties(properties)
+    internal fun build(): ObjectProperties<T> = ObjectProperties(properties)
 }

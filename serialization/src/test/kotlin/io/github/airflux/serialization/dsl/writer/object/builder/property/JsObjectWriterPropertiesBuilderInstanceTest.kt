@@ -53,7 +53,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
@@ -72,7 +72,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
@@ -91,7 +91,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
