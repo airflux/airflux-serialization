@@ -33,9 +33,9 @@ import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.`object`.builder.ObjectReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilderInstance
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidators
@@ -128,14 +128,14 @@ internal fun <T> buildObjectReader(
             failures.merge()
     }
 
-internal fun StructNode.read(context: ReaderContext, location: JsLocation, property: JsObjectProperty): JsResult<Any?> {
+internal fun StructNode.read(context: ReaderContext, location: JsLocation, property: ObjectProperty): JsResult<Any?> {
     val reader = when (property) {
-        is JsObjectProperty.Required<*> -> property.reader
-        is JsObjectProperty.Defaultable<*> -> property.reader
-        is JsObjectProperty.Optional<*> -> property.reader
-        is JsObjectProperty.OptionalWithDefault<*> -> property.reader
-        is JsObjectProperty.Nullable<*> -> property.reader
-        is JsObjectProperty.NullableWithDefault<*> -> property.reader
+        is ObjectProperty.Required<*> -> property.reader
+        is ObjectProperty.Defaultable<*> -> property.reader
+        is ObjectProperty.Optional<*> -> property.reader
+        is ObjectProperty.OptionalWithDefault<*> -> property.reader
+        is ObjectProperty.Nullable<*> -> property.reader
+        is ObjectProperty.NullableWithDefault<*> -> property.reader
     }
     return reader.read(context, location, this)
 }

@@ -26,7 +26,7 @@ import io.github.airflux.serialization.std.reader.StringReader
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectPropertyTest : FreeSpec() {
+internal class ObjectPropertyTest : FreeSpec() {
 
     companion object {
         private const val DEFAULT_VALUE = "none"
@@ -34,11 +34,11 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
     init {
 
-        "The JsObjectProperty type" - {
+        "The ObjectProperty type" - {
 
             "when created an instance of the required property" - {
                 val spec = required(name = "id", reader = StringReader)
-                val property = JsObjectProperty.Required(spec)
+                val property = ObjectProperty.Required(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -51,7 +51,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
             "when created an instance of the defaultable property" - {
                 val spec = defaultable(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
-                val property = JsObjectProperty.Defaultable(spec)
+                val property = ObjectProperty.Defaultable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -64,7 +64,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
             "when created an instance of the optional property" - {
                 val spec = optional(name = "id", reader = StringReader)
-                val property = JsObjectProperty.Optional(spec)
+                val property = ObjectProperty.Optional(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -77,7 +77,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
             "when created an instance of the optional with default property" - {
                 val spec = optionalWithDefault(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
-                val property = JsObjectProperty.OptionalWithDefault(spec)
+                val property = ObjectProperty.OptionalWithDefault(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -90,7 +90,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
             "when created an instance of the nullable property" - {
                 val spec = nullable(name = "id", reader = StringReader)
-                val property = JsObjectProperty.Nullable(spec)
+                val property = ObjectProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -103,7 +103,7 @@ internal class JsObjectPropertyTest : FreeSpec() {
 
             "when created an instance of the nullable with default property" - {
                 val spec = nullableWithDefault(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
-                val property = JsObjectProperty.NullableWithDefault(spec)
+                val property = ObjectProperty.NullableWithDefault(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path

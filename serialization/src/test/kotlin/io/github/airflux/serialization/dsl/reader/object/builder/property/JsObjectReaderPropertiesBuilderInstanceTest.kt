@@ -85,7 +85,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the required property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Required<*>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Required<*>>()
                         it.path shouldBe REQUIRED_PATH
                         it.reader shouldBe REQUIRED_READER
                     }
@@ -93,7 +93,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the defaultable property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Defaultable<*>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Defaultable<*>>()
                         it.path shouldBe DEFAULTABLE_PATH
                         it.reader shouldBe DEFAULTABLE_READER
                     }
@@ -101,7 +101,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the optional property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Optional<*>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Optional<*>>()
                         it.path shouldBe OPTIONAL_PATH
                         it.reader shouldBe OPTIONAL_READER
                     }
@@ -109,7 +109,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the optional with default property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.OptionalWithDefault<*>>()
+                        it.shouldBeInstanceOf<ObjectProperty.OptionalWithDefault<*>>()
                         it.path shouldBe OPTIONAL_WITH_DEFAULT_PATH
                         it.reader shouldBe OPTIONAL_WITH_DEFAULT_READER
                     }
@@ -117,7 +117,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the nullable property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Nullable<*>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Nullable<*>>()
                         it.path shouldBe NULLABLE_PATH
                         it.reader shouldBe NULLABLE_READER
                     }
@@ -125,7 +125,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the nullable with default property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.NullableWithDefault<*>>()
+                        it.shouldBeInstanceOf<ObjectProperty.NullableWithDefault<*>>()
                         it.path shouldBe NULLABLE_WITH_DEFAULT_PATH
                         it.reader shouldBe NULLABLE_WITH_DEFAULT_READER
                     }

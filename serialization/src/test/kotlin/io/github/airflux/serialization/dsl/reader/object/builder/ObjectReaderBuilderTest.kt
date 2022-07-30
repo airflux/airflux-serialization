@@ -31,7 +31,7 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.nullableWithDefault
@@ -146,7 +146,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                             validation {
                                 +validator
                             }
-                            val name: JsObjectProperty.Required<String> =
+                            val name: ObjectProperty.Required<String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -177,7 +177,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         validation {
                             +validator
                         }
-                        val name: JsObjectProperty.Required<String> =
+                        val name: ObjectProperty.Required<String> =
                             property(propertySpec(error = JsonErrors.PathMissing))
                         returns { _, location ->
                             DTO(name = +name).success(location)
@@ -256,7 +256,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
-                    val property: JsObjectProperty = JsObjectProperty.Required(
+                    val property: ObjectProperty = ObjectProperty.Required(
                         required(
                             name = ATTRIBUTE_NAME,
                             reader = createReader(value = USER_NAME)
@@ -271,7 +271,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the defaultable" - {
-                    val property: JsObjectProperty = JsObjectProperty.Defaultable(
+                    val property: ObjectProperty = ObjectProperty.Defaultable(
                         defaultable(
                             name = ATTRIBUTE_NAME,
                             reader = createReader(value = USER_NAME),
@@ -287,7 +287,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the optional" - {
-                    val property: JsObjectProperty = JsObjectProperty.Optional(
+                    val property: ObjectProperty = ObjectProperty.Optional(
                         optional(
                             name = ATTRIBUTE_NAME,
                             reader = createReader(value = USER_NAME)
@@ -302,7 +302,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the optional with default" - {
-                    val property: JsObjectProperty = JsObjectProperty.OptionalWithDefault(
+                    val property: ObjectProperty = ObjectProperty.OptionalWithDefault(
                         optionalWithDefault(
                             name = ATTRIBUTE_NAME,
                             reader = createReader(value = USER_NAME),
@@ -318,7 +318,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the nullable" - {
-                    val property: JsObjectProperty = JsObjectProperty.Nullable(
+                    val property: ObjectProperty = ObjectProperty.Nullable(
                         nullable(
                             name = ATTRIBUTE_NAME,
                             reader = createReader(value = USER_NAME)
@@ -333,7 +333,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the nullable with default" - {
-                    val property: JsObjectProperty = JsObjectProperty.NullableWithDefault(
+                    val property: ObjectProperty = ObjectProperty.NullableWithDefault(
                         nullableWithDefault(
                             name = ATTRIBUTE_NAME,
                             reader = createReader(value = USER_NAME),

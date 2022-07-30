@@ -17,5 +17,5 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property
 
 public class JsObjectProperties internal constructor(
-    private val items: List<JsObjectProperty>
-) : Collection<JsObjectProperty> by items
+    private val items: List<ObjectProperty>
+) : Collection<ObjectProperty> by items
