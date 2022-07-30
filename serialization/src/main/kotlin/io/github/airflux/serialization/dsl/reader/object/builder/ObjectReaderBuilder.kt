@@ -36,9 +36,9 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsOb
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilderInstance
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectReaderValidatorsBuilder
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidators
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilder
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilderInstance
 
 public fun <T> reader(
     configuration: ObjectReaderConfig = ObjectReaderConfig.DEFAULT,
@@ -46,7 +46,7 @@ public fun <T> reader(
 ): ObjectReader<T> {
     val readerBuilder = ObjectReaderBuilder<T>(
         JsObjectReaderPropertiesBuilderInstance(),
-        JsObjectReaderValidatorsBuilderInstance(configuration)
+        ObjectReaderValidatorsBuilderInstance(configuration)
     )
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
@@ -55,9 +55,9 @@ public fun <T> reader(
 @AirfluxMarker
 public class ObjectReaderBuilder<T> internal constructor(
     private val propertiesBuilder: JsObjectReaderPropertiesBuilderInstance,
-    private val validatorsBuilder: JsObjectReaderValidatorsBuilderInstance
+    private val validatorsBuilder: ObjectReaderValidatorsBuilderInstance
 ) : JsObjectReaderPropertiesBuilder by propertiesBuilder,
-    JsObjectReaderValidatorsBuilder by validatorsBuilder {
+    ObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
         public fun build(context: ReaderContext, location: JsLocation, objectValuesMap: ObjectValuesMap): JsResult<T>

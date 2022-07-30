@@ -19,13 +19,13 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 
-public interface JsObjectReaderValidatorsBuilder {
+public interface ObjectReaderValidatorsBuilder {
     public fun validation(block: JsObjectValidatorBuilders.Builder.() -> Unit)
 }
 
-internal class JsObjectReaderValidatorsBuilderInstance(
+internal class ObjectReaderValidatorsBuilderInstance(
     configuration: ObjectReaderConfig
-) : JsObjectReaderValidatorsBuilder {
+) : ObjectReaderValidatorsBuilder {
     private val builder: JsObjectValidatorBuilders.Builder = JsObjectValidatorBuilders.Builder(configuration.validation)
 
     override fun validation(block: JsObjectValidatorBuilders.Builder.() -> Unit) {
