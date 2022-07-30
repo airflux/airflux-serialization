@@ -22,14 +22,14 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class JsArrayValidatorBuildersTest : FreeSpec() {
+internal class ArrayValidatorBuildersTest : FreeSpec() {
 
     init {
 
-        "The JsArrayValidatorBuilders type" - {
+        "The ArrayValidatorBuilders type" - {
 
             "when the builder is empty" - {
-                val builder = JsArrayValidatorBuilders.Builder()
+                val builder = ArrayValidatorBuilders.Builder()
 
                 "when some validator builder was add" - {
                     val validator = DummyArrayValidatorBuilder(
@@ -65,7 +65,7 @@ internal class JsArrayValidatorBuildersTest : FreeSpec() {
                         key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                         result = null
                     )
-                    val builder = JsArrayValidatorBuilders.Builder(listOf(initValidator))
+                    val builder = ArrayValidatorBuilders.Builder(listOf(initValidator))
 
                     "then the validation object should contain only validator passed during initialization" {
                         val validation = builder.build()
@@ -78,7 +78,7 @@ internal class JsArrayValidatorBuildersTest : FreeSpec() {
                         key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                         result = null
                     )
-                    val builder = JsArrayValidatorBuilders.Builder(listOf(initValidator))
+                    val builder = ArrayValidatorBuilders.Builder(listOf(initValidator))
 
                     val validator = DummyArrayValidatorBuilder(
                         key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
@@ -98,7 +98,7 @@ internal class JsArrayValidatorBuildersTest : FreeSpec() {
                     val key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>()
 
                     val initValidator = DummyArrayValidatorBuilder(key = key, result = null)
-                    val builder = JsArrayValidatorBuilders.Builder(listOf(initValidator))
+                    val builder = ArrayValidatorBuilders.Builder(listOf(initValidator))
 
                     val validator = DummyArrayValidatorBuilder(key = key, result = null)
                     val builderWithItem = builder.apply {
