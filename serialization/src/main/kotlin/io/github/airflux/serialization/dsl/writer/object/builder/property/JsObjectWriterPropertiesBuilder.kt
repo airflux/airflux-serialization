@@ -19,24 +19,24 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
 
 public interface JsObjectWriterPropertiesBuilder<T : Any> {
-    public fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): JsObjectProperty.NonNullable<T, P>
-    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): JsObjectProperty.Optional<T, P>
-    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): JsObjectProperty.Nullable<T, P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): ObjectProperty.NonNullable<T, P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): ObjectProperty.Optional<T, P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): ObjectProperty.Nullable<T, P>
 }
 
 internal class JsObjectWriterPropertiesBuilderInstance<T : Any> : JsObjectWriterPropertiesBuilder<T> {
-    private val properties = mutableListOf<JsObjectProperty<T>>()
+    private val properties = mutableListOf<ObjectProperty<T>>()
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): JsObjectProperty.NonNullable<T, P> =
-        JsObjectProperty.NonNullable(spec)
+    override fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): ObjectProperty.NonNullable<T, P> =
+        ObjectProperty.NonNullable(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): JsObjectProperty.Optional<T, P> =
-        JsObjectProperty.Optional(spec)
+    override fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): ObjectProperty.Optional<T, P> =
+        ObjectProperty.Optional(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): JsObjectProperty.Nullable<T, P> =
-        JsObjectProperty.Nullable(spec)
+    override fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): ObjectProperty.Nullable<T, P> =
+        ObjectProperty.Nullable(spec)
             .also { properties.add(it) }
 
     internal fun build(): JsObjectProperties<T> = JsObjectProperties(properties)

@@ -25,7 +25,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectOptionalPropertyTest : FreeSpec() {
+internal class ObjectOptionalPropertyTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "id"
@@ -36,13 +36,13 @@ internal class JsObjectOptionalPropertyTest : FreeSpec() {
 
     init {
 
-        "The JsObjectProperty#Optional type" - {
+        "The ObjectProperty#Optional type" - {
 
             "when created an instance of the optional property" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val property = JsObjectProperty.Optional(spec)
+                val property = ObjectProperty.Optional(spec)
 
                 "then the attribute name should equal the attribute name from the spec" {
                     property.name shouldBe spec.name
@@ -89,8 +89,8 @@ internal class JsObjectOptionalPropertyTest : FreeSpec() {
     private fun <T : Any, P : Any> createProperty(
         from: (T) -> P?,
         writer: DummyWriter<P>
-    ): JsObjectProperty.Optional<T, P> =
-        JsObjectProperty.Optional(
+    ): ObjectProperty.Optional<T, P> =
+        ObjectProperty.Optional(
             ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
         )
 }

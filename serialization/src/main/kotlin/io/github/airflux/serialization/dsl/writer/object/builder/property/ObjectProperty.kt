@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.writer.`object`.writeNullable
 import io.github.airflux.serialization.core.writer.`object`.writeOptional
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
 
-public sealed class JsObjectProperty<T : Any> {
+public sealed class ObjectProperty<T : Any> {
     public abstract val name: String
     public abstract fun write(context: WriterContext, location: JsLocation, input: T): ValueNode?
 
@@ -33,7 +33,7 @@ public sealed class JsObjectProperty<T : Any> {
         override val name: String,
         private val from: (T) -> P,
         private val writer: Writer<P>
-    ) : JsObjectProperty<T>() {
+    ) : ObjectProperty<T>() {
 
         internal constructor(spec: ObjectPropertySpec.NonNullable<T, P>) : this(spec.name, spec.from, spec.writer)
 
@@ -45,7 +45,7 @@ public sealed class JsObjectProperty<T : Any> {
         override val name: String,
         private val from: (T) -> P?,
         private val writer: Writer<P>
-    ) : JsObjectProperty<T>() {
+    ) : ObjectProperty<T>() {
 
         internal constructor(spec: ObjectPropertySpec.Optional<T, P>) : this(spec.name, spec.from, spec.writer)
 
@@ -57,7 +57,7 @@ public sealed class JsObjectProperty<T : Any> {
         override val name: String,
         private val from: (T) -> P?,
         private val writer: Writer<P>
-    ) : JsObjectProperty<T>() {
+    ) : ObjectProperty<T>() {
 
         internal constructor(spec: ObjectPropertySpec.Nullable<T, P>) : this(spec.name, spec.from, spec.writer)
 

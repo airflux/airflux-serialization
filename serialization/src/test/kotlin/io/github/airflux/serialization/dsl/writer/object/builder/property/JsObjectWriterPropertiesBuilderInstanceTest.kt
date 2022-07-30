@@ -61,7 +61,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the non-nullable property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.NonNullable<*, *>>()
+                        it.shouldBeInstanceOf<ObjectProperty.NonNullable<*, *>>()
                         it.name shouldBe spec.name
                         it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
@@ -80,7 +80,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the optional property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Optional<*, *>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Optional<*, *>>()
                         it.name shouldBe spec.name
                         it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
@@ -99,7 +99,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the nullable property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<JsObjectProperty.Nullable<*, *>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Nullable<*, *>>()
                         it.name shouldBe spec.name
                         it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
                     }

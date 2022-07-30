@@ -18,15 +18,15 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectNonNullablePropertyTest : FreeSpec() {
+internal class ObjectNullablePropertyTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "id"
@@ -37,21 +37,32 @@ internal class JsObjectNonNullablePropertyTest : FreeSpec() {
 
     init {
 
-        "The JsObjectProperty#NonNullable type" - {
+        "The ObjectProperty#Nullable type" - {
 
-            "when created an instance of the non-nullable property" - {
-                val from: (String) -> String = { it }
+            "when created an instance of the nullable property" - {
+                val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val property = JsObjectProperty.NonNullable(spec)
+                val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val property = ObjectProperty.Optional(spec)
 
                 "then the attribute name should equal the attribute name from the spec" {
                     property.name shouldBe spec.name
                 }
             }
 
+            "when the extractor returns the null value" - {
+                val from: (String) -> String? = { null }
+                val writer = DummyWriter<String> { StringNode(it) }
+                val property = createProperty(from = from, writer = writer)
+
+                "then the method write should return the NullNode value" {
+                    val result = property.write(WriterContext(), LOCATION, ATTRIBUTE_VALUE)
+                    result shouldBe NullNode
+                }
+            }
+
             "when the extractor returns the non-null value" - {
-                val from: (String) -> String = { it }
+                val from: (String) -> String? = { it }
 
                 "when the writer of the property returns the null value" - {
                     val writer = DummyWriter<String> { null }
@@ -77,10 +88,10 @@ internal class JsObjectNonNullablePropertyTest : FreeSpec() {
     }
 
     private fun <T : Any, P : Any> createProperty(
-        from: (T) -> P,
-        writer: Writer<P>
-    ): JsObjectProperty.NonNullable<T, P> =
-        JsObjectProperty.NonNullable(
-            ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+        from: (T) -> P?,
+        writer: DummyWriter<P>
+    ): ObjectProperty.Nullable<T, P> =
+        ObjectProperty.Nullable(
+            ObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
         )
 }
