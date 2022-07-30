@@ -23,18 +23,21 @@ import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErro
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.reader.IntReader
 import io.github.airflux.serialization.std.reader.StringReader
+import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
+internal class ArrayNullableItemSpecTest : FreeSpec() {
 
     companion object {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
@@ -52,20 +55,34 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
     }
 
     init {
-        "The JsArrayItemSpec#NonNullable" - {
+
+        "The ArrayItemSpec#Nullable type" - {
 
             "when creating the instance of the spec" - {
-                val spec = nonNullable(reader = StringReader)
+                val spec = nullable(reader = StringReader)
 
                 "when the reader has read an item" - {
 
                     "when the reader has successfully read" - {
-                        val input = StringNode(ID_VALUE_AS_UUID)
-                        val result = spec.reader.read(CONTEXT, LOCATION, input)
 
-                        "then a value should be returned" {
-                            result as JsResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
+                        "if the attribute value is not the null type" - {
+                            val input = StringNode(ID_VALUE_AS_UUID)
+                            val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                            "then the not-null value should be returned" {
+                                result as JsResult.Success<String?>
+                                result.value shouldBe ID_VALUE_AS_UUID
+                            }
+                        }
+
+                        "if the attribute value is the null type" - {
+                            val input = NullNode
+                            val result = spec.reader.read(CONTEXT, LOCATION, input)
+
+                            "then the null value should be returned" {
+                                result as JsResult.Success<String?>
+                                result.value.shouldBeNull()
+                            }
                         }
                     }
 
@@ -90,8 +107,8 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = JsArrayItemSpec.NonNullable(reader = StringReader)
-                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty)
+                val spec = ArrayItemSpec.Nullable(reader = StringReader)
+                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
 
@@ -100,7 +117,7 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Success<String>
+                        result as JsResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
 
@@ -141,8 +158,8 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
             }
 
             "when an alternative spec was added" - {
-                val spec = nonNullable(reader = StringReader)
-                val alt = nonNullable(reader = IntReader.map { it.toString() })
+                val spec = nullable(reader = StringReader)
+                val alt = nullable(reader = IntReader.map { it.toString() })
                 val specWithAlternative = spec or alt
 
                 "when the main reader has successfully read" - {
@@ -151,7 +168,7 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
 
                     "then a value should be returned" {
                         println(result)
-                        result as JsResult.Success<String>
+                        result as JsResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -161,7 +178,7 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned from the alternative reader" {
-                        result as JsResult.Success<String>
+                        result as JsResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_INT
                     }
                 }

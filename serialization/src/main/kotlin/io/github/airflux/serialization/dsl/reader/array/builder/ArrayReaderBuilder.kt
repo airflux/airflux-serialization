@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.builder.ArrayReaderBuilder.ResultBuilder
-import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayItemSpec
+import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.ArrayItemSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilderInstance
@@ -62,7 +62,7 @@ public class ArrayReaderBuilder<T> internal constructor(
     }
 }
 
-public fun <T> returns(items: JsArrayItemSpec<T>): ResultBuilder<T> =
+public fun <T> returns(items: ArrayItemSpec<T>): ResultBuilder<T> =
     ResultBuilder { context, location, input ->
         readArray(context = context, location = location, from = input, items = items.reader)
     }
@@ -80,7 +80,7 @@ public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: Boolean): 
     }
 }
 
-public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayItemSpec<T>): ResultBuilder<T> {
+public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: ArrayItemSpec<T>): ResultBuilder<T> {
     val prefixItemReaders = prefixItems.readers
     return ResultBuilder { context, location, input ->
         readArray(

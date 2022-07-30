@@ -23,8 +23,8 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.NullNode
 
-public fun <T : Any> nullable(reader: Reader<T>): JsArrayItemSpec.Nullable<T?> =
-    JsArrayItemSpec.Nullable(
+public fun <T : Any> nullable(reader: Reader<T>): ArrayItemSpec.Nullable<T?> =
+    ArrayItemSpec.Nullable(
         reader = { context, location, input ->
             if (input is NullNode)
                 JsResult.Success(location = location, value = null)
@@ -33,16 +33,16 @@ public fun <T : Any> nullable(reader: Reader<T>): JsArrayItemSpec.Nullable<T?> =
         }
     )
 
-public infix fun <T> JsArrayItemSpec.Nullable<T>.validation(
+public infix fun <T> ArrayItemSpec.Nullable<T>.validation(
     validator: Validator<T?>
-): JsArrayItemSpec.Nullable<T> =
-    JsArrayItemSpec.Nullable(
+): ArrayItemSpec.Nullable<T> =
+    ArrayItemSpec.Nullable(
         reader = { context, location, input ->
             reader.read(context, location, input).validation(context, validator)
         }
     )
 
-public infix fun <T> JsArrayItemSpec.Nullable<T>.or(
-    alt: JsArrayItemSpec.Nullable<T>
-): JsArrayItemSpec.Nullable<T> =
-    JsArrayItemSpec.Nullable(reader = reader or alt.reader)
+public infix fun <T> ArrayItemSpec.Nullable<T>.or(
+    alt: ArrayItemSpec.Nullable<T>
+): ArrayItemSpec.Nullable<T> =
+    ArrayItemSpec.Nullable(reader = reader or alt.reader)

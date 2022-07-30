@@ -21,19 +21,19 @@ import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> nonNullable(reader: Reader<T>): JsArrayItemSpec.NonNullable<T> =
-    JsArrayItemSpec.NonNullable(reader)
+public fun <T : Any> nonNullable(reader: Reader<T>): ArrayItemSpec.NonNullable<T> =
+    ArrayItemSpec.NonNullable(reader)
 
-public infix fun <T> JsArrayItemSpec.NonNullable<T>.validation(
+public infix fun <T> ArrayItemSpec.NonNullable<T>.validation(
     validator: Validator<T>
-): JsArrayItemSpec.NonNullable<T> =
-    JsArrayItemSpec.NonNullable(
+): ArrayItemSpec.NonNullable<T> =
+    ArrayItemSpec.NonNullable(
         reader = { context, location, input ->
             reader.read(context, location, input).validation(context, validator)
         }
     )
 
-public infix fun <T> JsArrayItemSpec.NonNullable<T>.or(
-    alt: JsArrayItemSpec.NonNullable<T>
-): JsArrayItemSpec.NonNullable<T> =
-    JsArrayItemSpec.NonNullable(reader = reader or alt.reader)
+public infix fun <T> ArrayItemSpec.NonNullable<T>.or(
+    alt: ArrayItemSpec.NonNullable<T>
+): ArrayItemSpec.NonNullable<T> =
+    ArrayItemSpec.NonNullable(reader = reader or alt.reader)
