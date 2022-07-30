@@ -56,7 +56,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
     init {
 
         "The object validator AdditionalProperties" - {
-            val validator: JsObjectValidator = ObjectValidator.additionalProperties.build(properties)
+            val validator: JsObjectValidator = StdObjectValidator.additionalProperties.build(properties)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

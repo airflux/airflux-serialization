@@ -43,7 +43,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
     init {
 
         "The object validator IsNotEmpty" - {
-            val validator: JsObjectValidator = ObjectValidator.isNotEmpty.build(PROPERTIES)
+            val validator: JsObjectValidator = StdObjectValidator.isNotEmpty.build(PROPERTIES)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

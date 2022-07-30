@@ -22,7 +22,7 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std.MaxPropertiesObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std.MinPropertiesObjectValidatorBuilder
 
-public object ObjectValidator {
+public object StdObjectValidator {
     public val additionalProperties: JsObjectValidatorBuilder = AdditionalPropertiesObjectValidatorBuilder()
     public val isNotEmpty: JsObjectValidatorBuilder = IsNotEmptyObjectValidatorBuilder()
     public fun minProperties(value: Int): JsObjectValidatorBuilder = MinPropertiesObjectValidatorBuilder(value)

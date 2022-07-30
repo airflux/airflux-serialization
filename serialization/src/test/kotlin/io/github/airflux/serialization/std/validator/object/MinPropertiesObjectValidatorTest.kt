@@ -48,7 +48,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
     init {
 
         "The object validator MinProperties" - {
-            val validator: JsObjectValidator = ObjectValidator.minProperties(MIN_PROPERTIES).build(PROPERTIES)
+            val validator: JsObjectValidator = StdObjectValidator.minProperties(MIN_PROPERTIES).build(PROPERTIES)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
