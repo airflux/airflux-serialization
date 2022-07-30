@@ -18,13 +18,13 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
 
-public interface JsObjectWriterPropertiesBuilder<T : Any> {
+public interface ObjectWriterPropertiesBuilder<T : Any> {
     public fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): ObjectProperty.NonNullable<T, P>
     public fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): ObjectProperty.Optional<T, P>
     public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): ObjectProperty.Nullable<T, P>
 }
 
-internal class JsObjectWriterPropertiesBuilderInstance<T : Any> : JsObjectWriterPropertiesBuilder<T> {
+internal class ObjectWriterPropertiesBuilderInstance<T : Any> : ObjectWriterPropertiesBuilder<T> {
     private val properties = mutableListOf<ObjectProperty<T>>()
 
     override fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): ObjectProperty.NonNullable<T, P> =

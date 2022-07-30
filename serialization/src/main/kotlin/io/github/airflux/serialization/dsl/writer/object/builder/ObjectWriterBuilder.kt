@@ -28,24 +28,24 @@ import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.config.JsObjectWriterConfig
-import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilder
-import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsObjectWriterPropertiesBuilderInstance
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectProperties
+import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectWriterPropertiesBuilder
+import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectWriterPropertiesBuilderInstance
 
 public fun <T : Any> writer(
     config: JsObjectWriterConfig = JsObjectWriterConfig.DEFAULT,
     block: ObjectWriterBuilder<T>.() -> Unit
 ): ObjectWriter<T> =
     ObjectWriterBuilder<T>(
-        JsObjectWriterPropertiesBuilderInstance(),
+        ObjectWriterPropertiesBuilderInstance(),
         WriterActionConfiguratorInstance(config.options.actionIfEmpty)
     ).apply(block).build()
 
 @AirfluxMarker
 public class ObjectWriterBuilder<T : Any> internal constructor(
-    private val propertiesBuilder: JsObjectWriterPropertiesBuilderInstance<T>,
+    private val propertiesBuilder: ObjectWriterPropertiesBuilderInstance<T>,
     private val actionConfigurator: WriterActionConfiguratorInstance
-) : JsObjectWriterPropertiesBuilder<T> by propertiesBuilder,
+) : ObjectWriterPropertiesBuilder<T> by propertiesBuilder,
     WriterActionConfigurator by actionConfigurator {
 
     internal fun build(): ObjectWriter<T> {

@@ -27,7 +27,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
+internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "attribute-id"
@@ -39,10 +39,10 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
     init {
 
-        "The JsObjectWriterPropertiesBuilderInstance type" - {
+        "The ObjectWriterPropertiesBuilderInstance type" - {
 
             "when no property is added to the builder" - {
-                val properties = JsObjectWriterPropertiesBuilderInstance<String>().build()
+                val properties = ObjectWriterPropertiesBuilderInstance<String>().build()
 
                 "should be empty" {
                     properties shouldContainExactly emptyList()
@@ -53,7 +53,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val properties: ObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
@@ -72,7 +72,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val properties: ObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
@@ -91,7 +91,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
                 val spec = ObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
-                val properties: ObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
                     }
