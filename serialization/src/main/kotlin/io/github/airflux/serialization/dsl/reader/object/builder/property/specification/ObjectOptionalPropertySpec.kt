@@ -18,8 +18,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readOptional
 import io.github.airflux.serialization.core.reader.or
@@ -33,14 +33,14 @@ public fun <T : Any> optional(name: String, reader: Reader<T>): ObjectPropertySp
 
 public fun <T : Any> optional(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
     ObjectPropertySpec.Optional(
-        path = JsPaths(path),
+        path = PropertyPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
             readOptional(context, lookup, reader)
         }
     )
 
-public fun <T : Any> optional(paths: JsPaths, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
+public fun <T : Any> optional(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
     ObjectPropertySpec.Optional(
         path = paths,
         reader = { context, location, input ->

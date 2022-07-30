@@ -18,8 +18,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readWithDefault
 import io.github.airflux.serialization.core.reader.or
@@ -39,7 +39,7 @@ public fun <T : Any> defaultable(
     default: () -> T
 ): ObjectPropertySpec.Defaultable<T> =
     ObjectPropertySpec.Defaultable(
-        path = JsPaths(path),
+        path = PropertyPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
             readWithDefault(context, lookup, reader, default)
@@ -47,7 +47,7 @@ public fun <T : Any> defaultable(
     )
 
 public fun <T : Any> defaultable(
-    paths: JsPaths,
+    paths: PropertyPaths,
     reader: Reader<T>,
     default: () -> T
 ): ObjectPropertySpec.Defaultable<T> =

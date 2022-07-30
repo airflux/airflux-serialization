@@ -16,15 +16,15 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property
 
-import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.ObjectPropertySpec
 
 public sealed class ObjectProperty {
-    public abstract val path: JsPaths
+    public abstract val path: PropertyPaths
 
     public class Required<T : Any> private constructor(
-        override val path: JsPaths,
+        override val path: PropertyPaths,
         public val reader: Reader<T>
     ) : ObjectProperty() {
 
@@ -32,7 +32,7 @@ public sealed class ObjectProperty {
     }
 
     public class Defaultable<T : Any> private constructor(
-        override val path: JsPaths,
+        override val path: PropertyPaths,
         public val reader: Reader<T>
     ) : ObjectProperty() {
 
@@ -40,7 +40,7 @@ public sealed class ObjectProperty {
     }
 
     public class Optional<T : Any> private constructor(
-        override val path: JsPaths,
+        override val path: PropertyPaths,
         public val reader: Reader<T?>
     ) : ObjectProperty() {
 
@@ -48,7 +48,7 @@ public sealed class ObjectProperty {
     }
 
     public class OptionalWithDefault<T : Any> private constructor(
-        override val path: JsPaths,
+        override val path: PropertyPaths,
         public val reader: Reader<T>
     ) : ObjectProperty() {
 
@@ -56,7 +56,7 @@ public sealed class ObjectProperty {
     }
 
     public class Nullable<T : Any> private constructor(
-        override val path: JsPaths,
+        override val path: PropertyPaths,
         public val reader: Reader<T?>
     ) : ObjectProperty() {
 
@@ -64,7 +64,7 @@ public sealed class ObjectProperty {
     }
 
     public class NullableWithDefault<T : Any> private constructor(
-        override val path: JsPaths,
+        override val path: PropertyPaths,
         public val reader: Reader<T?>
     ) : ObjectProperty() {
 

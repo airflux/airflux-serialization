@@ -19,8 +19,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.`object`.readNullable
@@ -37,14 +37,14 @@ public fun <T : Any> nullable(name: String, reader: Reader<T>): ObjectPropertySp
 
 public fun <T : Any> nullable(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
-        path = JsPaths(path),
+        path = PropertyPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
             readNullable(context, lookup, reader)
         }
     )
 
-public fun <T : Any> nullable(paths: JsPaths, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
+public fun <T : Any> nullable(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
         path = paths,
         reader = Reader { context, location, input ->

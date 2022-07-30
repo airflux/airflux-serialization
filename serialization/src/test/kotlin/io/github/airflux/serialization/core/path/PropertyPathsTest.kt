@@ -20,7 +20,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class JsPathsTest : FreeSpec() {
+internal class PropertyPathsTest : FreeSpec() {
 
     companion object {
         private val pathUser = PropertyPath("user")
@@ -30,8 +30,8 @@ internal class JsPathsTest : FreeSpec() {
 
     init {
 
-        "The JsPaths type" - {
-            val paths = JsPaths(pathUser)
+        "The PropertyPaths type" - {
+            val paths = PropertyPaths(pathUser)
 
             "after creating" - {
 
@@ -80,7 +80,7 @@ internal class JsPathsTest : FreeSpec() {
                 }
 
                 "and adding a unique paths" - {
-                    val updatedPaths = paths.append(JsPaths(pathId, pathName))
+                    val updatedPaths = paths.append(PropertyPaths(pathId, pathName))
 
                     "should be non-empty" {
                         updatedPaths.items.isNotEmpty() shouldBe true
@@ -102,7 +102,7 @@ internal class JsPathsTest : FreeSpec() {
                 "and adding a non-unique paths" - {
 
                     "all adding elements is a non-unique" - {
-                        val updatedPaths = paths.append(JsPaths(pathUser))
+                        val updatedPaths = paths.append(PropertyPaths(pathUser))
 
                         "should return origin instance" {
                             updatedPaths shouldBe paths
@@ -110,7 +110,7 @@ internal class JsPathsTest : FreeSpec() {
                     }
 
                     "some adding elements is a non-unique" - {
-                        val updatedPaths = paths.append(JsPaths(pathUser, pathId))
+                        val updatedPaths = paths.append(PropertyPaths(pathUser, pathId))
 
                         "should be non-empty" {
                             updatedPaths.items.isNotEmpty() shouldBe true
@@ -132,7 +132,7 @@ internal class JsPathsTest : FreeSpec() {
             }
 
             "calling the fold function should return a folding value" {
-                val result = JsPaths(pathUser)
+                val result = PropertyPaths(pathUser)
                     .append(pathId)
                     .fold({ path -> path.toString() }) { acc, path -> "$acc, $path" }
 

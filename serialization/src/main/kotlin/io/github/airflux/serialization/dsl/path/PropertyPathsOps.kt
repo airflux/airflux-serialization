@@ -16,9 +16,9 @@
 
 package io.github.airflux.serialization.dsl.path
 
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 
-public infix fun String.or(alt: String): JsPaths = JsPaths(PropertyPath(this), PropertyPath(alt))
-public infix fun JsPaths.or(path: PropertyPath): JsPaths = append(path)
-public infix fun JsPaths.or(paths: JsPaths): JsPaths = append(paths)
+public infix fun String.or(alt: String): PropertyPaths = PropertyPaths(PropertyPath(this), PropertyPath(alt))
+public infix fun PropertyPaths.or(path: PropertyPath): PropertyPaths = append(path)
+public infix fun PropertyPaths.or(paths: PropertyPaths): PropertyPaths = append(paths)

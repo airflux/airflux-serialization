@@ -18,8 +18,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -157,7 +157,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 val idPath = PropertyPath("id")
                 val identifierPath = PropertyPath("identifier")
                 val spec = nullableWithDefault(
-                    paths = JsPaths(idPath, identifierPath),
+                    paths = PropertyPaths(idPath, identifierPath),
                     reader = StringReader,
                     default = DEFAULT
                 )
@@ -216,7 +216,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = ObjectPropertySpec.NullableWithDefault(path = JsPaths(PropertyPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.NullableWithDefault(path = PropertyPaths(PropertyPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
@@ -264,7 +264,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val spec = ObjectPropertySpec.NullableWithDefault(path = JsPaths(PropertyPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.NullableWithDefault(path = PropertyPaths(PropertyPath("id")), reader = StringReader)
                 val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when the reader has successfully read" - {

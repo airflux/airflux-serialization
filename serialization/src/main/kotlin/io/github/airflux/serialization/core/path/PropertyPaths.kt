@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.core.path
 
 @Suppress("unused")
-public class JsPaths private constructor(public val items: List<PropertyPath>) {
+public class PropertyPaths private constructor(public val items: List<PropertyPath>) {
 
     public constructor(path: PropertyPath, vararg other: PropertyPath) : this(path, other.asList())
     public constructor(path: PropertyPath, other: List<PropertyPath>) : this(listOf(path) + other)
 
-    public fun append(path: PropertyPath): JsPaths = if (path in items) this else JsPaths(items + path)
-    public fun append(paths: JsPaths): JsPaths {
+    public fun append(path: PropertyPath): PropertyPaths = if (path in items) this else PropertyPaths(items + path)
+    public fun append(paths: PropertyPaths): PropertyPaths {
         val newPaths = paths.items.filter { path -> path !in items }
-        return if (newPaths.isEmpty()) this else JsPaths(items + newPaths)
+        return if (newPaths.isEmpty()) this else PropertyPaths(items + newPaths)
     }
 
     public inline fun <R> fold(initial: (PropertyPath) -> R, operation: (acc: R, PropertyPath) -> R): R {

@@ -18,8 +18,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
@@ -165,7 +165,7 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
             "when creating the instance by a multi-path" - {
                 val idPath = PropertyPath("id")
                 val identifierPath = PropertyPath("identifier")
-                val spec = required(paths = JsPaths(idPath, identifierPath), reader = StringReader)
+                val spec = required(paths = PropertyPaths(idPath, identifierPath), reader = StringReader)
 
                 "then the paths parameter must contain only the passed paths" {
                     spec.path.items shouldContainExactly listOf(idPath, identifierPath)
@@ -236,7 +236,7 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = ObjectPropertySpec.Required(path = JsPaths(PropertyPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.Required(path = PropertyPaths(PropertyPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {

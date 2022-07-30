@@ -19,8 +19,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.`object`.readRequired
@@ -35,14 +35,14 @@ public fun <T : Any> required(name: String, reader: Reader<T>): ObjectPropertySp
 
 public fun <T : Any> required(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Required<T> =
     ObjectPropertySpec.Required(
-        path = JsPaths(path),
+        path = PropertyPaths(path),
         reader = { context, location, input ->
             val lookup = input.lookup(location, path)
             readRequired(context, lookup, reader)
         }
     )
 
-public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): ObjectPropertySpec.Required<T> =
+public fun <T : Any> required(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Required<T> =
     ObjectPropertySpec.Required(
         path = paths,
         reader = Reader { context, location, input ->
