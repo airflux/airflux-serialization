@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification
 
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -50,7 +50,7 @@ public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): ObjectProperty
             val failures = paths.items
                 .map { path ->
                     val lookup = input.lookup(location, path)
-                    if (lookup is JsLookup.Defined) return@Reader readRequired(context, lookup, reader)
+                    if (lookup is Lookup.Defined) return@Reader readRequired(context, lookup, reader)
                     JsResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
             failures.merge()

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -46,7 +46,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
             "when the element is defined" - {
 
                 "when the value of the element is not the NullNode" - {
-                    val from: JsLookup = JsLookup.Defined(location = LOCATION, value = StringNode(VALUE))
+                    val from: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
                         val result: JsResult<String?> =
@@ -56,7 +56,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
                 }
 
                 "when the value of the element is the NullNode" - {
-                    val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), NullNode)
+                    val from: Lookup = Lookup.Defined(location = JsLocation.empty.append("name"), NullNode)
 
                     "then should return the default value" {
                         val result: JsResult<String?> =
@@ -67,7 +67,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
             }
 
             "when the element is undefined" - {
-                val from: JsLookup = JsLookup.Undefined(location = LOCATION)
+                val from: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the default value" {
                     val result: JsResult<String?> =

@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.`object`
 
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -25,20 +25,20 @@ import io.github.airflux.serialization.core.value.NullNode
 /**
  * Reads required field or return default if a field is not found.
  *
- * - If a node is found with a value no 'null' ([from] is [JsLookup.Defined]) then applies [reader]
- * - If a node is found with a value 'null' ([from] is [JsLookup.Defined]) then returns [defaultValue]
- * - If a node is not found ([from] is [JsLookup.Undefined]) then returns [defaultValue]
+ * - If a node is found with a value no 'null' ([from] is [Lookup.Defined]) then applies [reader]
+ * - If a node is found with a value 'null' ([from] is [Lookup.Defined]) then returns [defaultValue]
+ * - If a node is not found ([from] is [Lookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readWithDefault(
     context: ReaderContext,
-    from: JsLookup,
+    from: Lookup,
     using: Reader<T>,
     defaultValue: () -> T
 ): JsResult<T> {
 
     fun <T : Any> readWithDefault(
         context: ReaderContext,
-        from: JsLookup.Defined,
+        from: Lookup.Defined,
         using: Reader<T>,
         defaultValue: () -> T
     ): JsResult<T> =
@@ -48,7 +48,7 @@ public fun <T : Any> readWithDefault(
             using.read(context, from.location, from.value)
 
     return when (from) {
-        is JsLookup.Defined -> readWithDefault(context, from, using, defaultValue)
-        is JsLookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
+        is Lookup.Defined -> readWithDefault(context, from, using, defaultValue)
+        is Lookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
     }
 }

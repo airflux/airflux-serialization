@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification
 
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -54,10 +54,10 @@ public fun <T : Any> optionalWithDefault(
     ObjectPropertySpec.OptionalWithDefault(
         path = paths,
         reader = { context, location, input ->
-            val lookup: JsLookup = paths.fold(
+            val lookup: Lookup = paths.fold(
                 initial = { path -> input.lookup(location, path) },
                 operation = { lookup, path ->
-                    if (lookup is JsLookup.Defined) return@fold lookup
+                    if (lookup is Lookup.Defined) return@fold lookup
                     input.lookup(location, path)
                 }
             )

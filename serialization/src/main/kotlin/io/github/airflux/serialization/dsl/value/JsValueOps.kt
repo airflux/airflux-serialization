@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.value
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.reader.Reader
@@ -29,5 +29,5 @@ import io.github.airflux.serialization.core.value.ValueNode
 public fun <T : Any> ValueNode.deserialization(context: ReaderContext, reader: Reader<T>): JsResult<T> =
     reader.read(context, JsLocation.empty, this)
 
-public operator fun ValueNode.div(key: String): JsLookup = this.lookup(JsLocation.empty, PathElement.Key(key))
-public operator fun ValueNode.div(idx: Int): JsLookup = this.lookup(JsLocation.empty, PathElement.Idx(idx))
+public operator fun ValueNode.div(key: String): Lookup = this.lookup(JsLocation.empty, PathElement.Key(key))
+public operator fun ValueNode.div(idx: Int): Lookup = this.lookup(JsLocation.empty, PathElement.Idx(idx))

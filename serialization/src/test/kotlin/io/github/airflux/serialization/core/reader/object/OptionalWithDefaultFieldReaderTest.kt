@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -43,7 +43,7 @@ internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
         "The readOptional (with default) function" - {
 
             "when the element is defined" - {
-                val from: JsLookup = JsLookup.Defined(location = LOCATION, value = StringNode(VALUE))
+                val from: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                 "then should return the result of applying the reader" {
                     val result: JsResult<String?> =
@@ -54,7 +54,7 @@ internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
             }
 
             "when the element is undefined" - {
-                val from: JsLookup = JsLookup.Undefined(location = LOCATION)
+                val from: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the default value" {
                     val result: JsResult<String?> =

@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.`object`
 
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -25,25 +25,25 @@ import io.github.airflux.serialization.core.value.NullNode
 /**
  * Reads nullable field or return default if a field is not found.
  *
- * - If a node is found with a value no 'null' ([from] is [JsLookup.Defined]) then applies [reader]
- * - If a node is found with a value 'null' ([from] is [JsLookup.Defined]) then returns 'null'
- * - If a node is not found ([from] is [JsLookup.Undefined]) then returns [defaultValue]
+ * - If a node is found with a value no 'null' ([from] is [Lookup.Defined]) then applies [reader]
+ * - If a node is found with a value 'null' ([from] is [Lookup.Defined]) then returns 'null'
+ * - If a node is not found ([from] is [Lookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readNullable(
     context: ReaderContext,
-    from: JsLookup,
+    from: Lookup,
     using: Reader<T>,
     defaultValue: () -> T?
 ): JsResult<T?> {
 
-    fun <T : Any> readNullable(context: ReaderContext, from: JsLookup.Defined, using: Reader<T>): JsResult<T?> =
+    fun <T : Any> readNullable(context: ReaderContext, from: Lookup.Defined, using: Reader<T>): JsResult<T?> =
         if (from.value is NullNode)
             JsResult.Success(location = from.location, value = null)
         else
             using.read(context, from.location, from.value)
 
     return when (from) {
-        is JsLookup.Defined -> readNullable(context, from, using)
-        is JsLookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
+        is Lookup.Defined -> readNullable(context, from, using)
+        is Lookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
     }
 }
