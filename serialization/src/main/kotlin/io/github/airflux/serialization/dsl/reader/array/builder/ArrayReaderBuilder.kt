@@ -32,8 +32,8 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.builder.ArrayReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayItemSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilder
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilderInstance
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilder
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidators
 import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 
@@ -42,15 +42,15 @@ public fun <T> arrayReader(
     block: ArrayReaderBuilder<T>.() -> ResultBuilder<T>
 ): ArrayReader<T> {
     val readerBuilder: ArrayReaderBuilder<T> =
-        ArrayReaderBuilder(JsArrayReaderValidatorsBuilderInstance(configuration))
+        ArrayReaderBuilder(ArrayReaderValidatorsBuilderInstance(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
 public class ArrayReaderBuilder<T> internal constructor(
-    private val validatorsBuilder: JsArrayReaderValidatorsBuilderInstance
-) : JsArrayReaderValidatorsBuilder by validatorsBuilder {
+    private val validatorsBuilder: ArrayReaderValidatorsBuilderInstance
+) : ArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
         public fun build(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult<List<T>>

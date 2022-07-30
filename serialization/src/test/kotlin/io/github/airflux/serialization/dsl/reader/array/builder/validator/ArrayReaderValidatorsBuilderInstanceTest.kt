@@ -23,15 +23,15 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class JsArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
+internal class ArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
 
     init {
 
-        "The JsArrayReaderValidatorsBuilderInstance type" - {
+        "The ArrayReaderValidatorsBuilderInstance type" - {
 
             "when the config is not contained any object validators" - {
                 val config = ArrayReaderConfig.Builder().build()
-                val validatorsBuilder = JsArrayReaderValidatorsBuilderInstance(config)
+                val validatorsBuilder = ArrayReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
                     val validators = validatorsBuilder.build()
@@ -72,7 +72,7 @@ internal class JsArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
                         }
                     }
                     .build()
-                val validatorsBuilder = JsArrayReaderValidatorsBuilderInstance(config)
+                val validatorsBuilder = ArrayReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
                     val validators = validatorsBuilder.build()
