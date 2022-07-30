@@ -31,8 +31,8 @@ internal class ArrayReaderValidatorsBuilderInstance(
         builder.block()
     }
 
-    fun build(): JsArrayValidators {
+    fun build(): ArrayValidators {
         val builders = builder.build()
-        return JsArrayValidators(builders.map { builder -> builder.build() })
+        return ArrayValidators(builders.map { builder -> builder.build() })
     }
 }

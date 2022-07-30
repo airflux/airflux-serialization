@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.validator
 
-public class JsArrayValidators private constructor(items: List<ArrayValidator>) : List<ArrayValidator> by items {
+public class ArrayValidators private constructor(items: List<ArrayValidator>) : List<ArrayValidator> by items {
 
     public companion object {
 
-        internal operator fun invoke(items: List<ArrayValidator>): JsArrayValidators =
-            if (items.isEmpty()) EMPTY else JsArrayValidators(items)
+        internal operator fun invoke(items: List<ArrayValidator>): ArrayValidators =
+            if (items.isEmpty()) EMPTY else ArrayValidators(items)
 
-        private val EMPTY = JsArrayValidators(emptyList())
+        private val EMPTY = ArrayValidators(emptyList())
     }
 }

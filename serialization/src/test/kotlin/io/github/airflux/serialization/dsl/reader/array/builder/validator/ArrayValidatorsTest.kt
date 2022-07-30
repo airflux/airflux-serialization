@@ -21,16 +21,16 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayValidatorsTest : FreeSpec() {
+internal class ArrayValidatorsTest : FreeSpec() {
 
     init {
 
-        "The JsArrayValidators type" - {
+        "The ArrayValidators type" - {
 
             "when some validators was passed during initialize" - {
                 val firstValidatorBuilder: ArrayValidator = DummyArrayValidator(result = null)
                 val secondValidatorBuilder: ArrayValidator = DummyArrayValidator(result = null)
-                val validators = JsArrayValidators(listOf(firstValidatorBuilder, secondValidatorBuilder))
+                val validators = ArrayValidators(listOf(firstValidatorBuilder, secondValidatorBuilder))
 
                 "then the validators container should contain the passed validators" {
                     validators shouldContainExactly listOf(firstValidatorBuilder, secondValidatorBuilder)
@@ -38,10 +38,10 @@ internal class JsArrayValidatorsTest : FreeSpec() {
             }
 
             "when any validators was not passed during initialize" - {
-                val validators = JsArrayValidators(emptyList())
+                val validators = ArrayValidators(emptyList())
 
                 "then should be returns empty instance" {
-                    validators shouldBe JsArrayValidators(emptyList())
+                    validators shouldBe ArrayValidators(emptyList())
                 }
             }
         }

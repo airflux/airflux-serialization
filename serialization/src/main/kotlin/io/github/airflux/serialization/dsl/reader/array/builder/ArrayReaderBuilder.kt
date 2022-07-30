@@ -34,7 +34,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.item.specificati
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilderInstance
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidators
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidators
 import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 
 public fun <T> arrayReader(
@@ -94,7 +94,7 @@ public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayIte
 }
 
 internal fun <T> buildObjectReader(
-    validators: JsArrayValidators,
+    validators: ArrayValidators,
     resultBuilder: ResultBuilder<T>
 ): ArrayReader<T> =
     ArrayReader { context, location, input ->
