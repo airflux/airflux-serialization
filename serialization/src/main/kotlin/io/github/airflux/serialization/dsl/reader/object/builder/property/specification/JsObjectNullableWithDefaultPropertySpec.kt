@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readNullable
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -30,14 +30,14 @@ import io.github.airflux.serialization.core.reader.validator.JsValidator
 
 public fun <T : Any> nullableWithDefault(
     name: String,
-    reader: JsReader<T>,
+    reader: Reader<T>,
     default: () -> T
 ): JsObjectPropertySpec.NullableWithDefault<T> =
     nullableWithDefault(JsPath(name), reader, default)
 
 public fun <T : Any> nullableWithDefault(
     path: JsPath,
-    reader: JsReader<T>,
+    reader: Reader<T>,
     default: () -> T
 ): JsObjectPropertySpec.NullableWithDefault<T> =
     JsObjectPropertySpec.NullableWithDefault(
@@ -50,7 +50,7 @@ public fun <T : Any> nullableWithDefault(
 
 public fun <T : Any> nullableWithDefault(
     paths: JsPaths,
-    reader: JsReader<T>,
+    reader: Reader<T>,
     default: () -> T
 ): JsObjectPropertySpec.NullableWithDefault<T> =
     JsObjectPropertySpec.NullableWithDefault(

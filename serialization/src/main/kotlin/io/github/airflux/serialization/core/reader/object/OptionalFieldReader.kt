@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 
@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
  * - If a node is found ([from] is [JsLookup.Defined]) then applies [reader]
  * - If a node is not found ([from] is [JsLookup.Undefined]) then returns 'null'
  */
-public fun <T : Any> readOptional(context: ReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> =
+public fun <T : Any> readOptional(context: ReaderContext, from: JsLookup, using: Reader<T>): JsResult<T?> =
     when (from) {
         is JsLookup.Defined -> using.read(context, from.location, from.value)
         is JsLookup.Undefined -> JsResult.Success(location = from.location, value = null)

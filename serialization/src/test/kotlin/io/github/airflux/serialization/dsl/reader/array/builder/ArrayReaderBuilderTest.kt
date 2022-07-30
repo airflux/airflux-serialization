@@ -34,7 +34,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.item.specificati
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class JsArrayReaderBuilderTest : FreeSpec() {
+internal class ArrayReaderBuilderTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "items"
@@ -55,7 +55,7 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsArrayReaderBuilder type" - {
+        "The ArrayReaderBuilder type" - {
 
             "when no errors in the reader" - {
                 val reader = arrayReader<String> {

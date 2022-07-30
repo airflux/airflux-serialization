@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property
 
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.JsObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
@@ -31,22 +31,22 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
     companion object {
         private val REQUIRED_PATH = JsPaths(JsPath("required-id"))
-        private val REQUIRED_READER = JsReader { _, location, _ -> JsResult.Success(location, "") }
+        private val REQUIRED_READER = Reader { _, location, _ -> JsResult.Success(location, "") }
 
         private val DEFAULTABLE_PATH = JsPaths(JsPath("defaultable-id"))
-        private val DEFAULTABLE_READER = JsReader { _, location, _ -> JsResult.Success(location, "") }
+        private val DEFAULTABLE_READER = Reader { _, location, _ -> JsResult.Success(location, "") }
 
         private val OPTIONAL_PATH = JsPaths(JsPath("optional-id"))
-        private val OPTIONAL_READER = JsReader { _, location, _ -> JsResult.Success(location, "") }
+        private val OPTIONAL_READER = Reader { _, location, _ -> JsResult.Success(location, "") }
 
         private val OPTIONAL_WITH_DEFAULT_PATH = JsPaths(JsPath("optional-with-default-id"))
-        private val OPTIONAL_WITH_DEFAULT_READER = JsReader { _, location, _ -> JsResult.Success(location, "") }
+        private val OPTIONAL_WITH_DEFAULT_READER = Reader { _, location, _ -> JsResult.Success(location, "") }
 
         private val NULLABLE_PATH = JsPaths(JsPath("nullable-id"))
-        private val NULLABLE_READER = JsReader { _, location, _ -> JsResult.Success(location, "") }
+        private val NULLABLE_READER = Reader { _, location, _ -> JsResult.Success(location, "") }
 
         private val NULLABLE_WITH_DEFAULT_PATH = JsPaths(JsPath("nullable-with-default-id"))
-        private val NULLABLE_WITH_DEFAULT_READER = JsReader { _, location, _ -> JsResult.Success(location, "") }
+        private val NULLABLE_WITH_DEFAULT_READER = Reader { _, location, _ -> JsResult.Success(location, "") }
     }
 
     init {

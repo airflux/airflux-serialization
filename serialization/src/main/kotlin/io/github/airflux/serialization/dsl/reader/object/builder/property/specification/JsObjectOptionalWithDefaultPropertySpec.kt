@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readOptional
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
@@ -28,14 +28,14 @@ import io.github.airflux.serialization.core.reader.validator.JsValidator
 
 public fun <T : Any> optionalWithDefault(
     name: String,
-    reader: JsReader<T>,
+    reader: Reader<T>,
     default: () -> T
 ): JsObjectPropertySpec.OptionalWithDefault<T> =
     optionalWithDefault(JsPath(name), reader, default)
 
 public fun <T : Any> optionalWithDefault(
     path: JsPath,
-    reader: JsReader<T>,
+    reader: Reader<T>,
     default: () -> T
 ): JsObjectPropertySpec.OptionalWithDefault<T> =
     JsObjectPropertySpec.OptionalWithDefault(
@@ -48,7 +48,7 @@ public fun <T : Any> optionalWithDefault(
 
 public fun <T : Any> optionalWithDefault(
     paths: JsPaths,
-    reader: JsReader<T>,
+    reader: Reader<T>,
     default: () -> T
 ): JsObjectPropertySpec.OptionalWithDefault<T> =
     JsObjectPropertySpec.OptionalWithDefault(

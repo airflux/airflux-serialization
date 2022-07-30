@@ -16,15 +16,15 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.item.specification
 
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 
 public fun <T> prefixItems(item: JsArrayItemSpec<T>, vararg items: JsArrayItemSpec<T>): JsArrayPrefixItemsSpec<T> =
     JsArrayPrefixItemsSpec(item = item, items = items)
 
-public class JsArrayPrefixItemsSpec<out T> private constructor(internal val readers: List<JsReader<T>>) {
+public class JsArrayPrefixItemsSpec<out T> private constructor(internal val readers: List<Reader<T>>) {
 
     internal constructor(item: JsArrayItemSpec<T>, vararg items: JsArrayItemSpec<T>) : this(
-        mutableListOf<JsReader<T>>()
+        mutableListOf<Reader<T>>()
             .apply {
                 add(item.reader)
                 items.forEach { add(it.reader) }

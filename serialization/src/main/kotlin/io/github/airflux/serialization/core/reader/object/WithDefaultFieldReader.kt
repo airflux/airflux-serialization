@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.NullNode
@@ -32,14 +32,14 @@ import io.github.airflux.serialization.core.value.NullNode
 public fun <T : Any> readWithDefault(
     context: ReaderContext,
     from: JsLookup,
-    using: JsReader<T>,
+    using: Reader<T>,
     defaultValue: () -> T
 ): JsResult<T> {
 
     fun <T : Any> readWithDefault(
         context: ReaderContext,
         from: JsLookup.Defined,
-        using: JsReader<T>,
+        using: Reader<T>,
         defaultValue: () -> T
     ): JsResult<T> =
         if (from.value is NullNode)

@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.`object`.readNullable
 import io.github.airflux.serialization.core.reader.or
@@ -32,10 +32,10 @@ import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 
-public fun <T : Any> nullable(name: String, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
+public fun <T : Any> nullable(name: String, reader: Reader<T>): JsObjectPropertySpec.Nullable<T> =
     nullable(JsPath(name), reader)
 
-public fun <T : Any> nullable(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
+public fun <T : Any> nullable(path: JsPath, reader: Reader<T>): JsObjectPropertySpec.Nullable<T> =
     JsObjectPropertySpec.Nullable(
         path = JsPaths(path),
         reader = { context, location, input ->
@@ -44,15 +44,15 @@ public fun <T : Any> nullable(path: JsPath, reader: JsReader<T>): JsObjectProper
         }
     )
 
-public fun <T : Any> nullable(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Nullable<T> =
+public fun <T : Any> nullable(paths: JsPaths, reader: Reader<T>): JsObjectPropertySpec.Nullable<T> =
     JsObjectPropertySpec.Nullable(
         path = paths,
-        reader = JsReader { context, location, input ->
+        reader = Reader { context, location, input ->
             val errorBuilder = context[PathMissingErrorBuilder]
             val failures = paths.items
                 .map { path ->
                     val lookup = input.lookup(location, path)
-                    if (lookup is JsLookup.Defined) return@JsReader readNullable(context, lookup, reader)
+                    if (lookup is JsLookup.Defined) return@Reader readNullable(context, lookup, reader)
                     JsResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
             failures.merge()

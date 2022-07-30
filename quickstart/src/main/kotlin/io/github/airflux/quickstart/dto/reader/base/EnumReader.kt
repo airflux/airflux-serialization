@@ -1,11 +1,11 @@
 package io.github.airflux.quickstart.dto.reader.base
 
 import io.github.airflux.quickstart.json.error.JsonErrors
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.result.JsResult
 
-inline fun <reified T : Enum<T>> JsReader<String>.asEnum(): JsReader<T> =
-    JsReader { context, location, input ->
+inline fun <reified T : Enum<T>> Reader<String>.asEnum(): Reader<T> =
+    Reader { context, location, input ->
         read(context, location, input)
             .asEnum()
     }

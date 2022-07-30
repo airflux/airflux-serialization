@@ -16,14 +16,14 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.item.specification
 
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 import io.github.airflux.serialization.core.value.NullNode
 
-public fun <T : Any> nullable(reader: JsReader<T>): JsArrayItemSpec.Nullable<T?> =
+public fun <T : Any> nullable(reader: Reader<T>): JsArrayItemSpec.Nullable<T?> =
     JsArrayItemSpec.Nullable(
         reader = { context, location, input ->
             if (input is NullNode)

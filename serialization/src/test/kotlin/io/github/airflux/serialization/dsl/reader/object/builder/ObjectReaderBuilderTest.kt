@@ -43,7 +43,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectReaderBuilderTest : FreeSpec() {
+internal class ObjectReaderBuilderTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "name"
@@ -58,7 +58,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsObjectReaderBuilder type" - {
+        "The ObjectReaderBuilder type" - {
 
             "when no errors in the reader" - {
                 val validator = DummyObjectValidatorBuilder(
@@ -206,7 +206,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                     val builder: (ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<String>) = { _, location ->
                         JsResult.Success(location = location, value = USER_NAME)
                     }
-                    val resultBuilder: JsObjectReaderBuilder.ResultBuilder<String> = returns(builder)
+                    val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
 
                     "then call the builder should return a result" {
                         val result = resultBuilder.build(CONTEXT, LOCATION, objectValuesMap)
@@ -220,7 +220,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                         { _, _ ->
                             throw IllegalStateException()
                         }
-                    val resultBuilder: JsObjectReaderBuilder.ResultBuilder<String> = returns(builder)
+                    val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
 
                     "when the context contains the exception handler" - {
                         val exceptionHandler: ExceptionsHandler = ExceptionsHandlerBuilder()

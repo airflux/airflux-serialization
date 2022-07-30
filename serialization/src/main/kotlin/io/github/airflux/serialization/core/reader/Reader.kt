@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.validator.JsValidator
 import io.github.airflux.serialization.core.value.ValueNode
 
 @Suppress("unused")
-public fun interface JsReader<out T> {
+public fun interface Reader<out T> {
 
     /**
      * Convert the [ValueNode] into a T
@@ -36,26 +36,26 @@ public fun interface JsReader<out T> {
     public fun read(context: ReaderContext, location: JsLocation, input: ValueNode): JsResult<T>
 
     /**
-     * Create a new [JsReader] which maps the value produced by this [JsReader].
+     * Create a new [Reader] which maps the value produced by this [Reader].
      *
-     * @param[R] The type of the value produced by the new [JsReader].
+     * @param[R] The type of the value produced by the new [Reader].
      * @param transform the function applied on the result of the current instance,
      * if successful
-     * @return A new [JsReader] with the updated behavior.
+     * @return A new [Reader] with the updated behavior.
      */
-    public infix fun <R> map(transform: (T) -> R): JsReader<R> =
-        JsReader { context, location, input -> read(context, location, input).map(transform) }
+    public infix fun <R> map(transform: (T) -> R): Reader<R> =
+        Reader { context, location, input -> read(context, location, input).map(transform) }
 }
 
 /**
- * Creates a new [JsReader], based on this one, which first executes this
- * [JsReader] logic then, if this [JsReader] resulted in a [JsError], runs
- * the other [JsReader] on the [ValueNode].
+ * Creates a new [Reader], based on this one, which first executes this
+ * [Reader] logic then, if this [Reader] resulted in a [JsError], runs
+ * the other [Reader] on the [ValueNode].
  *
- * @param other the [JsReader] to run if this one gets a [JsError]
- * @return A new [JsReader] with the updated behavior.
+ * @param other the [Reader] to run if this one gets a [JsError]
+ * @return A new [Reader] with the updated behavior.
  */
-public infix fun <T> JsReader<T>.or(other: JsReader<T>): JsReader<T> = JsReader { context, location, input ->
+public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { context, location, input ->
     read(context, location, input)
         .recovery { failure ->
             other.read(context, location, input)
@@ -63,14 +63,14 @@ public infix fun <T> JsReader<T>.or(other: JsReader<T>): JsReader<T> = JsReader 
         }
 }
 
-public infix fun <T> JsReader<T?>.filter(predicate: JsPredicate<T>): JsReader<T?> =
-    JsReader { context, location, input ->
+public infix fun <T> Reader<T?>.filter(predicate: JsPredicate<T>): Reader<T?> =
+    Reader { context, location, input ->
         this@filter.read(context, location, input)
             .filter(context, predicate)
     }
 
-public infix fun <T> JsReader<T>.validation(validator: JsValidator<T>): JsReader<T> =
-    JsReader { context, location, input ->
+public infix fun <T> Reader<T>.validation(validator: JsValidator<T>): Reader<T> =
+    Reader { context, location, input ->
         this@validation.read(context, location, input)
             .validation(context, validator)
     }

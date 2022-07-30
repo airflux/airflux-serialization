@@ -17,39 +17,39 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification
 
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 
 public sealed class JsObjectPropertySpec<T> {
     public abstract val path: JsPaths
-    public abstract val reader: JsReader<T>
+    public abstract val reader: Reader<T>
 
     public class Required<T : Any> internal constructor(
         override val path: JsPaths,
-        override val reader: JsReader<T>
+        override val reader: Reader<T>
     ) : JsObjectPropertySpec<T>()
 
     public class Defaultable<T : Any> internal constructor(
         override val path: JsPaths,
-        override val reader: JsReader<T>
+        override val reader: Reader<T>
     ) : JsObjectPropertySpec<T>()
 
     public class Optional<T : Any> internal constructor(
         override val path: JsPaths,
-        override val reader: JsReader<T?>
+        override val reader: Reader<T?>
     ) : JsObjectPropertySpec<T?>()
 
     public class OptionalWithDefault<T : Any> internal constructor(
         override val path: JsPaths,
-        override val reader: JsReader<T>
+        override val reader: Reader<T>
     ) : JsObjectPropertySpec<T>()
 
     public class Nullable<T : Any> internal constructor(
         override val path: JsPaths,
-        override val reader: JsReader<T?>
+        override val reader: Reader<T?>
     ) : JsObjectPropertySpec<T?>()
 
     public class NullableWithDefault<T : Any> internal constructor(
         override val path: JsPaths,
-        override val reader: JsReader<T?>
+        override val reader: Reader<T?>
     ) : JsObjectPropertySpec<T?>()
 }

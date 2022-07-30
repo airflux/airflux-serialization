@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -35,7 +35,7 @@ internal class NullableFieldReaderTest : FreeSpec() {
         private val CONTEXT = ReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
         private val LOCATION = JsLocation.empty.append("name")
         private const val VALUE = "user-1"
-        private val READER: JsReader<String> =
+        private val READER: Reader<String> =
             DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }
     }
 

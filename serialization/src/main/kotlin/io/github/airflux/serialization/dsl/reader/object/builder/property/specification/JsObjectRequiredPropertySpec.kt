@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.`object`.readRequired
 import io.github.airflux.serialization.core.reader.or
@@ -30,10 +30,10 @@ import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Compa
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 
-public fun <T : Any> required(name: String, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
+public fun <T : Any> required(name: String, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
     required(JsPath(name), reader)
 
-public fun <T : Any> required(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
+public fun <T : Any> required(path: JsPath, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
     JsObjectPropertySpec.Required(
         path = JsPaths(path),
         reader = { context, location, input ->
@@ -42,15 +42,15 @@ public fun <T : Any> required(path: JsPath, reader: JsReader<T>): JsObjectProper
         }
     )
 
-public fun <T : Any> required(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Required<T> =
+public fun <T : Any> required(paths: JsPaths, reader: Reader<T>): JsObjectPropertySpec.Required<T> =
     JsObjectPropertySpec.Required(
         path = paths,
-        reader = JsReader { context, location, input ->
+        reader = Reader { context, location, input ->
             val errorBuilder = context[PathMissingErrorBuilder]
             val failures = paths.items
                 .map { path ->
                     val lookup = input.lookup(location, path)
-                    if (lookup is JsLookup.Defined) return@JsReader readRequired(context, lookup, reader)
+                    if (lookup is JsLookup.Defined) return@Reader readRequired(context, lookup, reader)
                     JsResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
             failures.merge()

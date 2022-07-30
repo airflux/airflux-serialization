@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array.builder
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.JsArrayReader
+import io.github.airflux.serialization.core.reader.ArrayReader
 import io.github.airflux.serialization.core.reader.array.readArray
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
@@ -29,7 +29,7 @@ import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilder.ResultBuilder
+import io.github.airflux.serialization.dsl.reader.array.builder.ArrayReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayItemSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayPrefixItemsSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayReaderValidatorsBuilder
@@ -39,16 +39,16 @@ import io.github.airflux.serialization.dsl.reader.config.JsArrayReaderConfig
 
 public fun <T> arrayReader(
     configuration: JsArrayReaderConfig = JsArrayReaderConfig.DEFAULT,
-    block: JsArrayReaderBuilder<T>.() -> ResultBuilder<T>
-): JsArrayReader<T> {
-    val readerBuilder: JsArrayReaderBuilder<T> =
-        JsArrayReaderBuilder(JsArrayReaderValidatorsBuilderInstance(configuration))
+    block: ArrayReaderBuilder<T>.() -> ResultBuilder<T>
+): ArrayReader<T> {
+    val readerBuilder: ArrayReaderBuilder<T> =
+        ArrayReaderBuilder(JsArrayReaderValidatorsBuilderInstance(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
-public class JsArrayReaderBuilder<T> internal constructor(
+public class ArrayReaderBuilder<T> internal constructor(
     private val validatorsBuilder: JsArrayReaderValidatorsBuilderInstance
 ) : JsArrayReaderValidatorsBuilder by validatorsBuilder {
 
@@ -56,7 +56,7 @@ public class JsArrayReaderBuilder<T> internal constructor(
         public fun build(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult<List<T>>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): JsArrayReader<T> {
+    internal fun build(resultBuilder: ResultBuilder<T>): ArrayReader<T> {
         val validators = validatorsBuilder.build()
         return buildObjectReader(validators, resultBuilder)
     }
@@ -96,11 +96,11 @@ public fun <T> returns(prefixItems: JsArrayPrefixItemsSpec<T>, items: JsArrayIte
 internal fun <T> buildObjectReader(
     validators: JsArrayValidators,
     resultBuilder: ResultBuilder<T>
-): JsArrayReader<T> =
-    JsArrayReader { context, location, input ->
+): ArrayReader<T> =
+    ArrayReader { context, location, input ->
         if (input !is ArrayNode<*>) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@JsArrayReader JsResult.Failure(
+            return@ArrayReader JsResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.ARRAY, input.type)
             )
@@ -111,7 +111,7 @@ internal fun <T> buildObjectReader(
         validators.forEach { validator ->
             val failure = validator.validate(context, location, input)
             if (failure != null) {
-                if (context.failFast) return@JsArrayReader failure
+                if (context.failFast) return@ArrayReader failure
                 failures.add(failure)
             }
         }
@@ -119,7 +119,7 @@ internal fun <T> buildObjectReader(
         resultBuilder.build(context, location, input)
             .fold(
                 ifFailure = { failure ->
-                    if (context.failFast) return@JsArrayReader failure
+                    if (context.failFast) return@ArrayReader failure
                     failures.add(failure)
                     failures.merge()
                 },

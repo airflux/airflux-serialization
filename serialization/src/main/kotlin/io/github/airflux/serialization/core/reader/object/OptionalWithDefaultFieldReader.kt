@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 
@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 public fun <T : Any> readOptional(
     context: ReaderContext,
     from: JsLookup,
-    using: JsReader<T>,
+    using: Reader<T>,
     defaultValue: () -> T
 ): JsResult<T> =
     when (from) {

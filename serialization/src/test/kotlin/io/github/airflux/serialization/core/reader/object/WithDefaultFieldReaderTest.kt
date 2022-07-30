@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.`object`
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.NullNode
@@ -34,7 +34,7 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
         private val LOCATION = JsLocation.empty.append("name")
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"
-        private val READER: JsReader<String> =
+        private val READER: Reader<String> =
             DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }
         private val DEFAULT = { DEFAULT_VALUE }
     }

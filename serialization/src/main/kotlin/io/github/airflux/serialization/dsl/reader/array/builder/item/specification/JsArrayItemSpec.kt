@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.item.specification
 
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 
 public sealed class JsArrayItemSpec<out T> {
-    public abstract val reader: JsReader<T>
+    public abstract val reader: Reader<T>
 
-    public class NonNullable<out T> internal constructor(override val reader: JsReader<T>) : JsArrayItemSpec<T>()
-    public class Nullable<out T> internal constructor(override val reader: JsReader<T?>) : JsArrayItemSpec<T?>()
+    public class NonNullable<out T> internal constructor(override val reader: Reader<T>) : JsArrayItemSpec<T>()
+    public class Nullable<out T> internal constructor(override val reader: Reader<T?>) : JsArrayItemSpec<T?>()
 }

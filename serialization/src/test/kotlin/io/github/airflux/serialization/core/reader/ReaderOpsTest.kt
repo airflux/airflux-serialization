@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsReaderOpsTest : FreeSpec() {
+internal class ReaderOpsTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
@@ -44,7 +44,7 @@ internal class JsReaderOpsTest : FreeSpec() {
         "The extension-function the filter" - {
 
             "when an original reader returns a result as a success" - {
-                val reader: JsReader<String> = DummyReader(
+                val reader: Reader<String> = DummyReader(
                     result = JsResult.Success(location = LOCATION, value = VALUE)
                 )
 
@@ -68,7 +68,7 @@ internal class JsReaderOpsTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a failure" - {
-                val reader: JsReader<String> = DummyReader(
+                val reader: Reader<String> = DummyReader(
                     result = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 )
 
@@ -83,7 +83,7 @@ internal class JsReaderOpsTest : FreeSpec() {
         "The extension-function the validation" - {
 
             "when an original reader returns a result as a success" - {
-                val reader: JsReader<String> = DummyReader(
+                val reader: Reader<String> = DummyReader(
                     result = JsResult.Success(location = LOCATION, value = VALUE)
                 )
 
@@ -113,7 +113,7 @@ internal class JsReaderOpsTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a failure" - {
-                val reader: JsReader<String> = DummyReader(
+                val reader: Reader<String> = DummyReader(
                     result = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 )
 

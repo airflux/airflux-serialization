@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -32,9 +32,9 @@ import io.github.airflux.serialization.core.value.NullNode
  * - If a node is not found ([from] is [JsLookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readNullable(context: ReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> {
+public fun <T : Any> readNullable(context: ReaderContext, from: JsLookup, using: Reader<T>): JsResult<T?> {
 
-    fun <T : Any> readNullable(context: ReaderContext, from: JsLookup.Defined, using: JsReader<T>): JsResult<T?> =
+    fun <T : Any> readNullable(context: ReaderContext, from: JsLookup.Defined, using: Reader<T>): JsResult<T?> =
         if (from.value is NullNode)
             JsResult.Success(location = from.location, value = null)
         else

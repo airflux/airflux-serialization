@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.JsObjectReader
+import io.github.airflux.serialization.core.reader.ObjectReader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
@@ -31,7 +31,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.config.JsObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
-import io.github.airflux.serialization.dsl.reader.`object`.builder.JsObjectReaderBuilder.ResultBuilder
+import io.github.airflux.serialization.dsl.reader.`object`.builder.ObjectReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
@@ -42,9 +42,9 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsO
 
 public fun <T> reader(
     configuration: JsObjectReaderConfig = JsObjectReaderConfig.DEFAULT,
-    block: JsObjectReaderBuilder<T>.() -> ResultBuilder<T>
-): JsObjectReader<T> {
-    val readerBuilder = JsObjectReaderBuilder<T>(
+    block: ObjectReaderBuilder<T>.() -> ResultBuilder<T>
+): ObjectReader<T> {
+    val readerBuilder = ObjectReaderBuilder<T>(
         JsObjectReaderPropertiesBuilderInstance(),
         JsObjectReaderValidatorsBuilderInstance(configuration)
     )
@@ -53,7 +53,7 @@ public fun <T> reader(
 }
 
 @AirfluxMarker
-public class JsObjectReaderBuilder<T> internal constructor(
+public class ObjectReaderBuilder<T> internal constructor(
     private val propertiesBuilder: JsObjectReaderPropertiesBuilderInstance,
     private val validatorsBuilder: JsObjectReaderValidatorsBuilderInstance
 ) : JsObjectReaderPropertiesBuilder by propertiesBuilder,
@@ -63,7 +63,7 @@ public class JsObjectReaderBuilder<T> internal constructor(
         public fun build(context: ReaderContext, location: JsLocation, objectValuesMap: ObjectValuesMap): JsResult<T>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): JsObjectReader<T> {
+    internal fun build(resultBuilder: ResultBuilder<T>): ObjectReader<T> {
         val properties: JsObjectProperties = propertiesBuilder.build()
         val validators: JsObjectValidators = validatorsBuilder.build(properties)
         return buildObjectReader(validators, properties, resultBuilder)
@@ -85,11 +85,11 @@ internal fun <T> buildObjectReader(
     validators: JsObjectValidators,
     properties: JsObjectProperties,
     resultBuilder: ResultBuilder<T>
-): JsObjectReader<T> =
-    JsObjectReader { context, location, input ->
+): ObjectReader<T> =
+    ObjectReader { context, location, input ->
         if (input !is StructNode) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@JsObjectReader JsResult.Failure(
+            return@ObjectReader JsResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.OBJECT, input.type)
             )
@@ -101,7 +101,7 @@ internal fun <T> buildObjectReader(
         validators.forEach { validator ->
             val failure = validator.validate(context, location, properties, input)
             if (failure != null) {
-                if (failFast) return@JsObjectReader failure
+                if (failFast) return@ObjectReader failure
                 failures.add(failure)
             }
         }
@@ -112,7 +112,7 @@ internal fun <T> buildObjectReader(
                     input.read(context, location, property)
                         .fold(
                             ifFailure = { failure ->
-                                if (failFast) return@JsObjectReader failure
+                                if (failFast) return@ObjectReader failure
                                 failures.add(failure)
                             },
                             ifSuccess = { value ->
@@ -122,7 +122,7 @@ internal fun <T> buildObjectReader(
                 }
             }
 
-        return@JsObjectReader if (failures.isEmpty())
+        return@ObjectReader if (failures.isEmpty())
             resultBuilder.build(context, location, objectValuesMap)
         else
             failures.merge()

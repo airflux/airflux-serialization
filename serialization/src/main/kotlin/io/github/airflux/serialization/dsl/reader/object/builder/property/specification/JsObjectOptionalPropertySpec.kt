@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readOptional
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -28,10 +28,10 @@ import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 
-public fun <T : Any> optional(name: String, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
+public fun <T : Any> optional(name: String, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
     optional(JsPath(name), reader)
 
-public fun <T : Any> optional(path: JsPath, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
+public fun <T : Any> optional(path: JsPath, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
     JsObjectPropertySpec.Optional(
         path = JsPaths(path),
         reader = { context, location, input ->
@@ -40,7 +40,7 @@ public fun <T : Any> optional(path: JsPath, reader: JsReader<T>): JsObjectProper
         }
     )
 
-public fun <T : Any> optional(paths: JsPaths, reader: JsReader<T>): JsObjectPropertySpec.Optional<T> =
+public fun <T : Any> optional(paths: JsPaths, reader: Reader<T>): JsObjectPropertySpec.Optional<T> =
     JsObjectPropertySpec.Optional(
         path = paths,
         reader = { context, location, input ->

@@ -16,4 +16,4 @@
 
 package io.github.airflux.serialization.core.reader
 
-public fun interface JsArrayReader<T> : JsReader<List<T>>
+public fun interface ArrayReader<T> : Reader<List<T>>

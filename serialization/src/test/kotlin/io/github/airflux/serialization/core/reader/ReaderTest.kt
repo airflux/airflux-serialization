@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
 import kotlin.test.Test
 
-internal class JsReaderTest {
+internal class ReaderTest {
 
     companion object {
         private val CONTEXT = ReaderContext()
@@ -36,8 +36,8 @@ internal class JsReaderTest {
     }
 
     @Test
-    fun `Testing the map function of the JsReader class`() {
-        val reader = JsReader { _, location, _ ->
+    fun `Testing the map function of the Reader class`() {
+        val reader = Reader { _, location, _ ->
             JsResult.Success(location = location.append("id"), value = ID_VALUE)
         }
         val transformedReader = reader.map { value -> value.toInt() }
@@ -48,11 +48,11 @@ internal class JsReaderTest {
     }
 
     @Test
-    fun `Testing the or function of the JsReader class (first reader)`() {
-        val idReader = JsReader { _, location, _ ->
+    fun `Testing the or function of the Reader class (first reader)`() {
+        val idReader = Reader { _, location, _ ->
             JsResult.Success(location = location.append("id"), value = ID_VALUE)
         }
-        val identifierReader = JsReader<String> { _, location, _ ->
+        val identifierReader = Reader<String> { _, location, _ ->
             JsResult.Failure(location = location.append("identifier"), error = JsonErrors.PathMissing)
         }
         val composeReader = idReader or identifierReader
@@ -63,11 +63,11 @@ internal class JsReaderTest {
     }
 
     @Test
-    fun `Testing the or function of the JsReader class (second reader)`() {
-        val idReader = JsReader<String> { _, location, _ ->
+    fun `Testing the or function of the Reader class (second reader)`() {
+        val idReader = Reader<String> { _, location, _ ->
             JsResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
         }
-        val identifierReader = JsReader { _, location, _ ->
+        val identifierReader = Reader { _, location, _ ->
             JsResult.Success(location = location.append("identifier"), value = IDENTIFIER_VALUE)
         }
         val composeReader = idReader or identifierReader
@@ -78,11 +78,11 @@ internal class JsReaderTest {
     }
 
     @Test
-    fun `Testing the or function of the JsReader class (failure both reader)`() {
-        val idReader = JsReader { _, location, _ ->
+    fun `Testing the or function of the Reader class (failure both reader)`() {
+        val idReader = Reader { _, location, _ ->
             JsResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
         }
-        val identifierReader = JsReader { _, location, _ ->
+        val identifierReader = Reader { _, location, _ ->
             JsResult.Failure(
                 location = location.append("identifier"),
                 error = JsonErrors.InvalidType(expected = ValueNode.Type.OBJECT, actual = ValueNode.Type.STRING)

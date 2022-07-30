@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.array
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
@@ -37,7 +37,7 @@ public fun <T> readArray(
     context: ReaderContext,
     location: JsLocation,
     from: ArrayNode<*>,
-    prefixItems: List<JsReader<T>>,
+    prefixItems: List<Reader<T>>,
     errorIfAdditionalItems: Boolean
 ): JsResult<List<T>> = from.read(
     context = context,
@@ -55,7 +55,7 @@ public fun <T> readArray(
     context: ReaderContext,
     location: JsLocation,
     from: ArrayNode<*>,
-    items: JsReader<T>
+    items: Reader<T>
 ): JsResult<List<T>> =
     from.read(
         context = context,
@@ -74,8 +74,8 @@ public fun <T> readArray(
     context: ReaderContext,
     location: JsLocation,
     from: ArrayNode<*>,
-    prefixItems: List<JsReader<T>>,
-    items: JsReader<T>
+    prefixItems: List<Reader<T>>,
+    items: Reader<T>
 ): JsResult<List<T>> = from.read(
     context = context,
     location = location,
@@ -87,12 +87,12 @@ public fun <T> readArray(
 internal fun <T> ArrayNode<*>.read(
     context: ReaderContext,
     location: JsLocation,
-    prefixItems: List<JsReader<T>>,
-    items: JsReader<T>?,
+    prefixItems: List<Reader<T>>,
+    items: Reader<T>?,
     errorIfAdditionalItems: Boolean
 ): JsResult<List<T>> {
 
-    fun <T> getReader(idx: Int, prefixItems: List<JsReader<T>>, itemsReader: JsReader<T>?): JsReader<T>? =
+    fun <T> getReader(idx: Int, prefixItems: List<Reader<T>>, itemsReader: Reader<T>?): Reader<T>? =
         if (idx < prefixItems.size) prefixItems[idx] else itemsReader
 
     val failFast = context.failFast
@@ -100,7 +100,7 @@ internal fun <T> ArrayNode<*>.read(
     val initial: JsResult<MutableList<T>> = JsResult.Success(location, ArrayList(this.size))
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
-        val reader: JsReader<T> = getReader(idx, prefixItems, items)
+        val reader: Reader<T> = getReader(idx, prefixItems, items)
             ?: return if (errorIfAdditionalItems)
                 acc + JsResult.Failure(currentLocation, errorBuilder.build())
             else
