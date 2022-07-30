@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -32,7 +32,7 @@ import io.kotest.matchers.shouldBe
 internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
         private const val MAX_ITEMS = 2
     }
 

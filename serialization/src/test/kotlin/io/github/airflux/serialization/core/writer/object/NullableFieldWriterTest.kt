@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.writer.`object`
 
 import io.github.airflux.serialization.common.DummyWriter
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -30,7 +30,7 @@ internal class NullableFieldWriterTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = WriterContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

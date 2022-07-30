@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.array
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
@@ -49,7 +49,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 AdditionalItemsErrorBuilder { JsonErrors.AdditionalItems }
             )
         )
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.writer.array.builder.item
 
 import io.github.airflux.serialization.common.DummyWriter
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
@@ -31,7 +31,7 @@ internal class ArrayNullableItemsTest : FreeSpec() {
         private const val ITEM_VALUE = "value"
 
         private val CONTEXT = WriterContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

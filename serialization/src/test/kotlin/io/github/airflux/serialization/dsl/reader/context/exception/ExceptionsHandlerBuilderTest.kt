@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.context.exception
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -27,7 +27,7 @@ internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
         private val EXCEPTION = IllegalArgumentException()
     }
 

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.DummyReaderPredicate
 import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -34,7 +34,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
         private const val VALUE = "ABC"
         private val JSON_VALUE: ValueNode = StringNode(VALUE)
     }

@@ -17,14 +17,14 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 
-public fun ValueNode.readAsBoolean(context: ReaderContext, location: JsLocation): JsResult<Boolean> =
+public fun ValueNode.readAsBoolean(context: ReaderContext, location: Location): JsResult<Boolean> =
     if (this is BooleanNode)
         JsResult.Success(location, this.get)
     else {
@@ -32,7 +32,7 @@ public fun ValueNode.readAsBoolean(context: ReaderContext, location: JsLocation)
         JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.BOOLEAN, this.type))
     }
 
-public fun ValueNode.readAsString(context: ReaderContext, location: JsLocation): JsResult<String> =
+public fun ValueNode.readAsString(context: ReaderContext, location: Location): JsResult<String> =
     if (this is StringNode)
         JsResult.Success(location, this.get)
     else {
@@ -42,8 +42,8 @@ public fun ValueNode.readAsString(context: ReaderContext, location: JsLocation):
 
 public fun <T : Number> ValueNode.readAsNumber(
     context: ReaderContext,
-    location: JsLocation,
-    reader: (ReaderContext, JsLocation, String) -> JsResult<T>
+    location: Location,
+    reader: (ReaderContext, Location, String) -> JsResult<T>
 ): JsResult<T> =
     if (this is NumberNode)
         reader(context, location, this.get)
@@ -54,8 +54,8 @@ public fun <T : Number> ValueNode.readAsNumber(
 
 public inline fun <T> ValueNode.readAsObject(
     context: ReaderContext,
-    location: JsLocation,
-    reader: (ReaderContext, JsLocation, StructNode) -> JsResult<T>
+    location: Location,
+    reader: (ReaderContext, Location, StructNode) -> JsResult<T>
 ): JsResult<T> =
     if (this is StructNode)
         reader(context, location, this)
@@ -66,8 +66,8 @@ public inline fun <T> ValueNode.readAsObject(
 
 public inline fun <T> ValueNode.readAsArray(
     context: ReaderContext,
-    location: JsLocation,
-    reader: (ReaderContext, JsLocation, ArrayNode<*>) -> JsResult<T>
+    location: Location,
+    reader: (ReaderContext, Location, ArrayNode<*>) -> JsResult<T>
 ): JsResult<T> =
     if (this is ArrayNode<*>)
         reader(context, location, this)

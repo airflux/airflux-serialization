@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.common.DummyReader
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
@@ -30,7 +30,7 @@ internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
-        private val LOCATION = JsLocation.empty.append("name")
+        private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"
         private val READER: Reader<String> =

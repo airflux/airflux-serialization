@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -29,8 +29,8 @@ internal class ReadAsArrayTest : FreeSpec() {
     companion object {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
-        private val LOCATION = JsLocation.empty.append("user")
-        private val READER = { _: ReaderContext, location: JsLocation, input: ArrayNode<*> ->
+        private val LOCATION = Location.empty.append("user")
+        private val READER = { _: ReaderContext, location: Location, input: ArrayNode<*> ->
             val result = input.map { (it as StringNode).get }
             JsResult.Success(location, result)
         }

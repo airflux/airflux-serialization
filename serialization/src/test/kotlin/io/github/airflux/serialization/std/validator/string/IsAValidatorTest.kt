@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -31,7 +31,7 @@ import io.kotest.matchers.shouldBe
 internal class IsAValidatorTest : FreeSpec() {
 
     companion object {
-        private val LOCATION: JsLocation = JsLocation.empty
+        private val LOCATION: Location = Location.empty
         private val PATTERN: Regex = "\\d+".toRegex()
         private val IS_DIGITAL: (String) -> Boolean = { value: String -> PATTERN.matches(value) }
     }

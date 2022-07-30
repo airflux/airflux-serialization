@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.array.builder
 import io.github.airflux.serialization.common.DummyArrayValidatorBuilder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
@@ -48,7 +48,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType)
             )
         )
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
 
         private val MinItemsError = JsonErrors.Validation.Arrays.MinItems(expected = 1, actual = 0)
     }

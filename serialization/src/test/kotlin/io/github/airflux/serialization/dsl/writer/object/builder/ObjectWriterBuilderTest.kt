@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.writer.`object`.builder
 
 import io.github.airflux.serialization.common.DummyWriter
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -35,7 +35,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
         private const val ATTRIBUTE_VALUE = "user"
 
         private val CONTEXT = WriterContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

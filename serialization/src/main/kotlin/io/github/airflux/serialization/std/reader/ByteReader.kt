@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
@@ -31,7 +31,7 @@ import io.github.airflux.serialization.core.value.readAsNumber
  * Reader for primitive [Byte] type.
  */
 public object ByteReader : Reader<Byte> {
-    override fun read(context: ReaderContext, location: JsLocation, input: ValueNode): JsResult<Byte> =
+    override fun read(context: ReaderContext, location: Location, input: ValueNode): JsResult<Byte> =
         input.readAsNumber(context, location) { ctx, l, text ->
             try {
                 text.toByte().success(location = l)

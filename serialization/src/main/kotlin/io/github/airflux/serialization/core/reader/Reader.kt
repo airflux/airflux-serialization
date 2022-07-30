@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.JsError
@@ -33,7 +33,7 @@ public fun interface Reader<out T> {
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(context: ReaderContext, location: JsLocation, input: ValueNode): JsResult<T>
+    public fun read(context: ReaderContext, location: Location, input: ValueNode): JsResult<T>
 
     /**
      * Create a new [Reader] which maps the value produced by this [Reader].

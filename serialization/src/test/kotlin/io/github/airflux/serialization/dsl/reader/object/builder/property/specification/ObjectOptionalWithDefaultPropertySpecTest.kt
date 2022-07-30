@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.context.ReaderContext
@@ -50,7 +50,7 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                     InvalidTypeErrorBuilder(JsonErrors::InvalidType)
                 )
             )
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
         private val DEFAULT = { DEFAULT_VALUE }
     }
 

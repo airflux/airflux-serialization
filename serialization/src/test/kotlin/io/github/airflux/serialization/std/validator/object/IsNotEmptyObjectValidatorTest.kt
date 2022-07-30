@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.`object`
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StringNode
@@ -36,7 +36,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
     companion object {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "property-id"
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
         private val PROPERTIES: ObjectProperties = ObjectProperties(emptyList())
     }
 

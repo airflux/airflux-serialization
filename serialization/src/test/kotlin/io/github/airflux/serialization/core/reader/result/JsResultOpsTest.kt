@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -29,7 +29,7 @@ internal class JsResultOpsTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

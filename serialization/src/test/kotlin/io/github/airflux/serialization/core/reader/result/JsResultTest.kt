@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
@@ -30,7 +30,7 @@ internal class JsResultTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
-        private val LOCATION = JsLocation.empty.append("id")
+        private val LOCATION = Location.empty.append("id")
     }
 
     init {
@@ -83,7 +83,7 @@ internal class JsResultTest : FreeSpec() {
                 original.shouldBeEqualsContract(
                     y = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
                     z = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    other = JsResult.Success(location = JsLocation.empty, value = ORIGINAL_VALUE)
+                    other = JsResult.Success(location = Location.empty, value = ORIGINAL_VALUE)
                 )
             }
         }
@@ -177,7 +177,7 @@ internal class JsResultTest : FreeSpec() {
                 original.shouldBeEqualsContract(
                     y = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
                     z = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    other = JsResult.Failure(location = JsLocation.empty, error = JsonErrors.PathMissing)
+                    other = JsResult.Failure(location = Location.empty, error = JsonErrors.PathMissing)
                 )
             }
         }

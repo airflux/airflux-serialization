@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.common
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 
 internal class DummyReaderPredicate<T>(val result: Boolean) : JsPredicate<T> {
-    override fun test(context: ReaderContext, location: JsLocation, value: T): Boolean = result
+    override fun test(context: ReaderContext, location: Location, value: T): Boolean = result
 }

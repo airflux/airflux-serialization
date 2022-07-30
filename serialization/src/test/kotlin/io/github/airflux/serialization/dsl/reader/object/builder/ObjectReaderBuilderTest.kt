@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder
 import io.github.airflux.serialization.common.DummyObjectValidatorBuilder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
@@ -51,7 +51,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
         private const val DEFAULT_VALUE = "none"
 
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
 
         private val MinPropertiesError = JsonErrors.Validation.Object.MinProperties(expected = 1, actual = 0)
     }
@@ -203,7 +203,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
 
                 "when the builder does not throw an exception" - {
-                    val builder: (ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<String>) = { _, location ->
+                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> JsResult<String>) = { _, location ->
                         JsResult.Success(location = location, value = USER_NAME)
                     }
                     val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
@@ -216,7 +216,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when the builder does throw an exception" - {
-                    val builder: (ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<String>) =
+                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> JsResult<String>) =
                         { _, _ ->
                             throw IllegalStateException()
                         }

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.`object`
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StringNode
@@ -41,7 +41,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MAX_PROPERTIES = 2
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
         private val PROPERTIES: ObjectProperties = ObjectProperties(emptyList())
     }
 

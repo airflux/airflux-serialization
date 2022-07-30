@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -29,7 +29,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
-        private val LOCATION: JsLocation = JsLocation.empty.append("user")
+        private val LOCATION: Location = Location.empty.append("user")
     }
 
     init {

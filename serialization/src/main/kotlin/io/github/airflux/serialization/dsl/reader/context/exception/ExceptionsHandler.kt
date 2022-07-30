@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.dsl.reader.context.exception
 
 import io.github.airflux.serialization.core.context.Context
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 
 internal class ExceptionsHandler(
-    private val handler: (context: ReaderContext, location: JsLocation, exception: Throwable) -> JsError
+    private val handler: (context: ReaderContext, location: Location, exception: Throwable) -> JsError
 ) : Context.Element {
 
-    fun handleException(context: ReaderContext, location: JsLocation, exception: Throwable): JsError =
+    fun handleException(context: ReaderContext, location: Location, exception: Throwable): JsError =
         handler(context, location, exception)
 
     override val key: Context.Key<*> = Key

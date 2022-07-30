@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
@@ -32,7 +32,7 @@ internal class RequiredFieldReaderTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
-        private val LOCATION = JsLocation.empty.append("name")
+        private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
         private val READER: Reader<String> =
             DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }

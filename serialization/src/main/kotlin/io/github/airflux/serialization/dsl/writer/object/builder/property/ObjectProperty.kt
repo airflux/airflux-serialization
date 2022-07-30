@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
@@ -27,7 +27,7 @@ import io.github.airflux.serialization.dsl.writer.`object`.builder.property.spec
 
 public sealed class ObjectProperty<T : Any> {
     public abstract val name: String
-    public abstract fun write(context: WriterContext, location: JsLocation, input: T): ValueNode?
+    public abstract fun write(context: WriterContext, location: Location, input: T): ValueNode?
 
     public class NonNullable<T : Any, P : Any> private constructor(
         override val name: String,
@@ -37,7 +37,7 @@ public sealed class ObjectProperty<T : Any> {
 
         internal constructor(spec: ObjectPropertySpec.NonNullable<T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: WriterContext, location: JsLocation, input: T): ValueNode? =
+        override fun write(context: WriterContext, location: Location, input: T): ValueNode? =
             writeNonNullable(context = context, location = location, using = writer, value = from(input))
     }
 
@@ -49,7 +49,7 @@ public sealed class ObjectProperty<T : Any> {
 
         internal constructor(spec: ObjectPropertySpec.Optional<T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: WriterContext, location: JsLocation, input: T): ValueNode? =
+        override fun write(context: WriterContext, location: Location, input: T): ValueNode? =
             writeOptional(context = context, location = location, using = writer, value = from(input))
     }
 
@@ -61,7 +61,7 @@ public sealed class ObjectProperty<T : Any> {
 
         internal constructor(spec: ObjectPropertySpec.Nullable<T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: WriterContext, location: JsLocation, input: T): ValueNode? =
+        override fun write(context: WriterContext, location: Location, input: T): ValueNode? =
             writeNullable(context = context, location = location, using = writer, value = from(input))
     }
 }

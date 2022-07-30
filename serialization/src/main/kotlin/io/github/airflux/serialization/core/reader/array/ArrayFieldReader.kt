@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.array
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
@@ -35,7 +35,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
  */
 public fun <T> readArray(
     context: ReaderContext,
-    location: JsLocation,
+    location: Location,
     from: ArrayNode<*>,
     prefixItems: List<Reader<T>>,
     errorIfAdditionalItems: Boolean
@@ -53,7 +53,7 @@ public fun <T> readArray(
  */
 public fun <T> readArray(
     context: ReaderContext,
-    location: JsLocation,
+    location: Location,
     from: ArrayNode<*>,
     items: Reader<T>
 ): JsResult<List<T>> =
@@ -72,7 +72,7 @@ public fun <T> readArray(
  */
 public fun <T> readArray(
     context: ReaderContext,
-    location: JsLocation,
+    location: Location,
     from: ArrayNode<*>,
     prefixItems: List<Reader<T>>,
     items: Reader<T>
@@ -86,7 +86,7 @@ public fun <T> readArray(
 
 internal fun <T> ArrayNode<*>.read(
     context: ReaderContext,
-    location: JsLocation,
+    location: Location,
     prefixItems: List<Reader<T>>,
     items: Reader<T>?,
     errorIfAdditionalItems: Boolean

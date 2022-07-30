@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
@@ -26,5 +26,5 @@ import io.github.airflux.serialization.core.writer.context.WriterContext
  * Writer for primitive [Int] type.
  */
 public object IntWriter : Writer<Int> {
-    override fun write(context: WriterContext, location: JsLocation, value: Int): ValueNode = NumberNode.valueOf(value)
+    override fun write(context: WriterContext, location: Location, value: Int): ValueNode = NumberNode.valueOf(value)
 }

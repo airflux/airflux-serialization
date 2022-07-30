@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.condition
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.validator.Validator
 
@@ -25,7 +25,7 @@ public fun <T> Validator<T>.applyIfNotNull(): Validator<T?> =
         if (value != null) validate(context, location, value) else null
     }
 
-public fun <T> Validator<T>.applyIf(predicate: (ReaderContext, JsLocation, T) -> Boolean): Validator<T> =
+public fun <T> Validator<T>.applyIf(predicate: (ReaderContext, Location, T) -> Boolean): Validator<T> =
     Validator { context, location, value ->
         if (predicate(context, location, value)) validate(context, location, value) else null
     }

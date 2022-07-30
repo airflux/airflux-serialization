@@ -11,7 +11,7 @@ import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
 import io.github.airflux.quickstart.dto.writer.context.DefaultWriterContext
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.value.deserialization
@@ -34,7 +34,7 @@ fun main() {
     val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
     val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
     val response = Response(tender = tender)
-    val output: ValueNode? = response.serialization(DefaultWriterContext, JsLocation.empty, ResponseWriter)
+    val output: ValueNode? = response.serialization(DefaultWriterContext, Location.empty, ResponseWriter)
     println(output.toString())
 }
 

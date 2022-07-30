@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.`object`
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -45,7 +45,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_VALUE = "property-name"
         private const val NAME_PROPERTY_NAME = "title"
         private const val NAME_PROPERTY_VALUE = "property-title"
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
 
         private val idProperty: ObjectProperty.Required<String> =
             ObjectProperty.Required(required(ID_PROPERTY_NAME, StringReader))

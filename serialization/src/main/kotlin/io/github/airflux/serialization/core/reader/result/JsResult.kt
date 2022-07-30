@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 
 @Suppress("unused")
 public sealed class JsResult<out T> {
@@ -27,18 +27,18 @@ public sealed class JsResult<out T> {
     public infix fun <R> map(transform: (T) -> R): JsResult<R> =
         flatMap { location, value -> transform(value).success(location) }
 
-    public fun <R> flatMap(transform: (JsLocation, T) -> JsResult<R>): JsResult<R> = fold(
+    public fun <R> flatMap(transform: (Location, T) -> JsResult<R>): JsResult<R> = fold(
         ifFailure = ::identity,
         ifSuccess = { transform(it.location, it.value) }
     )
 
-    public data class Success<T>(val location: JsLocation, val value: T) : JsResult<T>()
+    public data class Success<T>(val location: Location, val value: T) : JsResult<T>()
 
     public class Failure private constructor(public val causes: List<Cause>) : JsResult<Nothing>() {
 
-        public constructor(location: JsLocation, error: JsError) : this(listOf(Cause(location, error)))
+        public constructor(location: Location, error: JsError) : this(listOf(Cause(location, error)))
 
-        public constructor(location: JsLocation, errors: JsErrors) : this(listOf(Cause(location, errors)))
+        public constructor(location: Location, errors: JsErrors) : this(listOf(Cause(location, errors)))
 
         public operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
 
@@ -53,8 +53,8 @@ public sealed class JsResult<out T> {
             append(")")
         }
 
-        public data class Cause(val location: JsLocation, val errors: JsErrors) {
-            public constructor(location: JsLocation, error: JsError) : this(location, JsErrors(error))
+        public data class Cause(val location: Location, val errors: JsErrors) {
+            public constructor(location: Location, error: JsError) : this(location, JsErrors(error))
         }
 
         public companion object {
@@ -87,5 +87,5 @@ public infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResu
     ifSuccess = ::identity
 )
 
-public fun <T> T.success(location: JsLocation): JsResult<T> = JsResult.Success(location, this)
-public fun <E : JsError> E.failure(location: JsLocation): JsResult<Nothing> = JsResult.Failure(location, this)
+public fun <T> T.success(location: Location): JsResult<T> = JsResult.Success(location, this)
+public fun <E : JsError> E.failure(location: Location): JsResult<Nothing> = JsResult.Failure(location, this)

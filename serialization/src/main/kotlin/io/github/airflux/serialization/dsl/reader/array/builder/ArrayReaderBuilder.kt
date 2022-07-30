@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.array.builder
 
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.ArrayReader
 import io.github.airflux.serialization.core.reader.array.readArray
 import io.github.airflux.serialization.core.reader.context.ReaderContext
@@ -53,7 +53,7 @@ public class ArrayReaderBuilder<T> internal constructor(
 ) : ArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult<List<T>>
+        public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): JsResult<List<T>>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): ArrayReader<T> {

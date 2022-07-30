@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.common.DummyWriter
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
@@ -31,7 +31,7 @@ internal class ObjectOptionalPropertyTest : FreeSpec() {
         private const val ATTRIBUTE_NAME = "id"
         private const val ATTRIBUTE_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

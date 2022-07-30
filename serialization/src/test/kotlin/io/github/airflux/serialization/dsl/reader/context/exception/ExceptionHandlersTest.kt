@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.context.exception
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -26,11 +26,11 @@ import io.kotest.matchers.shouldBe
 internal class ExceptionHandlersTest : FreeSpec() {
 
     companion object {
-        private val handlerOfSpecificException: ExceptionHandler = { _: ReaderContext, _: JsLocation, _: Throwable ->
+        private val handlerOfSpecificException: ExceptionHandler = { _: ReaderContext, _: Location, _: Throwable ->
             JsonErrors.PathMissing
         }
 
-        private val handlerOfGenericException: ExceptionHandler = { _: ReaderContext, _: JsLocation, _: Throwable ->
+        private val handlerOfGenericException: ExceptionHandler = { _: ReaderContext, _: Location, _: Throwable ->
             JsonErrors.PathMissing
         }
     }

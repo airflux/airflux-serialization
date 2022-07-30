@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.predicate
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -37,37 +37,37 @@ internal class JsPredicateAndCombinatorTest {
 
     @Test
     fun `The tested value is less to the minimum value of the range`() {
-        val result = composedFilter.test(CONTEXT, JsLocation.empty, MIN_VALUE - 1)
+        val result = composedFilter.test(CONTEXT, Location.empty, MIN_VALUE - 1)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is equal to the minimum value of the range`() {
-        val result = composedFilter.test(CONTEXT, JsLocation.empty, MIN_VALUE)
+        val result = composedFilter.test(CONTEXT, Location.empty, MIN_VALUE)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is more to the minimum value of the range`() {
-        val result = composedFilter.test(CONTEXT, JsLocation.empty, MIN_VALUE + 1)
+        val result = composedFilter.test(CONTEXT, Location.empty, MIN_VALUE + 1)
         assertTrue(result)
     }
 
     @Test
     fun `The tested value is less to the maximum value of the range`() {
-        val result = composedFilter.test(CONTEXT, JsLocation.empty, MAX_VALUE - 1)
+        val result = composedFilter.test(CONTEXT, Location.empty, MAX_VALUE - 1)
         assertTrue(result)
     }
 
     @Test
     fun `The tested value is equal to the maximum value of the range`() {
-        val result = composedFilter.test(CONTEXT, JsLocation.empty, MAX_VALUE)
+        val result = composedFilter.test(CONTEXT, Location.empty, MAX_VALUE)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is more to the maximum value of the range`() {
-        val result = composedFilter.test(CONTEXT, JsLocation.empty, MAX_VALUE + 1)
+        val result = composedFilter.test(CONTEXT, Location.empty, MAX_VALUE + 1)
         assertFalse(result)
     }
 }

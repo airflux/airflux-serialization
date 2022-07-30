@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.writer.array.builder
 
 import io.github.airflux.serialization.common.DummyWriter
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -37,7 +37,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val SECOND_ITEM = "item-2"
 
         private val CONTEXT = WriterContext()
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

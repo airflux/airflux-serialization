@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.lookup
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -26,25 +26,25 @@ import io.github.airflux.serialization.core.value.ValueNode
 @Suppress("unused")
 public sealed class Lookup {
 
-    public abstract val location: JsLocation
+    public abstract val location: Location
 
     public fun apply(key: String): Lookup = apply(PathElement.Key(key))
     public fun apply(idx: Int): Lookup = apply(PathElement.Idx(idx))
     public abstract fun apply(key: PathElement.Key): Lookup
     public abstract fun apply(idx: PathElement.Idx): Lookup
 
-    public data class Defined(override val location: JsLocation, val value: ValueNode) : Lookup() {
+    public data class Defined(override val location: Location, val value: ValueNode) : Lookup() {
         override fun apply(key: PathElement.Key): Lookup = value.lookup(location, key)
         override fun apply(idx: PathElement.Idx): Lookup = value.lookup(location, idx)
     }
 
-    public data class Undefined(override val location: JsLocation) : Lookup() {
+    public data class Undefined(override val location: Location) : Lookup() {
         override fun apply(key: PathElement.Key): Lookup = this
         override fun apply(idx: PathElement.Idx): Lookup = this
     }
 }
 
-public fun ValueNode.lookup(location: JsLocation, key: PathElement.Key): Lookup =
+public fun ValueNode.lookup(location: Location, key: PathElement.Key): Lookup =
     if (this is StructNode)
         this[key]
             ?.let { Lookup.Defined(location = location.append(key), value = it) }
@@ -52,7 +52,7 @@ public fun ValueNode.lookup(location: JsLocation, key: PathElement.Key): Lookup 
     else
         Lookup.Undefined(location = location.append(key))
 
-public fun ValueNode.lookup(location: JsLocation, idx: PathElement.Idx): Lookup =
+public fun ValueNode.lookup(location: Location, idx: PathElement.Idx): Lookup =
     if (this is ArrayNode<*>)
         this[idx]
             ?.let { Lookup.Defined(location = location.append(idx), value = it) }
@@ -60,9 +60,9 @@ public fun ValueNode.lookup(location: JsLocation, idx: PathElement.Idx): Lookup 
     else
         Lookup.Undefined(location = location.append(idx))
 
-public fun ValueNode.lookup(location: JsLocation, path: JsPath): Lookup {
+public fun ValueNode.lookup(location: Location, path: JsPath): Lookup {
 
-    tailrec fun lookup(location: JsLocation, path: JsPath, idxElement: Int, value: ValueNode): Lookup {
+    tailrec fun lookup(location: Location, path: JsPath, idxElement: Int, value: ValueNode): Lookup {
         if (idxElement == path.elements.size) return Lookup.Defined(location, value)
         return when (val element = path.elements[idxElement]) {
             is PathElement.Key -> if (value is StructNode) {

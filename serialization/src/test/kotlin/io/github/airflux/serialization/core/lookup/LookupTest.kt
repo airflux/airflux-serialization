@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.lookup
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -40,7 +40,7 @@ internal class LookupTest : FreeSpec() {
 
         private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
 
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {

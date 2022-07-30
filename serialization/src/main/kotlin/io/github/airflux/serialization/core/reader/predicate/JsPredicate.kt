@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.core.reader.predicate
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 
 @Suppress("unused")
 public fun interface JsPredicate<T> {
 
-    public fun test(context: ReaderContext, location: JsLocation, value: T): Boolean
+    public fun test(context: ReaderContext, location: Location, value: T): Boolean
 
     public infix fun or(other: JsPredicate<T>): JsPredicate<T> {
         val self = this

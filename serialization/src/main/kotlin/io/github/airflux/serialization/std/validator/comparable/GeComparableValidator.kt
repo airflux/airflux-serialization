@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderCo
 import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -30,7 +30,7 @@ public class GeComparableValidator<T> internal constructor(private val expected:
     where T : Number,
           T : Comparable<T> {
 
-    override fun validate(context: ReaderContext, location: JsLocation, value: T): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: Location, value: T): JsResult.Failure? =
         if (value >= expected)
             null
         else {

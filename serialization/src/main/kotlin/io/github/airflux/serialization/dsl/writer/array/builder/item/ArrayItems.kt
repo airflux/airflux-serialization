@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.array.builder.item
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
@@ -27,13 +27,13 @@ import io.github.airflux.serialization.dsl.writer.array.builder.item.specificati
 
 public sealed class ArrayItems<T> {
 
-    public abstract fun write(context: WriterContext, location: JsLocation, value: T): ValueNode?
+    public abstract fun write(context: WriterContext, location: Location, value: T): ValueNode?
 
     public class NonNullable<T : Any> private constructor(private val writer: Writer<T>) : ArrayItems<T>() {
 
         internal constructor(spec: ArrayItemSpec.NonNullable<T>) : this(spec.writer)
 
-        override fun write(context: WriterContext, location: JsLocation, value: T): ValueNode? =
+        override fun write(context: WriterContext, location: Location, value: T): ValueNode? =
             writeNonNullable(context = context, location = location, using = writer, value = value)
     }
 
@@ -41,7 +41,7 @@ public sealed class ArrayItems<T> {
 
         internal constructor(spec: ArrayItemSpec.Optional<T>) : this(spec.writer)
 
-        override fun write(context: WriterContext, location: JsLocation, value: T): ValueNode? =
+        override fun write(context: WriterContext, location: Location, value: T): ValueNode? =
             writeOptional(context = context, location = location, using = writer, value = value)
     }
 
@@ -49,7 +49,7 @@ public sealed class ArrayItems<T> {
 
         internal constructor(spec: ArrayItemSpec.Nullable<T>) : this(spec.writer)
 
-        override fun write(context: WriterContext, location: JsLocation, value: T): ValueNode? =
+        override fun write(context: WriterContext, location: Location, value: T): ValueNode? =
             writeNullable(context = context, location = location, using = writer, value = value)
     }
 }

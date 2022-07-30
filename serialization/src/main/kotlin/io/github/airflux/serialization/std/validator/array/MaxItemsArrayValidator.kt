@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderCo
 import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -29,7 +29,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayV
 
 public class MaxItemsArrayValidator internal constructor(private val expected: Int) : ArrayValidator {
 
-    override fun validate(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): JsResult.Failure? =
         if (input.size > expected) {
             val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build(expected, input.size))

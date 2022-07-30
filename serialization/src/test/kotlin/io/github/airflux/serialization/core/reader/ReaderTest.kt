@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.NullNode
@@ -30,7 +30,7 @@ internal class ReaderTest {
 
     companion object {
         private val CONTEXT = ReaderContext()
-        private val location = JsLocation.empty.append("user")
+        private val location = Location.empty.append("user")
         private const val ID_VALUE = "10"
         private const val IDENTIFIER_VALUE = "100"
     }

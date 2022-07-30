@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder
 
 import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.ObjectReader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
@@ -60,7 +60,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     ObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: JsLocation, objectValuesMap: ObjectValuesMap): JsResult<T>
+        public fun build(context: ReaderContext, location: Location, objectValuesMap: ObjectValuesMap): JsResult<T>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): ObjectReader<T> {
@@ -70,7 +70,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     }
 }
 
-public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T> =
+public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, Location) -> JsResult<T>): ResultBuilder<T> =
     ResultBuilder { context, location, values ->
         try {
             values.builder(context, location)
@@ -128,7 +128,7 @@ internal fun <T> buildObjectReader(
             failures.merge()
     }
 
-internal fun StructNode.read(context: ReaderContext, location: JsLocation, property: ObjectProperty): JsResult<Any?> {
+internal fun StructNode.read(context: ReaderContext, location: Location, property: ObjectProperty): JsResult<Any?> {
     val reader = when (property) {
         is ObjectProperty.Required<*> -> property.reader
         is ObjectProperty.Defaultable<*> -> property.reader

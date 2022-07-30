@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.common
 
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.result.JsResult
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-internal fun <T> JsResult<T?>.assertAsSuccess(location: JsLocation, value: T?) {
+internal fun <T> JsResult<T?>.assertAsSuccess(location: Location, value: T?) {
     this as JsResult.Success
     assertEquals(expected = location, actual = this.location)
     assertEquals(expected = value, actual = this.value)

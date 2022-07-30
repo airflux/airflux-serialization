@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.array.builder.item.specification
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
@@ -51,7 +51,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                     InvalidTypeErrorBuilder(JsonErrors::InvalidType)
                 )
             )
-        private val LOCATION = JsLocation.empty
+        private val LOCATION = Location.empty
     }
 
     init {
