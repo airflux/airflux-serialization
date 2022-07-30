@@ -196,10 +196,10 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
             config: SerializationConfig,
             type: JavaType,
             beanDesc: BeanDescription
-        ): JsonSerializer<*> = JsValueSerializer()
+        ): JsonSerializer<*> = ValueNodeSerializer()
     }
 
-    private class JsValueSerializer : JsonSerializer<ValueNode>() {
+    private class ValueNodeSerializer : JsonSerializer<ValueNode>() {
         override fun serialize(value: ValueNode, gen: JsonGenerator, provider: SerializerProvider) {
             when (value) {
                 is NullNode -> gen.writeNull()
