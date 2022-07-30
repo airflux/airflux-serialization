@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 
 public sealed interface JsArrayItemSpec<in T> {
 
-    public class NonNullable<T : Any> internal constructor(public val writer: JsWriter<T>) : JsArrayItemSpec<T>
-    public class Optional<T> internal constructor(public val writer: JsWriter<T & Any>) : JsArrayItemSpec<T>
-    public class Nullable<T> internal constructor(public val writer: JsWriter<T & Any>) : JsArrayItemSpec<T>
+    public class NonNullable<T : Any> internal constructor(public val writer: Writer<T>) : JsArrayItemSpec<T>
+    public class Optional<T> internal constructor(public val writer: Writer<T & Any>) : JsArrayItemSpec<T>
+    public class Nullable<T> internal constructor(public val writer: Writer<T & Any>) : JsArrayItemSpec<T>
 }

@@ -16,14 +16,14 @@
 
 package io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification
 
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
 public fun <T : Any, P : Any> nullable(
     name: String,
     from: (T) -> P?,
-    writer: JsWriter<P>
+    writer: Writer<P>
 ): JsObjectPropertySpec.Nullable<T, P> =
     JsObjectPropertySpec.Nullable(name = name, from = from, writer = writer)
 

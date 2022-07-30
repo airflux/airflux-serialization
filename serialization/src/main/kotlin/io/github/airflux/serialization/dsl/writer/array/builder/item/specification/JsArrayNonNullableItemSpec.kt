@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
 
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 
-public fun <T : Any> nonNullable(writer: JsWriter<T>): JsArrayItemSpec.NonNullable<T> =
+public fun <T : Any> nonNullable(writer: Writer<T>): JsArrayItemSpec.NonNullable<T> =
     JsArrayItemSpec.NonNullable(writer)

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -35,7 +35,7 @@ internal class NonNullableFieldWriterTest : FreeSpec() {
     init {
 
         "The writeNonNullable function" - {
-            val writer: JsWriter<String> = DummyWriter { StringNode(it) }
+            val writer: Writer<String> = DummyWriter { StringNode(it) }
 
             "when a value is not null" - {
                 val value = "value"

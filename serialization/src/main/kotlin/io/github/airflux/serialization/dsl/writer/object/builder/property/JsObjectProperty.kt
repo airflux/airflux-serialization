@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.core.writer.`object`.writeNonNullable
 import io.github.airflux.serialization.core.writer.`object`.writeNullable
@@ -32,7 +32,7 @@ public sealed class JsObjectProperty<T : Any> {
     public class NonNullable<T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P,
-        private val writer: JsWriter<P>
+        private val writer: Writer<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.NonNullable<T, P>) : this(spec.name, spec.from, spec.writer)
@@ -44,7 +44,7 @@ public sealed class JsObjectProperty<T : Any> {
     public class Optional<T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P?,
-        private val writer: JsWriter<P>
+        private val writer: Writer<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Optional<T, P>) : this(spec.name, spec.from, spec.writer)
@@ -56,7 +56,7 @@ public sealed class JsObjectProperty<T : Any> {
     public class Nullable<T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P?,
-        private val writer: JsWriter<P>
+        private val writer: Writer<P>
     ) : JsObjectProperty<T>() {
 
         internal constructor(spec: JsObjectPropertySpec.Nullable<T, P>) : this(spec.name, spec.from, spec.writer)

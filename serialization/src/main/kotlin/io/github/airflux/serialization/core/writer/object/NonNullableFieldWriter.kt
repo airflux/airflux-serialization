@@ -18,13 +18,13 @@ package io.github.airflux.serialization.core.writer.`object`
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 
 public fun <T : Any> writeNonNullable(
     context: WriterContext,
     location: JsLocation,
-    using: JsWriter<T>,
+    using: Writer<T>,
     value: T
 ): ValueNode? =
     using.write(context, location, value)

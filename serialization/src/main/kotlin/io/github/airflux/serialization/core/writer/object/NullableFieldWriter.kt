@@ -19,13 +19,13 @@ package io.github.airflux.serialization.core.writer.`object`
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 
 public fun <T : Any> writeNullable(
     context: WriterContext,
     location: JsLocation,
-    using: JsWriter<T>,
+    using: Writer<T>,
     value: T?
 ): ValueNode? =
     if (value != null) using.write(context, location, value) else NullNode

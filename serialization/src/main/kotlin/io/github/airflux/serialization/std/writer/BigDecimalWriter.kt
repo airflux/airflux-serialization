@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.context.option.get
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import java.math.BigDecimal
 
@@ -32,7 +32,7 @@ internal val WriterContext.stripTrailingZeros: Boolean
 /**
  * Writer for primitive [BigDecimal] type.
  */
-public object BigDecimalWriter : JsWriter<BigDecimal> {
+public object BigDecimalWriter : Writer<BigDecimal> {
 
     override fun write(context: WriterContext, location: JsLocation, value: BigDecimal): ValueNode {
         val text = if (context.stripTrailingZeros) value.stripTrailingZeros().toPlainString() else value.toPlainString()

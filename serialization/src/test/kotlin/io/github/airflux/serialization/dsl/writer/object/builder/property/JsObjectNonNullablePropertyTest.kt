@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
@@ -78,7 +78,7 @@ internal class JsObjectNonNullablePropertyTest : FreeSpec() {
 
     private fun <T : Any, P : Any> createProperty(
         from: (T) -> P,
-        writer: JsWriter<P>
+        writer: Writer<P>
     ): JsObjectProperty.NonNullable<T, P> =
         JsObjectProperty.NonNullable(
             JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
