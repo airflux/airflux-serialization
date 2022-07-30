@@ -38,7 +38,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: Validator<String> = StringValidator.minLength(MIN_VALUE)
+            val validator: Validator<String> = StdStringValidator.minLength(MIN_VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

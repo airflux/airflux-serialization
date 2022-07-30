@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public object StringValidator {
+public object StdStringValidator {
     public val isNotEmpty: Validator<String> = IsNotEmptyStringValidator()
     public val isNotBlank: Validator<String> = IsNotBlankStringValidator()
     public fun pattern(pattern: Regex): Validator<String> = PatternStringValidator(pattern)

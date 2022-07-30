@@ -37,7 +37,7 @@ internal class IsNotBlankValidatorTest : FreeSpec() {
     init {
 
         "The string validator IsNotBlank" - {
-            val validator: Validator<String> = StringValidator.isNotBlank
+            val validator: Validator<String> = StdStringValidator.isNotBlank
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

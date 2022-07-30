@@ -39,7 +39,7 @@ internal class IsAValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: Validator<String> = StringValidator.isA(IS_DIGITAL)
+            val validator: Validator<String> = StdStringValidator.isA(IS_DIGITAL)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

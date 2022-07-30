@@ -12,7 +12,7 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.returns
 import io.github.airflux.serialization.std.reader.StringReader
 import io.github.airflux.serialization.std.validator.`object`.StdObjectValidator.additionalProperties
 import io.github.airflux.serialization.std.validator.`object`.StdObjectValidator.isNotEmpty
-import io.github.airflux.serialization.std.validator.string.StringValidator.isNotBlank
+import io.github.airflux.serialization.std.validator.string.StdStringValidator.isNotBlank
 
 val LotStatusReader = StringReader.validation(isNotBlank).asEnum<LotStatus>()
 

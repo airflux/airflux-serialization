@@ -38,7 +38,7 @@ internal class PatternValidatorTest : FreeSpec() {
     init {
 
         "The string validator Pattern" - {
-            val validator: Validator<String> = StringValidator.pattern(PATTERN)
+            val validator: Validator<String> = StdStringValidator.pattern(PATTERN)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

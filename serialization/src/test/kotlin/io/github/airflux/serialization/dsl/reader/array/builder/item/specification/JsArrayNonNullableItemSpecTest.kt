@@ -29,7 +29,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.reader.IntReader
 import io.github.airflux.serialization.std.reader.StringReader
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
-import io.github.airflux.serialization.std.validator.string.StringValidator
+import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -91,7 +91,7 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
 
             "when the validator was added to the spec" - {
                 val spec = JsArrayItemSpec.NonNullable(reader = StringReader)
-                val specWithValidator = spec.validation(StringValidator.isNotEmpty)
+                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty)
 
                 "when the reader has successfully read" - {
 

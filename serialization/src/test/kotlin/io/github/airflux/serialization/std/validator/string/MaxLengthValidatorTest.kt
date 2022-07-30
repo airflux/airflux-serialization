@@ -38,7 +38,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MaxLength" - {
-            val validator: Validator<String> = StringValidator.maxLength(MAX_VALUE)
+            val validator: Validator<String> = StdStringValidator.maxLength(MAX_VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
