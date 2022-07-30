@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
 
-public fun interface JsArrayValidator {
+public fun interface ArrayValidator {
 
     public fun validate(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure?
 
@@ -32,9 +32,9 @@ public fun interface JsArrayValidator {
     * | F    | S      | S      |
     * | F    | F`     | F + F` |
     */
-    public infix fun or(alt: JsArrayValidator): JsArrayValidator {
+    public infix fun or(alt: ArrayValidator): ArrayValidator {
         val self = this
-        return JsArrayValidator { context, location, input ->
+        return ArrayValidator { context, location, input ->
             self.validate(context, location, input)
                 ?.let { error ->
                     alt.validate(context, location, input)
@@ -50,9 +50,9 @@ public fun interface JsArrayValidator {
      * | S    | F      | F      |
      * | F    | ignore | F      |
      */
-    public infix fun and(alt: JsArrayValidator): JsArrayValidator {
+    public infix fun and(alt: ArrayValidator): ArrayValidator {
         val self = this
-        return JsArrayValidator { context, location, input ->
+        return ArrayValidator { context, location, input ->
             val result = self.validate(context, location, input)
             result ?: alt.validate(context, location, input)
         }

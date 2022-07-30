@@ -25,9 +25,9 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 
-public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator {
+public class IsNotEmptyArrayValidator internal constructor() : ArrayValidator {
 
     override fun validate(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure? =
         if (input.isEmpty()) {
