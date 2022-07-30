@@ -27,13 +27,13 @@ import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstan
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
-import io.github.airflux.serialization.dsl.writer.config.JsObjectWriterConfig
+import io.github.airflux.serialization.dsl.writer.config.ObjectWriterConfig
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectWriterPropertiesBuilder
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.ObjectWriterPropertiesBuilderInstance
 
 public fun <T : Any> writer(
-    config: JsObjectWriterConfig = JsObjectWriterConfig.DEFAULT,
+    config: ObjectWriterConfig = ObjectWriterConfig.DEFAULT,
     block: ObjectWriterBuilder<T>.() -> Unit
 ): ObjectWriter<T> =
     ObjectWriterBuilder<T>(
