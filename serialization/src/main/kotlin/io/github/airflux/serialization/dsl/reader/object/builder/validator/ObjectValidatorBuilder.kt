@@ -18,9 +18,9 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 
-public interface JsObjectValidatorBuilder {
+public interface ObjectValidatorBuilder {
     public val key: Key<*>
     public fun build(properties: JsObjectProperties): ObjectValidator
 
-    public interface Key<E : JsObjectValidatorBuilder>
+    public interface Key<E : ObjectValidatorBuilder>
 }

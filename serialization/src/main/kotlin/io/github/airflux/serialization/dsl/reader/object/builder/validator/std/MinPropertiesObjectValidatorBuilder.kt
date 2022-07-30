@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std
 
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.std.validator.`object`.MinPropertiesObjectValidator
 
-internal class MinPropertiesObjectValidatorBuilder(private val value: Int) : JsObjectValidatorBuilder {
+internal class MinPropertiesObjectValidatorBuilder(private val value: Int) : ObjectValidatorBuilder {
 
-    override val key: JsObjectValidatorBuilder.Key<*> = Key
+    override val key: ObjectValidatorBuilder.Key<*> = Key
 
     override fun build(properties: JsObjectProperties): ObjectValidator = MinPropertiesObjectValidator(value)
 
-    companion object Key : JsObjectValidatorBuilder.Key<MinPropertiesObjectValidatorBuilder>
+    companion object Key : ObjectValidatorBuilder.Key<MinPropertiesObjectValidatorBuilder>
 }

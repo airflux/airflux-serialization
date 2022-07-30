@@ -19,13 +19,13 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.validator.st
 import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.std.validator.`object`.AdditionalPropertiesObjectValidator
 
-internal class AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBuilder {
+internal class AdditionalPropertiesObjectValidatorBuilder : ObjectValidatorBuilder {
 
-    override val key: JsObjectValidatorBuilder.Key<*> = Key
+    override val key: ObjectValidatorBuilder.Key<*> = Key
 
     override fun build(properties: JsObjectProperties): ObjectValidator {
         val names: Set<String> = properties.names()
@@ -44,5 +44,5 @@ internal class AdditionalPropertiesObjectValidatorBuilder : JsObjectValidatorBui
         return flatMap { property -> property.names() }.toSet()
     }
 
-    companion object Key : JsObjectValidatorBuilder.Key<AdditionalPropertiesObjectValidatorBuilder>
+    companion object Key : ObjectValidatorBuilder.Key<AdditionalPropertiesObjectValidatorBuilder>
 }

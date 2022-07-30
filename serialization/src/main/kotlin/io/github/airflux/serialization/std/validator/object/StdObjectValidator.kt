@@ -16,15 +16,15 @@
 
 package io.github.airflux.serialization.std.validator.`object`
 
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std.AdditionalPropertiesObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std.IsNotEmptyObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std.MaxPropertiesObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std.MinPropertiesObjectValidatorBuilder
 
 public object StdObjectValidator {
-    public val additionalProperties: JsObjectValidatorBuilder = AdditionalPropertiesObjectValidatorBuilder()
-    public val isNotEmpty: JsObjectValidatorBuilder = IsNotEmptyObjectValidatorBuilder()
-    public fun minProperties(value: Int): JsObjectValidatorBuilder = MinPropertiesObjectValidatorBuilder(value)
-    public fun maxProperties(value: Int): JsObjectValidatorBuilder = MaxPropertiesObjectValidatorBuilder(value)
+    public val additionalProperties: ObjectValidatorBuilder = AdditionalPropertiesObjectValidatorBuilder()
+    public val isNotEmpty: ObjectValidatorBuilder = IsNotEmptyObjectValidatorBuilder()
+    public fun minProperties(value: Int): ObjectValidatorBuilder = MinPropertiesObjectValidatorBuilder(value)
+    public fun maxProperties(value: Int): ObjectValidatorBuilder = MaxPropertiesObjectValidatorBuilder(value)
 }
