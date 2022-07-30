@@ -18,7 +18,6 @@ package io.github.airflux.serialization.core.lookup
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -28,23 +27,23 @@ public sealed class Lookup {
 
     public abstract val location: Location
 
-    public fun apply(key: String): Lookup = apply(PropertyPathElement.Key(key))
-    public fun apply(idx: Int): Lookup = apply(PropertyPathElement.Idx(idx))
-    public abstract fun apply(key: PropertyPathElement.Key): Lookup
-    public abstract fun apply(idx: PropertyPathElement.Idx): Lookup
+    public fun apply(key: String): Lookup = apply(PropertyPath.Element.Key(key))
+    public fun apply(idx: Int): Lookup = apply(PropertyPath.Element.Idx(idx))
+    public abstract fun apply(key: PropertyPath.Element.Key): Lookup
+    public abstract fun apply(idx: PropertyPath.Element.Idx): Lookup
 
     public data class Defined(override val location: Location, val value: ValueNode) : Lookup() {
-        override fun apply(key: PropertyPathElement.Key): Lookup = value.lookup(location, key)
-        override fun apply(idx: PropertyPathElement.Idx): Lookup = value.lookup(location, idx)
+        override fun apply(key: PropertyPath.Element.Key): Lookup = value.lookup(location, key)
+        override fun apply(idx: PropertyPath.Element.Idx): Lookup = value.lookup(location, idx)
     }
 
     public data class Undefined(override val location: Location) : Lookup() {
-        override fun apply(key: PropertyPathElement.Key): Lookup = this
-        override fun apply(idx: PropertyPathElement.Idx): Lookup = this
+        override fun apply(key: PropertyPath.Element.Key): Lookup = this
+        override fun apply(idx: PropertyPath.Element.Idx): Lookup = this
     }
 }
 
-public fun ValueNode.lookup(location: Location, key: PropertyPathElement.Key): Lookup =
+public fun ValueNode.lookup(location: Location, key: PropertyPath.Element.Key): Lookup =
     if (this is StructNode)
         this[key]
             ?.let { Lookup.Defined(location = location.append(key), value = it) }
@@ -52,7 +51,7 @@ public fun ValueNode.lookup(location: Location, key: PropertyPathElement.Key): L
     else
         Lookup.Undefined(location = location.append(key))
 
-public fun ValueNode.lookup(location: Location, idx: PropertyPathElement.Idx): Lookup =
+public fun ValueNode.lookup(location: Location, idx: PropertyPath.Element.Idx): Lookup =
     if (this is ArrayNode<*>)
         this[idx]
             ?.let { Lookup.Defined(location = location.append(idx), value = it) }
@@ -65,14 +64,14 @@ public fun ValueNode.lookup(location: Location, path: PropertyPath): Lookup {
     tailrec fun lookup(location: Location, path: PropertyPath, idxElement: Int, value: ValueNode): Lookup {
         if (idxElement == path.elements.size) return Lookup.Defined(location, value)
         return when (val element = path.elements[idxElement]) {
-            is PropertyPathElement.Key -> if (value is StructNode) {
+            is PropertyPath.Element.Key -> if (value is StructNode) {
                 val currentValue = value[element]
                     ?: return Lookup.Undefined(location.append(path.elements.subList(idxElement, path.elements.size)))
                 lookup(location.append(element), path, idxElement + 1, currentValue)
             } else
                 Lookup.Undefined(location = location.append(path.elements.subList(idxElement, path.elements.size)))
 
-            is PropertyPathElement.Idx -> if (value is ArrayNode<*>) {
+            is PropertyPath.Element.Idx -> if (value is ArrayNode<*>) {
                 val currentValue = value[element]
                     ?: return Lookup.Undefined(location.append(path.elements.subList(idxElement, path.elements.size)))
                 lookup(location.append(element), path, idxElement + 1, currentValue)

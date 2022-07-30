@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.value
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
@@ -29,5 +29,5 @@ import io.github.airflux.serialization.core.value.ValueNode
 public fun <T : Any> ValueNode.deserialization(context: ReaderContext, reader: Reader<T>): ReaderResult<T> =
     reader.read(context, Location.empty, this)
 
-public operator fun ValueNode.div(key: String): Lookup = this.lookup(Location.empty, PropertyPathElement.Key(key))
-public operator fun ValueNode.div(idx: Int): Lookup = this.lookup(Location.empty, PropertyPathElement.Idx(idx))
+public operator fun ValueNode.div(key: String): Lookup = this.lookup(Location.empty, PropertyPath.Element.Key(key))
+public operator fun ValueNode.div(idx: Int): Lookup = this.lookup(Location.empty, PropertyPath.Element.Idx(idx))

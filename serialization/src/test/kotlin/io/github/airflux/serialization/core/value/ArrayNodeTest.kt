@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.common.ObjectContract
 import io.github.airflux.serialization.common.TestData.FIRST_PHONE_VALUE
 import io.github.airflux.serialization.common.TestData.SECOND_PHONE_VALUE
-import io.github.airflux.serialization.core.path.PropertyPathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -73,12 +73,12 @@ internal class ArrayNodeTest {
 
     @Test
     fun getByIdxFromEmptyArray() {
-        assertNull(EMPTY_ARRAY[PropertyPathElement.Idx(0)])
+        assertNull(EMPTY_ARRAY[PropertyPath.Element.Idx(0)])
     }
 
     @Test
     fun getByIdxFromNotEmptyArray() {
-        val item = NOT_EMPTY_ARRAY[PropertyPathElement.Idx(0)]
+        val item = NOT_EMPTY_ARRAY[PropertyPath.Element.Idx(0)]
 
         assertNotNull(item)
         item as StringNode

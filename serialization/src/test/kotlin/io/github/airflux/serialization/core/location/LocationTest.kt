@@ -18,7 +18,6 @@ package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -36,14 +35,15 @@ internal class LocationTest : FreeSpec() {
                 }
 
                 "the foldRight() method should perform the fold to the right" {
-                    val result: List<PropertyPathElement> = Location.foldRight(mutableListOf(), location) { acc, elem ->
-                        acc.apply { add(elem) }
-                    }
+                    val result: List<PropertyPath.Element> =
+                        Location.foldRight(mutableListOf(), location) { acc, elem ->
+                            acc.apply { add(elem) }
+                        }
                     result shouldContainExactly emptyList()
                 }
 
                 "the foldLeft() method should perform the fold to the left" {
-                    val result: List<PropertyPathElement> = Location.foldLeft(mutableListOf(), location) { acc, elem ->
+                    val result: List<PropertyPath.Element> = Location.foldLeft(mutableListOf(), location) { acc, elem ->
                         acc.apply { add(elem) }
                     }
                     result shouldContainExactly emptyList()
@@ -53,27 +53,33 @@ internal class LocationTest : FreeSpec() {
                     val path = PropertyPath("users").append(0).append("phone")
                     val newLocation = location.append(path)
 
-                    val result: List<PropertyPathElement> = Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
-                        acc.apply { add(elem) }
-                    }
+                    val result: List<PropertyPath.Element> =
+                        Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
+                            acc.apply { add(elem) }
+                        }
                     result shouldContainExactly listOf(
-                        PropertyPathElement.Key("users"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("phone")
+                        PropertyPath.Element.Key("users"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("phone")
                     )
                 }
 
                 "the append() method with the parameter of path element collection type" {
-                    val path = listOf(PropertyPathElement.Key("users"), PropertyPathElement.Idx(0), PropertyPathElement.Key("phone"))
+                    val path = listOf(
+                        PropertyPath.Element.Key("users"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("phone")
+                    )
                     val newLocation = location.append(path)
 
-                    val result: List<PropertyPathElement> = Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
-                        acc.apply { add(elem) }
-                    }
+                    val result: List<PropertyPath.Element> =
+                        Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
+                            acc.apply { add(elem) }
+                        }
                     result shouldContainExactly listOf(
-                        PropertyPathElement.Key("users"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("phone")
+                        PropertyPath.Element.Key("users"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("phone")
                     )
                 }
 
@@ -98,24 +104,25 @@ internal class LocationTest : FreeSpec() {
                 }
 
                 "the foldRight() method should perform the fold to the right" {
-                    val result: List<PropertyPathElement> = Location.foldRight(mutableListOf(), location) { acc, elem ->
-                        acc.apply { add(elem) }
-                    }
+                    val result: List<PropertyPath.Element> =
+                        Location.foldRight(mutableListOf(), location) { acc, elem ->
+                            acc.apply { add(elem) }
+                        }
                     result shouldContainExactly listOf(
-                        PropertyPathElement.Key("phone"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("users")
+                        PropertyPath.Element.Key("phone"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("users")
                     )
                 }
 
                 "the foldLeft() method should perform the fold to the left" {
-                    val result: List<PropertyPathElement> = Location.foldLeft(mutableListOf(), location) { acc, elem ->
+                    val result: List<PropertyPath.Element> = Location.foldLeft(mutableListOf(), location) { acc, elem ->
                         acc.apply { add(elem) }
                     }
                     result shouldContainExactly listOf(
-                        PropertyPathElement.Key("users"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("phone")
+                        PropertyPath.Element.Key("users"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("phone")
                     )
                 }
 
@@ -123,32 +130,38 @@ internal class LocationTest : FreeSpec() {
                     val path = PropertyPath("mobile").append("title")
                     val newLocation = location.append(path)
 
-                    val result: List<PropertyPathElement> = Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
-                        acc.apply { add(elem) }
-                    }
+                    val result: List<PropertyPath.Element> =
+                        Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
+                            acc.apply { add(elem) }
+                        }
                     result shouldContainExactly listOf(
-                        PropertyPathElement.Key("users"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("phone"),
-                        PropertyPathElement.Key("mobile"),
-                        PropertyPathElement.Key("title")
+                        PropertyPath.Element.Key("users"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("phone"),
+                        PropertyPath.Element.Key("mobile"),
+                        PropertyPath.Element.Key("title")
                     )
                 }
 
                 "the append() method with the parameter of path element collection type" {
-                    val path = listOf(PropertyPathElement.Key("mobile"), PropertyPathElement.Idx(0), PropertyPathElement.Key("title"))
+                    val path = listOf(
+                        PropertyPath.Element.Key("mobile"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("title")
+                    )
                     val newLocation = location.append(path)
 
-                    val result: List<PropertyPathElement> = Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
-                        acc.apply { add(elem) }
-                    }
+                    val result: List<PropertyPath.Element> =
+                        Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
+                            acc.apply { add(elem) }
+                        }
                     result shouldContainExactly listOf(
-                        PropertyPathElement.Key("users"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("phone"),
-                        PropertyPathElement.Key("mobile"),
-                        PropertyPathElement.Idx(0),
-                        PropertyPathElement.Key("title")
+                        PropertyPath.Element.Key("users"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("phone"),
+                        PropertyPath.Element.Key("mobile"),
+                        PropertyPath.Element.Idx(0),
+                        PropertyPath.Element.Key("title")
                     )
                 }
 

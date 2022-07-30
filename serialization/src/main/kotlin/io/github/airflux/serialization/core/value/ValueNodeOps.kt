@@ -19,7 +19,6 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
@@ -80,12 +79,12 @@ internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
     tailrec fun ValueNode.getOrNull(path: PropertyPath, idxElement: Int): ValueNode? {
         if (idxElement == path.elements.size) return this
         return when (val element = path.elements[idxElement]) {
-            is PropertyPathElement.Key -> if (this is StructNode)
+            is PropertyPath.Element.Key -> if (this is StructNode)
                 this[element]?.getOrNull(path, idxElement + 1)
             else
                 null
 
-            is PropertyPathElement.Idx -> if (this is ArrayNode<*>)
+            is PropertyPath.Element.Idx -> if (this is ArrayNode<*>)
                 this[element]?.getOrNull(path, idxElement + 1)
             else
                 null

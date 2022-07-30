@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.ObjectContract
-import io.github.airflux.serialization.core.path.PropertyPathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -82,7 +82,7 @@ internal class StructNodeTest {
 
     @Test
     fun getByKeyFromEmptyObject() {
-        val key = PropertyPathElement.Key("name")
+        val key = PropertyPath.Element.Key("name")
 
         val value = EMPTY_OBJECT[key]
 
@@ -91,7 +91,7 @@ internal class StructNodeTest {
 
     @Test
     fun getByKeyFromNotEmptyObject() {
-        val key = PropertyPathElement.Key("name")
+        val key = PropertyPath.Element.Key("name")
 
         val value = NOT_EMPTY_OBJECT[key]
 

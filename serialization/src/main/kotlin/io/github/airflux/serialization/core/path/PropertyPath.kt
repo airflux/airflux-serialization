@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.core.path
 
 @Suppress("unused")
-public class PropertyPath private constructor(public val elements: List<PropertyPathElement>) {
+public class PropertyPath private constructor(public val elements: List<Element>) {
 
-    public constructor(key: String) : this(PropertyPathElement.Key(key))
-    public constructor(idx: Int) : this(PropertyPathElement.Idx(idx))
-    public constructor(element: PropertyPathElement) : this(listOf(element))
+    public constructor(key: String) : this(Element.Key(key))
+    public constructor(idx: Int) : this(Element.Idx(idx))
+    public constructor(element: Element) : this(listOf(element))
 
-    public fun append(key: String): PropertyPath = append(PropertyPathElement.Key(key))
-    public fun append(idx: Int): PropertyPath = append(PropertyPathElement.Idx(idx))
-    public fun append(element: PropertyPathElement): PropertyPath = PropertyPath(elements + element)
+    public fun append(key: String): PropertyPath = append(Element.Key(key))
+    public fun append(idx: Int): PropertyPath = append(Element.Idx(idx))
+    public fun append(element: Element): PropertyPath = PropertyPath(elements + element)
 
     override fun toString(): String = buildString {
         append("#")
@@ -36,6 +36,17 @@ public class PropertyPath private constructor(public val elements: List<Property
         this === other || (other is PropertyPath && this.elements == other.elements)
 
     override fun hashCode(): Int = elements.hashCode()
+
+    public sealed class Element {
+
+        public data class Key(val get: String) : Element() {
+            override fun toString(): String = "/$get"
+        }
+
+        public data class Idx(val get: Int) : Element() {
+            override fun toString(): String = "[$get]"
+        }
+    }
 
     public companion object
 }

@@ -17,18 +17,18 @@
 package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPathElement
+import io.github.airflux.serialization.core.path.PropertyPath.Element
 
 public sealed class Location {
 
     public abstract val isEmpty: Boolean
 
-    public fun append(key: String): Location = append(PropertyPathElement.Key(key))
-    public fun append(idx: Int): Location = append(PropertyPathElement.Idx(idx))
-    public fun append(element: PropertyPathElement): Location = Element(this, element)
+    public fun append(key: String): Location = append(PropertyPath.Element.Key(key))
+    public fun append(idx: Int): Location = append(PropertyPath.Element.Idx(idx))
+    public fun append(element: PropertyPath.Element): Location = Element(this, element)
     public fun append(path: PropertyPath): Location = path.elements.fold(this) { acc, p -> acc.append(p) }
 
-    public fun append(elements: Iterable<PropertyPathElement>): Location =
+    public fun append(elements: Iterable<PropertyPath.Element>): Location =
         elements.fold(this) { location, pathElement ->
             location.append(pathElement)
         }
@@ -38,7 +38,7 @@ public sealed class Location {
         override fun toString(): String = "#"
     }
 
-    private class Element(val begin: Location, val value: PropertyPathElement) : Location() {
+    private class Element(val begin: Location, val value: PropertyPath.Element) : Location() {
 
         override val isEmpty: Boolean = false
 
@@ -66,13 +66,13 @@ public sealed class Location {
 
         public val empty: Location = Empty
 
-        public tailrec fun <R> foldRight(initial: R, location: Location, operation: (R, PropertyPathElement) -> R): R =
+        public tailrec fun <R> foldRight(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
             when (location) {
                 is Empty -> initial
                 is Element -> foldRight(operation(initial, location.value), location.begin, operation)
             }
 
-        public fun <R> foldLeft(initial: R, location: Location, operation: (R, PropertyPathElement) -> R): R =
+        public fun <R> foldLeft(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
             when (location) {
                 is Empty -> initial
                 is Element -> operation(foldLeft(initial, location.begin, operation), location.value)

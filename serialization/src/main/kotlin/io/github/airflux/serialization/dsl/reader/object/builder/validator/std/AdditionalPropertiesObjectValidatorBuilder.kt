@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator.std
 
-import io.github.airflux.serialization.core.path.PropertyPathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
@@ -36,8 +36,8 @@ internal class AdditionalPropertiesObjectValidatorBuilder : ObjectValidatorBuild
         fun ObjectProperty.names(): List<String> = path.items
             .mapNotNull { path ->
                 when (val element = path.elements.first()) {
-                    is PropertyPathElement.Key -> element.get
-                    is PropertyPathElement.Idx -> null
+                    is PropertyPath.Element.Key -> element.get
+                    is PropertyPath.Element.Idx -> null
                 }
             }
 
