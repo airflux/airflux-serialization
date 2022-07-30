@@ -18,10 +18,10 @@ package io.github.airflux.serialization.dsl.reader.array.builder.item.specificat
 
 import io.github.airflux.serialization.core.reader.Reader
 
-public fun <T> prefixItems(item: ArrayItemSpec<T>, vararg items: ArrayItemSpec<T>): JsArrayPrefixItemsSpec<T> =
-    JsArrayPrefixItemsSpec(item = item, items = items)
+public fun <T> prefixItems(item: ArrayItemSpec<T>, vararg items: ArrayItemSpec<T>): ArrayPrefixItemsSpec<T> =
+    ArrayPrefixItemsSpec(item = item, items = items)
 
-public class JsArrayPrefixItemsSpec<out T> private constructor(internal val readers: List<Reader<T>>) {
+public class ArrayPrefixItemsSpec<out T> private constructor(internal val readers: List<Reader<T>>) {
 
     internal constructor(item: ArrayItemSpec<T>, vararg items: ArrayItemSpec<T>) : this(
         mutableListOf<Reader<T>>()
