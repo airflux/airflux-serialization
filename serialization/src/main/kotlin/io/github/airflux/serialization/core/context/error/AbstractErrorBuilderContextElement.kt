@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.core.context.error
 
-public abstract class AbstractErrorBuilderContextElement<T : JsContextErrorBuilderElement>(
-    override val key: JsContextErrorBuilderKey<T>
-) : JsContextErrorBuilderElement
+public abstract class AbstractErrorBuilderContextElement<T : ContextErrorBuilderElement>(
+    override val key: ContextErrorBuilderKey<T>
+) : ContextErrorBuilderElement

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsArrayReader
 import io.github.airflux.serialization.core.reader.array.readArray
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -53,7 +53,7 @@ public class JsArrayReaderBuilder<T> internal constructor(
 ) : JsArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: JsReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult<List<T>>
+        public fun build(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult<List<T>>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsArrayReader<T> {

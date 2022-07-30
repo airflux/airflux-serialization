@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyObjectValidatorBuilder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.JsError
@@ -50,7 +50,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
         private const val USER_NAME = "user"
         private const val DEFAULT_VALUE = "none"
 
-        private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val LOCATION = JsLocation.empty
 
         private val MinPropertiesError = JsonErrors.Validation.Object.MinProperties(expected = 1, actual = 0)
@@ -203,7 +203,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                 val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
 
                 "when the builder does not throw an exception" - {
-                    val builder: (ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<String>) = { _, location ->
+                    val builder: (ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<String>) = { _, location ->
                         JsResult.Success(location = location, value = USER_NAME)
                     }
                     val resultBuilder: JsObjectReaderBuilder.ResultBuilder<String> = returns(builder)
@@ -216,7 +216,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when the builder does throw an exception" - {
-                    val builder: (ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<String>) =
+                    val builder: (ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<String>) =
                         { _, _ ->
                             throw IllegalStateException()
                         }

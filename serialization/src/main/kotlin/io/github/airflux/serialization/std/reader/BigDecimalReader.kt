@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ValueNode
@@ -29,7 +29,7 @@ import java.math.BigDecimal
  * Reader for [BigDecimal] type.
  */
 public object BigDecimalReader : JsReader<BigDecimal> {
-    override fun read(context: JsReaderContext, location: JsLocation, input: ValueNode): JsResult<BigDecimal> =
+    override fun read(context: ReaderContext, location: JsLocation, input: ValueNode): JsResult<BigDecimal> =
         input.readAsNumber(context, location) { _, p, text ->
             BigDecimal(text).success(location = p)
         }

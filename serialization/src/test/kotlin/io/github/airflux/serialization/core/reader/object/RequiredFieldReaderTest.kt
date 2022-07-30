@@ -21,7 +21,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StringNode
@@ -31,7 +31,7 @@ import io.kotest.matchers.shouldBe
 internal class RequiredFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
+        private val CONTEXT = ReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
         private val LOCATION = JsLocation.empty.append("name")
         private const val VALUE = "user-1"
         private val READER: JsReader<String> =

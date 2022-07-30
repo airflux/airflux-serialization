@@ -16,17 +16,17 @@
 
 package io.github.airflux.serialization.core.reader.context.option
 
-import io.github.airflux.serialization.core.context.option.JsContextOptionElement
-import io.github.airflux.serialization.core.context.option.JsContextOptionKey
+import io.github.airflux.serialization.core.context.option.ContextOptionElement
+import io.github.airflux.serialization.core.context.option.ContextOptionKey
 import io.github.airflux.serialization.core.context.option.get
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 
-public val JsReaderContext.failFast: Boolean
+public val ReaderContext.failFast: Boolean
     get() = get(FailFast) { true }
 
-public class FailFast(public override val value: Boolean) : JsContextOptionElement<Boolean> {
+public class FailFast(public override val value: Boolean) : ContextOptionElement<Boolean> {
 
-    override val key: JsContextOptionKey<Boolean, FailFast> = Key
+    override val key: ContextOptionKey<Boolean, FailFast> = Key
 
-    public companion object Key : JsContextOptionKey<Boolean, FailFast>
+    public companion object Key : ContextOptionKey<Boolean, FailFast>
 }

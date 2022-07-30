@@ -17,11 +17,11 @@
 package io.github.airflux.serialization.std.validator.`object`
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -35,7 +35,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
 ) : JsObjectValidator {
 
     override fun validate(
-        context: JsReaderContext,
+        context: ReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
         input: StructNode
@@ -59,7 +59,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
 
         public fun build(): JsError = function()
 
-        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()
         }
     }

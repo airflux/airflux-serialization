@@ -18,14 +18,14 @@ package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NumberNode
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class ByteWriterTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsWriterContext()
+        private val CONTEXT = WriterContext()
         private val LOCATION = JsLocation.empty
     }
 

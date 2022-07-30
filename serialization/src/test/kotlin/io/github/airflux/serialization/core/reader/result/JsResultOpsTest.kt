@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 import io.github.airflux.serialization.core.value.ValueNode
@@ -28,7 +28,7 @@ import io.kotest.matchers.shouldBe
 internal class JsResultOpsTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT = ReaderContext()
         private val LOCATION = JsLocation.empty
     }
 

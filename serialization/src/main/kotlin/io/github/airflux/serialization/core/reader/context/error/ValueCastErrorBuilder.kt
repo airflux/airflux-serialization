@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.context.error
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.reader.result.JsError
 import kotlin.reflect.KClass
@@ -30,7 +30,7 @@ public class ValueCastErrorBuilder(private val builder: (value: String, target: 
 
     public fun build(value: String, target: KClass<*>): JsError = builder(value, target)
 
-    public companion object Key : JsContextErrorBuilderKey<ValueCastErrorBuilder> {
+    public companion object Key : ContextErrorBuilderKey<ValueCastErrorBuilder> {
         override val name: String = errorBuilderName()
     }
 }

@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.context
+package io.github.airflux.serialization.dsl.writer.context
 
-public interface JsContext {
+import io.github.airflux.serialization.core.context.Context
+import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.dsl.AirfluxMarker
 
-    public val isEmpty: Boolean
+public fun writerContext(block: WriterContextBuilder.() -> Unit = {}): WriterContext =
+    WriterContextBuilder().apply(block).build()
 
-    public val isNotEmpty: Boolean
-        get() = !isEmpty
+@AirfluxMarker
+public class WriterContextBuilder internal constructor() {
+    private val elements = mutableListOf<Context.Element>()
 
-    public fun <E : Element> getOrNull(key: Key<E>): E?
-
-    public operator fun <E : Element> contains(key: Key<E>): Boolean
-
-    public interface Key<E : Element>
-
-    public interface Element {
-        public val key: Key<*>
-        public operator fun <E : Element> plus(element: E): List<Element> = listOf(this, element)
-    }
+    internal fun build(): WriterContext = WriterContext(elements)
 }

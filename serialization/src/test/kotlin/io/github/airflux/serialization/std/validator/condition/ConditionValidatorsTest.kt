@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.condition
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 import io.kotest.core.spec.style.FreeSpec
@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT = ReaderContext()
         private val LOCATION = JsLocation.empty
         private val isNotEmpty: JsValidator<String> =
             JsValidator { _, location, value ->

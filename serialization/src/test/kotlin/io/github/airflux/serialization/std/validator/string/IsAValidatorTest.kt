@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.JsValidator
 import io.kotest.assertions.throwables.shouldThrow
@@ -42,7 +42,7 @@ internal class IsAValidatorTest : FreeSpec() {
             val validator: JsValidator<String> = StringValidator.isA(IS_DIGITAL)
 
             "when the reader context does not contain the error builder" - {
-                val context = JsReaderContext()
+                val context = ReaderContext()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
@@ -53,7 +53,7 @@ internal class IsAValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context = JsReaderContext(
+                val context = ReaderContext(
                     IsAStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::IsA)
                 )
 

@@ -17,13 +17,13 @@
 package io.github.airflux.serialization.core.reader.validator
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 
 @Suppress("unused")
 public fun interface JsValidator<in T> {
 
-    public fun validate(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure?
+    public fun validate(context: ReaderContext, location: JsLocation, value: T): JsResult.Failure?
 }
 
 /*

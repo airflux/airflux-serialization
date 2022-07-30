@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.BooleanNode
@@ -45,7 +45,7 @@ internal class JsObjectOptionalPropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_INT = "10"
 
         private val CONTEXT =
-            JsReaderContext(
+            ReaderContext(
                 listOf(
                     IsNotEmptyStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty },
                     InvalidTypeErrorBuilder(JsonErrors::InvalidType)

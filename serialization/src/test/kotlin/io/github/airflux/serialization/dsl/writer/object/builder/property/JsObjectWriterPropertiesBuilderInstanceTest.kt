@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.inspectors.forOne
@@ -33,7 +33,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
         private const val ATTRIBUTE_NAME = "attribute-id"
         private const val ATTRIBUTE_VALUE = "f12720c8-a441-4b18-9783-b8bc7b31607c"
 
-        private val CONTEXT = JsWriterContext()
+        private val CONTEXT = WriterContext()
         private val LOCATION = JsLocation.empty
     }
 

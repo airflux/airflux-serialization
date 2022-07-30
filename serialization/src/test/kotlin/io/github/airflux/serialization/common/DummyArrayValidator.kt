@@ -17,12 +17,12 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidator
 
 internal class DummyArrayValidator(val result: JsResult.Failure?) : JsArrayValidator {
 
-    override fun validate(context: JsReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure? = result
+    override fun validate(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure? = result
 }

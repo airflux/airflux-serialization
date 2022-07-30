@@ -17,11 +17,11 @@
 package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -29,7 +29,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArra
 
 public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator {
 
-    override fun validate(context: JsReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: JsLocation, input: ArrayNode<*>): JsResult.Failure? =
         if (input.isEmpty()) {
             val errorBuilder = context[ErrorBuilder]
             JsResult.Failure(location, errorBuilder.build())
@@ -41,7 +41,7 @@ public class IsNotEmptyArrayValidator internal constructor() : JsArrayValidator 
 
         public fun build(): JsError = function()
 
-        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()
         }
     }

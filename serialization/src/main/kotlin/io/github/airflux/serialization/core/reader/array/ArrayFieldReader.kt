@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -34,7 +34,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
  * for prefix items of an array
  */
 public fun <T> readArray(
-    context: JsReaderContext,
+    context: ReaderContext,
     location: JsLocation,
     from: ArrayNode<*>,
     prefixItems: List<JsReader<T>>,
@@ -52,7 +52,7 @@ public fun <T> readArray(
  * @param items the reader for items of an array
  */
 public fun <T> readArray(
-    context: JsReaderContext,
+    context: ReaderContext,
     location: JsLocation,
     from: ArrayNode<*>,
     items: JsReader<T>
@@ -71,7 +71,7 @@ public fun <T> readArray(
  * @param items the reader for items of an array
  */
 public fun <T> readArray(
-    context: JsReaderContext,
+    context: ReaderContext,
     location: JsLocation,
     from: ArrayNode<*>,
     prefixItems: List<JsReader<T>>,
@@ -85,7 +85,7 @@ public fun <T> readArray(
 )
 
 internal fun <T> ArrayNode<*>.read(
-    context: JsReaderContext,
+    context: ReaderContext,
     location: JsLocation,
     prefixItems: List<JsReader<T>>,
     items: JsReader<T>?,

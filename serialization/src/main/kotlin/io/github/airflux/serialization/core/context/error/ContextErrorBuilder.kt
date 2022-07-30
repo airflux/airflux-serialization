@@ -16,23 +16,23 @@
 
 package io.github.airflux.serialization.core.context.error
 
-import io.github.airflux.serialization.core.context.JsContext
+import io.github.airflux.serialization.core.context.Context
 import kotlin.reflect.full.companionObject
 
-public operator fun <E : JsContextErrorBuilderElement> JsContext.get(key: JsContextErrorBuilderKey<E>): E =
+public operator fun <E : ContextErrorBuilderElement> Context.get(key: ContextErrorBuilderKey<E>): E =
     getOrNull(key)
         ?: throw NoSuchElementException("The error builder '${key.name}' is missing in the context.")
 
-public interface JsContextErrorBuilderKey<E : JsContextErrorBuilderElement> : JsContext.Key<E> {
+public interface ContextErrorBuilderKey<E : ContextErrorBuilderElement> : Context.Key<E> {
     public val name: String
 }
 
-public interface JsContextErrorBuilderElement : JsContext.Element {
-    override val key: JsContextErrorBuilderKey<*>
+public interface ContextErrorBuilderElement : Context.Element {
+    override val key: ContextErrorBuilderKey<*>
 }
 
-public inline fun <reified T : JsContextErrorBuilderKey<*>> T.errorBuilderName(): String =
+public inline fun <reified T : ContextErrorBuilderKey<*>> T.errorBuilderName(): String =
     errorBuilderName(T::class.java)
 
-public fun <T : JsContextErrorBuilderKey<*>> errorBuilderName(javaClass: Class<T>): String =
+public fun <T : ContextErrorBuilderKey<*>> errorBuilderName(javaClass: Class<T>): String =
     (javaClass.enclosingClass?.takeIf { it.kotlin.companionObject?.java == javaClass } ?: javaClass).canonicalName

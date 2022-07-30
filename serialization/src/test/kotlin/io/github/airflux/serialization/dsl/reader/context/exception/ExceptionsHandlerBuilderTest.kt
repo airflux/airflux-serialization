@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.context.exception
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -26,7 +26,7 @@ import io.kotest.matchers.shouldBe
 internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT = ReaderContext()
         private val LOCATION = JsLocation.empty
         private val EXCEPTION = IllegalArgumentException()
     }

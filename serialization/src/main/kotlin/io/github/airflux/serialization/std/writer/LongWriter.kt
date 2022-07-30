@@ -20,11 +20,11 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 
 /**
  * Writer for primitive [Long] type.
  */
 public object LongWriter : JsWriter<Long> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: Long): ValueNode = NumberNode.valueOf(value)
+    override fun write(context: WriterContext, location: JsLocation, value: Long): ValueNode = NumberNode.valueOf(value)
 }

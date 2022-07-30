@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyArrayValidatorBuilder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
@@ -42,7 +42,7 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
         private const val SECOND_ITEM = "second"
         private const val USER_NAME = "user"
 
-        private val CONTEXT = JsReaderContext(
+        private val CONTEXT = ReaderContext(
             listOf(
                 AdditionalItemsErrorBuilder { JsonErrors.AdditionalItems },
                 InvalidTypeErrorBuilder(JsonErrors::InvalidType)

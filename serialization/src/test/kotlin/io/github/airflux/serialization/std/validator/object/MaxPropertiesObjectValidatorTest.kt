@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.`object`
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -51,7 +51,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
             val validator: JsObjectValidator = ObjectValidator.maxProperties(MAX_PROPERTIES).build(PROPERTIES)
 
             "when the reader context does not contain the error builder" - {
-                val context = JsReaderContext()
+                val context = ReaderContext()
                 val input = StructNode(
                     ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                     NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
@@ -67,7 +67,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context = JsReaderContext(
+                val context = ReaderContext(
                     MaxPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
                 )
 

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.core.writer.`object`.writeNonNullable
 import io.github.airflux.serialization.core.writer.`object`.writeNullable
 import io.github.airflux.serialization.core.writer.`object`.writeOptional
@@ -27,13 +27,13 @@ import io.github.airflux.serialization.dsl.writer.array.builder.item.specificati
 
 public sealed class JsArrayItems<T> {
 
-    public abstract fun write(context: JsWriterContext, location: JsLocation, value: T): ValueNode?
+    public abstract fun write(context: WriterContext, location: JsLocation, value: T): ValueNode?
 
     public class NonNullable<T : Any> private constructor(private val writer: JsWriter<T>) : JsArrayItems<T>() {
 
         internal constructor(spec: JsArrayItemSpec.NonNullable<T>) : this(spec.writer)
 
-        override fun write(context: JsWriterContext, location: JsLocation, value: T): ValueNode? =
+        override fun write(context: WriterContext, location: JsLocation, value: T): ValueNode? =
             writeNonNullable(context = context, location = location, using = writer, value = value)
     }
 
@@ -41,7 +41,7 @@ public sealed class JsArrayItems<T> {
 
         internal constructor(spec: JsArrayItemSpec.Optional<T>) : this(spec.writer)
 
-        override fun write(context: JsWriterContext, location: JsLocation, value: T): ValueNode? =
+        override fun write(context: WriterContext, location: JsLocation, value: T): ValueNode? =
             writeOptional(context = context, location = location, using = writer, value = value)
     }
 
@@ -49,7 +49,7 @@ public sealed class JsArrayItems<T> {
 
         internal constructor(spec: JsArrayItemSpec.Nullable<T>) : this(spec.writer)
 
-        override fun write(context: JsWriterContext, location: JsLocation, value: T): ValueNode? =
+        override fun write(context: WriterContext, location: JsLocation, value: T): ValueNode? =
             writeNullable(context = context, location = location, using = writer, value = value)
     }
 }

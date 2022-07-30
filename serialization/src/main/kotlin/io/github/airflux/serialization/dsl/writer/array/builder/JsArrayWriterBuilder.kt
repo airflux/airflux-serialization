@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.writer.JsArrayWriter
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
@@ -68,7 +68,7 @@ internal fun <T> buildArrayWriter(
     actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
     items: JsArrayItems<T>
 ): JsArrayWriter<T> =
-    JsArrayWriter { context: JsWriterContext, location: JsLocation, values ->
+    JsArrayWriter { context: WriterContext, location: JsLocation, values ->
         val result = values.mapNotNull { value -> items.write(context, location, value) }
 
         if (result.isNotEmpty())

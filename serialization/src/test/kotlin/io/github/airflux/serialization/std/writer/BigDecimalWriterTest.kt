@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NumberNode
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
@@ -36,7 +36,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
         "The big decimal type writer" - {
 
             "when the writer context does not contain the stripTrailingZeros option" - {
-                val context = JsWriterContext()
+                val context = WriterContext()
 
                 "then the writer should return original value" {
                     val result = BigDecimalWriter.write(context, LOCATION, BigDecimal(TEXT_VALUE))
@@ -47,7 +47,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
             "when the writer context contain the stripTrailingZeros option" - {
 
                 "when the stripTrailingZeros option is true" - {
-                    val context = JsWriterContext(
+                    val context = WriterContext(
                         BigDecimalWriter.StripTrailingZeros(true)
                     )
 
@@ -58,7 +58,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
                 }
 
                 "when the stripTrailingZeros option is false" - {
-                    val context = JsWriterContext(
+                    val context = WriterContext(
                         BigDecimalWriter.StripTrailingZeros(false)
                     )
 

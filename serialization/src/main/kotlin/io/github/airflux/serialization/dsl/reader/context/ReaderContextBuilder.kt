@@ -16,20 +16,20 @@
 
 package io.github.airflux.serialization.dsl.reader.context
 
-import io.github.airflux.serialization.core.context.JsContext
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderElement
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.context.Context
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderElement
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
 
-public fun readerContext(block: JsReaderContextBuilder.() -> Unit = {}): JsReaderContext =
-    JsReaderContextBuilder().apply(block).build()
+public fun readerContext(block: ReaderContextBuilder.() -> Unit = {}): ReaderContext =
+    ReaderContextBuilder().apply(block).build()
 
 @AirfluxMarker
-public class JsReaderContextBuilder internal constructor() {
+public class ReaderContextBuilder internal constructor() {
 
-    private val elements = mutableListOf<JsContext.Element>()
+    private val elements = mutableListOf<Context.Element>()
 
     public var failFast: Boolean? = null
 
@@ -42,24 +42,24 @@ public class JsReaderContextBuilder internal constructor() {
         ExceptionsHandlerBuilder().apply(block).build().also { elements.add(it) }
     }
 
-    internal fun build(): JsReaderContext {
+    internal fun build(): ReaderContext {
         failFast?.let { isTrue ->
             FailFast(value = isTrue).also { elements.add(it) }
         }
 
-        return JsReaderContext(elements)
+        return ReaderContext(elements)
     }
 
     @AirfluxMarker
     public class ErrorsBuilder internal constructor() {
-        private val items = mutableListOf<JsContextErrorBuilderElement>()
+        private val items = mutableListOf<ContextErrorBuilderElement>()
 
-        public fun <E : JsContextErrorBuilderElement> register(error: E) {
+        public fun <E : ContextErrorBuilderElement> register(error: E) {
             items.add(error)
         }
 
-        public operator fun <E : JsContextErrorBuilderElement> E.unaryPlus(): Unit = register(this)
+        public operator fun <E : ContextErrorBuilderElement> E.unaryPlus(): Unit = register(this)
 
-        internal fun build(): List<JsContext.Element> = items
+        internal fun build(): List<Context.Element> = items
     }
 }

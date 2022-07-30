@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.reader
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -31,7 +31,7 @@ import io.github.airflux.serialization.core.value.readAsNumber
  * Reader for primitive [Short] type.
  */
 public object ShortReader : JsReader<Short> {
-    override fun read(context: JsReaderContext, location: JsLocation, input: ValueNode): JsResult<Short> =
+    override fun read(context: ReaderContext, location: JsLocation, input: ValueNode): JsResult<Short> =
         input.readAsNumber(context, location) { ctx, l, text ->
             try {
                 text.toShort().success(location = l)

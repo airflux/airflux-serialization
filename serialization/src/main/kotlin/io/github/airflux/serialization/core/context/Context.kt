@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.context.option
+package io.github.airflux.serialization.core.context
 
-import io.github.airflux.serialization.core.context.JsContext
+public interface Context {
 
-public fun <T, E : JsContextOptionElement<T>> JsContext.get(key: JsContextOptionKey<T, E>, default: () -> T): T =
-    getOrNull(key)?.value ?: default()
+    public val isEmpty: Boolean
 
-public interface JsContextOptionKey<T, E : JsContextOptionElement<T>> : JsContext.Key<E>
+    public val isNotEmpty: Boolean
+        get() = !isEmpty
 
-public interface JsContextOptionElement<T> : JsContext.Element {
-    override val key: JsContextOptionKey<T, *>
-    public val value: T
+    public fun <E : Element> getOrNull(key: Key<E>): E?
+
+    public operator fun <E : Element> contains(key: Key<E>): Boolean
+
+    public interface Key<E : Element>
+
+    public interface Element {
+        public val key: Key<*>
+        public operator fun <E : Element> plus(element: E): List<Element> = listOf(this, element)
+    }
 }

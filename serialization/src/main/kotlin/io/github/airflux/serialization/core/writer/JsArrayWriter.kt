@@ -18,8 +18,8 @@ package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 
 public fun interface JsArrayWriter<in T> : JsWriter<Iterable<T>> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: Iterable<T>): ValueNode?
+    override fun write(context: WriterContext, location: JsLocation, value: Iterable<T>): ValueNode?
 }

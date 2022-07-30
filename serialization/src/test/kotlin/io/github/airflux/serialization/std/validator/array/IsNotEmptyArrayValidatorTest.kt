@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.array
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -41,7 +41,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
             val validator = ArrayValidator.isNotEmpty.build()
 
             "when the reader context does not contain the error builder" - {
-                val context = JsReaderContext()
+                val context = ReaderContext()
 
                 "when the test condition is false" {
                     val input: ArrayNode<StringNode> = ArrayNode()
@@ -54,7 +54,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
             }
 
             "when the reader context contains the error builder" - {
-                val context = JsReaderContext(
+                val context = ReaderContext(
                     IsNotEmptyArrayValidator.ErrorBuilder { JsonErrors.Validation.Arrays.IsEmpty }
                 )
 

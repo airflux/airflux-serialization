@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.context.option
 
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -27,7 +27,7 @@ internal class FailFastTest : FreeSpec() {
         "The extension-function failFast" - {
 
             "when the writer context does not contain the FailFast option" - {
-                val context = JsReaderContext()
+                val context = ReaderContext()
 
                 "should return the default value" {
                     val result = context.failFast
@@ -36,7 +36,7 @@ internal class FailFastTest : FreeSpec() {
             }
 
             "when the writer context contain the FailFast option" - {
-                val context = JsReaderContext(FailFast(false))
+                val context = ReaderContext(FailFast(false))
 
                 "should return the option value" {
                     val result = context.failFast

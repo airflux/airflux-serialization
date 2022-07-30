@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class OptionalFieldWriterTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsWriterContext()
+        private val CONTEXT = WriterContext()
         private val LOCATION = JsLocation.empty
     }
 

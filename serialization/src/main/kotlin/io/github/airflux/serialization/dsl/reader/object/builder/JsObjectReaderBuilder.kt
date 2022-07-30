@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsObjectReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -60,7 +60,7 @@ public class JsObjectReaderBuilder<T> internal constructor(
     JsObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: JsReaderContext, location: JsLocation, objectValuesMap: ObjectValuesMap): JsResult<T>
+        public fun build(context: ReaderContext, location: JsLocation, objectValuesMap: ObjectValuesMap): JsResult<T>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): JsObjectReader<T> {
@@ -70,7 +70,7 @@ public class JsObjectReaderBuilder<T> internal constructor(
     }
 }
 
-public fun <T> returns(builder: ObjectValuesMap.(JsReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T> =
+public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, JsLocation) -> JsResult<T>): ResultBuilder<T> =
     ResultBuilder { context, location, values ->
         try {
             values.builder(context, location)
@@ -128,7 +128,7 @@ internal fun <T> buildObjectReader(
             failures.merge()
     }
 
-internal fun StructNode.read(context: JsReaderContext, location: JsLocation, property: JsObjectProperty): JsResult<Any?> {
+internal fun StructNode.read(context: ReaderContext, location: JsLocation, property: JsObjectProperty): JsResult<Any?> {
     val reader = when (property) {
         is JsObjectProperty.Required<*> -> property.reader
         is JsObjectProperty.Defaultable<*> -> property.reader

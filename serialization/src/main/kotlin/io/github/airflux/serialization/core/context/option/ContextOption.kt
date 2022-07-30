@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.context
+package io.github.airflux.serialization.core.context.option
 
-import io.github.airflux.serialization.core.context.JsContext
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
-import io.github.airflux.serialization.dsl.AirfluxMarker
+import io.github.airflux.serialization.core.context.Context
 
-public fun writerContext(block: JsWriterContextBuilder.() -> Unit = {}): JsWriterContext =
-    JsWriterContextBuilder().apply(block).build()
+public fun <T, E : ContextOptionElement<T>> Context.get(key: ContextOptionKey<T, E>, default: () -> T): T =
+    getOrNull(key)?.value ?: default()
 
-@AirfluxMarker
-public class JsWriterContextBuilder internal constructor() {
-    private val elements = mutableListOf<JsContext.Element>()
+public interface ContextOptionKey<T, E : ContextOptionElement<T>> : Context.Key<E>
 
-    internal fun build(): JsWriterContext = JsWriterContext(elements)
+public interface ContextOptionElement<T> : Context.Element {
+    override val key: ContextOptionKey<T, *>
+    public val value: T
 }

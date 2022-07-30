@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.context.error
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.value.ValueNode
@@ -30,7 +30,7 @@ public class InvalidTypeErrorBuilder(private val builder: (expected: ValueNode.T
 
     public fun build(expected: ValueNode.Type, actual: ValueNode.Type): JsError = builder(expected, actual)
 
-    public companion object Key : JsContextErrorBuilderKey<InvalidTypeErrorBuilder> {
+    public companion object Key : ContextErrorBuilderKey<InvalidTypeErrorBuilder> {
         override val name: String = errorBuilderName()
     }
 }

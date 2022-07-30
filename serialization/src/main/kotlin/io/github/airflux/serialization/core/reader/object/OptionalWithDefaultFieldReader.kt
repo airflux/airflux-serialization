@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.`object`
 
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 
 /**
@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.result.JsResult
  * - If a node is not found ([from] is [JsLookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readOptional(
-    context: JsReaderContext,
+    context: ReaderContext,
     from: JsLookup,
     using: JsReader<T>,
     defaultValue: () -> T

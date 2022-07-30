@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.context.exception
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import kotlin.reflect.KClass
@@ -29,13 +29,13 @@ public class ExceptionsHandlerBuilder internal constructor() {
 
     @Suppress("unused")
     public inline fun <reified E : Throwable> exception(
-        noinline handler: (JsReaderContext, JsLocation, E) -> JsError
+        noinline handler: (ReaderContext, JsLocation, E) -> JsError
     ): Unit =
         exception(E::class, handler)
 
-    public fun <E : Throwable> exception(kClass: KClass<E>, handler: (JsReaderContext, JsLocation, E) -> JsError) {
+    public fun <E : Throwable> exception(kClass: KClass<E>, handler: (ReaderContext, JsLocation, E) -> JsError) {
         @Suppress("UNCHECKED_CAST")
-        handlers += kClass to handler as (JsReaderContext, JsLocation, Throwable) -> JsError
+        handlers += kClass to handler as (ReaderContext, JsLocation, Throwable) -> JsError
     }
 
     internal fun build(): ExceptionsHandler {

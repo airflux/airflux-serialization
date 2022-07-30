@@ -16,21 +16,21 @@
 
 package io.github.airflux.serialization.core.context
 
-public abstract class JsAbstractContext : JsContext {
+public abstract class AbstractContext : Context {
 
-    protected abstract val elements: Map<JsContext.Key<*>, JsContext.Element>
+    protected abstract val elements: Map<Context.Key<*>, Context.Element>
 
     override val isEmpty: Boolean
         get() = elements.isEmpty()
 
     @Suppress("UNCHECKED_CAST")
-    override fun <E : JsContext.Element> getOrNull(key: JsContext.Key<E>): E? = elements[key]?.let { it as E }
+    override fun <E : Context.Element> getOrNull(key: Context.Key<E>): E? = elements[key]?.let { it as E }
 
-    override operator fun <E : JsContext.Element> contains(key: JsContext.Key<E>): Boolean = elements.contains(key)
+    override operator fun <E : Context.Element> contains(key: Context.Key<E>): Boolean = elements.contains(key)
 
-    protected fun <E : JsContext.Element> add(element: E): Map<JsContext.Key<*>, JsContext.Element> =
+    protected fun <E : Context.Element> add(element: E): Map<Context.Key<*>, Context.Element> =
         elements + (element.key to element)
 
-    protected fun <E : JsContext.Element> add(elements: Iterable<E>): Map<JsContext.Key<*>, JsContext.Element> =
+    protected fun <E : Context.Element> add(elements: Iterable<E>): Map<Context.Key<*>, Context.Element> =
         this.elements + elements.map { it.key to it }
 }

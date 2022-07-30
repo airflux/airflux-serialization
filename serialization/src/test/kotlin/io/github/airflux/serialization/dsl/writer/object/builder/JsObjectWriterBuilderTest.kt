@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.optional
 import io.kotest.core.spec.style.FreeSpec
@@ -34,7 +34,7 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
         private const val ATTRIBUTE_NAME = "name"
         private const val ATTRIBUTE_VALUE = "user"
 
-        private val CONTEXT = JsWriterContext()
+        private val CONTEXT = WriterContext()
         private val LOCATION = JsLocation.empty
     }
 

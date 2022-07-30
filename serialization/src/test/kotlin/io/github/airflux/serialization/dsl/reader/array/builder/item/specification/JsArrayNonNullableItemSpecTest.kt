@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array.builder.item.specificat
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -41,7 +41,7 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
         private const val ID_VALUE_AS_INT = "10"
 
         private val CONTEXT =
-            JsReaderContext(
+            ReaderContext(
                 listOf(
                     IsNotEmptyStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty },
                     PathMissingErrorBuilder { JsonErrors.PathMissing },

@@ -20,12 +20,12 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 
 /**
  * Writer for primitive [Boolean] type.
  */
 public object BooleanWriter : JsWriter<Boolean> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: Boolean): ValueNode =
+    override fun write(context: WriterContext, location: JsLocation, value: Boolean): ValueNode =
         if (value) BooleanNode.True else BooleanNode.False
 }

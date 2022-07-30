@@ -17,11 +17,11 @@
 package io.github.airflux.serialization.std.validator.comparable
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.JsValidator
@@ -30,7 +30,7 @@ public class MinComparableValidator<T> internal constructor(private val expected
     where T : Number,
           T : Comparable<T> {
 
-    override fun validate(context: JsReaderContext, location: JsLocation, value: T): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: JsLocation, value: T): JsResult.Failure? =
         if (value >= expected)
             null
         else {
@@ -43,7 +43,7 @@ public class MinComparableValidator<T> internal constructor(private val expected
 
         public fun build(expected: Number, actual: Number): JsError = function(expected, actual)
 
-        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()
         }
     }

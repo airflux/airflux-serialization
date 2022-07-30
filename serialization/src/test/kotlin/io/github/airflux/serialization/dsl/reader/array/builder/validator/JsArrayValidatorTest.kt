@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array.builder.validator
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -32,7 +32,7 @@ import io.kotest.matchers.shouldBe
 internal class JsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT = ReaderContext()
         private val LOCATION = JsLocation.empty
         private val VALUE = ArrayNode<StringNode>()
     }

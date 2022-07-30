@@ -17,9 +17,9 @@
 package io.github.airflux.serialization.dsl.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 
-public typealias WriterActionBuilderIfResultIsEmpty = (JsWriterContext, JsLocation) -> WriterActionIfResultIsEmpty
+public typealias WriterActionBuilderIfResultIsEmpty = (WriterContext, JsLocation) -> WriterActionIfResultIsEmpty
 
 internal interface WriterActionConfigurator {
     var actionIfEmpty: WriterActionBuilderIfResultIsEmpty

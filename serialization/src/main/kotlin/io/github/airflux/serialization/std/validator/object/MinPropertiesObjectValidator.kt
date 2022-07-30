@@ -17,11 +17,11 @@
 package io.github.airflux.serialization.std.validator.`object`
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
+import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StructNode
@@ -31,7 +31,7 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsO
 public class MinPropertiesObjectValidator internal constructor(private val value: Int) : JsObjectValidator {
 
     override fun validate(
-        context: JsReaderContext,
+        context: ReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
         input: StructNode
@@ -47,7 +47,7 @@ public class MinPropertiesObjectValidator internal constructor(private val value
 
         public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
 
-        public companion object Key : JsContextErrorBuilderKey<ErrorBuilder> {
+        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()
         }
     }

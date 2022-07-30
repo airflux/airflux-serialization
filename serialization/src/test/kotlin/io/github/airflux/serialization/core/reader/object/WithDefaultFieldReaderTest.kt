@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -30,7 +30,7 @@ import io.kotest.matchers.shouldBe
 internal class WithDefaultFieldReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT = ReaderContext()
         private val LOCATION = JsLocation.empty.append("name")
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"

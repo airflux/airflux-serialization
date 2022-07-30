@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nullable
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.optional
@@ -36,7 +36,7 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
         private const val FIRST_ITEM = "item-1"
         private const val SECOND_ITEM = "item-2"
 
-        private val CONTEXT = JsWriterContext()
+        private val CONTEXT = WriterContext()
         private val LOCATION = JsLocation.empty
     }
 

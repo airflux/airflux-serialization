@@ -17,19 +17,19 @@
 package io.github.airflux.serialization.dsl.reader.context
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsReaderContextBuilderTest : FreeSpec() {
+internal class ReaderContextBuilderTest : FreeSpec() {
 
     init {
 
         "when the context is not initialized" - {
-            val context: JsReaderContext = readerContext()
+            val context: ReaderContext = readerContext()
 
             "then context is empty" {
                 context.isEmpty shouldBe true
@@ -37,7 +37,7 @@ internal class JsReaderContextBuilderTest : FreeSpec() {
         }
 
         "when any parameters are not set in the builder" - {
-            val context: JsReaderContext = readerContext {}
+            val context: ReaderContext = readerContext {}
 
             "then the context is empty" {
                 context.isEmpty shouldBe true
@@ -45,7 +45,7 @@ internal class JsReaderContextBuilderTest : FreeSpec() {
         }
 
         "when failFast parameter is set in the builder" - {
-            val context: JsReaderContext = readerContext {
+            val context: ReaderContext = readerContext {
                 failFast = false
             }
 
@@ -55,7 +55,7 @@ internal class JsReaderContextBuilderTest : FreeSpec() {
         }
 
         "when the error builder was registered" - {
-            val context: JsReaderContext = readerContext {
+            val context: ReaderContext = readerContext {
                 errorBuilders {
                     +PathMissingErrorBuilder { JsonErrors.PathMissing }
                 }
@@ -67,7 +67,7 @@ internal class JsReaderContextBuilderTest : FreeSpec() {
         }
 
         "when the exception handler was registered" - {
-            val context: JsReaderContext = readerContext {
+            val context: ReaderContext = readerContext {
                 exceptions {
                     exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
                 }

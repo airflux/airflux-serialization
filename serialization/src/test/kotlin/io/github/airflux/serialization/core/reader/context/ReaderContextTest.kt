@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.writer.context
+package io.github.airflux.serialization.core.reader.context
 
-import io.github.airflux.serialization.core.context.JsContext
+import io.github.airflux.serialization.core.context.Context
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldContainExactly
@@ -24,7 +24,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsWriterContextTest : FreeSpec() {
+internal class ReaderContextTest : FreeSpec() {
 
     companion object {
         private val userContext = UserContext()
@@ -33,12 +33,12 @@ internal class JsWriterContextTest : FreeSpec() {
 
     init {
 
-        "The JsWriterContext" - {
+        "The ReaderContext type" - {
 
             "when calling the constructor" - {
 
                 "without parameters" - {
-                    val empty = JsWriterContext()
+                    val empty = ReaderContext()
 
                     "context should be is empty" {
                         empty.isEmpty shouldBe true
@@ -46,7 +46,7 @@ internal class JsWriterContextTest : FreeSpec() {
                 }
 
                 "with one parameters" - {
-                    val one = JsWriterContext(userContext)
+                    val one = ReaderContext(userContext)
 
                     "context should not be is empty" {
                         one.isEmpty shouldBe false
@@ -60,7 +60,7 @@ internal class JsWriterContextTest : FreeSpec() {
 
                 "with the collection of the parameters" - {
                     val elements = listOf(userContext, orderContext)
-                    val one = JsWriterContext(elements)
+                    val one = ReaderContext(elements)
 
                     "context should not be is empty" {
                         one.isEmpty shouldBe false
@@ -76,7 +76,7 @@ internal class JsWriterContextTest : FreeSpec() {
             }
 
             "when context is empty" - {
-                val empty = JsWriterContext()
+                val empty = ReaderContext()
 
                 "property isEmpty should return true" - {
                     empty.isEmpty shouldBe true
@@ -122,7 +122,7 @@ internal class JsWriterContextTest : FreeSpec() {
             }
 
             "when context is not empty" - {
-                val one = JsWriterContext(userContext)
+                val one = ReaderContext(userContext)
 
                 "property isEmpty should return false" - {
                     one.isEmpty shouldBe false
@@ -199,23 +199,23 @@ internal class JsWriterContextTest : FreeSpec() {
         }
     }
 
-    class UserContext : JsContext.Element {
+    class UserContext : Context.Element {
         override fun toString(): String = "UserContext"
         override fun equals(other: Any?): Boolean = this === other || other is UserContext
         override fun hashCode(): Int = Key.hashCode()
 
-        override val key: JsContext.Key<*> = Key
+        override val key: Context.Key<*> = Key
 
-        companion object Key : JsContext.Key<UserContext>
+        companion object Key : Context.Key<UserContext>
     }
 
-    class OrderContext : JsContext.Element {
+    class OrderContext : Context.Element {
         override fun toString(): String = "OrderContext"
         override fun equals(other: Any?): Boolean = this === other || other is OrderContext
         override fun hashCode(): Int = UserContext.hashCode()
 
-        override val key: JsContext.Key<*> = Key
+        override val key: Context.Key<*> = Key
 
-        companion object Key : JsContext.Key<OrderContext>
+        companion object Key : Context.Key<OrderContext>
     }
 }

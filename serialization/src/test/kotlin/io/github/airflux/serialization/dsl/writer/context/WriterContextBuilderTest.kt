@@ -16,16 +16,16 @@
 
 package io.github.airflux.serialization.dsl.writer.context
 
-import io.github.airflux.serialization.core.writer.context.JsWriterContext
+import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsWriterContextBuilderTest : FreeSpec() {
+internal class WriterContextBuilderTest : FreeSpec() {
 
     init {
 
         "when the context is not initialized" - {
-            val context: JsWriterContext = writerContext()
+            val context: WriterContext = writerContext()
 
             "then context is empty" {
                 context.isEmpty shouldBe true
@@ -33,7 +33,7 @@ internal class JsWriterContextBuilderTest : FreeSpec() {
         }
 
         "when any parameters are not set in the builder" - {
-            val context: JsWriterContext = writerContext { }
+            val context: WriterContext = writerContext { }
 
             "then context is empty" {
                 context.isEmpty shouldBe true

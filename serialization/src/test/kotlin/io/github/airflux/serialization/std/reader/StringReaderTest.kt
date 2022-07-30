@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.BooleanNode
@@ -31,7 +31,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = JsReaderContext(
+        private val CONTEXT = ReaderContext(
             InvalidTypeErrorBuilder(JsonErrors::InvalidType)
         )
         private const val TEXT = "abc"

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.predicate
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.context.JsReaderContext
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -25,7 +25,7 @@ import kotlin.test.assertTrue
 internal class JsPredicateAndCombinatorTest {
 
     companion object {
-        private val CONTEXT = JsReaderContext()
+        private val CONTEXT = ReaderContext()
 
         private const val MIN_VALUE = 10
         private const val MAX_VALUE = 20
