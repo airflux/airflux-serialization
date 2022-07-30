@@ -57,13 +57,13 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
         ): JsonDeserializer<*>? {
             val klass = javaType.rawClass
             return if (ValueNode::class.java.isAssignableFrom(klass) || klass == NullNode::class.java)
-                JsValueDeserializer(klass)
+                ValueNodeDeserializer(klass)
             else
                 null
         }
     }
 
-    private class JsValueDeserializer(val klass: Class<*>) : JsonDeserializer<Any>() {
+    private class ValueNodeDeserializer(val klass: Class<*>) : JsonDeserializer<Any>() {
 
         override fun isCachable(): Boolean = true
 
