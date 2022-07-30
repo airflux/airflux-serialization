@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.dsl.reader.result
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPathElement
 
-public operator fun Location.div(key: String): Location = append(PathElement.Key(key))
-public operator fun Location.div(idx: Int): Location = append(PathElement.Idx(idx))
-public operator fun Location.div(element: PathElement): Location = append(element)
+public operator fun Location.div(key: String): Location = append(PropertyPathElement.Key(key))
+public operator fun Location.div(idx: Int): Location = append(PropertyPathElement.Idx(idx))
+public operator fun Location.div(element: PropertyPathElement): Location = append(element)

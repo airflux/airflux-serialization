@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.core.path
 
 @Suppress("unused")
-public class PropertyPath private constructor(public val elements: List<PathElement>) {
+public class PropertyPath private constructor(public val elements: List<PropertyPathElement>) {
 
-    public constructor(key: String) : this(PathElement.Key(key))
-    public constructor(idx: Int) : this(PathElement.Idx(idx))
-    public constructor(element: PathElement) : this(listOf(element))
+    public constructor(key: String) : this(PropertyPathElement.Key(key))
+    public constructor(idx: Int) : this(PropertyPathElement.Idx(idx))
+    public constructor(element: PropertyPathElement) : this(listOf(element))
 
-    public fun append(key: String): PropertyPath = append(PathElement.Key(key))
-    public fun append(idx: Int): PropertyPath = append(PathElement.Idx(idx))
-    public fun append(element: PathElement): PropertyPath = PropertyPath(elements + element)
+    public fun append(key: String): PropertyPath = append(PropertyPathElement.Key(key))
+    public fun append(idx: Int): PropertyPath = append(PropertyPathElement.Idx(idx))
+    public fun append(element: PropertyPathElement): PropertyPath = PropertyPath(elements + element)
 
     override fun toString(): String = buildString {
         append("#")

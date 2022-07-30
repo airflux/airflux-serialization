@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.core.path
 
-public sealed class PathElement {
+public sealed class PropertyPathElement {
 
-    public data class Key(val get: String) : PathElement() {
+    public data class Key(val get: String) : PropertyPathElement() {
         override fun toString(): String = "/$get"
     }
 
-    public data class Idx(val get: Int) : PathElement() {
+    public data class Idx(val get: Int) : PropertyPathElement() {
         override fun toString(): String = "[$get]"
     }
 }

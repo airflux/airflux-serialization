@@ -40,8 +40,8 @@ internal class PropertyPathTest : FreeSpec() {
                     path.elements.size shouldBe 1
                 }
 
-                "should have element of type 'PathElement.Key' with value '$keyUser'" {
-                    path.elements shouldContain PathElement.Key(keyUser)
+                "should have element of type 'PropertyPathElement.Key' with value '$keyUser'" {
+                    path.elements shouldContain PropertyPathElement.Key(keyUser)
                 }
 
                 "method 'toString() should return '#/$keyUser'" {
@@ -62,8 +62,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath.elements shouldContainExactly listOf(
-                            PathElement.Key(keyUser),
-                            PathElement.Key(keyName)
+                            PropertyPathElement.Key(keyUser),
+                            PropertyPathElement.Key(keyName)
                         )
                     }
 
@@ -89,7 +89,7 @@ internal class PropertyPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath.elements shouldContainExactly listOf(PathElement.Key(keyUser), PathElement.Idx(idx))
+                        updatedPath.elements shouldContainExactly listOf(PropertyPathElement.Key(keyUser), PropertyPathElement.Idx(idx))
                     }
 
                     "method 'toString() should return '#/$keyUser[$idx]'" {
@@ -114,8 +114,8 @@ internal class PropertyPathTest : FreeSpec() {
                     path.elements.size shouldBe 1
                 }
 
-                "should have element of type 'PathElement.Idx' with value '$firstIdx'" {
-                    path.elements[0].shouldBeInstanceOf<PathElement.Idx>().get shouldBe firstIdx
+                "should have element of type 'PropertyPathElement.Idx' with value '$firstIdx'" {
+                    path.elements[0].shouldBeInstanceOf<PropertyPathElement.Idx>().get shouldBe firstIdx
                 }
 
                 "method 'toString() should return '#[$firstIdx]'" {
@@ -136,8 +136,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath.elements shouldContainExactly listOf(
-                            PathElement.Idx(firstIdx),
-                            PathElement.Key(keyName)
+                            PropertyPathElement.Idx(firstIdx),
+                            PropertyPathElement.Key(keyName)
                         )
                     }
 
@@ -164,8 +164,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath.elements shouldContainExactly listOf(
-                            PathElement.Idx(firstIdx),
-                            PathElement.Idx(secondIdx)
+                            PropertyPathElement.Idx(firstIdx),
+                            PropertyPathElement.Idx(secondIdx)
                         )
                     }
 

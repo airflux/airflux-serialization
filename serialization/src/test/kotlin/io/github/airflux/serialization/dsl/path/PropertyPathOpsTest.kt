@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.dsl.path
 
-import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
@@ -31,7 +31,7 @@ internal class PropertyPathOpsTest : FreeSpec() {
                 val path = PropertyPath / "user"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PathElement.Key("user"))
+                    path.elements shouldContainExactly listOf(PropertyPathElement.Key("user"))
                 }
             }
 
@@ -39,7 +39,7 @@ internal class PropertyPathOpsTest : FreeSpec() {
                 val path = PropertyPath / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PathElement.Idx(0))
+                    path.elements shouldContainExactly listOf(PropertyPathElement.Idx(0))
                 }
             }
 
@@ -47,7 +47,7 @@ internal class PropertyPathOpsTest : FreeSpec() {
                 val path = PropertyPath / "user" / "name"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PathElement.Key("user"), PathElement.Key("name"))
+                    path.elements shouldContainExactly listOf(PropertyPathElement.Key("user"), PropertyPathElement.Key("name"))
                 }
             }
 
@@ -55,7 +55,7 @@ internal class PropertyPathOpsTest : FreeSpec() {
                 val path = PropertyPath / "phones" / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PathElement.Key("phones"), PathElement.Idx(0))
+                    path.elements shouldContainExactly listOf(PropertyPathElement.Key("phones"), PropertyPathElement.Idx(0))
                 }
             }
         }

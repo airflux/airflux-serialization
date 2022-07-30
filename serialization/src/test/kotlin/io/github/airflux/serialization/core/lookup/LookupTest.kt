@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.lookup
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -30,13 +30,13 @@ internal class LookupTest : FreeSpec() {
 
     companion object {
         private const val KEY_NAME = "id"
-        private val KEY_ELEMENT_PATH = PathElement.Key(KEY_NAME)
+        private val KEY_ELEMENT_PATH = PropertyPathElement.Key(KEY_NAME)
 
         private const val UNKNOWN_KEY_NAME = "identifier"
-        private val UNKNOWN_KEY_ELEMENT_PATH = PathElement.Key(UNKNOWN_KEY_NAME)
+        private val UNKNOWN_KEY_ELEMENT_PATH = PropertyPathElement.Key(UNKNOWN_KEY_NAME)
 
         private const val IDX = 0
-        private val IDX_ELEMENT_PATH = PathElement.Idx(IDX)
+        private val IDX_ELEMENT_PATH = PropertyPathElement.Idx(IDX)
 
         private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
 
