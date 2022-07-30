@@ -26,8 +26,8 @@ import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.config.JsObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
@@ -87,11 +87,11 @@ internal fun <T> buildObjectReader(
     resultBuilder: ResultBuilder<T>
 ): JsObjectReader<T> =
     JsObjectReader { context, location, input ->
-        if (input !is JsObject) {
+        if (input !is StructNode) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
             return@JsObjectReader JsResult.Failure(
                 location = location,
-                error = errorBuilder.build(JsValue.Type.OBJECT, input.type)
+                error = errorBuilder.build(ValueNode.Type.OBJECT, input.type)
             )
         }
 
@@ -128,7 +128,7 @@ internal fun <T> buildObjectReader(
             failures.merge()
     }
 
-internal fun JsObject.read(context: JsReaderContext, location: JsLocation, property: JsObjectProperty): JsResult<Any?> {
+internal fun StructNode.read(context: JsReaderContext, location: JsLocation, property: JsObjectProperty): JsResult<Any?> {
     val reader = when (property) {
         is JsObjectProperty.Required<*> -> property.reader
         is JsObjectProperty.Defaultable<*> -> property.reader

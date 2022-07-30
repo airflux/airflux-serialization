@@ -35,24 +35,28 @@ internal class ReadAsStringTest : FreeSpec() {
     }
 
     init {
-        "The 'readAsString' function" - {
-            "when called with a receiver of a 'JsString'" - {
+        "The readAsString function" - {
+
+            "when called with a receiver of the StringNode type" - {
+
                 "should return the string value" {
-                    val json: JsValue = JsString("abc")
+                    val json: ValueNode = StringNode("abc")
                     val result = json.readAsString(CONTEXT, LOCATION)
                     result.assertAsSuccess(location = LOCATION, value = "abc")
                 }
             }
-            "when called with a receiver of a not 'JsString'" - {
-                "should return the 'InvalidType' error" {
-                    val json: JsValue = JsBoolean.valueOf(true)
+
+            "when called with a receiver of not the StringNode type" - {
+
+                "should return the invalid type error" {
+                    val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsString(CONTEXT, LOCATION)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
-                                expected = JsValue.Type.STRING,
-                                actual = JsValue.Type.BOOLEAN
+                                expected = ValueNode.Type.STRING,
+                                actual = ValueNode.Type.BOOLEAN
                             )
                         )
                     )

@@ -19,9 +19,9 @@ package io.github.airflux.serialization.core.lookup
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -48,16 +48,16 @@ internal class JsLookupTest : FreeSpec() {
         "The lookup by a key element of the path" - {
 
             "when the value contains the finding key" - {
-                val value = JsObject(KEY_NAME to JsString(VALUE))
+                val value = StructNode(KEY_NAME to StringNode(VALUE))
 
                 "then should return the value as an instance of type Defined" {
                     val lookup = value.lookup(LOCATION, KEY_ELEMENT_PATH)
-                    lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
+                    lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                 }
             }
 
             "when the value does not contain the finding key" - {
-                val value = JsObject(KEY_NAME to JsString(VALUE))
+                val value = StructNode(KEY_NAME to StringNode(VALUE))
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, UNKNOWN_KEY_ELEMENT_PATH)
@@ -66,7 +66,7 @@ internal class JsLookupTest : FreeSpec() {
             }
 
             "when a value is an invalid type" - {
-                val value = JsString(VALUE)
+                val value = StringNode(VALUE)
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, KEY_ELEMENT_PATH)
@@ -78,16 +78,16 @@ internal class JsLookupTest : FreeSpec() {
         "The lookup by an index element of the path" - {
 
             "when the value contains the finding index" - {
-                val value = JsArray(JsString(VALUE))
+                val value = ArrayNode(StringNode(VALUE))
 
                 "then should return the value as an instance of type Defined" {
                     val lookup = value.lookup(LOCATION, IDX_ELEMENT_PATH)
-                    lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
+                    lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
                 }
             }
 
             "when the value does not contain the finding index" - {
-                val value = JsArray<JsString>()
+                val value = ArrayNode<StringNode>()
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, IDX_ELEMENT_PATH)
@@ -96,7 +96,7 @@ internal class JsLookupTest : FreeSpec() {
             }
 
             "when a value is an invalid type" - {
-                val value = JsString(VALUE)
+                val value = StringNode(VALUE)
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, IDX_ELEMENT_PATH)
@@ -110,16 +110,16 @@ internal class JsLookupTest : FreeSpec() {
             "when the path contains a key element" - {
 
                 "when the value contains the finding key" - {
-                    val value = JsObject(KEY_NAME to JsString(VALUE))
+                    val value = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = value.lookup(LOCATION, JsPath(KEY_ELEMENT_PATH))
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val value = JsObject(KEY_NAME to JsString(VALUE))
+                    val value = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, JsPath(UNKNOWN_KEY_ELEMENT_PATH))
@@ -128,7 +128,7 @@ internal class JsLookupTest : FreeSpec() {
                 }
 
                 "when a value is an invalid type" - {
-                    val value = JsString(VALUE)
+                    val value = StringNode(VALUE)
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, JsPath(KEY_ELEMENT_PATH))
@@ -140,16 +140,16 @@ internal class JsLookupTest : FreeSpec() {
             "when the path contains a indexed element" - {
 
                 "when the value contains the finding index" - {
-                    val value = JsArray(JsString(VALUE))
+                    val value = ArrayNode(StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = value.lookup(LOCATION, JsPath(IDX_ELEMENT_PATH))
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding index" - {
-                    val value = JsArray<JsString>()
+                    val value = ArrayNode<StringNode>()
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, JsPath(IDX_ELEMENT_PATH))
@@ -158,7 +158,7 @@ internal class JsLookupTest : FreeSpec() {
                 }
 
                 "when a value is an invalid type" - {
-                    val value = JsString(VALUE)
+                    val value = StringNode(VALUE)
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, JsPath(IDX_ELEMENT_PATH))
@@ -173,16 +173,16 @@ internal class JsLookupTest : FreeSpec() {
             "when lookup by a key element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val defined = JsLookup.Defined(LOCATION, JsObject(KEY_NAME to JsString(VALUE)))
+                    val defined = JsLookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = defined.apply(KEY_NAME)
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val defined = JsLookup.Defined(LOCATION, JsObject(KEY_NAME to JsString(VALUE)))
+                    val defined = JsLookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = defined.apply(UNKNOWN_KEY_NAME)
@@ -194,16 +194,16 @@ internal class JsLookupTest : FreeSpec() {
             "when lookup by an index element of the path" - {
 
                 "when the value contains the finding index" - {
-                    val defined = JsLookup.Defined(LOCATION, JsArray(JsString(VALUE)))
+                    val defined = JsLookup.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = defined.apply(IDX)
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding index" - {
-                    val defined = JsLookup.Defined(LOCATION, JsArray<JsString>())
+                    val defined = JsLookup.Defined(LOCATION, ArrayNode<StringNode>())
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = defined.apply(IDX)

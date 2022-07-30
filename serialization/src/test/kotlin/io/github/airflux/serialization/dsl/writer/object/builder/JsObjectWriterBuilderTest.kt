@@ -18,9 +18,9 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.optional
@@ -45,12 +45,12 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
             "when have some attributes for writing to an object" - {
                 val from: (String) -> String = { it }
                 val writer = writer {
-                    property(nonNullable(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { JsString(it) }))
+                    property(nonNullable(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { StringNode(it) }))
                 }
 
-                "then should returns the object with some attributes" {
+                "then should return the object with some attributes" {
                     val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
-                    result shouldBe JsObject(ATTRIBUTE_NAME to JsString(ATTRIBUTE_VALUE))
+                    result shouldBe StructNode(ATTRIBUTE_NAME to StringNode(ATTRIBUTE_VALUE))
                 }
             }
 
@@ -59,34 +59,34 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
 
                 "when the action of the writer was not set" - {
                     val writer = writer {
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the empty JsObject" {
+                    "then should return the empty value of the StructNode type" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
-                        result shouldBe JsObject()
+                        result shouldBe StructNode()
                     }
                 }
 
                 "when the action of the writer was set to return empty value" - {
                     val writer = writer {
                         actionIfEmpty = returnEmptyValue()
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the empty JsObject" {
+                    "then should return the empty value of the StructNode type" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
-                        result shouldBe JsObject()
+                        result shouldBe StructNode()
                     }
                 }
 
                 "when the action of the writer was set to return nothing" - {
                     val writer = writer {
                         actionIfEmpty = returnNothing()
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the null value" {
+                    "then should return the null value" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
                         result.shouldBeNull()
                     }
@@ -95,12 +95,12 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
                 "when the action of the writer was set to return null value" - {
                     val writer = writer {
                         actionIfEmpty = returnNullValue()
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { JsString(it) }))
+                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the JsNull" {
+                    "then should return the NullNode value" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
-                        result shouldBe JsNull
+                        result shouldBe NullNode
                     }
                 }
             }

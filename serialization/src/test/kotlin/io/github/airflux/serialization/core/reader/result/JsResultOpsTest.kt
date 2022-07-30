@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validator.JsValidator
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -71,7 +71,7 @@ internal class JsResultOpsTest : FreeSpec() {
             "when result is failure" - {
                 val result: JsResult<String> = JsResult.Failure(
                     location = LOCATION,
-                    error = JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    error = JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                 )
 
                 "then filter should return the original value" {

@@ -16,9 +16,9 @@
 
 package io.github.airflux.serialization.dsl.writer.`object`.builder
 
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsObjectWriter
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
@@ -59,7 +59,7 @@ internal fun <T : Any> buildObjectWriter(
     properties: JsObjectProperties<T>
 ): JsObjectWriter<T> =
     JsObjectWriter { context, location, input ->
-        val items: Map<String, JsValue> = mutableMapOf<String, JsValue>()
+        val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
@@ -68,11 +68,11 @@ internal fun <T : Any> buildObjectWriter(
                 }
             }
         if (items.isNotEmpty())
-            JsObject(items)
+            StructNode(items)
         else
             when (actionIfEmpty(context, location)) {
-                RETURN_EMPTY_VALUE -> JsObject()
+                RETURN_EMPTY_VALUE -> StructNode()
                 RETURN_NOTHING -> null
-                RETURN_NULL_VALUE -> JsNull
+                RETURN_NULL_VALUE -> NullNode
             }
     }

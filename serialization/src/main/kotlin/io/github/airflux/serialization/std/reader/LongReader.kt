@@ -24,14 +24,14 @@ import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorB
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.value.readAsNumber
 
 /**
  * Reader for primitive [Long] type.
  */
 public object LongReader : JsReader<Long> {
-    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<Long> =
+    override fun read(context: JsReaderContext, location: JsLocation, input: ValueNode): JsResult<Long> =
         input.readAsNumber(context, location) { ctx, p, text ->
             try {
                 text.toLong().success(location = p)

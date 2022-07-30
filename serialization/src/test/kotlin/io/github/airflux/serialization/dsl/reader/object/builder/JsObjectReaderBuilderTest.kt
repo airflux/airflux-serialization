@@ -26,9 +26,9 @@ import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
@@ -75,8 +75,8 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                     }
                 }
 
-                "then should returns successful value" {
-                    val input = JsObject(ATTRIBUTE_NAME to JsString(USER_NAME))
+                "then should return successful value" {
+                    val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                     val result = reader.read(context = CONTEXT, location = LOCATION, input)
                     result as JsResult.Success
                     result.value shouldBe DTO(name = USER_NAME)
@@ -86,7 +86,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
             "when errors occur in the reader" - {
 
                 "when input is not the object type" - {
-                    val input = JsString(USER_NAME)
+                    val input = StringNode(USER_NAME)
                     val reader = reader<DTO> {
                         val name = property(propertySpec(value = USER_NAME))
                         returns { _, location ->
@@ -101,8 +101,8 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.OBJECT,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.OBJECT,
+                                    actual = ValueNode.Type.STRING
                                 )
                             )
                         )
@@ -128,7 +128,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = JsObject(ATTRIBUTE_NAME to JsString(USER_NAME))
+                            val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
@@ -154,7 +154,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = JsObject(ATTRIBUTE_NAME to JsString(USER_NAME))
+                            val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
@@ -185,7 +185,7 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "then all error should be returns" {
-                        val input = JsObject(ATTRIBUTE_NAME to JsString(USER_NAME))
+                        val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                         val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
                         result as JsResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -252,8 +252,8 @@ internal class JsObjectReaderBuilderTest : FreeSpec() {
                 }
             }
 
-            "the extension-function JsObject#read" - {
-                val input = JsObject(ATTRIBUTE_NAME to JsString(USER_NAME))
+            "the StructNode#read extension-function" - {
+                val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
                     val property: JsObjectProperty = JsObjectProperty.Required(

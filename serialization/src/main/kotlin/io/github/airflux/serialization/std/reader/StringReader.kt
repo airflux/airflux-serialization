@@ -20,13 +20,13 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.value.readAsString
 
 /**
  * Reader for primitive [String] type.
  */
 public object StringReader : JsReader<String> {
-    override fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<String> =
+    override fun read(context: JsReaderContext, location: JsLocation, input: ValueNode): JsResult<String> =
         input.readAsString(context, location)
 }

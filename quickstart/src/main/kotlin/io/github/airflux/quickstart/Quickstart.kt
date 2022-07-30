@@ -13,7 +13,7 @@ import io.github.airflux.quickstart.dto.writer.ResponseWriter
 import io.github.airflux.quickstart.dto.writer.context.DefaultWriterContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.value.deserialization
 import io.github.airflux.serialization.dsl.writer.serialization
 import java.math.BigDecimal
@@ -23,7 +23,7 @@ fun main() {
         registerModule(AirFluxJsonModule)
     }
 
-    val json = mapper.readValue(jsonOfTender, JsValue::class.java)
+    val json = mapper.readValue(jsonOfTender, ValueNode::class.java)
 
     when (val result = json.deserialization(context = DefaultReaderContext, reader = RequestReader)) {
         is JsResult.Success -> println(result.value)
@@ -34,7 +34,7 @@ fun main() {
     val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
     val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
     val response = Response(tender = tender)
-    val output: JsValue? = response.serialization(DefaultWriterContext, JsLocation.empty, ResponseWriter)
+    val output: ValueNode? = response.serialization(DefaultWriterContext, JsLocation.empty, ResponseWriter)
     println(output.toString())
 }
 

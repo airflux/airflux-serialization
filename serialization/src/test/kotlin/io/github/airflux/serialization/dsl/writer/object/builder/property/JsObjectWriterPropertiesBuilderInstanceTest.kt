@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
@@ -51,7 +51,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
             "when a non-nullable property were added to the builder" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
@@ -63,14 +63,14 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                     properties.forOne {
                         it.shouldBeInstanceOf<JsObjectProperty.NonNullable<*, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe JsString(ATTRIBUTE_VALUE)
+                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
                 }
             }
 
             "when a optional property were added to the builder" - {
                 val from: (String) -> String? = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = JsObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
@@ -82,14 +82,14 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                     properties.forOne {
                         it.shouldBeInstanceOf<JsObjectProperty.Optional<*, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe JsString(ATTRIBUTE_VALUE)
+                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
                 }
             }
 
             "when a nullable property were added to the builder" - {
                 val from: (String) -> String? = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = JsObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
@@ -101,7 +101,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                     properties.forOne {
                         it.shouldBeInstanceOf<JsObjectProperty.Nullable<*, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe JsString(ATTRIBUTE_VALUE)
+                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
                 }
             }

@@ -21,8 +21,8 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -45,7 +45,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val context = JsReaderContext()
 
                 "when the test condition is false" {
-                    val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"), JsString("C"))
+                    val input: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validate(context, LOCATION, input)
@@ -60,7 +60,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 )
 
                 "when a collection is empty" - {
-                    val input: JsArray<JsString> = JsArray()
+                    val input: ArrayNode<StringNode> = ArrayNode()
 
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, input)
@@ -69,7 +69,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 }
 
                 "when the collection contains a number of elements less than the maximum" - {
-                    val input: JsArray<JsString> = JsArray(JsString("A"))
+                    val input: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
 
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, input)
@@ -78,7 +78,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 }
 
                 "when the collection contains a number of elements equal to the maximum" - {
-                    val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"))
+                    val input: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
 
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, input)
@@ -87,7 +87,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 }
 
                 "when the collection contains a number of elements more than the maximum" - {
-                    val input: JsArray<JsString> = JsArray(JsString("A"), JsString("B"), JsString("C"))
+                    val input: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
                     "the validator should return an error" {
                         val failure = validator.validate(context, LOCATION, input)

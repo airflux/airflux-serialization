@@ -23,11 +23,11 @@ import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.reader.IntReader
 import io.github.airflux.serialization.std.reader.StringReader
 import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
@@ -68,7 +68,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read an attribute named id" - {
-                    val input = JsObject("id" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -78,7 +78,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the attribute does not founded" - {
-                    val input = JsObject("code" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a default value should be returned" {
@@ -88,7 +88,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val input = JsObject("id" to JsNumber.valueOf(10))
+                    val input = StructNode("id" to NumberNode.valueOf(10))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
@@ -97,8 +97,8 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -115,7 +115,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read an attribute named id" - {
-                    val input = JsObject("id" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -125,7 +125,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the attribute does not founded" - {
-                    val input = JsObject("code" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a default value should be returned" {
@@ -135,7 +135,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val input = JsObject("id" to JsNumber.valueOf(10))
+                    val input = StructNode("id" to NumberNode.valueOf(10))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
@@ -144,8 +144,8 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -167,7 +167,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read an attribute named id" - {
-                    val input = JsObject("id" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -177,7 +177,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read an attribute named identifier" - {
-                    val input = JsObject("identifier" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -187,7 +187,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the attribute does not founded" - {
-                    val input = JsObject("code" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a default value should be returned" {
@@ -197,7 +197,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val input = JsObject("id" to JsNumber.valueOf(10))
+                    val input = StructNode("id" to NumberNode.valueOf(10))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
@@ -206,8 +206,8 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -222,7 +222,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
-                        val input = JsString(ID_VALUE_AS_UUID)
+                        val input = StringNode(ID_VALUE_AS_UUID)
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
@@ -231,7 +231,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     }
 
                     "then a validation error should be returned if validation is a failure" {
-                        val input = JsString("")
+                        val input = StringNode("")
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
@@ -245,7 +245,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val input = JsNumber.valueOf(10)
+                        val input = NumberNode.valueOf(10)
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
@@ -254,8 +254,8 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -270,7 +270,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if the result was not filtered" {
-                        val input = JsString(ID_VALUE_AS_UUID)
+                        val input = StringNode(ID_VALUE_AS_UUID)
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
@@ -279,7 +279,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     }
 
                     "then the null value should be returned if the result was filtered" {
-                        val input = JsString("")
+                        val input = StringNode("")
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
@@ -291,7 +291,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val input = JsNumber.valueOf(10)
+                        val input = NumberNode.valueOf(10)
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
@@ -300,8 +300,8 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -323,7 +323,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has successfully read" - {
-                    val input = JsObject("id" to JsString(ID_VALUE_AS_UUID))
+                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -334,7 +334,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has failure read" - {
-                    val input = JsObject("id" to JsNumber.valueOf(ID_VALUE_AS_INT)!!)
+                    val input = StructNode("id" to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned from the alternative reader" {
@@ -344,7 +344,7 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the alternative reader has failure read" - {
-                    val input = JsObject("id" to JsBoolean.True)
+                    val input = StructNode("id" to BooleanNode.True)
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned all read errors" {
@@ -353,15 +353,15 @@ internal class JsObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.BOOLEAN
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.BOOLEAN
                                 )
                             ),
                             JsResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.BOOLEAN
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.BOOLEAN
                                 )
                             )
                         )

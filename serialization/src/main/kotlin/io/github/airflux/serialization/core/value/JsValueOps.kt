@@ -24,68 +24,68 @@ import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
 
-public fun JsValue.readAsBoolean(context: JsReaderContext, location: JsLocation): JsResult<Boolean> =
-    if (this is JsBoolean)
+public fun ValueNode.readAsBoolean(context: JsReaderContext, location: JsLocation): JsResult<Boolean> =
+    if (this is BooleanNode)
         JsResult.Success(location, this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.BOOLEAN, this.type))
+        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.BOOLEAN, this.type))
     }
 
-public fun JsValue.readAsString(context: JsReaderContext, location: JsLocation): JsResult<String> =
-    if (this is JsString)
+public fun ValueNode.readAsString(context: JsReaderContext, location: JsLocation): JsResult<String> =
+    if (this is StringNode)
         JsResult.Success(location, this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.STRING, this.type))
+        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.STRING, this.type))
     }
 
-public fun <T : Number> JsValue.readAsNumber(
+public fun <T : Number> ValueNode.readAsNumber(
     context: JsReaderContext,
     location: JsLocation,
     reader: (JsReaderContext, JsLocation, String) -> JsResult<T>
 ): JsResult<T> =
-    if (this is JsNumber)
+    if (this is NumberNode)
         reader(context, location, this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.NUMBER, this.type))
+        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.NUMBER, this.type))
     }
 
-public inline fun <T> JsValue.readAsObject(
+public inline fun <T> ValueNode.readAsObject(
     context: JsReaderContext,
     location: JsLocation,
-    reader: (JsReaderContext, JsLocation, JsObject) -> JsResult<T>
+    reader: (JsReaderContext, JsLocation, StructNode) -> JsResult<T>
 ): JsResult<T> =
-    if (this is JsObject)
+    if (this is StructNode)
         reader(context, location, this)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.OBJECT, this.type))
+        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.OBJECT, this.type))
     }
 
-public inline fun <T> JsValue.readAsArray(
+public inline fun <T> ValueNode.readAsArray(
     context: JsReaderContext,
     location: JsLocation,
-    reader: (JsReaderContext, JsLocation, JsArray<*>) -> JsResult<T>
+    reader: (JsReaderContext, JsLocation, ArrayNode<*>) -> JsResult<T>
 ): JsResult<T> =
-    if (this is JsArray<*>)
+    if (this is ArrayNode<*>)
         reader(context, location, this)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(JsValue.Type.ARRAY, this.type))
+        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.ARRAY, this.type))
     }
 
-internal fun JsValue.getOrNull(path: JsPath): JsValue? {
-    tailrec fun JsValue.getOrNull(path: JsPath, idxElement: Int): JsValue? {
+internal fun ValueNode.getOrNull(path: JsPath): ValueNode? {
+    tailrec fun ValueNode.getOrNull(path: JsPath, idxElement: Int): ValueNode? {
         if (idxElement == path.elements.size) return this
         return when (val element = path.elements[idxElement]) {
-            is PathElement.Key -> if (this is JsObject)
+            is PathElement.Key -> if (this is StructNode)
                 this[element]?.getOrNull(path, idxElement + 1)
             else
                 null
 
-            is PathElement.Idx -> if (this is JsArray<*>)
+            is PathElement.Idx -> if (this is ArrayNode<*>)
                 this[element]?.getOrNull(path, idxElement + 1)
             else
                 null
@@ -95,4 +95,4 @@ internal fun JsValue.getOrNull(path: JsPath): JsValue? {
     return this.getOrNull(path, 0)
 }
 
-internal operator fun JsObject.contains(path: JsPath): Boolean = this.getOrNull(path) != null
+internal operator fun StructNode.contains(path: JsPath): Boolean = this.getOrNull(path) != null

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
@@ -102,7 +102,7 @@ internal class JsResultTest : FreeSpec() {
             "constructor(JsLocation, JsErrors)" {
                 val errors = JsErrors(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                 )
 
                 val failure = JsResult.Failure(location = LOCATION, errors = errors)
@@ -115,7 +115,7 @@ internal class JsResultTest : FreeSpec() {
                 val secondFailure = JsResult.Failure(
                     location = LOCATION,
                     errors = JsErrors(
-                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
 
@@ -126,7 +126,7 @@ internal class JsResultTest : FreeSpec() {
                     JsResult.Failure.Cause(
                         location = LOCATION,
                         errors = JsErrors(
-                            JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                            JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                         )
                     )
                 )
@@ -196,14 +196,14 @@ internal class JsResultTest : FreeSpec() {
                     location = LOCATION,
                     errors = JsErrors(
                         JsonErrors.PathMissing,
-                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
 
                 cause.location shouldBe LOCATION
                 cause.errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                    JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                 )
             }
         }
@@ -214,7 +214,7 @@ internal class JsResultTest : FreeSpec() {
                 JsResult.Failure(
                     location = LOCATION,
                     errors = JsErrors(
-                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
             )
@@ -226,7 +226,7 @@ internal class JsResultTest : FreeSpec() {
                 JsResult.Failure.Cause(
                     location = LOCATION,
                     errors = JsErrors(
-                        JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
             )

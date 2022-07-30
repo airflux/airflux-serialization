@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.NullNode
 
 /**
  * Reads nullable field or return default if a field is not found.
@@ -35,7 +35,7 @@ import io.github.airflux.serialization.core.value.JsNull
 public fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup, using: JsReader<T>): JsResult<T?> {
 
     fun <T : Any> readNullable(context: JsReaderContext, from: JsLookup.Defined, using: JsReader<T>): JsResult<T?> =
-        if (from.value is JsNull)
+        if (from.value is NullNode)
             JsResult.Success(location = from.location, value = null)
         else
             using.read(context, from.location, from.value)

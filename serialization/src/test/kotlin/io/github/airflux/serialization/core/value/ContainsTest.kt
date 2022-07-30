@@ -26,12 +26,12 @@ internal class ContainsTest : FreeSpec() {
     companion object {
         private const val USER_NAME_VALUE = "user"
         private const val PHONE_NUMBER_VALUE = "123456789"
-        val INPUT: JsObject = JsObject(
-            "user" to JsObject(
-                "name" to JsString(USER_NAME_VALUE),
-                "phones" to JsArray(
-                    JsObject(
-                        "value" to JsString(PHONE_NUMBER_VALUE)
+        val INPUT: StructNode = StructNode(
+            "user" to StructNode(
+                "name" to StringNode(USER_NAME_VALUE),
+                "phones" to ArrayNode(
+                    StructNode(
+                        "value" to StringNode(PHONE_NUMBER_VALUE)
                     )
                 )
             )
@@ -40,7 +40,7 @@ internal class ContainsTest : FreeSpec() {
 
     init {
 
-        "JsObject#contains" - {
+        "StructNode#contains" - {
 
             "should return the true value if an element by the path was found" - {
                 withData(

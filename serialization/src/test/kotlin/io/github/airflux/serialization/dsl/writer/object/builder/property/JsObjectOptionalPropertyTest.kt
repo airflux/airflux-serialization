@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
@@ -40,7 +40,7 @@ internal class JsObjectOptionalPropertyTest : FreeSpec() {
 
             "when created an instance of the optional property" - {
                 val from: (String) -> String? = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = JsObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val property = JsObjectProperty.Optional(spec)
 
@@ -51,10 +51,10 @@ internal class JsObjectOptionalPropertyTest : FreeSpec() {
 
             "when the extractor returns the null value" - {
                 val from: (String) -> String? = { null }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val property = createProperty(from = from, writer = writer)
 
-                "then the method write should return the JsNull value" {
+                "then the method write should return the NullNode value" {
                     val result = property.write(JsWriterContext(), LOCATION, ATTRIBUTE_VALUE)
                     result shouldBe null
                 }
@@ -74,12 +74,12 @@ internal class JsObjectOptionalPropertyTest : FreeSpec() {
                 }
 
                 "when the writer of the property returns the not null value" - {
-                    val writer = DummyWriter<String> { JsString(it) }
+                    val writer = DummyWriter<String> { StringNode(it) }
                     val property = createProperty(from = from, writer = writer)
 
                     "then the method write should return the not null value" {
                         val result = property.write(JsWriterContext(), LOCATION, ATTRIBUTE_VALUE)
-                        result shouldBe JsString(ATTRIBUTE_VALUE)
+                        result shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
                 }
             }

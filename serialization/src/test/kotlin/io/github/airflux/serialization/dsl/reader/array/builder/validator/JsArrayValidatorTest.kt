@@ -21,9 +21,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -34,7 +34,7 @@ internal class JsArrayValidatorTest : FreeSpec() {
     companion object {
         private val CONTEXT = JsReaderContext()
         private val LOCATION = JsLocation.empty
-        private val VALUE = JsArray<JsString>()
+        private val VALUE = ArrayNode<StringNode>()
     }
 
     init {
@@ -78,7 +78,7 @@ internal class JsArrayValidatorTest : FreeSpec() {
                         val rightValidator = JsArrayValidator { _, location, _ ->
                             JsResult.Failure(
                                 location,
-                                JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                                JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                             )
                         }
 
@@ -92,8 +92,8 @@ internal class JsArrayValidatorTest : FreeSpec() {
                                 JsResult.Failure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = JsValue.Type.STRING,
-                                        actual = JsValue.Type.BOOLEAN
+                                        expected = ValueNode.Type.STRING,
+                                        actual = ValueNode.Type.BOOLEAN
                                     )
                                 )
                             ).merge()
@@ -140,7 +140,7 @@ internal class JsArrayValidatorTest : FreeSpec() {
                         val rightValidator = JsArrayValidator { _, location, _ ->
                             JsResult.Failure(
                                 location,
-                                JsonErrors.InvalidType(expected = JsValue.Type.STRING, actual = JsValue.Type.BOOLEAN)
+                                JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                             )
                         }
 

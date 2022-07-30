@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property.spe
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -40,7 +40,7 @@ internal class JsObjectNonNullablePropertySpecTest : FreeSpec() {
 
             "when created the instance of a spec of the non-nullable property" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = nonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
 
                 "then the attribute name should equal the passed attribute name" {
@@ -53,13 +53,13 @@ internal class JsObjectNonNullablePropertySpecTest : FreeSpec() {
 
                 "then the initialized writer should return a attribute value" {
                     val result = spec.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
-                    result shouldBe JsString(ATTRIBUTE_VALUE)
+                    result shouldBe StringNode(ATTRIBUTE_VALUE)
                 }
             }
 
             "when the filter was added to the spec" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = nonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
@@ -75,7 +75,7 @@ internal class JsObjectNonNullablePropertySpecTest : FreeSpec() {
                     val result = specWithFilter.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
 
                     "then a non-null attribute value should be returned" {
-                        result shouldBe JsString(ATTRIBUTE_VALUE)
+                        result shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
                 }
 

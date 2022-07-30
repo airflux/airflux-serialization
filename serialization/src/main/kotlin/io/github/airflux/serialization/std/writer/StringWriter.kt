@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 
@@ -26,5 +26,5 @@ import io.github.airflux.serialization.core.writer.context.JsWriterContext
  * Writer for primitive [String] type.
  */
 public object StringWriter : JsWriter<String> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: String): JsValue = JsString(value)
+    override fun write(context: JsWriterContext, location: JsLocation, value: String): ValueNode = StringNode(value)
 }

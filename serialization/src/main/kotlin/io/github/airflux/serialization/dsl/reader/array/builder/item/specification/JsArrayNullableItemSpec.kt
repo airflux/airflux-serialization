@@ -21,12 +21,12 @@ import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.JsValidator
-import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.NullNode
 
 public fun <T : Any> nullable(reader: JsReader<T>): JsArrayItemSpec.Nullable<T?> =
     JsArrayItemSpec.Nullable(
         reader = { context, location, input ->
-            if (input is JsNull)
+            if (input is NullNode)
                 JsResult.Success(location = location, value = null)
             else
                 reader.read(context, location, input)

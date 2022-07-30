@@ -27,12 +27,12 @@ internal class GetOrNullTest : FreeSpec() {
     companion object {
         private const val USER_NAME_VALUE = "user"
         private const val PHONE_NUMBER_VALUE = "123456789"
-        val INPUT: JsValue = JsObject(
-            "user" to JsObject(
-                "name" to JsString(USER_NAME_VALUE),
-                "phones" to JsArray(
-                    JsObject(
-                        "value" to JsString(PHONE_NUMBER_VALUE)
+        val INPUT: ValueNode = StructNode(
+            "user" to StructNode(
+                "name" to StringNode(USER_NAME_VALUE),
+                "phones" to ArrayNode(
+                    StructNode(
+                        "value" to StringNode(PHONE_NUMBER_VALUE)
                     )
                 )
             )
@@ -47,8 +47,8 @@ internal class GetOrNullTest : FreeSpec() {
                 withData(
                     nameFn = { "${it.first}" },
                     listOf(
-                        Pair(JsPath("user").append("name"), JsString(USER_NAME_VALUE)),
-                        Pair(JsPath("user").append("phones").append(0).append("value"), JsString(PHONE_NUMBER_VALUE)),
+                        Pair(JsPath("user").append("name"), StringNode(USER_NAME_VALUE)),
+                        Pair(JsPath("user").append("phones").append(0).append("value"), StringNode(PHONE_NUMBER_VALUE)),
                     )
                 ) { (path, value) ->
                     val result = INPUT.getOrNull(path)

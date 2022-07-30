@@ -23,11 +23,11 @@ import io.github.airflux.serialization.core.path.PathElement
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 
 @Suppress("unused")
-public fun <T : Any> JsValue.deserialization(context: JsReaderContext, reader: JsReader<T>): JsResult<T> =
+public fun <T : Any> ValueNode.deserialization(context: JsReaderContext, reader: JsReader<T>): JsResult<T> =
     reader.read(context, JsLocation.empty, this)
 
-public operator fun JsValue.div(key: String): JsLookup = this.lookup(JsLocation.empty, PathElement.Key(key))
-public operator fun JsValue.div(idx: Int): JsLookup = this.lookup(JsLocation.empty, PathElement.Idx(idx))
+public operator fun ValueNode.div(key: String): JsLookup = this.lookup(JsLocation.empty, PathElement.Key(key))
+public operator fun ValueNode.div(idx: Int): JsLookup = this.lookup(JsLocation.empty, PathElement.Idx(idx))

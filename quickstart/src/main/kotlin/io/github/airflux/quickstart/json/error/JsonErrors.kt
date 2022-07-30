@@ -1,14 +1,14 @@
 package io.github.airflux.quickstart.json.error
 
 import io.github.airflux.serialization.core.reader.result.JsError
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import kotlin.reflect.KClass
 
 sealed class JsonErrors : JsError {
 
     object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: JsValue.Type, val actual: JsValue.Type) : JsonErrors()
+    data class InvalidType(val expected: ValueNode.Type, val actual: ValueNode.Type) : JsonErrors()
 
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 

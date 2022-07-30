@@ -22,8 +22,8 @@ import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.ValueNode
 import kotlin.test.Test
 
 internal class JsReaderTest {
@@ -42,7 +42,7 @@ internal class JsReaderTest {
         }
         val transformedReader = reader.map { value -> value.toInt() }
 
-        val result = transformedReader.read(CONTEXT, location, JsNull)
+        val result = transformedReader.read(CONTEXT, location, NullNode)
 
         result.assertAsSuccess(location = location.append("id"), value = ID_VALUE.toInt())
     }
@@ -57,7 +57,7 @@ internal class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(CONTEXT, location, JsNull)
+        val result = composeReader.read(CONTEXT, location, NullNode)
 
         result.assertAsSuccess(location = location.append("id"), value = ID_VALUE)
     }
@@ -72,7 +72,7 @@ internal class JsReaderTest {
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(CONTEXT, location, JsNull)
+        val result = composeReader.read(CONTEXT, location, NullNode)
 
         result.assertAsSuccess(location = location.append("identifier"), value = IDENTIFIER_VALUE)
     }
@@ -85,18 +85,18 @@ internal class JsReaderTest {
         val identifierReader = JsReader { _, location, _ ->
             JsResult.Failure(
                 location = location.append("identifier"),
-                error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+                error = JsonErrors.InvalidType(expected = ValueNode.Type.OBJECT, actual = ValueNode.Type.STRING)
             )
         }
         val composeReader = idReader or identifierReader
 
-        val result = composeReader.read(CONTEXT, location, JsNull)
+        val result = composeReader.read(CONTEXT, location, NullNode)
 
         result.assertAsFailure(
             JsResult.Failure.Cause(location = location.append("id"), error = JsonErrors.PathMissing),
             JsResult.Failure.Cause(
                 location = location.append("identifier"),
-                error = JsonErrors.InvalidType(expected = JsValue.Type.OBJECT, actual = JsValue.Type.STRING)
+                error = JsonErrors.InvalidType(expected = ValueNode.Type.OBJECT, actual = ValueNode.Type.STRING)
             )
         )
     }

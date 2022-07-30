@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.NullNode
 
 /**
  * Reads required field or return default if a field is not found.
@@ -42,7 +42,7 @@ public fun <T : Any> readWithDefault(
         using: JsReader<T>,
         defaultValue: () -> T
     ): JsResult<T> =
-        if (from.value is JsNull)
+        if (from.value is NullNode)
             JsResult.Success(location = from.location, value = defaultValue())
         else
             using.read(context, from.location, from.value)

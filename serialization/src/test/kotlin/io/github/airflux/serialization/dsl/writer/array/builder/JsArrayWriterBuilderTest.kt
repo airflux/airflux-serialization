@@ -18,10 +18,10 @@ package io.github.airflux.serialization.dsl.writer.array.builder
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nullable
@@ -46,40 +46,40 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
             "when have some non-nullable items for writing to an array" - {
                 val writer = arrayWriter<String> {
-                    items(nonNullable(writer = DummyWriter { JsString(it) }))
+                    items(nonNullable(writer = DummyWriter { StringNode(it) }))
                 }
                 val value = listOf(FIRST_ITEM, SECOND_ITEM)
                 val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
 
-                "then should returns the array with items" {
-                    result as JsArray<*>
-                    result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
+                "then should return the array with items" {
+                    result as ArrayNode<*>
+                    result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                 }
             }
 
             "when have some optional items for writing to an array" - {
                 val writer = arrayWriter<String?> {
-                    items(optional(writer = DummyWriter { JsString(it) }))
+                    items(optional(writer = DummyWriter { StringNode(it) }))
                 }
                 val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
                 val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
 
-                "then should returns the array with items" {
-                    result as JsArray<*>
-                    result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
+                "then should return the array with items" {
+                    result as ArrayNode<*>
+                    result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                 }
             }
 
             "when have some nullable items for writing to an array" - {
                 val writer = arrayWriter<String?> {
-                    items(nullable(writer = DummyWriter { JsString(it) }))
+                    items(nullable(writer = DummyWriter { StringNode(it) }))
                 }
                 val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
                 val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
 
-                "then should returns the array with items" {
-                    result as JsArray<*>
-                    result shouldBe JsArray(JsNull, JsString(FIRST_ITEM), JsNull, JsString(SECOND_ITEM), JsNull)
+                "then should return the array with items" {
+                    result as ArrayNode<*>
+                    result shouldBe ArrayNode(NullNode, StringNode(FIRST_ITEM), NullNode, StringNode(SECOND_ITEM), NullNode)
                 }
             }
 
@@ -88,34 +88,34 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
                 "when the action of the writer was not set" - {
                     val writer = arrayWriter<String> {
-                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the empty JsArray" {
+                    "then should return the empty value of the ArrayNode type" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
-                        result shouldBe JsArray<JsValue>()
+                        result shouldBe ArrayNode<ValueNode>()
                     }
                 }
 
                 "when the action of the writer was set to return empty value" - {
                     val writer = arrayWriter<String> {
                         actionIfEmpty = returnEmptyValue()
-                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the empty JsArray" {
+                    "then should return the empty value of the ArrayNode type" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
-                        result shouldBe JsArray<JsValue>()
+                        result shouldBe ArrayNode<ValueNode>()
                     }
                 }
 
                 "when the action of the writer was set to return nothing" - {
                     val writer = arrayWriter<String> {
                         actionIfEmpty = returnNothing()
-                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the null value" {
+                    "then should return the null value" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
                         result.shouldBeNull()
                     }
@@ -124,12 +124,12 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
                 "when the action of the writer was set to return null value" - {
                     val writer = arrayWriter<String> {
                         actionIfEmpty = returnNullValue()
-                        items(nonNullable(writer = DummyWriter { JsString(it) }))
+                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
                     }
 
-                    "then should returns the JsNull" {
+                    "then should return the NullNode value" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
-                        result shouldBe JsNull
+                        result shouldBe NullNode
                     }
                 }
             }

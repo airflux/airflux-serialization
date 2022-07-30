@@ -27,9 +27,9 @@ import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.nonNullable
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -68,36 +68,31 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                     returns(items = itemSpec())
                 }
 
-                "then should returns successful value" {
-                    val input = JsArray(JsString(io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.FIRST_ITEM), JsString(
-                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.SECOND_ITEM
-                    ))
-                    val result = reader.read(context = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.CONTEXT, location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION, input)
+                "then should return successful value" {
+                    val input = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                    val result = reader.read(context = CONTEXT, location = LOCATION, input)
                     result as JsResult.Success
-                    result.value shouldContainExactly listOf(
-                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.FIRST_ITEM,
-                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.SECOND_ITEM
-                    )
+                    result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
                 }
             }
 
             "when errors occur in the reader" - {
 
                 "when input is not the object type" - {
-                    val input = JsString(io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.USER_NAME)
+                    val input = StringNode(USER_NAME)
                     val reader = arrayReader<String> {
                         returns(items = itemSpec())
                     }
 
                     "then the reader should return the invalid type error" {
-                        val result = reader.read(context = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.CONTEXT, location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION, input)
+                        val result = reader.read(context = CONTEXT, location = LOCATION, input)
                         result as JsResult.Failure
                         result.causes shouldContainExactly listOf(
                             JsResult.Failure.Cause(
-                                location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION,
+                                location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.ARRAY,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.ARRAY,
+                                    actual = ValueNode.Type.STRING
                                 )
                             )
                         )
@@ -105,7 +100,7 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val contextWithFailFastTrue = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.CONTEXT + FailFast(true)
+                    val contextWithFailFastTrue = CONTEXT + FailFast(true)
 
                     "when the validator returns an error" - {
                         val reader = arrayReader<String> {
@@ -113,9 +108,7 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = JsResult.Failure(
-                                        location = LOCATION.append(
-                                            ATTRIBUTE_NAME
-                                        ),
+                                        location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
                                     )
                                 )
@@ -124,15 +117,13 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = JsArray(JsString(io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION, input)
+                            val input = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
                                 JsResult.Failure.Cause(
-                                    location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION.append(
-                                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.ATTRIBUTE_NAME
-                                    ),
-                                    error = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.MinItemsError
+                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    error = MinItemsError
                                 )
                             )
                         }
@@ -150,14 +141,12 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = JsArray(JsString(io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION, input)
+                            val input = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
                                 JsResult.Failure.Cause(
-                                    location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION.append(
-                                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.ATTRIBUTE_NAME
-                                    ).append(0),
+                                    location = LOCATION.append(ATTRIBUTE_NAME).append(0),
                                     error = JsonErrors.PathMissing
                                 )
                             )
@@ -168,15 +157,13 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                 "when fail-fast is false" - {
 
                     "when only the validator returns an error" - {
-                        val contextWithFailFastFalse = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.CONTEXT + FailFast(false)
+                        val contextWithFailFastFalse = CONTEXT + FailFast(false)
                         val reader = arrayReader<String> {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = JsResult.Failure(
-                                        location = LOCATION.append(
-                                            ATTRIBUTE_NAME
-                                        ),
+                                        location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
                                     )
                                 )
@@ -185,30 +172,26 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = JsArray(JsString(io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastFalse, location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION, input)
+                            val input = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
                                 JsResult.Failure.Cause(
-                                    location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION.append(
-                                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.ATTRIBUTE_NAME
-                                    ),
-                                    error = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.MinItemsError
+                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    error = MinItemsError
                                 )
                             )
                         }
                     }
 
                     "when the validator and the reader of items return errors" - {
-                        val contextWithFailFastFalse = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.CONTEXT + FailFast(false)
+                        val contextWithFailFastFalse = CONTEXT + FailFast(false)
                         val reader = arrayReader<String> {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = JsResult.Failure(
-                                        location = LOCATION.append(
-                                            ATTRIBUTE_NAME
-                                        ),
+                                        location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
                                     )
                                 )
@@ -217,20 +200,16 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then all error should be returns" {
-                            val input = JsArray(JsString(io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastFalse, location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION, input)
+                            val input = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
                                 JsResult.Failure.Cause(
-                                    location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION.append(
-                                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.ATTRIBUTE_NAME
-                                    ),
-                                    error = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.MinItemsError
+                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    error = MinItemsError
                                 ),
                                 JsResult.Failure.Cause(
-                                    location = io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.LOCATION.append(
-                                        io.github.airflux.serialization.dsl.reader.array.builder.JsArrayReaderBuilderTest.Companion.ATTRIBUTE_NAME
-                                    ).append(0),
+                                    location = LOCATION.append(ATTRIBUTE_NAME).append(0),
                                     error = JsonErrors.PathMissing
                                 )
                             )
@@ -242,14 +221,16 @@ internal class JsArrayReaderBuilderTest : FreeSpec() {
     }
 
     fun itemSpec() = nonNullable { _, location, input ->
-        (input as JsString).get.success(location)
+        (input as StringNode).get.success(location)
     }
 
     fun <T : Any> itemSpec(error: JsError) = nonNullable(
         reader = DummyReader<T>(
-            result = JsResult.Failure(location = LOCATION.append(
-                ATTRIBUTE_NAME
-            ).append(0), error = error)
+            result = JsResult.Failure(
+                location = LOCATION.append(
+                    ATTRIBUTE_NAME
+                ).append(0), error = error
+            )
         )
     )
 }

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.JsArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
@@ -39,7 +39,7 @@ internal class JsArrayOptionalItemsTest : FreeSpec() {
         "The JsArrayItems#Optional" - {
 
             "when created an instance of the optional item" - {
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val items: JsArrayItems.Optional<String?> = createItems(writer = writer)
 
                 "when an item is the not null value" - {
@@ -47,7 +47,7 @@ internal class JsArrayOptionalItemsTest : FreeSpec() {
 
                     "then the method write should return the null value" {
                         val result = items.write(CONTEXT, LOCATION, value)
-                        result shouldBe JsString(ITEM_VALUE)
+                        result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
 

@@ -30,8 +30,8 @@ internal class ReadAsArrayTest : FreeSpec() {
         private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = JsLocation.empty.append("user")
-        private val READER = { _: JsReaderContext, location: JsLocation, input: JsArray<*> ->
-            val result = input.map { (it as JsString).get }
+        private val READER = { _: JsReaderContext, location: JsLocation, input: ArrayNode<*> ->
+            val result = input.map { (it as StringNode).get }
             JsResult.Success(location, result)
         }
     }
@@ -39,10 +39,10 @@ internal class ReadAsArrayTest : FreeSpec() {
     init {
         "The 'readAsArray' function" - {
 
-            "when called with a receiver of a 'JsArray'" - {
+            "when called with a receiver of the ArrayNode type" - {
 
                 "should return the collection of values" {
-                    val json: JsValue = JsArray(JsString(USER_NAME))
+                    val json: ValueNode = ArrayNode(StringNode(USER_NAME))
 
                     val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
@@ -51,18 +51,18 @@ internal class ReadAsArrayTest : FreeSpec() {
                 }
             }
 
-            "when called with a receiver of a not 'JsArray'" - {
+            "when called with a receiver of not the ArrayNode type" - {
 
-                "should return the 'InvalidType' error" {
-                    val json: JsValue = JsBoolean.valueOf(true)
+                "should return the invalid type error" {
+                    val json: ValueNode = BooleanNode.valueOf(true)
 
                     val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
                     result as JsResult.Failure
                     result shouldBe JsResult.Failure(
                         location = LOCATION, error = JsonErrors.InvalidType(
-                            expected = JsValue.Type.ARRAY,
-                            actual = JsValue.Type.BOOLEAN
+                            expected = ValueNode.Type.ARRAY,
+                            actual = ValueNode.Type.BOOLEAN
                         )
                     )
                 }

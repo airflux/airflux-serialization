@@ -25,8 +25,8 @@ import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.JsValidator
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -36,7 +36,7 @@ internal class JsReaderOpsTest : FreeSpec() {
         private val CONTEXT = JsReaderContext()
         private val LOCATION = JsLocation.empty
         private const val VALUE = "ABC"
-        private val JSON_VALUE: JsValue = JsString(VALUE)
+        private val JSON_VALUE: ValueNode = StringNode(VALUE)
     }
 
     init {

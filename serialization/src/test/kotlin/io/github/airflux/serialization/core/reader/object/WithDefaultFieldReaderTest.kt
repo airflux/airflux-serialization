@@ -22,8 +22,8 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -45,8 +45,8 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
 
             "when the element is defined" - {
 
-                "when the value of the element is not the JsNull" - {
-                    val from: JsLookup = JsLookup.Defined(location = LOCATION, value = JsString(VALUE))
+                "when the value of the element is not the NullNode" - {
+                    val from: JsLookup = JsLookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
                         val result: JsResult<String?> =
@@ -55,8 +55,8 @@ internal class WithDefaultFieldReaderTest : FreeSpec() {
                     }
                 }
 
-                "when the value of the element is the JsNull" - {
-                    val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), JsNull)
+                "when the value of the element is the NullNode" - {
+                    val from: JsLookup = JsLookup.Defined(location = JsLocation.empty.append("name"), NullNode)
 
                     "then should return the default value" {
                         val result: JsResult<String?> =

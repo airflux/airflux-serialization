@@ -25,15 +25,15 @@ import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.JsValidator
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 
 @Suppress("unused")
 public fun interface JsReader<out T> {
 
     /**
-     * Convert the [JsValue] into a T
+     * Convert the [ValueNode] into a T
      */
-    public fun read(context: JsReaderContext, location: JsLocation, input: JsValue): JsResult<T>
+    public fun read(context: JsReaderContext, location: JsLocation, input: ValueNode): JsResult<T>
 
     /**
      * Create a new [JsReader] which maps the value produced by this [JsReader].
@@ -50,7 +50,7 @@ public fun interface JsReader<out T> {
 /**
  * Creates a new [JsReader], based on this one, which first executes this
  * [JsReader] logic then, if this [JsReader] resulted in a [JsError], runs
- * the other [JsReader] on the [JsValue].
+ * the other [JsReader] on the [ValueNode].
  *
  * @param other the [JsReader] to run if this one gets a [JsError]
  * @return A new [JsReader] with the updated behavior.

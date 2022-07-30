@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.nulls.beNull
@@ -40,12 +40,12 @@ internal class JsErrorsTest : FreeSpec() {
             "#invoke(JsError, JsError) should return JsErrors with all errors" {
                 val errors = JsErrors(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                    JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
                 )
 
                 errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                    JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
                 )
             }
 
@@ -61,7 +61,7 @@ internal class JsErrorsTest : FreeSpec() {
                     val errors = JsErrors(
                         listOf(
                             JsonErrors.PathMissing,
-                            JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                            JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
                         )
                     )
 
@@ -69,7 +69,7 @@ internal class JsErrorsTest : FreeSpec() {
                         .items.shouldContainAll(
                             listOf(
                                 JsonErrors.PathMissing,
-                                JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                                JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
                             )
                         )
                 }
@@ -77,13 +77,13 @@ internal class JsErrorsTest : FreeSpec() {
 
             "calling plus function should return a new JsErrors object with all errors" {
                 val firstErrors = JsErrors(JsonErrors.PathMissing)
-                val secondErrors = JsErrors(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
+                val secondErrors = JsErrors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
 
                 val errors = firstErrors + secondErrors
 
                 errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING)
+                    JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
                 )
             }
 
@@ -93,7 +93,7 @@ internal class JsErrorsTest : FreeSpec() {
                 errors.shouldBeEqualsContract(
                     y = JsErrors(JsonErrors.PathMissing),
                     z = JsErrors(JsonErrors.PathMissing),
-                    other = JsErrors(JsonErrors.InvalidType(JsValue.Type.BOOLEAN, JsValue.Type.STRING))
+                    other = JsErrors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
                 )
             }
         }

@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -43,7 +43,7 @@ internal class OptionalFieldReaderTest : FreeSpec() {
         "The readOptional function" - {
 
             "when the element is defined" - {
-                val from: JsLookup = JsLookup.Defined(location = LOCATION, value = JsString(VALUE))
+                val from: JsLookup = JsLookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                 "then should return the result of applying the reader" {
                     val result: JsResult<String?> = readOptional(context = CONTEXT, from = from, using = READER)
@@ -54,7 +54,7 @@ internal class OptionalFieldReaderTest : FreeSpec() {
             "when the element is undefined" - {
                 val from: JsLookup = JsLookup.Undefined(location = LOCATION)
 
-                "then should return a null value" {
+                "then should return the null value" {
                     val result: JsResult<String?> = readOptional(context = CONTEXT, from = from, using = READER)
                     result shouldBe JsResult.Success(location = LOCATION, value = null)
                 }

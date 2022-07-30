@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item.specificat
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -38,7 +38,7 @@ internal class JsArrayOptionalItemSpecTest : FreeSpec() {
         "The JsArrayItemSpec#Optional" - {
 
             "when created the instance of a spec of the optional item" - {
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = optional(writer = writer)
 
                 "then the instance should contain the writer passed during initialization" {
@@ -47,7 +47,7 @@ internal class JsArrayOptionalItemSpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = optional(writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
@@ -55,7 +55,7 @@ internal class JsArrayOptionalItemSpecTest : FreeSpec() {
                     val result = specWithFilter.writer.write(CONTEXT, LOCATION, ITEM_VALUE)
 
                     "then the not null value should be returned" {
-                        result shouldBe JsString(ITEM_VALUE)
+                        result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
 

@@ -18,10 +18,10 @@ package io.github.airflux.serialization.dsl.value
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -46,16 +46,16 @@ internal class JsValueOpsTest : FreeSpec() {
             "when lookup by a key element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val json: JsValue = JsObject(KEY_NAME to JsString(VALUE))
+                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / KEY_NAME
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val json: JsValue = JsObject(KEY_NAME to JsString(VALUE))
+                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = json / UNKNOWN_KEY_NAME
@@ -67,16 +67,16 @@ internal class JsValueOpsTest : FreeSpec() {
             "when lookup by an index element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val json: JsValue = JsArray(JsString(VALUE))
+                    val json: ValueNode = ArrayNode(StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / IDX
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val json: JsValue = JsArray(JsString(VALUE))
+                    val json: ValueNode = ArrayNode(StringNode(VALUE))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = json / UNKNOWN_IDX

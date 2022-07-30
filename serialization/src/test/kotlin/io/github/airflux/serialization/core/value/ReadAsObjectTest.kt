@@ -31,31 +31,34 @@ internal class ReadAsObjectTest : FreeSpec() {
         private val CONTEXT = JsReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = JsLocation.empty.append("user")
-        private val reader = { _: JsReaderContext, location: JsLocation, input: JsObject ->
-            val name = input["name"] as JsString
+        private val reader = { _: JsReaderContext, location: JsLocation, input: StructNode ->
+            val name = input["name"] as StringNode
             JsResult.Success(location, DTO(name = name.get))
         }
     }
 
     init {
         "The 'readAsObject' function" - {
-            "when called with a receiver of a 'JsObject'" - {
+
+            "when called with a receiver of the StructNode type" - {
+
                 "should return the DTO" {
-                    val json: JsValue = JsObject("name" to JsString(USER_NAME))
+                    val json: ValueNode = StructNode("name" to StringNode(USER_NAME))
                     val result = json.readAsObject(CONTEXT, LOCATION, reader)
                     result.assertAsSuccess(location = LOCATION, value = DTO(name = USER_NAME))
                 }
             }
-            "when called with a receiver of a not 'JsObject'" - {
-                "should return the 'InvalidType' error" {
-                    val json: JsValue = JsBoolean.valueOf(true)
+            "when called with a receiver of not the StructNode type" - {
+
+                "should return the invalid type' error" {
+                    val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsObject(CONTEXT, LOCATION, reader)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
-                                expected = JsValue.Type.OBJECT,
-                                actual = JsValue.Type.BOOLEAN
+                                expected = ValueNode.Type.OBJECT,
+                                actual = ValueNode.Type.BOOLEAN
                             )
                         )
                     )

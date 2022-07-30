@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 
@@ -26,6 +26,6 @@ import io.github.airflux.serialization.core.writer.context.JsWriterContext
  * Writer for primitive [Boolean] type.
  */
 public object BooleanWriter : JsWriter<Boolean> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: Boolean): JsValue =
-        if (value) JsBoolean.True else JsBoolean.False
+    override fun write(context: JsWriterContext, location: JsLocation, value: Boolean): ValueNode =
+        if (value) BooleanNode.True else BooleanNode.False
 }

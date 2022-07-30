@@ -24,9 +24,9 @@ import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 
@@ -53,19 +53,19 @@ internal class ByteReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Byte.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val input: JsValue = JsNumber.valueOf(value)
-                    val result = io.github.airflux.serialization.std.reader.ByteReader.read(CONTEXT, JsLocation.empty, input)
+                    val input: ValueNode = NumberNode.valueOf(value)
+                    val result = ByteReader.read(CONTEXT, JsLocation.empty, input)
                     result.assertAsSuccess(location = JsLocation.empty, value = value)
                 }
             }
 
             "should return the invalid type error" {
-                val input: JsValue = JsString("abc")
-                val result = io.github.airflux.serialization.std.reader.ByteReader.read(CONTEXT, JsLocation.empty, input)
+                val input: ValueNode = StringNode("abc")
+                val result = ByteReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,
-                        error = JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                        error = JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.STRING)
                     )
                 )
             }
@@ -80,8 +80,8 @@ internal class ByteReaderTest : FreeSpec() {
                         Pair("The value is in an invalid format, positive with a fractional part.", "10.5"),
                     )
                 ) { (_, value) ->
-                    val input = JsNumber.valueOf(value)!!
-                    val result = io.github.airflux.serialization.std.reader.ByteReader.read(CONTEXT, JsLocation.empty, input)
+                    val input = NumberNode.valueOf(value)!!
+                    val result = ByteReader.read(CONTEXT, JsLocation.empty, input)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = JsLocation.empty,

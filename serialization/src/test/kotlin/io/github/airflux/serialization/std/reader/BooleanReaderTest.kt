@@ -23,9 +23,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 
 internal class BooleanReaderTest : FreeSpec() {
@@ -39,24 +39,27 @@ internal class BooleanReaderTest : FreeSpec() {
         "The boolean type reader" - {
 
             "should return value the true" {
-                val input: JsValue = JsBoolean.valueOf(true)
-                val result = io.github.airflux.serialization.std.reader.BooleanReader.read(CONTEXT, JsLocation.empty, input)
+                val input: ValueNode = BooleanNode.valueOf(true)
+                val result = BooleanReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsSuccess(location = JsLocation.empty, value = true)
             }
 
             "should return value the false" {
-                val input: JsValue = JsBoolean.valueOf(false)
-                val result = io.github.airflux.serialization.std.reader.BooleanReader.read(CONTEXT, JsLocation.empty, input)
+                val input: ValueNode = BooleanNode.valueOf(false)
+                val result = BooleanReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsSuccess(location = JsLocation.empty, value = false)
             }
 
             "should return the invalid type error" {
-                val input: JsValue = JsString("abc")
-                val result = io.github.airflux.serialization.std.reader.BooleanReader.read(CONTEXT, JsLocation.empty, input)
+                val input: ValueNode = StringNode("abc")
+                val result = BooleanReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,
-                        error = JsonErrors.InvalidType(expected = JsValue.Type.BOOLEAN, actual = JsValue.Type.STRING)
+                        error = JsonErrors.InvalidType(
+                            expected = ValueNode.Type.BOOLEAN,
+                            actual = ValueNode.Type.STRING
+                        )
                     )
                 )
             }

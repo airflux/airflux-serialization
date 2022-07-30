@@ -21,8 +21,8 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsObject
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
 import io.kotest.assertions.throwables.shouldThrow
@@ -52,7 +52,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
 
             "when the reader context does not contain the error builder" - {
                 val context = JsReaderContext()
-                val input = JsObject()
+                val input = StructNode()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
@@ -68,7 +68,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 )
 
                 "when the object is empty" - {
-                    val input = JsObject()
+                    val input = StructNode()
 
                     "then the validator should return an error" {
                         val errors = validator.validate(context, LOCATION, PROPERTIES, input)
@@ -81,7 +81,7 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties less than the minimum" - {
-                    val input = JsObject(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                    val input = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                     "then the validator should return an error" {
                         val failure = validator.validate(context, LOCATION, PROPERTIES, input)
@@ -94,9 +94,9 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties equal to the minimum" - {
-                    val input = JsObject(
-                        ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
-                        NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
+                    val input = StructNode(
+                        ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
+                        NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                     )
 
                     "then the validator should do not return any errors" {
@@ -106,10 +106,10 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties more than the minimum" - {
-                    val input = JsObject(
-                        ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
-                        NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
-                        TITLE_PROPERTY_NAME to JsString(TITLE_PROPERTY_VALUE)
+                    val input = StructNode(
+                        ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
+                        NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                        TITLE_PROPERTY_NAME to StringNode(TITLE_PROPERTY_VALUE)
                     )
 
                     "then the validator should do not return any errors" {

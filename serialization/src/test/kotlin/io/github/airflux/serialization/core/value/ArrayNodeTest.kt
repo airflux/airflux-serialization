@@ -28,13 +28,13 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-internal class JsArrayTest {
+internal class ArrayNodeTest {
 
     companion object {
-        private val EMPTY_ARRAY = JsArray<JsString>()
-        private val FIRST_ITEM = JsString(FIRST_PHONE_VALUE)
-        private val SECOND_ITEM = JsString(SECOND_PHONE_VALUE)
-        private val NOT_EMPTY_ARRAY = JsArray(FIRST_ITEM, SECOND_ITEM)
+        private val EMPTY_ARRAY = ArrayNode<StringNode>()
+        private val FIRST_ITEM = StringNode(FIRST_PHONE_VALUE)
+        private val SECOND_ITEM = StringNode(SECOND_PHONE_VALUE)
+        private val NOT_EMPTY_ARRAY = ArrayNode(FIRST_ITEM, SECOND_ITEM)
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class JsArrayTest {
         val item = NOT_EMPTY_ARRAY[0]
 
         assertNotNull(item)
-        item as JsString
+        item as StringNode
         assertEquals(FIRST_PHONE_VALUE, item.get)
     }
 
@@ -81,7 +81,7 @@ internal class JsArrayTest {
         val item = NOT_EMPTY_ARRAY[PathElement.Idx(0)]
 
         assertNotNull(item)
-        item as JsString
+        item as StringNode
         assertEquals(FIRST_PHONE_VALUE, item.get)
     }
 
@@ -92,22 +92,23 @@ internal class JsArrayTest {
     }
 
     @Test
-    fun `Testing the toString function of the JsArray class`() {
+    fun `Testing the toString function of the ArrayNode class`() {
         ObjectContract.checkToString(
-            JsArray(
-                JsString(FIRST_PHONE_VALUE),
-                JsString(SECOND_PHONE_VALUE),
+            ArrayNode(
+                StringNode(FIRST_PHONE_VALUE),
+                StringNode(SECOND_PHONE_VALUE),
             ),
             """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE"]"""
         )
     }
 
+    //TODO
     @Test
-    fun `Testing the equals contract of the JsString class`() {
+    fun `Testing the equals contract of the StringNode class`() {
         ObjectContract.checkEqualsContract(
-            JsArray(JsString(FIRST_PHONE_VALUE)),
-            JsArray(JsString(FIRST_PHONE_VALUE)),
-            JsArray(JsString(SECOND_PHONE_VALUE)),
+            ArrayNode(StringNode(FIRST_PHONE_VALUE)),
+            ArrayNode(StringNode(FIRST_PHONE_VALUE)),
+            ArrayNode(StringNode(SECOND_PHONE_VALUE)),
         )
     }
 }

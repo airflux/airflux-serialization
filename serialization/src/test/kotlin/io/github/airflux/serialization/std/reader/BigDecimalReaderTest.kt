@@ -23,9 +23,9 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import java.math.BigDecimal
@@ -44,19 +44,19 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 withData(
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
-                    val input: JsValue = JsNumber.valueOf(value)!!
-                    val result = io.github.airflux.serialization.std.reader.BigDecimalReader.read(CONTEXT, JsLocation.empty, input)
+                    val input: ValueNode = NumberNode.valueOf(value)!!
+                    val result = BigDecimalReader.read(CONTEXT, JsLocation.empty, input)
                     result.assertAsSuccess(location = JsLocation.empty, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
-                val input: JsValue = JsString("abc")
-                val result = io.github.airflux.serialization.std.reader.BigDecimalReader.read(CONTEXT, JsLocation.empty, input)
+                val input: ValueNode = StringNode("abc")
+                val result = BigDecimalReader.read(CONTEXT, JsLocation.empty, input)
                 result.assertAsFailure(
                     JsResult.Failure.Cause(
                         location = JsLocation.empty,
-                        error = JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.STRING)
+                        error = JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.STRING)
                     )
                 )
             }

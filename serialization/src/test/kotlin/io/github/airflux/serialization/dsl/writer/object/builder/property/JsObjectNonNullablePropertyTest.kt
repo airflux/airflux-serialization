@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
@@ -41,7 +41,7 @@ internal class JsObjectNonNullablePropertyTest : FreeSpec() {
 
             "when created an instance of the non-nullable property" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { JsString(it) }
+                val writer = DummyWriter<String> { StringNode(it) }
                 val spec = JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val property = JsObjectProperty.NonNullable(spec)
 
@@ -64,12 +64,12 @@ internal class JsObjectNonNullablePropertyTest : FreeSpec() {
                 }
 
                 "when the writer of the property returns the not null value" - {
-                    val writer = DummyWriter<String> { JsString(it) }
+                    val writer = DummyWriter<String> { StringNode(it) }
                     val property = createProperty(from = from, writer = writer)
 
                     "then the method write should return the not null value" {
                         val result = property.write(JsWriterContext(), LOCATION, ATTRIBUTE_VALUE)
-                        result shouldBe JsString(ATTRIBUTE_VALUE)
+                        result shouldBe StringNode(ATTRIBUTE_VALUE)
                     }
                 }
             }

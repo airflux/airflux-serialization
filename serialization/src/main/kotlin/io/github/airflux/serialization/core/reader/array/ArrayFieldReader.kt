@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.context.error.AdditionalItems
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.ArrayNode
 
 /**
  * Read a node which represent as array.
@@ -36,7 +36,7 @@ import io.github.airflux.serialization.core.value.JsArray
 public fun <T> readArray(
     context: JsReaderContext,
     location: JsLocation,
-    from: JsArray<*>,
+    from: ArrayNode<*>,
     prefixItems: List<JsReader<T>>,
     errorIfAdditionalItems: Boolean
 ): JsResult<List<T>> = from.read(
@@ -54,7 +54,7 @@ public fun <T> readArray(
 public fun <T> readArray(
     context: JsReaderContext,
     location: JsLocation,
-    from: JsArray<*>,
+    from: ArrayNode<*>,
     items: JsReader<T>
 ): JsResult<List<T>> =
     from.read(
@@ -73,7 +73,7 @@ public fun <T> readArray(
 public fun <T> readArray(
     context: JsReaderContext,
     location: JsLocation,
-    from: JsArray<*>,
+    from: ArrayNode<*>,
     prefixItems: List<JsReader<T>>,
     items: JsReader<T>
 ): JsResult<List<T>> = from.read(
@@ -84,7 +84,7 @@ public fun <T> readArray(
     errorIfAdditionalItems = false
 )
 
-internal fun <T> JsArray<*>.read(
+internal fun <T> ArrayNode<*>.read(
     context: JsReaderContext,
     location: JsLocation,
     prefixItems: List<JsReader<T>>,

@@ -33,24 +33,27 @@ internal class ReadAsBooleanTest : FreeSpec() {
     }
 
     init {
-        "The 'readAsBoolean' function" - {
-            "when called with a receiver of a 'JsBoolean'" - {
+        "The readAsBoolean function" - {
+
+            "when called with a receiver of the BooleanNode type" - {
+
                 "should return the boolean value" {
-                    val json: JsValue = JsBoolean.valueOf(true)
+                    val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsBoolean(CONTEXT, LOCATION)
                     result.assertAsSuccess(location = LOCATION, value = true)
                 }
             }
-            "when called with a receiver of a not 'JsBoolean'" - {
-                "should return the 'InvalidType' error" {
-                    val json = JsString("abc")
+            "when called with a receiver of not the BooleanNode type" - {
+
+                "should return the invalid type error" {
+                    val json = StringNode("abc")
                     val result = json.readAsBoolean(CONTEXT, LOCATION)
                     result.assertAsFailure(
                         JsResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
-                                expected = JsValue.Type.BOOLEAN,
-                                actual = JsValue.Type.STRING
+                                expected = ValueNode.Type.BOOLEAN,
+                                actual = ValueNode.Type.STRING
                             )
                         )
                     )

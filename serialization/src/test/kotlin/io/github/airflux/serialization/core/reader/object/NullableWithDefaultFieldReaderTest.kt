@@ -22,8 +22,8 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -45,8 +45,8 @@ internal class NullableWithDefaultFieldReaderTest : FreeSpec() {
 
             "when the element is defined" - {
 
-                "when the value of the element is not the JsNull" - {
-                    val from: JsLookup = JsLookup.Defined(location = LOCATION, value = JsString(VALUE))
+                "when the value of the element is not the NullNode" - {
+                    val from: JsLookup = JsLookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
                         val result: JsResult<String?> =
@@ -55,10 +55,10 @@ internal class NullableWithDefaultFieldReaderTest : FreeSpec() {
                     }
                 }
 
-                "when the value of the element is the JsNull" - {
-                    val from: JsLookup = JsLookup.Defined(location = LOCATION, JsNull)
+                "when the value of the element is the NullNode" - {
+                    val from: JsLookup = JsLookup.Defined(location = LOCATION, NullNode)
 
-                    "then should return a null value" {
+                    "then should return the null value" {
                         val result: JsResult<String?> =
                             readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
                         result shouldBe JsResult.Success(location = LOCATION, value = null)

@@ -18,58 +18,58 @@ package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.path.PathElement
 
-public sealed class JsValue {
+public sealed class ValueNode {
 
     public enum class Type { ARRAY, BOOLEAN, NULL, NUMBER, OBJECT, STRING }
 
     public abstract val type: Type
 }
 
-public object JsNull : JsValue() {
+public object NullNode : ValueNode() {
     override val type: Type = Type.NULL
 
     override fun toString(): String = "null"
 }
 
-public sealed class JsBoolean(public val get: Boolean) : JsValue() {
+public sealed class BooleanNode(public val get: Boolean) : ValueNode() {
 
     public companion object {
-        public fun valueOf(value: Boolean): JsBoolean = if (value) True else False
+        public fun valueOf(value: Boolean): BooleanNode = if (value) True else False
     }
 
     override val type: Type = Type.BOOLEAN
 
-    public object True : JsBoolean(true)
-    public object False : JsBoolean(false)
+    public object True : BooleanNode(true)
+    public object False : BooleanNode(false)
 
     override fun toString(): String = get.toString()
 }
 
-public class JsString(public val get: String) : JsValue() {
+public class StringNode(public val get: String) : ValueNode() {
 
     override val type: Type = Type.STRING
 
     override fun toString(): String = """"$get""""
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsString && this.get == other.get)
+        this === other || (other is StringNode && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
 }
 
-public class JsNumber private constructor(public val get: String) : JsValue() {
+public class NumberNode private constructor(public val get: String) : ValueNode() {
 
     public companion object {
         private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
         private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
         private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
 
-        public fun valueOf(value: Byte): JsNumber = JsNumber(value.toString())
-        public fun valueOf(value: Short): JsNumber = JsNumber(value.toString())
-        public fun valueOf(value: Int): JsNumber = JsNumber(value.toString())
-        public fun valueOf(value: Long): JsNumber = JsNumber(value.toString())
+        public fun valueOf(value: Byte): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: Short): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: Int): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: Long): NumberNode = NumberNode(value.toString())
 
-        public fun valueOf(value: String): JsNumber? = if (value.matches(pattern)) JsNumber(value) else null
+        public fun valueOf(value: String): NumberNode? = if (value.matches(pattern)) NumberNode(value) else null
     }
 
     override val type: Type = Type.NUMBER
@@ -81,22 +81,22 @@ public class JsNumber private constructor(public val get: String) : JsValue() {
     override fun toString(): String = get
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsNumber && this.get == other.get)
+        this === other || (other is NumberNode && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
 }
 
-public class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : JsValue(), Iterable<T> {
+public class ArrayNode<T : ValueNode>(private val items: List<T> = emptyList()) : ValueNode(), Iterable<T> {
 
     public companion object {
-        public operator fun <T : JsValue> invoke(vararg elements: T): JsArray<T> = JsArray(elements.toList())
+        public operator fun <T : ValueNode> invoke(vararg elements: T): ArrayNode<T> = ArrayNode(elements.toList())
     }
 
     override val type: Type = Type.ARRAY
 
-    public operator fun get(idx: PathElement.Idx): JsValue? = get(idx.get)
+    public operator fun get(idx: PathElement.Idx): ValueNode? = get(idx.get)
 
-    public operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
+    public operator fun get(idx: Int): ValueNode? = items.getOrNull(idx)
 
     public val size: Int
         get() = items.size
@@ -108,37 +108,40 @@ public class JsArray<T : JsValue>(private val items: List<T> = emptyList()) : Js
     override fun toString(): String = items.joinToString(prefix = "[", postfix = "]")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsArray<*> && this.items == other.items)
+        this === other || (other is ArrayNode<*> && this.items == other.items)
 
     override fun hashCode(): Int = items.hashCode()
 }
 
-public class JsObject(private val properties: Map<String, JsValue> = emptyMap()) : JsValue(),
-                                                                                   Iterable<Map.Entry<String, JsValue>> {
+public class StructNode(
+    private val properties: Map<String, ValueNode> = emptyMap()
+) : ValueNode(),
+    Iterable<Map.Entry<String, ValueNode>> {
 
     public companion object {
 
-        public operator fun invoke(vararg properties: Pair<String, JsValue>): JsObject = JsObject(properties.toMap())
+        public operator fun invoke(vararg properties: Pair<String, ValueNode>): StructNode =
+            StructNode(properties.toMap())
     }
 
     override val type: Type = Type.OBJECT
 
-    public operator fun get(key: PathElement.Key): JsValue? = get(key.get)
+    public operator fun get(key: PathElement.Key): ValueNode? = get(key.get)
 
-    public operator fun get(key: String): JsValue? = properties[key]
+    public operator fun get(key: String): ValueNode? = properties[key]
 
     public val count: Int
         get() = properties.size
 
     public fun isEmpty(): Boolean = properties.isEmpty()
 
-    override fun iterator(): Iterator<Map.Entry<String, JsValue>> = properties.iterator()
+    override fun iterator(): Iterator<Map.Entry<String, ValueNode>> = properties.iterator()
 
     override fun toString(): String = properties.map { (name, value) -> """"$name": $value""" }
         .joinToString(prefix = "{", postfix = "}")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsObject && this.properties.keys == other.properties.keys)
+        this === other || (other is StructNode && this.properties.keys == other.properties.keys)
 
     override fun hashCode(): Int = properties.keys.hashCode()
 }

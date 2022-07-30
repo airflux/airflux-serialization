@@ -17,10 +17,10 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 
-internal class DummyWriter<T : Any>(val result: (T) -> JsValue?) : JsWriter<T> {
-    override fun write(context: JsWriterContext, location: JsLocation, value: T): JsValue? = result(value)
+internal class DummyWriter<T : Any>(val result: (T) -> ValueNode?) : JsWriter<T> {
+    override fun write(context: JsWriterContext, location: JsLocation, value: T): ValueNode? = result(value)
 }

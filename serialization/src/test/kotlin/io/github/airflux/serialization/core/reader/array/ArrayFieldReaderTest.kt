@@ -25,11 +25,11 @@ import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.reader.IntReader
 import io.github.airflux.serialization.std.reader.LongReader
 import io.github.airflux.serialization.std.reader.StringReader
@@ -57,7 +57,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
         "The readArray function for the items-only reader" - {
 
             "when parameter 'from' is empty" - {
-                val from = JsArray<JsString>()
+                val from = ArrayNode<StringNode>()
 
                 val result: JsResult<List<String>> =
                     readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
@@ -68,7 +68,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             "when parameter 'from' is not empty" - {
 
                 "when read was any errors" {
-                    val from = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
+                    val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                     val result: JsResult<List<String>> =
                         readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
@@ -80,7 +80,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 }
 
                 "when read was some errors" - {
-                    val from = JsArray(JsNumber.valueOf(10), JsBoolean.True)
+                    val from = ArrayNode(NumberNode.valueOf(10), BooleanNode.True)
 
                     "when fail-fast is true" {
                         val updatedContext: JsReaderContext = CONTEXT + FailFast(true)
@@ -93,8 +93,8 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -111,15 +111,15 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             ),
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.BOOLEAN
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.BOOLEAN
                                 )
                             )
                         )
@@ -131,7 +131,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
         "The readArray function for the prefix-items-only readers" - {
 
             "when parameter 'from' is empty" - {
-                val from = JsArray<JsString>()
+                val from = ArrayNode<StringNode>()
 
                 val result: JsResult<List<String>> = readArray(
                     context = CONTEXT,
@@ -145,7 +145,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             }
 
             "when parameter 'from' is not empty" - {
-                val from = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
+                val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                 "when the number of readers is less than the number of items" - {
                     val readers = listOf(StringReader)
@@ -232,8 +232,8 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.STRING
                                 )
                             )
                         )
@@ -255,15 +255,15 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.STRING
                                 )
                             ),
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.BOOLEAN,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.BOOLEAN,
+                                    actual = ValueNode.Type.STRING
                                 )
                             )
                         )
@@ -275,7 +275,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
         "The readArray function for the prefix-items and items readers" - {
 
             "when parameter 'from' is empty" - {
-                val from = JsArray<JsString>()
+                val from = ArrayNode<StringNode>()
 
                 val result: JsResult<List<String>> = readArray(
                     context = CONTEXT,
@@ -289,7 +289,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             }
 
             "when parameter 'from' is not empty" - {
-                val from = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
+                val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                 "when read was any errors" {
                     val result: JsResult<List<String>> = readArray(
@@ -324,8 +324,8 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.STRING
                                 )
                             )
                         )
@@ -347,15 +347,15 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.STRING
                                 )
                             ),
                             JsResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.STRING
                                 )
                             )
                         )
@@ -402,7 +402,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
 
             "when receiver is failure" {
                 val receiver: JsResult<MutableList<String>> =
-                    JsonErrors.InvalidType(expected = JsValue.Type.NUMBER, actual = JsValue.Type.BOOLEAN)
+                    JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.BOOLEAN)
                         .failure(LOCATION.append(0))
 
                 val result = receiver + parameter
@@ -412,8 +412,8 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     JsResult.Failure.Cause(
                         location = LOCATION.append(0),
                         error = JsonErrors.InvalidType(
-                            expected = JsValue.Type.NUMBER,
-                            actual = JsValue.Type.BOOLEAN
+                            expected = ValueNode.Type.NUMBER,
+                            actual = ValueNode.Type.BOOLEAN
                         )
                     ),
                     JsResult.Failure.Cause(

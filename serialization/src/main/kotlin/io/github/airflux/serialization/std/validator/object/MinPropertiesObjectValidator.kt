@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsObject
+import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidator
 
@@ -34,7 +34,7 @@ public class MinPropertiesObjectValidator internal constructor(private val value
         context: JsReaderContext,
         location: JsLocation,
         properties: JsObjectProperties,
-        input: JsObject
+        input: StructNode
     ): JsResult.Failure? =
         if (input.count < value) {
             val errorBuilder = context[ErrorBuilder]

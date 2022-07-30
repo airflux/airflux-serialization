@@ -18,9 +18,9 @@ package io.github.airflux.serialization.core.writer.`object`
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import io.kotest.core.spec.style.FreeSpec
@@ -36,25 +36,25 @@ internal class NullableFieldWriterTest : FreeSpec() {
     init {
 
         "The writeNullable function" - {
-            val writer: JsWriter<String> = DummyWriter { JsString(it) }
+            val writer: JsWriter<String> = DummyWriter { StringNode(it) }
 
             "when a value is not null" - {
                 val value = "value"
 
-                "should return the JsString value" {
-                    val result: JsValue? =
+                "should return the StringNode value" {
+                    val result: ValueNode? =
                         writeNullable(context = CONTEXT, location = LOCATION, using = writer, value = value)
-                    result shouldBe JsString(value)
+                    result shouldBe StringNode(value)
                 }
             }
 
             "when a value is null" - {
                 val value: String? = null
 
-                "should return the JsNull value" {
-                    val result: JsValue? =
+                "should return the NullNode value" {
+                    val result: ValueNode? =
                         writeNullable(context = CONTEXT, location = LOCATION, using = writer, value = value)
-                    result shouldBe JsNull
+                    result shouldBe NullNode
                 }
             }
         }

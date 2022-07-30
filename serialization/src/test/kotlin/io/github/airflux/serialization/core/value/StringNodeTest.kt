@@ -19,10 +19,19 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.common.ObjectContract
 import kotlin.test.Test
 
-internal class JsNullTest {
+internal class StringNodeTest {
 
     @Test
-    fun `Testing the toString function of the JsNull class`() {
-        ObjectContract.checkToString(JsNull, "null")
+    fun `Testing the toString function of the StringNode class`() {
+        ObjectContract.checkToString(StringNode("user"), "\"user\"")
+    }
+
+    @Test
+    fun `Testing the equals contract of the StringNode class`() {
+        ObjectContract.checkEqualsContract(
+            StringNode("user"),
+            StringNode("user"),
+            StringNode("title")
+        )
     }
 }

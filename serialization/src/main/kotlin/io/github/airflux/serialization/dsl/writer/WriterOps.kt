@@ -17,9 +17,9 @@
 package io.github.airflux.serialization.dsl.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 
-public fun <T : Any> T.serialization(context: JsWriterContext, location: JsLocation, writer: JsWriter<T>): JsValue? =
+public fun <T : Any> T.serialization(context: JsWriterContext, location: JsLocation, writer: JsWriter<T>): ValueNode? =
     writer.write(context, location, this)

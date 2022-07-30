@@ -22,10 +22,10 @@ import io.github.airflux.serialization.core.reader.context.JsReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.reader.IntReader
 import io.github.airflux.serialization.std.reader.StringReader
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
@@ -60,31 +60,27 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
                 "when the reader has read an item" - {
 
                     "when the reader has successfully read" - {
-                        val input = JsString(io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_UUID)
-                        val result = spec.reader.read(
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                        val input = StringNode(ID_VALUE_AS_UUID)
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                         "then a value should be returned" {
                             result as JsResult.Success<String>
-                            result.value shouldBe io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_UUID
+                            result.value shouldBe ID_VALUE_AS_UUID
                         }
                     }
 
                     "when a read error occurred" - {
-                        val input = JsNumber.valueOf(10)
-                        val result = spec.reader.read(
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                        val input = NumberNode.valueOf(10)
+                        val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                         "then should be returned a read error" {
                             result as JsResult.Failure
                             result.causes shouldContainExactly listOf(
                                 JsResult.Failure.Cause(
-                                    location = io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION,
+                                    location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = JsValue.Type.STRING,
-                                        actual = JsValue.Type.NUMBER
+                                        expected = ValueNode.Type.STRING,
+                                        actual = ValueNode.Type.NUMBER
                                     )
                                 )
                             )
@@ -100,27 +96,23 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
-                        val input = JsString(io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_UUID)
+                        val input = StringNode(ID_VALUE_AS_UUID)
 
-                        val result = specWithValidator.reader.read(
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
                         result as JsResult.Success<String>
-                        result.value shouldBe io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_UUID
+                        result.value shouldBe ID_VALUE_AS_UUID
                     }
 
                     "then a validation error should be returned if validation is a failure" {
-                        val input = JsString("")
+                        val input = StringNode("")
 
-                        val result = specWithValidator.reader.read(
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
                         result as JsResult.Failure
                         result.causes shouldContainExactly listOf(
                             JsResult.Failure.Cause(
-                                location = io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION,
+                                location = LOCATION,
                                 error = JsonErrors.Validation.Strings.IsEmpty
                             )
                         )
@@ -130,19 +122,17 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val input = JsNumber.valueOf(10)
+                        val input = NumberNode.valueOf(10)
 
-                        val result = specWithValidator.reader.read(
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                            io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
                         result as JsResult.Failure
                         result.causes shouldContainExactly listOf(
                             JsResult.Failure.Cause(
-                                location = io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION,
+                                location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.NUMBER
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
                                 )
                             )
                         )
@@ -156,51 +146,45 @@ internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
                 val specWithAlternative = spec or alt
 
                 "when the main reader has successfully read" - {
-                    val input = JsString(io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_UUID)
-                    val result = specWithAlternative.reader.read(
-                        io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                        io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                    val input = StringNode(ID_VALUE_AS_UUID)
+                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
                         println(result)
                         result as JsResult.Success<String>
-                        result.value shouldBe io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_UUID
+                        result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
 
                 "when the main reader has failure read" - {
-                    val input = JsNumber.valueOf(io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_INT)!!
-                    val result = specWithAlternative.reader.read(
-                        io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                        io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                    val input = NumberNode.valueOf(ID_VALUE_AS_INT)!!
+                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned from the alternative reader" {
                         result as JsResult.Success<String>
-                        result.value shouldBe io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.ID_VALUE_AS_INT
+                        result.value shouldBe ID_VALUE_AS_INT
                     }
                 }
 
                 "when the alternative reader has failure read" - {
-                    val input = JsBoolean.True
-                    val result = specWithAlternative.reader.read(
-                        io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.CONTEXT,
-                        io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION, input)
+                    val input = BooleanNode.True
+                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned all read errors" {
                         result as JsResult.Failure
                         result.causes shouldContainExactly listOf(
                             JsResult.Failure.Cause(
-                                location = io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION,
+                                location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.STRING,
-                                    actual = JsValue.Type.BOOLEAN
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.BOOLEAN
                                 )
                             ),
                             JsResult.Failure.Cause(
-                                location = io.github.airflux.serialization.dsl.reader.array.builder.item.specification.JsArrayNonNullableItemSpecTest.Companion.LOCATION,
+                                location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.BOOLEAN
+                                    expected = ValueNode.Type.NUMBER,
+                                    actual = ValueNode.Type.BOOLEAN
                                 )
                             )
                         )

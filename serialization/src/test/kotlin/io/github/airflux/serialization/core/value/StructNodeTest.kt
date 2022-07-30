@@ -26,17 +26,17 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-internal class JsObjectTest {
+internal class StructNodeTest {
 
     companion object {
         private const val USER_NAME_VALUE = "user"
-        private val USER_NAME = JsString(USER_NAME_VALUE)
+        private val USER_NAME = StringNode(USER_NAME_VALUE)
 
         private const val IS_ACTIVE_VALUE = true
-        private val IS_ACTIVE = JsBoolean.valueOf(IS_ACTIVE_VALUE)
+        private val IS_ACTIVE = BooleanNode.valueOf(IS_ACTIVE_VALUE)
 
-        private val EMPTY_OBJECT = JsObject()
-        private val NOT_EMPTY_OBJECT = JsObject(
+        private val EMPTY_OBJECT = StructNode()
+        private val NOT_EMPTY_OBJECT = StructNode(
             "name" to USER_NAME,
             "isActive" to IS_ACTIVE
         )
@@ -76,7 +76,7 @@ internal class JsObjectTest {
         val value = NOT_EMPTY_OBJECT["name"]
 
         assertNotNull(value)
-        value as JsString
+        value as StringNode
         assertEquals(USER_NAME_VALUE, value.get)
     }
 
@@ -96,7 +96,7 @@ internal class JsObjectTest {
         val value = NOT_EMPTY_OBJECT[key]
 
         assertNotNull(value)
-        value as JsString
+        value as StringNode
         assertEquals(USER_NAME_VALUE, value.get)
     }
 
@@ -110,29 +110,29 @@ internal class JsObjectTest {
     }
 
     @Test
-    fun `Testing the toString function of the JsObject class`() {
+    fun `Testing the toString function of the StructNode class`() {
         val userName = "user"
         val isActive = true
 
         ObjectContract.checkToString(
-            JsObject(
-                "name" to JsString(userName),
-                "isActive" to JsBoolean.valueOf(isActive)
+            StructNode(
+                "name" to StringNode(userName),
+                "isActive" to BooleanNode.valueOf(isActive)
             ),
             """{"name": "$userName", "isActive": $isActive}"""
         )
     }
 
     @Test
-    fun `Testing the equals contract of the JsObject class`() {
+    fun `Testing the equals contract of the StructNode class`() {
         val firstUserName = "user-1"
         val secondUserName = "user-2"
         val isActive = true
 
         ObjectContract.checkEqualsContract(
-            JsObject("name" to JsString(firstUserName)),
-            JsObject("name" to JsString(secondUserName)),
-            JsObject("isActive" to JsBoolean.valueOf(isActive)),
+            StructNode("name" to StringNode(firstUserName)),
+            StructNode("name" to StringNode(secondUserName)),
+            StructNode("isActive" to BooleanNode.valueOf(isActive)),
         )
     }
 }

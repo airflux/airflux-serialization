@@ -20,15 +20,15 @@ import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderCo
 import io.github.airflux.serialization.core.context.error.JsContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.reader.result.JsError
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.ValueNode
 
 /**
  * The builder of an error that occurs when an element is an invalid type by the specified path.
  */
-public class InvalidTypeErrorBuilder(private val builder: (expected: JsValue.Type, actual: JsValue.Type) -> JsError) :
+public class InvalidTypeErrorBuilder(private val builder: (expected: ValueNode.Type, actual: ValueNode.Type) -> JsError) :
     AbstractErrorBuilderContextElement<InvalidTypeErrorBuilder>(key = InvalidTypeErrorBuilder) {
 
-    public fun build(expected: JsValue.Type, actual: JsValue.Type): JsError = builder(expected, actual)
+    public fun build(expected: ValueNode.Type, actual: ValueNode.Type): JsError = builder(expected, actual)
 
     public companion object Key : JsContextErrorBuilderKey<InvalidTypeErrorBuilder> {
         override val name: String = errorBuilderName()

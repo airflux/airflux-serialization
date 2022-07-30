@@ -20,8 +20,8 @@ import io.github.airflux.serialization.core.context.option.JsContextOptionElemen
 import io.github.airflux.serialization.core.context.option.JsContextOptionKey
 import io.github.airflux.serialization.core.context.option.get
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.context.JsWriterContext
 import java.math.BigDecimal
@@ -34,9 +34,9 @@ internal val JsWriterContext.stripTrailingZeros: Boolean
  */
 public object BigDecimalWriter : JsWriter<BigDecimal> {
 
-    override fun write(context: JsWriterContext, location: JsLocation, value: BigDecimal): JsValue {
+    override fun write(context: JsWriterContext, location: JsLocation, value: BigDecimal): ValueNode {
         val text = if (context.stripTrailingZeros) value.stripTrailingZeros().toPlainString() else value.toPlainString()
-        return JsNumber.valueOf(text)!!
+        return NumberNode.valueOf(text)!!
     }
 
     public class StripTrailingZeros(override val value: Boolean) : JsContextOptionElement<Boolean> {
