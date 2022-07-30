@@ -30,7 +30,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayWriterBuilderTest : FreeSpec() {
+internal class ArrayWriterBuilderTest : FreeSpec() {
 
     companion object {
         private const val FIRST_ITEM = "item-1"
@@ -42,7 +42,7 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsArrayWriterBuilder type" - {
+        "The ArrayWriterBuilder type" - {
 
             "when have some non-nullable items for writing to an array" - {
                 val writer = arrayWriter<String> {
@@ -79,7 +79,13 @@ internal class JsArrayWriterBuilderTest : FreeSpec() {
 
                 "then should return the array with items" {
                     result as ArrayNode<*>
-                    result shouldBe ArrayNode(NullNode, StringNode(FIRST_ITEM), NullNode, StringNode(SECOND_ITEM), NullNode)
+                    result shouldBe ArrayNode(
+                        NullNode,
+                        StringNode(FIRST_ITEM),
+                        NullNode,
+                        StringNode(SECOND_ITEM),
+                        NullNode
+                    )
                 }
             }
 

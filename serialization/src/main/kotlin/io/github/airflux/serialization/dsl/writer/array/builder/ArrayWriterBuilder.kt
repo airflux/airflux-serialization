@@ -28,19 +28,19 @@ import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstan
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
-import io.github.airflux.serialization.dsl.writer.array.builder.JsArrayWriterBuilder.WriterBuilder
+import io.github.airflux.serialization.dsl.writer.array.builder.ArrayWriterBuilder.WriterBuilder
 import io.github.airflux.serialization.dsl.writer.array.builder.item.ArrayItems
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.github.airflux.serialization.dsl.writer.config.JsArrayWriterConfig
 
 public fun <T> arrayWriter(
     config: JsArrayWriterConfig = JsArrayWriterConfig.DEFAULT,
-    block: JsArrayWriterBuilder.() -> WriterBuilder<T>
+    block: ArrayWriterBuilder.() -> WriterBuilder<T>
 ): ArrayWriter<T> =
-    JsArrayWriterBuilder(WriterActionConfiguratorInstance(config.options.actionIfEmpty)).block().build()
+    ArrayWriterBuilder(WriterActionConfiguratorInstance(config.options.actionIfEmpty)).block().build()
 
 @AirfluxMarker
-public class JsArrayWriterBuilder internal constructor(
+public class ArrayWriterBuilder internal constructor(
     private val actionConfigurator: WriterActionConfiguratorInstance
 ) : WriterActionConfigurator by actionConfigurator {
 
