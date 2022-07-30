@@ -31,10 +31,10 @@ import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RE
 import io.github.airflux.serialization.dsl.writer.array.builder.ArrayWriterBuilder.WriterBuilder
 import io.github.airflux.serialization.dsl.writer.array.builder.item.ArrayItems
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
-import io.github.airflux.serialization.dsl.writer.config.JsArrayWriterConfig
+import io.github.airflux.serialization.dsl.writer.config.ArrayWriterConfig
 
 public fun <T> arrayWriter(
-    config: JsArrayWriterConfig = JsArrayWriterConfig.DEFAULT,
+    config: ArrayWriterConfig = ArrayWriterConfig.DEFAULT,
     block: ArrayWriterBuilder.() -> WriterBuilder<T>
 ): ArrayWriter<T> =
     ArrayWriterBuilder(WriterActionConfiguratorInstance(config.options.actionIfEmpty)).block().build()

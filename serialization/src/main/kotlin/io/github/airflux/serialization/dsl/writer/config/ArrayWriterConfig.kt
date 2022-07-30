@@ -20,10 +20,10 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
 
-public fun arrayWriterConfig(block: JsArrayWriterConfig.Builder.() -> Unit): JsArrayWriterConfig =
-    JsArrayWriterConfig.Builder().apply(block).build()
+public fun arrayWriterConfig(block: ArrayWriterConfig.Builder.() -> Unit): ArrayWriterConfig =
+    ArrayWriterConfig.Builder().apply(block).build()
 
-public class JsArrayWriterConfig private constructor(
+public class ArrayWriterConfig private constructor(
     public val options: Options
 ) {
 
@@ -31,7 +31,7 @@ public class JsArrayWriterConfig private constructor(
     public class Builder internal constructor() {
         public var actionIfEmpty: WriterActionBuilderIfResultIsEmpty = returnEmptyValue
 
-        internal fun build(): JsArrayWriterConfig = JsArrayWriterConfig(
+        internal fun build(): ArrayWriterConfig = ArrayWriterConfig(
             options = Options(actionIfEmpty = actionIfEmpty)
         )
 
@@ -46,6 +46,6 @@ public class JsArrayWriterConfig private constructor(
     )
 
     public companion object {
-        public val DEFAULT: JsArrayWriterConfig = Builder().build()
+        public val DEFAULT: ArrayWriterConfig = Builder().build()
     }
 }
