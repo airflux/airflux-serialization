@@ -22,9 +22,10 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayNonNullableItemsTest : FreeSpec() {
+internal class ArrayOptionalItemsTest : FreeSpec() {
 
     companion object {
         private const val ITEM_VALUE = "value"
@@ -34,11 +35,12 @@ internal class JsArrayNonNullableItemsTest : FreeSpec() {
     }
 
     init {
-        "The JsArrayItems#NonNullable" - {
 
-            "when created an instance of the non-nullable item" - {
+        "The ArrayItems#Optional type" - {
+
+            "when created an instance of the optional item" - {
                 val writer = DummyWriter<String> { StringNode(it) }
-                val items: JsArrayItems.NonNullable<String> = createItems(writer = writer)
+                val items: ArrayItems.Optional<String?> = createItems(writer = writer)
 
                 "when an item is the not null value" - {
                     val value = "value"
@@ -48,10 +50,19 @@ internal class JsArrayNonNullableItemsTest : FreeSpec() {
                         result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
+
+                "when an item is the null value" - {
+                    val value: String? = null
+
+                    "then the method write should return the not null value" {
+                        val result = items.write(CONTEXT, LOCATION, value)
+                        result.shouldBeNull()
+                    }
+                }
             }
         }
     }
 
-    private fun <T : Any> createItems(writer: DummyWriter<T>): JsArrayItems.NonNullable<T> =
-        JsArrayItems.NonNullable(ArrayItemSpec.NonNullable(writer = writer))
+    private fun <T> createItems(writer: DummyWriter<T & Any>): ArrayItems.Optional<T> =
+        ArrayItems.Optional(ArrayItemSpec.Optional(writer = writer))
 }

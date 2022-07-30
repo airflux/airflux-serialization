@@ -25,11 +25,11 @@ import io.github.airflux.serialization.core.writer.`object`.writeNullable
 import io.github.airflux.serialization.core.writer.`object`.writeOptional
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 
-public sealed class JsArrayItems<T> {
+public sealed class ArrayItems<T> {
 
     public abstract fun write(context: WriterContext, location: JsLocation, value: T): ValueNode?
 
-    public class NonNullable<T : Any> private constructor(private val writer: Writer<T>) : JsArrayItems<T>() {
+    public class NonNullable<T : Any> private constructor(private val writer: Writer<T>) : ArrayItems<T>() {
 
         internal constructor(spec: ArrayItemSpec.NonNullable<T>) : this(spec.writer)
 
@@ -37,7 +37,7 @@ public sealed class JsArrayItems<T> {
             writeNonNullable(context = context, location = location, using = writer, value = value)
     }
 
-    public class Optional<T> private constructor(private val writer: Writer<T & Any>) : JsArrayItems<T>() {
+    public class Optional<T> private constructor(private val writer: Writer<T & Any>) : ArrayItems<T>() {
 
         internal constructor(spec: ArrayItemSpec.Optional<T>) : this(spec.writer)
 
@@ -45,7 +45,7 @@ public sealed class JsArrayItems<T> {
             writeOptional(context = context, location = location, using = writer, value = value)
     }
 
-    public class Nullable<T> private constructor(private val writer: Writer<T & Any>) : JsArrayItems<T>() {
+    public class Nullable<T> private constructor(private val writer: Writer<T & Any>) : ArrayItems<T>() {
 
         internal constructor(spec: ArrayItemSpec.Nullable<T>) : this(spec.writer)
 

@@ -18,14 +18,14 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayOptionalItemsTest : FreeSpec() {
+internal class ArrayNullableItemsTest : FreeSpec() {
 
     companion object {
         private const val ITEM_VALUE = "value"
@@ -36,11 +36,11 @@ internal class JsArrayOptionalItemsTest : FreeSpec() {
 
     init {
 
-        "The JsArrayItems#Optional" - {
+        "The ArrayItems#Nullable type" - {
 
-            "when created an instance of the optional item" - {
+            "when created an instance of the nullable item" - {
                 val writer = DummyWriter<String> { StringNode(it) }
-                val items: JsArrayItems.Optional<String?> = createItems(writer = writer)
+                val items: ArrayItems.Nullable<String?> = createItems(writer = writer)
 
                 "when an item is the not null value" - {
                     val value = "value"
@@ -54,15 +54,15 @@ internal class JsArrayOptionalItemsTest : FreeSpec() {
                 "when an item is the null value" - {
                     val value: String? = null
 
-                    "then the method write should return the not null value" {
+                    "then the method write should return the NullNode value" {
                         val result = items.write(CONTEXT, LOCATION, value)
-                        result.shouldBeNull()
+                        result shouldBe NullNode
                     }
                 }
             }
         }
     }
 
-    private fun <T> createItems(writer: DummyWriter<T & Any>): JsArrayItems.Optional<T> =
-        JsArrayItems.Optional(ArrayItemSpec.Optional(writer = writer))
+    private fun <T> createItems(writer: DummyWriter<T & Any>): ArrayItems.Nullable<T> =
+        ArrayItems.Nullable(ArrayItemSpec.Nullable(writer = writer))
 }
