@@ -18,7 +18,6 @@ package io.github.airflux.serialization.core.reader.validator
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.kotest.core.spec.style.FreeSpec
@@ -129,7 +128,7 @@ internal class ValidatorTest : FreeSpec() {
         }
     }
 
-    private sealed class ValidationErrors : JsError {
+    private sealed class ValidationErrors : JsResult.Error {
         object PathMissing : ValidationErrors()
         object InvalidType : ValidationErrors()
     }

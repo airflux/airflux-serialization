@@ -23,7 +23,6 @@ import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.failFast
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StructNode
@@ -54,10 +53,10 @@ public class AdditionalPropertiesObjectValidator internal constructor(
         return failures.takeIf { it.isNotEmpty() }?.merge()
     }
 
-    public class ErrorBuilder(private val function: () -> JsError) :
+    public class ErrorBuilder(private val function: () -> JsResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(): JsError = function()
+        public fun build(): JsResult.Error = function()
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

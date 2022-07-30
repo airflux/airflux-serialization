@@ -36,7 +36,7 @@ public sealed class JsResult<out T> {
 
     public class Failure private constructor(public val causes: List<Cause>) : JsResult<Nothing>() {
 
-        public constructor(location: Location, error: JsError) : this(listOf(Cause(location, error)))
+        public constructor(location: Location, error: Error) : this(listOf(Cause(location, error)))
 
         public constructor(location: Location, errors: JsErrors) : this(listOf(Cause(location, errors)))
 
@@ -54,23 +54,24 @@ public sealed class JsResult<out T> {
         }
 
         public data class Cause(val location: Location, val errors: JsErrors) {
-            public constructor(location: Location, error: JsError) : this(location, JsErrors(error))
+            public constructor(location: Location, error: Error) : this(location, JsErrors(error))
         }
 
         public companion object {
             public fun Collection<Failure>.merge(): Failure = Failure(causes = flatMap { failure -> failure.causes })
         }
     }
+
+    public interface Error
 }
 
 public inline fun <T, R> JsResult<T>.fold(
     ifFailure: (JsResult.Failure) -> R,
     ifSuccess: (JsResult.Success<T>) -> R
-): R =
-    when (this) {
-        is JsResult.Success -> ifSuccess(this)
-        is JsResult.Failure -> ifFailure(this)
-    }
+): R = when (this) {
+    is JsResult.Success -> ifSuccess(this)
+    is JsResult.Failure -> ifFailure(this)
+}
 
 public inline infix fun <T> JsResult<T>.recovery(function: (JsResult.Failure) -> JsResult<T>): JsResult<T> = fold(
     ifFailure = { function(it) },
@@ -88,4 +89,4 @@ public infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResu
 )
 
 public fun <T> T.success(location: Location): JsResult<T> = JsResult.Success(location, this)
-public fun <E : JsError> E.failure(location: Location): JsResult<Nothing> = JsResult.Failure(location, this)
+public fun <E : JsResult.Error> E.failure(location: Location): JsResult<Nothing> = JsResult.Failure(location, this)

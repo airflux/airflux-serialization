@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.result
 
-public class JsErrors private constructor(public val items: List<JsError>) {
+public class JsErrors private constructor(public val items: List<JsResult.Error>) {
 
     public operator fun plus(other: JsErrors): JsErrors = JsErrors(items + other.items)
 
@@ -33,11 +33,11 @@ public class JsErrors private constructor(public val items: List<JsError>) {
 
     public companion object {
 
-        public operator fun invoke(error: JsError, vararg errors: JsError): JsErrors = if (errors.isEmpty())
+        public operator fun invoke(error: JsResult.Error, vararg errors: JsResult.Error): JsErrors = if (errors.isEmpty())
             JsErrors(listOf(error))
         else
             JsErrors(listOf(error) + errors.asList())
 
-        public operator fun invoke(errors: List<JsError>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
+        public operator fun invoke(errors: List<JsResult.Error>): JsErrors? = errors.takeIf { it.isNotEmpty() }?.let { JsErrors(it) }
     }
 }

@@ -19,7 +19,6 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.recovery
@@ -49,10 +48,10 @@ public fun interface Reader<out T> {
 
 /**
  * Creates a new [Reader], based on this one, which first executes this
- * [Reader] logic then, if this [Reader] resulted in a [JsError], runs
+ * [Reader] logic then, if this [Reader] resulted in a [JsResult.Error], runs
  * the other [Reader] on the [ValueNode].
  *
- * @param other the [Reader] to run if this one gets a [JsError]
+ * @param other the [Reader] to run if this one gets a [JsResult.Error]
  * @return A new [Reader] with the updated behavior.
  */
 public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { context, location, input ->

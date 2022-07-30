@@ -1,10 +1,10 @@
 package io.github.airflux.quickstart.json.error
 
-import io.github.airflux.serialization.core.reader.result.JsError
+import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ValueNode
 import kotlin.reflect.KClass
 
-sealed class JsonErrors : JsError {
+sealed class JsonErrors : JsResult.Error {
 
     object PathMissing : JsonErrors()
 

@@ -18,6 +18,6 @@ package io.github.airflux.serialization.dsl.reader.context.exception
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsError
+import io.github.airflux.serialization.core.reader.result.JsResult
 
-internal typealias ExceptionHandler = (ReaderContext, Location, Throwable) -> JsError
+internal typealias ExceptionHandler = (ReaderContext, Location, Throwable) -> JsResult.Error

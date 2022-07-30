@@ -24,7 +24,6 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -224,7 +223,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         (input as StringNode).get.success(location)
     }
 
-    fun <T : Any> itemSpec(error: JsError) = nonNullable(
+    fun <T : Any> itemSpec(error: JsResult.Error) = nonNullable(
         reader = DummyReader<T>(
             result = JsResult.Failure(
                 location = LOCATION.append(

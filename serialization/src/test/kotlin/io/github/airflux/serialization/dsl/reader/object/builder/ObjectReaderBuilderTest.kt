@@ -23,7 +23,6 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
@@ -353,7 +352,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
     fun <T : Any> propertySpec(value: T) = required(name = ATTRIBUTE_NAME, reader = createReader(value = value))
 
-    fun <T : Any> propertySpec(error: JsError) = required(
+    fun <T : Any> propertySpec(error: JsResult.Error) = required(
         name = ATTRIBUTE_NAME,
         reader = DummyReader<T>(result = JsResult.Failure(location = LOCATION.append(ATTRIBUTE_NAME), error = error))
     )

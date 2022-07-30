@@ -22,7 +22,6 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
@@ -36,10 +35,10 @@ public class PatternStringValidator internal constructor(private val pattern: Re
             JsResult.Failure(location = location, error = errorBuilder.build(value, pattern))
         }
 
-    public class ErrorBuilder(private val function: (value: String, pattern: Regex) -> JsError) :
+    public class ErrorBuilder(private val function: (value: String, pattern: Regex) -> JsResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(value: String, pattern: Regex): JsError = function(value, pattern)
+        public fun build(value: String, pattern: Regex): JsResult.Error = function(value, pattern)
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

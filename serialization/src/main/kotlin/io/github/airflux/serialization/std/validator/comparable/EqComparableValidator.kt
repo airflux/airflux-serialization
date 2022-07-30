@@ -22,7 +22,6 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
@@ -38,10 +37,10 @@ public class EqComparableValidator<T> internal constructor(private val expected:
             JsResult.Failure(location = location, error = errorBuilder.build(expected, value))
         }
 
-    public class ErrorBuilder(private val function: (expected: Number, actual: Number) -> JsError) :
+    public class ErrorBuilder(private val function: (expected: Number, actual: Number) -> JsResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(expected: Number, actual: Number): JsError = function(expected, actual)
+        public fun build(expected: Number, actual: Number): JsResult.Error = function(expected, actual)
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

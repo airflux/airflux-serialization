@@ -22,7 +22,6 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsError
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
@@ -42,10 +41,10 @@ public class MinPropertiesObjectValidator internal constructor(private val value
         } else
             null
 
-    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsError) :
+    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(expected: Int, actual: Int): JsError = function(expected, actual)
+        public fun build(expected: Int, actual: Int): JsResult.Error = function(expected, actual)
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()
