@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property.spe
 
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.filter
-import io.github.airflux.serialization.core.writer.predicate.JsPredicate
+import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
 public fun <T : Any, P : Any> nullable(
     name: String,
@@ -28,6 +28,6 @@ public fun <T : Any, P : Any> nullable(
     ObjectPropertySpec.Nullable(name = name, from = from, writer = writer)
 
 public infix fun <T : Any, P : Any> ObjectPropertySpec.Nullable<T, P>.filter(
-    predicate: JsPredicate<P>
+    predicate: WriterPredicate<P>
 ): ObjectPropertySpec.Optional<T, P> =
     ObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

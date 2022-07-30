@@ -19,20 +19,20 @@ package io.github.airflux.serialization.core.writer.predicate
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.writer.context.WriterContext
 
-public fun interface JsPredicate<T> {
+public fun interface WriterPredicate<T> {
     public fun test(context: WriterContext, location: Location, value: T): Boolean
 
-    public infix fun or(other: JsPredicate<T>): JsPredicate<T> {
+    public infix fun or(other: WriterPredicate<T>): WriterPredicate<T> {
         val self = this
-        return JsPredicate { context, location, value ->
+        return WriterPredicate { context, location, value ->
             val result = self.test(context, location, value)
             if (result) result else other.test(context, location, value)
         }
     }
 
-    public infix fun and(other: JsPredicate<T>): JsPredicate<T> {
+    public infix fun and(other: WriterPredicate<T>): WriterPredicate<T> {
         val self = this
-        return JsPredicate { context, location, value ->
+        return WriterPredicate { context, location, value ->
             val result = self.test(context, location, value)
             if (result) other.test(context, location, value) else result
         }

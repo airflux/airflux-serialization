@@ -19,14 +19,14 @@ package io.github.airflux.serialization.core.writer
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
-import io.github.airflux.serialization.core.writer.predicate.JsPredicate
+import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
 public fun interface Writer<in T : Any> {
 
     public fun write(context: WriterContext, location: Location, value: T): ValueNode?
 }
 
-internal fun <T : Any> Writer<T>.filter(predicate: JsPredicate<T>): Writer<T> =
+internal fun <T : Any> Writer<T>.filter(predicate: WriterPredicate<T>): Writer<T> =
     Writer { context, location, value ->
         if (predicate.test(context, location, value))
             this@filter.write(context, location, value)
