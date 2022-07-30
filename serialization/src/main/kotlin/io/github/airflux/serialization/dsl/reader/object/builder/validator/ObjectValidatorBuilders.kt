@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.serialization.dsl.AirfluxMarker
 
-public class JsObjectValidatorBuilders private constructor(
+public class ObjectValidatorBuilders private constructor(
     items: List<ObjectValidatorBuilder>
 ) : List<ObjectValidatorBuilder> by items {
 
@@ -33,8 +33,8 @@ public class JsObjectValidatorBuilders private constructor(
 
         public operator fun <T : ObjectValidatorBuilder> T.unaryMinus(): Unit = remove(this)
 
-        internal fun build(): JsObjectValidatorBuilders =
-            if (builders.isNotEmpty()) JsObjectValidatorBuilders(builders) else EMPTY
+        internal fun build(): ObjectValidatorBuilders =
+            if (builders.isNotEmpty()) ObjectValidatorBuilders(builders) else EMPTY
 
         private fun <T : ObjectValidatorBuilder> remove(builder: T) {
             val indexBuilder = builders.indexOfFirst { it.key == builder.key }
@@ -42,7 +42,7 @@ public class JsObjectValidatorBuilders private constructor(
         }
 
         private companion object {
-            private val EMPTY = JsObjectValidatorBuilders(emptyList())
+            private val EMPTY = ObjectValidatorBuilders(emptyList())
         }
     }
 }
