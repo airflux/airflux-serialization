@@ -28,7 +28,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectWriterBuilderTest : FreeSpec() {
+internal class ObjectWriterBuilderTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "name"
@@ -40,7 +40,7 @@ internal class JsObjectWriterBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsObjectWriterBuilder type" - {
+        "The ObjectWriterBuilder type" - {
 
             "when have some attributes for writing to an object" - {
                 val from: (String) -> String = { it }

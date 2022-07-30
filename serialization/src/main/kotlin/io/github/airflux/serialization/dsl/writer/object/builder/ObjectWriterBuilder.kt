@@ -34,15 +34,15 @@ import io.github.airflux.serialization.dsl.writer.`object`.builder.property.JsOb
 
 public fun <T : Any> writer(
     config: JsObjectWriterConfig = JsObjectWriterConfig.DEFAULT,
-    block: JsObjectWriterBuilder<T>.() -> Unit
+    block: ObjectWriterBuilder<T>.() -> Unit
 ): ObjectWriter<T> =
-    JsObjectWriterBuilder<T>(
+    ObjectWriterBuilder<T>(
         JsObjectWriterPropertiesBuilderInstance(),
         WriterActionConfiguratorInstance(config.options.actionIfEmpty)
     ).apply(block).build()
 
 @AirfluxMarker
-public class JsObjectWriterBuilder<T : Any> internal constructor(
+public class ObjectWriterBuilder<T : Any> internal constructor(
     private val propertiesBuilder: JsObjectWriterPropertiesBuilderInstance<T>,
     private val actionConfigurator: WriterActionConfiguratorInstance
 ) : JsObjectWriterPropertiesBuilder<T> by propertiesBuilder,
