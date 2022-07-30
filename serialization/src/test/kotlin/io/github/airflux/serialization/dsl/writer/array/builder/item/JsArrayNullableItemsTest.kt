@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.JsArrayItemSpec
+import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -64,5 +64,5 @@ internal class JsArrayNullableItemsTest : FreeSpec() {
     }
 
     private fun <T> createItems(writer: DummyWriter<T & Any>): JsArrayItems.Nullable<T> =
-        JsArrayItems.Nullable(JsArrayItemSpec.Nullable(writer = writer))
+        JsArrayItems.Nullable(ArrayItemSpec.Nullable(writer = writer))
 }

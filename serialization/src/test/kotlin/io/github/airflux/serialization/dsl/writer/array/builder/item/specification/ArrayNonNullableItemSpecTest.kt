@@ -21,10 +21,10 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayNonNullableItemSpecTest : FreeSpec() {
+internal class ArrayNonNullableItemSpecTest : FreeSpec() {
 
     init {
-        "The JsArrayItemSpec#NonNullable" - {
+        "The ArrayItemSpec#NonNullable type" - {
 
             "when created the instance of a spec of the non-nullable item" - {
                 val writer = DummyWriter<String> { StringNode(it) }

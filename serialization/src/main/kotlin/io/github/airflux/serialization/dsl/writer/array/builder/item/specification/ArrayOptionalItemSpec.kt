@@ -17,6 +17,12 @@
 package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
 
 import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.filter
+import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
-public fun <T : Any> nonNullable(writer: Writer<T>): JsArrayItemSpec.NonNullable<T> =
-    JsArrayItemSpec.NonNullable(writer)
+public fun <T> optional(writer: Writer<T & Any>): ArrayItemSpec.Optional<T> = ArrayItemSpec.Optional(writer)
+
+public infix fun <T> ArrayItemSpec.Optional<T>.filter(
+    predicate: JsPredicate<T & Any>
+): ArrayItemSpec.Optional<T> =
+    ArrayItemSpec.Optional(writer = writer.filter(predicate))

@@ -30,7 +30,7 @@ import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.array.builder.JsArrayWriterBuilder.WriterBuilder
 import io.github.airflux.serialization.dsl.writer.array.builder.item.JsArrayItems
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.JsArrayItemSpec
+import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.github.airflux.serialization.dsl.writer.config.JsArrayWriterConfig
 
 public fun <T> arrayWriter(
@@ -48,17 +48,17 @@ public class JsArrayWriterBuilder internal constructor(
         public fun build(): ArrayWriter<T>
     }
 
-    public fun <T : Any> items(spec: JsArrayItemSpec.NonNullable<T>): WriterBuilder<T> =
+    public fun <T : Any> items(spec: ArrayItemSpec.NonNullable<T>): WriterBuilder<T> =
         WriterBuilder {
             buildArrayWriter(actionIfEmpty, JsArrayItems.NonNullable(spec))
         }
 
-    public fun <T> items(spec: JsArrayItemSpec.Optional<T>): WriterBuilder<T> =
+    public fun <T> items(spec: ArrayItemSpec.Optional<T>): WriterBuilder<T> =
         WriterBuilder {
             buildArrayWriter(actionIfEmpty, JsArrayItems.Optional(spec))
         }
 
-    public fun <T> items(spec: JsArrayItemSpec.Nullable<T>): WriterBuilder<T> =
+    public fun <T> items(spec: ArrayItemSpec.Nullable<T>): WriterBuilder<T> =
         WriterBuilder {
             buildArrayWriter(actionIfEmpty, JsArrayItems.Nullable(spec))
         }

@@ -24,7 +24,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsArrayNullableItemSpecTest : FreeSpec() {
+internal class ArrayOptionalItemSpecTest : FreeSpec() {
 
     companion object {
         private const val ITEM_VALUE = "value"
@@ -35,11 +35,11 @@ internal class JsArrayNullableItemSpecTest : FreeSpec() {
 
     init {
 
-        "The JsObjectPropertySpec#Nullable" - {
+        "The ArrayItemSpec#Optional type" - {
 
-            "when created the instance of a spec of the nullable item" - {
+            "when created the instance of a spec of the optional item" - {
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = nullable(writer = writer)
+                val spec = optional(writer = writer)
 
                 "then the instance should contain the writer passed during initialization" {
                     spec.writer shouldBe writer
@@ -48,7 +48,7 @@ internal class JsArrayNullableItemSpecTest : FreeSpec() {
 
             "when the filter was added to the spec" - {
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = nullable(writer = writer)
+                val spec = optional(writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when passing a value that satisfies the predicate for filtering" - {

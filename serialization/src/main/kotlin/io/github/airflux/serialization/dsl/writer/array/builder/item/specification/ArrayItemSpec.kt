@@ -17,12 +17,10 @@
 package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
 
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.filter
-import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
-public fun <T> nullable(writer: Writer<T & Any>): JsArrayItemSpec.Nullable<T> = JsArrayItemSpec.Nullable(writer)
+public sealed interface ArrayItemSpec<in T> {
 
-public infix fun <T> JsArrayItemSpec.Nullable<T>.filter(
-    predicate: JsPredicate<T & Any>
-): JsArrayItemSpec.Optional<T> =
-    JsArrayItemSpec.Optional(writer = writer.filter(predicate))
+    public class NonNullable<T : Any> internal constructor(public val writer: Writer<T>) : ArrayItemSpec<T>
+    public class Optional<T> internal constructor(public val writer: Writer<T & Any>) : ArrayItemSpec<T>
+    public class Nullable<T> internal constructor(public val writer: Writer<T & Any>) : ArrayItemSpec<T>
+}
