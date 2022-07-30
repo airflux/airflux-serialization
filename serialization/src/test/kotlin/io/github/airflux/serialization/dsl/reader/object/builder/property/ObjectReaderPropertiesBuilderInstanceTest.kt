@@ -27,7 +27,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
+internal class ObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
     companion object {
         private val REQUIRED_PATH = JsPaths(JsPath("required-id"))
@@ -51,10 +51,10 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
     init {
 
-        "The JsObjectReaderPropertiesBuilderInstance type" - {
+        "The ObjectReaderPropertiesBuilderInstance type" - {
 
             "when no property is added to the builder" - {
-                val properties = JsObjectReaderPropertiesBuilderInstance().build()
+                val properties = ObjectReaderPropertiesBuilderInstance().build()
 
                 "should be empty" {
                     properties shouldContainExactly emptyList()
@@ -62,7 +62,7 @@ internal class JsObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
             }
 
             "when some properties were added to the builder" - {
-                val properties: ObjectProperties = JsObjectReaderPropertiesBuilderInstance()
+                val properties: ObjectProperties = ObjectReaderPropertiesBuilderInstance()
                     .apply {
                         property(ObjectPropertySpec.Required(path = REQUIRED_PATH, reader = REQUIRED_READER))
                         property(ObjectPropertySpec.Defaultable(path = DEFAULTABLE_PATH, reader = DEFAULTABLE_READER))

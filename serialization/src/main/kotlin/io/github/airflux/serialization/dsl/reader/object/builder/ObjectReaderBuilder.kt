@@ -32,10 +32,10 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.`object`.builder.ObjectReaderBuilder.ResultBuilder
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilderInstance
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperty
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectReaderPropertiesBuilder
+import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectReaderPropertiesBuilderInstance
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidators
@@ -45,7 +45,7 @@ public fun <T> reader(
     block: ObjectReaderBuilder<T>.() -> ResultBuilder<T>
 ): ObjectReader<T> {
     val readerBuilder = ObjectReaderBuilder<T>(
-        JsObjectReaderPropertiesBuilderInstance(),
+        ObjectReaderPropertiesBuilderInstance(),
         ObjectReaderValidatorsBuilderInstance(configuration)
     )
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
@@ -54,9 +54,9 @@ public fun <T> reader(
 
 @AirfluxMarker
 public class ObjectReaderBuilder<T> internal constructor(
-    private val propertiesBuilder: JsObjectReaderPropertiesBuilderInstance,
+    private val propertiesBuilder: ObjectReaderPropertiesBuilderInstance,
     private val validatorsBuilder: ObjectReaderValidatorsBuilderInstance
-) : JsObjectReaderPropertiesBuilder by propertiesBuilder,
+) : ObjectReaderPropertiesBuilder by propertiesBuilder,
     ObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
