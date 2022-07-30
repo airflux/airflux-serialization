@@ -19,24 +19,24 @@ package io.github.airflux.serialization.dsl.reader.array.builder.validator
 import io.github.airflux.serialization.dsl.AirfluxMarker
 
 public class JsArrayValidatorBuilders private constructor(
-    items: List<JsArrayValidatorBuilder>
-) : List<JsArrayValidatorBuilder> by items {
+    items: List<ArrayValidatorBuilder>
+) : List<ArrayValidatorBuilder> by items {
 
     @AirfluxMarker
-    public class Builder internal constructor(items: List<JsArrayValidatorBuilder> = emptyList()) {
-        private val builders = mutableListOf<JsArrayValidatorBuilder>().apply { addAll(items) }
+    public class Builder internal constructor(items: List<ArrayValidatorBuilder> = emptyList()) {
+        private val builders = mutableListOf<ArrayValidatorBuilder>().apply { addAll(items) }
 
-        public operator fun <T : JsArrayValidatorBuilder> T.unaryPlus() {
+        public operator fun <T : ArrayValidatorBuilder> T.unaryPlus() {
             remove(this)
             builders.add(this)
         }
 
-        public operator fun <T : JsArrayValidatorBuilder> T.unaryMinus(): Unit = remove(this)
+        public operator fun <T : ArrayValidatorBuilder> T.unaryMinus(): Unit = remove(this)
 
         internal fun build(): JsArrayValidatorBuilders =
             if (builders.isNotEmpty()) JsArrayValidatorBuilders(builders) else EMPTY
 
-        private fun <T : JsArrayValidatorBuilder> remove(builder: T) {
+        private fun <T : ArrayValidatorBuilder> remove(builder: T) {
             val indexBuilder = builders.indexOfFirst { it.key == builder.key }
             if (indexBuilder != -1) builders.removeAt(indexBuilder)
         }

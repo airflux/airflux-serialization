@@ -17,12 +17,12 @@
 package io.github.airflux.serialization.dsl.reader.array.builder.validator.std
 
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidatorBuilder
 import io.github.airflux.serialization.std.validator.array.MaxItemsArrayValidator
 
-internal class MaxItemsArrayValidatorBuilder(private val value: Int) : JsArrayValidatorBuilder {
-    override val key: JsArrayValidatorBuilder.Key<*> = Key
+internal class MaxItemsArrayValidatorBuilder(private val value: Int) : ArrayValidatorBuilder {
+    override val key: ArrayValidatorBuilder.Key<*> = Key
     override fun build(): ArrayValidator = MaxItemsArrayValidator(value)
 
-    companion object Key : JsArrayValidatorBuilder.Key<MaxItemsArrayValidatorBuilder>
+    companion object Key : ArrayValidatorBuilder.Key<MaxItemsArrayValidatorBuilder>
 }

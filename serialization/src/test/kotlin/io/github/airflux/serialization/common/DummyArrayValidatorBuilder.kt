@@ -21,12 +21,12 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.JsArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidatorBuilder
 
 internal class DummyArrayValidatorBuilder(
-    override val key: JsArrayValidatorBuilder.Key<*>,
+    override val key: ArrayValidatorBuilder.Key<*>,
     result: JsResult.Failure?
-) : JsArrayValidatorBuilder {
+) : ArrayValidatorBuilder {
 
     val validator = Validator(result)
     override fun build(): ArrayValidator = validator
@@ -37,6 +37,6 @@ internal class DummyArrayValidatorBuilder(
     }
 
     companion object {
-        fun <E : JsArrayValidatorBuilder> key() = object : JsArrayValidatorBuilder.Key<E> {}
+        fun <E : ArrayValidatorBuilder> key() = object : ArrayValidatorBuilder.Key<E> {}
     }
 }
