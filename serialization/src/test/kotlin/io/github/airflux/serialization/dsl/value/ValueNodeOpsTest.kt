@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsValueOpsTest : FreeSpec() {
+internal class ValueNodeOpsTest : FreeSpec() {
 
     companion object {
         private const val KEY_NAME = "id"
@@ -41,7 +41,7 @@ internal class JsValueOpsTest : FreeSpec() {
 
     init {
 
-        "The JsValue#div" - {
+        "The ValueNode#div" - {
 
             "when lookup by a key element of the path" - {
 
