@@ -38,7 +38,7 @@ internal class MinComparableValidatorTest : FreeSpec() {
     init {
 
         "The string validator Min" - {
-            val validator: Validator<Int> = ComparableValidator.min(MIN_VALUE)
+            val validator: Validator<Int> = StdComparableValidator.min(MIN_VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

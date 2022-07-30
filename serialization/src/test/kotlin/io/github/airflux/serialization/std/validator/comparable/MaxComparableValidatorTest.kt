@@ -38,7 +38,7 @@ internal class MaxComparableValidatorTest : FreeSpec() {
     init {
 
         "The string validator Max" - {
-            val validator: Validator<Int> = ComparableValidator.max(MAX_VALUE)
+            val validator: Validator<Int> = StdComparableValidator.max(MAX_VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

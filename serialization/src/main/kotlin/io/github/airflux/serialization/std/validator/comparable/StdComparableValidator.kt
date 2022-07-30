@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.comparable
 
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public object ComparableValidator {
+public object StdComparableValidator {
 
     /**
      * Validation of a value, if a value is less than an expected [value] then an error, otherwise a success.

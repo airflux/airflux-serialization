@@ -38,7 +38,7 @@ internal class LeComparableValidatorTest : FreeSpec() {
     init {
 
         "The string validator Ge" - {
-            val validator: Validator<Int> = ComparableValidator.le(VALUE)
+            val validator: Validator<Int> = StdComparableValidator.le(VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
