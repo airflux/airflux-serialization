@@ -25,20 +25,20 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
-internal class JsErrorsTest : FreeSpec() {
+internal class JsResultErrorsTest : FreeSpec() {
 
     init {
 
-        "A JsErrors type" - {
+        "A JsResult#Errors type" - {
 
-            "#invoke(JsError, _) should return JsErrors with a single error" {
-                val errors = JsErrors(JsonErrors.PathMissing)
+            "#invoke(JsResult#Error, _) should return JsErrors with a single error" {
+                val errors = JsResult.Errors(JsonErrors.PathMissing)
 
                 errors.items shouldContainAll listOf(JsonErrors.PathMissing)
             }
 
-            "#invoke(JsError, JsError) should return JsErrors with all errors" {
-                val errors = JsErrors(
+            "#invoke(JsResult#Error, JsResult#Error) should return JsErrors with all errors" {
+                val errors = JsResult.Errors(
                     JsonErrors.PathMissing,
                     JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
                 )
@@ -49,16 +49,16 @@ internal class JsErrorsTest : FreeSpec() {
                 )
             }
 
-            "#invoke(List<JsError>)" - {
+            "#invoke(List<JsResult#Error>)" - {
 
                 "should return null if list is empty" {
-                    val errors = JsErrors(emptyList())
+                    val errors = JsResult.Errors(emptyList())
 
                     errors should beNull()
                 }
 
-                "should return JsErrors with errors from the list" {
-                    val errors = JsErrors(
+                "should return JsResult.Errors with errors from the list" {
+                    val errors = JsResult.Errors(
                         listOf(
                             JsonErrors.PathMissing,
                             JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
@@ -75,9 +75,10 @@ internal class JsErrorsTest : FreeSpec() {
                 }
             }
 
-            "calling plus function should return a new JsErrors object with all errors" {
-                val firstErrors = JsErrors(JsonErrors.PathMissing)
-                val secondErrors = JsErrors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
+            "calling plus function should return a new JsResult#Errors object with all errors" {
+                val firstErrors = JsResult.Errors(JsonErrors.PathMissing)
+                val secondErrors =
+                    JsResult.Errors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
 
                 val errors = firstErrors + secondErrors
 
@@ -88,12 +89,12 @@ internal class JsErrorsTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                val errors = JsErrors(JsonErrors.PathMissing)
+                val errors = JsResult.Errors(JsonErrors.PathMissing)
 
                 errors.shouldBeEqualsContract(
-                    y = JsErrors(JsonErrors.PathMissing),
-                    z = JsErrors(JsonErrors.PathMissing),
-                    other = JsErrors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
+                    y = JsResult.Errors(JsonErrors.PathMissing),
+                    z = JsResult.Errors(JsonErrors.PathMissing),
+                    other = JsResult.Errors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
                 )
             }
         }

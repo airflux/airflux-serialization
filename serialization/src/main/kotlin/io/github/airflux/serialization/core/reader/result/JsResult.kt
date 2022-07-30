@@ -38,7 +38,7 @@ public sealed class JsResult<out T> {
 
         public constructor(location: Location, error: Error) : this(listOf(Cause(location, error)))
 
-        public constructor(location: Location, errors: JsErrors) : this(listOf(Cause(location, errors)))
+        public constructor(location: Location, errors: Errors) : this(listOf(Cause(location, errors)))
 
         public operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
 
@@ -53,8 +53,8 @@ public sealed class JsResult<out T> {
             append(")")
         }
 
-        public data class Cause(val location: Location, val errors: JsErrors) {
-            public constructor(location: Location, error: Error) : this(location, JsErrors(error))
+        public data class Cause(val location: Location, val errors: Errors) {
+            public constructor(location: Location, error: Error) : this(location, Errors(error))
         }
 
         public companion object {
@@ -63,6 +63,33 @@ public sealed class JsResult<out T> {
     }
 
     public interface Error
+
+    public class Errors private constructor(public val items: List<Error>) {
+
+        public operator fun plus(other: Errors): Errors = Errors(items + other.items)
+
+        override fun equals(other: Any?): Boolean =
+            this === other || (other is Errors && this.items == other.items)
+
+        override fun hashCode(): Int = items.hashCode()
+
+        override fun toString(): String = buildString {
+            append("Errors(items=")
+            append(items.toString())
+            append(")")
+        }
+
+        public companion object {
+
+            public operator fun invoke(error: Error, vararg errors: Error): Errors = if (errors.isEmpty())
+                Errors(listOf(error))
+            else
+                Errors(listOf(error) + errors.asList())
+
+            public operator fun invoke(errors: List<Error>): Errors? =
+                errors.takeIf { it.isNotEmpty() }?.let { Errors(it) }
+        }
+    }
 }
 
 public inline fun <T, R> JsResult<T>.fold(

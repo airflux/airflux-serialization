@@ -95,12 +95,12 @@ internal class JsResultTest : FreeSpec() {
                 val failure = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 failure.causes shouldContainAll listOf(
-                    JsResult.Failure.Cause(location = LOCATION, errors = JsErrors(JsonErrors.PathMissing))
+                    JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing))
                 )
             }
 
-            "constructor(JsLocation, JsErrors)" {
-                val errors = JsErrors(
+            "constructor(JsLocation, JsResult.Errors)" {
+                val errors = JsResult.Errors(
                     JsonErrors.PathMissing,
                     JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                 )
@@ -111,10 +111,11 @@ internal class JsResultTest : FreeSpec() {
             }
 
             "calling plus function should return " {
-                val firstFailure = JsResult.Failure(location = LOCATION, errors = JsErrors(JsonErrors.PathMissing))
+                val firstFailure =
+                    JsResult.Failure(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing))
                 val secondFailure = JsResult.Failure(
                     location = LOCATION,
-                    errors = JsErrors(
+                    errors = JsResult.Errors(
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
@@ -122,10 +123,10 @@ internal class JsResultTest : FreeSpec() {
                 val failure = firstFailure + secondFailure
 
                 failure.causes shouldContainAll listOf(
-                    JsResult.Failure.Cause(location = LOCATION, errors = JsErrors(JsonErrors.PathMissing)),
+                    JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing)),
                     JsResult.Failure.Cause(
                         location = LOCATION,
-                        errors = JsErrors(
+                        errors = JsResult.Errors(
                             JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                         )
                     )
@@ -188,13 +189,13 @@ internal class JsResultTest : FreeSpec() {
                 val cause = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
-                cause.errors shouldBe JsErrors(JsonErrors.PathMissing)
+                cause.errors shouldBe JsResult.Errors(JsonErrors.PathMissing)
             }
 
-            "constructor(JsLocation, JsErrors)" {
+            "constructor(Location, JsResult#Errors)" {
                 val cause = JsResult.Failure.Cause(
                     location = LOCATION,
-                    errors = JsErrors(
+                    errors = JsResult.Errors(
                         JsonErrors.PathMissing,
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
@@ -210,10 +211,10 @@ internal class JsResultTest : FreeSpec() {
 
         "JsResult#merge function" {
             val failures = listOf(
-                JsResult.Failure(location = LOCATION, errors = JsErrors(JsonErrors.PathMissing)),
+                JsResult.Failure(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing)),
                 JsResult.Failure(
                     location = LOCATION,
-                    errors = JsErrors(
+                    errors = JsResult.Errors(
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
@@ -222,10 +223,10 @@ internal class JsResultTest : FreeSpec() {
             val failure = failures.merge()
 
             failure.causes shouldContainAll listOf(
-                JsResult.Failure.Cause(location = LOCATION, errors = JsErrors(JsonErrors.PathMissing)),
+                JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing)),
                 JsResult.Failure.Cause(
                     location = LOCATION,
-                    errors = JsErrors(
+                    errors = JsResult.Errors(
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
@@ -244,7 +245,7 @@ internal class JsResultTest : FreeSpec() {
             result as JsResult.Failure
 
             result.causes shouldContainAll listOf(
-                JsResult.Failure.Cause(location = LOCATION, errors = JsErrors(JsonErrors.PathMissing))
+                JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing))
             )
         }
     }
