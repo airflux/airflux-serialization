@@ -22,7 +22,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class JsObjectReaderConfigTest : FreeSpec() {
+internal class ObjectReaderConfigTest : FreeSpec() {
 
     companion object {
         val validator = DummyObjectValidatorBuilder(
@@ -34,7 +34,7 @@ internal class JsObjectReaderConfigTest : FreeSpec() {
     init {
 
         "when any parameters are not set in the builder" - {
-            val config: JsObjectReaderConfig = objectReaderConfig {}
+            val config: ObjectReaderConfig = objectReaderConfig {}
 
             "then the validator should be missing" {
                 config.validation should beEmpty()
@@ -42,7 +42,7 @@ internal class JsObjectReaderConfigTest : FreeSpec() {
         }
 
         "when some validators were set in the builder" - {
-            val config: JsObjectReaderConfig = objectReaderConfig {
+            val config: ObjectReaderConfig = objectReaderConfig {
                 validation {
                     +validator
                 }

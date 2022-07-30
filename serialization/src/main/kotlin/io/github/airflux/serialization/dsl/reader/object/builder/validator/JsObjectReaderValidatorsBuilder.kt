@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
-import io.github.airflux.serialization.dsl.reader.config.JsObjectReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 
 public interface JsObjectReaderValidatorsBuilder {
@@ -24,7 +24,7 @@ public interface JsObjectReaderValidatorsBuilder {
 }
 
 internal class JsObjectReaderValidatorsBuilderInstance(
-    configuration: JsObjectReaderConfig
+    configuration: ObjectReaderConfig
 ) : JsObjectReaderValidatorsBuilder {
     private val builder: JsObjectValidatorBuilders.Builder = JsObjectValidatorBuilders.Builder(configuration.validation)
 

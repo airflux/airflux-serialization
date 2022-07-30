@@ -19,10 +19,10 @@ package io.github.airflux.serialization.dsl.reader.config
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidatorBuilders
 
-public fun objectReaderConfig(block: JsObjectReaderConfig.Builder.() -> Unit): JsObjectReaderConfig =
-    JsObjectReaderConfig.Builder().apply(block).build()
+public fun objectReaderConfig(block: ObjectReaderConfig.Builder.() -> Unit): ObjectReaderConfig =
+    ObjectReaderConfig.Builder().apply(block).build()
 
-public class JsObjectReaderConfig private constructor(public val validation: JsObjectValidatorBuilders) {
+public class ObjectReaderConfig private constructor(public val validation: JsObjectValidatorBuilders) {
 
     @AirfluxMarker
     public class Builder internal constructor() {
@@ -32,10 +32,10 @@ public class JsObjectReaderConfig private constructor(public val validation: JsO
             validation.block()
         }
 
-        internal fun build(): JsObjectReaderConfig = JsObjectReaderConfig(validation = validation.build())
+        internal fun build(): ObjectReaderConfig = ObjectReaderConfig(validation = validation.build())
     }
 
     public companion object {
-        public val DEFAULT: JsObjectReaderConfig = Builder().build()
+        public val DEFAULT: ObjectReaderConfig = Builder().build()
     }
 }

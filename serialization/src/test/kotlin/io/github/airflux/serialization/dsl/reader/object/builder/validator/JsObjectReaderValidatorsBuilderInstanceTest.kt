@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
 import io.github.airflux.serialization.common.DummyObjectValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.config.JsObjectReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.beEmpty
@@ -35,7 +35,7 @@ internal class JsObjectReaderValidatorsBuilderInstanceTest : FreeSpec() {
         "The JsObjectReaderValidatorsBuilderInstance type" - {
 
             "when the config is not contained the object validator" - {
-                val config = JsObjectReaderConfig.Builder().build()
+                val config = ObjectReaderConfig.Builder().build()
                 val validationBuilder = JsObjectReaderValidatorsBuilderInstance(config)
 
                 "when the validator was not overridden" - {
@@ -70,7 +70,7 @@ internal class JsObjectReaderValidatorsBuilderInstanceTest : FreeSpec() {
                     key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
                     result = null
                 )
-                val config = JsObjectReaderConfig.Builder()
+                val config = ObjectReaderConfig.Builder()
                     .apply {
                         validation {
                             +initValidatorBuilder

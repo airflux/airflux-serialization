@@ -29,7 +29,7 @@ import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.config.JsObjectReaderConfig
+import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.`object`.builder.ObjectReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperties
@@ -41,7 +41,7 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsO
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidators
 
 public fun <T> reader(
-    configuration: JsObjectReaderConfig = JsObjectReaderConfig.DEFAULT,
+    configuration: ObjectReaderConfig = ObjectReaderConfig.DEFAULT,
     block: ObjectReaderBuilder<T>.() -> ResultBuilder<T>
 ): ObjectReader<T> {
     val readerBuilder = ObjectReaderBuilder<T>(
