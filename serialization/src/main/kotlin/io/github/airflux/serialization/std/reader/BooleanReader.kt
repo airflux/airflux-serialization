@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.reader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.value.readAsBoolean
 
@@ -27,6 +27,6 @@ import io.github.airflux.serialization.core.value.readAsBoolean
  * Reader for primitive [Boolean] type.
  */
 public object BooleanReader : Reader<Boolean> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): JsResult<Boolean> =
+    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<Boolean> =
         input.readAsBoolean(context, location)
 }

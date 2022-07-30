@@ -22,58 +22,58 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
-public fun ValueNode.readAsBoolean(context: ReaderContext, location: Location): JsResult<Boolean> =
+public fun ValueNode.readAsBoolean(context: ReaderContext, location: Location): ReaderResult<Boolean> =
     if (this is BooleanNode)
-        JsResult.Success(location, this.get)
+        ReaderResult.Success(location, this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.BOOLEAN, this.type))
+        ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.BOOLEAN, this.type))
     }
 
-public fun ValueNode.readAsString(context: ReaderContext, location: Location): JsResult<String> =
+public fun ValueNode.readAsString(context: ReaderContext, location: Location): ReaderResult<String> =
     if (this is StringNode)
-        JsResult.Success(location, this.get)
+        ReaderResult.Success(location, this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.STRING, this.type))
+        ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.STRING, this.type))
     }
 
 public fun <T : Number> ValueNode.readAsNumber(
     context: ReaderContext,
     location: Location,
-    reader: (ReaderContext, Location, String) -> JsResult<T>
-): JsResult<T> =
+    reader: (ReaderContext, Location, String) -> ReaderResult<T>
+): ReaderResult<T> =
     if (this is NumberNode)
         reader(context, location, this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.NUMBER, this.type))
+        ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.NUMBER, this.type))
     }
 
 public inline fun <T> ValueNode.readAsObject(
     context: ReaderContext,
     location: Location,
-    reader: (ReaderContext, Location, StructNode) -> JsResult<T>
-): JsResult<T> =
+    reader: (ReaderContext, Location, StructNode) -> ReaderResult<T>
+): ReaderResult<T> =
     if (this is StructNode)
         reader(context, location, this)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.OBJECT, this.type))
+        ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.OBJECT, this.type))
     }
 
 public inline fun <T> ValueNode.readAsArray(
     context: ReaderContext,
     location: Location,
-    reader: (ReaderContext, Location, ArrayNode<*>) -> JsResult<T>
-): JsResult<T> =
+    reader: (ReaderContext, Location, ArrayNode<*>) -> ReaderResult<T>
+): ReaderResult<T> =
     if (this is ArrayNode<*>)
         reader(context, location, this)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
-        JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.ARRAY, this.type))
+        ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.ARRAY, this.type))
     }
 
 internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {

@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
  * Reads required field.
@@ -30,11 +30,11 @@ import io.github.airflux.serialization.core.reader.result.JsResult
  * - If a node is not found ([from] is [Lookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readRequired(context: ReaderContext, from: Lookup, using: Reader<T>): JsResult<T> =
+public fun <T : Any> readRequired(context: ReaderContext, from: Lookup, using: Reader<T>): ReaderResult<T> =
     when (from) {
         is Lookup.Defined -> using.read(context, from.location, from.value)
         is Lookup.Undefined -> {
             val errorBuilder = context[PathMissingErrorBuilder]
-            JsResult.Failure(location = from.location, error = errorBuilder.build())
+            ReaderResult.Failure(location = from.location, error = errorBuilder.build())
         }
     }

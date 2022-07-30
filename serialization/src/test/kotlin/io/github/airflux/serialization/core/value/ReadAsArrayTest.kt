@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -32,7 +32,7 @@ internal class ReadAsArrayTest : FreeSpec() {
         private val LOCATION = Location.empty.append("user")
         private val READER = { _: ReaderContext, location: Location, input: ArrayNode<*> ->
             val result = input.map { (it as StringNode).get }
-            JsResult.Success(location, result)
+            ReaderResult.Success(location, result)
         }
     }
 
@@ -46,8 +46,8 @@ internal class ReadAsArrayTest : FreeSpec() {
 
                     val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
-                    result as JsResult.Success
-                    result shouldBe JsResult.Success(location = LOCATION, value = listOf(USER_NAME))
+                    result as ReaderResult.Success
+                    result shouldBe ReaderResult.Success(location = LOCATION, value = listOf(USER_NAME))
                 }
             }
 
@@ -58,8 +58,8 @@ internal class ReadAsArrayTest : FreeSpec() {
 
                     val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
-                    result as JsResult.Failure
-                    result shouldBe JsResult.Failure(
+                    result as ReaderResult.Failure
+                    result shouldBe ReaderResult.Failure(
                         location = LOCATION, error = JsonErrors.InvalidType(
                             expected = ValueNode.Type.ARRAY,
                             actual = ValueNode.Type.BOOLEAN

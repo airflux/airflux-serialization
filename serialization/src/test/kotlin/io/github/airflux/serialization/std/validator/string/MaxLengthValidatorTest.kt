@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -92,7 +92,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                             val failure = validator.validate(context, LOCATION, str)
 
                             failure.shouldNotBeNull()
-                            failure shouldBe JsResult.Failure(
+                            failure shouldBe ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Strings.MaxLength(
                                     expected = MAX_VALUE,
@@ -130,7 +130,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                             val failure = validator.validate(context, LOCATION, str)
 
                             failure.shouldNotBeNull()
-                            failure shouldBe JsResult.Failure(
+                            failure shouldBe ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Strings.MaxLength(
                                     expected = MAX_VALUE,

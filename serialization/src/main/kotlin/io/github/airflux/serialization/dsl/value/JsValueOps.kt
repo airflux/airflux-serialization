@@ -22,11 +22,11 @@ import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPathElement
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ValueNode
 
 @Suppress("unused")
-public fun <T : Any> ValueNode.deserialization(context: ReaderContext, reader: Reader<T>): JsResult<T> =
+public fun <T : Any> ValueNode.deserialization(context: ReaderContext, reader: Reader<T>): ReaderResult<T> =
     reader.read(context, Location.empty, this)
 
 public operator fun ValueNode.div(key: String): Lookup = this.lookup(Location.empty, PropertyPathElement.Key(key))

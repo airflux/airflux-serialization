@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T> JsResult<T?>.filter(context: ReaderContext, predicate: ReaderPredicate<T>): JsResult<T?> =
+public fun <T> ReaderResult<T?>.filter(context: ReaderContext, predicate: ReaderPredicate<T>): ReaderResult<T?> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { result ->
@@ -31,12 +31,12 @@ public fun <T> JsResult<T?>.filter(context: ReaderContext, predicate: ReaderPred
                 if (predicate.test(context, result.location, result.value))
                     result
                 else
-                    JsResult.Success(result.location, null)
+                    ReaderResult.Success(result.location, null)
             }
         }
     )
 
-public fun <T> JsResult<T>.validation(context: ReaderContext, validator: Validator<T>): JsResult<T> =
+public fun <T> ReaderResult<T>.validation(context: ReaderContext, validator: Validator<T>): ReaderResult<T> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { result -> validator.validate(context, result.location, result.value) ?: result }

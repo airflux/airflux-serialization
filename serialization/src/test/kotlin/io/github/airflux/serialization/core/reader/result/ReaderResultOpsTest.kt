@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsResultOpsTest : FreeSpec() {
+internal class ReaderResultOpsTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
@@ -40,17 +40,17 @@ internal class JsResultOpsTest : FreeSpec() {
             "when result is success" - {
 
                 "when the value satisfies the predicate" - {
-                    val result: JsResult<String> = JsResult.Success(location = LOCATION, value = "  ")
+                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "  ")
 
                     "then filter should return null" {
                         val filtered = result.filter(CONTEXT, isNotBlank)
-                        filtered shouldBe JsResult.Success(location = LOCATION, value = null)
+                        filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
                     }
                 }
 
                 "when the value does not satisfy the predicate and is not the null" - {
-                    val result: JsResult<String> =
-                        JsResult.Success(location = LOCATION, value = "user")
+                    val result: ReaderResult<String> =
+                        ReaderResult.Success(location = LOCATION, value = "user")
 
                     "then filter should return the original value" {
                         val filtered = result.filter(CONTEXT, isNotBlank)
@@ -59,7 +59,7 @@ internal class JsResultOpsTest : FreeSpec() {
                 }
 
                 "when the value does not satisfy the predicate and is the null" - {
-                    val result: JsResult<String?> = JsResult.Success(location = LOCATION, value = null)
+                    val result: ReaderResult<String?> = ReaderResult.Success(location = LOCATION, value = null)
 
                     "then filter should return the original value" {
                         val filtered = result.filter(CONTEXT, isNotBlank)
@@ -69,7 +69,7 @@ internal class JsResultOpsTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val result: JsResult<String> = JsResult.Failure(
+                val result: ReaderResult<String> = ReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                 )
@@ -83,18 +83,18 @@ internal class JsResultOpsTest : FreeSpec() {
 
         "The extension-function the validation" - {
             val isNotEmpty = Validator<String> { _, location, value ->
-                if (value.isNotEmpty()) null else JsResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
+                if (value.isNotEmpty()) null else ReaderResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
             }
 
             "when result is success" - {
 
                 "when the value contains an invalid value" - {
-                    val result: JsResult<String> = JsResult.Success(location = LOCATION, value = "")
+                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "")
 
                     "then validator should return an error" {
                         val validated = result.validation(CONTEXT, isNotEmpty)
 
-                        validated shouldBe JsResult.Failure(
+                        validated shouldBe ReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -102,7 +102,7 @@ internal class JsResultOpsTest : FreeSpec() {
                 }
 
                 "when the value contains a valid value" - {
-                    val result: JsResult<String> = JsResult.Success(location = LOCATION, value = "user")
+                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "user")
 
                     "then validator should return the original value" {
                         val validated = result.validation(CONTEXT, isNotEmpty)
@@ -112,7 +112,7 @@ internal class JsResultOpsTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val result: JsResult<String> = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val result: ReaderResult<String> = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
                     val validated = result.validation(CONTEXT, isNotEmpty)

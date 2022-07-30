@@ -22,8 +22,8 @@ import io.github.airflux.serialization.core.reader.ObjectReader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.StructNode
@@ -60,7 +60,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     ObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, objectValuesMap: ObjectValuesMap): JsResult<T>
+        public fun build(context: ReaderContext, location: Location, objectValuesMap: ObjectValuesMap): ReaderResult<T>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): ObjectReader<T> {
@@ -70,7 +70,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     }
 }
 
-public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, Location) -> JsResult<T>): ResultBuilder<T> =
+public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<T>): ResultBuilder<T> =
     ResultBuilder { context, location, values ->
         try {
             values.builder(context, location)
@@ -89,14 +89,14 @@ internal fun <T> buildObjectReader(
     ObjectReader { context, location, input ->
         if (input !is StructNode) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@ObjectReader JsResult.Failure(
+            return@ObjectReader ReaderResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.OBJECT, input.type)
             )
         }
 
         val failFast = context.failFast
-        val failures = mutableListOf<JsResult.Failure>()
+        val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
             val failure = validator.validate(context, location, properties, input)
@@ -128,7 +128,7 @@ internal fun <T> buildObjectReader(
             failures.merge()
     }
 
-internal fun StructNode.read(context: ReaderContext, location: Location, property: ObjectProperty): JsResult<Any?> {
+internal fun StructNode.read(context: ReaderContext, location: Location, property: ObjectProperty): ReaderResult<Any?> {
     val reader = when (property) {
         is ObjectProperty.Required<*> -> property.reader
         is ObjectProperty.Defaultable<*> -> property.reader

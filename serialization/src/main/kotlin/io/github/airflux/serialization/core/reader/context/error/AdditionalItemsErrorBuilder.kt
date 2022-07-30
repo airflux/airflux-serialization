@@ -19,15 +19,15 @@ package io.github.airflux.serialization.core.reader.context.error
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
  * The builder of an error that occurs when an element appears in the array that is not described in prefixItems.
  */
-public class AdditionalItemsErrorBuilder(private val builder: () -> JsResult.Error) :
+public class AdditionalItemsErrorBuilder(private val builder: () -> ReaderResult.Error) :
     AbstractErrorBuilderContextElement<AdditionalItemsErrorBuilder>(key = AdditionalItemsErrorBuilder) {
 
-    public fun build(): JsResult.Error = builder()
+    public fun build(): ReaderResult.Error = builder()
 
     public companion object Key : ContextErrorBuilderKey<AdditionalItemsErrorBuilder> {
         override val name: String = errorBuilderName()

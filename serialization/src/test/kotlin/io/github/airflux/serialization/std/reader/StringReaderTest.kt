@@ -22,7 +22,7 @@ import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -50,7 +50,7 @@ internal class StringReaderTest : FreeSpec() {
                 val input: ValueNode = BooleanNode.valueOf(true)
                 val result = StringReader.read(CONTEXT, Location.empty, input)
                 result.assertAsFailure(
-                    JsResult.Failure.Cause(
+                    ReaderResult.Failure.Cause(
                         location = Location.empty,
                         error = JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )

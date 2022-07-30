@@ -18,8 +18,8 @@ package io.github.airflux.serialization.core.reader.validator
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -42,7 +42,7 @@ internal class ValidatorTest : FreeSpec() {
                     val leftValidator = Validator<Unit> { _, _, _ -> null }
 
                     val rightValidator = Validator<Unit> { _, location, _ ->
-                        JsResult.Failure(location, ValidationErrors.PathMissing)
+                        ReaderResult.Failure(location, ValidationErrors.PathMissing)
                     }
 
                     val composeValidator = leftValidator or rightValidator
@@ -53,7 +53,7 @@ internal class ValidatorTest : FreeSpec() {
 
                 "if the left validator returns an error" - {
                     val leftValidator = Validator<Unit> { _, location, _ ->
-                        JsResult.Failure(location, ValidationErrors.PathMissing)
+                        ReaderResult.Failure(location, ValidationErrors.PathMissing)
                     }
 
                     "and the right validator returns success then returning the first error" {
@@ -67,7 +67,7 @@ internal class ValidatorTest : FreeSpec() {
 
                     "and the right validator returns an error then returning both errors" {
                         val rightValidator = Validator<Unit> { _, location, _ ->
-                            JsResult.Failure(location, ValidationErrors.InvalidType)
+                            ReaderResult.Failure(location, ValidationErrors.InvalidType)
                         }
 
                         val composeValidator = leftValidator or rightValidator
@@ -75,8 +75,8 @@ internal class ValidatorTest : FreeSpec() {
 
                         failure.shouldNotBeNull()
                         failure shouldBe listOf(
-                            JsResult.Failure(LOCATION, ValidationErrors.PathMissing),
-                            JsResult.Failure(LOCATION, ValidationErrors.InvalidType)
+                            ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing),
+                            ReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
                         ).merge()
                     }
                 }
@@ -86,18 +86,18 @@ internal class ValidatorTest : FreeSpec() {
 
                 "if the left validator returns an error then the right validator doesn't execute" {
                     val leftValidator = Validator<Unit> { _, location, _ ->
-                        JsResult.Failure(location, ValidationErrors.PathMissing)
+                        ReaderResult.Failure(location, ValidationErrors.PathMissing)
                     }
 
                     val rightValidator = Validator<Unit> { _, location, _ ->
-                        JsResult.Failure(location, ValidationErrors.InvalidType)
+                        ReaderResult.Failure(location, ValidationErrors.InvalidType)
                     }
 
                     val composeValidator = leftValidator and rightValidator
                     val failure = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                     failure.shouldNotBeNull()
-                    failure shouldBe JsResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                    failure shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
@@ -114,21 +114,21 @@ internal class ValidatorTest : FreeSpec() {
 
                     "and the right validator returns an error, then an error is returned" {
                         val rightValidator = Validator<Unit> { _, location, _ ->
-                            JsResult.Failure(location, ValidationErrors.PathMissing)
+                            ReaderResult.Failure(location, ValidationErrors.PathMissing)
                         }
 
                         val composeValidator = leftValidator and rightValidator
                         val failure = composeValidator.validate(CONTEXT, LOCATION, Unit)
 
                         failure.shouldNotBeNull()
-                        failure shouldBe JsResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                        failure shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
                     }
                 }
             }
         }
     }
 
-    private sealed class ValidationErrors : JsResult.Error {
+    private sealed class ValidationErrors : ReaderResult.Error {
         object PathMissing : ValidationErrors()
         object InvalidType : ValidationErrors()
     }

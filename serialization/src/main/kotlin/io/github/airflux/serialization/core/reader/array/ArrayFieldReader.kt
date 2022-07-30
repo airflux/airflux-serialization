@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
 
@@ -39,7 +39,7 @@ public fun <T> readArray(
     from: ArrayNode<*>,
     prefixItems: List<Reader<T>>,
     errorIfAdditionalItems: Boolean
-): JsResult<List<T>> = from.read(
+): ReaderResult<List<T>> = from.read(
     context = context,
     location = location,
     prefixItems = prefixItems,
@@ -56,7 +56,7 @@ public fun <T> readArray(
     location: Location,
     from: ArrayNode<*>,
     items: Reader<T>
-): JsResult<List<T>> =
+): ReaderResult<List<T>> =
     from.read(
         context = context,
         location = location,
@@ -76,7 +76,7 @@ public fun <T> readArray(
     from: ArrayNode<*>,
     prefixItems: List<Reader<T>>,
     items: Reader<T>
-): JsResult<List<T>> = from.read(
+): ReaderResult<List<T>> = from.read(
     context = context,
     location = location,
     prefixItems = prefixItems,
@@ -90,19 +90,19 @@ internal fun <T> ArrayNode<*>.read(
     prefixItems: List<Reader<T>>,
     items: Reader<T>?,
     errorIfAdditionalItems: Boolean
-): JsResult<List<T>> {
+): ReaderResult<List<T>> {
 
     fun <T> getReader(idx: Int, prefixItems: List<Reader<T>>, itemsReader: Reader<T>?): Reader<T>? =
         if (idx < prefixItems.size) prefixItems[idx] else itemsReader
 
     val failFast = context.failFast
     val errorBuilder = context[AdditionalItemsErrorBuilder]
-    val initial: JsResult<MutableList<T>> = JsResult.Success(location, ArrayList(this.size))
+    val initial: ReaderResult<MutableList<T>> = ReaderResult.Success(location, ArrayList(this.size))
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         val reader: Reader<T> = getReader(idx, prefixItems, items)
             ?: return if (errorIfAdditionalItems)
-                acc + JsResult.Failure(currentLocation, errorBuilder.build())
+                acc + ReaderResult.Failure(currentLocation, errorBuilder.build())
             else
                 acc
 
@@ -114,12 +114,12 @@ internal fun <T> ArrayNode<*>.read(
     }
 }
 
-internal operator fun <T> JsResult<MutableList<T>>.plus(result: JsResult.Success<T>): JsResult<MutableList<T>> = fold(
+internal operator fun <T> ReaderResult<MutableList<T>>.plus(result: ReaderResult.Success<T>): ReaderResult<MutableList<T>> = fold(
     ifFailure = ::identity,
     ifSuccess = { success -> success.apply { value += result.value } }
 )
 
-internal operator fun <T> JsResult<MutableList<T>>.plus(result: JsResult.Failure): JsResult<MutableList<T>> = fold(
+internal operator fun <T> ReaderResult<MutableList<T>>.plus(result: ReaderResult.Failure): ReaderResult<MutableList<T>> = fold(
     ifFailure = { failure -> failure + result },
     ifSuccess = { result }
 )

@@ -22,7 +22,7 @@ import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsNumberTest : FreeSpec() {
@@ -31,7 +31,7 @@ internal class ReadAsNumberTest : FreeSpec() {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val LOCATION = Location.empty.append("user")
         private val reader =
-            { _: ReaderContext, location: Location, text: String -> JsResult.Success(location, text.toInt()) }
+            { _: ReaderContext, location: Location, text: String -> ReaderResult.Success(location, text.toInt()) }
     }
 
     init {
@@ -51,7 +51,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsNumber(CONTEXT, LOCATION, reader)
                     result.assertAsFailure(
-                        JsResult.Failure.Cause(
+                        ReaderResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
                                 expected = ValueNode.Type.NUMBER,

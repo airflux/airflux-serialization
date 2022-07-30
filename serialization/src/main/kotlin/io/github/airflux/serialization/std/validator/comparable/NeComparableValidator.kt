@@ -22,25 +22,25 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class NeComparableValidator<T> internal constructor(private val expected: T) : Validator<T>
     where T : Number,
           T : Comparable<T> {
 
-    override fun validate(context: ReaderContext, location: Location, value: T): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: Location, value: T): ReaderResult.Failure? =
         if (value != expected)
             null
         else {
             val errorBuilder = context[ErrorBuilder]
-            JsResult.Failure(location = location, error = errorBuilder.build(expected, value))
+            ReaderResult.Failure(location = location, error = errorBuilder.build(expected, value))
         }
 
-    public class ErrorBuilder(private val function: (expected: Number, actual: Number) -> JsResult.Error) :
+    public class ErrorBuilder(private val function: (expected: Number, actual: Number) -> ReaderResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(expected: Number, actual: Number): JsResult.Error = function(expected, actual)
+        public fun build(expected: Number, actual: Number): ReaderResult.Error = function(expected, actual)
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

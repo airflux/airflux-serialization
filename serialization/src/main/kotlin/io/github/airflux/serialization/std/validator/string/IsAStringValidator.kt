@@ -22,23 +22,23 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class IsAStringValidator internal constructor(private val predicate: (String) -> Boolean) : Validator<String> {
 
-    override fun validate(context: ReaderContext, location: Location, value: String): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: Location, value: String): ReaderResult.Failure? =
         if (predicate(value))
             null
         else {
             val errorBuilder = context[ErrorBuilder]
-            JsResult.Failure(location = location, error = errorBuilder.build(value))
+            ReaderResult.Failure(location = location, error = errorBuilder.build(value))
         }
 
-    public class ErrorBuilder(private val function: (value: String) -> JsResult.Error) :
+    public class ErrorBuilder(private val function: (value: String) -> ReaderResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(value: String): JsResult.Error = function(value)
+        public fun build(value: String): ReaderResult.Error = function(value)
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

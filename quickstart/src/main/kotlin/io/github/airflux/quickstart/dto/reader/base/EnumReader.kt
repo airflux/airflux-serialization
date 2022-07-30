@@ -2,7 +2,7 @@ package io.github.airflux.quickstart.dto.reader.base
 
 import io.github.airflux.quickstart.json.error.JsonErrors
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 inline fun <reified T : Enum<T>> Reader<String>.asEnum(): Reader<T> =
     Reader { context, location, input ->
@@ -10,15 +10,15 @@ inline fun <reified T : Enum<T>> Reader<String>.asEnum(): Reader<T> =
             .asEnum()
     }
 
-inline fun <reified T : Enum<T>> JsResult<String>.asEnum(): JsResult<T> =
+inline fun <reified T : Enum<T>> ReaderResult<String>.asEnum(): ReaderResult<T> =
     this.asEnum(enumValues()) { text -> enumValueOf(text.uppercase()) }
 
-fun <T : Enum<T>> JsResult<String>.asEnum(allowable: Array<T>, transform: (String) -> T): JsResult<T> =
+fun <T : Enum<T>> ReaderResult<String>.asEnum(allowable: Array<T>, transform: (String) -> T): ReaderResult<T> =
     flatMap { location, text ->
         try {
-            JsResult.Success(location, transform(text))
+            ReaderResult.Success(location, transform(text))
         } catch (ignored: Exception) {
-            JsResult.Failure(
+            ReaderResult.Failure(
                 location = location,
                 error = JsonErrors.EnumCast(actual = text, expected = allowable.joinToString())
             )

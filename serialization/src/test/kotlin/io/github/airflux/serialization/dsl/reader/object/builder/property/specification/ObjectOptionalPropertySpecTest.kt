@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -70,7 +70,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -80,7 +80,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then the null value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value.shouldBeNull()
                     }
                 }
@@ -90,9 +90,9 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -117,7 +117,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -127,7 +127,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then the null value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value.shouldBeNull()
                     }
                 }
@@ -137,9 +137,9 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -165,7 +165,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -175,7 +175,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -185,7 +185,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then the null value should be returned" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value.shouldBeNull()
                     }
                 }
@@ -195,9 +195,9 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -220,7 +220,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
 
@@ -229,9 +229,9 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                            ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
                         )
                     }
                 }
@@ -243,9 +243,9 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -268,7 +268,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
 
@@ -277,7 +277,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value.shouldBeNull()
                     }
                 }
@@ -289,9 +289,9 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -318,7 +318,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
                     "then a value should be returned" {
                         println(result)
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
@@ -328,7 +328,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned from the alternative reader" {
-                        result as JsResult.Success<String?>
+                        result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_INT
                     }
                 }
@@ -338,16 +338,16 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned all read errors" {
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
                                     actual = ValueNode.Type.BOOLEAN
                                 )
                             ),
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.NUMBER,

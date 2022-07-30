@@ -22,23 +22,23 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class IsNotEmptyStringValidator internal constructor() : Validator<String> {
 
-    override fun validate(context: ReaderContext, location: Location, value: String): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: Location, value: String): ReaderResult.Failure? =
         if (value.isNotEmpty())
             null
         else {
             val errorBuilder = context[ErrorBuilder]
-            JsResult.Failure(location = location, error = errorBuilder.build())
+            ReaderResult.Failure(location = location, error = errorBuilder.build())
         }
 
-    public class ErrorBuilder(private val function: () -> JsResult.Error) :
+    public class ErrorBuilder(private val function: () -> ReaderResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(): JsResult.Error = function()
+        public fun build(): ReaderResult.Error = function()
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

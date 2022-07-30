@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array.builder.item.specificat
 
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.NullNode
@@ -27,7 +27,7 @@ public fun <T : Any> nullable(reader: Reader<T>): ArrayItemSpec.Nullable<T?> =
     ArrayItemSpec.Nullable(
         reader = { context, location, input ->
             if (input is NullNode)
-                JsResult.Success(location = location, value = null)
+                ReaderResult.Success(location = location, value = null)
             else
                 reader.read(context, location, input)
         }

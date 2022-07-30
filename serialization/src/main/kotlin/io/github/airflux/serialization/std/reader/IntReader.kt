@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ValueNode
@@ -31,7 +31,7 @@ import io.github.airflux.serialization.core.value.readAsNumber
  * Reader for primitive [Int] type.
  */
 public object IntReader : Reader<Int> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): JsResult<Int> =
+    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<Int> =
         input.readAsNumber(context, location) { ctx, l, text ->
             try {
                 text.toInt().success(location = l)

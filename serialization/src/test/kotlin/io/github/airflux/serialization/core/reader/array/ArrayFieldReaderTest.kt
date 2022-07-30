@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -59,10 +59,10 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             "when parameter 'from' is empty" - {
                 val from = ArrayNode<StringNode>()
 
-                val result: JsResult<List<String>> =
+                val result: ReaderResult<List<String>> =
                     readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
 
-                result shouldBe JsResult.Success(location = LOCATION, value = emptyList())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
             }
 
             "when parameter 'from' is not empty" - {
@@ -70,10 +70,10 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 "when read was any errors" {
                     val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
-                    val result: JsResult<List<String>> =
+                    val result: ReaderResult<List<String>> =
                         readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
 
-                    result shouldBe JsResult.Success(
+                    result shouldBe ReaderResult.Success(
                         location = LOCATION,
                         value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                     )
@@ -85,12 +85,12 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     "when fail-fast is true" {
                         val updatedContext: ReaderContext = CONTEXT + FailFast(true)
 
-                        val result: JsResult<List<String>> =
+                        val result: ReaderResult<List<String>> =
                             readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -103,19 +103,19 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     "when fail-fast is false" {
                         val updatedContext: ReaderContext = CONTEXT + FailFast(false)
 
-                        val result: JsResult<List<String>> =
+                        val result: ReaderResult<List<String>> =
                             readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
                                     actual = ValueNode.Type.NUMBER
                                 )
                             ),
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.STRING,
@@ -133,7 +133,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             "when parameter 'from' is empty" - {
                 val from = ArrayNode<StringNode>()
 
-                val result: JsResult<List<String>> = readArray(
+                val result: ReaderResult<List<String>> = readArray(
                     context = CONTEXT,
                     location = LOCATION,
                     from = from,
@@ -141,7 +141,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     errorIfAdditionalItems = true
                 )
 
-                result shouldBe JsResult.Success(location = LOCATION, value = emptyList())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
             }
 
             "when parameter 'from' is not empty" - {
@@ -151,7 +151,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     val readers = listOf(StringReader)
 
                     "when errorIfAdditionalItems is true" {
-                        val result: JsResult<List<String>> = readArray(
+                        val result: ReaderResult<List<String>> = readArray(
                             context = CONTEXT,
                             location = LOCATION,
                             from = from,
@@ -159,9 +159,9 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.AdditionalItems
                             )
@@ -169,7 +169,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     }
 
                     "when errorIfAdditionalItems is false" {
-                        val result: JsResult<List<String>> = readArray(
+                        val result: ReaderResult<List<String>> = readArray(
                             context = CONTEXT,
                             location = LOCATION,
                             from = from,
@@ -177,7 +177,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             errorIfAdditionalItems = false
                         )
 
-                        result shouldBe JsResult.Success(
+                        result shouldBe ReaderResult.Success(
                             location = LOCATION,
                             value = listOf(FIRST_PHONE_VALUE)
                         )
@@ -185,7 +185,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                 }
 
                 "when the number of readers is equal to the number of items" {
-                    val result: JsResult<List<String>> = readArray(
+                    val result: ReaderResult<List<String>> = readArray(
                         context = CONTEXT,
                         location = LOCATION,
                         from = from,
@@ -193,14 +193,14 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                         errorIfAdditionalItems = true
                     )
 
-                    result shouldBe JsResult.Success(
+                    result shouldBe ReaderResult.Success(
                         location = LOCATION,
                         value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                     )
                 }
 
                 "when the number of readers is more than the number of items" {
-                    val result: JsResult<List<String>> = readArray(
+                    val result: ReaderResult<List<String>> = readArray(
                         context = CONTEXT,
                         location = LOCATION,
                         from = from,
@@ -208,7 +208,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                         errorIfAdditionalItems = true
                     )
 
-                    result shouldBe JsResult.Success(
+                    result shouldBe ReaderResult.Success(
                         location = LOCATION,
                         value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                     )
@@ -219,7 +219,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     "when fail-fast is true" {
                         val updatedContext: ReaderContext = CONTEXT + FailFast(true)
 
-                        val result: JsResult<List<Number>> = readArray(
+                        val result: ReaderResult<List<Number>> = readArray(
                             context = updatedContext,
                             location = LOCATION,
                             from = from,
@@ -227,9 +227,9 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.NUMBER,
@@ -250,16 +250,16 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.NUMBER,
                                     actual = ValueNode.Type.STRING
                                 )
                             ),
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.BOOLEAN,
@@ -277,7 +277,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             "when parameter 'from' is empty" - {
                 val from = ArrayNode<StringNode>()
 
-                val result: JsResult<List<String>> = readArray(
+                val result: ReaderResult<List<String>> = readArray(
                     context = CONTEXT,
                     location = LOCATION,
                     from = from,
@@ -285,14 +285,14 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     items = StringReader
                 )
 
-                result shouldBe JsResult.Success(location = LOCATION, value = emptyList())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
             }
 
             "when parameter 'from' is not empty" - {
                 val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                 "when read was any errors" {
-                    val result: JsResult<List<String>> = readArray(
+                    val result: ReaderResult<List<String>> = readArray(
                         context = CONTEXT,
                         location = LOCATION,
                         from = from,
@@ -300,7 +300,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                         items = StringReader
                     )
 
-                    result shouldBe JsResult.Success(
+                    result shouldBe ReaderResult.Success(
                         location = LOCATION,
                         value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                     )
@@ -311,7 +311,7 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                     "when fail-fast is true" {
                         val updatedContext: ReaderContext = CONTEXT + FailFast(true)
 
-                        val result: JsResult<List<Int>> = readArray(
+                        val result: ReaderResult<List<Int>> = readArray(
                             context = updatedContext,
                             location = LOCATION,
                             from = from,
@@ -319,9 +319,9 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             items = IntReader
                         )
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.NUMBER,
@@ -342,16 +342,16 @@ internal class ArrayFieldReaderTest : FreeSpec() {
                             items = IntReader
                         )
 
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.NUMBER,
                                     actual = ValueNode.Type.STRING
                                 )
                             ),
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(1),
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.NUMBER,
@@ -364,23 +364,23 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             }
         }
 
-        "The extension-function JsResult<MutableList<T>>#plus(JsResult.Success<T>)" - {
-            val parameter: JsResult.Success<String> = JsResult.Success(LOCATION.append(1), SECOND_PHONE_VALUE)
+        "The extension-function ReaderResult<MutableList<T>>#plus(ReaderResult.Success<T>)" - {
+            val parameter: ReaderResult.Success<String> = ReaderResult.Success(LOCATION.append(1), SECOND_PHONE_VALUE)
 
             "when receiver is success" {
-                val receiver: JsResult<MutableList<String>> =
+                val receiver: ReaderResult<MutableList<String>> =
                     mutableListOf(FIRST_PHONE_VALUE).success(LOCATION.append(0))
 
                 val result = receiver + parameter
 
-                result shouldBe JsResult.Success(
+                result shouldBe ReaderResult.Success(
                     location = LOCATION.append(0),
                     value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                 )
             }
 
             "when receiver is failure" {
-                val receiver: JsResult<MutableList<String>> = JsonErrors.PathMissing.failure(LOCATION.append(0))
+                val receiver: ReaderResult<MutableList<String>> = JsonErrors.PathMissing.failure(LOCATION.append(0))
 
                 val result = receiver + parameter
 
@@ -388,11 +388,11 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             }
         }
 
-        "The extension-function JsResult<MutableList<T>>#plus(JsResult.Failure)" - {
-            val parameter: JsResult.Failure = JsResult.Failure(LOCATION.append(1), JsonErrors.PathMissing)
+        "The extension-function ReaderResult<MutableList<T>>#plus(ReaderResult.Failure)" - {
+            val parameter: ReaderResult.Failure = ReaderResult.Failure(LOCATION.append(1), JsonErrors.PathMissing)
 
             "when receiver is success" {
-                val receiver: JsResult<MutableList<String>> =
+                val receiver: ReaderResult<MutableList<String>> =
                     mutableListOf(FIRST_PHONE_VALUE).success(LOCATION.append(0))
 
                 val result = receiver + parameter
@@ -401,22 +401,22 @@ internal class ArrayFieldReaderTest : FreeSpec() {
             }
 
             "when receiver is failure" {
-                val receiver: JsResult<MutableList<String>> =
+                val receiver: ReaderResult<MutableList<String>> =
                     JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.BOOLEAN)
                         .failure(LOCATION.append(0))
 
                 val result = receiver + parameter
 
-                result as JsResult.Failure
+                result as ReaderResult.Failure
                 result.causes shouldContainExactly listOf(
-                    JsResult.Failure.Cause(
+                    ReaderResult.Failure.Cause(
                         location = LOCATION.append(0),
                         error = JsonErrors.InvalidType(
                             expected = ValueNode.Type.NUMBER,
                             actual = ValueNode.Type.BOOLEAN
                         )
                     ),
-                    JsResult.Failure.Cause(
+                    ReaderResult.Failure.Cause(
                         location = LOCATION.append(1),
                         error = JsonErrors.PathMissing
                     )

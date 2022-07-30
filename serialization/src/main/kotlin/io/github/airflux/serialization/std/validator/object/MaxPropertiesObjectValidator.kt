@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
@@ -34,17 +34,17 @@ public class MaxPropertiesObjectValidator internal constructor(private val value
         location: Location,
         properties: ObjectProperties,
         input: StructNode
-    ): JsResult.Failure? =
+    ): ReaderResult.Failure? =
         if (input.count > value) {
             val errorBuilder = context[ErrorBuilder]
-            JsResult.Failure(location, errorBuilder.build(value, input.count))
+            ReaderResult.Failure(location, errorBuilder.build(value, input.count))
         } else
             null
 
-    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> JsResult.Error) :
+    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> ReaderResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(expected: Int, actual: Int): JsResult.Error = function(expected, actual)
+        public fun build(expected: Int, actual: Int): ReaderResult.Error = function(expected, actual)
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

@@ -17,19 +17,19 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-internal fun <T> JsResult<T?>.assertAsSuccess(location: Location, value: T?) {
-    this as JsResult.Success
+internal fun <T> ReaderResult<T?>.assertAsSuccess(location: Location, value: T?) {
+    this as ReaderResult.Success
     assertEquals(expected = location, actual = this.location)
     assertEquals(expected = value, actual = this.value)
 }
 
-internal fun JsResult<*>.assertAsFailure(vararg expected: JsResult.Failure.Cause) {
+internal fun ReaderResult<*>.assertAsFailure(vararg expected: ReaderResult.Failure.Cause) {
 
-    val failures = (this as JsResult.Failure).causes
+    val failures = (this as ReaderResult.Failure).causes
 
     assertEquals(expected = expected.count(), actual = failures.count(), message = "Failures more than expected.")
 

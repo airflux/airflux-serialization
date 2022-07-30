@@ -19,13 +19,13 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 
-internal class JsResultTest : FreeSpec() {
+internal class ReaderResultTest : FreeSpec() {
 
     companion object {
         private const val ORIGINAL_VALUE = "10"
@@ -35,8 +35,8 @@ internal class JsResultTest : FreeSpec() {
 
     init {
 
-        "A JsResult#Success type" - {
-            val original: JsResult<String> = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+        "A ReaderResult#Success type" - {
+            val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
             "calling fold function should return an original value" {
                 val result = original.fold(
@@ -50,19 +50,19 @@ internal class JsResultTest : FreeSpec() {
             "calling map function should return a result of applying the [transform] function to the value" {
                 val result = original.map { it.toInt() }
 
-                result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling flatMap function should return a result of applying the [transform] function to the value" {
-                val result = original.flatMap { location, value -> JsResult.Success(location, value.toInt()) }
+                val result = original.flatMap { location, value -> ReaderResult.Success(location, value.toInt()) }
 
-                result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling recovery function should return an original" {
-                val result = original.recovery { JsResult.Success(LOCATION, ELSE_VALUE) }
+                val result = original.recovery { ReaderResult.Success(LOCATION, ELSE_VALUE) }
 
-                result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
             }
 
             "calling getOrElse function should return a value" {
@@ -72,7 +72,7 @@ internal class JsResultTest : FreeSpec() {
             }
 
             "calling orElse function should return a value" {
-                val elseResult = JsResult.Success(location = LOCATION, value = ELSE_VALUE)
+                val elseResult = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
 
                 val result = original.orElse { elseResult }
 
@@ -81,41 +81,45 @@ internal class JsResultTest : FreeSpec() {
 
             "should comply with equals() and hashCode() contract" {
                 original.shouldBeEqualsContract(
-                    y = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    z = JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    other = JsResult.Success(location = Location.empty, value = ORIGINAL_VALUE)
+                    y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    other = ReaderResult.Success(location = Location.empty, value = ORIGINAL_VALUE)
                 )
             }
         }
 
-        "A JsResult#Failure type" - {
-            val original: JsResult<String> = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+        "A ReaderResult#Failure type" - {
+            val original: ReaderResult<String> =
+                ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
             "constructor(JsLocation, JsError)" {
-                val failure = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val failure = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 failure.causes shouldContainAll listOf(
-                    JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing))
+                    ReaderResult.Failure.Cause(
+                        location = LOCATION,
+                        errors = ReaderResult.Errors(JsonErrors.PathMissing)
+                    )
                 )
             }
 
-            "constructor(JsLocation, JsResult.Errors)" {
-                val errors = JsResult.Errors(
+            "constructor(JsLocation, ReaderResult#Errors)" {
+                val errors = ReaderResult.Errors(
                     JsonErrors.PathMissing,
                     JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                 )
 
-                val failure = JsResult.Failure(location = LOCATION, errors = errors)
+                val failure = ReaderResult.Failure(location = LOCATION, errors = errors)
 
-                failure.causes shouldContainAll listOf(JsResult.Failure.Cause(location = LOCATION, errors = errors))
+                failure.causes shouldContainAll listOf(ReaderResult.Failure.Cause(location = LOCATION, errors = errors))
             }
 
             "calling plus function should return " {
                 val firstFailure =
-                    JsResult.Failure(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing))
-                val secondFailure = JsResult.Failure(
+                    ReaderResult.Failure(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing))
+                val secondFailure = ReaderResult.Failure(
                     location = LOCATION,
-                    errors = JsResult.Errors(
+                    errors = ReaderResult.Errors(
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
@@ -123,10 +127,13 @@ internal class JsResultTest : FreeSpec() {
                 val failure = firstFailure + secondFailure
 
                 failure.causes shouldContainAll listOf(
-                    JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing)),
-                    JsResult.Failure.Cause(
+                    ReaderResult.Failure.Cause(
                         location = LOCATION,
-                        errors = JsResult.Errors(
+                        errors = ReaderResult.Errors(JsonErrors.PathMissing)
+                    ),
+                    ReaderResult.Failure.Cause(
+                        location = LOCATION,
+                        errors = ReaderResult.Errors(
                             JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                         )
                     )
@@ -149,15 +156,15 @@ internal class JsResultTest : FreeSpec() {
             }
 
             "calling flatMap function should return an original do not apply the [transform] function to the value" {
-                val result = original.flatMap { location, value -> JsResult.Success(location, value.toInt()) }
+                val result = original.flatMap { location, value -> ReaderResult.Success(location, value.toInt()) }
 
                 result shouldBe original
             }
 
             "calling recovery function should return the result of invoking the recovery function" {
-                val result = original.recovery { JsResult.Success(LOCATION, ELSE_VALUE) }
+                val result = original.recovery { ReaderResult.Success(LOCATION, ELSE_VALUE) }
 
-                result shouldBe JsResult.Success(location = LOCATION, value = ELSE_VALUE)
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
             }
 
             "calling getOrElse function should return a defaultValue" {
@@ -167,7 +174,7 @@ internal class JsResultTest : FreeSpec() {
             }
 
             "calling orElse function should return the result of calling the [defaultValue] function" {
-                val elseResult = JsResult.Success(location = LOCATION, value = ELSE_VALUE)
+                val elseResult = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
 
                 val result = original.orElse { elseResult }
 
@@ -176,26 +183,26 @@ internal class JsResultTest : FreeSpec() {
 
             "should comply with equals() and hashCode() contract" {
                 original.shouldBeEqualsContract(
-                    y = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    other = JsResult.Failure(location = Location.empty, error = JsonErrors.PathMissing)
+                    y = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    other = ReaderResult.Failure(location = Location.empty, error = JsonErrors.PathMissing)
                 )
             }
         }
 
-        "A JsResult#Failure#Cause type" - {
+        "A ReaderResult#Failure#Cause type" - {
 
             "constructor(JsLocation, JsError)" {
-                val cause = JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                val cause = ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
-                cause.errors shouldBe JsResult.Errors(JsonErrors.PathMissing)
+                cause.errors shouldBe ReaderResult.Errors(JsonErrors.PathMissing)
             }
 
-            "constructor(Location, JsResult#Errors)" {
-                val cause = JsResult.Failure.Cause(
+            "constructor(Location, ReaderResult#Errors)" {
+                val cause = ReaderResult.Failure.Cause(
                     location = LOCATION,
-                    errors = JsResult.Errors(
+                    errors = ReaderResult.Errors(
                         JsonErrors.PathMissing,
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
@@ -209,12 +216,12 @@ internal class JsResultTest : FreeSpec() {
             }
         }
 
-        "JsResult#merge function" {
+        "ReaderResult#merge function" {
             val failures = listOf(
-                JsResult.Failure(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing)),
-                JsResult.Failure(
+                ReaderResult.Failure(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
+                ReaderResult.Failure(
                     location = LOCATION,
-                    errors = JsResult.Errors(
+                    errors = ReaderResult.Errors(
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
@@ -223,10 +230,10 @@ internal class JsResultTest : FreeSpec() {
             val failure = failures.merge()
 
             failure.causes shouldContainAll listOf(
-                JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing)),
-                JsResult.Failure.Cause(
+                ReaderResult.Failure.Cause(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
+                ReaderResult.Failure.Cause(
                     location = LOCATION,
-                    errors = JsResult.Errors(
+                    errors = ReaderResult.Errors(
                         JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                     )
                 )
@@ -236,16 +243,16 @@ internal class JsResultTest : FreeSpec() {
         "asSuccess(JsLocation) extension function" {
             val result = ORIGINAL_VALUE.success(LOCATION)
 
-            result shouldBe JsResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+            result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
         "asFailure(JsLocation) extension function" {
             val result = JsonErrors.PathMissing.failure(LOCATION)
 
-            result as JsResult.Failure
+            result as ReaderResult.Failure
 
             result.causes shouldContainAll listOf(
-                JsResult.Failure.Cause(location = LOCATION, errors = JsResult.Errors(JsonErrors.PathMissing))
+                ReaderResult.Failure.Cause(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing))
             )
         }
     }

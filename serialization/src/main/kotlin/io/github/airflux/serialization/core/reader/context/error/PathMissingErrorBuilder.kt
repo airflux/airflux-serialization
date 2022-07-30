@@ -19,15 +19,15 @@ package io.github.airflux.serialization.core.reader.context.error
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
 import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
  * The builder of an error that occurs when an element is missing by the specified path.
  */
-public class PathMissingErrorBuilder(private val builder: () -> JsResult.Error) :
+public class PathMissingErrorBuilder(private val builder: () -> ReaderResult.Error) :
     AbstractErrorBuilderContextElement<PathMissingErrorBuilder>(key = PathMissingErrorBuilder) {
 
-    public fun build(): JsResult.Error = builder()
+    public fun build(): ReaderResult.Error = builder()
 
     public companion object Key : ContextErrorBuilderKey<PathMissingErrorBuilder> {
         override val name: String = errorBuilderName()

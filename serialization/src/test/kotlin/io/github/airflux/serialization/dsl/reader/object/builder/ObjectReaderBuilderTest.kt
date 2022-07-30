@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -77,7 +77,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 "then should return successful value" {
                     val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                     val result = reader.read(context = CONTEXT, location = LOCATION, input)
-                    result as JsResult.Success
+                    result as ReaderResult.Success
                     result.value shouldBe DTO(name = USER_NAME)
                 }
             }
@@ -95,9 +95,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then the reader should return the invalid type error" {
                         val result = reader.read(context = CONTEXT, location = LOCATION, input)
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.OBJECT,
@@ -114,7 +114,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     "when the validator returns an error" - {
                         val validator = DummyObjectValidatorBuilder(
                             key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
-                            result = JsResult.Failure(location = LOCATION, error = MinPropertiesError)
+                            result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader = reader<DTO> {
                             validation {
@@ -129,9 +129,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         "then the reader should return the validation error" {
                             val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(location = LOCATION, error = MinPropertiesError)
+                                ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError)
                             )
                         }
                     }
@@ -155,9 +155,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         "then the reader should return the validation error" {
                             val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(
+                                ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME),
                                     error = JsonErrors.PathMissing
                                 )
@@ -170,7 +170,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     val contextWithFailFastFalse = CONTEXT + FailFast(false)
                     val validator = DummyObjectValidatorBuilder(
                         key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
-                        result = JsResult.Failure(location = LOCATION, error = MinPropertiesError)
+                        result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                     )
                     val reader = reader<DTO> {
                         validation {
@@ -186,10 +186,10 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     "then all error should be returns" {
                         val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
                         val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION.append(ATTRIBUTE_NAME),
                                 error = JsonErrors.PathMissing
                             )
@@ -202,20 +202,20 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
 
                 "when the builder does not throw an exception" - {
-                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> JsResult<String>) = { _, location ->
-                        JsResult.Success(location = location, value = USER_NAME)
+                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<String>) = { _, location ->
+                        ReaderResult.Success(location = location, value = USER_NAME)
                     }
                     val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
 
                     "then call the builder should return a result" {
                         val result = resultBuilder.build(CONTEXT, LOCATION, objectValuesMap)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
 
                 "when the builder does throw an exception" - {
-                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> JsResult<String>) =
+                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<String>) =
                         { _, _ ->
                             throw IllegalStateException()
                         }
@@ -233,9 +233,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                         "then call the builder should return an error" {
                             val result = resultBuilder.build(contextWithExceptionHandler, LOCATION, objectValuesMap)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                                ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
                             )
                         }
                     }
@@ -264,7 +264,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = input.read(CONTEXT, LOCATION, property)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
@@ -280,7 +280,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = input.read(CONTEXT, LOCATION, property)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
@@ -295,7 +295,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = input.read(CONTEXT, LOCATION, property)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
@@ -311,7 +311,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = input.read(CONTEXT, LOCATION, property)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
@@ -326,7 +326,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = input.read(CONTEXT, LOCATION, property)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
@@ -342,7 +342,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = input.read(CONTEXT, LOCATION, property)
-                        result as JsResult.Success
+                        result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
                 }
@@ -352,13 +352,13 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
     fun <T : Any> propertySpec(value: T) = required(name = ATTRIBUTE_NAME, reader = createReader(value = value))
 
-    fun <T : Any> propertySpec(error: JsResult.Error) = required(
+    fun <T : Any> propertySpec(error: ReaderResult.Error) = required(
         name = ATTRIBUTE_NAME,
-        reader = DummyReader<T>(result = JsResult.Failure(location = LOCATION.append(ATTRIBUTE_NAME), error = error))
+        reader = DummyReader<T>(result = ReaderResult.Failure(location = LOCATION.append(ATTRIBUTE_NAME), error = error))
     )
 
     fun <T : Any> createReader(value: T): DummyReader<T> =
-        DummyReader(result = JsResult.Success(location = LOCATION.append(ATTRIBUTE_NAME), value = value))
+        DummyReader(result = ReaderResult.Success(location = LOCATION.append(ATTRIBUTE_NAME), value = value))
 
     internal data class DTO(val name: String)
 }

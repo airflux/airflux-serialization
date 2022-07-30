@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 
 /**
@@ -32,11 +32,11 @@ import io.github.airflux.serialization.core.value.NullNode
  * - If a node is not found ([from] is [Lookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readNullable(context: ReaderContext, from: Lookup, using: Reader<T>): JsResult<T?> {
+public fun <T : Any> readNullable(context: ReaderContext, from: Lookup, using: Reader<T>): ReaderResult<T?> {
 
-    fun <T : Any> readNullable(context: ReaderContext, from: Lookup.Defined, using: Reader<T>): JsResult<T?> =
+    fun <T : Any> readNullable(context: ReaderContext, from: Lookup.Defined, using: Reader<T>): ReaderResult<T?> =
         if (from.value is NullNode)
-            JsResult.Success(location = from.location, value = null)
+            ReaderResult.Success(location = from.location, value = null)
         else
             using.read(context, from.location, from.value)
 
@@ -44,7 +44,7 @@ public fun <T : Any> readNullable(context: ReaderContext, from: Lookup, using: R
         is Lookup.Defined -> readNullable(context, from, using)
         is Lookup.Undefined -> {
             val errorBuilder = context[PathMissingErrorBuilder]
-            JsResult.Failure(location = from.location, error = errorBuilder.build())
+            ReaderResult.Failure(location = from.location, error = errorBuilder.build())
         }
     }
 }

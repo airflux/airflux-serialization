@@ -19,8 +19,8 @@ package io.github.airflux.serialization.dsl.reader.array.builder.validator
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -48,7 +48,7 @@ internal class ArrayValidatorTest : FreeSpec() {
 
                     "then the right validator does not execute" {
                         val rightValidator = ArrayValidator { _, location, _ ->
-                            JsResult.Failure(location, JsonErrors.PathMissing)
+                            ReaderResult.Failure(location, JsonErrors.PathMissing)
                         }
 
                         val composeValidator = leftValidator or rightValidator
@@ -60,7 +60,7 @@ internal class ArrayValidatorTest : FreeSpec() {
 
                 "when the left validator returns failure" - {
                     val leftValidator = ArrayValidator { _, location, _ ->
-                        JsResult.Failure(location, JsonErrors.PathMissing)
+                        ReaderResult.Failure(location, JsonErrors.PathMissing)
                     }
 
                     "when the right validator returns success" - {
@@ -76,7 +76,7 @@ internal class ArrayValidatorTest : FreeSpec() {
 
                     "when the right validator returns failure" - {
                         val rightValidator = ArrayValidator { _, location, _ ->
-                            JsResult.Failure(
+                            ReaderResult.Failure(
                                 location,
                                 JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                             )
@@ -88,8 +88,8 @@ internal class ArrayValidatorTest : FreeSpec() {
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(
-                                JsResult.Failure(LOCATION, JsonErrors.PathMissing),
-                                JsResult.Failure(
+                                ReaderResult.Failure(LOCATION, JsonErrors.PathMissing),
+                                ReaderResult.Failure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
                                         expected = ValueNode.Type.STRING,
@@ -119,26 +119,26 @@ internal class ArrayValidatorTest : FreeSpec() {
 
                     "when the right validator returns failure" - {
                         val rightValidator = ArrayValidator { _, location, _ ->
-                            JsResult.Failure(location, JsonErrors.PathMissing)
+                            ReaderResult.Failure(location, JsonErrors.PathMissing)
                         }
 
                         "then failure of the right validator is returned" {
                             val composeValidator = leftValidator and rightValidator
                             val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE)
                             failure.shouldNotBeNull()
-                            failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
+                            failure shouldBe ReaderResult.Failure(LOCATION, JsonErrors.PathMissing)
                         }
                     }
                 }
 
                 "when the left validator returns failure" - {
                     val leftValidator = ArrayValidator { _, location, _ ->
-                        JsResult.Failure(location, JsonErrors.PathMissing)
+                        ReaderResult.Failure(location, JsonErrors.PathMissing)
                     }
 
                     "then the right validator does not execute" - {
                         val rightValidator = ArrayValidator { _, location, _ ->
-                            JsResult.Failure(
+                            ReaderResult.Failure(
                                 location,
                                 JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
                             )
@@ -148,7 +148,7 @@ internal class ArrayValidatorTest : FreeSpec() {
                         val failure = composeValidator.validate(CONTEXT, LOCATION, VALUE)
 
                         failure.shouldNotBeNull()
-                        failure shouldBe JsResult.Failure(LOCATION, JsonErrors.PathMissing)
+                        failure shouldBe ReaderResult.Failure(LOCATION, JsonErrors.PathMissing)
                     }
                 }
             }

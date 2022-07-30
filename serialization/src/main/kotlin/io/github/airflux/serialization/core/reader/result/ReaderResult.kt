@@ -20,21 +20,21 @@ import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
 
 @Suppress("unused")
-public sealed class JsResult<out T> {
+public sealed class ReaderResult<out T> {
 
     public companion object;
 
-    public infix fun <R> map(transform: (T) -> R): JsResult<R> =
+    public infix fun <R> map(transform: (T) -> R): ReaderResult<R> =
         flatMap { location, value -> transform(value).success(location) }
 
-    public fun <R> flatMap(transform: (Location, T) -> JsResult<R>): JsResult<R> = fold(
+    public fun <R> flatMap(transform: (Location, T) -> ReaderResult<R>): ReaderResult<R> = fold(
         ifFailure = ::identity,
         ifSuccess = { transform(it.location, it.value) }
     )
 
-    public data class Success<T>(val location: Location, val value: T) : JsResult<T>()
+    public data class Success<T>(val location: Location, val value: T) : ReaderResult<T>()
 
-    public class Failure private constructor(public val causes: List<Cause>) : JsResult<Nothing>() {
+    public class Failure private constructor(public val causes: List<Cause>) : ReaderResult<Nothing>() {
 
         public constructor(location: Location, error: Error) : this(listOf(Cause(location, error)))
 
@@ -92,28 +92,31 @@ public sealed class JsResult<out T> {
     }
 }
 
-public inline fun <T, R> JsResult<T>.fold(
-    ifFailure: (JsResult.Failure) -> R,
-    ifSuccess: (JsResult.Success<T>) -> R
+public inline fun <T, R> ReaderResult<T>.fold(
+    ifFailure: (ReaderResult.Failure) -> R,
+    ifSuccess: (ReaderResult.Success<T>) -> R
 ): R = when (this) {
-    is JsResult.Success -> ifSuccess(this)
-    is JsResult.Failure -> ifFailure(this)
+    is ReaderResult.Success -> ifSuccess(this)
+    is ReaderResult.Failure -> ifFailure(this)
 }
 
-public inline infix fun <T> JsResult<T>.recovery(function: (JsResult.Failure) -> JsResult<T>): JsResult<T> = fold(
+public inline infix fun <T> ReaderResult<T>.recovery(
+    function: (ReaderResult.Failure) -> ReaderResult<T>
+): ReaderResult<T> = fold(
     ifFailure = { function(it) },
     ifSuccess = ::identity
 )
 
-public infix fun <T> JsResult<T>.getOrElse(defaultValue: () -> T): T = fold(
+public infix fun <T> ReaderResult<T>.getOrElse(defaultValue: () -> T): T = fold(
     ifFailure = { defaultValue() },
     ifSuccess = { it.value }
 )
 
-public infix fun <T> JsResult<T>.orElse(defaultValue: () -> JsResult<T>): JsResult<T> = fold(
+public infix fun <T> ReaderResult<T>.orElse(defaultValue: () -> ReaderResult<T>): ReaderResult<T> = fold(
     ifFailure = { defaultValue() },
     ifSuccess = ::identity
 )
 
-public fun <T> T.success(location: Location): JsResult<T> = JsResult.Success(location, this)
-public fun <E : JsResult.Error> E.failure(location: Location): JsResult<Nothing> = JsResult.Failure(location, this)
+public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Success(location, this)
+public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<Nothing> =
+    ReaderResult.Failure(location, this)

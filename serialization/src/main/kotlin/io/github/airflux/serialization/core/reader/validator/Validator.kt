@@ -18,12 +18,12 @@ package io.github.airflux.serialization.core.reader.validator
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 @Suppress("unused")
 public fun interface Validator<in T> {
 
-    public fun validate(context: ReaderContext, location: Location, value: T): JsResult.Failure?
+    public fun validate(context: ReaderContext, location: Location, value: T): ReaderResult.Failure?
 }
 
 /*

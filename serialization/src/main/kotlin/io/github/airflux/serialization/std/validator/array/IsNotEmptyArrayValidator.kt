@@ -22,23 +22,23 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 
 public class IsNotEmptyArrayValidator internal constructor() : ArrayValidator {
 
-    override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): JsResult.Failure? =
+    override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult.Failure? =
         if (input.isEmpty()) {
             val errorBuilder = context[ErrorBuilder]
-            JsResult.Failure(location, errorBuilder.build())
+            ReaderResult.Failure(location, errorBuilder.build())
         } else
             null
 
-    public class ErrorBuilder(private val function: () -> JsResult.Error) :
+    public class ErrorBuilder(private val function: () -> ReaderResult.Error) :
         AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
 
-        public fun build(): JsResult.Error = function()
+        public fun build(): ReaderResult.Error = function()
 
         public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
             override val name: String = errorBuilderName()

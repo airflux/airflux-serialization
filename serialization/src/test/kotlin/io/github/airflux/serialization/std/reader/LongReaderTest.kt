@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -64,7 +64,7 @@ internal class LongReaderTest : FreeSpec() {
                 val input: ValueNode = StringNode("abc")
                 val result = LongReader.read(CONTEXT, Location.empty, input)
                 result.assertAsFailure(
-                    JsResult.Failure.Cause(
+                    ReaderResult.Failure.Cause(
                         location = Location.empty,
                         error = JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.STRING)
                     )
@@ -84,7 +84,7 @@ internal class LongReaderTest : FreeSpec() {
                     val input = NumberNode.valueOf(value)!!
                     val result = LongReader.read(CONTEXT, Location.empty, input)
                     result.assertAsFailure(
-                        JsResult.Failure.Cause(
+                        ReaderResult.Failure.Cause(
                             location = Location.empty,
                             error = JsonErrors.ValueCast(value = value, type = Long::class)
                         )

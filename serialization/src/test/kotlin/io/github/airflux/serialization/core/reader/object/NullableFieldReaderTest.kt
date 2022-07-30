@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
@@ -36,7 +36,7 @@ internal class NullableFieldReaderTest : FreeSpec() {
         private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
         private val READER: Reader<String> =
-            DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }
+            DummyReader { _, location -> ReaderResult.Success(location = location, value = VALUE) }
     }
 
     init {
@@ -49,9 +49,9 @@ internal class NullableFieldReaderTest : FreeSpec() {
                     val from: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
-                        val result: JsResult<String?> =
+                        val result: ReaderResult<String?> =
                             readNullable(context = CONTEXT, from = from, using = READER)
-                        result shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                     }
                 }
 
@@ -59,9 +59,9 @@ internal class NullableFieldReaderTest : FreeSpec() {
                     val from: Lookup = Lookup.Defined(location = Location.empty.append("name"), NullNode)
 
                     "then should return the null value" {
-                        val result: JsResult<String?> =
+                        val result: ReaderResult<String?> =
                             readNullable(context = CONTEXT, from = from, using = READER)
-                        result shouldBe JsResult.Success(location = LOCATION, value = null)
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = null)
                     }
                 }
             }
@@ -70,8 +70,8 @@ internal class NullableFieldReaderTest : FreeSpec() {
                 val from: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the missing path error" {
-                    val result: JsResult<String?> = readNullable(context = CONTEXT, from = from, using = READER)
-                    result shouldBe JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val result: ReaderResult<String?> = readNullable(context = CONTEXT, from = from, using = READER)
+                    result shouldBe ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 }
             }
         }

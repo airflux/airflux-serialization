@@ -18,9 +18,9 @@ package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-internal class DummyValidator<T>(val result: JsResult.Failure?) : Validator<T> {
-    override fun validate(context: ReaderContext, location: Location, value: T): JsResult.Failure? = result
+internal class DummyValidator<T>(val result: ReaderResult.Failure?) : Validator<T> {
+    override fun validate(context: ReaderContext, location: Location, value: T): ReaderResult.Failure? = result
 }

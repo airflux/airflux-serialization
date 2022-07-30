@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
@@ -35,7 +35,7 @@ internal class NullableWithDefaultFieldReaderTest : FreeSpec() {
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"
         private val READER: Reader<String> =
-            DummyReader { _, location -> JsResult.Success(location = location, value = VALUE) }
+            DummyReader { _, location -> ReaderResult.Success(location = location, value = VALUE) }
         private val DEFAULT = { DEFAULT_VALUE }
     }
 
@@ -49,9 +49,9 @@ internal class NullableWithDefaultFieldReaderTest : FreeSpec() {
                     val from: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
-                        val result: JsResult<String?> =
+                        val result: ReaderResult<String?> =
                             readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
-                        result shouldBe JsResult.Success(location = LOCATION, value = VALUE)
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                     }
                 }
 
@@ -59,9 +59,9 @@ internal class NullableWithDefaultFieldReaderTest : FreeSpec() {
                     val from: Lookup = Lookup.Defined(location = LOCATION, NullNode)
 
                     "then should return the null value" {
-                        val result: JsResult<String?> =
+                        val result: ReaderResult<String?> =
                             readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
-                        result shouldBe JsResult.Success(location = LOCATION, value = null)
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = null)
                     }
                 }
             }
@@ -70,9 +70,9 @@ internal class NullableWithDefaultFieldReaderTest : FreeSpec() {
                 val from: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the default value" {
-                    val result: JsResult<String?> =
+                    val result: ReaderResult<String?> =
                         readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
-                    result shouldBe JsResult.Success(location = LOCATION, value = DEFAULT_VALUE)
+                    result shouldBe ReaderResult.Success(location = LOCATION, value = DEFAULT_VALUE)
                 }
             }
         }

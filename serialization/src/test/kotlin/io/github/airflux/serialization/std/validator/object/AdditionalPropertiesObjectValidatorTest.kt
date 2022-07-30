@@ -21,8 +21,8 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
@@ -109,7 +109,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                             val failure = validator.validate(context, LOCATION, properties, input)
 
                             failure.shouldNotBeNull()
-                            failure shouldBe JsResult.Failure(
+                            failure shouldBe ReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Object.AdditionalProperties
                             )
@@ -123,7 +123,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                             val failure = validator.validate(contextWithFailFast, LOCATION, properties, input)
 
                             failure.shouldNotBeNull()
-                            failure shouldBe JsResult.Failure(
+                            failure shouldBe ReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Object.AdditionalProperties
                             )
@@ -138,11 +138,11 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(
-                                JsResult.Failure(
+                                ReaderResult.Failure(
                                     location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                     error = JsonErrors.Validation.Object.AdditionalProperties
                                 ),
-                                JsResult.Failure(
+                                ReaderResult.Failure(
                                     location = LOCATION.append(NAME_PROPERTY_VALUE),
                                     error = JsonErrors.Validation.Object.AdditionalProperties
                                 )

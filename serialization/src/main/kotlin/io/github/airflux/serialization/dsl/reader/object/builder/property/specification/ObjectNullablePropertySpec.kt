@@ -26,8 +26,8 @@ import io.github.airflux.serialization.core.reader.context.error.PathMissingErro
 import io.github.airflux.serialization.core.reader.`object`.readNullable
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -53,7 +53,7 @@ public fun <T : Any> nullable(paths: PropertyPaths, reader: Reader<T>): ObjectPr
                 .map { path ->
                     val lookup = input.lookup(location, path)
                     if (lookup is Lookup.Defined) return@Reader readNullable(context, lookup, reader)
-                    JsResult.Failure(location = location.append(path), error = errorBuilder.build())
+                    ReaderResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
             failures.merge()
         }

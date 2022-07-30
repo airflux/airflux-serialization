@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.`object`
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 
 /**
@@ -34,21 +34,21 @@ public fun <T : Any> readWithDefault(
     from: Lookup,
     using: Reader<T>,
     defaultValue: () -> T
-): JsResult<T> {
+): ReaderResult<T> {
 
     fun <T : Any> readWithDefault(
         context: ReaderContext,
         from: Lookup.Defined,
         using: Reader<T>,
         defaultValue: () -> T
-    ): JsResult<T> =
+    ): ReaderResult<T> =
         if (from.value is NullNode)
-            JsResult.Success(location = from.location, value = defaultValue())
+            ReaderResult.Success(location = from.location, value = defaultValue())
         else
             using.read(context, from.location, from.value)
 
     return when (from) {
         is Lookup.Defined -> readWithDefault(context, from, using, defaultValue)
-        is Lookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
+        is Lookup.Undefined -> ReaderResult.Success(location = from.location, value = defaultValue())
     }
 }

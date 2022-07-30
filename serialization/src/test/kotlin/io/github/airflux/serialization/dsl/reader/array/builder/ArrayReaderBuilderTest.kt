@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -70,7 +70,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                 "then should return successful value" {
                     val input = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                     val result = reader.read(context = CONTEXT, location = LOCATION, input)
-                    result as JsResult.Success
+                    result as ReaderResult.Success
                     result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
                 }
             }
@@ -85,9 +85,9 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                     "then the reader should return the invalid type error" {
                         val result = reader.read(context = CONTEXT, location = LOCATION, input)
-                        result as JsResult.Failure
+                        result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            JsResult.Failure.Cause(
+                            ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = ValueNode.Type.ARRAY,
@@ -106,7 +106,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
-                                    result = JsResult.Failure(
+                                    result = ReaderResult.Failure(
                                         location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
                                     )
@@ -118,9 +118,9 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         "then the reader should return the validation error" {
                             val input = ArrayNode(StringNode(FIRST_ITEM))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(
+                                ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME),
                                     error = MinItemsError
                                 )
@@ -142,9 +142,9 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         "then the reader should return the validation error" {
                             val input = ArrayNode(StringNode(FIRST_ITEM))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(
+                                ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME).append(0),
                                     error = JsonErrors.PathMissing
                                 )
@@ -161,7 +161,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
-                                    result = JsResult.Failure(
+                                    result = ReaderResult.Failure(
                                         location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
                                     )
@@ -173,9 +173,9 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         "then the reader should return the validation error" {
                             val input = ArrayNode(StringNode(FIRST_ITEM))
                             val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(
+                                ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME),
                                     error = MinItemsError
                                 )
@@ -189,7 +189,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
-                                    result = JsResult.Failure(
+                                    result = ReaderResult.Failure(
                                         location = LOCATION.append(ATTRIBUTE_NAME),
                                         error = MinItemsError
                                     )
@@ -201,13 +201,13 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         "then all error should be returns" {
                             val input = ArrayNode(StringNode(FIRST_ITEM))
                             val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
-                            result as JsResult.Failure
+                            result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
-                                JsResult.Failure.Cause(
+                                ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME),
                                     error = MinItemsError
                                 ),
-                                JsResult.Failure.Cause(
+                                ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ATTRIBUTE_NAME).append(0),
                                     error = JsonErrors.PathMissing
                                 )
@@ -223,9 +223,9 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         (input as StringNode).get.success(location)
     }
 
-    fun <T : Any> itemSpec(error: JsResult.Error) = nonNullable(
+    fun <T : Any> itemSpec(error: ReaderResult.Error) = nonNullable(
         reader = DummyReader<T>(
-            result = JsResult.Failure(
+            result = ReaderResult.Failure(
                 location = LOCATION.append(
                     ATTRIBUTE_NAME
                 ).append(0), error = error

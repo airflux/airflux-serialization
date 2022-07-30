@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.`object`
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
  * Reads optional field or return default if a field is not found.
@@ -32,8 +32,8 @@ public fun <T : Any> readOptional(
     from: Lookup,
     using: Reader<T>,
     defaultValue: () -> T
-): JsResult<T> =
+): ReaderResult<T> =
     when (from) {
         is Lookup.Defined -> using.read(context, from.location, from.value)
-        is Lookup.Undefined -> JsResult.Success(location = from.location, value = defaultValue())
+        is Lookup.Undefined -> ReaderResult.Success(location = from.location, value = defaultValue())
     }

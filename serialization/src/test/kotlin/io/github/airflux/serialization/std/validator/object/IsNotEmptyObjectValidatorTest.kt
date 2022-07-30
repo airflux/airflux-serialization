@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
@@ -68,7 +68,7 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
                     "then the validator should return an error" {
                         val failure = validator.validate(context, LOCATION, PROPERTIES, input)
                         failure.shouldNotBeNull()
-                        failure shouldBe JsResult.Failure(
+                        failure shouldBe ReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Object.IsEmpty
                         )

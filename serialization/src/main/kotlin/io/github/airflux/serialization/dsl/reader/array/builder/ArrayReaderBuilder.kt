@@ -23,8 +23,8 @@ import io.github.airflux.serialization.core.reader.array.readArray
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -53,7 +53,7 @@ public class ArrayReaderBuilder<T> internal constructor(
 ) : ArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): JsResult<List<T>>
+        public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<List<T>>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): ArrayReader<T> {
@@ -100,13 +100,13 @@ internal fun <T> buildObjectReader(
     ArrayReader { context, location, input ->
         if (input !is ArrayNode<*>) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@ArrayReader JsResult.Failure(
+            return@ArrayReader ReaderResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.ARRAY, input.type)
             )
         }
 
-        val failures = mutableListOf<JsResult.Failure>()
+        val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
             val failure = validator.validate(context, location, input)

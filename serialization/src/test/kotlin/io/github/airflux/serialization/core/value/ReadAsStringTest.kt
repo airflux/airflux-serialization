@@ -22,7 +22,7 @@ import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsStringTest : FreeSpec() {
@@ -52,7 +52,7 @@ internal class ReadAsStringTest : FreeSpec() {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsString(CONTEXT, LOCATION)
                     result.assertAsFailure(
-                        JsResult.Failure.Cause(
+                        ReaderResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
                                 expected = ValueNode.Type.STRING,

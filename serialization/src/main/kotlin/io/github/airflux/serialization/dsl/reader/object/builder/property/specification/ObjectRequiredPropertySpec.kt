@@ -25,8 +25,8 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.`object`.readRequired
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.result.JsResult
-import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
@@ -51,7 +51,7 @@ public fun <T : Any> required(paths: PropertyPaths, reader: Reader<T>): ObjectPr
                 .map { path ->
                     val lookup = input.lookup(location, path)
                     if (lookup is Lookup.Defined) return@Reader readRequired(context, lookup, reader)
-                    JsResult.Failure(location = location.append(path), error = errorBuilder.build())
+                    ReaderResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
             failures.merge()
         }

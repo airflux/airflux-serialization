@@ -12,7 +12,7 @@ import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
 import io.github.airflux.quickstart.dto.writer.context.DefaultWriterContext
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.value.deserialization
 import io.github.airflux.serialization.dsl.writer.serialization
@@ -26,8 +26,8 @@ fun main() {
     val json = mapper.readValue(jsonOfTender, ValueNode::class.java)
 
     when (val result = json.deserialization(context = DefaultReaderContext, reader = RequestReader)) {
-        is JsResult.Success -> println(result.value)
-        is JsResult.Failure -> println(result.causes)
+        is ReaderResult.Success -> println(result.value)
+        is ReaderResult.Failure -> println(result.causes)
     }
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")

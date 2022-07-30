@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.condition
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.JsResult
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -36,7 +36,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
                 if (value.isNotEmpty())
                     null
                 else
-                    JsResult.Failure(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
+                    ReaderResult.Failure(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
             }
     }
 
@@ -49,7 +49,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
                 val failure = validator.validate(CONTEXT, LOCATION, "")
 
                 failure.shouldNotBeNull()
-                failure shouldBe JsResult.Failure(
+                failure shouldBe ReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.Validation.Strings.IsEmpty
                 )
@@ -70,7 +70,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
                 val failure = validator.validate(CONTEXT, LOCATION, "")
 
                 failure.shouldNotBeNull()
-                failure shouldBe JsResult.Failure(
+                failure shouldBe ReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.Validation.Strings.IsEmpty
                 )
