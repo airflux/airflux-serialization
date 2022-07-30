@@ -21,7 +21,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.validator.std.Is
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.std.MaxItemsArrayValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.std.MinItemsArrayValidatorBuilder
 
-public object ArrayValidator {
+public object StdArrayValidator {
 
     /**
      * If the is empty then an error, otherwise a success.

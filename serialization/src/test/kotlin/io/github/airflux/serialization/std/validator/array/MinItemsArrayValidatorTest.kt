@@ -39,7 +39,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator = ArrayValidator.minItems(MIN_ITEMS).build()
+            val validator = StdArrayValidator.minItems(MIN_ITEMS).build()
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

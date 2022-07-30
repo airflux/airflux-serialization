@@ -38,7 +38,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator IsNotEmpty" - {
-            val validator = ArrayValidator.isNotEmpty.build()
+            val validator = StdArrayValidator.isNotEmpty.build()
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()

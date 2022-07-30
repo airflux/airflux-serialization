@@ -39,7 +39,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MaxItems" - {
-            val validator = ArrayValidator.maxItems(MAX_ITEMS).build()
+            val validator = StdArrayValidator.maxItems(MAX_ITEMS).build()
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
