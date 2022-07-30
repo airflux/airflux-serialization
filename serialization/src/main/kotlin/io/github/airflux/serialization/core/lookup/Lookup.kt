@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.lookup
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -60,9 +60,9 @@ public fun ValueNode.lookup(location: Location, idx: PathElement.Idx): Lookup =
     else
         Lookup.Undefined(location = location.append(idx))
 
-public fun ValueNode.lookup(location: Location, path: JsPath): Lookup {
+public fun ValueNode.lookup(location: Location, path: PropertyPath): Lookup {
 
-    tailrec fun lookup(location: Location, path: JsPath, idxElement: Int, value: ValueNode): Lookup {
+    tailrec fun lookup(location: Location, path: PropertyPath, idxElement: Int, value: ValueNode): Lookup {
         if (idxElement == path.elements.size) return Lookup.Defined(location, value)
         return when (val element = path.elements[idxElement]) {
             is PathElement.Key -> if (value is StructNode) {

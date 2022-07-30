@@ -18,8 +18,8 @@ package io.github.airflux.serialization.dsl.reader.`object`.builder.property.spe
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -64,7 +64,7 @@ internal class ObjectDefaultablePropertySpecTest : FreeSpec() {
                 val spec = defaultable(name = "id", reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
-                    spec.path.items shouldContainExactly listOf(JsPath("id"))
+                    spec.path.items shouldContainExactly listOf(PropertyPath("id"))
                 }
 
                 "when the reader has read an attribute named id" - {
@@ -120,7 +120,7 @@ internal class ObjectDefaultablePropertySpecTest : FreeSpec() {
             }
 
             "when creating the instance by a single-path" - {
-                val path = JsPath("id")
+                val path = PropertyPath("id")
                 val spec = defaultable(path = path, reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
@@ -180,8 +180,8 @@ internal class ObjectDefaultablePropertySpecTest : FreeSpec() {
             }
 
             "when creating the instance by a multi-path" - {
-                val idPath = JsPath("id")
-                val identifierPath = JsPath("identifier")
+                val idPath = PropertyPath("id")
+                val identifierPath = PropertyPath("identifier")
                 val spec = defaultable(
                     paths = JsPaths(idPath, identifierPath),
                     reader = StringReader,
@@ -268,7 +268,7 @@ internal class ObjectDefaultablePropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = ObjectPropertySpec.Defaultable(path = JsPaths(JsPath("id")), reader = StringReader)
+                val spec = ObjectPropertySpec.Defaultable(path = JsPaths(PropertyPath("id")), reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
 
                 "when the reader has successfully read" - {
@@ -325,7 +325,7 @@ internal class ObjectDefaultablePropertySpecTest : FreeSpec() {
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
-                    specWithAlternative.path.items shouldContainExactly listOf(JsPath("id"))
+                    specWithAlternative.path.items shouldContainExactly listOf(PropertyPath("id"))
                 }
 
                 "when the main reader has successfully read" - {

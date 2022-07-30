@@ -18,8 +18,8 @@ package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsResult
@@ -76,8 +76,8 @@ public inline fun <T> ValueNode.readAsArray(
         JsResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.ARRAY, this.type))
     }
 
-internal fun ValueNode.getOrNull(path: JsPath): ValueNode? {
-    tailrec fun ValueNode.getOrNull(path: JsPath, idxElement: Int): ValueNode? {
+internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
+    tailrec fun ValueNode.getOrNull(path: PropertyPath, idxElement: Int): ValueNode? {
         if (idxElement == path.elements.size) return this
         return when (val element = path.elements[idxElement]) {
             is PathElement.Key -> if (this is StructNode)
@@ -95,4 +95,4 @@ internal fun ValueNode.getOrNull(path: JsPath): ValueNode? {
     return this.getOrNull(path, 0)
 }
 
-internal operator fun StructNode.contains(path: JsPath): Boolean = this.getOrNull(path) != null
+internal operator fun StructNode.contains(path: PropertyPath): Boolean = this.getOrNull(path) != null

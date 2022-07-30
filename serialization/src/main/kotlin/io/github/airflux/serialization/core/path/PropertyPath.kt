@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.core.path
 
 @Suppress("unused")
-public class JsPath private constructor(public val elements: List<PathElement>) {
+public class PropertyPath private constructor(public val elements: List<PathElement>) {
 
     public constructor(key: String) : this(PathElement.Key(key))
     public constructor(idx: Int) : this(PathElement.Idx(idx))
     public constructor(element: PathElement) : this(listOf(element))
 
-    public fun append(key: String): JsPath = append(PathElement.Key(key))
-    public fun append(idx: Int): JsPath = append(PathElement.Idx(idx))
-    public fun append(element: PathElement): JsPath = JsPath(elements + element)
+    public fun append(key: String): PropertyPath = append(PathElement.Key(key))
+    public fun append(idx: Int): PropertyPath = append(PathElement.Idx(idx))
+    public fun append(element: PathElement): PropertyPath = PropertyPath(elements + element)
 
     override fun toString(): String = buildString {
         append("#")
@@ -33,7 +33,7 @@ public class JsPath private constructor(public val elements: List<PathElement>) 
     }
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsPath && this.elements == other.elements)
+        this === other || (other is PropertyPath && this.elements == other.elements)
 
     override fun hashCode(): Int = elements.hashCode()
 

@@ -23,9 +23,9 @@ import io.kotest.matchers.shouldBe
 internal class JsPathsTest : FreeSpec() {
 
     companion object {
-        private val pathUser = JsPath("user")
-        private val pathId = JsPath("id")
-        private val pathName = JsPath("name")
+        private val pathUser = PropertyPath("user")
+        private val pathId = PropertyPath("id")
+        private val pathName = PropertyPath("name")
     }
 
     init {

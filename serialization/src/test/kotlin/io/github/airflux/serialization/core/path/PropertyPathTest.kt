@@ -23,18 +23,18 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal class JsPathTest : FreeSpec() {
+internal class PropertyPathTest : FreeSpec() {
 
     companion object {
-        private val OTHER_PATH = JsPath("other")
+        private val OTHER_PATH = PropertyPath("other")
     }
 
     init {
-        "A 'JsPath' type" - {
+        "A PropertyPath type" - {
             val keyUser = "user"
 
             "create from named path element '$keyUser'" - {
-                val path = JsPath(keyUser)
+                val path = PropertyPath(keyUser)
 
                 "should have only one element" {
                     path.elements.size shouldBe 1
@@ -49,7 +49,7 @@ internal class JsPathTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    path.shouldBeEqualsContract(y = JsPath(keyUser), z = JsPath(keyUser), other = OTHER_PATH)
+                    path.shouldBeEqualsContract(y = PropertyPath(keyUser), z = PropertyPath(keyUser), other = OTHER_PATH)
                 }
 
                 val keyName = "name"
@@ -73,8 +73,8 @@ internal class JsPathTest : FreeSpec() {
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(keyUser).append(keyName),
-                            z = JsPath(keyUser).append(keyName),
+                            y = PropertyPath(keyUser).append(keyName),
+                            z = PropertyPath(keyUser).append(keyName),
                             other = OTHER_PATH
                         )
                     }
@@ -98,8 +98,8 @@ internal class JsPathTest : FreeSpec() {
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(keyUser).append(idx),
-                            z = JsPath(keyUser).append(idx),
+                            y = PropertyPath(keyUser).append(idx),
+                            z = PropertyPath(keyUser).append(idx),
                             other = OTHER_PATH
                         )
                     }
@@ -108,7 +108,7 @@ internal class JsPathTest : FreeSpec() {
 
             val firstIdx = 0
             "create from index path element '$firstIdx'" - {
-                val path = JsPath(firstIdx)
+                val path = PropertyPath(firstIdx)
 
                 "should have only one element" {
                     path.elements.size shouldBe 1
@@ -123,7 +123,7 @@ internal class JsPathTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    path.shouldBeEqualsContract(y = JsPath(firstIdx), z = JsPath(firstIdx), other = OTHER_PATH)
+                    path.shouldBeEqualsContract(y = PropertyPath(firstIdx), z = PropertyPath(firstIdx), other = OTHER_PATH)
                 }
 
                 val keyName = "name"
@@ -147,8 +147,8 @@ internal class JsPathTest : FreeSpec() {
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(firstIdx).append(keyName),
-                            z = JsPath(firstIdx).append(keyName),
+                            y = PropertyPath(firstIdx).append(keyName),
+                            z = PropertyPath(firstIdx).append(keyName),
                             other = OTHER_PATH
                         )
                     }
@@ -175,8 +175,8 @@ internal class JsPathTest : FreeSpec() {
 
                     "should comply with equals() and hashCode() contract" {
                         updatedPath.shouldBeEqualsContract(
-                            y = JsPath(firstIdx).append(secondIdx),
-                            z = JsPath(firstIdx).append(secondIdx),
+                            y = PropertyPath(firstIdx).append(secondIdx),
+                            z = PropertyPath(firstIdx).append(secondIdx),
                             other = OTHER_PATH
                         )
                     }

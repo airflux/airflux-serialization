@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.lookup
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -113,7 +113,7 @@ internal class LookupTest : FreeSpec() {
                     val value = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
-                        val lookup = value.lookup(LOCATION, JsPath(KEY_ELEMENT_PATH))
+                        val lookup = value.lookup(LOCATION, PropertyPath(KEY_ELEMENT_PATH))
                         lookup shouldBe Lookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
@@ -122,7 +122,7 @@ internal class LookupTest : FreeSpec() {
                     val value = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Undefined" {
-                        val lookup = value.lookup(LOCATION, JsPath(UNKNOWN_KEY_ELEMENT_PATH))
+                        val lookup = value.lookup(LOCATION, PropertyPath(UNKNOWN_KEY_ELEMENT_PATH))
                         lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
                     }
                 }
@@ -131,7 +131,7 @@ internal class LookupTest : FreeSpec() {
                     val value = StringNode(VALUE)
 
                     "then should return the value as an instance of type Undefined" {
-                        val lookup = value.lookup(LOCATION, JsPath(KEY_ELEMENT_PATH))
+                        val lookup = value.lookup(LOCATION, PropertyPath(KEY_ELEMENT_PATH))
                         lookup shouldBe Lookup.Undefined(LOCATION.append(KEY_NAME))
                     }
                 }
@@ -143,7 +143,7 @@ internal class LookupTest : FreeSpec() {
                     val value = ArrayNode(StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
-                        val lookup = value.lookup(LOCATION, JsPath(IDX_ELEMENT_PATH))
+                        val lookup = value.lookup(LOCATION, PropertyPath(IDX_ELEMENT_PATH))
                         lookup shouldBe Lookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
@@ -152,7 +152,7 @@ internal class LookupTest : FreeSpec() {
                     val value = ArrayNode<StringNode>()
 
                     "then should return the value as an instance of type Undefined" {
-                        val lookup = value.lookup(LOCATION, JsPath(IDX_ELEMENT_PATH))
+                        val lookup = value.lookup(LOCATION, PropertyPath(IDX_ELEMENT_PATH))
                         lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
                     }
                 }
@@ -161,7 +161,7 @@ internal class LookupTest : FreeSpec() {
                     val value = StringNode(VALUE)
 
                     "then should return the value as an instance of type Undefined" {
-                        val lookup = value.lookup(LOCATION, JsPath(IDX_ELEMENT_PATH))
+                        val lookup = value.lookup(LOCATION, PropertyPath(IDX_ELEMENT_PATH))
                         lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
                     }
                 }

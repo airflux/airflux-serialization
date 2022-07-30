@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -46,11 +46,11 @@ internal class ContainsTest : FreeSpec() {
                 withData(
                     nameFn = { "$it" },
                     listOf(
-                        JsPath("user"),
-                        JsPath("user").append("name"),
-                        JsPath("user").append("phones"),
-                        JsPath("user").append("phones").append(0),
-                        JsPath("user").append("phones").append(0).append("value"),
+                        PropertyPath("user"),
+                        PropertyPath("user").append("name"),
+                        PropertyPath("user").append("phones"),
+                        PropertyPath("user").append("phones").append(0),
+                        PropertyPath("user").append("phones").append(0).append("value"),
                     )
                 ) { path ->
                     val result = path in INPUT
@@ -62,12 +62,12 @@ internal class ContainsTest : FreeSpec() {
                 withData(
                     nameFn = { "$it" },
                     listOf(
-                        JsPath("id"),
-                        JsPath("user").append("id"),
-                        JsPath("user").append(0),
-                        JsPath("user").append("phones").append("title"),
-                        JsPath("user").append("phones").append(1),
-                        JsPath("user").append("phones").append(0).append("title"),
+                        PropertyPath("id"),
+                        PropertyPath("user").append("id"),
+                        PropertyPath("user").append(0),
+                        PropertyPath("user").append("phones").append("title"),
+                        PropertyPath("user").append("phones").append(1),
+                        PropertyPath("user").append("phones").append(0).append("title"),
                     )
                 ) { path ->
                     val result = path in INPUT

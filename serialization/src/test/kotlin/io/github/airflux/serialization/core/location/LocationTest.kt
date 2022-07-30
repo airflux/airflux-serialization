@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -49,8 +49,8 @@ internal class LocationTest : FreeSpec() {
                     result shouldContainExactly emptyList()
                 }
 
-                "the append() method with the JsPath type parameter" {
-                    val path = JsPath("users").append(0).append("phone")
+                "the append() method with the PropertyPath type parameter" {
+                    val path = PropertyPath("users").append(0).append("phone")
                     val newLocation = location.append(path)
 
                     val result: List<PathElement> = Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->
@@ -119,8 +119,8 @@ internal class LocationTest : FreeSpec() {
                     )
                 }
 
-                "the append() method with the JsPath type parameter" {
-                    val path = JsPath("mobile").append("title")
+                "the append() method with the PropertyPathF type parameter" {
+                    val path = PropertyPath("mobile").append("title")
                     val newLocation = location.append(path)
 
                     val result: List<PathElement> = Location.foldLeft(mutableListOf(), newLocation) { acc, elem ->

@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.core.location
 
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 
 public sealed class Location {
 
@@ -26,7 +26,7 @@ public sealed class Location {
     public fun append(key: String): Location = append(PathElement.Key(key))
     public fun append(idx: Int): Location = append(PathElement.Idx(idx))
     public fun append(element: PathElement): Location = Element(this, element)
-    public fun append(path: JsPath): Location = path.elements.fold(this) { acc, p -> acc.append(p) }
+    public fun append(path: PropertyPath): Location = path.elements.fold(this) { acc, p -> acc.append(p) }
 
     public fun append(elements: Iterable<PathElement>): Location = elements.fold(this) { location, pathElement ->
         location.append(pathElement)

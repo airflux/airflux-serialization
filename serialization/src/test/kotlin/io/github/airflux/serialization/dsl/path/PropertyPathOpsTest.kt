@@ -16,43 +16,43 @@
 
 package io.github.airflux.serialization.dsl.path
 
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PathElement
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class JsPathOpsTest : FreeSpec() {
+internal class PropertyPathOpsTest : FreeSpec() {
 
     init {
 
-        "The JsPath type" - {
+        "The PropertyPath type" - {
 
-            "JsPath#Companion#div(String) function" - {
-                val path = JsPath / "user"
+            "PropertyPath#Companion#div(String) function" - {
+                val path = PropertyPath / "user"
 
                 "should have elements in the order they were passed" {
                     path.elements shouldContainExactly listOf(PathElement.Key("user"))
                 }
             }
 
-            "JsPath#Companion#div(Int) function" - {
-                val path = JsPath / 0
+            "PropertyPath#Companion#div(Int) function" - {
+                val path = PropertyPath / 0
 
                 "should have elements in the order they were passed" {
                     path.elements shouldContainExactly listOf(PathElement.Idx(0))
                 }
             }
 
-            "JsPath#div(String) function" - {
-                val path = JsPath / "user" / "name"
+            "PropertyPath#div(String) function" - {
+                val path = PropertyPath / "user" / "name"
 
                 "should have elements in the order they were passed" {
                     path.elements shouldContainExactly listOf(PathElement.Key("user"), PathElement.Key("name"))
                 }
             }
 
-            "JsPath#div(Int) function" - {
-                val path = JsPath / "phones" / 0
+            "PropertyPath#div(Int) function" - {
+                val path = PropertyPath / "phones" / 0
 
                 "should have elements in the order they were passed" {
                     path.elements shouldContainExactly listOf(PathElement.Key("phones"), PathElement.Idx(0))

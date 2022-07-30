@@ -16,17 +16,17 @@
 
 package io.github.airflux.serialization.dsl.path
 
-import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.path.PropertyPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
 internal class JsPathsOpsTest : FreeSpec() {
 
     companion object {
-        private val pathUser = JsPath("user")
-        private val pathId = JsPath("id")
-        private val pathName = JsPath("name")
+        private val pathUser = PropertyPath("user")
+        private val pathId = PropertyPath("id")
+        private val pathName = PropertyPath("name")
     }
 
     init {
@@ -42,7 +42,7 @@ internal class JsPathsOpsTest : FreeSpec() {
 
             val paths = JsPaths(io.github.airflux.serialization.dsl.path.JsPathsOpsTest.Companion.pathUser)
 
-            "JsPaths#or(JsPath) function" - {
+            "JsPaths#or(PropertyPath) function" - {
                 val updatedPath = paths or io.github.airflux.serialization.dsl.path.JsPathsOpsTest.Companion.pathId
 
                 "should have elements in the order they were passed element" {
