@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
-public fun <T : Any, P : Any> optional(
+public fun <T : Any, P : Any> nonNullable(
     name: String,
-    from: (T) -> P?,
+    from: (T) -> P,
     writer: Writer<P>
-): JsObjectPropertySpec.Optional<T, P> =
-    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer)
+): ObjectPropertySpec.NonNullable<T, P> =
+    ObjectPropertySpec.NonNullable(name = name, from = from, writer = writer)
 
-public infix fun <T : Any, P : Any> JsObjectPropertySpec.Optional<T, P>.filter(
+public infix fun <T : Any, P : Any> ObjectPropertySpec.NonNullable<T, P>.filter(
     predicate: JsPredicate<P>
-): JsObjectPropertySpec.Optional<T, P> =
-    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))
+): ObjectPropertySpec.Optional<T, P> =
+    ObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

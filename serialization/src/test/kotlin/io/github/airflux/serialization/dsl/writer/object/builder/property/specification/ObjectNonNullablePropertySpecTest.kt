@@ -24,7 +24,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectNonNullablePropertySpecTest : FreeSpec() {
+internal class ObjectNonNullablePropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "id"
@@ -36,7 +36,7 @@ internal class JsObjectNonNullablePropertySpecTest : FreeSpec() {
 
     init {
 
-        "The JsObjectPropertySpec#NonNullable" - {
+        "The ObjectPropertySpec#NonNullable type" - {
 
             "when created the instance of a spec of the non-nullable property" - {
                 val from: (String) -> String = { it }

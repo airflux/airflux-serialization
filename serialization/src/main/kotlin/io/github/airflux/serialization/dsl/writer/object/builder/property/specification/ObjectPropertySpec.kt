@@ -18,24 +18,24 @@ package io.github.airflux.serialization.dsl.writer.`object`.builder.property.spe
 
 import io.github.airflux.serialization.core.writer.Writer
 
-public sealed interface JsObjectPropertySpec<T : Any, P : Any> {
+public sealed interface ObjectPropertySpec<T : Any, P : Any> {
     public val name: String
 
     public class NonNullable<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P,
         public val writer: Writer<P>
-    ) : JsObjectPropertySpec<T, P>
+    ) : ObjectPropertySpec<T, P>
 
     public class Optional<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
         public val writer: Writer<P>
-    ) : JsObjectPropertySpec<T, P>
+    ) : ObjectPropertySpec<T, P>
 
     public class Nullable<T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
         public val writer: Writer<P>
-    ) : JsObjectPropertySpec<T, P>
+    ) : ObjectPropertySpec<T, P>
 }

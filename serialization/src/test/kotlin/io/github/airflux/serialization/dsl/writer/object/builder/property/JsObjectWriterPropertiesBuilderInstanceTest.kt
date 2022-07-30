@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
-import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
+import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.inspectors.forOne
 import io.kotest.matchers.collections.shouldContainExactly
@@ -52,7 +52,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
             "when a non-nullable property were added to the builder" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = JsObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
@@ -71,7 +71,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
             "when a optional property were added to the builder" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = JsObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
@@ -90,7 +90,7 @@ internal class JsObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
             "when a nullable property were added to the builder" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = JsObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val properties: JsObjectProperties<String> = JsObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)

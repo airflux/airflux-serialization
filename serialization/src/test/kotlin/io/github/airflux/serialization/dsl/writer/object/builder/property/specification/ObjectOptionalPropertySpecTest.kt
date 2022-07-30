@@ -24,11 +24,11 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsObjectNullablePropertySpecTest : FreeSpec() {
+internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ATTRIBUTE_NAME = "id"
-        private const val ATTRIBUTE_VALUE = "8933c39e-e99f-4a3f-b2a1-ea915d690ded"
+        private const val ATTRIBUTE_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val CONTEXT = WriterContext()
         private val LOCATION = JsLocation.empty
@@ -36,18 +36,18 @@ internal class JsObjectNullablePropertySpecTest : FreeSpec() {
 
     init {
 
-        "The JsObjectPropertySpec#Nullable" - {
+        "The ObjectPropertySpec#Optional type" - {
 
             "when created the instance of a spec of the nullable property" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
 
                 "then the attribute name should equal the passed attribute name" {
                     spec.name shouldBe ATTRIBUTE_NAME
                 }
 
-                "then the value extractor should equal the passed the value extractor" {
+                "then the value extractor should equals the passed the value extractor" {
                     spec.from shouldBe from
                 }
 
@@ -60,10 +60,10 @@ internal class JsObjectNullablePropertySpecTest : FreeSpec() {
             "when the filter was added to the spec" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = optional(name = "id", from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
-                "hen the attribute name should equal the passed attribute name" {
+                "then the attribute name should equal the passed attribute name" {
                     spec.name shouldBe ATTRIBUTE_NAME
                 }
 

@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
-import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.JsObjectPropertySpec
+import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.ObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -42,7 +42,7 @@ internal class JsObjectNullablePropertyTest : FreeSpec() {
             "when created an instance of the nullable property" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = JsObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
                 val property = JsObjectProperty.Optional(spec)
 
                 "then the attribute name should equal the attribute name from the spec" {
@@ -92,6 +92,6 @@ internal class JsObjectNullablePropertyTest : FreeSpec() {
         writer: DummyWriter<P>
     ): JsObjectProperty.Nullable<T, P> =
         JsObjectProperty.Nullable(
-            JsObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+            ObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
         )
 }

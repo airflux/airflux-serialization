@@ -24,10 +24,10 @@ public fun <T : Any, P : Any> nullable(
     name: String,
     from: (T) -> P?,
     writer: Writer<P>
-): JsObjectPropertySpec.Nullable<T, P> =
-    JsObjectPropertySpec.Nullable(name = name, from = from, writer = writer)
+): ObjectPropertySpec.Nullable<T, P> =
+    ObjectPropertySpec.Nullable(name = name, from = from, writer = writer)
 
-public infix fun <T : Any, P : Any> JsObjectPropertySpec.Nullable<T, P>.filter(
+public infix fun <T : Any, P : Any> ObjectPropertySpec.Nullable<T, P>.filter(
     predicate: JsPredicate<P>
-): JsObjectPropertySpec.Optional<T, P> =
-    JsObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))
+): ObjectPropertySpec.Optional<T, P> =
+    ObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))
