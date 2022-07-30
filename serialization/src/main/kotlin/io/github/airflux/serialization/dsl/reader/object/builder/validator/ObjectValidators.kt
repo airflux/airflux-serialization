@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.`object`.builder.validator
 
-public class JsObjectValidators private constructor(items: List<ObjectValidator>) : List<ObjectValidator> by items {
+public class ObjectValidators private constructor(items: List<ObjectValidator>) : List<ObjectValidator> by items {
 
     public companion object {
 
-        private val EMPTY = JsObjectValidators(emptyList())
+        private val EMPTY = ObjectValidators(emptyList())
 
-        internal operator fun invoke(items: List<ObjectValidator>): JsObjectValidators =
-            if (items.isEmpty()) EMPTY else JsObjectValidators(items)
+        internal operator fun invoke(items: List<ObjectValidator>): ObjectValidators =
+            if (items.isEmpty()) EMPTY else ObjectValidators(items)
     }
 }

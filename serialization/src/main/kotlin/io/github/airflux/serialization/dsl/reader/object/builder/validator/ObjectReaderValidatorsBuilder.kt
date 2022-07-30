@@ -32,8 +32,8 @@ internal class ObjectReaderValidatorsBuilderInstance(
         builder.block()
     }
 
-    fun build(properties: JsObjectProperties): JsObjectValidators {
+    fun build(properties: JsObjectProperties): ObjectValidators {
         val builders = builder.build()
-        return JsObjectValidators(builders.map { builder -> builder.build(properties) })
+        return ObjectValidators(builders.map { builder -> builder.build(properties) })
     }
 }

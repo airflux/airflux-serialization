@@ -36,9 +36,9 @@ import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsOb
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectProperty
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.property.JsObjectReaderPropertiesBuilderInstance
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.JsObjectValidators
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectReaderValidatorsBuilderInstance
+import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidators
 
 public fun <T> reader(
     configuration: ObjectReaderConfig = ObjectReaderConfig.DEFAULT,
@@ -65,7 +65,7 @@ public class ObjectReaderBuilder<T> internal constructor(
 
     internal fun build(resultBuilder: ResultBuilder<T>): ObjectReader<T> {
         val properties: JsObjectProperties = propertiesBuilder.build()
-        val validators: JsObjectValidators = validatorsBuilder.build(properties)
+        val validators: ObjectValidators = validatorsBuilder.build(properties)
         return buildObjectReader(validators, properties, resultBuilder)
     }
 }
@@ -82,7 +82,7 @@ public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, JsLocation) -> J
     }
 
 internal fun <T> buildObjectReader(
-    validators: JsObjectValidators,
+    validators: ObjectValidators,
     properties: JsObjectProperties,
     resultBuilder: ResultBuilder<T>
 ): ObjectReader<T> =
