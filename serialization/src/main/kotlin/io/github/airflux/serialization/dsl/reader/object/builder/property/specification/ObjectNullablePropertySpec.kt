@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.`object`.readNullable
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.JsResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.filter
@@ -70,7 +70,7 @@ public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.validation(
     )
 
 public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.filter(
-    predicate: JsPredicate<T>
+    predicate: ReaderPredicate<T>
 ): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
         path = path,

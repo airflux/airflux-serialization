@@ -22,7 +22,7 @@ import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.StringNode
@@ -49,7 +49,7 @@ internal class ReaderOpsTest : FreeSpec() {
                 )
 
                 "when the value satisfies the predicate" - {
-                    val predicate: JsPredicate<String> = DummyReaderPredicate(result = false)
+                    val predicate: ReaderPredicate<String> = DummyReaderPredicate(result = false)
 
                     "then filter should return the null value" {
                         val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
@@ -58,7 +58,7 @@ internal class ReaderOpsTest : FreeSpec() {
                 }
 
                 "when the value does not satisfy the predicate" - {
-                    val predicate: JsPredicate<String> = DummyReaderPredicate(result = true)
+                    val predicate: ReaderPredicate<String> = DummyReaderPredicate(result = true)
 
                     "then filter should return the original value" {
                         val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
@@ -73,7 +73,7 @@ internal class ReaderOpsTest : FreeSpec() {
                 )
 
                 "then filtering does not execute and the original result should be returned" {
-                    val predicate: JsPredicate<String> = DummyReaderPredicate(result = false)
+                    val predicate: ReaderPredicate<String> = DummyReaderPredicate(result = false)
                     val validated = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
                     validated shouldBe JsResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 }

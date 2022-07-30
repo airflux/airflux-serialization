@@ -20,21 +20,21 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 
 @Suppress("unused")
-public fun interface JsPredicate<T> {
+public fun interface ReaderPredicate<T> {
 
     public fun test(context: ReaderContext, location: Location, value: T): Boolean
 
-    public infix fun or(other: JsPredicate<T>): JsPredicate<T> {
+    public infix fun or(other: ReaderPredicate<T>): ReaderPredicate<T> {
         val self = this
-        return JsPredicate { context, location, value ->
+        return ReaderPredicate { context, location, value ->
             val result = self.test(context, location, value)
             if (result) result else other.test(context, location, value)
         }
     }
 
-    public infix fun and(other: JsPredicate<T>): JsPredicate<T> {
+    public infix fun and(other: ReaderPredicate<T>): ReaderPredicate<T> {
         val self = this
-        return JsPredicate { context, location, value ->
+        return ReaderPredicate { context, location, value ->
             val result = self.test(context, location, value)
             if (result) other.test(context, location, value) else result
         }

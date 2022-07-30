@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
@@ -35,7 +35,7 @@ internal class JsResultOpsTest : FreeSpec() {
     init {
 
         "The extension-function the filter" - {
-            val isNotBlank = JsPredicate<String> { _, _, value -> value.isNotBlank() }
+            val isNotBlank = ReaderPredicate<String> { _, _, value -> value.isNotBlank() }
 
             "when result is success" - {
 

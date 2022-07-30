@@ -18,10 +18,10 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T> JsResult<T?>.filter(context: ReaderContext, predicate: JsPredicate<T>): JsResult<T?> =
+public fun <T> JsResult<T?>.filter(context: ReaderContext, predicate: ReaderPredicate<T>): JsResult<T?> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { result ->

@@ -22,7 +22,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class JsPredicateOrCombinatorTest {
+internal class ReaderPredicateOrCombinatorTest {
 
     companion object {
         private val CONTEXT = ReaderContext()
@@ -30,8 +30,8 @@ internal class JsPredicateOrCombinatorTest {
         private const val MIN_VALUE = 10
         private const val MAX_VALUE = 20
 
-        private val leftFilter = JsPredicate<Int> { _, _, value -> value < MIN_VALUE }
-        private val rightFilter = JsPredicate<Int> { _, _, value -> value > MAX_VALUE }
+        private val leftFilter = ReaderPredicate<Int> { _, _, value -> value < MIN_VALUE }
+        private val rightFilter = ReaderPredicate<Int> { _, _, value -> value > MAX_VALUE }
         private val composedFilter = leftFilter or rightFilter
     }
 

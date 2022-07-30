@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.JsResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.recovery
@@ -62,7 +62,7 @@ public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { contex
         }
 }
 
-public infix fun <T> Reader<T?>.filter(predicate: JsPredicate<T>): Reader<T?> =
+public infix fun <T> Reader<T?>.filter(predicate: ReaderPredicate<T>): Reader<T?> =
     Reader { context, location, input ->
         this@filter.read(context, location, input)
             .filter(context, predicate)

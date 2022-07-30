@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.`object`.readNullable
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -78,7 +78,7 @@ public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.validation(
     )
 
 public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.filter(
-    predicate: JsPredicate<T>
+    predicate: ReaderPredicate<T>
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = path,
