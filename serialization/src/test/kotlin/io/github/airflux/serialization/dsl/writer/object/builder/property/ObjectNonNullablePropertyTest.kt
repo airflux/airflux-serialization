@@ -29,8 +29,8 @@ import io.kotest.matchers.shouldBe
 internal class ObjectNonNullablePropertyTest : FreeSpec() {
 
     companion object {
-        private const val ATTRIBUTE_NAME = "id"
-        private const val ATTRIBUTE_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
+        private const val PROPERTY_NAME = "id"
+        private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
         private val LOCATION = Location.empty
     }
@@ -42,10 +42,10 @@ internal class ObjectNonNullablePropertyTest : FreeSpec() {
             "when created an instance of the non-nullable property" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.NonNullable(name = PROPERTY_NAME, from = from, writer = writer)
                 val property = ObjectProperty.NonNullable(spec)
 
-                "then the attribute name should equal the attribute name from the spec" {
+                "then the property name should equal the property name from the spec" {
                     property.name shouldBe spec.name
                 }
             }
@@ -58,7 +58,7 @@ internal class ObjectNonNullablePropertyTest : FreeSpec() {
                     val property = createProperty(from = from, writer = writer)
 
                     "then the method write should return the null value" {
-                        val result = property.write(WriterContext(), LOCATION, ATTRIBUTE_VALUE)
+                        val result = property.write(WriterContext(), LOCATION, PROPERTY_VALUE)
                         result.shouldBeNull()
                     }
                 }
@@ -68,8 +68,8 @@ internal class ObjectNonNullablePropertyTest : FreeSpec() {
                     val property = createProperty(from = from, writer = writer)
 
                     "then the method write should return the not null value" {
-                        val result = property.write(WriterContext(), LOCATION, ATTRIBUTE_VALUE)
-                        result shouldBe StringNode(ATTRIBUTE_VALUE)
+                        val result = property.write(WriterContext(), LOCATION, PROPERTY_VALUE)
+                        result shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }
@@ -81,6 +81,6 @@ internal class ObjectNonNullablePropertyTest : FreeSpec() {
         writer: Writer<P>
     ): ObjectProperty.NonNullable<T, P> =
         ObjectProperty.NonNullable(
-            ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+            ObjectPropertySpec.NonNullable(name = PROPERTY_NAME, from = from, writer = writer)
         )
 }

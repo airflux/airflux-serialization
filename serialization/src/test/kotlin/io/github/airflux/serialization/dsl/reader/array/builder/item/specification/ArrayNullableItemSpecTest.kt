@@ -65,7 +65,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                     "when the reader has successfully read" - {
 
-                        "if the attribute value is not the null type" - {
+                        "if the property value is not the null type" - {
                             val input = StringNode(ID_VALUE_AS_UUID)
                             val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -75,7 +75,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                             }
                         }
 
-                        "if the attribute value is the null type" - {
+                        "if the property value is the null type" - {
                             val input = NullNode
                             val result = spec.reader.read(CONTEXT, LOCATION, input)
 

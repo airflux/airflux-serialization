@@ -59,16 +59,16 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
 
         "The ObjectPropertySpec#Defaultable type" - {
 
-            "when creating the instance by a attribute name" - {
+            "when creating the instance by a property name" - {
                 val spec = required(name = "id", reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(PropertyPath("id"))
                 }
 
-                "when the reader has read an attribute named id" - {
+                "when the reader has read a property named id" - {
 
-                    "if the attribute value is not the null type" - {
+                    "if the property value is not the null type" - {
                         val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                         val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -79,7 +79,7 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the attribute does not founded" - {
+                "when the property does not founded" - {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -118,9 +118,9 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
                     spec.path.items shouldContainExactly listOf(path)
                 }
 
-                "when the reader has read an attribute named id" - {
+                "when the reader has read a property named id" - {
 
-                    "if the attribute value is not the null type" - {
+                    "if the property value is not the null type" - {
                         val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                         val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -131,7 +131,7 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the attribute does not founded" - {
+                "when the property does not founded" - {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -171,9 +171,9 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
                     spec.path.items shouldContainExactly listOf(idPath, identifierPath)
                 }
 
-                "when the reader has read an attribute named id" - {
+                "when the reader has read a property named id" - {
 
-                    "if the attribute value is not the null type" - {
+                    "if the property value is not the null type" - {
                         val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                         val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -184,9 +184,9 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the reader has read an attribute named identifier" - {
+                "when the reader has read a property named identifier" - {
 
-                    "if the attribute value is not the null type" - {
+                    "if the property value is not the null type" - {
                         val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
                         val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -197,7 +197,7 @@ internal class ObjectRequiredPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the attribute does not founded" - {
+                "when the property does not founded" - {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 

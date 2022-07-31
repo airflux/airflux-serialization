@@ -45,7 +45,7 @@ import io.kotest.matchers.shouldBe
 internal class ObjectReaderBuilderTest : FreeSpec() {
 
     companion object {
-        private const val ATTRIBUTE_NAME = "name"
+        private const val PROPERTY_NAME = "name"
         private const val USER_NAME = "user"
         private const val DEFAULT_VALUE = "none"
 
@@ -75,7 +75,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "then should return successful value" {
-                    val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
+                    val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
                     val result = reader.read(context = CONTEXT, location = LOCATION, input)
                     result as ReaderResult.Success
                     result.value shouldBe DTO(name = USER_NAME)
@@ -127,7 +127,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
+                            val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
@@ -153,12 +153,12 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
+                            val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    location = LOCATION.append(PROPERTY_NAME),
                                     error = JsonErrors.PathMissing
                                 )
                             )
@@ -184,13 +184,13 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "then all error should be returns" {
-                        val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
+                        val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
                         val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append(ATTRIBUTE_NAME),
+                                location = LOCATION.append(PROPERTY_NAME),
                                 error = JsonErrors.PathMissing
                             )
                         )
@@ -252,12 +252,12 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
             }
 
             "the StructNode#read extension-function" - {
-                val input = StructNode(ATTRIBUTE_NAME to StringNode(USER_NAME))
+                val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
                     val property: ObjectProperty = ObjectProperty.Required(
                         required(
-                            name = ATTRIBUTE_NAME,
+                            name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME)
                         )
                     )
@@ -272,7 +272,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 "when property is the defaultable" - {
                     val property: ObjectProperty = ObjectProperty.Defaultable(
                         defaultable(
-                            name = ATTRIBUTE_NAME,
+                            name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
                             default = { DEFAULT_VALUE }
                         )
@@ -288,7 +288,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 "when property is the optional" - {
                     val property: ObjectProperty = ObjectProperty.Optional(
                         optional(
-                            name = ATTRIBUTE_NAME,
+                            name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME)
                         )
                     )
@@ -303,7 +303,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 "when property is the optional with default" - {
                     val property: ObjectProperty = ObjectProperty.OptionalWithDefault(
                         optionalWithDefault(
-                            name = ATTRIBUTE_NAME,
+                            name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
                             default = { DEFAULT_VALUE }
                         )
@@ -319,7 +319,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 "when property is the nullable" - {
                     val property: ObjectProperty = ObjectProperty.Nullable(
                         nullable(
-                            name = ATTRIBUTE_NAME,
+                            name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME)
                         )
                     )
@@ -334,7 +334,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 "when property is the nullable with default" - {
                     val property: ObjectProperty = ObjectProperty.NullableWithDefault(
                         nullableWithDefault(
-                            name = ATTRIBUTE_NAME,
+                            name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
                             default = { DEFAULT_VALUE }
                         )
@@ -350,15 +350,15 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
         }
     }
 
-    fun <T : Any> propertySpec(value: T) = required(name = ATTRIBUTE_NAME, reader = createReader(value = value))
+    fun <T : Any> propertySpec(value: T) = required(name = PROPERTY_NAME, reader = createReader(value = value))
 
     fun <T : Any> propertySpec(error: ReaderResult.Error) = required(
-        name = ATTRIBUTE_NAME,
-        reader = DummyReader<T>(result = ReaderResult.Failure(location = LOCATION.append(ATTRIBUTE_NAME), error = error))
+        name = PROPERTY_NAME,
+        reader = DummyReader<T>(result = ReaderResult.Failure(location = LOCATION.append(PROPERTY_NAME), error = error))
     )
 
     fun <T : Any> createReader(value: T): DummyReader<T> =
-        DummyReader(result = ReaderResult.Success(location = LOCATION.append(ATTRIBUTE_NAME), value = value))
+        DummyReader(result = ReaderResult.Success(location = LOCATION.append(PROPERTY_NAME), value = value))
 
     internal data class DTO(val name: String)
 }

@@ -118,25 +118,25 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
 
                 "write the value as the object" - {
 
-                    "with attribute as the null value" {
+                    "with property as the null value" {
                         val json = StructNode("id" to NullNode)
                         val value = json.serialization()
                         value shouldBe """{"id":null}"""
                     }
 
-                    "with attribute as a string value" {
+                    "with property as a string value" {
                         val json = StructNode("name" to StringNode("user-1"))
                         val value = json.serialization()
                         value shouldBe """{"name":"user-1"}"""
                     }
 
-                    "with attribute as a number value" {
+                    "with property as a number value" {
                         val json = StructNode("id" to NumberNode.valueOf(123))
                         val value = json.serialization()
                         value shouldBe """{"id":123}"""
                     }
 
-                    "with attribute as a boolean value" - {
+                    "with property as a boolean value" - {
 
                         "true" {
                             val json = StructNode("isActive" to BooleanNode.True)

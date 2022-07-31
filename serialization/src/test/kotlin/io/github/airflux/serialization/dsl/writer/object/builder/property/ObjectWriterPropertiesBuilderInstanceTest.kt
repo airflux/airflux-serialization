@@ -30,8 +30,8 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
     companion object {
-        private const val ATTRIBUTE_NAME = "attribute-id"
-        private const val ATTRIBUTE_VALUE = "f12720c8-a441-4b18-9783-b8bc7b31607c"
+        private const val PROPERTY_NAME = "id"
+        private const val PROPERTY_VALUE = "f12720c8-a441-4b18-9783-b8bc7b31607c"
 
         private val CONTEXT = WriterContext()
         private val LOCATION = Location.empty
@@ -52,7 +52,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
             "when a non-nullable property were added to the builder" - {
                 val from: (String) -> String = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = ObjectPropertySpec.NonNullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.NonNullable(name = PROPERTY_NAME, from = from, writer = writer)
                 val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
@@ -63,7 +63,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                     properties.forOne {
                         it.shouldBeInstanceOf<ObjectProperty.NonNullable<*, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
+                        it.write(CONTEXT, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }
@@ -71,7 +71,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
             "when a optional property were added to the builder" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = ObjectPropertySpec.Optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.Optional(name = PROPERTY_NAME, from = from, writer = writer)
                 val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
@@ -82,7 +82,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                     properties.forOne {
                         it.shouldBeInstanceOf<ObjectProperty.Optional<*, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
+                        it.write(CONTEXT, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }
@@ -90,7 +90,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
             "when a nullable property were added to the builder" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = ObjectPropertySpec.Nullable(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = ObjectPropertySpec.Nullable(name = PROPERTY_NAME, from = from, writer = writer)
                 val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
                     .apply {
                         property(spec)
@@ -101,7 +101,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
                     properties.forOne {
                         it.shouldBeInstanceOf<ObjectProperty.Nullable<*, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE) shouldBe StringNode(ATTRIBUTE_VALUE)
+                        it.write(CONTEXT, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }

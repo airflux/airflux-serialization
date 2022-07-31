@@ -27,8 +27,8 @@ import io.kotest.matchers.shouldBe
 internal class ObjectOptionalPropertySpecTest : FreeSpec() {
 
     companion object {
-        private const val ATTRIBUTE_NAME = "id"
-        private const val ATTRIBUTE_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
+        private const val PROPERTY_NAME = "id"
+        private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val CONTEXT = WriterContext()
         private val LOCATION = Location.empty
@@ -41,19 +41,19 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
             "when created the instance of a spec of the nullable property" - {
                 val from: (String) -> String? = { it }
                 val writer = DummyWriter<String> { StringNode(it) }
-                val spec = optional(name = ATTRIBUTE_NAME, from = from, writer = writer)
+                val spec = optional(name = PROPERTY_NAME, from = from, writer = writer)
 
-                "then the attribute name should equal the passed attribute name" {
-                    spec.name shouldBe ATTRIBUTE_NAME
+                "then the property name should equal the passed property name" {
+                    spec.name shouldBe PROPERTY_NAME
                 }
 
                 "then the value extractor should equals the passed the value extractor" {
                     spec.from shouldBe from
                 }
 
-                "then the initialized writer should return a attribute value" {
-                    val result = spec.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
-                    result shouldBe StringNode(ATTRIBUTE_VALUE)
+                "then the initialized writer should return a property value" {
+                    val result = spec.writer.write(CONTEXT, LOCATION, PROPERTY_VALUE)
+                    result shouldBe StringNode(PROPERTY_VALUE)
                 }
             }
 
@@ -63,8 +63,8 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 val spec = optional(name = "id", from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
-                "then the attribute name should equal the passed attribute name" {
-                    spec.name shouldBe ATTRIBUTE_NAME
+                "then the property name should equal the passed property name" {
+                    spec.name shouldBe PROPERTY_NAME
                 }
 
                 "then the value extractor should equals the passed the value extractor" {
@@ -72,10 +72,10 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, ATTRIBUTE_VALUE)
+                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, PROPERTY_VALUE)
 
-                    "then a non-null attribute value should be returned" {
-                        result shouldBe StringNode(ATTRIBUTE_VALUE)
+                    "then a non-null property value should be returned" {
+                        result shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
 

@@ -36,7 +36,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 internal class ArrayReaderBuilderTest : FreeSpec() {
 
     companion object {
-        private const val ATTRIBUTE_NAME = "items"
+        private const val PROPERTY_NAME = "items"
         private const val FIRST_ITEM = "first"
         private const val SECOND_ITEM = "second"
         private const val USER_NAME = "user"
@@ -107,7 +107,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = ReaderResult.Failure(
-                                        location = LOCATION.append(ATTRIBUTE_NAME),
+                                        location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
                                     )
                                 )
@@ -121,7 +121,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    location = LOCATION.append(PROPERTY_NAME),
                                     error = MinItemsError
                                 )
                             )
@@ -145,7 +145,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(ATTRIBUTE_NAME).append(0),
+                                    location = LOCATION.append(PROPERTY_NAME).append(0),
                                     error = JsonErrors.PathMissing
                                 )
                             )
@@ -162,7 +162,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = ReaderResult.Failure(
-                                        location = LOCATION.append(ATTRIBUTE_NAME),
+                                        location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
                                     )
                                 )
@@ -176,7 +176,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    location = LOCATION.append(PROPERTY_NAME),
                                     error = MinItemsError
                                 )
                             )
@@ -190,7 +190,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
                                     result = ReaderResult.Failure(
-                                        location = LOCATION.append(ATTRIBUTE_NAME),
+                                        location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
                                     )
                                 )
@@ -204,11 +204,11 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(ATTRIBUTE_NAME),
+                                    location = LOCATION.append(PROPERTY_NAME),
                                     error = MinItemsError
                                 ),
                                 ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(ATTRIBUTE_NAME).append(0),
+                                    location = LOCATION.append(PROPERTY_NAME).append(0),
                                     error = JsonErrors.PathMissing
                                 )
                             )
@@ -227,7 +227,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         reader = DummyReader<T>(
             result = ReaderResult.Failure(
                 location = LOCATION.append(
-                    ATTRIBUTE_NAME
+                    PROPERTY_NAME
                 ).append(0), error = error
             )
         )

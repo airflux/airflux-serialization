@@ -60,14 +60,14 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
 
         "The ObjectPropertySpec#NullableWithDefault type" - {
 
-            "when creating the instance by a attribute name" - {
+            "when creating the instance by a property name" - {
                 val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(PropertyPath("id"))
                 }
 
-                "when the reader has read an attribute named id" - {
+                "when the reader has read a property named id" - {
                     val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -77,7 +77,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the attribute does not founded" - {
+                "when the property does not founded" - {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -114,7 +114,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     spec.path.items shouldContainExactly listOf(path)
                 }
 
-                "when the reader has read an attribute named id" - {
+                "when the reader has read a property named id" - {
                     val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -124,7 +124,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the attribute does not founded" - {
+                "when the property does not founded" - {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -166,7 +166,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     spec.path.items shouldContainExactly listOf(idPath, identifierPath)
                 }
 
-                "when the reader has read an attribute named id" - {
+                "when the reader has read a property named id" - {
                     val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -176,7 +176,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the reader has read an attribute named identifier" - {
+                "when the reader has read a property named identifier" - {
                     val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
@@ -186,7 +186,7 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when the attribute does not founded" - {
+                "when the property does not founded" - {
                     val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 

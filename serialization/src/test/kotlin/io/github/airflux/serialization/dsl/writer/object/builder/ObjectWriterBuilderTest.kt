@@ -31,8 +31,8 @@ import io.kotest.matchers.shouldBe
 internal class ObjectWriterBuilderTest : FreeSpec() {
 
     companion object {
-        private const val ATTRIBUTE_NAME = "name"
-        private const val ATTRIBUTE_VALUE = "user"
+        private const val PROPERTY_NAME = "name"
+        private const val PROPERTY_VALUE = "user"
 
         private val CONTEXT = WriterContext()
         private val LOCATION = Location.empty
@@ -42,28 +42,28 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
 
         "The ObjectWriterBuilder type" - {
 
-            "when have some attributes for writing to an object" - {
+            "when have some propertys for writing to an object" - {
                 val from: (String) -> String = { it }
                 val writer = writer {
-                    property(nonNullable(name = ATTRIBUTE_NAME, from = from, writer = DummyWriter { StringNode(it) }))
+                    property(nonNullable(name = PROPERTY_NAME, from = from, writer = DummyWriter { StringNode(it) }))
                 }
 
-                "then should return the object with some attributes" {
-                    val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
-                    result shouldBe StructNode(ATTRIBUTE_NAME to StringNode(ATTRIBUTE_VALUE))
+                "then should return the object with some propertys" {
+                    val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
+                    result shouldBe StructNode(PROPERTY_NAME to StringNode(PROPERTY_VALUE))
                 }
             }
 
-            "when no attributes for writing to an object" - {
+            "when no propertys for writing to an object" - {
                 val from: (String) -> String? = { null }
 
                 "when the action of the writer was not set" - {
                     val writer = writer {
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
+                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
                     "then should return the empty value of the StructNode type" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
                         result shouldBe StructNode()
                     }
                 }
@@ -71,11 +71,11 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 "when the action of the writer was set to return empty value" - {
                     val writer = writer {
                         actionIfEmpty = returnEmptyValue()
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
+                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
                     "then should return the empty value of the StructNode type" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
                         result shouldBe StructNode()
                     }
                 }
@@ -83,11 +83,11 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 "when the action of the writer was set to return nothing" - {
                     val writer = writer {
                         actionIfEmpty = returnNothing()
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
+                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
                     "then should return the null value" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
                         result.shouldBeNull()
                     }
                 }
@@ -95,11 +95,11 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 "when the action of the writer was set to return null value" - {
                     val writer = writer {
                         actionIfEmpty = returnNullValue()
-                        property(optional(name = ATTRIBUTE_NAME, from = from, DummyWriter { StringNode(it) }))
+                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
                     "then should return the NullNode value" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = ATTRIBUTE_VALUE)
+                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
                         result shouldBe NullNode
                     }
                 }
