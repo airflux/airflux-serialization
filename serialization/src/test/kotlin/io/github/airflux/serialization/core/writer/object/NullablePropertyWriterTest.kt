@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class NullableFieldWriterTest : FreeSpec() {
+internal class NullablePropertyWriterTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = WriterContext()
