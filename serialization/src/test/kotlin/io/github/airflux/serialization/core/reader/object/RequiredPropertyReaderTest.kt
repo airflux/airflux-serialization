@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class RequiredFieldReaderTest : FreeSpec() {
+internal class RequiredPropertyReaderTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))

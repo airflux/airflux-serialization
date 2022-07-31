@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.context.error.PathMissingErro
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
- * Reads required field.
+ * Reads required property.
  *
  * - If a node is found ([from] is [Lookup.Defined]) then applies [reader]
  * - If a node is not found ([from] is [Lookup.Undefined]) then an error is returned
