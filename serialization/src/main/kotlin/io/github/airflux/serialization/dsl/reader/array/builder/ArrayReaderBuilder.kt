@@ -58,7 +58,7 @@ public class ArrayReaderBuilder<T> internal constructor(
 
     internal fun build(resultBuilder: ResultBuilder<T>): ArrayReader<T> {
         val validators = validatorsBuilder.build()
-        return buildObjectReader(validators, resultBuilder)
+        return buildArrayReader(validators, resultBuilder)
     }
 }
 
@@ -93,7 +93,7 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpe
     }
 }
 
-internal fun <T> buildObjectReader(
+internal fun <T> buildArrayReader(
     validators: ArrayValidators,
     resultBuilder: ResultBuilder<T>
 ): ArrayReader<T> =
