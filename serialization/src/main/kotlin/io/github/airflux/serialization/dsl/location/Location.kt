@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.result
+package io.github.airflux.serialization.dsl.location
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
