@@ -26,7 +26,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class OptionalFieldWriterTest : FreeSpec() {
+internal class OptionalPropertyWriterTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = WriterContext()
