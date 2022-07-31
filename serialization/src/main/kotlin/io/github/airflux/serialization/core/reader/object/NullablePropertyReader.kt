@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 
 /**
- * Reads nullable field or return default if a field is not found.
+ * Reads nullable property or return default if a property is not found.
  *
  * - If a node is found with a value no 'null' ([from] is [Lookup.Defined]) then applies [reader]
  * - If a node is found with a value 'null' ([from] is [Lookup.Defined]) then returns 'null'
