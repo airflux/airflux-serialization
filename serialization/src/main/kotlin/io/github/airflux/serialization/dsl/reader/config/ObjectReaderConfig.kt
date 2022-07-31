@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.config
 
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidatorBuilders
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilders
 
 public fun objectReaderConfig(block: ObjectReaderConfig.Builder.() -> Unit): ObjectReaderConfig =
     ObjectReaderConfig.Builder().apply(block).build()

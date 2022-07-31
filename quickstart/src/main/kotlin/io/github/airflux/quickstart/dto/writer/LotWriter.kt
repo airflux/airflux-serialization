@@ -6,8 +6,8 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.dsl.writer.array.builder.arrayWriter
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nullable
-import io.github.airflux.serialization.dsl.writer.`object`.builder.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.`object`.builder.writer
+import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
+import io.github.airflux.serialization.dsl.writer.struct.builder.writer
 import io.github.airflux.serialization.std.writer.StringWriter
 
 val LotStatus = Writer<LotStatus> { _, _, value ->

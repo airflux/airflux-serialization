@@ -18,15 +18,15 @@ import io.github.airflux.serialization.std.validator.comparable.LtComparableVali
 import io.github.airflux.serialization.std.validator.comparable.MaxComparableValidator
 import io.github.airflux.serialization.std.validator.comparable.MinComparableValidator
 import io.github.airflux.serialization.std.validator.comparable.NeComparableValidator
-import io.github.airflux.serialization.std.validator.`object`.AdditionalPropertiesObjectValidator
-import io.github.airflux.serialization.std.validator.`object`.IsNotEmptyObjectValidator
-import io.github.airflux.serialization.std.validator.`object`.MaxPropertiesObjectValidator
-import io.github.airflux.serialization.std.validator.`object`.MinPropertiesObjectValidator
 import io.github.airflux.serialization.std.validator.string.IsAStringValidator
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
 import io.github.airflux.serialization.std.validator.string.MaxLengthStringValidator
 import io.github.airflux.serialization.std.validator.string.MinLengthStringValidator
 import io.github.airflux.serialization.std.validator.string.PatternStringValidator
+import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesObjectValidator
+import io.github.airflux.serialization.std.validator.struct.IsNotEmptyObjectValidator
+import io.github.airflux.serialization.std.validator.struct.MaxPropertiesObjectValidator
+import io.github.airflux.serialization.std.validator.struct.MinPropertiesObjectValidator
 
 val DefaultReaderContext = readerContext {
     failFast = false

@@ -20,9 +20,9 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.ObjectProperties
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidator
-import io.github.airflux.serialization.dsl.reader.`object`.builder.validator.ObjectValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
 
 internal class DummyObjectValidatorBuilder(
     override val key: ObjectValidatorBuilder.Key<*>,

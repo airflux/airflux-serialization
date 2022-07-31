@@ -2,12 +2,12 @@ package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.dsl.reader.`object`.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.`object`.builder.reader
-import io.github.airflux.serialization.dsl.reader.`object`.builder.returns
-import io.github.airflux.serialization.std.validator.`object`.StdObjectValidator.additionalProperties
-import io.github.airflux.serialization.std.validator.`object`.StdObjectValidator.maxProperties
-import io.github.airflux.serialization.std.validator.`object`.StdObjectValidator.minProperties
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
+import io.github.airflux.serialization.dsl.reader.struct.builder.reader
+import io.github.airflux.serialization.dsl.reader.struct.builder.returns
+import io.github.airflux.serialization.std.validator.struct.StdObjectValidator.additionalProperties
+import io.github.airflux.serialization.std.validator.struct.StdObjectValidator.maxProperties
+import io.github.airflux.serialization.std.validator.struct.StdObjectValidator.minProperties
 
 val ValueReader = reader<Value>(ObjectReaderConfiguration) {
     validation {

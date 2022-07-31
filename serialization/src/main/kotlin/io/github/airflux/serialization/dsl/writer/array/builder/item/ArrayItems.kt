@@ -20,9 +20,9 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
-import io.github.airflux.serialization.core.writer.`object`.writeNonNullable
-import io.github.airflux.serialization.core.writer.`object`.writeNullable
-import io.github.airflux.serialization.core.writer.`object`.writeOptional
+import io.github.airflux.serialization.core.writer.struct.writeNonNullable
+import io.github.airflux.serialization.core.writer.struct.writeNullable
+import io.github.airflux.serialization.core.writer.struct.writeOptional
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 
 public sealed class ArrayItems<T> {
