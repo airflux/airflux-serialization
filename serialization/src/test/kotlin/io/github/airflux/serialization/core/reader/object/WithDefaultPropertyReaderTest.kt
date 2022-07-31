@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class WithDefaultFieldReaderTest : FreeSpec() {
+internal class WithDefaultPropertyReaderTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
