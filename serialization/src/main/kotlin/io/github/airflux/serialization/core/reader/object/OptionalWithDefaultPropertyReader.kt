@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
- * Reads optional field or return default if a field is not found.
+ * Reads optional property or return default if a property is not found.
  *
  * - If a node is found ([from] is [Lookup.Defined]) then applies [reader]
  * - If a node is not found ([from] is [Lookup.Undefined]) then returns [defaultValue]

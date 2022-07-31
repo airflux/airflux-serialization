@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
+internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
@@ -47,7 +47,7 @@ internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
 
                 "then should return the result of applying the reader" {
                     val result: ReaderResult<String?> =
-                        readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
+                        readOptional(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
 
                     result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                 }
@@ -58,7 +58,7 @@ internal class OptionalWithDefaultFieldReaderTest : FreeSpec() {
 
                 "then should return the default value" {
                     val result: ReaderResult<String?> =
-                        readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
+                        readOptional(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
 
                     result shouldBe ReaderResult.Success(location = LOCATION, value = DEFAULT_VALUE)
                 }
