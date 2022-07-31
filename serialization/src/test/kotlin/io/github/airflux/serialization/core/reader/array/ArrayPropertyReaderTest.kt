@@ -37,7 +37,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class ArrayFieldReaderTest : FreeSpec() {
+internal class ArrayPropertyReaderTest : FreeSpec() {
 
     companion object {
         private const val FIRST_PHONE_VALUE = "123"
