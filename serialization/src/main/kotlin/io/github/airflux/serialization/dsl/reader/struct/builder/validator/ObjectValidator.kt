@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.struct.builder.validator
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 
 public fun interface ObjectValidator {
@@ -28,7 +28,7 @@ public fun interface ObjectValidator {
         context: ReaderContext,
         location: Location,
         properties: ObjectProperties,
-        input: StructNode
+        input: ObjectNode
     ): ReaderResult.Failure?
 
     /*

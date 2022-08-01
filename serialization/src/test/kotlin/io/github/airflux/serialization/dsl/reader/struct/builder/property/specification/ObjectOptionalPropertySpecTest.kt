@@ -25,8 +25,8 @@ import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErro
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.reader.IntReader
 import io.github.airflux.serialization.std.reader.StringReader
@@ -66,7 +66,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named id" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -76,7 +76,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then the null value should be returned" {
@@ -86,7 +86,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val input = StructNode("id" to NumberNode.valueOf(10))
+                    val input = ObjectNode("id" to NumberNode.valueOf(10))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
@@ -113,7 +113,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named id" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -123,7 +123,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then the null value should be returned" {
@@ -133,7 +133,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val input = StructNode("id" to NumberNode.valueOf(10))
+                    val input = ObjectNode("id" to NumberNode.valueOf(10))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
@@ -161,7 +161,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named id" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -171,7 +171,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named identifier" - {
-                    val input = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("identifier" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -181,7 +181,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val input = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then the null value should be returned" {
@@ -191,7 +191,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val input = StructNode("id" to NumberNode.valueOf(10))
+                    val input = ObjectNode("id" to NumberNode.valueOf(10))
                     val result = spec.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned a read error" {
@@ -313,7 +313,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has successfully read" - {
-                    val input = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned" {
@@ -324,7 +324,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has failure read" - {
-                    val input = StructNode("id" to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
+                    val input = ObjectNode("id" to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then a value should be returned from the alternative reader" {
@@ -334,7 +334,7 @@ internal class ObjectOptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the alternative reader has failure read" - {
-                    val input = StructNode("id" to BooleanNode.True)
+                    val input = ObjectNode("id" to BooleanNode.True)
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
 
                     "then should be returned all read errors" {

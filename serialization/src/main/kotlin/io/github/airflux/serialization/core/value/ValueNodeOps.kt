@@ -54,9 +54,9 @@ public fun <T : Number> ValueNode.readAsNumber(
 public inline fun <T> ValueNode.readAsObject(
     context: ReaderContext,
     location: Location,
-    reader: (ReaderContext, Location, StructNode) -> ReaderResult<T>
+    reader: (ReaderContext, Location, ObjectNode) -> ReaderResult<T>
 ): ReaderResult<T> =
-    if (this is StructNode)
+    if (this is ObjectNode)
         reader(context, location, this)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
@@ -79,7 +79,7 @@ internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
     tailrec fun ValueNode.getOrNull(path: PropertyPath, idxElement: Int): ValueNode? {
         if (idxElement == path.elements.size) return this
         return when (val element = path.elements[idxElement]) {
-            is PropertyPath.Element.Key -> if (this is StructNode)
+            is PropertyPath.Element.Key -> if (this is ObjectNode)
                 this[element]?.getOrNull(path, idxElement + 1)
             else
                 null
@@ -94,4 +94,4 @@ internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
     return this.getOrNull(path, 0)
 }
 
-internal operator fun StructNode.contains(path: PropertyPath): Boolean = this.getOrNull(path) != null
+internal operator fun ObjectNode.contains(path: PropertyPath): Boolean = this.getOrNull(path) != null

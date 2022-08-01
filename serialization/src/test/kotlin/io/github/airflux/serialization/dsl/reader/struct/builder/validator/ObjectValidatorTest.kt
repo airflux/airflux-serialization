@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.kotest.core.spec.style.FreeSpec
@@ -34,7 +34,7 @@ internal class ObjectValidatorTest : FreeSpec() {
     companion object {
         private val CONTEXT = ReaderContext()
         private val LOCATION = Location.empty
-        private val VALUE = StructNode()
+        private val VALUE = ObjectNode()
         private val PROPERTIES = ObjectProperties(emptyList())
     }
 

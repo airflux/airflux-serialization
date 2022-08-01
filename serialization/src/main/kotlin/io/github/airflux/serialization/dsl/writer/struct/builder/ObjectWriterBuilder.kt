@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.writer.struct.builder
 
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.ObjectWriter
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -68,10 +68,10 @@ internal fun <T : Any> buildObjectWriter(
                 }
             }
         if (items.isNotEmpty())
-            StructNode(items)
+            ObjectNode(items)
         else
             when (actionIfEmpty(context, location)) {
-                RETURN_EMPTY_VALUE -> StructNode()
+                RETURN_EMPTY_VALUE -> ObjectNode()
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> NullNode
             }

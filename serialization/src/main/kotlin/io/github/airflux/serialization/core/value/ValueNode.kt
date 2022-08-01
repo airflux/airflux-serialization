@@ -113,15 +113,15 @@ public class ArrayNode<T : ValueNode>(private val items: List<T> = emptyList()) 
     override fun hashCode(): Int = items.hashCode()
 }
 
-public class StructNode(
+public class ObjectNode(
     private val properties: Map<String, ValueNode> = emptyMap()
 ) : ValueNode(),
     Iterable<Map.Entry<String, ValueNode>> {
 
     public companion object {
 
-        public operator fun invoke(vararg properties: Pair<String, ValueNode>): StructNode =
-            StructNode(properties.toMap())
+        public operator fun invoke(vararg properties: Pair<String, ValueNode>): ObjectNode =
+            ObjectNode(properties.toMap())
     }
 
     override val type: Type = Type.OBJECT
@@ -141,7 +141,7 @@ public class StructNode(
         .joinToString(prefix = "{", postfix = "}")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is StructNode && this.properties.keys == other.properties.keys)
+        this === other || (other is ObjectNode && this.properties.keys == other.properties.keys)
 
     override fun hashCode(): Int = properties.keys.hashCode()
 }

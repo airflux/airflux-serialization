@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
@@ -87,7 +87,7 @@ internal fun <T> buildObjectReader(
     resultBuilder: ResultBuilder<T>
 ): ObjectReader<T> =
     ObjectReader { context, location, input ->
-        if (input !is StructNode) {
+        if (input !is ObjectNode) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
             return@ObjectReader ReaderResult.Failure(
                 location = location,
@@ -128,7 +128,7 @@ internal fun <T> buildObjectReader(
             failures.merge()
     }
 
-internal fun StructNode.read(context: ReaderContext, location: Location, property: ObjectProperty): ReaderResult<Any?> {
+internal fun ObjectNode.read(context: ReaderContext, location: Location, property: ObjectProperty): ReaderResult<Any?> {
     val reader = when (property) {
         is ObjectProperty.Required<*> -> property.reader
         is ObjectProperty.Defaultable<*> -> property.reader

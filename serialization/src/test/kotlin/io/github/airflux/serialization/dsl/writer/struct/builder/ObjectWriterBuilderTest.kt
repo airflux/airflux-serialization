@@ -19,8 +19,8 @@ package io.github.airflux.serialization.dsl.writer.struct.builder
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.optional
@@ -50,7 +50,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
 
                 "then should return the object with some propertys" {
                     val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
-                    result shouldBe StructNode(PROPERTY_NAME to StringNode(PROPERTY_VALUE))
+                    result shouldBe ObjectNode(PROPERTY_NAME to StringNode(PROPERTY_VALUE))
                 }
             }
 
@@ -64,7 +64,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
 
                     "then should return the empty value of the StructNode type" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
-                        result shouldBe StructNode()
+                        result shouldBe ObjectNode()
                     }
                 }
 
@@ -76,7 +76,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
 
                     "then should return the empty value of the StructNode type" {
                         val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
-                        result shouldBe StructNode()
+                        result shouldBe ObjectNode()
                     }
                 }
 

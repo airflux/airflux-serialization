@@ -35,8 +35,8 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import java.util.*
 
@@ -139,7 +139,7 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                 JsonToken.END_OBJECT -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingObject) {
-                        maybeValue = StructNode(head.values.toMap())
+                        maybeValue = ObjectNode(head.values.toMap())
                         nextContext = parserContext
                     } else
                         throw ParsingException("We should have been reading an object, something got wrong ($head)")
@@ -213,7 +213,7 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                     }
                     gen.writeEndArray()
                 }
-                is StructNode -> {
+                is ObjectNode -> {
                     gen.writeStartObject()
                     value.forEach { (name, element) ->
                         gen.writeFieldName(name)

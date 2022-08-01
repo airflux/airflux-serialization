@@ -22,8 +22,8 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -52,7 +52,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     "with the value as the NumberNode type" {
                         val json = """{"id": 123}""".deserialization()
 
-                        val root = json.shouldBeInstanceOf<StructNode>()
+                        val root = json.shouldBeInstanceOf<ObjectNode>()
                         val id = root["id"]
                         val value = id.shouldBeInstanceOf<NumberNode>()
                         value.get shouldBe "123"
@@ -61,7 +61,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     "the value as the StringNode type" {
                         val json = """{"name": "user-1"}""".deserialization()
 
-                        val root = json.shouldBeInstanceOf<StructNode>()
+                        val root = json.shouldBeInstanceOf<ObjectNode>()
                         val name = root["name"]
                         val value = name.shouldBeInstanceOf<StringNode>()
                         value.get shouldBe "user-1"
@@ -72,7 +72,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                         "true" {
                             val json = """{"isActive": true}""".deserialization()
 
-                            val root = json.shouldBeInstanceOf<StructNode>()
+                            val root = json.shouldBeInstanceOf<ObjectNode>()
                             val isActive = root["isActive"]
                             isActive.shouldBeInstanceOf<BooleanNode.True>()
                         }
@@ -80,7 +80,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                         "false" {
                             val json = """{"isActive": false}""".deserialization()
 
-                            val root = json.shouldBeInstanceOf<StructNode>()
+                            val root = json.shouldBeInstanceOf<ObjectNode>()
                             val isActive = root["isActive"]
                             isActive.shouldBeInstanceOf<BooleanNode.False>()
                         }
@@ -89,7 +89,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     "the value as the NullNode type" {
                         val json = """{"title": null}""".deserialization()
 
-                        val root = json.shouldBeInstanceOf<StructNode>()
+                        val root = json.shouldBeInstanceOf<ObjectNode>()
                         val title = root["title"]
                         title.shouldBeInstanceOf<NullNode>()
                     }
@@ -119,19 +119,19 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                 "write the value as the object" - {
 
                     "with property as the null value" {
-                        val json = StructNode("id" to NullNode)
+                        val json = ObjectNode("id" to NullNode)
                         val value = json.serialization()
                         value shouldBe """{"id":null}"""
                     }
 
                     "with property as a string value" {
-                        val json = StructNode("name" to StringNode("user-1"))
+                        val json = ObjectNode("name" to StringNode("user-1"))
                         val value = json.serialization()
                         value shouldBe """{"name":"user-1"}"""
                     }
 
                     "with property as a number value" {
-                        val json = StructNode("id" to NumberNode.valueOf(123))
+                        val json = ObjectNode("id" to NumberNode.valueOf(123))
                         val value = json.serialization()
                         value shouldBe """{"id":123}"""
                     }
@@ -139,13 +139,13 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     "with property as a boolean value" - {
 
                         "true" {
-                            val json = StructNode("isActive" to BooleanNode.True)
+                            val json = ObjectNode("isActive" to BooleanNode.True)
                             val value = json.serialization()
                             value shouldBe """{"isActive":true}"""
                         }
 
                         "false" {
-                            val json = StructNode("isActive" to BooleanNode.False)
+                            val json = ObjectNode("isActive" to BooleanNode.False)
                             val value = json.serialization()
                             value shouldBe """{"isActive":false}"""
                         }

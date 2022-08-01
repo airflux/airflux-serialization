@@ -23,8 +23,8 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
@@ -60,7 +60,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
-                val input = StructNode(
+                val input = ObjectNode(
                     ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                     TITLE_PROPERTY_VALUE to StringNode(TITLE_PROPERTY_NAME)
                 )
@@ -79,7 +79,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                 )
 
                 "when the object is empty" - {
-                    val input = StructNode()
+                    val input = ObjectNode()
 
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, properties, input)
@@ -88,7 +88,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object does not contains additional properties" - {
-                    val input = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val input = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, properties, input)
@@ -97,7 +97,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains additional properties" - {
-                    val input = StructNode(
+                    val input = ObjectNode(
                         ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                         TITLE_PROPERTY_VALUE to StringNode(TITLE_PROPERTY_NAME),
                         NAME_PROPERTY_VALUE to StringNode(NAME_PROPERTY_NAME)

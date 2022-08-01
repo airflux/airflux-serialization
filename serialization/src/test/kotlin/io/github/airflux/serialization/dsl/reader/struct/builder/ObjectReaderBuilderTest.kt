@@ -25,8 +25,8 @@ import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErro
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
@@ -75,7 +75,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "then should return successful value" {
-                    val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
+                    val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
                     val result = reader.read(context = CONTEXT, location = LOCATION, input)
                     result as ReaderResult.Success
                     result.value shouldBe DTO(name = USER_NAME)
@@ -127,7 +127,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
@@ -153,7 +153,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
                             val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
@@ -184,7 +184,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "then all error should be returns" {
-                        val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
+                        val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
                         val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -252,7 +252,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
             }
 
             "the StructNode#read extension-function" - {
-                val input = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
+                val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
                     val property: ObjectProperty = ObjectProperty.Required(

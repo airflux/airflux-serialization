@@ -26,7 +26,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-internal class StructNodeTest {
+internal class ObjectNodeTest {
 
     companion object {
         private const val USER_NAME_VALUE = "user"
@@ -35,8 +35,8 @@ internal class StructNodeTest {
         private const val IS_ACTIVE_VALUE = true
         private val IS_ACTIVE = BooleanNode.valueOf(IS_ACTIVE_VALUE)
 
-        private val EMPTY_OBJECT = StructNode()
-        private val NOT_EMPTY_OBJECT = StructNode(
+        private val EMPTY_OBJECT = ObjectNode()
+        private val NOT_EMPTY_OBJECT = ObjectNode(
             "name" to USER_NAME,
             "isActive" to IS_ACTIVE
         )
@@ -115,7 +115,7 @@ internal class StructNodeTest {
         val isActive = true
 
         ObjectContract.checkToString(
-            StructNode(
+            ObjectNode(
                 "name" to StringNode(userName),
                 "isActive" to BooleanNode.valueOf(isActive)
             ),
@@ -130,9 +130,9 @@ internal class StructNodeTest {
         val isActive = true
 
         ObjectContract.checkEqualsContract(
-            StructNode("name" to StringNode(firstUserName)),
-            StructNode("name" to StringNode(secondUserName)),
-            StructNode("isActive" to BooleanNode.valueOf(isActive)),
+            ObjectNode("name" to StringNode(firstUserName)),
+            ObjectNode("name" to StringNode(secondUserName)),
+            ObjectNode("isActive" to BooleanNode.valueOf(isActive)),
         )
     }
 }

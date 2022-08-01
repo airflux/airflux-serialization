@@ -19,8 +19,8 @@ package io.github.airflux.serialization.core.lookup
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -47,7 +47,7 @@ internal class LookupTest : FreeSpec() {
         "The lookup by a key element of the path" - {
 
             "when the value contains the finding key" - {
-                val value = StructNode(KEY_NAME to StringNode(VALUE))
+                val value = ObjectNode(KEY_NAME to StringNode(VALUE))
 
                 "then should return the value as an instance of type Defined" {
                     val lookup = value.lookup(LOCATION, KEY_ELEMENT_PATH)
@@ -56,7 +56,7 @@ internal class LookupTest : FreeSpec() {
             }
 
             "when the value does not contain the finding key" - {
-                val value = StructNode(KEY_NAME to StringNode(VALUE))
+                val value = ObjectNode(KEY_NAME to StringNode(VALUE))
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, UNKNOWN_KEY_ELEMENT_PATH)
@@ -109,7 +109,7 @@ internal class LookupTest : FreeSpec() {
             "when the path contains a key element" - {
 
                 "when the value contains the finding key" - {
-                    val value = StructNode(KEY_NAME to StringNode(VALUE))
+                    val value = ObjectNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(KEY_ELEMENT_PATH))
@@ -118,7 +118,7 @@ internal class LookupTest : FreeSpec() {
                 }
 
                 "when the value does not contain the finding key" - {
-                    val value = StructNode(KEY_NAME to StringNode(VALUE))
+                    val value = ObjectNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(UNKNOWN_KEY_ELEMENT_PATH))
@@ -172,7 +172,7 @@ internal class LookupTest : FreeSpec() {
             "when lookup by a key element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val defined = Lookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
+                    val defined = Lookup.Defined(LOCATION, ObjectNode(KEY_NAME to StringNode(VALUE)))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = defined.apply(KEY_NAME)
@@ -181,7 +181,7 @@ internal class LookupTest : FreeSpec() {
                 }
 
                 "when the value does not contain the finding key" - {
-                    val defined = Lookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
+                    val defined = Lookup.Defined(LOCATION, ObjectNode(KEY_NAME to StringNode(VALUE)))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = defined.apply(UNKNOWN_KEY_NAME)

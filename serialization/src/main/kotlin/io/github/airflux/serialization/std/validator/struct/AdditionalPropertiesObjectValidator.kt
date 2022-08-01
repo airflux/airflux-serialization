@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
 
@@ -37,7 +37,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
         context: ReaderContext,
         location: Location,
         properties: ObjectProperties,
-        input: StructNode
+        input: ObjectNode
     ): ReaderResult.Failure? {
         val failFast = context.failFast
         val errorBuilder = context[ErrorBuilder]

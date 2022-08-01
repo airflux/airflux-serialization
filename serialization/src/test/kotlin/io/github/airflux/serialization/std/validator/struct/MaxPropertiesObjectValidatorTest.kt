@@ -21,8 +21,8 @@ import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
 import io.kotest.assertions.throwables.shouldThrow
@@ -52,7 +52,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
-                val input = StructNode(
+                val input = ObjectNode(
                     ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                     NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                     TITLE_PROPERTY_NAME to StringNode(TITLE_PROPERTY_VALUE)
@@ -72,7 +72,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
                 )
 
                 "when the object is empty" - {
-                    val input = StructNode()
+                    val input = ObjectNode()
 
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, PROPERTIES, input)
@@ -81,7 +81,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties less than the maximum" - {
-                    val input = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val input = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
                     "then the validator should do not return any errors" {
                         val errors = validator.validate(context, LOCATION, PROPERTIES, input)
                         errors.shouldBeNull()
@@ -89,7 +89,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties equal to the maximum" - {
-                    val input = StructNode(
+                    val input = ObjectNode(
                         ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                         NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                     )
@@ -101,7 +101,7 @@ internal class MaxPropertiesObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object contains a number of properties more than the maximum" - {
-                    val input = StructNode(
+                    val input = ObjectNode(
                         ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                         NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                         TITLE_PROPERTY_NAME to StringNode(TITLE_PROPERTY_VALUE)
