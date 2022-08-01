@@ -86,7 +86,7 @@ public class NumberNode private constructor(public val get: String) : ValueNode(
     override fun hashCode(): Int = get.hashCode()
 }
 
-public class ArrayNode<T : ValueNode>(private val items: List<T> = emptyList()) : ValueNode(), Iterable<T> {
+public class ArrayNode<out T : ValueNode>(private val items: List<T> = emptyList()) : ValueNode(), Iterable<T> {
 
     public companion object {
         public operator fun <T : ValueNode> invoke(vararg elements: T): ArrayNode<T> = ArrayNode(elements.toList())
