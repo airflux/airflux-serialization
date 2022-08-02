@@ -25,7 +25,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class ArrayOptionalItemsTest : FreeSpec() {
+internal class ArrayOptionalItemWriterTest : FreeSpec() {
 
     companion object {
         private const val ITEM_VALUE = "value"
@@ -40,13 +40,13 @@ internal class ArrayOptionalItemsTest : FreeSpec() {
 
             "when created an instance of the optional item" - {
                 val writer = DummyWriter<String> { StringNode(it) }
-                val items: ArrayItems.Optional<String?> = createItems(writer = writer)
+                val itemWriter: ArrayItemWriter.Optional<String?> = createItemWriter(writer = writer)
 
                 "when an item is the not null value" - {
                     val value = "value"
 
                     "then the method write should return the null value" {
-                        val result = items.write(CONTEXT, LOCATION, value)
+                        val result = itemWriter.write(CONTEXT, LOCATION, value)
                         result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
@@ -55,7 +55,7 @@ internal class ArrayOptionalItemsTest : FreeSpec() {
                     val value: String? = null
 
                     "then the method write should return the not null value" {
-                        val result = items.write(CONTEXT, LOCATION, value)
+                        val result = itemWriter.write(CONTEXT, LOCATION, value)
                         result.shouldBeNull()
                     }
                 }
@@ -63,6 +63,6 @@ internal class ArrayOptionalItemsTest : FreeSpec() {
         }
     }
 
-    private fun <T> createItems(writer: DummyWriter<T & Any>): ArrayItems.Optional<T> =
-        ArrayItems.Optional(ArrayItemSpec.Optional(writer = writer))
+    private fun <T> createItemWriter(writer: DummyWriter<T & Any>): ArrayItemWriter.Optional<T> =
+        ArrayItemWriter.Optional(ArrayItemSpec.Optional(writer = writer))
 }

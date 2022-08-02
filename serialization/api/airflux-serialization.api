@@ -1097,19 +1097,19 @@ public final class io/github/airflux/serialization/dsl/writer/array/builder/Arra
 	public static synthetic fun arrayWriter$default (Lio/github/airflux/serialization/dsl/writer/config/ArrayWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/ArrayWriter;
 }
 
-public abstract class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems {
+public abstract class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter {
 	public abstract fun write (Lio/github/airflux/serialization/core/writer/context/WriterContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems$NonNullable : io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems {
+public final class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter$NonNullable : io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter {
 	public fun write (Lio/github/airflux/serialization/core/writer/context/WriterContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems$Nullable : io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems {
+public final class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter$Nullable : io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter {
 	public fun write (Lio/github/airflux/serialization/core/writer/context/WriterContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems$Optional : io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItems {
+public final class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter$Optional : io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter {
 	public fun write (Lio/github/airflux/serialization/core/writer/context/WriterContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 

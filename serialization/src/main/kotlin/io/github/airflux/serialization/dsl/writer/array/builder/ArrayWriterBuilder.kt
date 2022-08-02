@@ -29,7 +29,7 @@ import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.array.builder.ArrayWriterBuilder.WriterBuilder
-import io.github.airflux.serialization.dsl.writer.array.builder.item.ArrayItems
+import io.github.airflux.serialization.dsl.writer.array.builder.item.ArrayItemWriter
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.github.airflux.serialization.dsl.writer.config.ArrayWriterConfig
 
@@ -50,26 +50,26 @@ public class ArrayWriterBuilder internal constructor(
 
     public fun <T : Any> items(spec: ArrayItemSpec.NonNullable<T>): WriterBuilder<T> =
         WriterBuilder {
-            buildArrayWriter(actionIfEmpty, ArrayItems.NonNullable(spec))
+            buildArrayWriter(actionIfEmpty, ArrayItemWriter.NonNullable(spec))
         }
 
     public fun <T> items(spec: ArrayItemSpec.Optional<T>): WriterBuilder<T> =
         WriterBuilder {
-            buildArrayWriter(actionIfEmpty, ArrayItems.Optional(spec))
+            buildArrayWriter(actionIfEmpty, ArrayItemWriter.Optional(spec))
         }
 
     public fun <T> items(spec: ArrayItemSpec.Nullable<T>): WriterBuilder<T> =
         WriterBuilder {
-            buildArrayWriter(actionIfEmpty, ArrayItems.Nullable(spec))
+            buildArrayWriter(actionIfEmpty, ArrayItemWriter.Nullable(spec))
         }
 }
 
 internal fun <T> buildArrayWriter(
     actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
-    items: ArrayItems<T>
+    itemsWriter: ArrayItemWriter<T>
 ): ArrayWriter<T> =
     ArrayWriter { context: WriterContext, location: Location, values ->
-        val result = values.mapNotNull { value -> items.write(context, location, value) }
+        val result = values.mapNotNull { value -> itemsWriter.write(context, location, value) }
 
         if (result.isNotEmpty())
             ArrayNode(result)
