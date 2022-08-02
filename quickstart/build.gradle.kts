@@ -11,7 +11,7 @@ repositories {
     mavenLocal()
 }
 
-val jacksonVersion by extra { "2.12.4" }
+val jacksonVersion by extra { "2.13.3" }
 
 dependencies {
     implementation(project(":airflux-serialization"))

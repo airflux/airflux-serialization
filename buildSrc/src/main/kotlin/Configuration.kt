@@ -56,7 +56,7 @@ object Configuration {
 
     object Versions {
 
-        const val Jackson = "2.12.5"
+        const val Jackson = "2.13.3"
 
         object Detekt {
             const val Tool = "1.21.0"
