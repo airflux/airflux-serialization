@@ -32,7 +32,7 @@ import io.github.airflux.serialization.dsl.writer.struct.builder.property.Object
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.ObjectWriterPropertiesBuilder
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.ObjectWriterPropertiesBuilderInstance
 
-public fun <T : Any> writer(
+public fun <T : Any> structWriter(
     config: ObjectWriterConfig = ObjectWriterConfig.DEFAULT,
     block: ObjectWriterBuilder<T>.() -> Unit
 ): ObjectWriter<T> =

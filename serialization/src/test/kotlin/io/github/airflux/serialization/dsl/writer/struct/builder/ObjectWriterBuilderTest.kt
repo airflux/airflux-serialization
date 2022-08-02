@@ -44,7 +44,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
 
             "when have some propertys for writing to an object" - {
                 val from: (String) -> String = { it }
-                val writer = writer {
+                val writer = structWriter {
                     property(nonNullable(name = PROPERTY_NAME, from = from, writer = DummyWriter { StringNode(it) }))
                 }
 
@@ -58,7 +58,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 val from: (String) -> String? = { null }
 
                 "when the action of the writer was not set" - {
-                    val writer = writer {
+                    val writer = structWriter {
                         property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
 
@@ -69,7 +69,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 }
 
                 "when the action of the writer was set to return empty value" - {
-                    val writer = writer {
+                    val writer = structWriter {
                         actionIfEmpty = returnEmptyValue()
                         property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
@@ -81,7 +81,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 }
 
                 "when the action of the writer was set to return nothing" - {
-                    val writer = writer {
+                    val writer = structWriter {
                         actionIfEmpty = returnNothing()
                         property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
@@ -93,7 +93,7 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
                 }
 
                 "when the action of the writer was set to return null value" - {
-                    val writer = writer {
+                    val writer = structWriter {
                         actionIfEmpty = returnNullValue()
                         property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
                     }
