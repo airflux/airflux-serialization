@@ -5,10 +5,10 @@ import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySp
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.builder.reader
 import io.github.airflux.serialization.dsl.reader.struct.builder.returns
+import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 
-val TenderReader = reader<Tender>(ObjectReaderConfiguration) {
+val TenderReader = structReader<Tender>(ObjectReaderConfiguration) {
     val id = property(identifierPropertySpec)
     val title = property(optional(name = "title", reader = TitleReader))
     val value = property(optional(name = "value", reader = ValueReader))

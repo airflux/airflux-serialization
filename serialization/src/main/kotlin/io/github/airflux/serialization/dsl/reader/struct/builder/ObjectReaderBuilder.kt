@@ -40,7 +40,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.Objec
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidators
 
-public fun <T> reader(
+public fun <T> structReader(
     configuration: ObjectReaderConfig = ObjectReaderConfig.DEFAULT,
     block: ObjectReaderBuilder<T>.() -> ResultBuilder<T>
 ): ObjectReader<T> {

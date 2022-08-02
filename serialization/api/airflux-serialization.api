@@ -783,9 +783,9 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/ObjectReaderBuilderKt {
-	public static final fun reader (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/ObjectReader;
-	public static synthetic fun reader$default (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/ObjectReader;
 	public static final fun returns (Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/builder/ObjectReaderBuilder$ResultBuilder;
+	public static final fun structReader (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/ObjectReader;
+	public static synthetic fun structReader$default (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/ObjectReader;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/ObjectValuesMap {
@@ -1208,8 +1208,8 @@ public final class io/github/airflux/serialization/dsl/writer/struct/builder/Obj
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/builder/ObjectWriterBuilderKt {
-	public static final fun writer (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/ObjectWriter;
-	public static synthetic fun writer$default (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/ObjectWriter;
+	public static final fun structWriter (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/ObjectWriter;
+	public static synthetic fun structWriter$default (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/ObjectWriter;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/builder/property/ObjectProperties : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker {

@@ -64,7 +64,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
                     result = null
                 )
-                val reader = reader<DTO> {
+                val reader = structReader<DTO> {
                     validation {
                         +validator
                     }
@@ -86,7 +86,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                 "when input is not the object type" - {
                     val input = StringNode(USER_NAME)
-                    val reader = reader<DTO> {
+                    val reader = structReader<DTO> {
                         val name = property(propertySpec(value = USER_NAME))
                         returns { _, location ->
                             DTO(name = +name).success(location)
@@ -116,7 +116,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                             key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
-                        val reader = reader<DTO> {
+                        val reader = structReader<DTO> {
                             validation {
                                 +validator
                             }
@@ -141,7 +141,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                             key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
                             result = null
                         )
-                        val reader = reader<DTO> {
+                        val reader = structReader<DTO> {
                             validation {
                                 +validator
                             }
@@ -172,7 +172,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
                         result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                     )
-                    val reader = reader<DTO> {
+                    val reader = structReader<DTO> {
                         validation {
                             +validator
                         }

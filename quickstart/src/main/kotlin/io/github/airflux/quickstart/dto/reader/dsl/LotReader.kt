@@ -7,8 +7,8 @@ import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySp
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.builder.reader
 import io.github.airflux.serialization.dsl.reader.struct.builder.returns
+import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 import io.github.airflux.serialization.std.reader.StringReader
 import io.github.airflux.serialization.std.validator.string.StdStringValidator.isNotBlank
 import io.github.airflux.serialization.std.validator.struct.StdObjectValidator.additionalProperties
@@ -16,7 +16,7 @@ import io.github.airflux.serialization.std.validator.struct.StdObjectValidator.i
 
 val LotStatusReader = StringReader.validation(isNotBlank).asEnum<LotStatus>()
 
-val LotReader = reader<Lot>(ObjectReaderConfiguration) {
+val LotReader = structReader<Lot>(ObjectReaderConfiguration) {
 
     validation {
         +additionalProperties
