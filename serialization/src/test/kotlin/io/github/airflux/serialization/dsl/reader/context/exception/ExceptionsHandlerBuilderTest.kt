@@ -46,7 +46,7 @@ internal class ExceptionsHandlerBuilderTest : FreeSpec() {
         "when an exception handler is registered in the builder" - {
             val exceptionsHandler = ExceptionsHandlerBuilder()
                 .apply {
-                    exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
+                    handler<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
                 }.build()
 
             "then the handleException should return the error" {

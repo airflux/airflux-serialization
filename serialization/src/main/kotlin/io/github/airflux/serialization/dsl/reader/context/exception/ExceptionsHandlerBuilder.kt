@@ -28,12 +28,12 @@ public class ExceptionsHandlerBuilder internal constructor() {
     private val handlers = mutableListOf<Pair<KClass<*>, ExceptionHandler>>()
 
     @Suppress("unused")
-    public inline fun <reified E : Throwable> exception(
+    public inline fun <reified E : Throwable> handler(
         noinline handler: (ReaderContext, Location, E) -> ReaderResult.Error
     ): Unit =
-        exception(E::class, handler)
+        handler(E::class, handler)
 
-    public fun <E : Throwable> exception(kClass: KClass<E>, handler: (ReaderContext, Location, E) -> ReaderResult.Error) {
+    public fun <E : Throwable> handler(kClass: KClass<E>, handler: (ReaderContext, Location, E) -> ReaderResult.Error) {
         @Suppress("UNCHECKED_CAST")
         handlers += kClass to handler as (ReaderContext, Location, Throwable) -> ReaderResult.Error
     }

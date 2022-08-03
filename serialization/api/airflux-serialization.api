@@ -750,15 +750,11 @@ public final class io/github/airflux/serialization/dsl/reader/config/ObjectReade
 }
 
 public final class io/github/airflux/serialization/dsl/reader/context/ReaderContextBuilder {
-	public final fun errorBuilders (Lkotlin/jvm/functions/Function1;)V
-	public final fun exceptions (Lkotlin/jvm/functions/Function1;)V
+	public final fun add (Lio/github/airflux/serialization/core/context/Context$Element;)V
+	public final fun exceptionHandlers (Lkotlin/jvm/functions/Function1;)V
 	public final fun getFailFast ()Ljava/lang/Boolean;
 	public final fun setFailFast (Ljava/lang/Boolean;)V
-}
-
-public final class io/github/airflux/serialization/dsl/reader/context/ReaderContextBuilder$ErrorsBuilder {
-	public final fun register (Lio/github/airflux/serialization/core/context/error/ContextErrorBuilderElement;)V
-	public final fun unaryPlus (Lio/github/airflux/serialization/core/context/error/ContextErrorBuilderElement;)V
+	public final fun unaryPlus (Lio/github/airflux/serialization/core/context/Context$Element;)V
 }
 
 public final class io/github/airflux/serialization/dsl/reader/context/ReaderContextBuilderKt {
@@ -767,7 +763,7 @@ public final class io/github/airflux/serialization/dsl/reader/context/ReaderCont
 }
 
 public final class io/github/airflux/serialization/dsl/reader/context/exception/ExceptionsHandlerBuilder {
-	public final fun exception (Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function3;)V
+	public final fun handler (Lkotlin/reflect/KClass;Lkotlin/jvm/functions/Function3;)V
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/ObjectReaderBuilder : io/github/airflux/serialization/dsl/reader/struct/builder/property/ObjectReaderPropertiesBuilder, io/github/airflux/serialization/dsl/reader/struct/builder/validator/ObjectReaderValidatorsBuilder {

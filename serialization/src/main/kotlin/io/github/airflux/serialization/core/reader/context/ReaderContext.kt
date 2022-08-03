@@ -24,8 +24,7 @@ public class ReaderContext private constructor(
 ) : AbstractContext() {
 
     public operator fun <E : Context.Element> plus(element: E): ReaderContext = ReaderContext(add(element))
-    public operator fun <E : Context.Element> plus(elements: Iterable<E>): ReaderContext =
-        ReaderContext(add(elements))
+    public operator fun <E : Context.Element> plus(elements: Iterable<E>): ReaderContext = ReaderContext(add(elements))
 
     internal companion object {
 

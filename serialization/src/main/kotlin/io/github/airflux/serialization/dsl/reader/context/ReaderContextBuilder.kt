@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.dsl.reader.context
 
 import io.github.airflux.serialization.core.context.Context
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderElement
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -33,12 +32,13 @@ public class ReaderContextBuilder internal constructor() {
 
     public var failFast: Boolean? = null
 
-    public fun errorBuilders(block: ErrorsBuilder.() -> Unit) {
-        val errors = ErrorsBuilder().apply(block).build()
-        elements.addAll(errors)
+    public fun <E : Context.Element> add(element: E) {
+        elements.add(element)
     }
 
-    public fun exceptions(block: ExceptionsHandlerBuilder.() -> Unit) {
+    public operator fun <E : Context.Element> E.unaryPlus(): Unit = add(this)
+
+    public fun exceptionHandlers(block: ExceptionsHandlerBuilder.() -> Unit) {
         ExceptionsHandlerBuilder().apply(block).build().also { elements.add(it) }
     }
 
@@ -48,18 +48,5 @@ public class ReaderContextBuilder internal constructor() {
         }
 
         return ReaderContext(elements)
-    }
-
-    @AirfluxMarker
-    public class ErrorsBuilder internal constructor() {
-        private val items = mutableListOf<ContextErrorBuilderElement>()
-
-        public fun <E : ContextErrorBuilderElement> register(error: E) {
-            items.add(error)
-        }
-
-        public operator fun <E : ContextErrorBuilderElement> E.unaryPlus(): Unit = register(this)
-
-        internal fun build(): List<Context.Element> = items
     }
 }

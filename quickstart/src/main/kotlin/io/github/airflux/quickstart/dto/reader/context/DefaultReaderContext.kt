@@ -31,41 +31,43 @@ import io.github.airflux.serialization.std.validator.struct.MinPropertiesObjectV
 val DefaultReaderContext = readerContext {
     failFast = false
 
-    errorBuilders {
-        readerErrorBuilders()
-        objectValidationErrorBuilders()
-        arrayValidationErrorBuilders()
-        stringValidationErrorBuilders()
-        comparableValidationErrorBuilders()
-    }
+    registerErrorBuilders()
 
-    exceptions {
-        exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
-        exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
+    exceptionHandlers {
+        handler<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
+        handler<Exception> { _, _, _ -> JsonErrors.PathMissing }
     }
 }
 
-fun ReaderContextBuilder.ErrorsBuilder.readerErrorBuilders() {
-    register(PathMissingErrorBuilder { JsonErrors.PathMissing })
+fun ReaderContextBuilder.registerErrorBuilders() {
+    readerErrorBuilders()
+    objectValidationErrorBuilders()
+    arrayValidationErrorBuilders()
+    stringValidationErrorBuilders()
+    comparableValidationErrorBuilders()
+}
+
+fun ReaderContextBuilder.readerErrorBuilders() {
+    +PathMissingErrorBuilder { JsonErrors.PathMissing }
     +InvalidTypeErrorBuilder(JsonErrors::InvalidType)
     +ValueCastErrorBuilder(JsonErrors::ValueCast)
     +AdditionalItemsErrorBuilder { JsonErrors.AdditionalItems }
 }
 
-fun ReaderContextBuilder.ErrorsBuilder.objectValidationErrorBuilders() {
+fun ReaderContextBuilder.objectValidationErrorBuilders() {
     +AdditionalPropertiesObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.AdditionalProperties }
     +IsNotEmptyObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
     +MinPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
     +MaxPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MaxProperties)
 }
 
-fun ReaderContextBuilder.ErrorsBuilder.arrayValidationErrorBuilders() {
+fun ReaderContextBuilder.arrayValidationErrorBuilders() {
     +IsNotEmptyArrayValidator.ErrorBuilder { JsonErrors.Validation.Arrays.IsEmpty }
     +MinItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
     +MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MaxItems)
 }
 
-fun ReaderContextBuilder.ErrorsBuilder.stringValidationErrorBuilders() {
+fun ReaderContextBuilder.stringValidationErrorBuilders() {
     +IsNotEmptyObjectValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty }
     +IsNotBlankStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsBlank }
     +MinLengthStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::MinLength)
@@ -74,7 +76,7 @@ fun ReaderContextBuilder.ErrorsBuilder.stringValidationErrorBuilders() {
     +IsAStringValidator.ErrorBuilder(JsonErrors.Validation.Strings::IsA)
 }
 
-fun ReaderContextBuilder.ErrorsBuilder.comparableValidationErrorBuilders() {
+fun ReaderContextBuilder.comparableValidationErrorBuilders() {
     +MinComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Min)
     +MaxComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Max)
     +EqComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Eq)

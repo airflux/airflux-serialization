@@ -224,7 +224,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     "when the context contains the exception handler" - {
                         val exceptionHandler: ExceptionsHandler = ExceptionsHandlerBuilder()
                             .apply {
-                                this.exception<IllegalStateException> { _, _, _ ->
+                                this.handler<IllegalStateException> { _, _, _ ->
                                     JsonErrors.PathMissing
                                 }
                             }

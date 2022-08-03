@@ -54,22 +54,20 @@ internal class ReaderContextBuilderTest : FreeSpec() {
             }
         }
 
-        "when the error builder was registered" - {
+        "when some element was registered" - {
             val context: ReaderContext = readerContext {
-                errorBuilders {
-                    +PathMissingErrorBuilder { JsonErrors.PathMissing }
-                }
+                +PathMissingErrorBuilder { JsonErrors.PathMissing }
             }
 
-            "then the context should contain registered the error builder" {
+            "then the context should contain its element" {
                 context.contains(PathMissingErrorBuilder) shouldBe true
             }
         }
 
         "when the exception handler was registered" - {
             val context: ReaderContext = readerContext {
-                exceptions {
-                    exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
+                exceptionHandlers {
+                    handler<Exception> { _, _, _ -> JsonErrors.PathMissing }
                 }
             }
 
