@@ -107,6 +107,11 @@ public inline infix fun <T> ReaderResult<T>.recovery(
     ifSuccess = ::identity
 )
 
+public fun <T> ReaderResult<T>.getOrNull(): T? = fold(
+    ifFailure = { null },
+    ifSuccess = { it.value }
+)
+
 public infix fun <T> ReaderResult<T>.getOrElse(defaultValue: () -> T): T = fold(
     ifFailure = { defaultValue() },
     ifSuccess = { it.value }
@@ -115,6 +120,11 @@ public infix fun <T> ReaderResult<T>.getOrElse(defaultValue: () -> T): T = fold(
 public infix fun <T> ReaderResult<T>.orElse(defaultValue: () -> ReaderResult<T>): ReaderResult<T> = fold(
     ifFailure = { defaultValue() },
     ifSuccess = ::identity
+)
+
+public infix fun <T> ReaderResult<T>.orThrow(exceptionBuilder: (ReaderResult.Failure) -> Throwable): T = fold(
+    ifFailure = { throw exceptionBuilder(it) },
+    ifSuccess = { it.value }
 )
 
 public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Success(location, this)

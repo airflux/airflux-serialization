@@ -21,8 +21,10 @@ import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ValueNode
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
 internal class ReaderResultTest : FreeSpec() {
@@ -65,6 +67,12 @@ internal class ReaderResultTest : FreeSpec() {
                 result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
             }
 
+            "calling getOrNull function should return a value" {
+                val result = original.getOrNull()
+
+                result shouldBe ORIGINAL_VALUE
+            }
+
             "calling getOrElse function should return a value" {
                 val result = original.getOrElse { ELSE_VALUE }
 
@@ -77,6 +85,12 @@ internal class ReaderResultTest : FreeSpec() {
                 val result = original.orElse { elseResult }
 
                 result shouldBe original
+            }
+
+            "calling orThrow function should return a value" {
+                val result = original.orThrow { throw IllegalStateException() }
+
+                result shouldBe ORIGINAL_VALUE
             }
 
             "should comply with equals() and hashCode() contract" {
@@ -167,6 +181,12 @@ internal class ReaderResultTest : FreeSpec() {
                 result shouldBe ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
             }
 
+            "calling getOrNull function should return the null value" {
+                val result = original.getOrNull()
+
+                result.shouldBeNull()
+            }
+
             "calling getOrElse function should return a defaultValue" {
                 val result = original.getOrElse { ELSE_VALUE }
 
@@ -179,6 +199,12 @@ internal class ReaderResultTest : FreeSpec() {
                 val result = original.orElse { elseResult }
 
                 result shouldBe elseResult
+            }
+
+            "calling orThrow function should return an exception" {
+                shouldThrow<IllegalStateException> {
+                    original.orThrow { throw IllegalStateException() }
+                }
             }
 
             "should comply with equals() and hashCode() contract" {
