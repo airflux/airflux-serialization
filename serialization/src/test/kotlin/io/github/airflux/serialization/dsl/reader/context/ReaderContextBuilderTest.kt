@@ -20,7 +20,6 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.FailFast
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -61,18 +60,6 @@ internal class ReaderContextBuilderTest : FreeSpec() {
 
             "then the context should contain its element" {
                 context.contains(PathMissingErrorBuilder) shouldBe true
-            }
-        }
-
-        "when the exception handler was registered" - {
-            val context: ReaderContext = readerContext {
-                exceptionHandlers {
-                    handler<Exception> { _, _, _ -> JsonErrors.PathMissing }
-                }
-            }
-
-            "then the context should contain registered the exception handler" {
-                context.contains(ExceptionsHandler) shouldBe true
             }
         }
     }

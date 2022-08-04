@@ -19,39 +19,40 @@ package io.github.airflux.serialization.dsl.reader.context.exception
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.assertThrows
 
-internal class ExceptionsHandlerBuilderTest : FreeSpec() {
+internal class ExceptionsHandlerTest : FreeSpec() {
 
     companion object {
         private val CONTEXT = ReaderContext()
         private val LOCATION = Location.empty
-        private val EXCEPTION = IllegalArgumentException()
     }
 
     init {
+        "The ExceptionsHandler" - {
+            val handler = exceptionsHandler(
+                exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
+            )
 
-        "when an exception handler is not registered in the builder" - {
-            val exceptionsHandler: ExceptionsHandler = ExceptionsHandlerBuilder().build()
+            "when trying to handle an exception that has a handler" - {
+                val exception = IllegalArgumentException()
 
-            "then the handleException should re-throw an exception" {
-                shouldThrow<IllegalArgumentException> {
-                    exceptionsHandler.handleException(CONTEXT, LOCATION, EXCEPTION)
+                "then should return a result of handling" {
+                    val result = handler.handle(CONTEXT, LOCATION, exception)
+                    result shouldBe JsonErrors.PathMissing
                 }
             }
-        }
 
-        "when an exception handler is registered in the builder" - {
-            val exceptionsHandler = ExceptionsHandlerBuilder()
-                .apply {
-                    handler<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
-                }.build()
+            "when trying to handle an exception that has not a handler" - {
+                val exception = IllegalStateException()
 
-            "then the handleException should return the error" {
-                val error = exceptionsHandler.handleException(CONTEXT, LOCATION, EXCEPTION)
-                error shouldBe JsonErrors.PathMissing
+                "then should re-throwing the exception" {
+                    assertThrows<IllegalStateException> {
+                        handler.handle(CONTEXT, LOCATION, exception)
+                    }
+                }
             }
         }
     }

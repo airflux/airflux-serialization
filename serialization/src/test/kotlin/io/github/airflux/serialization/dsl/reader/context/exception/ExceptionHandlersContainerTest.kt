@@ -23,53 +23,51 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class ExceptionHandlersTest : FreeSpec() {
+internal class ExceptionHandlersContainerTest : FreeSpec() {
 
     companion object {
-        private val handlerOfSpecificException: ExceptionHandler = { _: ReaderContext, _: Location, _: Throwable ->
-            JsonErrors.PathMissing
-        }
+        private val specificExceptionHandler =
+            { _: ReaderContext, _: Location, _: IllegalArgumentException -> JsonErrors.PathMissing }
 
-        private val handlerOfGenericException: ExceptionHandler = { _: ReaderContext, _: Location, _: Throwable ->
-            JsonErrors.PathMissing
-        }
+        private val genericExceptionHandler =
+            { _: ReaderContext, _: Location, _: Exception -> JsonErrors.PathMissing }
     }
 
     init {
 
-        "ExceptionHandlers#get" - {
+        "ExceptionHandlersContainer#get" - {
             val exception = IllegalArgumentException()
 
             "when the most specific exception is first" - {
-                val handlers = ExceptionHandlers(
+                val handlers = ExceptionHandlersContainer(
                     listOf(
-                        IllegalArgumentException::class to handlerOfSpecificException,
-                        Exception::class to handlerOfGenericException
+                        exception(specificExceptionHandler),
+                        exception(genericExceptionHandler)
                     )
                 )
 
                 "should return the handler for the most specific an exception" {
                     val handler = handlers[exception]
-                    handler shouldBe handlerOfSpecificException
+                    handler shouldBe specificExceptionHandler
                 }
             }
 
             "when the most specific exception is not first" - {
-                val handlers = ExceptionHandlers(
+                val handlers = ExceptionHandlersContainer(
                     listOf(
-                        Exception::class to handlerOfGenericException,
-                        IllegalArgumentException::class to handlerOfSpecificException
+                        exception(genericExceptionHandler),
+                        exception(specificExceptionHandler)
                     )
                 )
 
                 "should return the handler for the most generic an exception" {
                     val handler = handlers[exception]
-                    handler shouldBe handlerOfGenericException
+                    handler shouldBe genericExceptionHandler
                 }
             }
 
             "when no the exception handlers" - {
-                val handlers = ExceptionHandlers(emptyList())
+                val handlers = ExceptionHandlersContainer(emptyList())
 
                 "should return the null value" {
                     val handler = handlers[exception]

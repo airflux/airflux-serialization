@@ -16,10 +16,12 @@
 
 package io.github.airflux.serialization.dsl.reader.context.exception
 
+import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.dsl.common.instanceOf
-import kotlin.reflect.KClass
 
-internal class ExceptionHandlers(private val items: List<Pair<KClass<*>, ExceptionHandler>>) {
-    operator fun get(exception: Throwable): ExceptionHandler? =
-        items.find { exception.instanceOf(it.first) }?.second
+internal class ExceptionHandlersContainer(private val items: List<ExceptionHandlerSpec>) {
+    operator fun get(exception: Throwable): ((ReaderContext, Location, Throwable) -> ReaderResult.Error)? =
+        items.find { exception.instanceOf(it.exception) }?.handler
 }

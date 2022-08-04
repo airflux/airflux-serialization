@@ -6,6 +6,8 @@ import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErro
 import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.dsl.reader.context.ReaderContextBuilder
+import io.github.airflux.serialization.dsl.reader.context.exception.exception
+import io.github.airflux.serialization.dsl.reader.context.exception.exceptionsHandler
 import io.github.airflux.serialization.dsl.reader.context.readerContext
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
 import io.github.airflux.serialization.std.validator.array.MaxItemsArrayValidator
@@ -31,12 +33,15 @@ import io.github.airflux.serialization.std.validator.struct.MinPropertiesObjectV
 val DefaultReaderContext = readerContext {
     failFast = false
 
+    registerExceptionHandler()
     registerErrorBuilders()
+}
 
-    exceptionHandlers {
-        handler<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
-        handler<Exception> { _, _, _ -> JsonErrors.PathMissing }
-    }
+fun ReaderContextBuilder.registerExceptionHandler() {
+    +exceptionsHandler(
+        exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing },
+        exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
+    )
 }
 
 fun ReaderContextBuilder.registerErrorBuilders() {

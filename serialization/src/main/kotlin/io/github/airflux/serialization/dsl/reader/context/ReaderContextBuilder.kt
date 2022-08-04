@@ -20,7 +20,6 @@ import io.github.airflux.serialization.core.context.Context
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.option.FailFast
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
 
 public fun readerContext(block: ReaderContextBuilder.() -> Unit = {}): ReaderContext =
     ReaderContextBuilder().apply(block).build()
@@ -37,10 +36,6 @@ public class ReaderContextBuilder internal constructor() {
     }
 
     public operator fun <E : Context.Element> E.unaryPlus(): Unit = add(this)
-
-    public fun exceptionHandlers(block: ExceptionsHandlerBuilder.() -> Unit) {
-        ExceptionsHandlerBuilder().apply(block).build().also { elements.add(it) }
-    }
 
     internal fun build(): ReaderContext {
         failFast?.let { isTrue ->

@@ -29,7 +29,8 @@ import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandlerBuilder
+import io.github.airflux.serialization.dsl.reader.context.exception.exception
+import io.github.airflux.serialization.dsl.reader.context.exception.exceptionsHandler
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
@@ -221,14 +222,12 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
                     val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
 
-                    "when the context contains the exception handler" - {
-                        val exceptionHandler: ExceptionsHandler = ExceptionsHandlerBuilder()
-                            .apply {
-                                this.handler<IllegalStateException> { _, _, _ ->
-                                    JsonErrors.PathMissing
-                                }
+                    "when the context contains the exceptions handler" - {
+                        val exceptionHandler: ExceptionsHandler = exceptionsHandler(
+                            exception<IllegalStateException> { _, _, _ ->
+                                JsonErrors.PathMissing
                             }
-                            .build()
+                        )
                         val contextWithExceptionHandler = CONTEXT + exceptionHandler
 
                         "then call the builder should return an error" {

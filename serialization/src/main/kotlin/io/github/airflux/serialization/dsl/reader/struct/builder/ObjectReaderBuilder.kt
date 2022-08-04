@@ -76,7 +76,7 @@ public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, Location) -> Rea
             values.builder(context, location)
         } catch (expected: Throwable) {
             val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
-            handler.handleException(context, location, expected)
+            handler.handle(context, location, expected)
                 .failure(location)
         }
     }

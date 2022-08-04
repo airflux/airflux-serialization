@@ -21,14 +21,22 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
-internal class ExceptionsHandler(
-    private val handler: (context: ReaderContext, location: Location, exception: Throwable) -> ReaderResult.Error
+public fun exceptionsHandler(vararg handlers: ExceptionHandlerSpec): ExceptionsHandler {
+    val handlersContainer = ExceptionHandlersContainer(handlers.toList())
+    return ExceptionsHandler { context, location, exception ->
+        val handler = handlersContainer[exception] ?: throw exception
+        handler(context, location, exception)
+    }
+}
+
+public class ExceptionsHandler(
+    private val handler: (ReaderContext, Location, Throwable) -> ReaderResult.Error
 ) : Context.Element {
 
-    fun handleException(context: ReaderContext, location: Location, exception: Throwable): ReaderResult.Error =
+    public fun handle(context: ReaderContext, location: Location, exception: Throwable): ReaderResult.Error =
         handler(context, location, exception)
 
     override val key: Context.Key<*> = Key
 
-    companion object Key : Context.Key<ExceptionsHandler>
+    internal companion object Key : Context.Key<ExceptionsHandler>
 }
