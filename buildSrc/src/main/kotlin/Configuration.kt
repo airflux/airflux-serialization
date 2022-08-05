@@ -66,6 +66,8 @@ object Configuration {
             const val Tool = "0.8.8"
         }
 
+        const val IntellijEngine = "1.0.668"
+
         object Test {
 
             object JUnit {

@@ -26,7 +26,7 @@ tasks {
 }
 
 kover {
-    coverageEngine.set(kotlinx.kover.api.CoverageEngine.JACOCO)
-    jacocoEngineVersion.set(Configuration.Versions.JaCoCo.Tool)
+    coverageEngine.set(kotlinx.kover.api.CoverageEngine.INTELLIJ)
+    intellijEngineVersion.set(Configuration.Versions.IntellijEngine)
     disabledProjects = setOf("quickstart")
 }
