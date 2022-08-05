@@ -770,9 +770,13 @@ public final class io/github/airflux/serialization/dsl/reader/context/exception/
 }
 
 public final class io/github/airflux/serialization/dsl/reader/context/exception/ExceptionsHandler : io/github/airflux/serialization/core/context/Context$Element {
+	public static final field Key Lio/github/airflux/serialization/dsl/reader/context/exception/ExceptionsHandler$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function3;)V
 	public fun getKey ()Lio/github/airflux/serialization/core/context/Context$Key;
 	public final fun handle (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Throwable;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
+public final class io/github/airflux/serialization/dsl/reader/context/exception/ExceptionsHandler$Key : io/github/airflux/serialization/core/context/Context$Key {
 }
 
 public final class io/github/airflux/serialization/dsl/reader/context/exception/ExceptionsHandlerKt {

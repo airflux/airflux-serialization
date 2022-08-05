@@ -38,5 +38,5 @@ public class ExceptionsHandler(
 
     override val key: Context.Key<*> = Key
 
-    internal companion object Key : Context.Key<ExceptionsHandler>
+    public companion object Key : Context.Key<ExceptionsHandler>
 }
