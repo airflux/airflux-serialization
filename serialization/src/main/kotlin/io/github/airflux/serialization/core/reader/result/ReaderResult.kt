@@ -18,6 +18,8 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 
 @Suppress("unused")
 public sealed class ReaderResult<out T> {
@@ -130,3 +132,16 @@ public infix fun <T> ReaderResult<T>.orThrow(exceptionBuilder: (ReaderResult.Fai
 public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Success(location, this)
 public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<Nothing> =
     ReaderResult.Failure(location, this)
+
+public inline fun <T> runCatching(
+    context: ReaderContext,
+    location: Location,
+    block: () -> ReaderResult<T>
+): ReaderResult<T> =
+    try {
+        block()
+    } catch (expected: Throwable) {
+        val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
+        handler.handle(context, location, expected)
+            .failure(location)
+    }

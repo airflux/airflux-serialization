@@ -197,30 +197,15 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         )
                     }
                 }
-            }
 
-            "the function of building the ResultBuilder type" - {
-                val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
+                "when the result builder does throw an exception" - {
+                    val reader = structReader<DTO> {
+                        property(propertySpec(value = USER_NAME))
 
-                "when the builder does not throw an exception" - {
-                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<String>) = { _, location ->
-                        ReaderResult.Success(location = location, value = USER_NAME)
-                    }
-                    val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
-
-                    "then call the builder should return a result" {
-                        val result = resultBuilder.build(CONTEXT, LOCATION, objectValuesMap)
-                        result as ReaderResult.Success
-                        result.value shouldBe USER_NAME
-                    }
-                }
-
-                "when the builder does throw an exception" - {
-                    val builder: (ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<String>) =
-                        { _, _ ->
+                        returns { _, _ ->
                             throw IllegalStateException()
                         }
-                    val resultBuilder: ObjectReaderBuilder.ResultBuilder<String> = returns(builder)
+                    }
 
                     "when the context contains the exceptions handler" - {
                         val exceptionHandler: ExceptionsHandler = exceptionsHandler(
@@ -230,8 +215,10 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         )
                         val contextWithExceptionHandler = CONTEXT + exceptionHandler
 
-                        "then call the builder should return an error" {
-                            val result = resultBuilder.build(contextWithExceptionHandler, LOCATION, objectValuesMap)
+                        "then should return an error value" {
+                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result = reader.read(context = contextWithExceptionHandler, location = LOCATION, input)
+
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
@@ -241,9 +228,11 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "when the context does not contain the exception handler" - {
 
-                        "then call the builder should re-throw exception" {
+                        "then should re-throwing the exception" {
+                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+
                             shouldThrow<IllegalStateException> {
-                                resultBuilder.build(CONTEXT, LOCATION, objectValuesMap)
+                                reader.read(context = CONTEXT, location = LOCATION, input)
                             }
                         }
                     }

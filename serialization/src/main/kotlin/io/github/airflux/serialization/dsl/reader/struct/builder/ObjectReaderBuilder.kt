@@ -24,13 +24,12 @@ import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErro
 import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.runCatching
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
 import io.github.airflux.serialization.dsl.reader.struct.builder.ObjectReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
@@ -72,13 +71,7 @@ public class ObjectReaderBuilder<T> internal constructor(
 
 public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<T>): ResultBuilder<T> =
     ResultBuilder { context, location, values ->
-        try {
-            values.builder(context, location)
-        } catch (expected: Throwable) {
-            val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
-            handler.handle(context, location, expected)
-                .failure(location)
-        }
+        values.builder(context, location)
     }
 
 internal fun <T> buildObjectReader(
@@ -123,7 +116,9 @@ internal fun <T> buildObjectReader(
             }
 
         return@ObjectReader if (failures.isEmpty())
-            resultBuilder.build(context, location, objectValuesMap)
+            runCatching(context, location) {
+                resultBuilder.build(context, location, objectValuesMap)
+            }
         else
             failures.merge()
     }

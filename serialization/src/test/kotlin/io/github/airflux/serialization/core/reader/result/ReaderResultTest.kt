@@ -19,11 +19,16 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
+import io.github.airflux.serialization.dsl.reader.context.exception.exception
+import io.github.airflux.serialization.dsl.reader.context.exception.exceptionsHandler
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
@@ -32,6 +37,7 @@ internal class ReaderResultTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
+        private val CONTEXT = ReaderContext()
         private val LOCATION = Location.empty.append("id")
     }
 
@@ -264,6 +270,51 @@ internal class ReaderResultTest : FreeSpec() {
                     )
                 )
             )
+        }
+
+        "ReaderResult#runCatching" - {
+
+            "when no exception is thrown in the block" - {
+                val block: () -> ReaderResult<String> = { ORIGINAL_VALUE.success(LOCATION) }
+
+                "then should return the value" {
+                    val result = runCatching(CONTEXT, LOCATION, block)
+
+                    result as ReaderResult.Success
+                    result.value shouldBe ORIGINAL_VALUE
+                }
+            }
+
+            "when an exception is thrown in the block" - {
+                val block: () -> ReaderResult<String> = { throw IllegalStateException() }
+
+                "when the context contains the exceptions handler" - {
+                    val exceptionHandler: ExceptionsHandler = exceptionsHandler(
+                        exception<IllegalStateException> { _, _, _ ->
+                            JsonErrors.PathMissing
+                        }
+                    )
+                    val contextWithExceptionHandler = CONTEXT + exceptionHandler
+
+                    "then should return an error value" {
+                        val result = runCatching(contextWithExceptionHandler, LOCATION, block)
+
+                        result as ReaderResult.Failure
+                        result.causes shouldContainExactly listOf(
+                            ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                        )
+                    }
+                }
+
+                "when the context does not contain the exceptions handler" - {
+
+                    "then should re-throwing the exception" {
+                        shouldThrow<IllegalStateException> {
+                            runCatching(CONTEXT, LOCATION, block)
+                        }
+                    }
+                }
+            }
         }
 
         "asSuccess(JsLocation) extension function" {
