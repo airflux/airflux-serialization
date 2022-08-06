@@ -1,6 +1,6 @@
-<img src="docs/airflux.png" alt="Airflux logo" height="131" width="394" />
+<img src="docs/logo.png" alt="Airflux logo" />
 
-# The AirFlux JSON library.
+# The Airflux serialization library.
 
 ![CI](https://github.com/airflux/airflux/workflows/CI/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -19,11 +19,29 @@ The library to parse, validate and generate data in the JSON (JavaScript Object 
 
 The documentation site: [https://airflux.github.io/airflux/](https://airflux.github.io/airflux/)
 
+# Installation
+```
+repositories {
+    ...
+    maven {
+        url = uri("https://jitpack.io")
+    }
+}
+
+dependencies {
+    implementation("com.github.airflux.airflux:airflux-serialization:v0.0.1-alpha.1")
+    
+    implementation("com.github.airflux.airflux:airflux-jackson-parser:v0.0.1-alpha.1")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3") {
+        exclude(group = "org.jetbrains.kotlin")
+    }
+}
+```
+
 # Codecov graphs
 
 [![Codecov Sunburst](https://codecov.io/gh/airflux/airflux/branch/main/graphs/sunburst.svg?token=QBD7092MJI)](https://codecov.io/gh/airflux/airflux/branch/main/graphs/sunburst.svg?token=QBD7092MJI)
-[![Codecov Grid](https://codecov.io/gh/airflux/airflux/branch/main/graphs/tree.svg?token=QBD7092MJI)](https://codecov.io/gh/airflux/airflux/branch/main/graphs/tree.svg?token=QBD7092MJI)
-[![Codecov Icicle](https://codecov.io/gh/airflux/airflux/branch/main/graphs/icicle.svg?token=QBD7092MJI)](https://codecov.io/gh/airflux/airflux/branch/main/graphs/icicle.svg?token=QBD7092MJI)
 
 # License
 
