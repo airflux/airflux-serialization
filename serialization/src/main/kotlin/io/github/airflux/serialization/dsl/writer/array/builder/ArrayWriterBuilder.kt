@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.array.builder
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.writer.ArrayWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.context.WriterContext
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
@@ -36,7 +36,7 @@ import io.github.airflux.serialization.dsl.writer.config.ArrayWriterConfig
 public fun <T> arrayWriter(
     config: ArrayWriterConfig = ArrayWriterConfig.DEFAULT,
     block: ArrayWriterBuilder.() -> WriterBuilder<T>
-): ArrayWriter<T> =
+): Writer<Iterable<T>> =
     ArrayWriterBuilder(WriterActionConfiguratorInstance(config.options.actionIfEmpty)).block().build()
 
 @AirfluxMarker
@@ -45,7 +45,7 @@ public class ArrayWriterBuilder internal constructor(
 ) : WriterActionConfigurator by actionConfigurator {
 
     public fun interface WriterBuilder<T> {
-        public fun build(): ArrayWriter<T>
+        public fun build(): Writer<Iterable<T>>
     }
 
     public fun <T : Any> items(spec: ArrayItemSpec.NonNullable<T>): WriterBuilder<T> =
@@ -67,8 +67,8 @@ public class ArrayWriterBuilder internal constructor(
 internal fun <T> buildArrayWriter(
     actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
     itemsWriter: ArrayItemWriter<T>
-): ArrayWriter<T> =
-    ArrayWriter { context: WriterContext, location: Location, values ->
+): Writer<Iterable<T>> =
+    Writer { context: WriterContext, location: Location, values ->
         val result = values.mapNotNull { value -> itemsWriter.write(context, location, value) }
 
         if (result.isNotEmpty())

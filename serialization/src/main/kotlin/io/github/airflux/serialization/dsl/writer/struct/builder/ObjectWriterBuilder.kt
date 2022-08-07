@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.struct.builder
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.ObjectWriter
+import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
@@ -35,7 +35,7 @@ import io.github.airflux.serialization.dsl.writer.struct.builder.property.Object
 public fun <T : Any> structWriter(
     config: ObjectWriterConfig = ObjectWriterConfig.DEFAULT,
     block: ObjectWriterBuilder<T>.() -> Unit
-): ObjectWriter<T> =
+): Writer<T> =
     ObjectWriterBuilder<T>(
         ObjectWriterPropertiesBuilderInstance(),
         WriterActionConfiguratorInstance(config.options.actionIfEmpty)
@@ -48,7 +48,7 @@ public class ObjectWriterBuilder<T : Any> internal constructor(
 ) : ObjectWriterPropertiesBuilder<T> by propertiesBuilder,
     WriterActionConfigurator by actionConfigurator {
 
-    internal fun build(): ObjectWriter<T> {
+    internal fun build(): Writer<T> {
         val properties: ObjectProperties<T> = propertiesBuilder.build()
         return buildObjectWriter(actionIfEmpty, properties)
     }
@@ -57,8 +57,8 @@ public class ObjectWriterBuilder<T : Any> internal constructor(
 internal fun <T : Any> buildObjectWriter(
     actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
     properties: ObjectProperties<T>
-): ObjectWriter<T> =
-    ObjectWriter { context, location, input ->
+): Writer<T> =
+    Writer { context, location, input ->
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->

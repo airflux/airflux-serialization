@@ -495,13 +495,6 @@ public final class io/github/airflux/serialization/core/value/ValueNodeOpsKt {
 	public static final fun readAsString (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
-public abstract interface class io/github/airflux/serialization/core/writer/ArrayWriter : io/github/airflux/serialization/core/writer/Writer {
-	public abstract fun write (Lio/github/airflux/serialization/core/writer/context/WriterContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/ValueNode;
-}
-
-public abstract interface class io/github/airflux/serialization/core/writer/ObjectWriter : io/github/airflux/serialization/core/writer/Writer {
-}
-
 public abstract interface class io/github/airflux/serialization/core/writer/Writer {
 	public abstract fun write (Lio/github/airflux/serialization/core/writer/context/WriterContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
@@ -1099,12 +1092,12 @@ public final class io/github/airflux/serialization/dsl/writer/array/builder/Arra
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/writer/array/builder/ArrayWriterBuilder$WriterBuilder {
-	public abstract fun build ()Lio/github/airflux/serialization/core/writer/ArrayWriter;
+	public abstract fun build ()Lio/github/airflux/serialization/core/writer/Writer;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/array/builder/ArrayWriterBuilderKt {
-	public static final fun arrayWriter (Lio/github/airflux/serialization/dsl/writer/config/ArrayWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/ArrayWriter;
-	public static synthetic fun arrayWriter$default (Lio/github/airflux/serialization/dsl/writer/config/ArrayWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/ArrayWriter;
+	public static final fun arrayWriter (Lio/github/airflux/serialization/dsl/writer/config/ArrayWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/Writer;
+	public static synthetic fun arrayWriter$default (Lio/github/airflux/serialization/dsl/writer/config/ArrayWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/Writer;
 }
 
 public abstract class io/github/airflux/serialization/dsl/writer/array/builder/item/ArrayItemWriter {
@@ -1218,8 +1211,8 @@ public final class io/github/airflux/serialization/dsl/writer/struct/builder/Obj
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/builder/ObjectWriterBuilderKt {
-	public static final fun structWriter (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/ObjectWriter;
-	public static synthetic fun structWriter$default (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/ObjectWriter;
+	public static final fun structWriter (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/Writer;
+	public static synthetic fun structWriter$default (Lio/github/airflux/serialization/dsl/writer/config/ObjectWriterConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/Writer;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/builder/property/ObjectProperties : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker {
