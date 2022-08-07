@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.builder
+package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
-
-internal class ObjectValuesMapInstance : ObjectValuesMap {
+internal class PropertyValuesInstance : PropertyValues {
     private val properties: MutableSet<ObjectProperty> = mutableSetOf()
     private val values: MutableMap<ObjectProperty, Any> = mutableMapOf()
 

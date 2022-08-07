@@ -17,6 +17,8 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder
 
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
@@ -29,7 +31,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class ObjectValuesMapTest : FreeSpec() {
+internal class PropertyValuesTest : FreeSpec() {
 
     companion object {
         private const val UNKNOWN_PROPERTY_NAME = "name"
@@ -41,10 +43,10 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
     init {
 
-        "The ObjectValuesMap" - {
+        "The PropertyValues type" - {
 
             "when not added any value" - {
-                val map: ObjectValuesMap = ObjectValuesMapInstance()
+                val map: PropertyValues = PropertyValuesInstance()
 
                 "then the property isEmpty should return true" {
                     map.isEmpty shouldBe true
@@ -164,7 +166,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
                 "for required property" - {
                     val property = ObjectProperty.Required(required(PROPERTY_NAME, StringReader))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -215,7 +217,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
                 "for defaultable property" - {
                     val property =
                         ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -267,7 +269,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
                 "for optional property" - {
                     val property = ObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -319,7 +321,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
                     val property = ObjectProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -371,7 +373,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
                 "for nullable property" - {
                     val property = ObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -423,7 +425,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
                     val property = ObjectProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -478,7 +480,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
                 "for required property" - {
                     val property = ObjectProperty.Required(required(PROPERTY_NAME, StringReader))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
 
@@ -510,7 +512,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
                 "for defaultable property" - {
                     val property =
                         ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
 
@@ -541,7 +543,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
                 "for optional property" - {
                     val property = ObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
 
@@ -593,7 +595,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
                     val property = ObjectProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
 
@@ -624,7 +626,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
 
                 "for nullable property" - {
                     val property = ObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
 
@@ -676,7 +678,7 @@ internal class ObjectValuesMapTest : FreeSpec() {
                     val property = ObjectProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
                     )
-                    val map: ObjectValuesMap = ObjectValuesMapInstance().apply {
+                    val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
 

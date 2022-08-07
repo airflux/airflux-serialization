@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.builder
-
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
+package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
 @Suppress("TooManyFunctions")
-public sealed interface ObjectValuesMap {
+public sealed interface PropertyValues {
 
     public val isEmpty: Boolean
     public val isNotEmpty: Boolean

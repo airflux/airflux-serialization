@@ -35,6 +35,8 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.Object
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectReaderPropertiesBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectReaderPropertiesBuilderInstance
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidatorsBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidatorsBuilderInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidators
@@ -59,7 +61,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     ObjectReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, objectValuesMap: ObjectValuesMap): ReaderResult<T>
+        public fun build(context: ReaderContext, location: Location, propertyValues: PropertyValues): ReaderResult<T>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
@@ -69,7 +71,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     }
 }
 
-public fun <T> returns(builder: ObjectValuesMap.(ReaderContext, Location) -> ReaderResult<T>): ResultBuilder<T> =
+public fun <T> returns(builder: PropertyValues.(ReaderContext, Location) -> ReaderResult<T>): ResultBuilder<T> =
     ResultBuilder { context, location, values ->
         values.builder(context, location)
     }
@@ -99,7 +101,7 @@ internal fun <T> buildObjectReader(
             }
         }
 
-        val objectValuesMap: ObjectValuesMap = ObjectValuesMapInstance()
+        val propertyValues: PropertyValues = PropertyValuesInstance()
             .apply {
                 properties.forEach { property ->
                     input.read(context, location, property)
@@ -117,7 +119,7 @@ internal fun <T> buildObjectReader(
 
         return@Reader if (failures.isEmpty())
             runCatching(context, location) {
-                resultBuilder.build(context, location, objectValuesMap)
+                resultBuilder.build(context, location, propertyValues)
             }
         else
             failures.merge()
