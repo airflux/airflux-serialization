@@ -172,12 +172,6 @@ public final class io/github/airflux/serialization/core/path/PropertyPaths {
 public final class io/github/airflux/serialization/core/path/PropertyPaths$Companion {
 }
 
-public abstract interface class io/github/airflux/serialization/core/reader/ArrayReader : io/github/airflux/serialization/core/reader/Reader {
-}
-
-public abstract interface class io/github/airflux/serialization/core/reader/ObjectReader : io/github/airflux/serialization/core/reader/Reader {
-}
-
 public abstract interface class io/github/airflux/serialization/core/reader/Reader {
 	public fun map (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/Reader;
 	public abstract fun read (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
@@ -572,8 +566,8 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/array
 }
 
 public final class io/github/airflux/serialization/dsl/reader/array/builder/ArrayReaderBuilderKt {
-	public static final fun arrayReader (Lio/github/airflux/serialization/dsl/reader/config/ArrayReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/ArrayReader;
-	public static synthetic fun arrayReader$default (Lio/github/airflux/serialization/dsl/reader/config/ArrayReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/ArrayReader;
+	public static final fun arrayReader (Lio/github/airflux/serialization/dsl/reader/config/ArrayReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/Reader;
+	public static synthetic fun arrayReader$default (Lio/github/airflux/serialization/dsl/reader/config/ArrayReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/Reader;
 	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/builder/item/specification/ArrayItemSpec;)Lio/github/airflux/serialization/dsl/reader/array/builder/ArrayReaderBuilder$ResultBuilder;
 	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/builder/item/specification/ArrayPrefixItemsSpec;Lio/github/airflux/serialization/dsl/reader/array/builder/item/specification/ArrayItemSpec;)Lio/github/airflux/serialization/dsl/reader/array/builder/ArrayReaderBuilder$ResultBuilder;
 	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/builder/item/specification/ArrayPrefixItemsSpec;Z)Lio/github/airflux/serialization/dsl/reader/array/builder/ArrayReaderBuilder$ResultBuilder;
@@ -800,8 +794,8 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/ObjectReaderBuilderKt {
 	public static final fun returns (Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/builder/ObjectReaderBuilder$ResultBuilder;
-	public static final fun structReader (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/ObjectReader;
-	public static synthetic fun structReader$default (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/ObjectReader;
+	public static final fun structReader (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/Reader;
+	public static synthetic fun structReader$default (Lio/github/airflux/serialization/dsl/reader/config/ObjectReaderConfig;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/Reader;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/ObjectValuesMap {

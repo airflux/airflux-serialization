@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.struct.builder
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.ObjectReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.context.option.failFast
@@ -42,7 +42,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.Objec
 public fun <T> structReader(
     configuration: ObjectReaderConfig = ObjectReaderConfig.DEFAULT,
     block: ObjectReaderBuilder<T>.() -> ResultBuilder<T>
-): ObjectReader<T> {
+): Reader<T> {
     val readerBuilder = ObjectReaderBuilder<T>(
         ObjectReaderPropertiesBuilderInstance(),
         ObjectReaderValidatorsBuilderInstance(configuration)
@@ -62,7 +62,7 @@ public class ObjectReaderBuilder<T> internal constructor(
         public fun build(context: ReaderContext, location: Location, objectValuesMap: ObjectValuesMap): ReaderResult<T>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): ObjectReader<T> {
+    internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
         val properties: ObjectProperties = propertiesBuilder.build()
         val validators: ObjectValidators = validatorsBuilder.build(properties)
         return buildObjectReader(validators, properties, resultBuilder)
@@ -78,11 +78,11 @@ internal fun <T> buildObjectReader(
     validators: ObjectValidators,
     properties: ObjectProperties,
     resultBuilder: ResultBuilder<T>
-): ObjectReader<T> =
-    ObjectReader { context, location, input ->
+): Reader<T> =
+    Reader { context, location, input ->
         if (input !is ObjectNode) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@ObjectReader ReaderResult.Failure(
+            return@Reader ReaderResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.OBJECT, input.type)
             )
@@ -94,7 +94,7 @@ internal fun <T> buildObjectReader(
         validators.forEach { validator ->
             val failure = validator.validate(context, location, properties, input)
             if (failure != null) {
-                if (failFast) return@ObjectReader failure
+                if (failFast) return@Reader failure
                 failures.add(failure)
             }
         }
@@ -105,7 +105,7 @@ internal fun <T> buildObjectReader(
                     input.read(context, location, property)
                         .fold(
                             ifFailure = { failure ->
-                                if (failFast) return@ObjectReader failure
+                                if (failFast) return@Reader failure
                                 failures.add(failure)
                             },
                             ifSuccess = { value ->
@@ -115,7 +115,7 @@ internal fun <T> buildObjectReader(
                 }
             }
 
-        return@ObjectReader if (failures.isEmpty())
+        return@Reader if (failures.isEmpty())
             runCatching(context, location) {
                 resultBuilder.build(context, location, objectValuesMap)
             }

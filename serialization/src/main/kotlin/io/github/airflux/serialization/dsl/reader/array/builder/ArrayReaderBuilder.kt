@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array.builder
 
 import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.ArrayReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.array.readArray
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
@@ -40,7 +40,7 @@ import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 public fun <T> arrayReader(
     configuration: ArrayReaderConfig = ArrayReaderConfig.DEFAULT,
     block: ArrayReaderBuilder<T>.() -> ResultBuilder<T>
-): ArrayReader<T> {
+): Reader<List<T>> {
     val readerBuilder: ArrayReaderBuilder<T> =
         ArrayReaderBuilder(ArrayReaderValidatorsBuilderInstance(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
@@ -56,7 +56,7 @@ public class ArrayReaderBuilder<T> internal constructor(
         public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<List<T>>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): ArrayReader<T> {
+    internal fun build(resultBuilder: ResultBuilder<T>): Reader<List<T>> {
         val validators = validatorsBuilder.build()
         return buildArrayReader(validators, resultBuilder)
     }
@@ -96,11 +96,11 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpe
 internal fun <T> buildArrayReader(
     validators: ArrayValidators,
     resultBuilder: ResultBuilder<T>
-): ArrayReader<T> =
-    ArrayReader { context, location, input ->
+): Reader<List<T>> =
+    Reader { context, location, input ->
         if (input !is ArrayNode<*>) {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@ArrayReader ReaderResult.Failure(
+            return@Reader ReaderResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.ARRAY, input.type)
             )
@@ -111,7 +111,7 @@ internal fun <T> buildArrayReader(
         validators.forEach { validator ->
             val failure = validator.validate(context, location, input)
             if (failure != null) {
-                if (context.failFast) return@ArrayReader failure
+                if (context.failFast) return@Reader failure
                 failures.add(failure)
             }
         }
@@ -119,7 +119,7 @@ internal fun <T> buildArrayReader(
         resultBuilder.build(context, location, input)
             .fold(
                 ifFailure = { failure ->
-                    if (context.failFast) return@ArrayReader failure
+                    if (context.failFast) return@Reader failure
                     failures.add(failure)
                     failures.merge()
                 },
