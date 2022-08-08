@@ -133,7 +133,7 @@ public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Suc
 public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<Nothing> =
     ReaderResult.Failure(location, this)
 
-public inline fun <T> runCatching(
+public inline fun <T> withCatching(
     context: ReaderContext,
     location: Location,
     block: () -> ReaderResult<T>

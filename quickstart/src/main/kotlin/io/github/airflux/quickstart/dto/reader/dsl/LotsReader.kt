@@ -1,8 +1,8 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.quickstart.dto.model.Lots
-import io.github.airflux.serialization.core.reader.result.runCatching
 import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.result.withCatching
 import io.github.airflux.serialization.dsl.reader.array.builder.arrayReader
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.reader.array.builder.returns
@@ -14,7 +14,7 @@ val LotsReader = arrayReader(ArrayReaderConfiguration) {
     }
     returns(items = nonNullable(LotReader))
 }.flatMap { context, location, items ->
-    runCatching(context, location) {
+    withCatching(context, location) {
         Lots(items).success(location)
     }
 }

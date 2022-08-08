@@ -272,13 +272,13 @@ internal class ReaderResultTest : FreeSpec() {
             )
         }
 
-        "ReaderResult#runCatching" - {
+        "ReaderResult#withCatching" - {
 
             "when no exception is thrown in the block" - {
                 val block: () -> ReaderResult<String> = { ORIGINAL_VALUE.success(LOCATION) }
 
                 "then should return the value" {
-                    val result = runCatching(CONTEXT, LOCATION, block)
+                    val result = withCatching(CONTEXT, LOCATION, block)
 
                     result as ReaderResult.Success
                     result.value shouldBe ORIGINAL_VALUE
@@ -297,7 +297,7 @@ internal class ReaderResultTest : FreeSpec() {
                     val contextWithExceptionHandler = CONTEXT + exceptionHandler
 
                     "then should return an error value" {
-                        val result = runCatching(contextWithExceptionHandler, LOCATION, block)
+                        val result = withCatching(contextWithExceptionHandler, LOCATION, block)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -310,7 +310,7 @@ internal class ReaderResultTest : FreeSpec() {
 
                     "then should re-throwing the exception" {
                         shouldThrow<IllegalStateException> {
-                            runCatching(CONTEXT, LOCATION, block)
+                            withCatching(CONTEXT, LOCATION, block)
                         }
                     }
                 }
