@@ -226,7 +226,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     )
 
                     "then function should return a result" {
-                        val result = input.read(CONTEXT, LOCATION, property)
+                        val result = with(ObjectReader) {
+                            input.read(CONTEXT, LOCATION, property)
+                        }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
@@ -242,7 +244,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     )
 
                     "then function should return a result" {
-                        val result = input.read(CONTEXT, LOCATION, property)
+                        val result = with(ObjectReader) {
+                            input.read(CONTEXT, LOCATION, property)
+                        }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
@@ -257,7 +261,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     )
 
                     "then function should return a result" {
-                        val result = input.read(CONTEXT, LOCATION, property)
+                        val result = with(ObjectReader) {
+                            input.read(CONTEXT, LOCATION, property)
+                        }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
@@ -273,7 +279,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     )
 
                     "then function should return a result" {
-                        val result = input.read(CONTEXT, LOCATION, property)
+                        val result = with(ObjectReader) {
+                            input.read(CONTEXT, LOCATION, property)
+                        }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
@@ -288,7 +296,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     )
 
                     "then function should return a result" {
-                        val result = input.read(CONTEXT, LOCATION, property)
+                        val result = with(ObjectReader) {
+                            input.read(CONTEXT, LOCATION, property)
+                        }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }
@@ -304,7 +314,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     )
 
                     "then function should return a result" {
-                        val result = input.read(CONTEXT, LOCATION, property)
+                        val result = with(ObjectReader) {
+                            input.read(CONTEXT, LOCATION, property)
+                        }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
                     }

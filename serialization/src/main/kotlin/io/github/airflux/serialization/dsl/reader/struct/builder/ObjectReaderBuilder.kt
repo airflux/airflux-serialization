@@ -66,7 +66,7 @@ public class ObjectReaderBuilder<T> internal constructor(
     internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
         val properties: ObjectProperties = propertiesBuilder.build()
         val validators: ObjectValidators = validatorsBuilder.build(properties)
-        return buildObjectReader(validators, properties, resultBuilder)
+        return ObjectReader(validators, properties, resultBuilder)
     }
 }
 
@@ -75,27 +75,31 @@ public fun <T> returns(builder: PropertyValues.(ReaderContext, Location) -> Read
         values.builder(context, location)
     }
 
-internal fun <T> buildObjectReader(
-    validators: ObjectValidators,
-    properties: ObjectProperties,
-    resultBuilder: ResultBuilder<T>
-): Reader<T> =
-    Reader { context, location, input ->
-        if (input !is ObjectNode) {
+internal class ObjectReader<T>(
+    private val validators: ObjectValidators,
+    private val properties: ObjectProperties,
+    private val resultBuilder: ResultBuilder<T>
+) : Reader<T> {
+
+    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<T> =
+        if (input is ObjectNode)
+            read(context, location, input)
+        else {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@Reader ReaderResult.Failure(
+            ReaderResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.OBJECT, input.type)
             )
         }
 
+    private fun read(context: ReaderContext, location: Location, input: ObjectNode): ReaderResult<T> {
         val failFast = context.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
             val failure = validator.validate(context, location, properties, input)
             if (failure != null) {
-                if (failFast) return@Reader failure
+                if (failFast) return failure
                 failures.add(failure)
             }
         }
@@ -106,30 +110,38 @@ internal fun <T> buildObjectReader(
                     input.read(context, location, property)
                         .fold(
                             ifFailure = { failure ->
-                                if (failFast) return@Reader failure
+                                if (failFast) return failure
                                 failures.add(failure)
                             },
-                            ifSuccess = { value ->
-                                this[property] = value.value
+                            ifSuccess = { success ->
+                                this[property] = success.value
                             }
                         )
                 }
             }
 
-        return@Reader if (failures.isEmpty())
+        return if (failures.isEmpty())
             resultBuilder.build(context, location, propertyValues)
         else
             failures.merge()
     }
 
-internal fun ObjectNode.read(context: ReaderContext, location: Location, property: ObjectProperty): ReaderResult<Any?> {
-    val reader = when (property) {
-        is ObjectProperty.Required<*> -> property.reader
-        is ObjectProperty.Defaultable<*> -> property.reader
-        is ObjectProperty.Optional<*> -> property.reader
-        is ObjectProperty.OptionalWithDefault<*> -> property.reader
-        is ObjectProperty.Nullable<*> -> property.reader
-        is ObjectProperty.NullableWithDefault<*> -> property.reader
+    internal companion object {
+
+        fun ObjectNode.read(
+            context: ReaderContext,
+            location: Location,
+            property: ObjectProperty
+        ): ReaderResult<Any?> {
+            val reader = when (property) {
+                is ObjectProperty.Required<*> -> property.reader
+                is ObjectProperty.Defaultable<*> -> property.reader
+                is ObjectProperty.Optional<*> -> property.reader
+                is ObjectProperty.OptionalWithDefault<*> -> property.reader
+                is ObjectProperty.Nullable<*> -> property.reader
+                is ObjectProperty.NullableWithDefault<*> -> property.reader
+            }
+            return reader.read(context, location, this)
+        }
     }
-    return reader.read(context, location, this)
 }
