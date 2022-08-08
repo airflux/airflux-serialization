@@ -57,7 +57,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         "The ArrayReaderBuilder type" - {
 
             "when no errors in the reader" - {
-                val reader = arrayReader<String> {
+                val reader = arrayReader {
                     validation {
                         DummyArrayValidatorBuilder(
                             key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
@@ -79,7 +79,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                 "when input is not the object type" - {
                     val input = StringNode(USER_NAME)
-                    val reader = arrayReader<String> {
+                    val reader = arrayReader {
                         returns(items = itemSpec())
                     }
 
@@ -102,7 +102,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                     val contextWithFailFastTrue = CONTEXT + FailFast(true)
 
                     "when the validator returns an error" - {
-                        val reader = arrayReader<String> {
+                        val reader = arrayReader<List<String>> {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
@@ -129,7 +129,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                     }
 
                     "when the reader of items returns an error" - {
-                        val reader = arrayReader<String> {
+                        val reader = arrayReader<List<String>> {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
@@ -157,7 +157,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                     "when only the validator returns an error" - {
                         val contextWithFailFastFalse = CONTEXT + FailFast(false)
-                        val reader = arrayReader<String> {
+                        val reader = arrayReader {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
@@ -185,7 +185,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                     "when the validator and the reader of items return errors" - {
                         val contextWithFailFastFalse = CONTEXT + FailFast(false)
-                        val reader = arrayReader<String> {
+                        val reader = arrayReader<List<String>> {
                             validation {
                                 +DummyArrayValidatorBuilder(
                                     key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),

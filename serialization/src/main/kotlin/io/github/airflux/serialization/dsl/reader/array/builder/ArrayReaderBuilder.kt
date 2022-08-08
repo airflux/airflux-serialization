@@ -40,7 +40,7 @@ import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
 public fun <T> arrayReader(
     configuration: ArrayReaderConfig = ArrayReaderConfig.DEFAULT,
     block: ArrayReaderBuilder<T>.() -> ResultBuilder<T>
-): Reader<List<T>> {
+): Reader<T> {
     val readerBuilder: ArrayReaderBuilder<T> =
         ArrayReaderBuilder(ArrayReaderValidatorsBuilderInstance(configuration))
     val resultBuilder: ResultBuilder<T> = readerBuilder.block()
@@ -53,21 +53,21 @@ public class ArrayReaderBuilder<T> internal constructor(
 ) : ArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<List<T>>
+        public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<T>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): Reader<List<T>> {
+    internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
         val validators = validatorsBuilder.build()
         return buildArrayReader(validators, resultBuilder)
     }
 }
 
-public fun <T> returns(items: ArrayItemSpec<T>): ResultBuilder<T> =
+public fun <T> returns(items: ArrayItemSpec<T>): ResultBuilder<List<T>> =
     ResultBuilder { context, location, input ->
         readArray(context = context, location = location, from = input, items = items.reader)
     }
 
-public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<T> {
+public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<List<T>> {
     val prefixItemReaders = prefixItems.readers
     return ResultBuilder { context, location, input ->
         readArray(
@@ -80,7 +80,7 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): Re
     }
 }
 
-public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpec<T>): ResultBuilder<T> {
+public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpec<T>): ResultBuilder<List<T>> {
     val prefixItemReaders = prefixItems.readers
     return ResultBuilder { context, location, input ->
         readArray(
@@ -93,10 +93,7 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpe
     }
 }
 
-internal fun <T> buildArrayReader(
-    validators: ArrayValidators,
-    resultBuilder: ResultBuilder<T>
-): Reader<List<T>> =
+internal fun <T> buildArrayReader(validators: ArrayValidators, resultBuilder: ResultBuilder<T>): Reader<T> =
     Reader { context, location, input ->
         if (input !is ArrayNode<*>) {
             val errorBuilder = context[InvalidTypeErrorBuilder]

@@ -6,7 +6,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.item.specificati
 import io.github.airflux.serialization.dsl.reader.array.builder.returns
 import io.github.airflux.serialization.std.validator.array.StdArrayValidator.isNotEmpty
 
-val LotsReader = arrayReader<Lot>(ArrayReaderConfiguration) {
+val LotsReader = arrayReader<List<Lot>>(ArrayReaderConfiguration) {
     validation {
         +isNotEmpty
     }
