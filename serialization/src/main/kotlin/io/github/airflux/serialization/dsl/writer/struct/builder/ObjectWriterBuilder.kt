@@ -58,12 +58,12 @@ internal fun <T : Any> buildObjectWriter(
     actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
     properties: ObjectProperties<T>
 ): Writer<T> =
-    Writer { context, location, input ->
+    Writer { context, location, value ->
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
-                    property.write(context, currentLocation, input)
+                    property.write(context, currentLocation, value)
                         ?.let { value -> this[property.name] = value }
                 }
             }
