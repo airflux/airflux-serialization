@@ -58,7 +58,7 @@ public class ArrayReaderBuilder<T> internal constructor(
 
     internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
         val validators = validatorsBuilder.build()
-        return buildArrayReader(validators, resultBuilder)
+        return ArrayReader(validators, resultBuilder)
     }
 }
 
@@ -93,30 +93,38 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpe
     }
 }
 
-internal fun <T> buildArrayReader(validators: ArrayValidators, resultBuilder: ResultBuilder<T>): Reader<T> =
-    Reader { context, location, input ->
-        if (input !is ArrayNode<*>) {
+internal class ArrayReader<T>(
+    private val validators: ArrayValidators,
+    private val resultBuilder: ResultBuilder<T>
+) : Reader<T> {
+
+    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<T> =
+        if (input is ArrayNode<*>)
+            read(context, location, input)
+        else {
             val errorBuilder = context[InvalidTypeErrorBuilder]
-            return@Reader ReaderResult.Failure(
+            ReaderResult.Failure(
                 location = location,
                 error = errorBuilder.build(ValueNode.Type.ARRAY, input.type)
             )
         }
 
+    private fun read(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<T> {
+        val failFast = context.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
             val failure = validator.validate(context, location, input)
             if (failure != null) {
-                if (context.failFast) return@Reader failure
+                if (failFast) return failure
                 failures.add(failure)
             }
         }
 
-        resultBuilder.build(context, location, input)
+        return resultBuilder.build(context, location, input)
             .fold(
                 ifFailure = { failure ->
-                    if (context.failFast) return@Reader failure
+                    if (failFast) return failure
                     failures.add(failure)
                     failures.merge()
                 },
@@ -125,3 +133,4 @@ internal fun <T> buildArrayReader(validators: ArrayValidators, resultBuilder: Re
                 }
             )
     }
+}
