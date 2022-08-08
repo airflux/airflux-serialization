@@ -28,9 +28,6 @@ import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
-import io.github.airflux.serialization.dsl.reader.context.exception.exception
-import io.github.airflux.serialization.dsl.reader.context.exception.exceptionsHandler
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
@@ -197,44 +194,22 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         )
                     }
                 }
+            }
 
-                "when the result builder does throw an exception" - {
-                    val reader = structReader<DTO> {
-                        property(propertySpec(value = USER_NAME))
+            "when some exception was thrown in the result builder" - {
+                val reader = structReader<DTO> {
+                    property(propertySpec(value = USER_NAME))
 
-                        returns { _, _ ->
-                            throw IllegalStateException()
-                        }
+                    returns { _, _ ->
+                        throw IllegalStateException()
                     }
+                }
 
-                    "when the context contains the exceptions handler" - {
-                        val exceptionHandler: ExceptionsHandler = exceptionsHandler(
-                            exception<IllegalStateException> { _, _, _ ->
-                                JsonErrors.PathMissing
-                            }
-                        )
-                        val contextWithExceptionHandler = CONTEXT + exceptionHandler
+                val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
 
-                        "then should return an error value" {
-                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                            val result = reader.read(context = contextWithExceptionHandler, location = LOCATION, input)
-
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
-                            )
-                        }
-                    }
-
-                    "when the context does not contain the exception handler" - {
-
-                        "then should re-throwing the exception" {
-                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-
-                            shouldThrow<IllegalStateException> {
-                                reader.read(context = CONTEXT, location = LOCATION, input)
-                            }
-                        }
+                "then it exception should be thrown out from the reader" {
+                    shouldThrow<IllegalStateException> {
+                        reader.read(context = CONTEXT, location = LOCATION, input)
                     }
                 }
             }

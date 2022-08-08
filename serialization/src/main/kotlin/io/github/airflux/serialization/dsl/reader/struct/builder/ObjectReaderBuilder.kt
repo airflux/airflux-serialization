@@ -25,7 +25,6 @@ import io.github.airflux.serialization.core.reader.context.option.failFast
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.reader.result.withCatching
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -118,9 +117,7 @@ internal fun <T> buildObjectReader(
             }
 
         return@Reader if (failures.isEmpty())
-            withCatching(context, location) {
-                resultBuilder.build(context, location, propertyValues)
-            }
+            resultBuilder.build(context, location, propertyValues)
         else
             failures.merge()
     }
