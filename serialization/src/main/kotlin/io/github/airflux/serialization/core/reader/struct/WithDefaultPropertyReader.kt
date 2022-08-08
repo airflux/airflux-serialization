@@ -25,30 +25,30 @@ import io.github.airflux.serialization.core.value.NullNode
 /**
  * Reads required property or return default if a property is not found.
  *
- * - If a node is found with a value no 'null' ([from] is [Lookup.Defined]) then applies [reader]
- * - If a node is found with a value 'null' ([from] is [Lookup.Defined]) then returns [defaultValue]
- * - If a node is not found ([from] is [Lookup.Undefined]) then returns [defaultValue]
+ * - If a node is found with a value no 'null' ([lookup] is [Lookup.Defined]) then applies [reader]
+ * - If a node is found with a value 'null' ([lookup] is [Lookup.Defined]) then returns [defaultValue]
+ * - If a node is not found ([lookup] is [Lookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readWithDefault(
     context: ReaderContext,
-    from: Lookup,
+    lookup: Lookup,
     using: Reader<T>,
     defaultValue: () -> T
 ): ReaderResult<T> {
 
     fun <T : Any> readWithDefault(
         context: ReaderContext,
-        from: Lookup.Defined,
+        lookup: Lookup.Defined,
         using: Reader<T>,
         defaultValue: () -> T
     ): ReaderResult<T> =
-        if (from.value is NullNode)
-            ReaderResult.Success(location = from.location, value = defaultValue())
+        if (lookup.value is NullNode)
+            ReaderResult.Success(location = lookup.location, value = defaultValue())
         else
-            using.read(context, from.location, from.value)
+            using.read(context, lookup.location, lookup.value)
 
-    return when (from) {
-        is Lookup.Defined -> readWithDefault(context, from, using, defaultValue)
-        is Lookup.Undefined -> ReaderResult.Success(location = from.location, value = defaultValue())
+    return when (lookup) {
+        is Lookup.Defined -> readWithDefault(context, lookup, using, defaultValue)
+        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue())
     }
 }

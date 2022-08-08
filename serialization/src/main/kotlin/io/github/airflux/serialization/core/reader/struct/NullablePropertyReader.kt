@@ -27,24 +27,24 @@ import io.github.airflux.serialization.core.value.NullNode
 /**
  * Reads nullable property or return default if a property is not found.
  *
- * - If a node is found with a value no 'null' ([from] is [Lookup.Defined]) then applies [reader]
- * - If a node is found with a value 'null' ([from] is [Lookup.Defined]) then returns 'null'
- * - If a node is not found ([from] is [Lookup.Undefined]) then an error is returned
+ * - If a node is found with a value no 'null' ([lookup] is [Lookup.Defined]) then applies [reader]
+ * - If a node is found with a value 'null' ([lookup] is [Lookup.Defined]) then returns 'null'
+ * - If a node is not found ([lookup] is [Lookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readNullable(context: ReaderContext, from: Lookup, using: Reader<T>): ReaderResult<T?> {
+public fun <T : Any> readNullable(context: ReaderContext, lookup: Lookup, using: Reader<T>): ReaderResult<T?> {
 
-    fun <T : Any> readNullable(context: ReaderContext, from: Lookup.Defined, using: Reader<T>): ReaderResult<T?> =
-        if (from.value is NullNode)
-            ReaderResult.Success(location = from.location, value = null)
+    fun <T : Any> readNullable(context: ReaderContext, lookup: Lookup.Defined, using: Reader<T>): ReaderResult<T?> =
+        if (lookup.value is NullNode)
+            ReaderResult.Success(location = lookup.location, value = null)
         else
-            using.read(context, from.location, from.value)
+            using.read(context, lookup.location, lookup.value)
 
-    return when (from) {
-        is Lookup.Defined -> readNullable(context, from, using)
+    return when (lookup) {
+        is Lookup.Defined -> readNullable(context, lookup, using)
         is Lookup.Undefined -> {
             val errorBuilder = context[PathMissingErrorBuilder]
-            ReaderResult.Failure(location = from.location, error = errorBuilder.build())
+            ReaderResult.Failure(location = lookup.location, error = errorBuilder.build())
         }
     }
 }

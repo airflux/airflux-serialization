@@ -46,32 +46,32 @@ internal class NullableWithDefaultPropertyReaderTest : FreeSpec() {
             "when the element is defined" - {
 
                 "when the value of the element is not the NullNode" - {
-                    val from: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
+                    val lookup: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
                         val result: ReaderResult<String?> =
-                            readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
+                            readNullable(context = CONTEXT, lookup = lookup, using = READER, defaultValue = DEFAULT)
                         result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                     }
                 }
 
                 "when the value of the element is the NullNode" - {
-                    val from: Lookup = Lookup.Defined(location = LOCATION, NullNode)
+                    val lookup: Lookup = Lookup.Defined(location = LOCATION, NullNode)
 
                     "then should return the null value" {
                         val result: ReaderResult<String?> =
-                            readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
+                            readNullable(context = CONTEXT, lookup = lookup, using = READER, defaultValue = DEFAULT)
                         result shouldBe ReaderResult.Success(location = LOCATION, value = null)
                     }
                 }
             }
 
             "when the element is undefined" - {
-                val from: Lookup = Lookup.Undefined(location = LOCATION)
+                val lookup: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the default value" {
                     val result: ReaderResult<String?> =
-                        readNullable(context = CONTEXT, from = from, using = READER, defaultValue = DEFAULT)
+                        readNullable(context = CONTEXT, lookup = lookup, using = READER, defaultValue = DEFAULT)
                     result shouldBe ReaderResult.Success(location = LOCATION, value = DEFAULT_VALUE)
                 }
             }

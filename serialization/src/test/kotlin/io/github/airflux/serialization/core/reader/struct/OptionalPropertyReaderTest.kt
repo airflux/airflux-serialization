@@ -43,19 +43,19 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         "The readOptional function" - {
 
             "when the element is defined" - {
-                val from: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
+                val lookup: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                 "then should return the result of applying the reader" {
-                    val result: ReaderResult<String?> = readOptional(context = CONTEXT, from = from, using = READER)
+                    val result: ReaderResult<String?> = readOptional(context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                 }
             }
 
             "when the element is undefined" - {
-                val from: Lookup = Lookup.Undefined(location = LOCATION)
+                val lookup: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the null value" {
-                    val result: ReaderResult<String?> = readOptional(context = CONTEXT, from = from, using = READER)
+                    val result: ReaderResult<String?> = readOptional(context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBe ReaderResult.Success(location = LOCATION, value = null)
                 }
             }

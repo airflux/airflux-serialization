@@ -24,16 +24,16 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 /**
  * Reads optional property or return default if a property is not found.
  *
- * - If a node is found ([from] is [Lookup.Defined]) then applies [reader]
- * - If a node is not found ([from] is [Lookup.Undefined]) then returns [defaultValue]
+ * - If a node is found ([lookup] is [Lookup.Defined]) then applies [reader]
+ * - If a node is not found ([lookup] is [Lookup.Undefined]) then returns [defaultValue]
  */
 public fun <T : Any> readOptional(
     context: ReaderContext,
-    from: Lookup,
+    lookup: Lookup,
     using: Reader<T>,
     defaultValue: () -> T
 ): ReaderResult<T> =
-    when (from) {
-        is Lookup.Defined -> using.read(context, from.location, from.value)
-        is Lookup.Undefined -> ReaderResult.Success(location = from.location, value = defaultValue())
+    when (lookup) {
+        is Lookup.Defined -> using.read(context, lookup.location, lookup.value)
+        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue())
     }

@@ -26,15 +26,15 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 /**
  * Reads required property.
  *
- * - If a node is found ([from] is [Lookup.Defined]) then applies [reader]
- * - If a node is not found ([from] is [Lookup.Undefined]) then an error is returned
+ * - If a node is found ([lookup] is [Lookup.Defined]) then applies [reader]
+ * - If a node is not found ([lookup] is [Lookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readRequired(context: ReaderContext, from: Lookup, using: Reader<T>): ReaderResult<T> =
-    when (from) {
-        is Lookup.Defined -> using.read(context, from.location, from.value)
+public fun <T : Any> readRequired(context: ReaderContext, lookup: Lookup, using: Reader<T>): ReaderResult<T> =
+    when (lookup) {
+        is Lookup.Defined -> using.read(context, lookup.location, lookup.value)
         is Lookup.Undefined -> {
             val errorBuilder = context[PathMissingErrorBuilder]
-            ReaderResult.Failure(location = from.location, error = errorBuilder.build())
+            ReaderResult.Failure(location = lookup.location, error = errorBuilder.build())
         }
     }
