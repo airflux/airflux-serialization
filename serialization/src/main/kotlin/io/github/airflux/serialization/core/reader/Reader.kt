@@ -21,6 +21,7 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
+import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -44,6 +45,15 @@ public fun interface Reader<out T> {
      */
     public infix fun <R> map(transform: (T) -> R): Reader<R> =
         Reader { context, location, input -> read(context, location, input).map(transform) }
+
+    public infix fun <R> flatMap(transform: (ReaderContext, Location, T) -> ReaderResult<R>): Reader<R> =
+        Reader { context, location, input ->
+            read(context, location, input)
+                .fold(
+                    ifFailure = { it },
+                    ifSuccess = { transform(context, it.location, it.value) }
+                )
+        }
 }
 
 /**

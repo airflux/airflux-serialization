@@ -4,5 +4,5 @@ data class Tender(
     val id: String,
     val title: String?,
     val value: Value?,
-    val lots: List<Lot>
+    val lots: Lots
 )

@@ -5,6 +5,7 @@ import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.quickstart.dto.Response
 import io.github.airflux.quickstart.dto.model.Lot
 import io.github.airflux.quickstart.dto.model.LotStatus
+import io.github.airflux.quickstart.dto.model.Lots
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
@@ -32,7 +33,7 @@ fun main() {
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")
     val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)
-    val tender = Tender(id = "tender-1", title = "title", value = value, lots = listOf(lot))
+    val tender = Tender(id = "tender-1", title = "title", value = value, lots = Lots(listOf(lot)))
     val response = Response(tender = tender)
     val output: ValueNode? = response.serialization(DefaultWriterContext, Location.empty, ResponseWriter)
     println(output.toString())

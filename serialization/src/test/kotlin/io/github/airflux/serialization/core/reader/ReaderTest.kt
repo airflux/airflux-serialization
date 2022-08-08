@@ -16,88 +16,129 @@
 
 package io.github.airflux.serialization.core.reader
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.assertAsFailure
-import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
-import kotlin.test.Test
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
-internal class ReaderTest {
+internal class ReaderTest : FreeSpec() {
 
     companion object {
+        private const val VALUE = "42"
+        private const val LEFT_VALUE = "2b26f8fa-dfdf-40bd-82ba-6e7cde08036d"
+        private const val RIGHT_VALUE = "bbbbb1f0-606e-4bd3-9ccb-41b52e6287f2"
         private val CONTEXT = ReaderContext()
-        private val location = Location.empty.append("user")
-        private const val ID_VALUE = "10"
-        private const val IDENTIFIER_VALUE = "100"
+        private val LOCATION = Location.empty
     }
 
-    @Test
-    fun `Testing the map function of the Reader class`() {
-        val reader = Reader { _, location, _ ->
-            ReaderResult.Success(location = location.append("id"), value = ID_VALUE)
+    init {
+
+        "The Reader type" - {
+
+            "Reader#map" - {
+                val reader =
+                    DummyReader { _, location -> ReaderResult.Success(location = location.append("id"), value = VALUE) }
+
+                "should return new reader" {
+                    val transformedReader = reader.map { value -> value.toInt() }
+                    val result = transformedReader.read(CONTEXT, LOCATION, NullNode)
+
+                    result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = VALUE.toInt())
+                }
+            }
+
+            "Reader#flatMap" - {
+                val reader =
+                    DummyReader { _, location -> ReaderResult.Success(location = location.append("id"), value = VALUE) }
+
+                "should return new reader" {
+                    val transformedReader = reader.flatMap { _, location, value -> value.toInt().success(location) }
+                    val result = transformedReader.read(CONTEXT, LOCATION, NullNode)
+
+                    result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = VALUE.toInt())
+                }
+            }
+
+            "Reader#or" - {
+
+                "when left reader returns an value" - {
+                    val leftReader = DummyReader { _, location ->
+                        ReaderResult.Success(location = location.append("id"), value = LEFT_VALUE)
+                    }
+
+                    val rightReader = DummyReader { _, location ->
+                        ReaderResult.Success(location = location.append("identifier"), value = RIGHT_VALUE)
+                    }
+
+                    val reader = leftReader or rightReader
+
+                    "then the right reader doesn't execute" {
+                        val result = reader.read(CONTEXT, LOCATION, NullNode)
+                        result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = LEFT_VALUE)
+                    }
+                }
+
+                "when left reader returns an error" - {
+                    val leftReader = DummyReader { _, location ->
+                        ReaderResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
+                    }
+
+                    "when the right reader returns an value" - {
+                        val rightReader = DummyReader { _, location ->
+                            ReaderResult.Success(location = location.append("identifier"), value = RIGHT_VALUE)
+                        }
+                        val reader = leftReader or rightReader
+
+                        "then the result of the right reader should be returned" {
+                            val result = reader.read(CONTEXT, LOCATION, NullNode)
+                            result shouldBe ReaderResult.Success(
+                                location = LOCATION.append("identifier"),
+                                value = RIGHT_VALUE
+                            )
+                        }
+                    }
+
+                    "when the right reader returns an error" - {
+                        val rightReader = DummyReader { _, location ->
+                            ReaderResult.Failure(
+                                location = location.append("identifier"),
+                                error = JsonErrors.InvalidType(
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.NUMBER
+                                )
+                            )
+                        }
+                        val reader = leftReader or rightReader
+
+                        "then both errors should be returned" {
+                            val result = reader.read(CONTEXT, LOCATION, NullNode)
+
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append("id"),
+                                    error = JsonErrors.PathMissing
+                                ),
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append("identifier"),
+                                    error = JsonErrors.InvalidType(
+                                        expected = ValueNode.Type.STRING,
+                                        actual = ValueNode.Type.NUMBER
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
-        val transformedReader = reader.map { value -> value.toInt() }
-
-        val result = transformedReader.read(CONTEXT, location, NullNode)
-
-        result.assertAsSuccess(location = location.append("id"), value = ID_VALUE.toInt())
-    }
-
-    @Test
-    fun `Testing the or function of the Reader class (first reader)`() {
-        val idReader = Reader { _, location, _ ->
-            ReaderResult.Success(location = location.append("id"), value = ID_VALUE)
-        }
-        val identifierReader = Reader<String> { _, location, _ ->
-            ReaderResult.Failure(location = location.append("identifier"), error = JsonErrors.PathMissing)
-        }
-        val composeReader = idReader or identifierReader
-
-        val result = composeReader.read(CONTEXT, location, NullNode)
-
-        result.assertAsSuccess(location = location.append("id"), value = ID_VALUE)
-    }
-
-    @Test
-    fun `Testing the or function of the Reader class (second reader)`() {
-        val idReader = Reader<String> { _, location, _ ->
-            ReaderResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
-        }
-        val identifierReader = Reader { _, location, _ ->
-            ReaderResult.Success(location = location.append("identifier"), value = IDENTIFIER_VALUE)
-        }
-        val composeReader = idReader or identifierReader
-
-        val result = composeReader.read(CONTEXT, location, NullNode)
-
-        result.assertAsSuccess(location = location.append("identifier"), value = IDENTIFIER_VALUE)
-    }
-
-    @Test
-    fun `Testing the or function of the Reader class (failure both reader)`() {
-        val idReader = Reader { _, location, _ ->
-            ReaderResult.Failure(location = location.append("id"), error = JsonErrors.PathMissing)
-        }
-        val identifierReader = Reader { _, location, _ ->
-            ReaderResult.Failure(
-                location = location.append("identifier"),
-                error = JsonErrors.InvalidType(expected = ValueNode.Type.OBJECT, actual = ValueNode.Type.STRING)
-            )
-        }
-        val composeReader = idReader or identifierReader
-
-        val result = composeReader.read(CONTEXT, location, NullNode)
-
-        result.assertAsFailure(
-            ReaderResult.Failure.Cause(location = location.append("id"), error = JsonErrors.PathMissing),
-            ReaderResult.Failure.Cause(
-                location = location.append("identifier"),
-                error = JsonErrors.InvalidType(expected = ValueNode.Type.OBJECT, actual = ValueNode.Type.STRING)
-            )
-        )
     }
 }

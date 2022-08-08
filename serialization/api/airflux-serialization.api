@@ -173,6 +173,7 @@ public final class io/github/airflux/serialization/core/path/PropertyPaths$Compa
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/Reader {
+	public fun flatMap (Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/Reader;
 	public fun map (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/Reader;
 	public abstract fun read (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
