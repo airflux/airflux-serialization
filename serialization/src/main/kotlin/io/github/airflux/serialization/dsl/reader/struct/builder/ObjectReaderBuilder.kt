@@ -81,23 +81,23 @@ internal class ObjectReader<T>(
     private val resultBuilder: ResultBuilder<T>
 ) : Reader<T> {
 
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<T> =
-        if (input is ObjectNode)
-            read(context, location, input)
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T> =
+        if (source is ObjectNode)
+            read(context, location, source)
         else {
             val errorBuilder = context[InvalidTypeErrorBuilder]
             ReaderResult.Failure(
                 location = location,
-                error = errorBuilder.build(ValueNode.Type.OBJECT, input.type)
+                error = errorBuilder.build(ValueNode.Type.OBJECT, source.type)
             )
         }
 
-    private fun read(context: ReaderContext, location: Location, input: ObjectNode): ReaderResult<T> {
+    private fun read(context: ReaderContext, location: Location, source: ObjectNode): ReaderResult<T> {
         val failFast = context.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
-            val failure = validator.validate(context, location, properties, input)
+            val failure = validator.validate(context, location, properties, source)
             if (failure != null) {
                 if (failFast) return failure
                 failures.add(failure)
@@ -107,7 +107,7 @@ internal class ObjectReader<T>(
         val propertyValues: PropertyValues = PropertyValuesInstance()
             .apply {
                 properties.forEach { property ->
-                    input.read(context, location, property)
+                    source.read(context, location, property)
                         .fold(
                             ifFailure = { failure ->
                                 if (failFast) return failure

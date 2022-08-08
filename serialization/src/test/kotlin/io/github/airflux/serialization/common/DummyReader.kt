@@ -26,6 +26,6 @@ internal class DummyReader<T>(val result: (ReaderContext, Location) -> ReaderRes
 
     constructor(result: ReaderResult<T>) : this({ _, _ -> result })
 
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<T> =
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T> =
         result(context, location)
 }

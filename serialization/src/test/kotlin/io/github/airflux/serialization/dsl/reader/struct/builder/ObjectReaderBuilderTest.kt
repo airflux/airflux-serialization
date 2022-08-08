@@ -73,8 +73,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "then should return successful value" {
-                    val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                    val result = reader.read(context = CONTEXT, location = LOCATION, input)
+                    val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                    val result = reader.read(context = CONTEXT, location = LOCATION, source)
                     result as ReaderResult.Success
                     result.value shouldBe DTO(name = USER_NAME)
                 }
@@ -82,8 +82,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
             "when errors occur in the reader" - {
 
-                "when input is not the object type" - {
-                    val input = StringNode(USER_NAME)
+                "when source is not the object type" - {
+                    val source = StringNode(USER_NAME)
                     val reader = structReader<DTO> {
                         val name = property(propertySpec(value = USER_NAME))
                         returns { _, location ->
@@ -92,7 +92,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "then the reader should return the invalid type error" {
-                        val result = reader.read(context = CONTEXT, location = LOCATION, input)
+                        val result = reader.read(context = CONTEXT, location = LOCATION, source)
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
@@ -125,8 +125,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
+                            val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError)
@@ -151,8 +151,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
+                            val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result =
+                                reader.read(context = contextWithFailFastTrue, location = LOCATION, source = source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -182,8 +183,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "then all error should be returns" {
-                        val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                        val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
+                        val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                        val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, source)
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
@@ -205,17 +206,17 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
                 }
 
-                val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
 
                 "then it exception should be thrown out from the reader" {
                     shouldThrow<IllegalStateException> {
-                        reader.read(context = CONTEXT, location = LOCATION, input)
+                        reader.read(context = CONTEXT, location = LOCATION, source)
                     }
                 }
             }
 
             "the StructNode#read extension-function" - {
-                val input = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
                     val property: ObjectProperty = ObjectProperty.Required(
@@ -227,7 +228,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            input.read(CONTEXT, LOCATION, property)
+                            source.read(CONTEXT, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -245,7 +246,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            input.read(CONTEXT, LOCATION, property)
+                            source.read(CONTEXT, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -262,7 +263,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            input.read(CONTEXT, LOCATION, property)
+                            source.read(CONTEXT, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -280,7 +281,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            input.read(CONTEXT, LOCATION, property)
+                            source.read(CONTEXT, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -297,7 +298,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            input.read(CONTEXT, LOCATION, property)
+                            source.read(CONTEXT, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -315,7 +316,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            input.read(CONTEXT, LOCATION, property)
+                            source.read(CONTEXT, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME

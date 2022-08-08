@@ -31,8 +31,8 @@ internal class ReadAsObjectTest : FreeSpec() {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = Location.empty.append("user")
-        private val reader = { _: ReaderContext, location: Location, input: ObjectNode ->
-            val name = input["name"] as StringNode
+        private val reader = { _: ReaderContext, location: Location, source: ObjectNode ->
+            val name = source["name"] as StringNode
             ReaderResult.Success(location, DTO(name = name.get))
         }
     }

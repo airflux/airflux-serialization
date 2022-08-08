@@ -27,6 +27,6 @@ import io.github.airflux.serialization.core.value.readAsBoolean
  * Reader for primitive [Boolean] type.
  */
 public object BooleanReader : Reader<Boolean> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<Boolean> =
-        input.readAsBoolean(context, location)
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Boolean> =
+        source.readAsBoolean(context, location)
 }

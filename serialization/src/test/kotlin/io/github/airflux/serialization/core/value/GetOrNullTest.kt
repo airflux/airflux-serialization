@@ -27,7 +27,7 @@ internal class GetOrNullTest : FreeSpec() {
     companion object {
         private const val USER_NAME_VALUE = "user"
         private const val PHONE_NUMBER_VALUE = "123456789"
-        val INPUT: ValueNode = ObjectNode(
+        val SOURCE: ValueNode = ObjectNode(
             "user" to ObjectNode(
                 "name" to StringNode(USER_NAME_VALUE),
                 "phones" to ArrayNode(
@@ -51,7 +51,7 @@ internal class GetOrNullTest : FreeSpec() {
                         Pair(PropertyPath("user").append("phones").append(0).append("value"), StringNode(PHONE_NUMBER_VALUE)),
                     )
                 ) { (path, value) ->
-                    val result = INPUT.getOrNull(path)
+                    val result = SOURCE.getOrNull(path)
                     result shouldBe value
                 }
             }
@@ -68,7 +68,7 @@ internal class GetOrNullTest : FreeSpec() {
                         PropertyPath("user").append("phones").append(0).append("title"),
                     )
                 ) { path ->
-                    val result = INPUT.getOrNull(path)
+                    val result = SOURCE.getOrNull(path)
                     result.shouldBeNull()
                 }
             }

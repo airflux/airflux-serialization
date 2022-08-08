@@ -29,8 +29,8 @@ import java.math.BigDecimal
  * Reader for [BigDecimal] type.
  */
 public object BigDecimalReader : Reader<BigDecimal> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<BigDecimal> =
-        input.readAsNumber(context, location) { _, p, text ->
-            BigDecimal(text).success(location = p)
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<BigDecimal> =
+        source.readAsNumber(context, location) { _, p, value ->
+            BigDecimal(value).success(location = p)
         }
 }

@@ -31,13 +31,13 @@ import io.github.airflux.serialization.core.value.readAsNumber
  * Reader for primitive [Short] type.
  */
 public object ShortReader : Reader<Short> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<Short> =
-        input.readAsNumber(context, location) { ctx, l, text ->
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Short> =
+        source.readAsNumber(context, location) { ctx, l, value ->
             try {
-                text.toShort().success(location = l)
+                value.toShort().success(location = l)
             } catch (expected: NumberFormatException) {
                 val errorBuilder = ctx[ValueCastErrorBuilder]
-                errorBuilder.build(text, Short::class).failure(location = l)
+                errorBuilder.build(value, Short::class).failure(location = l)
             }
         }
 }

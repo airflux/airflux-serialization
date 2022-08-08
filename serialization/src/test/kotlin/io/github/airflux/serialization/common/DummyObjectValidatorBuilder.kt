@@ -37,7 +37,7 @@ internal class DummyObjectValidatorBuilder(
             context: ReaderContext,
             location: Location,
             properties: ObjectProperties,
-            input: ObjectNode
+            source: ObjectNode
         ): ReaderResult.Failure? = result
     }
 

@@ -37,13 +37,13 @@ public class AdditionalPropertiesObjectValidator internal constructor(
         context: ReaderContext,
         location: Location,
         properties: ObjectProperties,
-        input: ObjectNode
+        source: ObjectNode
     ): ReaderResult.Failure? {
         val failFast = context.failFast
         val errorBuilder = context[ErrorBuilder]
 
         val failures = mutableListOf<ReaderResult.Failure>()
-        input.forEach { (name, _) ->
+        source.forEach { (name, _) ->
             if (name !in names) {
                 val failure = ReaderResult.Failure(location.append(name), errorBuilder.build())
                 if (failFast) return failure

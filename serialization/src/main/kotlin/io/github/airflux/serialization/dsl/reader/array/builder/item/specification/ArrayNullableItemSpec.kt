@@ -25,11 +25,11 @@ import io.github.airflux.serialization.core.value.NullNode
 
 public fun <T : Any> nullable(reader: Reader<T>): ArrayItemSpec.Nullable<T?> =
     ArrayItemSpec.Nullable(
-        reader = { context, location, input ->
-            if (input is NullNode)
+        reader = { context, location, source ->
+            if (source is NullNode)
                 ReaderResult.Success(location = location, value = null)
             else
-                reader.read(context, location, input)
+                reader.read(context, location, source)
         }
     )
 
@@ -37,8 +37,8 @@ public infix fun <T> ArrayItemSpec.Nullable<T>.validation(
     validator: Validator<T?>
 ): ArrayItemSpec.Nullable<T> =
     ArrayItemSpec.Nullable(
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 

@@ -33,11 +33,11 @@ public class MaxPropertiesObjectValidator internal constructor(private val value
         context: ReaderContext,
         location: Location,
         properties: ObjectProperties,
-        input: ObjectNode
+        source: ObjectNode
     ): ReaderResult.Failure? =
-        if (input.count > value) {
+        if (source.count > value) {
             val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location, errorBuilder.build(value, input.count))
+            ReaderResult.Failure(location, errorBuilder.build(value, source.count))
         } else
             null
 

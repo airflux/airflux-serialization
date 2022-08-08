@@ -66,8 +66,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named id" - {
-                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result as ReaderResult.Success<String>
@@ -76,8 +76,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val input = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a default value should be returned" {
                         result as ReaderResult.Success<String>
@@ -86,8 +86,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val input = ObjectNode("id" to NumberNode.valueOf(10))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to NumberNode.valueOf(10))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result as ReaderResult.Failure
@@ -113,8 +113,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named id" - {
-                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result as ReaderResult.Success<String>
@@ -123,8 +123,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val input = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a default value should be returned" {
                         result as ReaderResult.Success<String>
@@ -133,8 +133,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val input = ObjectNode("id" to NumberNode.valueOf(10))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to NumberNode.valueOf(10))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result as ReaderResult.Failure
@@ -165,8 +165,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named id" - {
-                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result as ReaderResult.Success<String>
@@ -175,8 +175,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the reader has read a property named identifier" - {
-                    val input = ObjectNode("identifier" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("identifier" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result as ReaderResult.Success<String>
@@ -185,8 +185,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val input = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then a default value should be returned" {
                         result as ReaderResult.Success<String>
@@ -195,8 +195,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val input = ObjectNode("id" to NumberNode.valueOf(10))
-                    val result = spec.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to NumberNode.valueOf(10))
+                    val result = spec.reader.read(CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result as ReaderResult.Failure
@@ -223,22 +223,25 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
-                        val input = StringNode(ID_VALUE_AS_UUID)
+                        val source = StringNode(ID_VALUE_AS_UUID)
 
-                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, source)
 
                         result as ReaderResult.Success<String>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
 
                     "then a validation error should be returned if validation is a failure" {
-                        val input = StringNode("")
+                        val source = StringNode("")
 
-                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, source)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                            ReaderResult.Failure.Cause(
+                                location = LOCATION,
+                                error = JsonErrors.Validation.Strings.IsEmpty
+                            )
                         )
                     }
                 }
@@ -246,9 +249,9 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val input = NumberNode.valueOf(10)
+                        val source = NumberNode.valueOf(10)
 
-                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, input)
+                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, source)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -278,8 +281,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has successfully read" - {
-                    val input = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
-                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         println(result)
@@ -289,8 +292,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has failure read" - {
-                    val input = ObjectNode("id" to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
-                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
+                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result as ReaderResult.Success<String>
@@ -299,8 +302,8 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 }
 
                 "when the alternative reader has failure read" - {
-                    val input = ObjectNode("id" to BooleanNode.True)
-                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, input)
+                    val source = ObjectNode("id" to BooleanNode.True)
+                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
 
                     "then should be returned all read errors" {
                         result as ReaderResult.Failure

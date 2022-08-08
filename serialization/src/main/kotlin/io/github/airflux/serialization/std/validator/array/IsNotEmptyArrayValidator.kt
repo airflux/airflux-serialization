@@ -28,8 +28,8 @@ import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayV
 
 public class IsNotEmptyArrayValidator internal constructor() : ArrayValidator {
 
-    override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult.Failure? =
-        if (input.isEmpty()) {
+    override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+        if (source.isEmpty()) {
             val errorBuilder = context[ErrorBuilder]
             ReaderResult.Failure(location, errorBuilder.build())
         } else

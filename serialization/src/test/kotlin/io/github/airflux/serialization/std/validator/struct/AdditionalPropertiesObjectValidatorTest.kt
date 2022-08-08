@@ -60,14 +60,14 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
-                val input = ObjectNode(
+                val source = ObjectNode(
                     ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                     TITLE_PROPERTY_VALUE to StringNode(TITLE_PROPERTY_NAME)
                 )
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, properties, input)
+                        validator.validate(context, LOCATION, properties, source)
                     }
                     exception.message shouldBe "The error builder '${AdditionalPropertiesObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -79,25 +79,25 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                 )
 
                 "when the object is empty" - {
-                    val input = ObjectNode()
+                    val source = ObjectNode()
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, properties, input)
+                        val errors = validator.validate(context, LOCATION, properties, source)
                         errors.shouldBeNull()
                     }
                 }
 
                 "when the object does not contains additional properties" - {
-                    val input = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val source = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, properties, input)
+                        val errors = validator.validate(context, LOCATION, properties, source)
                         errors.shouldBeNull()
                     }
                 }
 
                 "when the object contains additional properties" - {
-                    val input = ObjectNode(
+                    val source = ObjectNode(
                         ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
                         TITLE_PROPERTY_VALUE to StringNode(TITLE_PROPERTY_NAME),
                         NAME_PROPERTY_VALUE to StringNode(NAME_PROPERTY_NAME)
@@ -106,7 +106,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                     "when fail-fast is missing" - {
 
                         "then the validator should return an error" {
-                            val failure = validator.validate(context, LOCATION, properties, input)
+                            val failure = validator.validate(context, LOCATION, properties, source)
 
                             failure.shouldNotBeNull()
                             failure shouldBe ReaderResult.Failure(
@@ -120,7 +120,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                         val contextWithFailFast = context + FailFast(true)
 
                         "then the validator should return an error" {
-                            val failure = validator.validate(contextWithFailFast, LOCATION, properties, input)
+                            val failure = validator.validate(contextWithFailFast, LOCATION, properties, source)
 
                             failure.shouldNotBeNull()
                             failure shouldBe ReaderResult.Failure(
@@ -134,7 +134,7 @@ internal class AdditionalPropertiesObjectValidatorTest : FreeSpec() {
                         val contextWithFailFast = context + FailFast(false)
 
                         "then the validator should return an error" {
-                            val failure = validator.validate(contextWithFailFast, LOCATION, properties, input)
+                            val failure = validator.validate(contextWithFailFast, LOCATION, properties, source)
 
                             failure.shouldNotBeNull()
                             failure shouldBe listOf(

@@ -33,7 +33,7 @@ public fun interface Reader<out T> {
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<T>
+    public fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T>
 
     /**
      * Create a new [Reader] which maps the value produced by this [Reader].
@@ -44,11 +44,11 @@ public fun interface Reader<out T> {
      * @return A new [Reader] with the updated behavior.
      */
     public infix fun <R> map(transform: (T) -> R): Reader<R> =
-        Reader { context, location, input -> read(context, location, input).map(transform) }
+        Reader { context, location, source -> read(context, location, source).map(transform) }
 
     public infix fun <R> flatMap(transform: (ReaderContext, Location, T) -> ReaderResult<R>): Reader<R> =
-        Reader { context, location, input ->
-            read(context, location, input)
+        Reader { context, location, source ->
+            read(context, location, source)
                 .fold(
                     ifFailure = { it },
                     ifSuccess = { transform(context, it.location, it.value) }
@@ -64,22 +64,22 @@ public fun interface Reader<out T> {
  * @param other the [Reader] to run if this one gets a [ReaderResult.Error]
  * @return A new [Reader] with the updated behavior.
  */
-public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { context, location, input ->
-    read(context, location, input)
+public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { context, location, source ->
+    read(context, location, source)
         .recovery { failure ->
-            other.read(context, location, input)
+            other.read(context, location, source)
                 .recovery { alternative -> failure + alternative }
         }
 }
 
 public infix fun <T> Reader<T?>.filter(predicate: ReaderPredicate<T>): Reader<T?> =
-    Reader { context, location, input ->
-        this@filter.read(context, location, input)
+    Reader { context, location, source ->
+        this@filter.read(context, location, source)
             .filter(context, predicate)
     }
 
 public infix fun <T> Reader<T>.validation(validator: Validator<T>): Reader<T> =
-    Reader { context, location, input ->
-        this@validation.read(context, location, input)
+    Reader { context, location, source ->
+        this@validation.read(context, location, source)
             .validation(context, validator)
     }

@@ -28,7 +28,7 @@ public fun interface ObjectValidator {
         context: ReaderContext,
         location: Location,
         properties: ObjectProperties,
-        input: ObjectNode
+        source: ObjectNode
     ): ReaderResult.Failure?
 
     /*
@@ -40,10 +40,10 @@ public fun interface ObjectValidator {
     */
     public infix fun or(alt: ObjectValidator): ObjectValidator {
         val self = this
-        return ObjectValidator { context, location, properties, input ->
-            self.validate(context, location, properties, input)
+        return ObjectValidator { context, location, properties, source ->
+            self.validate(context, location, properties, source)
                 ?.let { error ->
-                    alt.validate(context, location, properties, input)
+                    alt.validate(context, location, properties, source)
                         ?.let { error + it }
                 }
         }
@@ -58,9 +58,9 @@ public fun interface ObjectValidator {
      */
     public infix fun and(alt: ObjectValidator): ObjectValidator {
         val self = this
-        return ObjectValidator { context, location, properties, input ->
-            val result = self.validate(context, location, properties, input)
-            result ?: alt.validate(context, location, properties, input)
+        return ObjectValidator { context, location, properties, source ->
+            val result = self.validate(context, location, properties, source)
+            result ?: alt.validate(context, location, properties, source)
         }
     }
 }

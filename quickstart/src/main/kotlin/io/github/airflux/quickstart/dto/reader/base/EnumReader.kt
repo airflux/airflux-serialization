@@ -5,8 +5,8 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 inline fun <reified T : Enum<T>> Reader<String>.asEnum(): Reader<T> =
-    Reader { context, location, input ->
-        read(context, location, input)
+    Reader { context, location, source ->
+        read(context, location, source)
             .asEnum()
     }
 

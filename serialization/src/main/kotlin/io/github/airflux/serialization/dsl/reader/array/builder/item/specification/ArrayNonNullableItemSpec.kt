@@ -28,8 +28,8 @@ public infix fun <T> ArrayItemSpec.NonNullable<T>.validation(
     validator: Validator<T>
 ): ArrayItemSpec.NonNullable<T> =
     ArrayItemSpec.NonNullable(
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 

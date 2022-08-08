@@ -44,15 +44,15 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 withData(
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
-                    val input: ValueNode = NumberNode.valueOf(value)!!
-                    val result = BigDecimalReader.read(CONTEXT, Location.empty, input)
+                    val source: ValueNode = NumberNode.valueOf(value)!!
+                    val result = BigDecimalReader.read(CONTEXT, Location.empty, source)
                     result.assertAsSuccess(location = Location.empty, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
-                val input: ValueNode = StringNode("abc")
-                val result = BigDecimalReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = StringNode("abc")
+                val result = BigDecimalReader.read(CONTEXT, Location.empty, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,

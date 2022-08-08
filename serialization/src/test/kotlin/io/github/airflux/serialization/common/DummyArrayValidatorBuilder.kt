@@ -32,7 +32,7 @@ internal class DummyArrayValidatorBuilder(
     override fun build(): ArrayValidator = validator
 
     internal class Validator(val result: ReaderResult.Failure?) : ArrayValidator {
-        override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult.Failure? =
+        override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
             result
     }
 

@@ -27,6 +27,6 @@ import io.github.airflux.serialization.core.value.readAsString
  * Reader for primitive [String] type.
  */
 public object StringReader : Reader<String> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<String> =
-        input.readAsString(context, location)
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<String> =
+        source.readAsString(context, location)
 }

@@ -33,9 +33,9 @@ public class IsNotEmptyObjectValidator internal constructor() : ObjectValidator 
         context: ReaderContext,
         location: Location,
         properties: ObjectProperties,
-        input: ObjectNode
+        source: ObjectNode
     ): ReaderResult.Failure? =
-        if (input.isEmpty()) {
+        if (source.isEmpty()) {
             val errorBuilder = context[ErrorBuilder]
             ReaderResult.Failure(location, errorBuilder.build())
         } else

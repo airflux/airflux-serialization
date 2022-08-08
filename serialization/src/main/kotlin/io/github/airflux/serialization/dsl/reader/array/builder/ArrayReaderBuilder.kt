@@ -53,7 +53,7 @@ public class ArrayReaderBuilder<T> internal constructor(
 ) : ArrayReaderValidatorsBuilder by validatorsBuilder {
 
     public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<T>
+        public fun build(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult<T>
     }
 
     internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
@@ -63,17 +63,17 @@ public class ArrayReaderBuilder<T> internal constructor(
 }
 
 public fun <T> returns(items: ArrayItemSpec<T>): ResultBuilder<List<T>> =
-    ResultBuilder { context, location, input ->
-        readArray(context = context, location = location, from = input, items = items.reader)
+    ResultBuilder { context, location, source ->
+        readArray(context = context, location = location, source = source, items = items.reader)
     }
 
 public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<List<T>> {
     val prefixItemReaders = prefixItems.readers
-    return ResultBuilder { context, location, input ->
+    return ResultBuilder { context, location, source ->
         readArray(
             context = context,
             location = location,
-            from = input,
+            source = source,
             prefixItems = prefixItemReaders,
             errorIfAdditionalItems = !items
         )
@@ -82,11 +82,11 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): Re
 
 public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpec<T>): ResultBuilder<List<T>> {
     val prefixItemReaders = prefixItems.readers
-    return ResultBuilder { context, location, input ->
+    return ResultBuilder { context, location, source ->
         readArray(
             context = context,
             location = location,
-            from = input,
+            source = source,
             prefixItems = prefixItemReaders,
             items = items.reader
         )
@@ -98,30 +98,30 @@ internal class ArrayReader<T>(
     private val resultBuilder: ResultBuilder<T>
 ) : Reader<T> {
 
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<T> =
-        if (input is ArrayNode<*>)
-            read(context, location, input)
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T> =
+        if (source is ArrayNode<*>)
+            read(context, location, source)
         else {
             val errorBuilder = context[InvalidTypeErrorBuilder]
             ReaderResult.Failure(
                 location = location,
-                error = errorBuilder.build(ValueNode.Type.ARRAY, input.type)
+                error = errorBuilder.build(ValueNode.Type.ARRAY, source.type)
             )
         }
 
-    private fun read(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult<T> {
+    private fun read(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult<T> {
         val failFast = context.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
-            val failure = validator.validate(context, location, input)
+            val failure = validator.validate(context, location, source)
             if (failure != null) {
                 if (failFast) return failure
                 failures.add(failure)
             }
         }
 
-        return resultBuilder.build(context, location, input)
+        return resultBuilder.build(context, location, source)
             .fold(
                 ifFailure = { failure ->
                     if (failFast) return failure

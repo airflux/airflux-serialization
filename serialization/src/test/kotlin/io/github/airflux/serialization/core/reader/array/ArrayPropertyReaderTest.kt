@@ -56,22 +56,22 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
         "The readArray function for the items-only reader" - {
 
-            "when parameter 'from' is empty" - {
-                val from = ArrayNode<StringNode>()
+            "when parameter 'source' is empty" - {
+                val source = ArrayNode<StringNode>()
 
                 val result: ReaderResult<List<String>> =
-                    readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
+                    readArray(context = CONTEXT, location = LOCATION, source = source, items = StringReader)
 
                 result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
             }
 
-            "when parameter 'from' is not empty" - {
+            "when parameter 'source' is not empty" - {
 
                 "when read was any errors" {
-                    val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
+                    val source = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                     val result: ReaderResult<List<String>> =
-                        readArray(context = CONTEXT, location = LOCATION, from = from, items = StringReader)
+                        readArray(context = CONTEXT, location = LOCATION, source = source, items = StringReader)
 
                     result shouldBe ReaderResult.Success(
                         location = LOCATION,
@@ -80,13 +80,17 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                 }
 
                 "when read was some errors" - {
-                    val from = ArrayNode(NumberNode.valueOf(10), BooleanNode.True)
+                    val source = ArrayNode(NumberNode.valueOf(10), BooleanNode.True)
 
                     "when fail-fast is true" {
                         val updatedContext: ReaderContext = CONTEXT + FailFast(true)
 
-                        val result: ReaderResult<List<String>> =
-                            readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
+                        val result: ReaderResult<List<String>> = readArray(
+                            context = updatedContext,
+                            location = LOCATION,
+                            source = source,
+                            items = StringReader
+                        )
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -103,8 +107,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     "when fail-fast is false" {
                         val updatedContext: ReaderContext = CONTEXT + FailFast(false)
 
-                        val result: ReaderResult<List<String>> =
-                            readArray(context = updatedContext, location = LOCATION, from = from, items = StringReader)
+                        val result: ReaderResult<List<String>> = readArray(
+                            context = updatedContext,
+                            location = LOCATION,
+                            source = source,
+                            items = StringReader
+                        )
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -130,13 +138,13 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
         "The readArray function for the prefix-items-only readers" - {
 
-            "when parameter 'from' is empty" - {
-                val from = ArrayNode<StringNode>()
+            "when parameter 'source' is empty" - {
+                val source = ArrayNode<StringNode>()
 
                 val result: ReaderResult<List<String>> = readArray(
                     context = CONTEXT,
                     location = LOCATION,
-                    from = from,
+                    source = source,
                     prefixItems = listOf(StringReader),
                     errorIfAdditionalItems = true
                 )
@@ -144,8 +152,8 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                 result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
             }
 
-            "when parameter 'from' is not empty" - {
-                val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
+            "when parameter 'source' is not empty" - {
+                val source = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                 "when the number of readers is less than the number of items" - {
                     val readers = listOf(StringReader)
@@ -154,7 +162,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result: ReaderResult<List<String>> = readArray(
                             context = CONTEXT,
                             location = LOCATION,
-                            from = from,
+                            source = source,
                             prefixItems = readers,
                             errorIfAdditionalItems = true
                         )
@@ -172,7 +180,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result: ReaderResult<List<String>> = readArray(
                             context = CONTEXT,
                             location = LOCATION,
-                            from = from,
+                            source = source,
                             prefixItems = readers,
                             errorIfAdditionalItems = false
                         )
@@ -188,7 +196,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     val result: ReaderResult<List<String>> = readArray(
                         context = CONTEXT,
                         location = LOCATION,
-                        from = from,
+                        source = source,
                         prefixItems = listOf(StringReader, StringReader),
                         errorIfAdditionalItems = true
                     )
@@ -203,7 +211,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     val result: ReaderResult<List<String>> = readArray(
                         context = CONTEXT,
                         location = LOCATION,
-                        from = from,
+                        source = source,
                         prefixItems = listOf(StringReader, StringReader, StringReader),
                         errorIfAdditionalItems = true
                     )
@@ -222,7 +230,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result: ReaderResult<List<Number>> = readArray(
                             context = updatedContext,
                             location = LOCATION,
-                            from = from,
+                            source = source,
                             prefixItems = listOf(IntReader, LongReader),
                             errorIfAdditionalItems = true
                         )
@@ -245,7 +253,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result = readArray(
                             context = updatedContext,
                             location = LOCATION,
-                            from = from,
+                            source = source,
                             prefixItems = listOf(IntReader, io.github.airflux.serialization.std.reader.BooleanReader),
                             errorIfAdditionalItems = true
                         )
@@ -274,13 +282,13 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
         "The readArray function for the prefix-items and items readers" - {
 
-            "when parameter 'from' is empty" - {
-                val from = ArrayNode<StringNode>()
+            "when parameter 'source' is empty" - {
+                val source = ArrayNode<StringNode>()
 
                 val result: ReaderResult<List<String>> = readArray(
                     context = CONTEXT,
                     location = LOCATION,
-                    from = from,
+                    source = source,
                     prefixItems = listOf(StringReader),
                     items = StringReader
                 )
@@ -288,14 +296,14 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                 result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
             }
 
-            "when parameter 'from' is not empty" - {
-                val from = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
+            "when parameter 'source' is not empty" - {
+                val source = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
 
                 "when read was any errors" {
                     val result: ReaderResult<List<String>> = readArray(
                         context = CONTEXT,
                         location = LOCATION,
-                        from = from,
+                        source = source,
                         prefixItems = listOf(StringReader),
                         items = StringReader
                     )
@@ -314,7 +322,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result: ReaderResult<List<Int>> = readArray(
                             context = updatedContext,
                             location = LOCATION,
-                            from = from,
+                            source = source,
                             prefixItems = listOf(IntReader),
                             items = IntReader
                         )
@@ -337,7 +345,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result = readArray(
                             context = updatedContext,
                             location = LOCATION,
-                            from = from,
+                            source = source,
                             prefixItems = listOf(IntReader),
                             items = IntReader
                         )

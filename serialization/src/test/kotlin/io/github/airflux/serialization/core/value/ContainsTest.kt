@@ -26,7 +26,7 @@ internal class ContainsTest : FreeSpec() {
     companion object {
         private const val USER_NAME_VALUE = "user"
         private const val PHONE_NUMBER_VALUE = "123456789"
-        val INPUT: ObjectNode = ObjectNode(
+        val SOURCE: ObjectNode = ObjectNode(
             "user" to ObjectNode(
                 "name" to StringNode(USER_NAME_VALUE),
                 "phones" to ArrayNode(
@@ -53,7 +53,7 @@ internal class ContainsTest : FreeSpec() {
                         PropertyPath("user").append("phones").append(0).append("value"),
                     )
                 ) { path ->
-                    val result = path in INPUT
+                    val result = path in SOURCE
                     result shouldBe true
                 }
             }
@@ -70,7 +70,7 @@ internal class ContainsTest : FreeSpec() {
                         PropertyPath("user").append("phones").append(0).append("title"),
                     )
                 ) { path ->
-                    val result = path in INPUT
+                    val result = path in SOURCE
                     result shouldBe false
                 }
             }

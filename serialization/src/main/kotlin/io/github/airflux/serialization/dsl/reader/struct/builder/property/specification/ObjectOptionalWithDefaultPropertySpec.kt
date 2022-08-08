@@ -40,8 +40,8 @@ public fun <T : Any> optionalWithDefault(
 ): ObjectPropertySpec.OptionalWithDefault<T> =
     ObjectPropertySpec.OptionalWithDefault(
         path = PropertyPaths(path),
-        reader = { context, location, input ->
-            val lookup = input.lookup(location, path)
+        reader = { context, location, source ->
+            val lookup = source.lookup(location, path)
             readOptional(context, lookup, reader, default)
         }
     )
@@ -53,12 +53,12 @@ public fun <T : Any> optionalWithDefault(
 ): ObjectPropertySpec.OptionalWithDefault<T> =
     ObjectPropertySpec.OptionalWithDefault(
         path = paths,
-        reader = { context, location, input ->
+        reader = { context, location, source ->
             val lookup: Lookup = paths.fold(
-                initial = { path -> input.lookup(location, path) },
+                initial = { path -> source.lookup(location, path) },
                 operation = { lookup, path ->
                     if (lookup is Lookup.Defined) return@fold lookup
-                    input.lookup(location, path)
+                    source.lookup(location, path)
                 }
             )
             readOptional(context, lookup, reader, default)
@@ -70,8 +70,8 @@ public infix fun <T : Any> ObjectPropertySpec.OptionalWithDefault<T>.validation(
 ): ObjectPropertySpec.OptionalWithDefault<T> =
     ObjectPropertySpec.OptionalWithDefault(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 

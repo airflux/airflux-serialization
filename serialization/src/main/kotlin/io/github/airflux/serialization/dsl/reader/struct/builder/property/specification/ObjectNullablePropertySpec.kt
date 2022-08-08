@@ -38,8 +38,8 @@ public fun <T : Any> nullable(name: String, reader: Reader<T>): ObjectPropertySp
 public fun <T : Any> nullable(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
         path = PropertyPaths(path),
-        reader = { context, location, input ->
-            val lookup = input.lookup(location, path)
+        reader = { context, location, source ->
+            val lookup = source.lookup(location, path)
             readNullable(context, lookup, reader)
         }
     )
@@ -47,11 +47,11 @@ public fun <T : Any> nullable(path: PropertyPath, reader: Reader<T>): ObjectProp
 public fun <T : Any> nullable(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
         path = paths,
-        reader = Reader { context, location, input ->
+        reader = Reader { context, location, source ->
             val errorBuilder = context[PathMissingErrorBuilder]
             val failures = paths.items
                 .map { path ->
-                    val lookup = input.lookup(location, path)
+                    val lookup = source.lookup(location, path)
                     if (lookup is Lookup.Defined) return@Reader readNullable(context, lookup, reader)
                     ReaderResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
@@ -64,8 +64,8 @@ public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.validation(
 ): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 
@@ -74,8 +74,8 @@ public infix fun <T : Any> ObjectPropertySpec.Nullable<T>.filter(
 ): ObjectPropertySpec.Nullable<T> =
     ObjectPropertySpec.Nullable(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).filter(context, predicate)
+        reader = { context, location, source ->
+            reader.read(context, location, source).filter(context, predicate)
         }
     )
 

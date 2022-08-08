@@ -47,11 +47,11 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
-                val input = ObjectNode()
+                val source = ObjectNode()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, PROPERTIES, input)
+                        validator.validate(context, LOCATION, PROPERTIES, source)
                     }
                     exception.message shouldBe "The error builder '${IsNotEmptyObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
@@ -63,10 +63,10 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
                 )
 
                 "when the object is empty" - {
-                    val input = ObjectNode()
+                    val source = ObjectNode()
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, PROPERTIES, input)
+                        val failure = validator.validate(context, LOCATION, PROPERTIES, source)
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
                             location = LOCATION,
@@ -76,10 +76,10 @@ internal class IsNotEmptyObjectValidatorTest : FreeSpec() {
                 }
 
                 "when the object is not empty" - {
-                    val input = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val source = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, PROPERTIES, input)
+                        val errors = validator.validate(context, LOCATION, PROPERTIES, source)
                         errors.shouldBeNull()
                     }
                 }

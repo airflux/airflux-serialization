@@ -31,13 +31,13 @@ import io.github.airflux.serialization.core.value.readAsNumber
  * Reader for primitive [Long] type.
  */
 public object LongReader : Reader<Long> {
-    override fun read(context: ReaderContext, location: Location, input: ValueNode): ReaderResult<Long> =
-        input.readAsNumber(context, location) { ctx, p, text ->
+    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Long> =
+        source.readAsNumber(context, location) { ctx, p, value ->
             try {
-                text.toLong().success(location = p)
+                value.toLong().success(location = p)
             } catch (expected: NumberFormatException) {
                 val errorBuilder = ctx[ValueCastErrorBuilder]
-                errorBuilder.build(text, Long::class).failure(location = p)
+                errorBuilder.build(value, Long::class).failure(location = p)
             }
         }
 }

@@ -28,10 +28,10 @@ import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayV
 
 public class MinItemsArrayValidator internal constructor(private val expected: Int) : ArrayValidator {
 
-    override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult.Failure? =
-        if (input.size < expected) {
+    override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+        if (source.size < expected) {
             val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location, errorBuilder.build(expected, input.size))
+            ReaderResult.Failure(location, errorBuilder.build(expected, source.size))
         } else
             null
 

@@ -39,20 +39,20 @@ internal class BooleanReaderTest : FreeSpec() {
         "The boolean type reader" - {
 
             "should return value the true" {
-                val input: ValueNode = BooleanNode.valueOf(true)
-                val result = BooleanReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = BooleanNode.valueOf(true)
+                val result = BooleanReader.read(CONTEXT, Location.empty, source)
                 result.assertAsSuccess(location = Location.empty, value = true)
             }
 
             "should return value the false" {
-                val input: ValueNode = BooleanNode.valueOf(false)
-                val result = BooleanReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = BooleanNode.valueOf(false)
+                val result = BooleanReader.read(CONTEXT, Location.empty, source)
                 result.assertAsSuccess(location = Location.empty, value = false)
             }
 
             "should return the invalid type error" {
-                val input: ValueNode = StringNode("abc")
-                val result = BooleanReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = StringNode("abc")
+                val result = BooleanReader.read(CONTEXT, Location.empty, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,

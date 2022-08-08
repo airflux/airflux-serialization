@@ -36,10 +36,10 @@ import io.github.airflux.serialization.core.value.ArrayNode
 public fun <T> readArray(
     context: ReaderContext,
     location: Location,
-    from: ArrayNode<*>,
+    source: ArrayNode<*>,
     prefixItems: List<Reader<T>>,
     errorIfAdditionalItems: Boolean
-): ReaderResult<List<T>> = from.read(
+): ReaderResult<List<T>> = source.read(
     context = context,
     location = location,
     prefixItems = prefixItems,
@@ -54,10 +54,10 @@ public fun <T> readArray(
 public fun <T> readArray(
     context: ReaderContext,
     location: Location,
-    from: ArrayNode<*>,
+    source: ArrayNode<*>,
     items: Reader<T>
 ): ReaderResult<List<T>> =
-    from.read(
+    source.read(
         context = context,
         location = location,
         prefixItems = emptyList(),
@@ -73,10 +73,10 @@ public fun <T> readArray(
 public fun <T> readArray(
     context: ReaderContext,
     location: Location,
-    from: ArrayNode<*>,
+    source: ArrayNode<*>,
     prefixItems: List<Reader<T>>,
     items: Reader<T>
-): ReaderResult<List<T>> = from.read(
+): ReaderResult<List<T>> = source.read(
     context = context,
     location = location,
     prefixItems = prefixItems,
@@ -114,12 +114,18 @@ internal fun <T> ArrayNode<*>.read(
     }
 }
 
-internal operator fun <T> ReaderResult<MutableList<T>>.plus(result: ReaderResult.Success<T>): ReaderResult<MutableList<T>> = fold(
-    ifFailure = ::identity,
-    ifSuccess = { success -> success.apply { value += result.value } }
-)
+internal operator fun <T> ReaderResult<MutableList<T>>.plus(
+    result: ReaderResult.Success<T>
+): ReaderResult<MutableList<T>> =
+    fold(
+        ifFailure = ::identity,
+        ifSuccess = { success -> success.apply { value += result.value } }
+    )
 
-internal operator fun <T> ReaderResult<MutableList<T>>.plus(result: ReaderResult.Failure): ReaderResult<MutableList<T>> = fold(
-    ifFailure = { failure -> failure + result },
-    ifSuccess = { result }
-)
+internal operator fun <T> ReaderResult<MutableList<T>>.plus(
+    result: ReaderResult.Failure
+): ReaderResult<MutableList<T>> =
+    fold(
+        ifFailure = { failure -> failure + result },
+        ifSuccess = { result }
+    )

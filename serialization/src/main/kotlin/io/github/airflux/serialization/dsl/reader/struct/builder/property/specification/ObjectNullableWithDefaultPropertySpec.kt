@@ -42,8 +42,8 @@ public fun <T : Any> nullableWithDefault(
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = PropertyPaths(path),
-        reader = { context, location, input ->
-            val lookup = input.lookup(location, path)
+        reader = { context, location, source ->
+            val lookup = source.lookup(location, path)
             readNullable(context, lookup, reader, default)
         }
     )
@@ -55,12 +55,12 @@ public fun <T : Any> nullableWithDefault(
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = paths,
-        reader = { context, location, input ->
+        reader = { context, location, source ->
             val lookup: Lookup = paths.fold(
-                initial = { path -> input.lookup(location, path) },
+                initial = { path -> source.lookup(location, path) },
                 operation = { lookup, path ->
                     if (lookup is Lookup.Defined) return@fold lookup
-                    input.lookup(location, path)
+                    source.lookup(location, path)
                 }
             )
             readNullable(context, lookup, reader, default)
@@ -72,8 +72,8 @@ public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.validation(
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 
@@ -82,8 +82,8 @@ public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.filter(
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).filter(context, predicate)
+        reader = { context, location, source ->
+            reader.read(context, location, source).filter(context, predicate)
         }
     )
 

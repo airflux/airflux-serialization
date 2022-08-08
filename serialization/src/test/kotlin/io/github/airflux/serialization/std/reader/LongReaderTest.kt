@@ -54,15 +54,15 @@ internal class LongReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Long.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val input: ValueNode = NumberNode.valueOf(value)
-                    val result = LongReader.read(CONTEXT, Location.empty, input)
+                    val source: ValueNode = NumberNode.valueOf(value)
+                    val result = LongReader.read(CONTEXT, Location.empty, source)
                     result.assertAsSuccess(location = Location.empty, value = value)
                 }
             }
 
             "should return the invalid type error" {
-                val input: ValueNode = StringNode("abc")
-                val result = LongReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = StringNode("abc")
+                val result = LongReader.read(CONTEXT, Location.empty, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -81,8 +81,8 @@ internal class LongReaderTest : FreeSpec() {
                         Pair("The value is in an invalid format, positive with a fractional part.", "10.5"),
                     )
                 ) { (_, value) ->
-                    val input = NumberNode.valueOf(value)!!
-                    val result = LongReader.read(CONTEXT, Location.empty, input)
+                    val source = NumberNode.valueOf(value)!!
+                    val result = LongReader.read(CONTEXT, Location.empty, source)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = Location.empty,

@@ -34,8 +34,8 @@ public fun <T : Any> optional(name: String, reader: Reader<T>): ObjectPropertySp
 public fun <T : Any> optional(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
     ObjectPropertySpec.Optional(
         path = PropertyPaths(path),
-        reader = { context, location, input ->
-            val lookup = input.lookup(location, path)
+        reader = { context, location, source ->
+            val lookup = source.lookup(location, path)
             readOptional(context, lookup, reader)
         }
     )
@@ -43,12 +43,12 @@ public fun <T : Any> optional(path: PropertyPath, reader: Reader<T>): ObjectProp
 public fun <T : Any> optional(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
     ObjectPropertySpec.Optional(
         path = paths,
-        reader = { context, location, input ->
+        reader = { context, location, source ->
             val lookup: Lookup = paths.fold(
-                initial = { path -> input.lookup(location, path) },
+                initial = { path -> source.lookup(location, path) },
                 operation = { lookup, path ->
                     if (lookup is Lookup.Defined) return@fold lookup
-                    input.lookup(location, path)
+                    source.lookup(location, path)
                 }
             )
             readOptional(context, lookup, reader)
@@ -60,8 +60,8 @@ public infix fun <T : Any> ObjectPropertySpec.Optional<T>.validation(
 ): ObjectPropertySpec.Optional<T> =
     ObjectPropertySpec.Optional(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 
@@ -70,8 +70,8 @@ public infix fun <T : Any> ObjectPropertySpec.Optional<T>.filter(
 ): ObjectPropertySpec.Optional<T> =
     ObjectPropertySpec.Optional(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).filter(context, predicate)
+        reader = { context, location, source ->
+            reader.read(context, location, source).filter(context, predicate)
         }
     )
 

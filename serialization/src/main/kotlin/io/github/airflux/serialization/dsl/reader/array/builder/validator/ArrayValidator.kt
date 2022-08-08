@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
 
 public fun interface ArrayValidator {
 
-    public fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult.Failure?
+    public fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure?
 
     /*
     * | This | Other  | Result |
@@ -34,10 +34,10 @@ public fun interface ArrayValidator {
     */
     public infix fun or(alt: ArrayValidator): ArrayValidator {
         val self = this
-        return ArrayValidator { context, location, input ->
-            self.validate(context, location, input)
+        return ArrayValidator { context, location, source ->
+            self.validate(context, location, source)
                 ?.let { error ->
-                    alt.validate(context, location, input)
+                    alt.validate(context, location, source)
                         ?.let { error + it }
                 }
         }
@@ -52,9 +52,9 @@ public fun interface ArrayValidator {
      */
     public infix fun and(alt: ArrayValidator): ArrayValidator {
         val self = this
-        return ArrayValidator { context, location, input ->
-            val result = self.validate(context, location, input)
-            result ?: alt.validate(context, location, input)
+        return ArrayValidator { context, location, source ->
+            val result = self.validate(context, location, source)
+            result ?: alt.validate(context, location, source)
         }
     }
 }

@@ -68,8 +68,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                 }
 
                 "then should return successful value" {
-                    val input = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
-                    val result = reader.read(context = CONTEXT, location = LOCATION, input)
+                    val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                    val result = reader.read(context = CONTEXT, location = LOCATION, source)
                     result as ReaderResult.Success
                     result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
                 }
@@ -77,14 +77,14 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
             "when errors occur in the reader" - {
 
-                "when input is not the object type" - {
-                    val input = StringNode(USER_NAME)
+                "when source is not the object type" - {
+                    val source = StringNode(USER_NAME)
                     val reader = arrayReader {
                         returns(items = itemSpec())
                     }
 
                     "then the reader should return the invalid type error" {
-                        val result = reader.read(context = CONTEXT, location = LOCATION, input)
+                        val result = reader.read(context = CONTEXT, location = LOCATION, source)
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
@@ -116,8 +116,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -140,8 +140,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, input)
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -171,8 +171,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then the reader should return the validation error" {
-                            val input = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -199,8 +199,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         }
 
                         "then all error should be returns" {
-                            val input = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, input)
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -219,16 +219,15 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         }
     }
 
-    fun itemSpec() = nonNullable { _, location, input ->
-        (input as StringNode).get.success(location)
+    fun itemSpec() = nonNullable { _, location, source ->
+        (source as StringNode).get.success(location)
     }
 
     fun <T : Any> itemSpec(error: ReaderResult.Error) = nonNullable(
         reader = DummyReader<T>(
             result = ReaderResult.Failure(
-                location = LOCATION.append(
-                    PROPERTY_NAME
-                ).append(0), error = error
+                location = LOCATION.append(PROPERTY_NAME).append(0),
+                error = error
             )
         )
     )

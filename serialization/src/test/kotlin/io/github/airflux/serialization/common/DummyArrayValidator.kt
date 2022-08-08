@@ -24,5 +24,6 @@ import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayV
 
 internal class DummyArrayValidator(val result: ReaderResult.Failure?) : ArrayValidator {
 
-    override fun validate(context: ReaderContext, location: Location, input: ArrayNode<*>): ReaderResult.Failure? = result
+    override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+        result
 }

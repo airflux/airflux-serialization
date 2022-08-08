@@ -41,18 +41,21 @@ internal class StringReaderTest : FreeSpec() {
         "The string type reader" - {
 
             "should return the string value" {
-                val input: ValueNode = StringNode(TEXT)
-                val result = StringReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = StringNode(TEXT)
+                val result = StringReader.read(CONTEXT, Location.empty, source)
                 result.assertAsSuccess(location = Location.empty, value = TEXT)
             }
 
             "should return the invalid type error" {
-                val input: ValueNode = BooleanNode.valueOf(true)
-                val result = StringReader.read(CONTEXT, Location.empty, input)
+                val source: ValueNode = BooleanNode.valueOf(true)
+                val result = StringReader.read(CONTEXT, Location.empty, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
-                        error = JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                        error = JsonErrors.InvalidType(
+                            expected = ValueNode.Type.STRING,
+                            actual = ValueNode.Type.BOOLEAN
+                        )
                     )
                 )
             }

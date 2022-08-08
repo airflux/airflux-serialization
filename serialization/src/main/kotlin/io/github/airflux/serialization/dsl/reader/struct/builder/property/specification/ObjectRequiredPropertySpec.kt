@@ -36,8 +36,8 @@ public fun <T : Any> required(name: String, reader: Reader<T>): ObjectPropertySp
 public fun <T : Any> required(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Required<T> =
     ObjectPropertySpec.Required(
         path = PropertyPaths(path),
-        reader = { context, location, input ->
-            val lookup = input.lookup(location, path)
+        reader = { context, location, source ->
+            val lookup = source.lookup(location, path)
             readRequired(context, lookup, reader)
         }
     )
@@ -45,11 +45,11 @@ public fun <T : Any> required(path: PropertyPath, reader: Reader<T>): ObjectProp
 public fun <T : Any> required(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Required<T> =
     ObjectPropertySpec.Required(
         path = paths,
-        reader = Reader { context, location, input ->
+        reader = Reader { context, location, source ->
             val errorBuilder = context[PathMissingErrorBuilder]
             val failures = paths.items
                 .map { path ->
-                    val lookup = input.lookup(location, path)
+                    val lookup = source.lookup(location, path)
                     if (lookup is Lookup.Defined) return@Reader readRequired(context, lookup, reader)
                     ReaderResult.Failure(location = location.append(path), error = errorBuilder.build())
                 }
@@ -62,8 +62,8 @@ public infix fun <T : Any> ObjectPropertySpec.Required<T>.validation(
 ): ObjectPropertySpec.Required<T> =
     ObjectPropertySpec.Required(
         path = path,
-        reader = { context, location, input ->
-            reader.read(context, location, input).validation(context, validator)
+        reader = { context, location, source ->
+            reader.read(context, location, source).validation(context, validator)
         }
     )
 
