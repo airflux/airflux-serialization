@@ -133,6 +133,13 @@ public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Suc
 public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<Nothing> =
     ReaderResult.Failure(location, this)
 
+/**
+ * Calls the specified function [block] and returns its result if invocation was successful,
+ * catching any [Throwable] exception that was thrown from the [block] function execution
+ * and using the [ExceptionsHandler] from context to handle it.
+ *
+ * The [ExceptionsHandler] needs to add to the context before using this function.
+ */
 public inline fun <T> withCatching(
     context: ReaderContext,
     location: Location,

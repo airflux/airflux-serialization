@@ -21,6 +21,10 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
+/**
+ * Creates a [ExceptionsHandler] instance.
+ * @param handlers specifications of exception handlers that handle exceptions thrown in a reader
+ */
 public fun exceptionsHandler(vararg handlers: ExceptionHandlerSpec): ExceptionsHandler {
     val handlersContainer = ExceptionHandlersContainer(handlers.toList())
     return ExceptionsHandler { context, location, exception ->
@@ -29,6 +33,9 @@ public fun exceptionsHandler(vararg handlers: ExceptionHandlerSpec): ExceptionsH
     }
 }
 
+/**
+ * The element in the context to handle **uncaught** exceptions.
+ */
 public class ExceptionsHandler(
     private val handler: (ReaderContext, Location, Throwable) -> ReaderResult.Error
 ) : Context.Element {
