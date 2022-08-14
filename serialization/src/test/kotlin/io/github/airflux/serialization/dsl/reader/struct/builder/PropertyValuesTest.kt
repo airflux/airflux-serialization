@@ -16,6 +16,8 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder
 
+import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
@@ -37,8 +39,8 @@ internal class PropertyValuesTest : FreeSpec() {
         private const val UNKNOWN_PROPERTY_NAME = "name"
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "dd7c5dab-0f8b-4436-a8e8-72b841c90acc"
-        private const val PROPERTY_DEFAULT_VALUE = "None"
-        private val PROPERTY_DEFAULT = { PROPERTY_DEFAULT_VALUE }
+        private const val DEFAULT_VALUE = "None"
+        private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
     }
 
     init {
@@ -78,7 +80,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
+                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, { DEFAULT_VALUE }))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -111,7 +113,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for optional with default property" - {
                     val property = ObjectProperty.OptionalWithDefault(
-                        optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                        optionalWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
 
                     "then the method 'get' should throw an exception" {
@@ -145,7 +147,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable with default property" - {
                     val property = ObjectProperty.NullableWithDefault(
-                        nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                        nullableWithDefault(PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
                     )
 
                     "then the method 'get' should throw an exception" {
@@ -216,7 +218,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
+                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, { DEFAULT_VALUE }))
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -250,7 +252,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.Defaultable(
-                            defaultable(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                            defaultable(UNKNOWN_PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
                         )
 
                         "the method 'get' should thrown an exception" {
@@ -319,7 +321,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for optional with default property" - {
                     val property = ObjectProperty.OptionalWithDefault(
-                        optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                        optionalWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
@@ -354,7 +356,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.OptionalWithDefault(
-                            optionalWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                            optionalWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
                         "the method 'get' should thrown an exception" {
@@ -423,7 +425,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable with default property" - {
                     val property = ObjectProperty.NullableWithDefault(
-                        nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                        nullableWithDefault(PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
                     )
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
@@ -458,7 +460,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.NullableWithDefault(
-                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
                         )
 
                         "the method 'get' should thrown an exception" {
@@ -511,7 +513,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT))
+                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, { DEFAULT_VALUE }))
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }
@@ -593,7 +595,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for optional with default property" - {
                     val property = ObjectProperty.OptionalWithDefault(
-                        optionalWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                        optionalWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
@@ -676,7 +678,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable with default property" - {
                     val property = ObjectProperty.NullableWithDefault(
-                        nullableWithDefault(PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                        nullableWithDefault(PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
                     )
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
@@ -711,7 +713,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.NullableWithDefault(
-                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, PROPERTY_DEFAULT)
+                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
                         )
 
                         "the method 'get' should thrown an exception" {

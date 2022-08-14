@@ -51,7 +51,7 @@ internal class ObjectOptionalWithDefaultPropertySpecTest : FreeSpec() {
                 )
             )
         private val LOCATION = Location.empty
-        private val DEFAULT = { DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
     }
 
     init {

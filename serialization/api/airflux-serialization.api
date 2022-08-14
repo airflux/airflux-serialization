@@ -358,7 +358,7 @@ public final class io/github/airflux/serialization/core/reader/struct/OptionalPr
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/OptionalWithDefaultPropertyReaderKt {
-	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/lookup/Lookup;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
+	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/lookup/Lookup;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/RequiredPropertyReaderKt {
@@ -909,9 +909,9 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/pro
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectOptionalWithDefaultPropertySpecKt {
-	public static final fun optionalWithDefault (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
-	public static final fun optionalWithDefault (Lio/github/airflux/serialization/core/path/PropertyPaths;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
-	public static final fun optionalWithDefault (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
+	public static final fun optionalWithDefault (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
+	public static final fun optionalWithDefault (Lio/github/airflux/serialization/core/path/PropertyPaths;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
+	public static final fun optionalWithDefault (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
 	public static final fun or (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
 	public static final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;Lio/github/airflux/serialization/core/reader/validator/Validator;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectPropertySpec$OptionalWithDefault;
 }

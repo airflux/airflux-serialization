@@ -46,6 +46,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
         private const val PROPERTY_NAME = "name"
         private const val USER_NAME = "user"
         private const val DEFAULT_VALUE = "none"
+        private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
 
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val LOCATION = Location.empty
@@ -275,7 +276,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         optionalWithDefault(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
-                            default = { DEFAULT_VALUE }
+                            default = DEFAULT
                         )
                     )
 

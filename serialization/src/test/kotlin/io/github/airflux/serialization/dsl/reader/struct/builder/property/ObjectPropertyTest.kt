@@ -16,6 +16,8 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
+import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
@@ -30,6 +32,7 @@ internal class ObjectPropertyTest : FreeSpec() {
 
     companion object {
         private const val DEFAULT_VALUE = "none"
+        private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
     }
 
     init {
@@ -76,7 +79,7 @@ internal class ObjectPropertyTest : FreeSpec() {
             }
 
             "when created an instance of the optional with default property" - {
-                val spec = optionalWithDefault(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
+                val spec = optionalWithDefault(name = "id", reader = StringReader, default = DEFAULT)
                 val property = ObjectProperty.OptionalWithDefault(spec)
 
                 "then the path should equal the path from the spec" {
