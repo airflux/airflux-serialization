@@ -219,8 +219,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         }
     }
 
-    fun itemSpec() = nonNullable { _, location, source ->
-        (source as StringNode).get.success(location)
+    fun itemSpec() = nonNullable { _, _, source ->
+        (source as StringNode).get.success()
     }
 
     fun <T : Any> itemSpec(error: ReaderResult.Error) = nonNullable(

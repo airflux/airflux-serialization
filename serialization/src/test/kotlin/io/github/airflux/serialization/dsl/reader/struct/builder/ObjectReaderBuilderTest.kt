@@ -68,8 +68,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         +validator
                     }
                     val name = property(propertySpec(value = USER_NAME))
-                    returns { _, location ->
-                        DTO(name = +name).success(location)
+                    returns { _, _ ->
+                        DTO(name = +name).success()
                     }
                 }
 
@@ -87,8 +87,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     val source = StringNode(USER_NAME)
                     val reader = structReader<DTO> {
                         val name = property(propertySpec(value = USER_NAME))
-                        returns { _, location ->
-                            DTO(name = +name).success(location)
+                        returns { _, _ ->
+                            DTO(name = +name).success()
                         }
                     }
 
@@ -120,8 +120,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                                 +validator
                             }
                             val name = property(propertySpec(value = USER_NAME))
-                            returns { _, location ->
-                                DTO(name = +name).success(location)
+                            returns { _, _ ->
+                                DTO(name = +name).success()
                             }
                         }
 
@@ -146,8 +146,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                             }
                             val name: ObjectProperty.Required<String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
-                            returns { _, location ->
-                                DTO(name = +name).success(location)
+                            returns { _, _ ->
+                                DTO(name = +name).success()
                             }
                         }
 
@@ -178,8 +178,8 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         }
                         val name: ObjectProperty.Required<String> =
                             property(propertySpec(error = JsonErrors.PathMissing))
-                        returns { _, location ->
-                            DTO(name = +name).success(location)
+                        returns { _, _ ->
+                            DTO(name = +name).success()
                         }
                     }
 
@@ -335,7 +335,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
     )
 
     fun <T : Any> createReader(value: T): DummyReader<T> =
-        DummyReader(result = ReaderResult.Success(location = LOCATION.append(PROPERTY_NAME), value = value))
+        DummyReader(result = ReaderResult.Success(value = value))
 
     internal data class DTO(val name: String)
 }

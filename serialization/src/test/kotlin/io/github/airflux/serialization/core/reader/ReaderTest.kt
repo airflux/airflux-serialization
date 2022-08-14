@@ -44,44 +44,44 @@ internal class ReaderTest : FreeSpec() {
 
             "Reader#map" - {
                 val reader =
-                    DummyReader { _, location -> ReaderResult.Success(location = location.append("id"), value = VALUE) }
+                    DummyReader { _, _ -> ReaderResult.Success(value = VALUE) }
 
                 "should return new reader" {
                     val transformedReader = reader.map { value -> value.toInt() }
                     val result = transformedReader.read(CONTEXT, LOCATION, NullNode)
 
-                    result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = VALUE.toInt())
+                    result shouldBe ReaderResult.Success(value = VALUE.toInt())
                 }
             }
 
             "Reader#flatMap" - {
                 val reader =
-                    DummyReader { _, location -> ReaderResult.Success(location = location.append("id"), value = VALUE) }
+                    DummyReader { _, _ -> ReaderResult.Success(value = VALUE) }
 
                 "should return new reader" {
-                    val transformedReader = reader.flatMap { _, location, value -> value.toInt().success(location) }
+                    val transformedReader = reader.flatMap { _, _, value -> value.toInt().success() }
                     val result = transformedReader.read(CONTEXT, LOCATION, NullNode)
 
-                    result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = VALUE.toInt())
+                    result shouldBe ReaderResult.Success(value = VALUE.toInt())
                 }
             }
 
             "Reader#or" - {
 
                 "when left reader returns an value" - {
-                    val leftReader = DummyReader { _, location ->
-                        ReaderResult.Success(location = location.append("id"), value = LEFT_VALUE)
+                    val leftReader = DummyReader { _, _ ->
+                        ReaderResult.Success(value = LEFT_VALUE)
                     }
 
-                    val rightReader = DummyReader { _, location ->
-                        ReaderResult.Success(location = location.append("identifier"), value = RIGHT_VALUE)
+                    val rightReader = DummyReader { _, _ ->
+                        ReaderResult.Success(value = RIGHT_VALUE)
                     }
 
                     val reader = leftReader or rightReader
 
                     "then the right reader doesn't execute" {
                         val result = reader.read(CONTEXT, LOCATION, NullNode)
-                        result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = LEFT_VALUE)
+                        result shouldBe ReaderResult.Success(value = LEFT_VALUE)
                     }
                 }
 
@@ -91,17 +91,14 @@ internal class ReaderTest : FreeSpec() {
                     }
 
                     "when the right reader returns an value" - {
-                        val rightReader = DummyReader { _, location ->
-                            ReaderResult.Success(location = location.append("identifier"), value = RIGHT_VALUE)
+                        val rightReader = DummyReader { _, _ ->
+                            ReaderResult.Success(value = RIGHT_VALUE)
                         }
                         val reader = leftReader or rightReader
 
                         "then the result of the right reader should be returned" {
                             val result = reader.read(CONTEXT, LOCATION, NullNode)
-                            result shouldBe ReaderResult.Success(
-                                location = LOCATION.append("identifier"),
-                                value = RIGHT_VALUE
-                            )
+                            result shouldBe ReaderResult.Success(value = RIGHT_VALUE)
                         }
                     }
 

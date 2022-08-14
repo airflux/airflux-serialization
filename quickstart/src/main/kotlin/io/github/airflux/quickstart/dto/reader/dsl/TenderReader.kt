@@ -14,7 +14,7 @@ val TenderReader = structReader<Tender>(ObjectReaderConfiguration) {
     val value = property(optional(name = "value", reader = ValueReader))
     val lots = property(required(name = "lots", reader = LotsReader))
 
-    returns { _, location ->
-        Tender(+id, +title, +value, +lots).success(location)
+    returns { _, _ ->
+        Tender(+id, +title, +value, +lots).success()
     }
 }

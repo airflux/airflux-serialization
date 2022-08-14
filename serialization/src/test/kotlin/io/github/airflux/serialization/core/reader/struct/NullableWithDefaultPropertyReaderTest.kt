@@ -35,7 +35,7 @@ internal class NullableWithDefaultPropertyReaderTest : FreeSpec() {
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"
         private val READER: Reader<String> =
-            DummyReader { _, location -> ReaderResult.Success(location = location, value = VALUE) }
+            DummyReader { _, _ -> ReaderResult.Success(value = VALUE) }
         private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
     }
 
@@ -51,7 +51,7 @@ internal class NullableWithDefaultPropertyReaderTest : FreeSpec() {
                     "then should return the result of applying the reader" {
                         val result: ReaderResult<String?> =
                             readNullable(context = CONTEXT, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
+                        result shouldBe ReaderResult.Success(value = VALUE)
                     }
                 }
 
@@ -61,7 +61,7 @@ internal class NullableWithDefaultPropertyReaderTest : FreeSpec() {
                     "then should return the null value" {
                         val result: ReaderResult<String?> =
                             readNullable(context = CONTEXT, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                        result shouldBe ReaderResult.Success(value = null)
                     }
                 }
             }
@@ -72,7 +72,7 @@ internal class NullableWithDefaultPropertyReaderTest : FreeSpec() {
                 "then should return the default value" {
                     val result: ReaderResult<String?> =
                         readNullable(context = CONTEXT, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = DEFAULT_VALUE)
+                    result shouldBe ReaderResult.Success(value = DEFAULT_VALUE)
                 }
             }
         }

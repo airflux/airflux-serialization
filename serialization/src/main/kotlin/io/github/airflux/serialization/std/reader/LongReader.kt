@@ -34,7 +34,7 @@ public object LongReader : Reader<Long> {
     override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Long> =
         source.readAsNumber(context, location) { ctx, p, value ->
             try {
-                value.toLong().success(location = p)
+                value.toLong().success()
             } catch (expected: NumberFormatException) {
                 val errorBuilder = ctx[ValueCastErrorBuilder]
                 errorBuilder.build(value, Long::class).failure(location = p)

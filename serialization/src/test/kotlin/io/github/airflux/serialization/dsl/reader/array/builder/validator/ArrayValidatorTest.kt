@@ -78,7 +78,10 @@ internal class ArrayValidatorTest : FreeSpec() {
                         val rightValidator = ArrayValidator { _, location, _ ->
                             ReaderResult.Failure(
                                 location,
-                                JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                                JsonErrors.InvalidType(
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.BOOLEAN
+                                )
                             )
                         }
 
@@ -140,7 +143,10 @@ internal class ArrayValidatorTest : FreeSpec() {
                         val rightValidator = ArrayValidator { _, location, _ ->
                             ReaderResult.Failure(
                                 location,
-                                JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                                JsonErrors.InvalidType(
+                                    expected = ValueNode.Type.STRING,
+                                    actual = ValueNode.Type.BOOLEAN
+                                )
                             )
                         }
 

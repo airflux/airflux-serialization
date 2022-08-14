@@ -34,7 +34,7 @@ public object IntReader : Reader<Int> {
     override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Int> =
         source.readAsNumber(context, location) { ctx, l, value ->
             try {
-                value.toInt().success(location = l)
+                value.toInt().success()
             } catch (expected: NumberFormatException) {
                 val errorBuilder = ctx[ValueCastErrorBuilder]
                 errorBuilder.build(value, Int::class).failure(location = l)

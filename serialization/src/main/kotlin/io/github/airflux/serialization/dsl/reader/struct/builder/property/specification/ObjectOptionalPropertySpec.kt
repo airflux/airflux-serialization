@@ -61,7 +61,7 @@ public infix fun <T : Any> ObjectPropertySpec.Optional<T>.validation(
     ObjectPropertySpec.Optional(
         path = path,
         reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, validator)
+            reader.read(context, location, source).validation(context, location, validator)
         }
     )
 
@@ -71,7 +71,7 @@ public infix fun <T : Any> ObjectPropertySpec.Optional<T>.filter(
     ObjectPropertySpec.Optional(
         path = path,
         reader = { context, location, source ->
-            reader.read(context, location, source).filter(context, predicate)
+            reader.read(context, location, source).filter(context, location, predicate)
         }
     )
 

@@ -46,7 +46,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 ) { value ->
                     val source: ValueNode = NumberNode.valueOf(value)!!
                     val result = BigDecimalReader.read(CONTEXT, Location.empty, source)
-                    result.assertAsSuccess(location = Location.empty, value = BigDecimal(value))
+                    result.assertAsSuccess(value = BigDecimal(value))
                 }
             }
 

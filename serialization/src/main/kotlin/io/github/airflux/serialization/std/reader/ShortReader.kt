@@ -34,7 +34,7 @@ public object ShortReader : Reader<Short> {
     override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Short> =
         source.readAsNumber(context, location) { ctx, l, value ->
             try {
-                value.toShort().success(location = l)
+                value.toShort().success()
             } catch (expected: NumberFormatException) {
                 val errorBuilder = ctx[ValueCastErrorBuilder]
                 errorBuilder.build(value, Short::class).failure(location = l)

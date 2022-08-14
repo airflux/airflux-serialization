@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.reader
 
+import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
@@ -50,8 +51,8 @@ public fun interface Reader<out T> {
         Reader { context, location, source ->
             read(context, location, source)
                 .fold(
-                    ifFailure = { it },
-                    ifSuccess = { transform(context, it.location, it.value) }
+                    ifFailure = ::identity,
+                    ifSuccess = { transform(context, location, it.value) }
                 )
         }
 }
@@ -75,11 +76,11 @@ public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { contex
 public infix fun <T> Reader<T?>.filter(predicate: ReaderPredicate<T>): Reader<T?> =
     Reader { context, location, source ->
         this@filter.read(context, location, source)
-            .filter(context, predicate)
+            .filter(context, location, predicate)
     }
 
 public infix fun <T> Reader<T>.validation(validator: Validator<T>): Reader<T> =
     Reader { context, location, source ->
         this@validation.read(context, location, source)
-            .validation(context, validator)
+            .validation(context, location, validator)
     }

@@ -34,7 +34,7 @@ public object ByteReader : Reader<Byte> {
     override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Byte> =
         source.readAsNumber(context, location) { ctx, l, value ->
             try {
-                value.toByte().success(location = l)
+                value.toByte().success()
             } catch (expected: NumberFormatException) {
                 val errorBuilder = ctx[ValueCastErrorBuilder]
                 errorBuilder.build(value, Byte::class).failure(location = l)

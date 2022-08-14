@@ -8,7 +8,7 @@ import io.github.airflux.serialization.core.reader.result.success
 inline fun <reified T : Enum<T>> Reader<String>.asEnum(): Reader<T> =
     flatMap { _, location, value ->
         try {
-            enumValueOf<T>(value.uppercase()).success(location)
+            enumValueOf<T>(value.uppercase()).success()
         } catch (ignored: Exception) {
             val allowable = enumValues<T>()
             ReaderResult.Failure(

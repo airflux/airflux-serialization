@@ -55,7 +55,7 @@ internal class ShortReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source: ValueNode = NumberNode.valueOf(value)
                     val result = ShortReader.read(CONTEXT, Location.empty, source)
-                    result.assertAsSuccess(location = Location.empty, value = value)
+                    result.assertAsSuccess(value = value)
                 }
             }
 

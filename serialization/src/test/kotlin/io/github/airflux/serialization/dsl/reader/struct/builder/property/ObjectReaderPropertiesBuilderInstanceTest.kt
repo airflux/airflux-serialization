@@ -31,22 +31,22 @@ internal class ObjectReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
     companion object {
         private val REQUIRED_PATH = PropertyPaths(PropertyPath("required-id"))
-        private val REQUIRED_READER = Reader { _, location, _ -> ReaderResult.Success(location, "") }
+        private val REQUIRED_READER = Reader { _, _, _ -> ReaderResult.Success("") }
 
         private val DEFAULTABLE_PATH = PropertyPaths(PropertyPath("defaultable-id"))
-        private val DEFAULTABLE_READER = Reader { _, location, _ -> ReaderResult.Success(location, "") }
+        private val DEFAULTABLE_READER = Reader { _, _, _ -> ReaderResult.Success("") }
 
         private val OPTIONAL_PATH = PropertyPaths(PropertyPath("optional-id"))
-        private val OPTIONAL_READER = Reader { _, location, _ -> ReaderResult.Success(location, "") }
+        private val OPTIONAL_READER = Reader { _, _, _ -> ReaderResult.Success("") }
 
         private val OPTIONAL_WITH_DEFAULT_PATH = PropertyPaths(PropertyPath("optional-with-default-id"))
-        private val OPTIONAL_WITH_DEFAULT_READER = Reader { _, location, _ -> ReaderResult.Success(location, "") }
+        private val OPTIONAL_WITH_DEFAULT_READER = Reader { _, _, _ -> ReaderResult.Success("") }
 
         private val NULLABLE_PATH = PropertyPaths(PropertyPath("nullable-id"))
-        private val NULLABLE_READER = Reader { _, location, _ -> ReaderResult.Success(location, "") }
+        private val NULLABLE_READER = Reader { _, _, _ -> ReaderResult.Success("") }
 
         private val NULLABLE_WITH_DEFAULT_PATH = PropertyPaths(PropertyPath("nullable-with-default-id"))
-        private val NULLABLE_WITH_DEFAULT_READER = Reader { _, location, _ -> ReaderResult.Success(location, "") }
+        private val NULLABLE_WITH_DEFAULT_READER = Reader { _, _, _ -> ReaderResult.Success("") }
     }
 
     init {

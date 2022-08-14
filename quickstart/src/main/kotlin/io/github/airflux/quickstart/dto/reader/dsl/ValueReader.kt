@@ -19,7 +19,7 @@ val ValueReader = structReader<Value>(ObjectReaderConfiguration) {
     val amount = property(required(name = "amount", reader = AmountReader))
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
-    returns { _, location ->
-        Value(amount = +amount, currency = +currency).success(location)
+    returns { _, _ ->
+        Value(amount = +amount, currency = +currency).success()
     }
 }

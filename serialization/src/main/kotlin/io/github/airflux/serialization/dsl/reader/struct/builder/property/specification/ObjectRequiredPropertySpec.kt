@@ -63,7 +63,7 @@ public infix fun <T : Any> ObjectPropertySpec.Required<T>.validation(
     ObjectPropertySpec.Required(
         path = path,
         reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, validator)
+            reader.read(context, location, source).validation(context, location, validator)
         }
     )
 

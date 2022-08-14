@@ -40,7 +40,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
                 "should return the boolean value" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsBoolean(CONTEXT, LOCATION)
-                    result.assertAsSuccess(location = LOCATION, value = true)
+                    result.assertAsSuccess(value = true)
                 }
             }
             "when called with a receiver of not the BooleanNode type" - {

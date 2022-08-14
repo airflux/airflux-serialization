@@ -30,5 +30,5 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 public fun <T : Any> readOptional(context: ReaderContext, lookup: Lookup, using: Reader<T>): ReaderResult<T?> =
     when (lookup) {
         is Lookup.Defined -> using.read(context, lookup.location, lookup.value)
-        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = null)
+        is Lookup.Undefined -> ReaderResult.Success(value = null)
     }

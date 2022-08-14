@@ -17,27 +17,36 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T> ReaderResult<T?>.filter(context: ReaderContext, predicate: ReaderPredicate<T>): ReaderResult<T?> =
+public fun <T> ReaderResult<T?>.filter(
+    context: ReaderContext,
+    location: Location,
+    predicate: ReaderPredicate<T>
+): ReaderResult<T?> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { result ->
             if (result.value == null)
                 result
             else {
-                if (predicate.test(context, result.location, result.value))
+                if (predicate.test(context, location, result.value))
                     result
                 else
-                    ReaderResult.Success(result.location, null)
+                    ReaderResult.Success(null)
             }
         }
     )
 
-public fun <T> ReaderResult<T>.validation(context: ReaderContext, validator: Validator<T>): ReaderResult<T> =
+public fun <T> ReaderResult<T>.validation(
+    context: ReaderContext,
+    location: Location,
+    validator: Validator<T>
+): ReaderResult<T> =
     fold(
         ifFailure = ::identity,
-        ifSuccess = { result -> validator.validate(context, result.location, result.value) ?: result }
+        ifSuccess = { result -> validator.validate(context, location, result.value) ?: result }
     )

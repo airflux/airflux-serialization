@@ -31,7 +31,7 @@ internal class ReadAsNumberTest : FreeSpec() {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val LOCATION = Location.empty.append("user")
         private val reader =
-            { _: ReaderContext, location: Location, text: String -> ReaderResult.Success(location, text.toInt()) }
+            { _: ReaderContext, _: Location, text: String -> ReaderResult.Success(text.toInt()) }
     }
 
     init {
@@ -42,7 +42,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the number value" {
                     val json: ValueNode = NumberNode.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(CONTEXT, LOCATION, reader)
-                    result.assertAsSuccess(location = LOCATION, value = Int.MAX_VALUE)
+                    result.assertAsSuccess(value = Int.MAX_VALUE)
                 }
             }
             "when called with a receiver of not the NumberNode type" - {

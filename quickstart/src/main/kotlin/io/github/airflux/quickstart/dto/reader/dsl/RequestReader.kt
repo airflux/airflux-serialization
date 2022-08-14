@@ -9,7 +9,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 val RequestReader = structReader<Request> {
     val tender = property(required(name = "tender", reader = TenderReader))
 
-    returns { _, location ->
-        Request(tender = this[tender]).success(location)
+    returns { _, _ ->
+        Request(tender = this[tender]).success()
     }
 }

@@ -37,5 +37,5 @@ public fun <T : Any> readOptional(
     when (lookup) {
         is Lookup.Defined -> using.read(context, lookup.location, lookup.value)
         is Lookup.Undefined ->
-            ReaderResult.Success(location = lookup.location, value = defaultValue(context, lookup.location))
+            ReaderResult.Success(value = defaultValue(context, lookup.location))
     }

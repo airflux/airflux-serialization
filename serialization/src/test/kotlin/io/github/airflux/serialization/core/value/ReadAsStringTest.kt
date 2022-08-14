@@ -42,7 +42,7 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the string value" {
                     val json: ValueNode = StringNode("abc")
                     val result = json.readAsString(CONTEXT, LOCATION)
-                    result.assertAsSuccess(location = LOCATION, value = "abc")
+                    result.assertAsSuccess(value = "abc")
                 }
             }
 

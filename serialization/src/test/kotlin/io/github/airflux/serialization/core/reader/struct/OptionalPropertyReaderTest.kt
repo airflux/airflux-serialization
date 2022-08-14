@@ -35,7 +35,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
         private val READER: Reader<String> =
-            DummyReader { _, location -> ReaderResult.Success(location = location, value = VALUE) }
+            DummyReader { _, _ -> ReaderResult.Success(value = VALUE) }
     }
 
     init {
@@ -47,7 +47,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
 
                 "then should return the result of applying the reader" {
                     val result: ReaderResult<String?> = readOptional(context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
+                    result shouldBe ReaderResult.Success(value = VALUE)
                 }
             }
 
@@ -56,7 +56,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
 
                 "then should return the null value" {
                     val result: ReaderResult<String?> = readOptional(context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                    result shouldBe ReaderResult.Success(value = null)
                 }
             }
         }

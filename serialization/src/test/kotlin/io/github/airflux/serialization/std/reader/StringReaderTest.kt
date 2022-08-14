@@ -43,7 +43,7 @@ internal class StringReaderTest : FreeSpec() {
             "should return the string value" {
                 val source: ValueNode = StringNode(TEXT)
                 val result = StringReader.read(CONTEXT, Location.empty, source)
-                result.assertAsSuccess(location = Location.empty, value = TEXT)
+                result.assertAsSuccess(value = TEXT)
             }
 
             "should return the invalid type error" {

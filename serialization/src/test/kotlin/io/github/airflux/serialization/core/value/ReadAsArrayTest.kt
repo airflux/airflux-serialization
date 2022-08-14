@@ -30,9 +30,9 @@ internal class ReadAsArrayTest : FreeSpec() {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = Location.empty.append("user")
-        private val READER = { _: ReaderContext, location: Location, source: ArrayNode<*> ->
+        private val READER = { _: ReaderContext, _: Location, source: ArrayNode<*> ->
             val result = source.map { (it as StringNode).get }
-            ReaderResult.Success(location, result)
+            ReaderResult.Success(result)
         }
     }
 
@@ -47,7 +47,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                     val result = json.readAsArray(CONTEXT, LOCATION, READER)
 
                     result as ReaderResult.Success
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = listOf(USER_NAME))
+                    result shouldBe ReaderResult.Success(value = listOf(USER_NAME))
                 }
             }
 

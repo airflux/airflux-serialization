@@ -31,9 +31,9 @@ internal class ReadAsObjectTest : FreeSpec() {
         private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private const val USER_NAME = "user"
         private val LOCATION = Location.empty.append("user")
-        private val reader = { _: ReaderContext, location: Location, source: ObjectNode ->
+        private val reader = { _: ReaderContext, _: Location, source: ObjectNode ->
             val name = source["name"] as StringNode
-            ReaderResult.Success(location, DTO(name = name.get))
+            ReaderResult.Success(DTO(name = name.get))
         }
     }
 
@@ -45,7 +45,7 @@ internal class ReadAsObjectTest : FreeSpec() {
                 "should return the DTO" {
                     val json: ValueNode = ObjectNode("name" to StringNode(USER_NAME))
                     val result = json.readAsObject(CONTEXT, LOCATION, reader)
-                    result.assertAsSuccess(location = LOCATION, value = DTO(name = USER_NAME))
+                    result.assertAsSuccess(value = DTO(name = USER_NAME))
                 }
             }
             "when called with a receiver of not the StructNode type" - {

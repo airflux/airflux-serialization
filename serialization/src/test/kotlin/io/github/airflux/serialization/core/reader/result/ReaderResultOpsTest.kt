@@ -40,29 +40,29 @@ internal class ReaderResultOpsTest : FreeSpec() {
             "when result is success" - {
 
                 "when the value satisfies the predicate" - {
-                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "  ")
+                    val result: ReaderResult<String> = ReaderResult.Success(value = "  ")
 
                     "then filter should return null" {
-                        val filtered = result.filter(CONTEXT, isNotBlank)
-                        filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                        val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
+                        filtered shouldBe ReaderResult.Success(value = null)
                     }
                 }
 
                 "when the value does not satisfy the predicate and is not the null" - {
                     val result: ReaderResult<String> =
-                        ReaderResult.Success(location = LOCATION, value = "user")
+                        ReaderResult.Success(value = "user")
 
                     "then filter should return the original value" {
-                        val filtered = result.filter(CONTEXT, isNotBlank)
+                        val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
                         filtered shouldBe result
                     }
                 }
 
                 "when the value does not satisfy the predicate and is the null" - {
-                    val result: ReaderResult<String?> = ReaderResult.Success(location = LOCATION, value = null)
+                    val result: ReaderResult<String?> = ReaderResult.Success(value = null)
 
                     "then filter should return the original value" {
-                        val filtered = result.filter(CONTEXT, isNotBlank)
+                        val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
                         filtered shouldBe result
                     }
                 }
@@ -75,7 +75,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                 )
 
                 "then filter should return the original value" {
-                    val filtered = result.filter(CONTEXT, isNotBlank)
+                    val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
                     filtered shouldBe result
                 }
             }
@@ -89,10 +89,10 @@ internal class ReaderResultOpsTest : FreeSpec() {
             "when result is success" - {
 
                 "when the value contains an invalid value" - {
-                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "")
+                    val result: ReaderResult<String> = ReaderResult.Success(value = "")
 
                     "then validator should return an error" {
-                        val validated = result.validation(CONTEXT, isNotEmpty)
+                        val validated = result.validation(CONTEXT, LOCATION, isNotEmpty)
 
                         validated shouldBe ReaderResult.Failure(
                             location = LOCATION,
@@ -102,20 +102,21 @@ internal class ReaderResultOpsTest : FreeSpec() {
                 }
 
                 "when the value contains a valid value" - {
-                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "user")
+                    val result: ReaderResult<String> = ReaderResult.Success(value = "user")
 
                     "then validator should return the original value" {
-                        val validated = result.validation(CONTEXT, isNotEmpty)
+                        val validated = result.validation(CONTEXT, LOCATION, isNotEmpty)
                         validated shouldBe result
                     }
                 }
             }
 
             "when result is failure" - {
-                val result: ReaderResult<String> = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val result: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
-                    val validated = result.validation(CONTEXT, isNotEmpty)
+                    val validated = result.validation(CONTEXT, LOCATION, isNotEmpty)
                     validated shouldBe result
                 }
             }

@@ -73,7 +73,7 @@ public infix fun <T : Any> ObjectPropertySpec.Defaultable<T>.validation(
     ObjectPropertySpec.Defaultable(
         path = path,
         reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, validator)
+            reader.read(context, location, source).validation(context, location, validator)
         }
     )
 

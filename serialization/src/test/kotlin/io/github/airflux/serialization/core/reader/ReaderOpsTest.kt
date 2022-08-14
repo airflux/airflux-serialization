@@ -45,7 +45,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
             "when an original reader returns a result as a success" - {
                 val reader: Reader<String> = DummyReader(
-                    result = ReaderResult.Success(location = LOCATION, value = VALUE)
+                    result = ReaderResult.Success(value = VALUE)
                 )
 
                 "when the value satisfies the predicate" - {
@@ -53,7 +53,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
                     "then filter should return the null value" {
                         val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
-                        filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                        filtered shouldBe ReaderResult.Success(value = null)
                     }
                 }
 
@@ -62,7 +62,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
                     "then filter should return the original value" {
                         val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
-                        filtered shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
+                        filtered shouldBe ReaderResult.Success(value = VALUE)
                     }
                 }
             }
@@ -84,7 +84,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
             "when an original reader returns a result as a success" - {
                 val reader: Reader<String> = DummyReader(
-                    result = ReaderResult.Success(location = LOCATION, value = VALUE)
+                    result = ReaderResult.Success(value = VALUE)
                 )
 
                 "when validation is a success" - {
@@ -92,7 +92,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
                     "then should return the original result" {
                         val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
-                        validated shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
+                        validated shouldBe ReaderResult.Success(value = VALUE)
                     }
                 }
 

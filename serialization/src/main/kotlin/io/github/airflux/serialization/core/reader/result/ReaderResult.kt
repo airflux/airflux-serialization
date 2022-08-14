@@ -27,14 +27,14 @@ public sealed class ReaderResult<out T> {
     public companion object;
 
     public infix fun <R> map(transform: (T) -> R): ReaderResult<R> =
-        flatMap { location, value -> transform(value).success(location) }
+        flatMap { value -> transform(value).success() }
 
-    public fun <R> flatMap(transform: (Location, T) -> ReaderResult<R>): ReaderResult<R> = fold(
+    public fun <R> flatMap(transform: (T) -> ReaderResult<R>): ReaderResult<R> = fold(
         ifFailure = ::identity,
-        ifSuccess = { transform(it.location, it.value) }
+        ifSuccess = { transform(it.value) }
     )
 
-    public data class Success<T>(val location: Location, val value: T) : ReaderResult<T>()
+    public data class Success<T>(val value: T) : ReaderResult<T>()
 
     public class Failure private constructor(public val causes: List<Cause>) : ReaderResult<Nothing>() {
 
@@ -129,7 +129,7 @@ public infix fun <T> ReaderResult<T>.orThrow(exceptionBuilder: (ReaderResult.Fai
     ifSuccess = { it.value }
 )
 
-public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Success(location, this)
+public fun <T> T.success(): ReaderResult<T> = ReaderResult.Success(this)
 public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<Nothing> =
     ReaderResult.Failure(location, this)
 

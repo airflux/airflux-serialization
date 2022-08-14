@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 public fun ValueNode.readAsBoolean(context: ReaderContext, location: Location): ReaderResult<Boolean> =
     if (this is BooleanNode)
-        ReaderResult.Success(location, this.get)
+        ReaderResult.Success(this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
         ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.BOOLEAN, this.type))
@@ -33,7 +33,7 @@ public fun ValueNode.readAsBoolean(context: ReaderContext, location: Location): 
 
 public fun ValueNode.readAsString(context: ReaderContext, location: Location): ReaderResult<String> =
     if (this is StringNode)
-        ReaderResult.Success(location, this.get)
+        ReaderResult.Success(this.get)
     else {
         val errorBuilder = context[InvalidTypeErrorBuilder]
         ReaderResult.Failure(location = location, error = errorBuilder.build(ValueNode.Type.STRING, this.type))

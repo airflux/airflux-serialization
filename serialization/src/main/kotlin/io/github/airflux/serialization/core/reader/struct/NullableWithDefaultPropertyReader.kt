@@ -39,13 +39,13 @@ public fun <T : Any> readNullable(
 
     fun <T : Any> readNullable(context: ReaderContext, lookup: Lookup.Defined, using: Reader<T>): ReaderResult<T?> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(location = lookup.location, value = null)
+            ReaderResult.Success(value = null)
         else
             using.read(context, lookup.location, lookup.value)
 
     return when (lookup) {
         is Lookup.Defined -> readNullable(context, lookup, using)
         is Lookup.Undefined ->
-            ReaderResult.Success(location = lookup.location, value = defaultValue(context, lookup.location))
+            ReaderResult.Success(value = defaultValue(context, lookup.location))
     }
 }

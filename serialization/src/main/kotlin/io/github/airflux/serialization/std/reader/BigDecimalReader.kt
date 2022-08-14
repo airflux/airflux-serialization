@@ -30,7 +30,7 @@ import java.math.BigDecimal
  */
 public object BigDecimalReader : Reader<BigDecimal> {
     override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<BigDecimal> =
-        source.readAsNumber(context, location) { _, p, value ->
-            BigDecimal(value).success(location = p)
+        source.readAsNumber(context, location) { _, _, value ->
+            BigDecimal(value).success()
         }
 }

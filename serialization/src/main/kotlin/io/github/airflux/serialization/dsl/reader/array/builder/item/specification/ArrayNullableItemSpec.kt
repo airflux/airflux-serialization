@@ -27,7 +27,7 @@ public fun <T : Any> nullable(reader: Reader<T>): ArrayItemSpec.Nullable<T?> =
     ArrayItemSpec.Nullable(
         reader = { context, location, source ->
             if (source is NullNode)
-                ReaderResult.Success(location = location, value = null)
+                ReaderResult.Success(value = null)
             else
                 reader.read(context, location, source)
         }
@@ -38,7 +38,7 @@ public infix fun <T> ArrayItemSpec.Nullable<T>.validation(
 ): ArrayItemSpec.Nullable<T> =
     ArrayItemSpec.Nullable(
         reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, validator)
+            reader.read(context, location, source).validation(context, location, validator)
         }
     )
 

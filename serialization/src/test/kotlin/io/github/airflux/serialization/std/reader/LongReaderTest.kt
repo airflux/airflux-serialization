@@ -56,7 +56,7 @@ internal class LongReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source: ValueNode = NumberNode.valueOf(value)
                     val result = LongReader.read(CONTEXT, Location.empty, source)
-                    result.assertAsSuccess(location = Location.empty, value = value)
+                    result.assertAsSuccess(value = value)
                 }
             }
 
