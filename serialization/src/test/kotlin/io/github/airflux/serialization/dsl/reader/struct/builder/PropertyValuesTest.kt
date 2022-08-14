@@ -147,7 +147,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable with default property" - {
                     val property = ObjectProperty.NullableWithDefault(
-                        nullableWithDefault(PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
+                        nullableWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
 
                     "then the method 'get' should throw an exception" {
@@ -425,7 +425,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable with default property" - {
                     val property = ObjectProperty.NullableWithDefault(
-                        nullableWithDefault(PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
+                        nullableWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
@@ -460,7 +460,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.NullableWithDefault(
-                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
+                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
                         "the method 'get' should thrown an exception" {
@@ -678,7 +678,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable with default property" - {
                     val property = ObjectProperty.NullableWithDefault(
-                        nullableWithDefault(PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
+                        nullableWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
@@ -713,7 +713,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.NullableWithDefault(
-                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
+                            nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
                         "the method 'get' should thrown an exception" {

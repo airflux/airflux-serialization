@@ -311,7 +311,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                         nullableWithDefault(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
-                            default = { DEFAULT_VALUE }
+                            default = DEFAULT
                         )
                     )
 

@@ -16,11 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property.specification
 
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.filter
@@ -31,14 +33,14 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 public fun <T : Any> nullableWithDefault(
     name: String,
     reader: Reader<T>,
-    default: () -> T
+    default: (ReaderContext, Location) -> T?
 ): ObjectPropertySpec.NullableWithDefault<T> =
     nullableWithDefault(PropertyPath(name), reader, default)
 
 public fun <T : Any> nullableWithDefault(
     path: PropertyPath,
     reader: Reader<T>,
-    default: () -> T
+    default: (ReaderContext, Location) -> T?
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = PropertyPaths(path),
@@ -51,7 +53,7 @@ public fun <T : Any> nullableWithDefault(
 public fun <T : Any> nullableWithDefault(
     paths: PropertyPaths,
     reader: Reader<T>,
-    default: () -> T
+    default: (ReaderContext, Location) -> T?
 ): ObjectPropertySpec.NullableWithDefault<T> =
     ObjectPropertySpec.NullableWithDefault(
         path = paths,

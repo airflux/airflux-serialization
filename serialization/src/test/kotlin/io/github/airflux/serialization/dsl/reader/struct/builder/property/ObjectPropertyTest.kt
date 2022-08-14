@@ -105,7 +105,7 @@ internal class ObjectPropertyTest : FreeSpec() {
             }
 
             "when created an instance of the nullable with default property" - {
-                val spec = nullableWithDefault(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
+                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
                 val property = ObjectProperty.NullableWithDefault(spec)
 
                 "then the path should equal the path from the spec" {
