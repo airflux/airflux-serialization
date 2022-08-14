@@ -16,11 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property.specification
 
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readWithDefault
@@ -29,14 +31,14 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 public fun <T : Any> defaultable(
     name: String,
     reader: Reader<T>,
-    default: () -> T
+    default: (ReaderContext, Location) -> T
 ): ObjectPropertySpec.Defaultable<T> =
     defaultable(PropertyPath(name), reader, default)
 
 public fun <T : Any> defaultable(
     path: PropertyPath,
     reader: Reader<T>,
-    default: () -> T
+    default: (ReaderContext, Location) -> T
 ): ObjectPropertySpec.Defaultable<T> =
     ObjectPropertySpec.Defaultable(
         path = PropertyPaths(path),
@@ -49,7 +51,7 @@ public fun <T : Any> defaultable(
 public fun <T : Any> defaultable(
     paths: PropertyPaths,
     reader: Reader<T>,
-    default: () -> T
+    default: (ReaderContext, Location) -> T
 ): ObjectPropertySpec.Defaultable<T> =
     ObjectPropertySpec.Defaultable(
         path = paths,

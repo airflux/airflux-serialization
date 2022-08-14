@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.context.ReaderContext
@@ -33,22 +34,23 @@ public fun <T : Any> readWithDefault(
     context: ReaderContext,
     lookup: Lookup,
     using: Reader<T>,
-    defaultValue: () -> T
+    defaultValue: (ReaderContext, Location) -> T
 ): ReaderResult<T> {
 
     fun <T : Any> readWithDefault(
         context: ReaderContext,
         lookup: Lookup.Defined,
         using: Reader<T>,
-        defaultValue: () -> T
+        defaultValue: (ReaderContext, Location) -> T
     ): ReaderResult<T> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(location = lookup.location, value = defaultValue())
+            ReaderResult.Success(location = lookup.location, value = defaultValue(context, lookup.location))
         else
             using.read(context, lookup.location, lookup.value)
 
     return when (lookup) {
         is Lookup.Defined -> readWithDefault(context, lookup, using, defaultValue)
-        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue())
+        is Lookup.Undefined ->
+            ReaderResult.Success(location = lookup.location, value = defaultValue(context, lookup.location))
     }
 }

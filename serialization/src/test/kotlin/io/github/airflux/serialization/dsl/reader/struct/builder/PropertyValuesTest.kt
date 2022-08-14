@@ -80,7 +80,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, { DEFAULT_VALUE }))
+                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -218,7 +218,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, { DEFAULT_VALUE }))
+                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -252,7 +252,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                     "then for unknown property" - {
                         val unknownProperty = ObjectProperty.Defaultable(
-                            defaultable(UNKNOWN_PROPERTY_NAME, StringReader, { DEFAULT_VALUE })
+                            defaultable(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
                         "the method 'get' should thrown an exception" {
@@ -513,7 +513,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, { DEFAULT_VALUE }))
+                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
                     val map: PropertyValues = PropertyValuesInstance().apply {
                         this[property] = null
                     }

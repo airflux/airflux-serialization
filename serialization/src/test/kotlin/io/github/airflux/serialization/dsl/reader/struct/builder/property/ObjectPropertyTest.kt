@@ -53,7 +53,7 @@ internal class ObjectPropertyTest : FreeSpec() {
             }
 
             "when created an instance of the defaultable property" - {
-                val spec = defaultable(name = "id", reader = StringReader, default = { DEFAULT_VALUE })
+                val spec = defaultable(name = "id", reader = StringReader, default = DEFAULT)
                 val property = ObjectProperty.Defaultable(spec)
 
                 "then the path should equal the path from the spec" {
