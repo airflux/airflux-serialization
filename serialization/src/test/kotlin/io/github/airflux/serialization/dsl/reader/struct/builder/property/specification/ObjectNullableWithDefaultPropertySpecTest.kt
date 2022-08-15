@@ -336,7 +336,6 @@ internal class ObjectNullableWithDefaultPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
-                        println(result)
                         result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
                     }

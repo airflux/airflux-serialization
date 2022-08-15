@@ -34,8 +34,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         private val CONTEXT = ReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
         private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
-        private val READER: Reader<String> =
-            DummyReader { _, _ -> ReaderResult.Success(value = VALUE) }
+        private val READER: Reader<String> = DummyReader(ReaderResult.Success(value = VALUE))
     }
 
     init {

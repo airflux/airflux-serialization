@@ -34,8 +34,7 @@ internal class WithDefaultPropertyReaderTest : FreeSpec() {
         private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"
-        private val READER: Reader<String> =
-            DummyReader { _, _ -> ReaderResult.Success(value = VALUE) }
+        private val READER: Reader<String> = DummyReader(ReaderResult.Success(value = VALUE))
         private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
     }
 
