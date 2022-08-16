@@ -12,14 +12,14 @@ import io.github.airflux.serialization.dsl.reader.context.readerContext
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
 import io.github.airflux.serialization.std.validator.array.MaxItemsArrayValidator
 import io.github.airflux.serialization.std.validator.array.MinItemsArrayValidator
-import io.github.airflux.serialization.std.validator.comparable.EqComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.GeComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.GtComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.LeComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.LtComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.MaxComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.MinComparableValidator
-import io.github.airflux.serialization.std.validator.comparable.NeComparableValidator
+import io.github.airflux.serialization.std.validator.comparison.EqComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.GeComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.GtComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.LeComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.LtComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.MaxComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.MinComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.NeComparisonValidator
 import io.github.airflux.serialization.std.validator.string.IsAStringValidator
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
 import io.github.airflux.serialization.std.validator.string.MaxLengthStringValidator
@@ -82,12 +82,12 @@ fun ReaderContextBuilder.stringValidationErrorBuilders() {
 }
 
 fun ReaderContextBuilder.comparableValidationErrorBuilders() {
-    +MinComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Min)
-    +MaxComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Max)
-    +EqComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Eq)
-    +NeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ne)
-    +GtComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Gt)
-    +GeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ge)
-    +LtComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Lt)
-    +LeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Le)
+    +MinComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Min)
+    +MaxComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Max)
+    +EqComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Eq)
+    +NeComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ne)
+    +GtComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Gt)
+    +GeComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ge)
+    +LtComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Lt)
+    +LeComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Le)
 }

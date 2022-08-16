@@ -14,65 +14,65 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.validator.comparable
+package io.github.airflux.serialization.std.validator.comparison
 
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public object StdComparableValidator {
+public object StdComparisonValidator {
 
     /**
      * Validation of a value, if a value is less than an expected [value] then an error, otherwise a success.
      */
     public fun <T> min(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = MinComparableValidator(value)
+              T : Comparable<T> = MinComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is more than an expected [value] then error, otherwise a success.
      */
     public fun <T> max(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = MaxComparableValidator(value)
+              T : Comparable<T> = MaxComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is equal to an expected [value] then success, otherwise an error.
      */
     public fun <T> eq(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = EqComparableValidator(value)
+              T : Comparable<T> = EqComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is not equal to an expected [value] then a success, otherwise an error.
      */
     public fun <T> ne(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = NeComparableValidator(value)
+              T : Comparable<T> = NeComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is greater than an expected [value] then a success, otherwise an error.
      */
     public fun <T> gt(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = GtComparableValidator(value)
+              T : Comparable<T> = GtComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is greater than or equal to an expected [value] then a success, otherwise an error.
      */
     public fun <T> ge(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = GeComparableValidator(value)
+              T : Comparable<T> = GeComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is less than an expected [value] then a success, otherwise an error.
      */
     public fun <T> lt(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = LtComparableValidator(value)
+              T : Comparable<T> = LtComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is less than or equal to an expected [value] then a success, otherwise an error.
      */
     public fun <T> le(value: T): Validator<T>
         where T : Number,
-              T : Comparable<T> = LeComparableValidator(value)
+              T : Comparable<T> = LeComparisonValidator(value)
 }

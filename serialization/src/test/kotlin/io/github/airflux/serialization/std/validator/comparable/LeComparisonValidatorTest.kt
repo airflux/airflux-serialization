@@ -22,13 +22,15 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.std.validator.comparison.LeComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class LeComparableValidatorTest : FreeSpec() {
+internal class LeComparisonValidatorTest : FreeSpec() {
 
     companion object {
         private val LOCATION: Location = Location.empty
@@ -38,7 +40,7 @@ internal class LeComparableValidatorTest : FreeSpec() {
     init {
 
         "The string validator Ge" - {
-            val validator: Validator<Int> = StdComparableValidator.le(VALUE)
+            val validator: Validator<Int> = StdComparisonValidator.le(VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
@@ -47,13 +49,13 @@ internal class LeComparableValidatorTest : FreeSpec() {
                     val exception = shouldThrow<NoSuchElementException> {
                         validator.validate(context, LOCATION, VALUE + 1)
                     }
-                    exception.message shouldBe "The error builder '${LeComparableValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                    exception.message shouldBe "The error builder '${LeComparisonValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context = ReaderContext(
-                    LeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Le)
+                    LeComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Le)
                 )
 
                 "when a value is less than the allowed value" - {

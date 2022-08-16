@@ -1381,128 +1381,128 @@ public final class io/github/airflux/serialization/std/validator/array/StdArrayV
 	public final fun minItems (I)Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/EqComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/EqComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/EqComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/EqComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/EqComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/EqComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/EqComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/EqComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/GeComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/GeComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/GeComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/GeComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/GeComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/GeComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/GeComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/GeComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/GtComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/GtComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/GtComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/GtComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/GtComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/GtComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/GtComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/GtComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/LeComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/LeComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/LeComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/LeComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/LeComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/LeComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/LeComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/LeComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/LtComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/LtComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/LtComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/LtComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/LtComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/LtComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/LtComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/LtComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/MaxComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/MaxComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/MaxComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/MaxComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/MaxComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/MaxComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/MaxComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/MaxComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/MinComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/MinComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/MinComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/MinComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/MinComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/MinComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/MinComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/MinComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/NeComparableValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+public final class io/github/airflux/serialization/std/validator/comparison/NeComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/NeComparableValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
-	public static final field Key Lio/github/airflux/serialization/std/validator/comparable/NeComparableValidator$ErrorBuilder$Key;
+public final class io/github/airflux/serialization/std/validator/comparison/NeComparisonValidator$ErrorBuilder : io/github/airflux/serialization/core/context/error/AbstractErrorBuilderContextElement {
+	public static final field Key Lio/github/airflux/serialization/std/validator/comparison/NeComparisonValidator$ErrorBuilder$Key;
 	public fun <init> (Lkotlin/jvm/functions/Function2;)V
 	public final fun build (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/NeComparableValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
+public final class io/github/airflux/serialization/std/validator/comparison/NeComparisonValidator$ErrorBuilder$Key : io/github/airflux/serialization/core/context/error/ContextErrorBuilderKey {
 	public fun getName ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparable/StdComparableValidator {
-	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/comparable/StdComparableValidator;
+public final class io/github/airflux/serialization/std/validator/comparison/StdComparisonValidator {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/comparison/StdComparisonValidator;
 	public final fun eq (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 	public final fun ge (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 	public final fun gt (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.validator.comparable
+package io.github.airflux.serialization.std.validator.comparison
 
 import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
 import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
@@ -25,12 +25,12 @@ import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class MinComparableValidator<T> internal constructor(private val expected: T) : Validator<T>
+public class MaxComparisonValidator<T> internal constructor(private val expected: T) : Validator<T>
     where T : Number,
           T : Comparable<T> {
 
     override fun validate(context: ReaderContext, location: Location, value: T): ReaderResult.Failure? =
-        if (value >= expected)
+        if (value <= expected)
             null
         else {
             val errorBuilder = context[ErrorBuilder]

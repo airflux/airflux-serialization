@@ -22,13 +22,15 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.std.validator.comparison.GeComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class NeComparableValidatorTest : FreeSpec() {
+internal class GeComparisonValidatorTest : FreeSpec() {
 
     companion object {
         private val LOCATION: Location = Location.empty
@@ -37,36 +39,27 @@ internal class NeComparableValidatorTest : FreeSpec() {
 
     init {
 
-        "The string validator Eq" - {
-            val validator: Validator<Int> = StdComparableValidator.ne(VALUE)
+        "The string validator Ge" - {
+            val validator: Validator<Int> = StdComparisonValidator.ge(VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, VALUE)
+                        validator.validate(context, LOCATION, VALUE - 1)
                     }
-                    exception.message shouldBe "The error builder '${NeComparableValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                    exception.message shouldBe "The error builder '${GeComparisonValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context = ReaderContext(
-                    NeComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ne)
+                    GeComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Ge)
                 )
 
                 "when a value is less than the allowed value" - {
                     val value = VALUE - 1
-
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, value)
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when a value is equal to the allowed value" - {
-                    val value = VALUE
 
                     "then the validator should return an error" {
                         val failure = validator.validate(context, LOCATION, value)
@@ -74,12 +67,21 @@ internal class NeComparableValidatorTest : FreeSpec() {
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
                             location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Ne(expected = VALUE, actual = value)
+                            error = JsonErrors.Validation.Numbers.Ge(expected = VALUE, actual = value)
                         )
                     }
                 }
 
-                "when a value is more than the allowed value" - {
+                "when a value is equal to the allowed value" - {
+                    val value = VALUE
+
+                    "then the validator should return the null value" {
+                        val errors = validator.validate(context, LOCATION, value)
+                        errors.shouldBeNull()
+                    }
+                }
+
+                "when a value is greater than the allowed value" - {
                     val value = VALUE + 1
 
                     "then the validator should return the null value" {

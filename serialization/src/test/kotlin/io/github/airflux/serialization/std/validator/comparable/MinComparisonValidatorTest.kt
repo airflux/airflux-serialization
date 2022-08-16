@@ -22,42 +22,44 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.context.ReaderContext
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.std.validator.comparison.MinComparisonValidator
+import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class GtComparableValidatorTest : FreeSpec() {
+internal class MinComparisonValidatorTest : FreeSpec() {
 
     companion object {
         private val LOCATION: Location = Location.empty
-        private const val VALUE: Int = 2
+        private const val MIN_VALUE: Int = 2
     }
 
     init {
 
-        "The string validator Gt" - {
-            val validator: Validator<Int> = StdComparableValidator.gt(VALUE)
+        "The string validator Min" - {
+            val validator: Validator<Int> = StdComparisonValidator.min(MIN_VALUE)
 
             "when the reader context does not contain the error builder" - {
                 val context = ReaderContext()
 
                 "when the test condition is false" {
                     val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, VALUE)
+                        validator.validate(context, LOCATION, MIN_VALUE - 1)
                     }
-                    exception.message shouldBe "The error builder '${GtComparableValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                    exception.message shouldBe "The error builder '${MinComparisonValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
                 }
             }
 
             "when the reader context contains the error builder" - {
                 val context = ReaderContext(
-                    GtComparableValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Gt)
+                    MinComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Min)
                 )
 
-                "when a value is less than the allowed value" - {
-                    val value = VALUE - 1
+                "when a value is less than the min allowed" - {
+                    val value = MIN_VALUE - 1
 
                     "then the validator should return an error" {
                         val failure = validator.validate(context, LOCATION, value)
@@ -65,27 +67,22 @@ internal class GtComparableValidatorTest : FreeSpec() {
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
                             location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Gt(expected = VALUE, actual = value)
+                            error = JsonErrors.Validation.Numbers.Min(expected = MIN_VALUE, actual = value)
                         )
                     }
                 }
 
-                "when a value is equal to the allowed value" - {
-                    val value = VALUE
+                "when a value is equal to the min allowed" - {
+                    val value = MIN_VALUE
 
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, value)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Gt(expected = VALUE, actual = value)
-                        )
+                    "then the validator should return the null value" {
+                        val errors = validator.validate(context, LOCATION, value)
+                        errors.shouldBeNull()
                     }
                 }
 
-                "when a value is greater than the allowed value" - {
-                    val value = VALUE + 1
+                "when a value is more than the min allowed" - {
+                    val value = MIN_VALUE + 1
 
                     "then the validator should return the null value" {
                         val errors = validator.validate(context, LOCATION, value)
