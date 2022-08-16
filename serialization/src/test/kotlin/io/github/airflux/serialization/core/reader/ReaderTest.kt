@@ -53,11 +53,11 @@ internal class ReaderTest : FreeSpec() {
                 }
             }
 
-            "Reader#flatMap" - {
+            "Reader#flatMapResult" - {
                 val reader: Reader<String> = DummyReader(ReaderResult.Success(value = VALUE))
 
                 "should return new reader" {
-                    val transformedReader = reader.flatMap { _, _, value -> value.toInt().success() }
+                    val transformedReader = reader.flatMapResult { _, _, value -> value.toInt().success() }
                     val result = transformedReader.read(CONTEXT, LOCATION, NullNode)
 
                     result shouldBe ReaderResult.Success(value = VALUE.toInt())

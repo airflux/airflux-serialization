@@ -47,7 +47,7 @@ public fun interface Reader<out T> {
     public infix fun <R> map(transform: (T) -> R): Reader<R> =
         Reader { context, location, source -> read(context, location, source).map(transform) }
 
-    public infix fun <R> flatMap(transform: (ReaderContext, Location, T) -> ReaderResult<R>): Reader<R> =
+    public infix fun <R> flatMapResult(transform: (ReaderContext, Location, T) -> ReaderResult<R>): Reader<R> =
         Reader { context, location, source ->
             read(context, location, source)
                 .fold(

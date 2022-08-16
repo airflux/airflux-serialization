@@ -13,7 +13,7 @@ val LotsReader = arrayReader(ArrayReaderConfiguration) {
         +isNotEmpty
     }
     returns(items = nonNullable(LotReader))
-}.flatMap { context, location, items ->
+}.flatMapResult { context, location, items ->
     withCatching(context, location) {
         Lots(items).success()
     }
