@@ -96,14 +96,14 @@ internal fun <T> ArrayNode<*>.read(
         if (idx < prefixItems.size) prefixItems[idx] else itemsReader
 
     val failFast = context.failFast
-    val errorBuilder = context[AdditionalItemsErrorBuilder]
     val initial: ReaderResult<MutableList<T>> = ReaderResult.Success(ArrayList(this.size))
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         val reader: Reader<T> = getReader(idx, prefixItems, items)
-            ?: return if (errorIfAdditionalItems)
+            ?: return if (errorIfAdditionalItems) {
+                val errorBuilder = context[AdditionalItemsErrorBuilder]
                 acc + ReaderResult.Failure(currentLocation, errorBuilder.build())
-            else
+            } else
                 acc
 
         reader.read(context, currentLocation, elem)
