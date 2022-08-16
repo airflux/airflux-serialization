@@ -12,14 +12,14 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/53e1a68ffc064a6e8d9a01a4c3027764)](https://www.codacy.com/gh/airflux/airflux/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=airflux/airflux&amp;utm_campaign=Badge_Grade)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5511/badge)](https://bestpractices.coreinfrastructure.org/projects/5511)
 
-
 [![](https://jitpack.io/v/airflux/airflux.svg)](https://jitpack.io/#airflux/airflux)
 
 The library to parse, validate and generate data in the JSON (JavaScript Object Notation) format.
 
-The documentation site: [https://airflux.github.io/airflux/](https://airflux.github.io/airflux/)
+The documentation site: [https://airflux.github.io/airflux-serialization/](https://airflux.github.io/airflux-serialization/)
 
 # Installation
+
 ```
 repositories {
     ...
