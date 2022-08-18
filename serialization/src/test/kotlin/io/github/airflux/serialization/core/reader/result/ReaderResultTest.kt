@@ -85,6 +85,12 @@ internal class ReaderResultTest : FreeSpec() {
                 result shouldBe ORIGINAL_VALUE
             }
 
+            "calling getOrHandle function should return a value" {
+                val result = original.getOrHandle { ELSE_VALUE }
+
+                result shouldBe ORIGINAL_VALUE
+            }
+
             "calling orElse function should return a value" {
                 val elseResult = ReaderResult.Success(value = ELSE_VALUE)
 
@@ -195,6 +201,12 @@ internal class ReaderResultTest : FreeSpec() {
 
             "calling getOrElse function should return a defaultValue" {
                 val result = original.getOrElse { ELSE_VALUE }
+
+                result shouldBe ELSE_VALUE
+            }
+
+            "calling getOrHandle function should return a value from a handler" {
+                val result = original.getOrHandle { ELSE_VALUE }
 
                 result shouldBe ELSE_VALUE
             }

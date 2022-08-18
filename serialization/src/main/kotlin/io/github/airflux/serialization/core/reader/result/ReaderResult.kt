@@ -119,6 +119,11 @@ public infix fun <T> ReaderResult<T>.getOrElse(defaultValue: () -> T): T = fold(
     ifSuccess = { it.value }
 )
 
+public infix fun <T> ReaderResult<T>.getOrHandle(handler: (ReaderResult.Failure) -> T): T = fold(
+    ifFailure = { handler(it) },
+    ifSuccess = { it.value }
+)
+
 public infix fun <T> ReaderResult<T>.orElse(defaultValue: () -> ReaderResult<T>): ReaderResult<T> = fold(
     ifFailure = { defaultValue() },
     ifSuccess = ::identity
