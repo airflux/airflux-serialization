@@ -1,4 +1,4 @@
-<img src="docs/logo.png" alt="Airflux logo" />
+<img src="logo.png" alt="Airflux logo" />
 
 # The Airflux serialization library.
 
