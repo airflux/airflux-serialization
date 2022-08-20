@@ -41,7 +41,7 @@ dependencies {
 
 # Codecov graphs
 
-[![Codecov Sunburst](https://codecov.io/gh/airflux/airflux/branch/main/graphs/sunburst.svg?token=QBD7092MJI)](https://codecov.io/gh/airflux/airflux/branch/main/graphs/sunburst.svg?token=QBD7092MJI)
+[![Codecov Sunburst](https://codecov.io/gh/airflux/airflux-serialization/branch/main/graphs/sunburst.svg?token=QBD7092MJI)](https://codecov.io/gh/airflux/airflux-serialization/branch/main/graphs/sunburst.svg?token=QBD7092MJI)
 
 # License
 
