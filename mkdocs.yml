@@ -1,0 +1,34 @@
+site_name: Airflux serialization
+
+nav:
+  - Installation: installation.md
+  - Quickstart: quickstart.md
+
+theme:
+  language: en
+  name: material
+  logo: assets/logo.png
+  colorscheme: github
+  nav_style: dark
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - kotlin
+  icon:
+    repo: fontawesome/brands/git-alt
+repo_url: https://github.com/airflux/airflux-serialization
+repo_name: airflux/airflux-serialization
+edit_uri: ""
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      use_pygments: false
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/kotlin.min.js
+  - javascripts/highlight.js
+extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css
