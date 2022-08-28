@@ -20,9 +20,7 @@ val mapper = ObjectMapper().apply {
 
 ## Reading
 
-### JSON
-
-The example of JSON to be parsing, validation and matching to some types.
+### The example of JSON
 
 ```kotlin
 val JSON = """
@@ -42,11 +40,14 @@ val JSON = """
 ### Deserialization JSON
 
 ```kotlin
-val parsedUser = JSON.deserialization(mapper = mapper, context = DefaultReaderContext, reader = UserReader)
-    .getOrNull()
+val parsedUser = JSON.deserialization(
+    mapper = mapper,
+    context = DefaultReaderContext,
+    reader = UserReader
+).orThrow { IllegalStateException() }
 ```
 
-#### Define the readers for domain type.
+#### Define readers for domain types
 
 - Define the generic readers
 
@@ -61,7 +62,30 @@ val NonEmptyStringReader: Reader<String> = StringReader.validation(StdStringVali
 val PhoneNumberReader: Reader<String> = NonEmptyStringReader.validation(StdStringValidator.pattern("\\d*".toRegex()))
 ```
 
-- Define reader for the Phone type
+- Define the reader for the User type
+
+```kotlin
+val UserReader = structReader<User>(ObjectReaderConfiguration) {
+
+    val id = property(required(name = "id", reader = PositiveNumberReader))
+    val name = property(required(name = "name", reader = NonEmptyStringReader))
+    val phones = property(optionalWithDefault(name = "phones", reader = PhonesReader, default = { _, _ -> Phones() }))
+
+    returns { _, _ ->
+        User(id = +id, name = +name, phones = +phones).success()
+    }
+}
+```
+
+- Define the reader for the Phones type
+
+```kotlin
+val PhonesReader = arrayReader(ArrayReaderConfiguration) {
+    returns(items = nonNullable(PhoneReader))
+}.map { phones -> Phones(phones) }
+```
+
+- Define the reader for the Phone type
 
 ```kotlin
 val PhoneReader = structReader<Phone>(ObjectReaderConfiguration) {
@@ -78,30 +102,7 @@ val PhoneReader = structReader<Phone>(ObjectReaderConfiguration) {
 }
 ```
 
-- Define reader for the Phones type
-
-```kotlin
-val PhonesReader = arrayReader(ArrayReaderConfiguration) {
-    returns(items = nonNullable(PhoneReader))
-}.map { phones -> Phones(phones) }
-```
-
-- Define reader for the User type
-
-```kotlin
-val UserReader = structReader<User>(ObjectReaderConfiguration) {
-
-    val id = property(required(name = "id", reader = PositiveNumberReader))
-    val name = property(required(name = "name", reader = NonEmptyStringReader))
-    val phones = property(optionalWithDefault(name = "phones", reader = PhonesReader, default = { _, _ -> Phones() }))
-
-    returns { _, _ ->
-        User(id = +id, name = +name, phones = +phones).success()
-    }
-}
-```
-
-#### Define the config for an object reader builder
+#### Define the config for a struct reader builder
 
 ```kotlin
 val ObjectReaderConfiguration = objectReaderConfig {
@@ -123,12 +124,17 @@ val ArrayReaderConfiguration = arrayReaderConfig {
 }
 ```
 
-#### Define the context for a reader
+#### Define the context to deserialization of some JSON using the reader
 
 ```kotlin
 val DefaultReaderContext = readerContext {
     //Disabled the fail-fast mode
     failFast = false
+
+    //registering the parsing error builders
+    +PathMissingErrorBuilder { JsonErrors.PathMissing }
+    +InvalidTypeErrorBuilder(JsonErrors::InvalidType)
+    +ValueCastErrorBuilder(JsonErrors::ValueCast)
 
     //registering the object validation error builders
     +IsNotEmptyObjectValidator.ErrorBuilder { JsonErrors.Validation.Object.IsEmpty }
@@ -143,11 +149,6 @@ val DefaultReaderContext = readerContext {
 
     //registering the number validation error builders
     +GtComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Gt)
-
-    //registering the parsing error builders
-    +PathMissingErrorBuilder { JsonErrors.PathMissing }
-    +InvalidTypeErrorBuilder(JsonErrors::InvalidType)
-    +ValueCastErrorBuilder(JsonErrors::ValueCast)
 }
 ```
 
@@ -190,26 +191,9 @@ val user = User(id = 42, name = "user", phones = Phones(listOf(Phone(title = "mo
 val json = user.serialization(mapper = mapper, context = DefaultWriterContext, writer = UserWriter)
 ```
 
-#### Define the writers for domain type.
+#### Define the writers for some domain types
 
-- Define writer for the Phone type
-
-```kotlin
-val PhoneWriter = structWriter<Phone> {
-    property(nonNullable(name = "title", from = Phone::title, writer = StringWriter))
-    property(nonNullable(name = "number", from = Phone::number, writer = StringWriter))
-}
-```
-
-- Define writer for the Phones type
-
-```kotlin
-val PhonesWriter = arrayWriter<Phone> {
-    items(nullable(PhoneWriter))
-}
-```
-
-- Define writer for the User type
+- Define the writer for the User type
 
 ```kotlin
 val UserWriter = structWriter<User> {
@@ -219,7 +203,24 @@ val UserWriter = structWriter<User> {
 }
 ```
 
-#### Define the context for a writer.
+- Define the writer for the Phones type
+
+```kotlin
+val PhonesWriter = arrayWriter<Phone> {
+    items(nullable(PhoneWriter))
+}
+```
+
+- Define the writer for the Phone type
+
+```kotlin
+val PhoneWriter = structWriter<Phone> {
+    property(nonNullable(name = "title", from = Phone::title, writer = StringWriter))
+    property(nonNullable(name = "number", from = Phone::number, writer = StringWriter))
+}
+```
+
+#### Define the context to serialization of some domain type using the writer
 
 ```kotlin
 val DefaultWriterContext = writerContext()
