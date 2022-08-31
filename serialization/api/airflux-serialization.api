@@ -963,8 +963,6 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/validator/ObjectValidator {
-	public fun and (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/ObjectValidator;)Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/ObjectValidator;
-	public fun or (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/ObjectValidator;)Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/ObjectValidator;
 	public abstract fun validate (Lio/github/airflux/serialization/core/reader/context/ReaderContext;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/dsl/reader/struct/builder/property/ObjectProperties;Lio/github/airflux/serialization/core/value/ObjectNode;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 

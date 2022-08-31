@@ -30,37 +30,4 @@ public fun interface ObjectValidator {
         properties: ObjectProperties,
         source: ObjectNode
     ): ReaderResult.Failure?
-
-    /*
-    * | This | Other  | Result |
-    * |------|--------|--------|
-    * | S    | ignore | S      |
-    * | F    | S      | S      |
-    * | F    | F`     | F + F` |
-    */
-    public infix fun or(alt: ObjectValidator): ObjectValidator {
-        val self = this
-        return ObjectValidator { context, location, properties, source ->
-            self.validate(context, location, properties, source)
-                ?.let { error ->
-                    alt.validate(context, location, properties, source)
-                        ?.let { error + it }
-                }
-        }
-    }
-
-    /*
-     * | This | Other  | Result |
-     * |------|--------|--------|
-     * | S    | S      | S      |
-     * | S    | F      | F      |
-     * | F    | ignore | F      |
-     */
-    public infix fun and(alt: ObjectValidator): ObjectValidator {
-        val self = this
-        return ObjectValidator { context, location, properties, source ->
-            val result = self.validate(context, location, properties, source)
-            result ?: alt.validate(context, location, properties, source)
-        }
-    }
 }
