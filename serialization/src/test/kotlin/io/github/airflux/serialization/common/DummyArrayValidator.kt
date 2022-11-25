@@ -17,13 +17,15 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 
-internal class DummyArrayValidator(val result: ReaderResult.Failure?) : ArrayValidator {
-
-    override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
-        result
+internal class DummyArrayValidator<EB, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, CTX> {
+    override fun validate(
+        env: ReaderEnv<EB, CTX>,
+        location: Location,
+        source: ArrayNode<*>
+    ): ReaderResult.Failure? = result
 }

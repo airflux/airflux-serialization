@@ -16,38 +16,28 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
 
-public class IsNotEmptyObjectValidator internal constructor() : ObjectValidator {
+public class IsNotEmptyObjectValidator<EB, CTX> internal constructor() : ObjectValidator<EB, CTX>
+    where EB : IsNotEmptyObjectValidator.ErrorBuilder {
 
     override fun validate(
-        context: ReaderContext,
+        env: ReaderEnv<EB, CTX>,
         location: Location,
-        properties: ObjectProperties,
+        properties: ObjectProperties<EB, CTX>,
         source: ObjectNode
     ): ReaderResult.Failure? =
-        if (source.isEmpty()) {
-            val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location, errorBuilder.build())
-        } else
+        if (source.isEmpty())
+            ReaderResult.Failure(location, env.errorBuilders.isNotEmptyObjectError())
+        else
             null
 
-    public class ErrorBuilder(private val function: () -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(): ReaderResult.Error = function()
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun isNotEmptyObjectError(): ReaderResult.Error
     }
 }

@@ -17,13 +17,11 @@
 package io.github.airflux.serialization.core.reader.validator
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
-@Suppress("unused")
-public fun interface Validator<in T> {
-
-    public fun validate(context: ReaderContext, location: Location, value: T): ReaderResult.Failure?
+public fun interface Validator<EB, CTX, in T> {
+    public fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure?
 }
 
 /*
@@ -33,12 +31,12 @@ public fun interface Validator<in T> {
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-public infix fun <T> Validator<T>.or(other: Validator<T>): Validator<T> {
+public infix fun <EB, CTX, T> Validator<EB, CTX, T>.or(other: Validator<EB, CTX, T>): Validator<EB, CTX, T> {
     val self = this
-    return Validator { context, location, value ->
-        self.validate(context, location, value)
+    return Validator { env, location, value ->
+        self.validate(env, location, value)
             ?.let { error ->
-                other.validate(context, location, value)
+                other.validate(env, location, value)
                     ?.let { error + it }
             }
     }
@@ -51,10 +49,10 @@ public infix fun <T> Validator<T>.or(other: Validator<T>): Validator<T> {
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-public infix fun <T> Validator<T>.and(other: Validator<T>): Validator<T> {
+public infix fun <EB, CTX, T> Validator<EB, CTX, T>.and(other: Validator<EB, CTX, T>): Validator<EB, CTX, T> {
     val self = this
-    return Validator { context, location, value ->
-        val result = self.validate(context, location, value)
-        result ?: other.validate(context, location, value)
+    return Validator { env, location, value ->
+        val result = self.validate(env, location, value)
+        result ?: other.validate(env, location, value)
     }
 }

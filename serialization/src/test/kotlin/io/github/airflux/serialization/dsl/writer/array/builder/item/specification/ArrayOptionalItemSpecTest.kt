@@ -19,7 +19,8 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item.specificat
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -29,7 +30,7 @@ internal class ArrayOptionalItemSpecTest : FreeSpec() {
     companion object {
         private const val ITEM_VALUE = "value"
 
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
@@ -38,7 +39,7 @@ internal class ArrayOptionalItemSpecTest : FreeSpec() {
         "The ArrayItemSpec#Optional type" - {
 
             "when created the instance of a spec of the optional item" - {
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = optional(writer = writer)
 
                 "then the instance should contain the writer passed during initialization" {
@@ -47,12 +48,12 @@ internal class ArrayOptionalItemSpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = optional(writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, ITEM_VALUE)
+                    val result = specWithFilter.writer.write(ENV, LOCATION, ITEM_VALUE)
 
                     "then the not null value should be returned" {
                         result shouldBe StringNode(ITEM_VALUE)
@@ -60,7 +61,7 @@ internal class ArrayOptionalItemSpecTest : FreeSpec() {
                 }
 
                 "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, "")
+                    val result = specWithFilter.writer.write(ENV, LOCATION, "")
 
                     "then the null value should be returned" {
                         result.shouldBeNull()

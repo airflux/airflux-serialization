@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.validator
 
 import io.github.airflux.serialization.common.DummyObjectValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.beEmpty
@@ -27,85 +26,45 @@ import io.kotest.matchers.should
 internal class ObjectReaderValidatorsBuilderInstanceTest : FreeSpec() {
 
     companion object {
-        private val PROPERTIES = ObjectProperties(emptyList())
+        private val PROPERTIES = ObjectProperties<Unit, Unit>(emptyList())
     }
 
     init {
 
         "The ObjectReaderValidatorsBuilderInstance type" - {
 
-            "when the config is not contained the object validator" - {
-                val config = ObjectReaderConfig.Builder().build()
-                val validationBuilder = ObjectReaderValidatorsBuilderInstance(config)
+            "when validators were not added" - {
+                val validatorsBuilder = ObjectReaderValidationInstance<Unit, Unit>()
 
-                "when the validator was not overridden" - {
-                    val validators = validationBuilder.build(PROPERTIES)
-
-                    "then there is no validator" {
-                        validators should beEmpty()
-                    }
-                }
-
-                "when the validator was overridden" - {
-                    val someValidatorBuilder = DummyObjectValidatorBuilder(
-                        key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
-                        result = null
-                    )
-                    val validators = validationBuilder
-                        .apply {
-                            validation {
-                                +someValidatorBuilder
-                            }
-                        }
-                        .build(PROPERTIES)
-
-                    "then the overridden validator is used" {
-                        validators shouldContainExactly listOf(someValidatorBuilder.validator)
-                    }
+                "then the builder returns an empty collection" {
+                    val validators = validatorsBuilder.build(PROPERTIES)
+                    validators should beEmpty()
                 }
             }
 
-            "when the config contains the object validator" - {
-                val initValidatorBuilder = DummyObjectValidatorBuilder(
-                    key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+            "when some validators were added" - {
+                val firstValidatorBuilder = DummyObjectValidatorBuilder<Unit, Unit>(
+                    key = DummyObjectValidatorBuilder.key<Unit, Unit, DummyObjectValidatorBuilder<Unit, Unit>>(),
                     result = null
                 )
-                val config = ObjectReaderConfig.Builder()
-                    .apply {
-                        validation {
-                            +initValidatorBuilder
-                        }
-                    }
-                    .build()
-                val validationBuilder = ObjectReaderValidatorsBuilderInstance(config)
+                val secondValidatorBuilder = DummyObjectValidatorBuilder<Unit, Unit>(
+                    key = DummyObjectValidatorBuilder.key<Unit, Unit, DummyObjectValidatorBuilder<Unit, Unit>>(),
+                    result = null
+                )
 
-                "when the validator was not overridden" - {
-                    val validators = validationBuilder.build(PROPERTIES)
-
-                    "then the validator is used from the config" {
-                        validators shouldContainExactly listOf(initValidatorBuilder.validator)
+                val validatorsBuilder = ObjectReaderValidationInstance<Unit, Unit>().apply {
+                    validation {
+                        +firstValidatorBuilder
+                        +secondValidatorBuilder
                     }
                 }
 
-                "when the validator was overridden" - {
-                    val someValidatorBuilder = DummyObjectValidatorBuilder(
-                        key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
-                        result = null
+                "then the builder returns a collection of validators" {
+                    val validators = validatorsBuilder.build(PROPERTIES)
+                    validators shouldContainExactly listOf(
+                        firstValidatorBuilder.validator,
+                        secondValidatorBuilder.validator
                     )
-                    val validators = validationBuilder
-                        .apply {
-                            validation {
-                                +someValidatorBuilder
-                            }
-                        }
-                        .build(PROPERTIES)
-
-                    "then the overridden validator is used" {
-                        validators shouldContainExactly listOf(
-                            initValidatorBuilder.validator,
-                            someValidatorBuilder.validator
-                        )
-                    }
                 }
             }
         }

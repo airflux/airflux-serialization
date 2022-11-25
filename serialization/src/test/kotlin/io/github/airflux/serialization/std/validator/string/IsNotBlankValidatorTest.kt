@@ -17,12 +17,10 @@
 package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -31,67 +29,55 @@ import io.kotest.matchers.shouldBe
 internal class IsNotBlankValidatorTest : FreeSpec() {
 
     companion object {
-        private val LOCATION: Location = Location.empty
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
     }
 
     init {
 
         "The string validator IsNotBlank" - {
-            val validator: Validator<String> = StdStringValidator.isNotBlank
+            val validator: Validator<EB, Unit, String> = StdStringValidator.isNotBlank()
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when a string is empty" - {
+                val str = ""
 
-                "when the test condition is false" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, "")
-                    }
-                    exception.message shouldBe "The error builder '${IsNotBlankStringValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, str)
+
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Strings.IsBlank
+                    )
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    IsNotBlankStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsBlank }
-                )
+            "when a string is blank" - {
+                val str = " "
 
-                "when a string is empty" - {
-                    val str = ""
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, str)
 
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, str)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Strings.IsBlank
-                        )
-                    }
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Strings.IsBlank
+                    )
                 }
+            }
 
-                "when a string is blank" - {
-                    val str = " "
+            "when a string is not blank" - {
+                val str = " a "
 
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, str)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Strings.IsBlank
-                        )
-                    }
-                }
-
-                "when a string is not blank" - {
-                    val str = " a "
-
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, str)
-                        errors.shouldBeNull()
-                    }
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, str)
+                    errors.shouldBeNull()
                 }
             }
         }
+    }
+
+    internal class EB : IsNotBlankStringValidator.ErrorBuilder {
+        override fun isNotBlankStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsBlank
     }
 }

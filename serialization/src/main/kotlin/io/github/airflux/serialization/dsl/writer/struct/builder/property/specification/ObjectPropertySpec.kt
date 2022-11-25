@@ -18,24 +18,24 @@ package io.github.airflux.serialization.dsl.writer.struct.builder.property.speci
 
 import io.github.airflux.serialization.core.writer.Writer
 
-public sealed interface ObjectPropertySpec<T : Any, P : Any> {
+public sealed interface ObjectPropertySpec<CTX, T : Any, P : Any> {
     public val name: String
 
-    public class NonNullable<T : Any, P : Any> internal constructor(
+    public class NonNullable<CTX, T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P,
-        public val writer: Writer<P>
-    ) : ObjectPropertySpec<T, P>
+        public val writer: Writer<CTX, P>
+    ) : ObjectPropertySpec<CTX, T, P>
 
-    public class Optional<T : Any, P : Any> internal constructor(
+    public class Optional<CTX, T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
-        public val writer: Writer<P>
-    ) : ObjectPropertySpec<T, P>
+        public val writer: Writer<CTX, P>
+    ) : ObjectPropertySpec<CTX, T, P>
 
-    public class Nullable<T : Any, P : Any> internal constructor(
+    public class Nullable<CTX, T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
-        public val writer: Writer<P>
-    ) : ObjectPropertySpec<T, P>
+        public val writer: Writer<CTX, P>
+    ) : ObjectPropertySpec<CTX, T, P>
 }

@@ -28,22 +28,31 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> optional(name: String, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
+public fun <EB, CTX, T : Any> optional(
+    name: String,
+    reader: Reader<EB, CTX, T>
+): ObjectPropertySpec.Optional<EB, CTX, T> =
     optional(PropertyPath(name), reader)
 
-public fun <T : Any> optional(path: PropertyPath, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
+public fun <EB, CTX, T : Any> optional(
+    path: PropertyPath,
+    reader: Reader<EB, CTX, T>
+): ObjectPropertySpec.Optional<EB, CTX, T> =
     ObjectPropertySpec.Optional(
         path = PropertyPaths(path),
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             val lookup = source.lookup(location, path)
-            readOptional(context, lookup, reader)
+            readOptional(env, lookup, reader)
         }
     )
 
-public fun <T : Any> optional(paths: PropertyPaths, reader: Reader<T>): ObjectPropertySpec.Optional<T> =
+public fun <EB, CTX, T : Any> optional(
+    paths: PropertyPaths,
+    reader: Reader<EB, CTX, T>
+): ObjectPropertySpec.Optional<EB, CTX, T> =
     ObjectPropertySpec.Optional(
         path = paths,
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             val lookup: Lookup = paths.fold(
                 initial = { path -> source.lookup(location, path) },
                 operation = { lookup, path ->
@@ -51,31 +60,31 @@ public fun <T : Any> optional(paths: PropertyPaths, reader: Reader<T>): ObjectPr
                     source.lookup(location, path)
                 }
             )
-            readOptional(context, lookup, reader)
+            readOptional(env, lookup, reader)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.Optional<T>.validation(
-    validator: Validator<T?>
-): ObjectPropertySpec.Optional<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Optional<EB, CTX, T>.validation(
+    validator: Validator<EB, CTX, T?>
+): ObjectPropertySpec.Optional<EB, CTX, T> =
     ObjectPropertySpec.Optional(
         path = path,
-        reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, location, validator)
+        reader = { env, location, source ->
+            reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.Optional<T>.filter(
-    predicate: ReaderPredicate<T>
-): ObjectPropertySpec.Optional<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Optional<EB, CTX, T>.filter(
+    predicate: ReaderPredicate<EB, CTX, T>
+): ObjectPropertySpec.Optional<EB, CTX, T> =
     ObjectPropertySpec.Optional(
         path = path,
-        reader = { context, location, source ->
-            reader.read(context, location, source).filter(context, location, predicate)
+        reader = { env, location, source ->
+            reader.read(env, location, source).filter(env, predicate)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.Optional<T>.or(
-    alt: ObjectPropertySpec.Optional<T>
-): ObjectPropertySpec.Optional<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Optional<EB, CTX, T>.or(
+    alt: ObjectPropertySpec.Optional<EB, CTX, T>
+): ObjectPropertySpec.Optional<EB, CTX, T> =
     ObjectPropertySpec.Optional(path = path.append(alt.path), reader = reader or alt.reader)

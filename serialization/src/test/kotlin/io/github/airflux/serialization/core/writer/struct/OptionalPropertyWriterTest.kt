@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -29,21 +29,21 @@ import io.kotest.matchers.shouldBe
 internal class OptionalPropertyWriterTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The writeNullable function" - {
-            val writer: Writer<String> = DummyWriter { StringNode(it) }
+            val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
 
             "when a value is not null" - {
                 val value = "value"
 
                 "should return the StringNode value" {
                     val result: ValueNode? =
-                        writeOptional(context = CONTEXT, location = LOCATION, using = writer, value = value)
+                        writeOptional(env = ENV, location = LOCATION, using = writer, value = value)
                     result shouldBe StringNode(value)
                 }
             }
@@ -53,7 +53,7 @@ internal class OptionalPropertyWriterTest : FreeSpec() {
 
                 "should return the null value" {
                     val result: ValueNode? =
-                        writeOptional(context = CONTEXT, location = LOCATION, using = writer, value = value)
+                        writeOptional(env = ENV, location = LOCATION, using = writer, value = value)
                     result.shouldBeNull()
                 }
             }

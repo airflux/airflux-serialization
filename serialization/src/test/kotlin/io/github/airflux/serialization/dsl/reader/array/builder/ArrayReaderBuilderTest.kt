@@ -19,13 +19,14 @@ package io.github.airflux.serialization.dsl.reader.array.builder
 import io.github.airflux.serialization.common.DummyArrayValidatorBuilder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.option.FailFast
+import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -41,14 +42,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         private const val SECOND_ITEM = "second"
         private const val USER_NAME = "user"
 
-        private val CONTEXT = ReaderContext(
-            listOf(
-                AdditionalItemsErrorBuilder { JsonErrors.AdditionalItems },
-                InvalidTypeErrorBuilder(JsonErrors::InvalidType)
-            )
-        )
         private val LOCATION = Location.empty
-
         private val MinItemsError = JsonErrors.Validation.Arrays.MinItems(expected = 1, actual = 0)
     }
 
@@ -57,110 +51,69 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         "The ArrayReaderBuilder type" - {
 
             "when no errors in the reader" - {
-                val reader = arrayReader {
+                val reader: Reader<EB, CTX, List<String>> = arrayReader {
                     validation {
-                        DummyArrayValidatorBuilder(
-                            key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                        DummyArrayValidatorBuilder<EB, CTX>(
+                            key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                             result = null
                         )
                     }
                     returns(items = itemSpec())
                 }
 
-                "then should return successful value" {
-                    val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
-                    val result = reader.read(context = CONTEXT, location = LOCATION, source)
-                    result as ReaderResult.Success
-                    result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                "when fail-fast is true" - {
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+
+                    "then should return successful value" {
+                        val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                        result as ReaderResult.Success
+                        result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                    }
+                }
+
+                "when fail-fast is false" - {
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                    "then should return successful value" {
+                        val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                        result as ReaderResult.Success
+                        result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                    }
                 }
             }
 
             "when errors occur in the reader" - {
 
-                "when source is not the object type" - {
-                    val source = StringNode(USER_NAME)
-                    val reader = arrayReader {
-                        returns(items = itemSpec())
-                    }
-
-                    "then the reader should return the invalid type error" {
-                        val result = reader.read(context = CONTEXT, location = LOCATION, source)
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(
-                                location = LOCATION,
-                                error = JsonErrors.InvalidType(
-                                    expected = ValueNode.Type.ARRAY,
-                                    actual = ValueNode.Type.STRING
-                                )
-                            )
-                        )
-                    }
-                }
-
                 "when fail-fast is true" - {
-                    val contextWithFailFastTrue = CONTEXT + FailFast(true)
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
 
-                    "when the validator returns an error" - {
-                        val reader = arrayReader<List<String>> {
-                            validation {
-                                +DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
-                                    result = ReaderResult.Failure(
-                                        location = LOCATION.append(PROPERTY_NAME),
-                                        error = MinItemsError
+                    "when source is not the object type" - {
+                        val source = StringNode(USER_NAME)
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                            returns(items = itemSpec())
+                        }
+
+                        "then the reader should return the invalid type error" {
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION,
+                                    error = JsonErrors.InvalidType(
+                                        expected = ValueNode.Type.ARRAY,
+                                        actual = ValueNode.Type.STRING
                                     )
                                 )
-                            }
-                            returns(itemSpec(JsonErrors.PathMissing))
-                        }
-
-                        "then the reader should return the validation error" {
-                            val source = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, source)
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(PROPERTY_NAME),
-                                    error = MinItemsError
-                                )
                             )
                         }
                     }
 
-                    "when the reader of items returns an error" - {
-                        val reader = arrayReader<List<String>> {
+                    "when the validator returns an error" - {
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             validation {
-                                +DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
-                                    result = null
-                                )
-                            }
-                            returns(itemSpec(JsonErrors.PathMissing))
-                        }
-
-                        "then the reader should return the validation error" {
-                            val source = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, source)
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(PROPERTY_NAME).append(0),
-                                    error = JsonErrors.PathMissing
-                                )
-                            )
-                        }
-                    }
-                }
-
-                "when fail-fast is false" - {
-
-                    "when only the validator returns an error" - {
-                        val contextWithFailFastFalse = CONTEXT + FailFast(false)
-                        val reader = arrayReader {
-                            validation {
-                                +DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                                +DummyArrayValidatorBuilder<EB, CTX>(
+                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                                     result = ReaderResult.Failure(
                                         location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
@@ -172,7 +125,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                         "then the reader should return the validation error" {
                             val source = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -183,12 +136,138 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         }
                     }
 
-                    "when the validator and the reader of items return errors" - {
-                        val contextWithFailFastFalse = CONTEXT + FailFast(false)
-                        val reader = arrayReader<List<String>> {
+                    "when the reader of items returns an error" - {
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             validation {
-                                +DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<DummyArrayValidatorBuilder>(),
+                                +DummyArrayValidatorBuilder<EB, CTX>(
+                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
+                                    result = null
+                                )
+                            }
+                            returns(itemSpec(JsonErrors.PathMissing))
+                        }
+
+                        "then the reader should return the validation error" {
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append(PROPERTY_NAME).append(0),
+                                    error = JsonErrors.PathMissing
+                                )
+                            )
+                        }
+                    }
+
+                    "when the validator and the reader of items may return some errors" - {
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                            validation {
+                                +DummyArrayValidatorBuilder<EB, CTX>(
+                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
+                                    result = ReaderResult.Failure(
+                                        location = LOCATION.append(PROPERTY_NAME),
+                                        error = MinItemsError
+                                    )
+                                )
+                            }
+                            returns(itemSpec(JsonErrors.PathMissing))
+                        }
+
+                        "then only an error of validation should be returns" {
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append(PROPERTY_NAME),
+                                    error = MinItemsError
+                                )
+                            )
+                        }
+                    }
+                }
+
+                "when fail-fast is false" - {
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+
+                    "when source is not the object type" - {
+                        val source = StringNode(USER_NAME)
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                            returns(items = itemSpec())
+                        }
+
+                        "then the reader should return the invalid type error" {
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION,
+                                    error = JsonErrors.InvalidType(
+                                        expected = ValueNode.Type.ARRAY,
+                                        actual = ValueNode.Type.STRING
+                                    )
+                                )
+                            )
+                        }
+                    }
+
+                    "when the validator returns an error" - {
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                            validation {
+                                +DummyArrayValidatorBuilder<EB, CTX>(
+                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
+                                    result = ReaderResult.Failure(
+                                        location = LOCATION.append(PROPERTY_NAME),
+                                        error = MinItemsError
+                                    )
+                                )
+                            }
+                            returns(itemSpec())
+                        }
+
+                        "then the reader should return the validation error" {
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append(PROPERTY_NAME),
+                                    error = MinItemsError
+                                )
+                            )
+                        }
+                    }
+
+                    "when the reader of items returns an error" - {
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                            validation {
+                                +DummyArrayValidatorBuilder<EB, CTX>(
+                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
+                                    result = null
+                                )
+                            }
+                            returns(itemSpec(JsonErrors.PathMissing))
+                        }
+
+                        "then the reader should return the validation error" {
+                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append(PROPERTY_NAME).append(0),
+                                    error = JsonErrors.PathMissing
+                                )
+                            )
+                        }
+                    }
+
+                    "when the validator and the reader of items may return some errors" - {
+                        val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                            validation {
+                                +DummyArrayValidatorBuilder<EB, CTX>(
+                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                                     result = ReaderResult.Failure(
                                         location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
@@ -200,7 +279,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                         "then all error should be returns" {
                             val source = ArrayNode(StringNode(FIRST_ITEM))
-                            val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -219,16 +298,24 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
         }
     }
 
-    fun itemSpec() = nonNullable { _, _, source ->
-        (source as StringNode).get.success()
-    }
+    private fun itemSpec() = nonNullable<EB, CTX, String>(dummyStringReader())
 
-    fun <T : Any> itemSpec(error: ReaderResult.Error) = nonNullable(
-        reader = DummyReader<T>(
+    private fun <T : Any> itemSpec(error: ReaderResult.Error) = nonNullable(
+        reader = DummyReader<EB, CTX, T>(
             result = ReaderResult.Failure(
                 location = LOCATION.append(PROPERTY_NAME).append(0),
                 error = error
             )
         )
     )
+
+    internal class EB : AdditionalItemsErrorBuilder,
+                        InvalidTypeErrorBuilder {
+        override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
+
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
+    }
+
+    internal class CTX(override val failFast: Boolean) : FailFastOption
 }

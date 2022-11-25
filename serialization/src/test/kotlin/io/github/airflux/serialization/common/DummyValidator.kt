@@ -17,10 +17,10 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-internal class DummyValidator<T>(val result: ReaderResult.Failure?) : Validator<T> {
-    override fun validate(context: ReaderContext, location: Location, value: T): ReaderResult.Failure? = result
+internal class DummyValidator<EB, CTX, T>(val result: ReaderResult.Failure?) : Validator<EB, CTX, T> {
+    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure? = result
 }

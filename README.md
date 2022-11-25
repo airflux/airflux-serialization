@@ -15,7 +15,7 @@
 
 [![](https://jitpack.io/v/airflux/airflux-serialization.svg)](https://jitpack.io/#airflux/airflux-serialization)
 
-The library to parse, validate and generate data in the JSON (JavaScript Object Notation) format.
+The Kotlin library for parsing, validation, and generating data in the JSON (JavaScript Object Notation) format.
 
 The documentation site: [https://airflux.github.io/airflux-serialization/](https://airflux.github.io/airflux-serialization/)
 

@@ -17,31 +17,31 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
 
-internal class DummyObjectValidatorBuilder(
+internal class DummyObjectValidatorBuilder<EB, CTX>(
     override val key: ObjectValidatorBuilder.Key<*>,
     result: ReaderResult.Failure?
-) : ObjectValidatorBuilder {
+) : ObjectValidatorBuilder<EB, CTX> {
 
-    val validator = Validator(result)
-    override fun build(properties: ObjectProperties): ObjectValidator = validator
+    val validator = Validator<EB, CTX>(result)
+    override fun build(properties: ObjectProperties<EB, CTX>): ObjectValidator<EB, CTX> = validator
 
-    internal class Validator(val result: ReaderResult.Failure?) : ObjectValidator {
+    internal class Validator<EB, CTX>(val result: ReaderResult.Failure?) : ObjectValidator<EB, CTX> {
         override fun validate(
-            context: ReaderContext,
+            env: ReaderEnv<EB, CTX>,
             location: Location,
-            properties: ObjectProperties,
+            properties: ObjectProperties<EB, CTX>,
             source: ObjectNode
         ): ReaderResult.Failure? = result
     }
 
     companion object {
-        fun <E : ObjectValidatorBuilder> key() = object : ObjectValidatorBuilder.Key<E> {}
+        fun <EB, CTX, E : ObjectValidatorBuilder<EB, CTX>> key() = object : ObjectValidatorBuilder.Key<E> {}
     }
 }

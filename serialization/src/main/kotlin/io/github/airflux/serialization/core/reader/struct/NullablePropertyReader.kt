@@ -16,11 +16,10 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 
@@ -32,19 +31,26 @@ import io.github.airflux.serialization.core.value.NullNode
  * - If a node is not found ([lookup] is [Lookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readNullable(context: ReaderContext, lookup: Lookup, using: Reader<T>): ReaderResult<T?> {
+public fun <EB, CTX, T : Any> readNullable(
+    env: ReaderEnv<EB, CTX>,
+    lookup: Lookup,
+    using: Reader<EB, CTX, T>
+): ReaderResult<T?>
+    where EB : PathMissingErrorBuilder {
 
-    fun <T : Any> readNullable(context: ReaderContext, lookup: Lookup.Defined, using: Reader<T>): ReaderResult<T?> =
+    fun <EB, CTX, T : Any> readNullable(
+        env: ReaderEnv<EB, CTX>,
+        lookup: Lookup.Defined,
+        using: Reader<EB, CTX, T>
+    ): ReaderResult<T?> =
         if (lookup.value is NullNode)
             ReaderResult.Success(value = null)
         else
-            using.read(context, lookup.location, lookup.value)
+            using.read(env, lookup.location, lookup.value)
 
     return when (lookup) {
-        is Lookup.Defined -> readNullable(context, lookup, using)
-        is Lookup.Undefined -> {
-            val errorBuilder = context[PathMissingErrorBuilder]
-            ReaderResult.Failure(location = lookup.location, error = errorBuilder.build())
-        }
+        is Lookup.Defined -> readNullable(env, lookup, using)
+        is Lookup.Undefined ->
+            ReaderResult.Failure(location = lookup.location, error = env.errorBuilders.pathMissingError())
     }
 }

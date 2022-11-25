@@ -16,19 +16,17 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder
 
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.option.failFast
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.config.ObjectReaderConfig
 import io.github.airflux.serialization.dsl.reader.struct.builder.ObjectReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
@@ -36,78 +34,83 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.Object
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectReaderPropertiesBuilderInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidatorsBuilder
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidatorsBuilderInstance
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidators
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidation
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectReaderValidationInstance
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
 
-public fun <T> structReader(
-    configuration: ObjectReaderConfig = ObjectReaderConfig.DEFAULT,
-    block: ObjectReaderBuilder<T>.() -> ResultBuilder<T>
-): Reader<T> {
-    val readerBuilder = ObjectReaderBuilder<T>(
+public fun <EB, CTX, T> structReader(block: ObjectReaderBuilder<EB, CTX, T>.() -> ResultBuilder<EB, CTX, T>): Reader<EB, CTX, T>
+    where EB : InvalidTypeErrorBuilder,
+          CTX : FailFastOption {
+    val readerBuilder = ObjectReaderBuilder<EB, CTX, T>(
         ObjectReaderPropertiesBuilderInstance(),
-        ObjectReaderValidatorsBuilderInstance(configuration)
+        ObjectReaderValidationInstance()
     )
-    val resultBuilder: ResultBuilder<T> = readerBuilder.block()
+    val resultBuilder: ResultBuilder<EB, CTX, T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
-public class ObjectReaderBuilder<T> internal constructor(
-    private val propertiesBuilder: ObjectReaderPropertiesBuilderInstance,
-    private val validatorsBuilder: ObjectReaderValidatorsBuilderInstance
-) : ObjectReaderPropertiesBuilder by propertiesBuilder,
-    ObjectReaderValidatorsBuilder by validatorsBuilder {
+public class ObjectReaderBuilder<EB, CTX, T> internal constructor(
+    private val propertiesBuilder: ObjectReaderPropertiesBuilderInstance<EB, CTX>,
+    private val validatorsBuilder: ObjectReaderValidationInstance<EB, CTX>
+) : ObjectReaderPropertiesBuilder<EB, CTX> by propertiesBuilder,
+    ObjectReaderValidation<EB, CTX> by validatorsBuilder
+    where EB : InvalidTypeErrorBuilder,
+          CTX : FailFastOption {
 
-    public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, propertyValues: PropertyValues): ReaderResult<T>
+    public fun interface ResultBuilder<EB, CTX, T> {
+        public fun build(
+            env: ReaderEnv<EB, CTX>,
+            location: Location,
+            propertyValues: PropertyValues<EB, CTX>
+        ): ReaderResult<T>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
-        val properties: ObjectProperties = propertiesBuilder.build()
-        val validators: ObjectValidators = validatorsBuilder.build(properties)
+    internal fun build(resultBuilder: ResultBuilder<EB, CTX, T>): Reader<EB, CTX, T> {
+        val properties: ObjectProperties<EB, CTX> = propertiesBuilder.build()
+        val validators: List<ObjectValidator<EB, CTX>> = validatorsBuilder.build(properties)
         return ObjectReader(validators, properties, resultBuilder)
     }
 }
 
-public fun <T> returns(builder: PropertyValues.(ReaderContext, Location) -> ReaderResult<T>): ResultBuilder<T> =
-    ResultBuilder { context, location, values ->
-        values.builder(context, location)
-    }
+public fun <EB, CTX, T> returns(
+    builder: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
+): ResultBuilder<EB, CTX, T> =
+    ResultBuilder { env, location, values -> values.builder(env, location) }
 
-internal class ObjectReader<T>(
-    private val validators: ObjectValidators,
-    private val properties: ObjectProperties,
-    private val resultBuilder: ResultBuilder<T>
-) : Reader<T> {
+internal class ObjectReader<EB, CTX, T>(
+    private val validators: List<ObjectValidator<EB, CTX>>,
+    private val properties: ObjectProperties<EB, CTX>,
+    private val resultBuilder: ResultBuilder<EB, CTX, T>
+) : Reader<EB, CTX, T>
+    where EB : InvalidTypeErrorBuilder,
+          CTX : FailFastOption {
 
-    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T> =
+    override fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
         if (source is ObjectNode)
-            read(context, location, source)
-        else {
-            val errorBuilder = context[InvalidTypeErrorBuilder]
+            read(env, location, source)
+        else
             ReaderResult.Failure(
                 location = location,
-                error = errorBuilder.build(ValueNode.Type.OBJECT, source.type)
+                error = env.errorBuilders.invalidTypeError(ValueNode.Type.OBJECT, source.type)
             )
-        }
 
-    private fun read(context: ReaderContext, location: Location, source: ObjectNode): ReaderResult<T> {
-        val failFast = context.failFast
+    private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ObjectNode): ReaderResult<T> {
+        val failFast = env.context.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
-            val failure = validator.validate(context, location, properties, source)
+            val failure = validator.validate(env, location, properties, source)
             if (failure != null) {
                 if (failFast) return failure
                 failures.add(failure)
             }
         }
 
-        val propertyValues: PropertyValues = PropertyValuesInstance()
+        val propertyValues: PropertyValues<EB, CTX> = PropertyValuesInstance<EB, CTX>()
             .apply {
                 properties.forEach { property ->
-                    source.read(context, location, property)
+                    source.read(env, location, property)
                         .fold(
                             ifFailure = { failure ->
                                 if (failFast) return failure
@@ -121,27 +124,27 @@ internal class ObjectReader<T>(
             }
 
         return if (failures.isEmpty())
-            resultBuilder.build(context, location, propertyValues)
+            resultBuilder.build(env, location, propertyValues)
         else
             failures.merge()
     }
 
     internal companion object {
 
-        fun ObjectNode.read(
-            context: ReaderContext,
+        fun <EB, CTX> ObjectNode.read(
+            env: ReaderEnv<EB, CTX>,
             location: Location,
-            property: ObjectProperty
+            property: ObjectProperty<EB, CTX>
         ): ReaderResult<Any?> {
             val reader = when (property) {
-                is ObjectProperty.Required<*> -> property.reader
-                is ObjectProperty.Defaultable<*> -> property.reader
-                is ObjectProperty.Optional<*> -> property.reader
-                is ObjectProperty.OptionalWithDefault<*> -> property.reader
-                is ObjectProperty.Nullable<*> -> property.reader
-                is ObjectProperty.NullableWithDefault<*> -> property.reader
+                is ObjectProperty.Required<EB, CTX, *> -> property.reader
+                is ObjectProperty.Defaultable<EB, CTX, *> -> property.reader
+                is ObjectProperty.Optional<EB, CTX, *> -> property.reader
+                is ObjectProperty.OptionalWithDefault<EB, CTX, *> -> property.reader
+                is ObjectProperty.Nullable<EB, CTX, *> -> property.reader
+                is ObjectProperty.NullableWithDefault<EB, CTX, *> -> property.reader
             }
-            return reader.read(context, location, this)
+            return reader.read(env, location, this)
         }
     }
 }

@@ -16,46 +16,45 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property.specification
 
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> optionalWithDefault(
+public fun <EB, CTX, T : Any> optionalWithDefault(
     name: String,
-    reader: Reader<T>,
-    default: (ReaderContext, Location) -> T
-): ObjectPropertySpec.OptionalWithDefault<T> =
+    reader: Reader<EB, CTX, T>,
+    default: (ReaderEnv<EB, CTX>) -> T
+): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
     optionalWithDefault(PropertyPath(name), reader, default)
 
-public fun <T : Any> optionalWithDefault(
+public fun <EB, CTX, T : Any> optionalWithDefault(
     path: PropertyPath,
-    reader: Reader<T>,
-    default: (ReaderContext, Location) -> T
-): ObjectPropertySpec.OptionalWithDefault<T> =
+    reader: Reader<EB, CTX, T>,
+    default: (ReaderEnv<EB, CTX>) -> T
+): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
     ObjectPropertySpec.OptionalWithDefault(
         path = PropertyPaths(path),
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             val lookup = source.lookup(location, path)
-            readOptional(context, lookup, reader, default)
+            readOptional(env, lookup, reader, default)
         }
     )
 
-public fun <T : Any> optionalWithDefault(
+public fun <EB, CTX, T : Any> optionalWithDefault(
     paths: PropertyPaths,
-    reader: Reader<T>,
-    default: (ReaderContext, Location) -> T
-): ObjectPropertySpec.OptionalWithDefault<T> =
+    reader: Reader<EB, CTX, T>,
+    default: (ReaderEnv<EB, CTX>) -> T
+): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
     ObjectPropertySpec.OptionalWithDefault(
         path = paths,
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             val lookup: Lookup = paths.fold(
                 initial = { path -> source.lookup(location, path) },
                 operation = { lookup, path ->
@@ -63,21 +62,21 @@ public fun <T : Any> optionalWithDefault(
                     source.lookup(location, path)
                 }
             )
-            readOptional(context, lookup, reader, default)
+            readOptional(env, lookup, reader, default)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.OptionalWithDefault<T>.validation(
-    validator: Validator<T>
-): ObjectPropertySpec.OptionalWithDefault<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>.validation(
+    validator: Validator<EB, CTX, T>
+): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
     ObjectPropertySpec.OptionalWithDefault(
         path = path,
-        reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, location, validator)
+        reader = { env, location, source ->
+            reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.OptionalWithDefault<T>.or(
-    alt: ObjectPropertySpec.OptionalWithDefault<T>
-): ObjectPropertySpec.OptionalWithDefault<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>.or(
+    alt: ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>
+): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
     ObjectPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)

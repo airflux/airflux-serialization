@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.std.AdditionalPropertiesObjectValidatorBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.std.IsNotEmptyObjectValidatorBuilder
@@ -23,8 +24,19 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.std.M
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.std.MinPropertiesObjectValidatorBuilder
 
 public object StdObjectValidator {
-    public val additionalProperties: ObjectValidatorBuilder = AdditionalPropertiesObjectValidatorBuilder()
-    public val isNotEmpty: ObjectValidatorBuilder = IsNotEmptyObjectValidatorBuilder()
-    public fun minProperties(value: Int): ObjectValidatorBuilder = MinPropertiesObjectValidatorBuilder(value)
-    public fun maxProperties(value: Int): ObjectValidatorBuilder = MaxPropertiesObjectValidatorBuilder(value)
+    public fun <EB, CTX> additionalProperties(): ObjectValidatorBuilder<EB, CTX>
+        where EB : AdditionalPropertiesObjectValidator.ErrorBuilder,
+              CTX : FailFastOption =
+        AdditionalPropertiesObjectValidatorBuilder()
+
+    public fun <EB, CTX> isNotEmpty(): ObjectValidatorBuilder<EB, CTX>
+        where EB : IsNotEmptyObjectValidator.ErrorBuilder = IsNotEmptyObjectValidatorBuilder()
+
+    public fun <EB, CTX> minProperties(value: Int): ObjectValidatorBuilder<EB, CTX>
+        where EB : MinPropertiesObjectValidator.ErrorBuilder =
+        MinPropertiesObjectValidatorBuilder(value)
+
+    public fun <EB, CTX> maxProperties(value: Int): ObjectValidatorBuilder<EB, CTX>
+        where EB : MaxPropertiesObjectValidator.ErrorBuilder =
+        MaxPropertiesObjectValidatorBuilder(value)
 }

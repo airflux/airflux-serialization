@@ -18,10 +18,8 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 
-@Suppress("unused")
 public sealed class ReaderResult<out T> {
 
     public companion object;
@@ -141,19 +139,18 @@ public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<
 /**
  * Calls the specified function [block] and returns its result if invocation was successful,
  * catching any [Throwable] exception that was thrown from the [block] function execution
- * and using the [ExceptionsHandler] from context to handle it.
- *
- * The [ExceptionsHandler] needs to add to the context before using this function.
+ * and using the [ExceptionsHandler] from env to handle it.
  */
-public inline fun <T> withCatching(
-    context: ReaderContext,
+public inline fun <EB, CTX, T> withCatching(
+    env: ReaderEnv<EB, CTX>,
     location: Location,
     block: () -> ReaderResult<T>
 ): ReaderResult<T> =
     try {
         block()
     } catch (expected: Throwable) {
-        val handler = context.getOrNull(ExceptionsHandler) ?: throw expected
-        handler.handle(context, location, expected)
-            .failure(location)
+        env.exceptionsHandler
+            ?.handle(env, location, expected)
+            ?.failure(location)
+            ?: throw expected
     }

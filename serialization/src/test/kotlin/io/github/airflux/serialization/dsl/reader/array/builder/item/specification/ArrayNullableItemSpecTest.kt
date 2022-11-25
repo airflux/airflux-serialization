@@ -17,18 +17,17 @@
 package io.github.airflux.serialization.dsl.reader.array.builder.item.specification
 
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyIntReader
+import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.std.reader.IntReader
-import io.github.airflux.serialization.std.reader.StringReader
 import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
@@ -43,15 +42,10 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
 
-        private val CONTEXT =
-            ReaderContext(
-                listOf(
-                    IsNotEmptyStringValidator.ErrorBuilder { JsonErrors.Validation.Strings.IsEmpty },
-                    PathMissingErrorBuilder { JsonErrors.PathMissing },
-                    InvalidTypeErrorBuilder(JsonErrors::InvalidType)
-                )
-            )
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
+        private val StringReader = dummyStringReader<EB, Unit>()
+        private val IntReader = dummyIntReader<EB, Unit>()
     }
 
     init {
@@ -67,7 +61,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                         "if the property value is not the null type" - {
                             val source = StringNode(ID_VALUE_AS_UUID)
-                            val result = spec.reader.read(CONTEXT, LOCATION, source)
+                            val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then the not-null value should be returned" {
                                 result as ReaderResult.Success<String?>
@@ -77,7 +71,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                         "if the property value is the null type" - {
                             val source = NullNode
-                            val result = spec.reader.read(CONTEXT, LOCATION, source)
+                            val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then the null value should be returned" {
                                 result as ReaderResult.Success<String?>
@@ -88,7 +82,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                     "when a read error occurred" - {
                         val source = NumberNode.valueOf(10)
-                        val result = spec.reader.read(CONTEXT, LOCATION, source)
+                        val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result as ReaderResult.Failure
@@ -107,15 +101,15 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = ArrayItemSpec.Nullable(reader = StringReader)
-                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty.applyIfNotNull())
+                val spec = nullable(reader = StringReader)
+                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
 
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
                         val source = StringNode(ID_VALUE_AS_UUID)
 
-                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result as ReaderResult.Success<String?>
                         result.value shouldBe ID_VALUE_AS_UUID
@@ -124,7 +118,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                     "then a validation error should be returned if validation is a failure" {
                         val source = StringNode("")
 
-                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -141,7 +135,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                     "then should be returned a read error" {
                         val source = NumberNode.valueOf(10)
 
-                        val result = specWithValidator.reader.read(CONTEXT, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -164,7 +158,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                 "when the main reader has successfully read" - {
                     val source = StringNode(ID_VALUE_AS_UUID)
-                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned" {
                         result as ReaderResult.Success<String?>
@@ -174,7 +168,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                 "when the main reader has failure read" - {
                     val source = NumberNode.valueOf(ID_VALUE_AS_INT)!!
-                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result as ReaderResult.Success<String?>
@@ -184,7 +178,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                 "when the alternative reader has failure read" - {
                     val source = BooleanNode.True
-                    val result = specWithAlternative.reader.read(CONTEXT, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then should be returned all read errors" {
                         result as ReaderResult.Failure
@@ -208,5 +202,14 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder,
+                        IsNotEmptyStringValidator.ErrorBuilder {
+
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
+
+        override fun isNotEmptyStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsEmpty
     }
 }

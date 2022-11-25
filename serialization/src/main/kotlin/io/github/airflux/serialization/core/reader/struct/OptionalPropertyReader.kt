@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.struct
 
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
@@ -27,8 +27,12 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
  * - If a node is found ([lookup] is [Lookup.Defined]) then applies [reader]
  * - If a node is not found ([lookup] is [Lookup.Undefined]) then returns 'null'
  */
-public fun <T : Any> readOptional(context: ReaderContext, lookup: Lookup, using: Reader<T>): ReaderResult<T?> =
+public fun <EB, CTX, T : Any> readOptional(
+    env: ReaderEnv<EB, CTX>,
+    lookup: Lookup,
+    using: Reader<EB, CTX, T>
+): ReaderResult<T?> =
     when (lookup) {
-        is Lookup.Defined -> using.read(context, lookup.location, lookup.value)
+        is Lookup.Defined -> using.read(env, lookup.location, lookup.value)
         is Lookup.Undefined -> ReaderResult.Success(value = null)
     }

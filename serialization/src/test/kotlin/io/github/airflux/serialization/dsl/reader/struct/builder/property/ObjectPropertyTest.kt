@@ -16,15 +16,19 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optionalWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
-import io.github.airflux.serialization.std.reader.StringReader
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -32,7 +36,8 @@ internal class ObjectPropertyTest : FreeSpec() {
 
     companion object {
         private const val DEFAULT_VALUE = "none"
-        private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
+        private val StringReader = dummyStringReader<EB, Unit>()
     }
 
     init {
@@ -117,5 +122,14 @@ internal class ObjectPropertyTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder,
+                        PathMissingErrorBuilder {
+
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
+
+        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
     }
 }

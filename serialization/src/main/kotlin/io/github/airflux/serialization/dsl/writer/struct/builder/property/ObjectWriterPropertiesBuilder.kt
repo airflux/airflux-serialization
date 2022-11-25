@@ -18,26 +18,31 @@ package io.github.airflux.serialization.dsl.writer.struct.builder.property
 
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.ObjectPropertySpec
 
-public interface ObjectWriterPropertiesBuilder<T : Any> {
-    public fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): ObjectProperty.NonNullable<T, P>
-    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): ObjectProperty.Optional<T, P>
-    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): ObjectProperty.Nullable<T, P>
+public interface ObjectWriterPropertiesBuilder<CTX, T : Any> {
+    public fun <P : Any> property(
+        spec: ObjectPropertySpec.NonNullable<CTX, T, P>
+    ): ObjectProperty.NonNullable<CTX, T, P>
+
+    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<CTX, T, P>): ObjectProperty.Optional<CTX, T, P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<CTX, T, P>): ObjectProperty.Nullable<CTX, T, P>
 }
 
-internal class ObjectWriterPropertiesBuilderInstance<T : Any> : ObjectWriterPropertiesBuilder<T> {
-    private val properties = mutableListOf<ObjectProperty<T>>()
+internal class ObjectWriterPropertiesBuilderInstance<CTX, T : Any> : ObjectWriterPropertiesBuilder<CTX, T> {
+    private val properties = mutableListOf<ObjectProperty<CTX, T>>()
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.NonNullable<T, P>): ObjectProperty.NonNullable<T, P> =
+    override fun <P : Any> property(
+        spec: ObjectPropertySpec.NonNullable<CTX, T, P>
+    ): ObjectProperty.NonNullable<CTX, T, P> =
         ObjectProperty.NonNullable(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Optional<T, P>): ObjectProperty.Optional<T, P> =
+    override fun <P : Any> property(spec: ObjectPropertySpec.Optional<CTX, T, P>): ObjectProperty.Optional<CTX, T, P> =
         ObjectProperty.Optional(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Nullable<T, P>): ObjectProperty.Nullable<T, P> =
+    override fun <P : Any> property(spec: ObjectPropertySpec.Nullable<CTX, T, P>): ObjectProperty.Nullable<CTX, T, P> =
         ObjectProperty.Nullable(spec)
             .also { properties.add(it) }
 
-    internal fun build(): ObjectProperties<T> = ObjectProperties(properties)
+    internal fun build(): ObjectProperties<CTX, T> = ObjectProperties(properties)
 }

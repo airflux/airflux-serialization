@@ -16,32 +16,26 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class MaxLengthStringValidator internal constructor(private val expected: Int) : Validator<String> {
+public class MaxLengthStringValidator<EB, CTX> internal constructor(
+    private val expected: Int
+) : Validator<EB, CTX, String>
+    where EB : MaxLengthStringValidator.ErrorBuilder {
 
-    override fun validate(context: ReaderContext, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: String): ReaderResult.Failure? =
         if (value.length <= expected)
             null
-        else {
-            val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location = location, error = errorBuilder.build(expected, value.length))
-        }
+        else
+            ReaderResult.Failure(
+                location = location,
+                error = env.errorBuilders.maxLengthStringError(expected, value.length)
+            )
 
-    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(expected: Int, actual: Int): ReaderResult.Error = function(expected, actual)
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun maxLengthStringError(expected: Int, actual: Int): ReaderResult.Error
     }
 }

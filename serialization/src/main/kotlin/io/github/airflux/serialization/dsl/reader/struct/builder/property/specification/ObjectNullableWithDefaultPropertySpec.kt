@@ -16,13 +16,12 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property.specification
 
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.filter
@@ -30,34 +29,34 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readNullable
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T : Any> nullableWithDefault(
+public fun <EB, CTX, T : Any> nullableWithDefault(
     name: String,
-    reader: Reader<T>,
-    default: (ReaderContext, Location) -> T?
-): ObjectPropertySpec.NullableWithDefault<T> =
+    reader: Reader<EB, CTX, T>,
+    default: (ReaderEnv<EB, CTX>) -> T?
+): ObjectPropertySpec.NullableWithDefault<EB, CTX, T> =
     nullableWithDefault(PropertyPath(name), reader, default)
 
-public fun <T : Any> nullableWithDefault(
+public fun <EB, CTX, T : Any> nullableWithDefault(
     path: PropertyPath,
-    reader: Reader<T>,
-    default: (ReaderContext, Location) -> T?
-): ObjectPropertySpec.NullableWithDefault<T> =
+    reader: Reader<EB, CTX, T>,
+    default: (ReaderEnv<EB, CTX>) -> T?
+): ObjectPropertySpec.NullableWithDefault<EB, CTX, T> =
     ObjectPropertySpec.NullableWithDefault(
         path = PropertyPaths(path),
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             val lookup = source.lookup(location, path)
-            readNullable(context, lookup, reader, default)
+            readNullable(env, lookup, reader, default)
         }
     )
 
-public fun <T : Any> nullableWithDefault(
+public fun <EB, CTX, T : Any> nullableWithDefault(
     paths: PropertyPaths,
-    reader: Reader<T>,
-    default: (ReaderContext, Location) -> T?
-): ObjectPropertySpec.NullableWithDefault<T> =
+    reader: Reader<EB, CTX, T>,
+    default: (ReaderEnv<EB, CTX>) -> T?
+): ObjectPropertySpec.NullableWithDefault<EB, CTX, T> =
     ObjectPropertySpec.NullableWithDefault(
         path = paths,
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             val lookup: Lookup = paths.fold(
                 initial = { path -> source.lookup(location, path) },
                 operation = { lookup, path ->
@@ -65,31 +64,31 @@ public fun <T : Any> nullableWithDefault(
                     source.lookup(location, path)
                 }
             )
-            readNullable(context, lookup, reader, default)
+            readNullable(env, lookup, reader, default)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.validation(
-    validator: Validator<T?>
-): ObjectPropertySpec.NullableWithDefault<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.NullableWithDefault<EB, CTX, T>.validation(
+    validator: Validator<EB, CTX, T?>
+): ObjectPropertySpec.NullableWithDefault<EB, CTX, T> =
     ObjectPropertySpec.NullableWithDefault(
         path = path,
-        reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, location, validator)
+        reader = { env, location, source ->
+            reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.filter(
-    predicate: ReaderPredicate<T>
-): ObjectPropertySpec.NullableWithDefault<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.NullableWithDefault<EB, CTX, T>.filter(
+    predicate: ReaderPredicate<EB, CTX, T>
+): ObjectPropertySpec.NullableWithDefault<EB, CTX, T> =
     ObjectPropertySpec.NullableWithDefault(
         path = path,
-        reader = { context, location, source ->
-            reader.read(context, location, source).filter(context, location, predicate)
+        reader = { env, location, source ->
+            reader.read(env, location, source).filter(env, predicate)
         }
     )
 
-public infix fun <T : Any> ObjectPropertySpec.NullableWithDefault<T>.or(
-    alt: ObjectPropertySpec.NullableWithDefault<T>
-): ObjectPropertySpec.NullableWithDefault<T> =
+public infix fun <EB, CTX, T : Any> ObjectPropertySpec.NullableWithDefault<EB, CTX, T>.or(
+    alt: ObjectPropertySpec.NullableWithDefault<EB, CTX, T>
+): ObjectPropertySpec.NullableWithDefault<EB, CTX, T> =
     ObjectPropertySpec.NullableWithDefault(path = path.append(alt.path), reader = reader or alt.reader)

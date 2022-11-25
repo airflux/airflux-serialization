@@ -20,8 +20,8 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -31,9 +31,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(
-            InvalidTypeErrorBuilder(JsonErrors::InvalidType)
-        )
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
+        private val StringReader = stringReader<EB, Unit>()
         private const val TEXT = "abc"
     }
 
@@ -42,13 +42,13 @@ internal class StringReaderTest : FreeSpec() {
 
             "should return the string value" {
                 val source: ValueNode = StringNode(TEXT)
-                val result = StringReader.read(CONTEXT, Location.empty, source)
+                val result = StringReader.read(ENV, LOCATION, source)
                 result.assertAsSuccess(value = TEXT)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = BooleanNode.valueOf(true)
-                val result = StringReader.read(CONTEXT, Location.empty, source)
+                val result = StringReader.read(ENV, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -60,5 +60,10 @@ internal class StringReaderTest : FreeSpec() {
                 )
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

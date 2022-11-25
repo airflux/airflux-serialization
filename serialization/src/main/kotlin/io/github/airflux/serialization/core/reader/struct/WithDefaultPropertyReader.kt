@@ -16,10 +16,9 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 
@@ -30,27 +29,26 @@ import io.github.airflux.serialization.core.value.NullNode
  * - If a node is found with a value 'null' ([lookup] is [Lookup.Defined]) then returns [defaultValue]
  * - If a node is not found ([lookup] is [Lookup.Undefined]) then returns [defaultValue]
  */
-public fun <T : Any> readWithDefault(
-    context: ReaderContext,
+public fun <EB, CTX, T : Any> readWithDefault(
+    env: ReaderEnv<EB, CTX>,
     lookup: Lookup,
-    using: Reader<T>,
-    defaultValue: (ReaderContext, Location) -> T
+    using: Reader<EB, CTX, T>,
+    defaultValue: (ReaderEnv<EB, CTX>) -> T
 ): ReaderResult<T> {
 
-    fun <T : Any> readWithDefault(
-        context: ReaderContext,
+    fun <EB, CTX, T : Any> readWithDefault(
+        env: ReaderEnv<EB, CTX>,
         lookup: Lookup.Defined,
-        using: Reader<T>,
-        defaultValue: (ReaderContext, Location) -> T
+        using: Reader<EB, CTX, T>,
+        defaultValue: (ReaderEnv<EB, CTX>) -> T
     ): ReaderResult<T> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(value = defaultValue(context, lookup.location))
+            ReaderResult.Success(value = defaultValue(env))
         else
-            using.read(context, lookup.location, lookup.value)
+            using.read(env, lookup.location, lookup.value)
 
     return when (lookup) {
-        is Lookup.Defined -> readWithDefault(context, lookup, using, defaultValue)
-        is Lookup.Undefined ->
-            ReaderResult.Success(value = defaultValue(context, lookup.location))
+        is Lookup.Defined -> readWithDefault(env, lookup, using, defaultValue)
+        is Lookup.Undefined -> ReaderResult.Success(value = defaultValue(env))
     }
 }

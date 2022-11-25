@@ -18,7 +18,8 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
@@ -28,14 +29,14 @@ import io.kotest.matchers.shouldBe
 internal class ReaderResultOpsTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext()
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The extension-function the filter" - {
-            val isNotBlank = ReaderPredicate<String> { _, _, value -> value.isNotBlank() }
+            val isNotBlank = ReaderPredicate<EB, Unit, String> { _, value -> value.isNotBlank() }
 
             "when result is success" - {
 
@@ -43,7 +44,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(value = "  ")
 
                     "then filter should return null" {
-                        val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
+                        val filtered = result.filter(ENV, isNotBlank)
                         filtered shouldBe ReaderResult.Success(value = null)
                     }
                 }
@@ -53,7 +54,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                         ReaderResult.Success(value = "user")
 
                     "then filter should return the original value" {
-                        val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
+                        val filtered = result.filter(ENV, isNotBlank)
                         filtered shouldBe result
                     }
                 }
@@ -62,7 +63,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String?> = ReaderResult.Success(value = null)
 
                     "then filter should return the original value" {
-                        val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
+                        val filtered = result.filter(ENV, isNotBlank)
                         filtered shouldBe result
                     }
                 }
@@ -75,15 +76,18 @@ internal class ReaderResultOpsTest : FreeSpec() {
                 )
 
                 "then filter should return the original value" {
-                    val filtered = result.filter(CONTEXT, LOCATION, isNotBlank)
+                    val filtered = result.filter(ENV, isNotBlank)
                     filtered shouldBe result
                 }
             }
         }
 
         "The extension-function the validation" - {
-            val isNotEmpty = Validator<String> { _, location, value ->
-                if (value.isNotEmpty()) null else ReaderResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
+            val isNotEmpty = Validator<EB, Unit, String> { _, location, value ->
+                if (value.isNotEmpty())
+                    null
+                else
+                    ReaderResult.Failure(location, JsonErrors.Validation.Strings.IsEmpty)
             }
 
             "when result is success" - {
@@ -92,7 +96,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(value = "")
 
                     "then validator should return an error" {
-                        val validated = result.validation(CONTEXT, LOCATION, isNotEmpty)
+                        val validated = result.validation(ENV, LOCATION, isNotEmpty)
 
                         validated shouldBe ReaderResult.Failure(
                             location = LOCATION,
@@ -105,7 +109,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(value = "user")
 
                     "then validator should return the original value" {
-                        val validated = result.validation(CONTEXT, LOCATION, isNotEmpty)
+                        val validated = result.validation(ENV, LOCATION, isNotEmpty)
                         validated shouldBe result
                     }
                 }
@@ -116,10 +120,15 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
-                    val validated = result.validation(CONTEXT, LOCATION, isNotEmpty)
+                    val validated = result.validation(ENV, LOCATION, isNotEmpty)
                     validated shouldBe result
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected, actual)
     }
 }

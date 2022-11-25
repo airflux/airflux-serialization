@@ -18,8 +18,8 @@ package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -27,10 +27,10 @@ import io.kotest.matchers.shouldBe
 internal class ReadAsArrayTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
-        private const val USER_NAME = "user"
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("user")
-        private val READER = { _: ReaderContext, _: Location, source: ArrayNode<*> ->
+        private const val USER_NAME = "user"
+        private val READER = { _: ReaderEnv<EB, Unit>, _: Location, source: ArrayNode<*> ->
             val result = source.map { (it as StringNode).get }
             ReaderResult.Success(result)
         }
@@ -44,7 +44,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the collection of values" {
                     val json: ValueNode = ArrayNode(StringNode(USER_NAME))
 
-                    val result = json.readAsArray(CONTEXT, LOCATION, READER)
+                    val result = json.readAsArray(ENV, LOCATION, READER)
 
                     result as ReaderResult.Success
                     result shouldBe ReaderResult.Success(value = listOf(USER_NAME))
@@ -56,11 +56,12 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
 
-                    val result = json.readAsArray(CONTEXT, LOCATION, READER)
+                    val result = json.readAsArray(ENV, LOCATION, READER)
 
                     result as ReaderResult.Failure
                     result shouldBe ReaderResult.Failure(
-                        location = LOCATION, error = JsonErrors.InvalidType(
+                        location = LOCATION,
+                        error = JsonErrors.InvalidType(
                             expected = ValueNode.Type.ARRAY,
                             actual = ValueNode.Type.BOOLEAN
                         )
@@ -68,5 +69,10 @@ internal class ReadAsArrayTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

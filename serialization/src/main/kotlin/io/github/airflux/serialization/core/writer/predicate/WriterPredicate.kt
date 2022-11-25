@@ -17,24 +17,25 @@
 package io.github.airflux.serialization.core.writer.predicate
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun interface WriterPredicate<T> {
-    public fun test(context: WriterContext, location: Location, value: T): Boolean
+public fun interface WriterPredicate<CTX, T> {
 
-    public infix fun or(other: WriterPredicate<T>): WriterPredicate<T> {
+    public fun test(env: WriterEnv<CTX>, location: Location, value: T): Boolean
+
+    public infix fun or(other: WriterPredicate<CTX, T>): WriterPredicate<CTX, T> {
         val self = this
-        return WriterPredicate { context, location, value ->
-            val result = self.test(context, location, value)
-            if (result) result else other.test(context, location, value)
+        return WriterPredicate { env, location, value ->
+            val result = self.test(env, location, value)
+            if (result) result else other.test(env, location, value)
         }
     }
 
-    public infix fun and(other: WriterPredicate<T>): WriterPredicate<T> {
+    public infix fun and(other: WriterPredicate<CTX, T>): WriterPredicate<CTX, T> {
         val self = this
-        return WriterPredicate { context, location, value ->
-            val result = self.test(context, location, value)
-            if (result) other.test(context, location, value) else result
+        return WriterPredicate { env, location, value ->
+            val result = self.test(env, location, value)
+            if (result) other.test(env, location, value) else result
         }
     }
 }

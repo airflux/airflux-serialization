@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
@@ -28,13 +28,12 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 
-@Suppress("unused")
-public fun interface Reader<out T> {
+public fun interface Reader<EB, CTX, out T> {
 
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T>
+    public fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T>
 
     /**
      * Create a new [Reader] which maps the value produced by this [Reader].
@@ -44,18 +43,20 @@ public fun interface Reader<out T> {
      * if successful
      * @return A new [Reader] with the updated behavior.
      */
-    public infix fun <R> map(transform: (T) -> R): Reader<R> =
-        Reader { context, location, source -> read(context, location, source).map(transform) }
-
-    public infix fun <R> flatMapResult(transform: (ReaderContext, Location, T) -> ReaderResult<R>): Reader<R> =
-        Reader { context, location, source ->
-            read(context, location, source)
-                .fold(
-                    ifFailure = ::identity,
-                    ifSuccess = { transform(context, location, it.value) }
-                )
-        }
+    public infix fun <R> map(transform: (T) -> R): Reader<EB, CTX, R> =
+        Reader { env, location, source -> read(env, location, source).map(transform) }
 }
+
+public infix fun <EB, CTX, T, R> Reader<EB, CTX, T>.flatMapResult(
+    transform: (ReaderEnv<EB, CTX>, Location, T) -> ReaderResult<R>
+): Reader<EB, CTX, R> =
+    Reader { env, location, source ->
+        read(env, location, source)
+            .fold(
+                ifFailure = ::identity,
+                ifSuccess = { transform(env, location, it.value) }
+            )
+    }
 
 /**
  * Creates a new [Reader], based on this one, which first executes this
@@ -65,22 +66,23 @@ public fun interface Reader<out T> {
  * @param other the [Reader] to run if this one gets a [ReaderResult.Error]
  * @return A new [Reader] with the updated behavior.
  */
-public infix fun <T> Reader<T>.or(other: Reader<T>): Reader<T> = Reader { context, location, source ->
-    read(context, location, source)
-        .recovery { failure ->
-            other.read(context, location, source)
-                .recovery { alternative -> failure + alternative }
-        }
-}
-
-public infix fun <T> Reader<T?>.filter(predicate: ReaderPredicate<T>): Reader<T?> =
-    Reader { context, location, source ->
-        this@filter.read(context, location, source)
-            .filter(context, location, predicate)
+public infix fun <EB, CTX, T> Reader<EB, CTX, T>.or(other: Reader<EB, CTX, T>): Reader<EB, CTX, T> =
+    Reader { env, location, source ->
+        read(env, location, source)
+            .recovery { failure ->
+                other.read(env, location, source)
+                    .recovery { alternative -> failure + alternative }
+            }
     }
 
-public infix fun <T> Reader<T>.validation(validator: Validator<T>): Reader<T> =
-    Reader { context, location, source ->
-        this@validation.read(context, location, source)
-            .validation(context, location, validator)
+public infix fun <EB, CTX, T> Reader<EB, CTX, T?>.filter(predicate: ReaderPredicate<EB, CTX, T>): Reader<EB, CTX, T?> =
+    Reader { env, location, source ->
+        this@filter.read(env, location, source)
+            .filter(env, predicate)
+    }
+
+public infix fun <EB, CTX, T> Reader<EB, CTX, T>.validation(validator: Validator<EB, CTX, T>): Reader<EB, CTX, T> =
+    Reader { env, location, source ->
+        this@validation.read(env, location, source)
+            .validation(env, location, validator)
     }

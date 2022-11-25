@@ -18,55 +18,65 @@ package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.ObjectPropertySpec
 
-public interface ObjectReaderPropertiesBuilder {
+public interface ObjectReaderPropertiesBuilder<EB, CTX> {
 
-    public fun <P : Any> property(spec: ObjectPropertySpec.Required<P>): ObjectProperty.Required<P>
-
-    public fun <P : Any> property(spec: ObjectPropertySpec.Defaultable<P>): ObjectProperty.Defaultable<P>
-
-    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<P>): ObjectProperty.Optional<P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Required<EB, CTX, P>): ObjectProperty.Required<EB, CTX, P>
 
     public fun <P : Any> property(
-        spec: ObjectPropertySpec.OptionalWithDefault<P>
-    ): ObjectProperty.OptionalWithDefault<P>
+        spec: ObjectPropertySpec.Defaultable<EB, CTX, P>
+    ): ObjectProperty.Defaultable<EB, CTX, P>
 
-    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<P>): ObjectProperty.Nullable<P>
+    public fun <P : Any> property(spec: ObjectPropertySpec.Optional<EB, CTX, P>): ObjectProperty.Optional<EB, CTX, P>
 
     public fun <P : Any> property(
-        spec: ObjectPropertySpec.NullableWithDefault<P>
-    ): ObjectProperty.NullableWithDefault<P>
+        spec: ObjectPropertySpec.OptionalWithDefault<EB, CTX, P>
+    ): ObjectProperty.OptionalWithDefault<EB, CTX, P>
+
+    public fun <P : Any> property(spec: ObjectPropertySpec.Nullable<EB, CTX, P>): ObjectProperty.Nullable<EB, CTX, P>
+
+    public fun <P : Any> property(
+        spec: ObjectPropertySpec.NullableWithDefault<EB, CTX, P>
+    ): ObjectProperty.NullableWithDefault<EB, CTX, P>
 }
 
-internal class ObjectReaderPropertiesBuilderInstance : ObjectReaderPropertiesBuilder {
-    private val properties = mutableListOf<ObjectProperty>()
+internal class ObjectReaderPropertiesBuilderInstance<EB, CTX> : ObjectReaderPropertiesBuilder<EB, CTX> {
+    private val properties = mutableListOf<ObjectProperty<EB, CTX>>()
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Required<P>): ObjectProperty.Required<P> =
+    override fun <P : Any> property(
+        spec: ObjectPropertySpec.Required<EB, CTX, P>
+    ): ObjectProperty.Required<EB, CTX, P> =
         ObjectProperty.Required(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Defaultable<P>): ObjectProperty.Defaultable<P> =
+    override fun <P : Any> property(
+        spec: ObjectPropertySpec.Defaultable<EB, CTX, P>
+    ): ObjectProperty.Defaultable<EB, CTX, P> =
         ObjectProperty.Defaultable(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Optional<P>): ObjectProperty.Optional<P> =
+    override fun <P : Any> property(
+        spec: ObjectPropertySpec.Optional<EB, CTX, P>
+    ): ObjectProperty.Optional<EB, CTX, P> =
         ObjectProperty.Optional(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
-        spec: ObjectPropertySpec.OptionalWithDefault<P>
-    ): ObjectProperty.OptionalWithDefault<P> =
+        spec: ObjectPropertySpec.OptionalWithDefault<EB, CTX, P>
+    ): ObjectProperty.OptionalWithDefault<EB, CTX, P> =
         ObjectProperty.OptionalWithDefault(spec)
             .also { properties.add(it) }
 
-    override fun <P : Any> property(spec: ObjectPropertySpec.Nullable<P>): ObjectProperty.Nullable<P> =
+    override fun <P : Any> property(
+        spec: ObjectPropertySpec.Nullable<EB, CTX, P>
+    ): ObjectProperty.Nullable<EB, CTX, P> =
         ObjectProperty.Nullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
-        spec: ObjectPropertySpec.NullableWithDefault<P>
-    ): ObjectProperty.NullableWithDefault<P> =
+        spec: ObjectPropertySpec.NullableWithDefault<EB, CTX, P>
+    ): ObjectProperty.NullableWithDefault<EB, CTX, P> =
         ObjectProperty.NullableWithDefault(spec)
             .also { properties.add(it) }
 
-    fun build(): ObjectProperties = ObjectProperties(properties)
+    fun build(): ObjectProperties<EB, CTX> = ObjectProperties(properties)
 }

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.writer.predicate
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -25,49 +25,49 @@ import kotlin.test.assertTrue
 internal class WriterPredicateOrCombinatorTest {
 
     companion object {
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
 
         private const val MIN_VALUE = 10
         private const val MAX_VALUE = 20
 
-        private val leftFilter = WriterPredicate<Int> { _, _, value -> value < MIN_VALUE }
-        private val rightFilter = WriterPredicate<Int> { _, _, value -> value > MAX_VALUE }
+        private val leftFilter = WriterPredicate<Unit, Int> { _, _, value -> value < MIN_VALUE }
+        private val rightFilter = WriterPredicate<Unit, Int> { _, _, value -> value > MAX_VALUE }
         private val composedFilter = leftFilter or rightFilter
     }
 
     @Test
     fun `The tested value is less to the minimum value of the range`() {
-        val result = composedFilter.test(CONTEXT, Location.empty, MIN_VALUE - 1)
+        val result = composedFilter.test(ENV, Location.empty, MIN_VALUE - 1)
         assertTrue(result)
     }
 
     @Test
     fun `The tested value is equal to the minimum value of the range`() {
-        val result = composedFilter.test(CONTEXT, Location.empty, MIN_VALUE)
+        val result = composedFilter.test(ENV, Location.empty, MIN_VALUE)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is more to the minimum value of the range`() {
-        val result = composedFilter.test(CONTEXT, Location.empty, MIN_VALUE + 1)
+        val result = composedFilter.test(ENV, Location.empty, MIN_VALUE + 1)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is less to the maximum value of the range`() {
-        val result = composedFilter.test(CONTEXT, Location.empty, MAX_VALUE - 1)
+        val result = composedFilter.test(ENV, Location.empty, MAX_VALUE - 1)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is equal to the maximum value of the range`() {
-        val result = composedFilter.test(CONTEXT, Location.empty, MAX_VALUE)
+        val result = composedFilter.test(ENV, Location.empty, MAX_VALUE)
         assertFalse(result)
     }
 
     @Test
     fun `The tested value is more to the maximum value of the range`() {
-        val result = composedFilter.test(CONTEXT, Location.empty, MAX_VALUE + 1)
+        val result = composedFilter.test(ENV, Location.empty, MAX_VALUE + 1)
         assertTrue(result)
     }
 }

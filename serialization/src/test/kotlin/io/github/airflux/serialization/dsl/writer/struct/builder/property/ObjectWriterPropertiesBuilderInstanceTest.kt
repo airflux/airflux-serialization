@@ -19,7 +19,8 @@ package io.github.airflux.serialization.dsl.writer.struct.builder.property
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.ObjectPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.inspectors.forOne
@@ -33,7 +34,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "f12720c8-a441-4b18-9783-b8bc7b31607c"
 
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
@@ -42,7 +43,7 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
         "The ObjectWriterPropertiesBuilderInstance type" - {
 
             "when no property is added to the builder" - {
-                val properties = ObjectWriterPropertiesBuilderInstance<String>().build()
+                val properties = ObjectWriterPropertiesBuilderInstance<Unit, String>().build()
 
                 "should be empty" {
                     properties shouldContainExactly emptyList()
@@ -51,9 +52,9 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
             "when a non-nullable property were added to the builder" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = ObjectPropertySpec.NonNullable(name = PROPERTY_NAME, from = from, writer = writer)
-                val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<Unit, String> = ObjectWriterPropertiesBuilderInstance<Unit, String>()
                     .apply {
                         property(spec)
                     }
@@ -61,18 +62,18 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the non-nullable property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<ObjectProperty.NonNullable<*, *>>()
+                        it.shouldBeInstanceOf<ObjectProperty.NonNullable<Unit, *, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
+                        it.write(ENV, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }
 
             "when a optional property were added to the builder" - {
                 val from: (String) -> String? = { it }
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = ObjectPropertySpec.Optional(name = PROPERTY_NAME, from = from, writer = writer)
-                val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<Unit, String> = ObjectWriterPropertiesBuilderInstance<Unit, String>()
                     .apply {
                         property(spec)
                     }
@@ -80,18 +81,18 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the optional property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<ObjectProperty.Optional<*, *>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Optional<Unit, *, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
+                        it.write(ENV, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }
 
             "when a nullable property were added to the builder" - {
                 val from: (String) -> String? = { it }
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = ObjectPropertySpec.Nullable(name = PROPERTY_NAME, from = from, writer = writer)
-                val properties: ObjectProperties<String> = ObjectWriterPropertiesBuilderInstance<String>()
+                val properties: ObjectProperties<Unit, String> = ObjectWriterPropertiesBuilderInstance<Unit, String>()
                     .apply {
                         property(spec)
                     }
@@ -99,9 +100,9 @@ internal class ObjectWriterPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the nullable property should contain in the container" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<ObjectProperty.Nullable<*, *>>()
+                        it.shouldBeInstanceOf<ObjectProperty.Nullable<Unit, *, *>>()
                         it.name shouldBe spec.name
-                        it.write(CONTEXT, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
+                        it.write(ENV, LOCATION, PROPERTY_VALUE) shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
             }

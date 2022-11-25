@@ -21,11 +21,13 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.Objec
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.std.validator.struct.MinPropertiesObjectValidator
 
-internal class MinPropertiesObjectValidatorBuilder(private val value: Int) : ObjectValidatorBuilder {
+internal class MinPropertiesObjectValidatorBuilder<EB, CTX>(private val value: Int) : ObjectValidatorBuilder<EB, CTX>
+    where EB : MinPropertiesObjectValidator.ErrorBuilder {
 
     override val key: ObjectValidatorBuilder.Key<*> = Key
 
-    override fun build(properties: ObjectProperties): ObjectValidator = MinPropertiesObjectValidator(value)
+    override fun build(properties: ObjectProperties<EB, CTX>): ObjectValidator<EB, CTX> =
+        MinPropertiesObjectValidator(value)
 
-    companion object Key : ObjectValidatorBuilder.Key<MinPropertiesObjectValidatorBuilder>
+    companion object Key : ObjectValidatorBuilder.Key<MinPropertiesObjectValidatorBuilder<*, *>>
 }

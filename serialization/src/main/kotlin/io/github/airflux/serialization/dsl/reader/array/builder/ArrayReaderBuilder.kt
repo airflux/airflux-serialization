@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder
 
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.array.readArray
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.option.failFast
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.fold
@@ -32,46 +32,59 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.builder.ArrayReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.ArrayItemSpec
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.ArrayPrefixItemsSpec
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilder
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidatorsBuilderInstance
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidators
-import io.github.airflux.serialization.dsl.reader.config.ArrayReaderConfig
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidation
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayReaderValidationInstance
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 
-public fun <T> arrayReader(
-    configuration: ArrayReaderConfig = ArrayReaderConfig.DEFAULT,
-    block: ArrayReaderBuilder<T>.() -> ResultBuilder<T>
-): Reader<T> {
-    val readerBuilder: ArrayReaderBuilder<T> =
-        ArrayReaderBuilder(ArrayReaderValidatorsBuilderInstance(configuration))
-    val resultBuilder: ResultBuilder<T> = readerBuilder.block()
+public fun <EB, CTX, T> arrayReader(
+    block: ArrayReaderBuilder<EB, CTX, T>.() -> ResultBuilder<EB, CTX, T>
+): Reader<EB, CTX, T>
+    where EB : AdditionalItemsErrorBuilder,
+          EB : InvalidTypeErrorBuilder,
+          CTX : FailFastOption {
+    val readerBuilder: ArrayReaderBuilder<EB, CTX, T> =
+        ArrayReaderBuilder(ArrayReaderValidationInstance())
+    val resultBuilder: ResultBuilder<EB, CTX, T> = readerBuilder.block()
     return readerBuilder.build(resultBuilder)
 }
 
 @AirfluxMarker
-public class ArrayReaderBuilder<T> internal constructor(
-    private val validatorsBuilder: ArrayReaderValidatorsBuilderInstance
-) : ArrayReaderValidatorsBuilder by validatorsBuilder {
+public class ArrayReaderBuilder<EB, CTX, T> internal constructor(
+    private val validatorsBuilder: ArrayReaderValidationInstance<EB, CTX>
+) : ArrayReaderValidation<EB, CTX> by validatorsBuilder
+    where EB : AdditionalItemsErrorBuilder,
+          EB : InvalidTypeErrorBuilder,
+          CTX : FailFastOption {
 
-    public fun interface ResultBuilder<T> {
-        public fun build(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult<T>
+    public fun interface ResultBuilder<EB, CTX, T>
+        where EB : AdditionalItemsErrorBuilder,
+              CTX : FailFastOption {
+        public fun build(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult<T>
     }
 
-    internal fun build(resultBuilder: ResultBuilder<T>): Reader<T> {
+    internal fun build(resultBuilder: ResultBuilder<EB, CTX, T>): Reader<EB, CTX, T> {
         val validators = validatorsBuilder.build()
         return ArrayReader(validators, resultBuilder)
     }
 }
 
-public fun <T> returns(items: ArrayItemSpec<T>): ResultBuilder<List<T>> =
-    ResultBuilder { context, location, source ->
-        readArray(context = context, location = location, source = source, items = items.reader)
+public fun <EB, CTX, T> returns(items: ArrayItemSpec<EB, CTX, T>): ResultBuilder<EB, CTX, List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption =
+    ResultBuilder { env, location, source ->
+        readArray(env = env, location = location, source = source, items = items.reader)
     }
 
-public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): ResultBuilder<List<T>> {
+public fun <EB, CTX, T> returns(
+    prefixItems: ArrayPrefixItemsSpec<EB, CTX, T>,
+    items: Boolean
+): ResultBuilder<EB, CTX, List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption {
     val prefixItemReaders = prefixItems.readers
-    return ResultBuilder { context, location, source ->
+    return ResultBuilder { env, location, source ->
         readArray(
-            context = context,
+            env = env,
             location = location,
             source = source,
             prefixItems = prefixItemReaders,
@@ -80,11 +93,16 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: Boolean): Re
     }
 }
 
-public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpec<T>): ResultBuilder<List<T>> {
+public fun <EB, CTX, T> returns(
+    prefixItems: ArrayPrefixItemsSpec<EB, CTX, T>,
+    items: ArrayItemSpec<EB, CTX, T>
+): ResultBuilder<EB, CTX, List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption {
     val prefixItemReaders = prefixItems.readers
-    return ResultBuilder { context, location, source ->
+    return ResultBuilder { env, location, source ->
         readArray(
-            context = context,
+            env = env,
             location = location,
             source = source,
             prefixItems = prefixItemReaders,
@@ -93,35 +111,36 @@ public fun <T> returns(prefixItems: ArrayPrefixItemsSpec<T>, items: ArrayItemSpe
     }
 }
 
-internal class ArrayReader<T>(
-    private val validators: ArrayValidators,
-    private val resultBuilder: ResultBuilder<T>
-) : Reader<T> {
+internal class ArrayReader<EB, CTX, T>(
+    private val validators: List<ArrayValidator<EB, CTX>>,
+    private val resultBuilder: ResultBuilder<EB, CTX, T>
+) : Reader<EB, CTX, T>
+    where EB : AdditionalItemsErrorBuilder,
+          EB : InvalidTypeErrorBuilder,
+          CTX : FailFastOption {
 
-    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T> =
+    override fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
         if (source is ArrayNode<*>)
-            read(context, location, source)
-        else {
-            val errorBuilder = context[InvalidTypeErrorBuilder]
+            read(env, location, source)
+        else
             ReaderResult.Failure(
                 location = location,
-                error = errorBuilder.build(ValueNode.Type.ARRAY, source.type)
+                error = env.errorBuilders.invalidTypeError(ValueNode.Type.ARRAY, source.type)
             )
-        }
 
-    private fun read(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult<T> {
-        val failFast = context.failFast
+    private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult<T> {
+        val failFast = env.context.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
-            val failure = validator.validate(context, location, source)
+            val failure = validator.validate(env, location, source)
             if (failure != null) {
                 if (failFast) return failure
                 failures.add(failure)
             }
         }
 
-        return resultBuilder.build(context, location, source)
+        return resultBuilder.build(env, location, source)
             .fold(
                 ifFailure = { failure ->
                     if (failFast) return failure

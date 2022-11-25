@@ -16,32 +16,18 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.context.option.ContextOptionElement
-import io.github.airflux.serialization.core.context.option.ContextOptionKey
-import io.github.airflux.serialization.core.context.option.get
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NumberNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
 import java.math.BigDecimal
-
-internal val WriterContext.stripTrailingZeros: Boolean
-    get() = get(BigDecimalWriter.StripTrailingZeros) { false }
 
 /**
  * Writer for primitive [BigDecimal] type.
  */
-public object BigDecimalWriter : Writer<BigDecimal> {
-
-    override fun write(context: WriterContext, location: Location, value: BigDecimal): ValueNode {
-        val text = if (context.stripTrailingZeros) value.stripTrailingZeros().toPlainString() else value.toPlainString()
-        return NumberNode.valueOf(text)!!
+public fun <CTX> bigDecimalWriter(stripTrailingZeros: Boolean): Writer<CTX, BigDecimal> =
+    Writer { _, _, value ->
+        val text = if (stripTrailingZeros)
+            value.stripTrailingZeros().toPlainString()
+        else
+            value.toPlainString()
+        NumberNode.valueOf(text)!!
     }
-
-    public class StripTrailingZeros(override val value: Boolean) : ContextOptionElement<Boolean> {
-        override val key: ContextOptionKey<Boolean, *> = Key
-
-        public companion object Key : ContextOptionKey<Boolean, StripTrailingZeros>
-    }
-}

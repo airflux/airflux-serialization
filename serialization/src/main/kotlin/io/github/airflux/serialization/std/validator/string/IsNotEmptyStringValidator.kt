@@ -16,32 +16,21 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class IsNotEmptyStringValidator internal constructor() : Validator<String> {
+public class IsNotEmptyStringValidator<EB, CTX> internal constructor() : Validator<EB, CTX, String>
+    where EB : IsNotEmptyStringValidator.ErrorBuilder {
 
-    override fun validate(context: ReaderContext, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: String): ReaderResult.Failure? =
         if (value.isNotEmpty())
             null
-        else {
-            val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location = location, error = errorBuilder.build())
-        }
+        else
+            ReaderResult.Failure(location = location, error = env.errorBuilders.isNotEmptyStringError())
 
-    public class ErrorBuilder(private val function: () -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(): ReaderResult.Error = function()
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun isNotEmptyStringError(): ReaderResult.Error
     }
 }

@@ -17,14 +17,12 @@
 package io.github.airflux.serialization.std.validator.comparable
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.validator.comparison.MaxComparisonValidator
 import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -33,63 +31,52 @@ import io.kotest.matchers.shouldBe
 internal class MaxComparisonValidatorTest : FreeSpec() {
 
     companion object {
-        private val LOCATION: Location = Location.empty
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
         private const val MAX_VALUE: Int = 2
     }
 
     init {
 
         "The string validator Max" - {
-            val validator: Validator<Int> = StdComparisonValidator.max(MAX_VALUE)
+            val validator: Validator<EB, Unit, Int> = StdComparisonValidator.max(MAX_VALUE)
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when a value is less than the max allowed" - {
+                val value = MAX_VALUE - 1
 
-                "when the test condition is false" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, MAX_VALUE + 1)
-                    }
-                    exception.message shouldBe "The error builder '${MaxComparisonValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    MaxComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Max)
-                )
+            "when a value is equal to the max allowed" - {
+                val value = MAX_VALUE
 
-                "when a value is less than the max allowed" - {
-                    val value = MAX_VALUE - 1
-
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, value)
-                        errors.shouldBeNull()
-                    }
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
                 }
+            }
 
-                "when a value is equal to the max allowed" - {
-                    val value = MAX_VALUE
+            "when a value is more than the max allowed" - {
+                val value = MAX_VALUE + 1
 
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, value)
-                        errors.shouldBeNull()
-                    }
-                }
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, value)
 
-                "when a value is more than the max allowed" - {
-                    val value = MAX_VALUE + 1
-
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, value)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Max(expected = MAX_VALUE, actual = value)
-                        )
-                    }
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Numbers.Max(expected = MAX_VALUE, actual = value)
+                    )
                 }
             }
         }
+    }
+
+    internal class EB : MaxComparisonValidator.ErrorBuilder {
+        override fun maxComparisonError(expected: Number, actual: Number): ReaderResult.Error =
+            JsonErrors.Validation.Numbers.Max(expected = expected, actual = actual)
     }
 }

@@ -20,18 +20,18 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsObjectTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
-        private const val USER_NAME = "user"
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("user")
-        private val reader = { _: ReaderContext, _: Location, source: ObjectNode ->
+        private const val USER_NAME = "user"
+        private val reader = { _: ReaderEnv<EB, Unit>, _: Location, source: ObjectNode ->
             val name = source["name"] as StringNode
             ReaderResult.Success(DTO(name = name.get))
         }
@@ -44,7 +44,7 @@ internal class ReadAsObjectTest : FreeSpec() {
 
                 "should return the DTO" {
                     val json: ValueNode = ObjectNode("name" to StringNode(USER_NAME))
-                    val result = json.readAsObject(CONTEXT, LOCATION, reader)
+                    val result = json.readAsObject(ENV, LOCATION, reader)
                     result.assertAsSuccess(value = DTO(name = USER_NAME))
                 }
             }
@@ -52,7 +52,7 @@ internal class ReadAsObjectTest : FreeSpec() {
 
                 "should return the invalid type' error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
-                    val result = json.readAsObject(CONTEXT, LOCATION, reader)
+                    val result = json.readAsObject(ENV, LOCATION, reader)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = LOCATION,
@@ -68,4 +68,9 @@ internal class ReadAsObjectTest : FreeSpec() {
     }
 
     private data class DTO(val name: String)
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
+    }
 }

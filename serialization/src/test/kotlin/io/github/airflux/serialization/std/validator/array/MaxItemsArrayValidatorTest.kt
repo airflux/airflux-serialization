@@ -17,13 +17,12 @@
 package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.kotest.assertions.throwables.shouldThrow
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -32,6 +31,7 @@ import io.kotest.matchers.shouldBe
 internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
         private const val MAX_ITEMS = 2
     }
@@ -39,67 +39,53 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MaxItems" - {
-            val validator = StdArrayValidator.maxItems(MAX_ITEMS).build()
+            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.maxItems<EB, Unit>(MAX_ITEMS).build()
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when a collection is empty" - {
+                val source: ArrayNode<StringNode> = ArrayNode()
 
-                "when the test condition is false" {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
-
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, source)
-                    }
-                    exception.message shouldBe "The error builder '${MaxItemsArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                "then the validator should do not return any errors" {
+                    val errors = validator.validate(ENV, LOCATION, source)
+                    errors.shouldBeNull()
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    MaxItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MaxItems)
-                )
+            "when the collection contains a number of elements less than the maximum" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
 
-                "when a collection is empty" - {
-                    val source: ArrayNode<StringNode> = ArrayNode()
-
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, source)
-                        errors.shouldBeNull()
-                    }
+                "then the validator should do not return any errors" {
+                    val errors = validator.validate(ENV, LOCATION, source)
+                    errors.shouldBeNull()
                 }
+            }
 
-                "when the collection contains a number of elements less than the maximum" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
+            "when the collection contains a number of elements equal to the maximum" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
 
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, source)
-                        errors.shouldBeNull()
-                    }
+                "then the validator should do not return any errors" {
+                    val errors = validator.validate(ENV, LOCATION, source)
+                    errors.shouldBeNull()
                 }
+            }
 
-                "when the collection contains a number of elements equal to the maximum" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
+            "when the collection contains a number of elements more than the maximum" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, source)
-                        errors.shouldBeNull()
-                    }
-                }
+                "the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, source)
 
-                "when the collection contains a number of elements more than the maximum" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
-
-                    "the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, source)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Arrays.MaxItems(expected = MAX_ITEMS, actual = source.size)
-                        )
-                    }
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Arrays.MaxItems(expected = MAX_ITEMS, actual = source.size)
+                    )
                 }
             }
         }
+    }
+
+    internal class EB : MaxItemsArrayValidator.ErrorBuilder {
+        override fun maxItemsArrayError(expected: Int, actual: Int): ReaderResult.Error =
+            JsonErrors.Validation.Arrays.MaxItems(expected = expected, actual = actual)
     }
 }

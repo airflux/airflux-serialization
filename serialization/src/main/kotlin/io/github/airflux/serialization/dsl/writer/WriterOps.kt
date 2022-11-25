@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <T : Any> T.serialization(context: WriterContext, location: Location, writer: Writer<T>): ValueNode? =
-    writer.write(context, location, this)
+public fun <CTX, T : Any> T.serialization(env: WriterEnv<CTX>, location: Location, writer: Writer<CTX, T>): ValueNode? =
+    writer.write(env, location, this)

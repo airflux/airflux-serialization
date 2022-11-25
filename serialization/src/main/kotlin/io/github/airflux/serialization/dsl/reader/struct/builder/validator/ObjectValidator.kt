@@ -17,17 +17,17 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.validator
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 
-public fun interface ObjectValidator {
+public fun interface ObjectValidator<EB, CTX> {
 
     public fun validate(
-        context: ReaderContext,
+        env: ReaderEnv<EB, CTX>,
         location: Location,
-        properties: ObjectProperties,
+        properties: ObjectProperties<EB, CTX>,
         source: ObjectNode
     ): ReaderResult.Failure?
 }

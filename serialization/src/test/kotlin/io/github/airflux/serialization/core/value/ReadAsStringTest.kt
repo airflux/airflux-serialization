@@ -20,17 +20,15 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsStringTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(
-            InvalidTypeErrorBuilder(JsonErrors::InvalidType)
-        )
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("user")
     }
 
@@ -41,7 +39,7 @@ internal class ReadAsStringTest : FreeSpec() {
 
                 "should return the string value" {
                     val json: ValueNode = StringNode("abc")
-                    val result = json.readAsString(CONTEXT, LOCATION)
+                    val result = json.readAsString(ENV, LOCATION)
                     result.assertAsSuccess(value = "abc")
                 }
             }
@@ -50,7 +48,7 @@ internal class ReadAsStringTest : FreeSpec() {
 
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
-                    val result = json.readAsString(CONTEXT, LOCATION)
+                    val result = json.readAsString(ENV, LOCATION)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = LOCATION,
@@ -63,5 +61,10 @@ internal class ReadAsStringTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

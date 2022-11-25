@@ -21,13 +21,15 @@ import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ValueNode
 
-@Suppress("unused")
-public fun <T : Any> ValueNode.deserialization(context: ReaderContext, reader: Reader<T>): ReaderResult<T> =
-    reader.read(context, Location.empty, this)
+public fun <EB, CTX, T : Any> ValueNode.deserialization(
+    env: ReaderEnv<EB, CTX>,
+    reader: Reader<EB, CTX, T>
+): ReaderResult<T> =
+    reader.read(env, Location.empty, this)
 
 public operator fun ValueNode.div(key: String): Lookup = this.lookup(Location.empty, PropertyPath.Element.Key(key))
 public operator fun ValueNode.div(idx: Int): Lookup = this.lookup(Location.empty, PropertyPath.Element.Idx(idx))

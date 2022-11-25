@@ -16,36 +16,34 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.option.failFast
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
 
-public class AdditionalPropertiesObjectValidator internal constructor(
+public class AdditionalPropertiesObjectValidator<EB, CTX> internal constructor(
     private val names: Set<String>
-) : ObjectValidator {
+) : ObjectValidator<EB, CTX>
+    where EB : AdditionalPropertiesObjectValidator.ErrorBuilder,
+          CTX : FailFastOption {
 
     override fun validate(
-        context: ReaderContext,
+        env: ReaderEnv<EB, CTX>,
         location: Location,
-        properties: ObjectProperties,
+        properties: ObjectProperties<EB, CTX>,
         source: ObjectNode
     ): ReaderResult.Failure? {
-        val failFast = context.failFast
-        val errorBuilder = context[ErrorBuilder]
+        val failFast = env.context.failFast
 
         val failures = mutableListOf<ReaderResult.Failure>()
         source.forEach { (name, _) ->
             if (name !in names) {
-                val failure = ReaderResult.Failure(location.append(name), errorBuilder.build())
+                val failure =
+                    ReaderResult.Failure(location.append(name), env.errorBuilders.additionalPropertiesObjectError())
                 if (failFast) return failure
                 failures.add(failure)
             }
@@ -53,13 +51,7 @@ public class AdditionalPropertiesObjectValidator internal constructor(
         return failures.takeIf { it.isNotEmpty() }?.merge()
     }
 
-    public class ErrorBuilder(private val function: () -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(): ReaderResult.Error = function()
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun additionalPropertiesObjectError(): ReaderResult.Error
     }
 }

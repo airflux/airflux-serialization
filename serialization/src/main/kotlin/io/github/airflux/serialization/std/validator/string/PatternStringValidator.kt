@@ -16,32 +16,22 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class PatternStringValidator internal constructor(private val pattern: Regex) : Validator<String> {
+public class PatternStringValidator<EB, CTX> internal constructor(private val pattern: Regex) :
+    Validator<EB, CTX, String>
+    where EB : PatternStringValidator.ErrorBuilder {
 
-    override fun validate(context: ReaderContext, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: String): ReaderResult.Failure? =
         if (pattern.matches(value))
             null
-        else {
-            val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location = location, error = errorBuilder.build(value, pattern))
-        }
+        else
+            ReaderResult.Failure(location = location, error = env.errorBuilders.patternStringError(value, pattern))
 
-    public class ErrorBuilder(private val function: (value: String, pattern: Regex) -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(value: String, pattern: Regex): ReaderResult.Error = function(value, pattern)
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun patternStringError(value: String, pattern: Regex): ReaderResult.Error
     }
 }

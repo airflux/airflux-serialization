@@ -20,9 +20,10 @@ import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun <T> nullable(writer: Writer<T & Any>): ArrayItemSpec.Nullable<T> = ArrayItemSpec.Nullable(writer)
+public fun <CTX, T> nullable(writer: Writer<CTX, T & Any>): ArrayItemSpec.Nullable<CTX, T> =
+    ArrayItemSpec.Nullable(writer)
 
-public infix fun <T> ArrayItemSpec.Nullable<T>.filter(
-    predicate: WriterPredicate<T & Any>
-): ArrayItemSpec.Optional<T> =
+public infix fun <CTX, T> ArrayItemSpec.Nullable<CTX, T>.filter(
+    predicate: WriterPredicate<CTX, T & Any>
+): ArrayItemSpec.Optional<CTX, T> =
     ArrayItemSpec.Optional(writer = writer.filter(predicate))

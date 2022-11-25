@@ -19,12 +19,10 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.dsl.reader.context.exception.ExceptionsHandler
-import io.github.airflux.serialization.dsl.reader.context.exception.exception
-import io.github.airflux.serialization.dsl.reader.context.exception.exceptionsHandler
+import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
@@ -37,7 +35,6 @@ internal class ReaderResultTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
-        private val CONTEXT = ReaderContext()
         private val LOCATION = Location.empty.append("id")
     }
 
@@ -289,11 +286,23 @@ internal class ReaderResultTest : FreeSpec() {
             "when no exception is thrown in the block" - {
                 val block: () -> ReaderResult<String> = { ORIGINAL_VALUE.success() }
 
-                "then should return the value" {
-                    val result = withCatching(CONTEXT, LOCATION, block)
+                "when the context contains the exceptions handler" - {
+                    val env = ReaderEnv(
+                        errorBuilders = Unit,
+                        context = Unit,
+                        exceptionsHandler = exceptionsHandler {
+                            exception<IllegalStateException> { _, _, _ ->
+                                JsonErrors.PathMissing
+                            }
+                        }
+                    )
 
-                    result as ReaderResult.Success
-                    result.value shouldBe ORIGINAL_VALUE
+                    "then should return the value" {
+                        val result = withCatching(env, LOCATION, block)
+
+                        result as ReaderResult.Success
+                        result.value shouldBe ORIGINAL_VALUE
+                    }
                 }
             }
 
@@ -301,15 +310,18 @@ internal class ReaderResultTest : FreeSpec() {
                 val block: () -> ReaderResult<String> = { throw IllegalStateException() }
 
                 "when the context contains the exceptions handler" - {
-                    val exceptionHandler: ExceptionsHandler = exceptionsHandler(
-                        exception<IllegalStateException> { _, _, _ ->
-                            JsonErrors.PathMissing
+                    val env = ReaderEnv(
+                        errorBuilders = Unit,
+                        context = Unit,
+                        exceptionsHandler = exceptionsHandler {
+                            exception<IllegalStateException> { _, _, _ ->
+                                JsonErrors.PathMissing
+                            }
                         }
                     )
-                    val contextWithExceptionHandler = CONTEXT + exceptionHandler
 
                     "then should return an error value" {
-                        val result = withCatching(contextWithExceptionHandler, LOCATION, block)
+                        val result = withCatching(env, LOCATION, block)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
@@ -319,10 +331,11 @@ internal class ReaderResultTest : FreeSpec() {
                 }
 
                 "when the context does not contain the exceptions handler" - {
+                    val env = ReaderEnv(Unit, Unit)
 
                     "then should re-throwing the exception" {
                         shouldThrow<IllegalStateException> {
-                            withCatching(CONTEXT, LOCATION, block)
+                            withCatching(env, LOCATION, block)
                         }
                     }
                 }

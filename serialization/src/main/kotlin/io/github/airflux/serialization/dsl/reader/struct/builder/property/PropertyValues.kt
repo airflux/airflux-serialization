@@ -17,28 +17,27 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
 @Suppress("TooManyFunctions")
-public sealed interface PropertyValues {
+public sealed interface PropertyValues<EB, CTX> {
 
     public val isEmpty: Boolean
     public val isNotEmpty: Boolean
     public val size: Int
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Required<T>): T
-    public operator fun <T : Any> ObjectProperty.Required<T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: ObjectProperty.Required<EB, CTX, T>): T
+    public operator fun <T : Any> ObjectProperty.Required<EB, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Defaultable<T>): T
-    public operator fun <T : Any> ObjectProperty.Defaultable<T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: ObjectProperty.Defaultable<EB, CTX, T>): T
+    public operator fun <T : Any> ObjectProperty.Defaultable<EB, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Optional<T>): T?
-    public operator fun <T : Any> ObjectProperty.Optional<T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: ObjectProperty.Optional<EB, CTX, T>): T?
+    public operator fun <T : Any> ObjectProperty.Optional<EB, CTX, T>.unaryPlus(): T? = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.OptionalWithDefault<T>): T
-    public operator fun <T : Any> ObjectProperty.OptionalWithDefault<T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: ObjectProperty.OptionalWithDefault<EB, CTX, T>): T
+    public operator fun <T : Any> ObjectProperty.OptionalWithDefault<EB, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Nullable<T>): T?
-    public operator fun <T : Any> ObjectProperty.Nullable<T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: ObjectProperty.Nullable<EB, CTX, T>): T?
+    public operator fun <T : Any> ObjectProperty.Nullable<EB, CTX, T>.unaryPlus(): T? = get(this)
 
-    public
-    infix operator fun <T : Any> get(property: ObjectProperty.NullableWithDefault<T>): T?
-    public operator fun <T : Any> ObjectProperty.NullableWithDefault<T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: ObjectProperty.NullableWithDefault<EB, CTX, T>): T?
+    public operator fun <T : Any> ObjectProperty.NullableWithDefault<EB, CTX, T>.unaryPlus(): T? = get(this)
 }

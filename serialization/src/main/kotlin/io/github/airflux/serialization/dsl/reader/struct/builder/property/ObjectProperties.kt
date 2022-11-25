@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
-public class ObjectProperties internal constructor(
-    private val items: List<ObjectProperty>
-) : Collection<ObjectProperty> by items
+public class ObjectProperties<EB, CTX> internal constructor(
+    private val items: List<ObjectProperty<EB, CTX>>
+) : Collection<ObjectProperty<EB, CTX>> by items

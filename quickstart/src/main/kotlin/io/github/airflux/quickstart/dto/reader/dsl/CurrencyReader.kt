@@ -1,8 +1,10 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
+import io.github.airflux.quickstart.dto.reader.base.StringReader
+import io.github.airflux.quickstart.dto.reader.base.isNotBlank
+import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
+import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.validation
-import io.github.airflux.serialization.std.reader.StringReader
-import io.github.airflux.serialization.std.validator.string.StdStringValidator.isNotBlank
 
-val CurrencyReader: Reader<String> = StringReader.validation(isNotBlank)
+val CurrencyReader: Reader<ReaderErrorBuilders, ReaderCtx, String> = StringReader.validation(isNotBlank)

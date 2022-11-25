@@ -20,12 +20,12 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <T : Any> writeNullable(
-    context: WriterContext,
+public fun <CTX, T : Any> writeNullable(
+    env: WriterEnv<CTX>,
     location: Location,
-    using: Writer<T>,
+    using: Writer<CTX, T>,
     value: T?
 ): ValueNode? =
-    if (value != null) using.write(context, location, value) else NullNode
+    if (value != null) using.write(env, location, value) else NullNode

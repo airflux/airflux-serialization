@@ -17,13 +17,12 @@
 package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.kotest.assertions.throwables.shouldThrow
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -32,6 +31,7 @@ import io.kotest.matchers.shouldBe
 internal class MinItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
     }
@@ -39,72 +39,58 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator = StdArrayValidator.minItems(MIN_ITEMS).build()
+            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.minItems<EB, Unit>(MIN_ITEMS).build()
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when a collection is empty" - {
+                val source: ArrayNode<StringNode> = ArrayNode()
 
-                "when the test condition is false" {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
+                "the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, source)
 
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, source)
-                    }
-                    exception.message shouldBe "The error builder '${MinItemsArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Arrays.MinItems(expected = MIN_ITEMS, actual = source.size)
+                    )
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    MinItemsArrayValidator.ErrorBuilder(JsonErrors.Validation.Arrays::MinItems)
-                )
+            "when the collection contains a number of elements less than the minimum" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
 
-                "when a collection is empty" - {
-                    val source: ArrayNode<StringNode> = ArrayNode()
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, source)
 
-                    "the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, source)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Arrays.MinItems(expected = MIN_ITEMS, actual = source.size)
-                        )
-                    }
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Arrays.MinItems(expected = MIN_ITEMS, actual = source.size)
+                    )
                 }
+            }
 
-                "when the collection contains a number of elements less than the minimum" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
+            "when the collection contains a number of elements equal to the minimum" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
 
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, source)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Arrays.MinItems(expected = MIN_ITEMS, actual = source.size)
-                        )
-                    }
+                "then the validator should do not return any errors" {
+                    val failure = validator.validate(ENV, LOCATION, source)
+                    failure.shouldBeNull()
                 }
+            }
 
-                "when the collection contains a number of elements equal to the minimum" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
+            "when the collection contains a number of elements more than the minimum" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
-                    "then the validator should do not return any errors" {
-                        val failure = validator.validate(context, LOCATION, source)
-                        failure.shouldBeNull()
-                    }
-                }
-
-                "when the collection contains a number of elements more than the minimum" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
-
-                    "then the validator should do not return any errors" {
-                        val failure = validator.validate(context, LOCATION, source)
-                        failure.shouldBeNull()
-                    }
+                "then the validator should do not return any errors" {
+                    val failure = validator.validate(ENV, LOCATION, source)
+                    failure.shouldBeNull()
                 }
             }
         }
+    }
+
+    internal class EB : MinItemsArrayValidator.ErrorBuilder {
+        override fun minItemsArrayError(expected: Int, actual: Int): ReaderResult.Error =
+            JsonErrors.Validation.Arrays.MinItems(expected = expected, actual = actual)
     }
 }
