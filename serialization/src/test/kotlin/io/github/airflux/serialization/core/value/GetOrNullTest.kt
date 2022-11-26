@@ -48,7 +48,10 @@ internal class GetOrNullTest : FreeSpec() {
                     nameFn = { "${it.first}" },
                     listOf(
                         Pair(PropertyPath("user").append("name"), StringNode(USER_NAME_VALUE)),
-                        Pair(PropertyPath("user").append("phones").append(0).append("value"), StringNode(PHONE_NUMBER_VALUE)),
+                        Pair(
+                            PropertyPath("user").append("phones").append(0).append("value"),
+                            StringNode(PHONE_NUMBER_VALUE)
+                        ),
                     )
                 ) { (path, value) ->
                     val result = SOURCE.getOrNull(path)

@@ -46,7 +46,10 @@ internal class PropertyPathOpsTest : FreeSpec() {
                 val path = PropertyPath / "user" / "name"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PropertyPath.Element.Key("user"), PropertyPath.Element.Key("name"))
+                    path.elements shouldContainExactly listOf(
+                        PropertyPath.Element.Key("user"),
+                        PropertyPath.Element.Key("name")
+                    )
                 }
             }
 
@@ -54,7 +57,10 @@ internal class PropertyPathOpsTest : FreeSpec() {
                 val path = PropertyPath / "phones" / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PropertyPath.Element.Key("phones"), PropertyPath.Element.Idx(0))
+                    path.elements shouldContainExactly listOf(
+                        PropertyPath.Element.Key("phones"),
+                        PropertyPath.Element.Idx(0)
+                    )
                 }
             }
         }

@@ -27,16 +27,12 @@ import io.github.airflux.serialization.std.validator.comparison.GtComparisonVali
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
 import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesObjectValidator
 import io.github.airflux.serialization.std.validator.struct.IsNotEmptyObjectValidator
-import io.github.airflux.serialization.std.validator.struct.MaxPropertiesObjectValidator
-import io.github.airflux.serialization.std.validator.struct.MinPropertiesObjectValidator
 
 object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              PathMissingErrorBuilder,
                              IsNotBlankStringValidator.ErrorBuilder,
                              IsNotEmptyObjectValidator.ErrorBuilder,
                              AdditionalPropertiesObjectValidator.ErrorBuilder,
-                             MinPropertiesObjectValidator.ErrorBuilder,
-                             MaxPropertiesObjectValidator.ErrorBuilder,
                              GtComparisonValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
@@ -51,12 +47,6 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 
     override fun additionalPropertiesObjectError(): ReaderResult.Error =
         JsonErrors.Validation.Object.AdditionalProperties
-
-    override fun minPropertiesObjectError(expected: Int, actual: Int): ReaderResult.Error =
-        JsonErrors.Validation.Object.MinProperties(expected = expected, actual = actual)
-
-    override fun maxPropertiesObjectError(expected: Int, actual: Int): ReaderResult.Error =
-        JsonErrors.Validation.Object.MaxProperties(expected = expected, actual = actual)
 
     override fun gtComparisonError(expected: Number, actual: Number): ReaderResult.Error =
         JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)

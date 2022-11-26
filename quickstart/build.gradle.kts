@@ -4,6 +4,8 @@ plugins {
     kotlin("jvm")
     java
     application
+
+    id("detekt-convention")
 }
 
 repositories {

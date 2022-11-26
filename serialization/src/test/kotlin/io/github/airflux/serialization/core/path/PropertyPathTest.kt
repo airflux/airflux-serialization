@@ -49,7 +49,11 @@ internal class PropertyPathTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    path.shouldBeEqualsContract(y = PropertyPath(keyUser), z = PropertyPath(keyUser), other = OTHER_PATH)
+                    path.shouldBeEqualsContract(
+                        y = PropertyPath(keyUser),
+                        z = PropertyPath(keyUser),
+                        other = OTHER_PATH
+                    )
                 }
 
                 val keyName = "name"
@@ -89,7 +93,10 @@ internal class PropertyPathTest : FreeSpec() {
                     }
 
                     "should have elements in the order they were added" {
-                        updatedPath.elements shouldContainExactly listOf(PropertyPath.Element.Key(keyUser), PropertyPath.Element.Idx(idx))
+                        updatedPath.elements shouldContainExactly listOf(
+                            PropertyPath.Element.Key(keyUser),
+                            PropertyPath.Element.Idx(idx)
+                        )
                     }
 
                     "method 'toString() should return '#/$keyUser[$idx]'" {
@@ -123,7 +130,11 @@ internal class PropertyPathTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    path.shouldBeEqualsContract(y = PropertyPath(firstIdx), z = PropertyPath(firstIdx), other = OTHER_PATH)
+                    path.shouldBeEqualsContract(
+                        y = PropertyPath(firstIdx),
+                        z = PropertyPath(firstIdx),
+                        other = OTHER_PATH
+                    )
                 }
 
                 val keyName = "name"

@@ -21,10 +21,8 @@ import io.github.airflux.quickstart.dto.reader.base.isNotEmpty
 import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
 import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
-import io.github.airflux.serialization.std.validator.struct.StdObjectValidator.maxProperties
 
 val CommonObjectReaderValidators: List<ObjectValidatorBuilder<ReaderErrorBuilders, ReaderCtx>> = listOf(
     additionalProperties,
-    isNotEmpty,
-    maxProperties(10)
+    isNotEmpty
 )
