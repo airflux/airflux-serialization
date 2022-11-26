@@ -16,32 +16,22 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 
-public class MinItemsArrayValidator internal constructor(private val expected: Int) : ArrayValidator {
+public class MinItemsArrayValidator<EB, CTX> internal constructor(private val expected: Int) : ArrayValidator<EB, CTX>
+    where EB : MinItemsArrayValidator.ErrorBuilder {
 
-    override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
-        if (source.size < expected) {
-            val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location, errorBuilder.build(expected, source.size))
-        } else
+    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+        if (source.size < expected)
+            ReaderResult.Failure(location, env.errorBuilders.minItemsArrayError(expected, source.size))
+        else
             null
 
-    public class ErrorBuilder(private val function: (expected: Int, actual: Int) -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(expected: Int, actual: Int): ReaderResult.Error = function(expected, actual)
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun minItemsArrayError(expected: Int, actual: Int): ReaderResult.Error
     }
 }

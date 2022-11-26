@@ -16,15 +16,11 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NumberNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
 
 /**
  * Writer for primitive [Short] type.
  */
-public object ShortWriter : Writer<Short> {
-    override fun write(context: WriterContext, location: Location, value: Short): ValueNode = NumberNode.valueOf(value)
-}
+public fun <CTX> shortWriter(): Writer<CTX, Short> =
+    Writer { _, _, value -> NumberNode.valueOf(value) }

@@ -19,27 +19,27 @@ package io.github.airflux.parser
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.withCatching
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.value.deserialization
 import io.github.airflux.serialization.dsl.writer.serialization
 
-public fun <T : Any> String.deserialization(
+public fun <EB, CTX, T : Any> String.deserialization(
     mapper: ObjectMapper,
-    context: ReaderContext,
-    reader: Reader<T>
+    env: ReaderEnv<EB, CTX>,
+    reader: Reader<EB, CTX, T>
 ): ReaderResult<T> =
-    withCatching(context, location = Location.empty) {
-        mapper.readValue(this, ValueNode::class.java).deserialization(context, reader)
+    withCatching(env, Location.empty) {
+        mapper.readValue(this, ValueNode::class.java).deserialization(env, reader)
     }
 
-public fun <T : Any> T.serialization(
+public fun <CTX, T : Any> T.serialization(
     mapper: ObjectMapper,
-    context: WriterContext,
-    writer: Writer<T>
-): String? = this.serialization(context, Location.empty, writer)
+    env: WriterEnv<CTX>,
+    writer: Writer<CTX, T>
+): String? = this.serialization(env, Location.empty, writer)
     ?.let { mapper.writeValueAsString(it) }

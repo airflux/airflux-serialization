@@ -17,15 +17,17 @@
 package io.github.airflux.serialization.std.validator.condition
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <T> Validator<T>.applyIfNotNull(): Validator<T?> =
-    Validator { context, location, value ->
-        if (value != null) validate(context, location, value) else null
+public fun <EB, CTX, T> Validator<EB, CTX, T>.applyIfNotNull(): Validator<EB, CTX, T?> =
+    Validator { env, location, value ->
+        if (value != null) validate(env, location, value) else null
     }
 
-public fun <T> Validator<T>.applyIf(predicate: (ReaderContext, Location, T) -> Boolean): Validator<T> =
-    Validator { context, location, value ->
-        if (predicate(context, location, value)) validate(context, location, value) else null
+public fun <EB, CTX, T> Validator<EB, CTX, T>.applyIf(
+    predicate: (ReaderEnv<EB, CTX>, Location, T) -> Boolean
+): Validator<EB, CTX, T> =
+    Validator { env, location, value ->
+        if (predicate(env, location, value)) validate(env, location, value) else null
     }

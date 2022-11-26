@@ -20,57 +20,46 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.writer.WriterActionBuilderIfResultIsEmpty
-import io.github.airflux.serialization.dsl.writer.WriterActionConfigurator
-import io.github.airflux.serialization.dsl.writer.WriterActionConfiguratorInstance
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
-import io.github.airflux.serialization.dsl.writer.config.ObjectWriterConfig
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.ObjectWriterPropertiesBuilder
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.ObjectWriterPropertiesBuilderInstance
 
-public fun <T : Any> structWriter(
-    config: ObjectWriterConfig = ObjectWriterConfig.DEFAULT,
-    block: ObjectWriterBuilder<T>.() -> Unit
-): Writer<T> =
-    ObjectWriterBuilder<T>(
-        ObjectWriterPropertiesBuilderInstance(),
-        WriterActionConfiguratorInstance(config.options.actionIfEmpty)
-    ).apply(block).build()
+public fun <CTX, T : Any> structWriter(block: ObjectWriterBuilder<CTX, T>.() -> Unit): Writer<CTX, T>
+    where CTX : WriterActionBuilderIfResultIsEmptyOption =
+    ObjectWriterBuilder<CTX, T>(ObjectWriterPropertiesBuilderInstance()).apply(block).build()
 
 @AirfluxMarker
-public class ObjectWriterBuilder<T : Any> internal constructor(
-    private val propertiesBuilder: ObjectWriterPropertiesBuilderInstance<T>,
-    private val actionConfigurator: WriterActionConfiguratorInstance
-) : ObjectWriterPropertiesBuilder<T> by propertiesBuilder,
-    WriterActionConfigurator by actionConfigurator {
+public class ObjectWriterBuilder<CTX, T : Any> internal constructor(
+    private val propertiesBuilder: ObjectWriterPropertiesBuilderInstance<CTX, T>
+) : ObjectWriterPropertiesBuilder<CTX, T> by propertiesBuilder
+    where CTX : WriterActionBuilderIfResultIsEmptyOption {
 
-    internal fun build(): Writer<T> {
-        val properties: ObjectProperties<T> = propertiesBuilder.build()
-        return buildObjectWriter(actionIfEmpty, properties)
+    internal fun build(): Writer<CTX, T> {
+        val properties: ObjectProperties<CTX, T> = propertiesBuilder.build()
+        return buildObjectWriter(properties)
     }
 }
 
-internal fun <T : Any> buildObjectWriter(
-    actionIfEmpty: WriterActionBuilderIfResultIsEmpty,
-    properties: ObjectProperties<T>
-): Writer<T> =
-    Writer { context, location, value ->
+internal fun <CTX, T : Any> buildObjectWriter(properties: ObjectProperties<CTX, T>): Writer<CTX, T>
+    where CTX : WriterActionBuilderIfResultIsEmptyOption =
+    Writer { env, location, value ->
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
-                    property.write(context, currentLocation, value)
+                    property.write(env, currentLocation, value)
                         ?.let { value -> this[property.name] = value }
                 }
             }
         if (items.isNotEmpty())
             ObjectNode(items)
         else
-            when (actionIfEmpty(context, location)) {
+            when (env.context.writerActionIfResultIsEmpty) {
                 RETURN_EMPTY_VALUE -> ObjectNode()
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> NullNode

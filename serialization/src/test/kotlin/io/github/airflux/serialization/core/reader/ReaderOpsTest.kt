@@ -21,7 +21,7 @@ import io.github.airflux.serialization.common.DummyReaderPredicate
 import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -33,7 +33,7 @@ import io.kotest.matchers.shouldBe
 internal class ReaderOpsTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext()
+        private val ENV: ReaderEnv<Unit, Unit> = ReaderEnv(Unit, Unit)
         private val LOCATION = Location.empty
         private const val VALUE = "ABC"
         private val JSON_VALUE: ValueNode = StringNode(VALUE)
@@ -44,37 +44,37 @@ internal class ReaderOpsTest : FreeSpec() {
         "The extension-function the filter" - {
 
             "when an original reader returns a result as a success" - {
-                val reader: Reader<String> = DummyReader(
+                val reader: Reader<Unit, Unit, String> = DummyReader(
                     result = ReaderResult.Success(value = VALUE)
                 )
 
                 "when the value satisfies the predicate" - {
-                    val predicate: ReaderPredicate<String> = DummyReaderPredicate(result = false)
+                    val predicate: ReaderPredicate<Unit, Unit, String> = DummyReaderPredicate(result = false)
 
                     "then filter should return the null value" {
-                        val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
+                        val filtered = reader.filter(predicate).read(ENV, LOCATION, JSON_VALUE)
                         filtered shouldBe ReaderResult.Success(value = null)
                     }
                 }
 
                 "when the value does not satisfy the predicate" - {
-                    val predicate: ReaderPredicate<String> = DummyReaderPredicate(result = true)
+                    val predicate: ReaderPredicate<Unit, Unit, String> = DummyReaderPredicate(result = true)
 
                     "then filter should return the original value" {
-                        val filtered = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
+                        val filtered = reader.filter(predicate).read(ENV, LOCATION, JSON_VALUE)
                         filtered shouldBe ReaderResult.Success(value = VALUE)
                     }
                 }
             }
 
             "when an original reader returns a result as a failure" - {
-                val reader: Reader<String> = DummyReader(
+                val reader: Reader<Unit, Unit, String> = DummyReader(
                     result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 )
 
                 "then filtering does not execute and the original result should be returned" {
-                    val predicate: ReaderPredicate<String> = DummyReaderPredicate(result = false)
-                    val validated = reader.filter(predicate).read(CONTEXT, LOCATION, JSON_VALUE)
+                    val predicate: ReaderPredicate<Unit, Unit, String> = DummyReaderPredicate(result = false)
+                    val validated = reader.filter(predicate).read(ENV, LOCATION, JSON_VALUE)
                     validated shouldBe ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 }
             }
@@ -83,26 +83,29 @@ internal class ReaderOpsTest : FreeSpec() {
         "The extension-function the validation" - {
 
             "when an original reader returns a result as a success" - {
-                val reader: Reader<String> = DummyReader(
+                val reader: Reader<Unit, Unit, String> = DummyReader(
                     result = ReaderResult.Success(value = VALUE)
                 )
 
                 "when validation is a success" - {
-                    val validator: Validator<String> = DummyValidator(result = null)
+                    val validator: Validator<Unit, Unit, String> = DummyValidator(result = null)
 
                     "then should return the original result" {
-                        val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                        val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
                         validated shouldBe ReaderResult.Success(value = VALUE)
                     }
                 }
 
                 "when validation is a failure" - {
-                    val validator: Validator<String> = DummyValidator(
-                        result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                    val validator: Validator<Unit, Unit, String> = DummyValidator(
+                        result = ReaderResult.Failure(
+                            location = LOCATION,
+                            error = JsonErrors.Validation.Strings.IsEmpty
+                        )
                     )
 
                     "then should return the result of a validation" {
-                        val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                        val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
 
                         validated shouldBe ReaderResult.Failure(
                             location = LOCATION,
@@ -113,15 +116,15 @@ internal class ReaderOpsTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a failure" - {
-                val reader: Reader<String> = DummyReader(
+                val reader: Reader<Unit, Unit, String> = DummyReader(
                     result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 )
 
                 "then validation does not execute and the original result should be returned" {
-                    val validator: Validator<String> = DummyValidator(
+                    val validator: Validator<Unit, Unit, String> = DummyValidator(
                         result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Object.IsEmpty)
                     )
-                    val validated = reader.validation(validator).read(CONTEXT, LOCATION, JSON_VALUE)
+                    val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
                     validated shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.PathMissing

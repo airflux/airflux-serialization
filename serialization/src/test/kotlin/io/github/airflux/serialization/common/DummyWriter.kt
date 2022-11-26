@@ -19,8 +19,8 @@ package io.github.airflux.serialization.common
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-internal class DummyWriter<T : Any>(val result: (T) -> ValueNode?) : Writer<T> {
-    override fun write(context: WriterContext, location: Location, value: T): ValueNode? = result(value)
+internal class DummyWriter<CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<CTX, T> {
+    override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? = result(value)
 }

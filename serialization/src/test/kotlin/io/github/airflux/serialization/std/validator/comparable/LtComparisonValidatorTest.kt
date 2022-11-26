@@ -17,14 +17,12 @@
 package io.github.airflux.serialization.std.validator.comparable
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.validator.comparison.LtComparisonValidator
 import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -33,68 +31,57 @@ import io.kotest.matchers.shouldBe
 internal class LtComparisonValidatorTest : FreeSpec() {
 
     companion object {
-        private val LOCATION: Location = Location.empty
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
         private const val VALUE: Int = 2
     }
 
     init {
 
         "The string validator Gt" - {
-            val validator: Validator<Int> = StdComparisonValidator.lt(VALUE)
+            val validator: Validator<EB, Unit, Int> = StdComparisonValidator.lt(VALUE)
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when a value is less than the allowed value" - {
+                val value = VALUE - 1
 
-                "when the test condition is false" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, VALUE)
-                    }
-                    exception.message shouldBe "The error builder '${LtComparisonValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    LtComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Lt)
-                )
+            "when a value is equal to the allowed value" - {
+                val value = VALUE
 
-                "when a value is less than the allowed value" - {
-                    val value = VALUE - 1
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, value)
 
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, value)
-                        errors.shouldBeNull()
-                    }
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
+                    )
                 }
+            }
 
-                "when a value is equal to the allowed value" - {
-                    val value = VALUE
+            "when a value is greater than the allowed value" - {
+                val value = VALUE + 1
 
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, value)
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, value)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
-                        )
-                    }
-                }
-
-                "when a value is greater than the allowed value" - {
-                    val value = VALUE + 1
-
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, value)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
-                        )
-                    }
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
+                    )
                 }
             }
         }
+    }
+
+    internal class EB : LtComparisonValidator.ErrorBuilder {
+        override fun ltComparisonError(expected: Number, actual: Number): ReaderResult.Error =
+            JsonErrors.Validation.Numbers.Lt(expected = expected, actual = actual)
     }
 }

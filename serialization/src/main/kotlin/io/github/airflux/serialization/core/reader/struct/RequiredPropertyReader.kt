@@ -16,11 +16,10 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 /**
@@ -30,11 +29,14 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
  * - If a node is not found ([lookup] is [Lookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <T : Any> readRequired(context: ReaderContext, lookup: Lookup, using: Reader<T>): ReaderResult<T> =
+public fun <EB, CTX, T : Any> readRequired(
+    env: ReaderEnv<EB, CTX>,
+    lookup: Lookup,
+    using: Reader<EB, CTX, T>
+): ReaderResult<T>
+    where EB : PathMissingErrorBuilder =
     when (lookup) {
-        is Lookup.Defined -> using.read(context, lookup.location, lookup.value)
-        is Lookup.Undefined -> {
-            val errorBuilder = context[PathMissingErrorBuilder]
-            ReaderResult.Failure(location = lookup.location, error = errorBuilder.build())
-        }
+        is Lookup.Defined -> using.read(env, lookup.location, lookup.value)
+        is Lookup.Undefined ->
+            ReaderResult.Failure(location = lookup.location, error = env.errorBuilders.pathMissingError())
     }

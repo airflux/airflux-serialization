@@ -23,26 +23,26 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.NullNode
 
-public fun <T : Any> nullable(reader: Reader<T>): ArrayItemSpec.Nullable<T?> =
+public fun <EB, CTX, T : Any> nullable(reader: Reader<EB, CTX, T>): ArrayItemSpec.Nullable<EB, CTX, T?> =
     ArrayItemSpec.Nullable(
-        reader = { context, location, source ->
+        reader = { env, location, source ->
             if (source is NullNode)
                 ReaderResult.Success(value = null)
             else
-                reader.read(context, location, source)
+                reader.read(env, location, source)
         }
     )
 
-public infix fun <T> ArrayItemSpec.Nullable<T>.validation(
-    validator: Validator<T?>
-): ArrayItemSpec.Nullable<T> =
+public infix fun <EB, CTX, T> ArrayItemSpec.Nullable<EB, CTX, T>.validation(
+    validator: Validator<EB, CTX, T?>
+): ArrayItemSpec.Nullable<EB, CTX, T> =
     ArrayItemSpec.Nullable(
-        reader = { context, location, source ->
-            reader.read(context, location, source).validation(context, location, validator)
+        reader = { env, location, source ->
+            reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <T> ArrayItemSpec.Nullable<T>.or(
-    alt: ArrayItemSpec.Nullable<T>
-): ArrayItemSpec.Nullable<T> =
+public infix fun <EB, CTX, T> ArrayItemSpec.Nullable<EB, CTX, T>.or(
+    alt: ArrayItemSpec.Nullable<EB, CTX, T>
+): ArrayItemSpec.Nullable<EB, CTX, T> =
     ArrayItemSpec.Nullable(reader = reader or alt.reader)

@@ -18,6 +18,7 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item.specificat
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.writer.Writer
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -27,7 +28,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
         "The ArrayItemSpec#NonNullable type" - {
 
             "when created the instance of a spec of the non-nullable item" - {
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nonNullable(writer = writer)
 
                 "then the instance should contain the writer passed during initialization" {

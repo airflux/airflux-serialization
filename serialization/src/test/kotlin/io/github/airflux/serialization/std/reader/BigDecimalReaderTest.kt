@@ -20,8 +20,8 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -33,7 +33,9 @@ import java.math.BigDecimal
 internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
+        private val BigDecimalReader = bigDecimalReader<EB, Unit>()
     }
 
     init {
@@ -45,14 +47,14 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
                     val source: ValueNode = NumberNode.valueOf(value)!!
-                    val result = BigDecimalReader.read(CONTEXT, Location.empty, source)
+                    val result = BigDecimalReader.read(ENV, LOCATION, source)
                     result.assertAsSuccess(value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = BigDecimalReader.read(CONTEXT, Location.empty, source)
+                val result = BigDecimalReader.read(ENV, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -61,5 +63,10 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 )
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

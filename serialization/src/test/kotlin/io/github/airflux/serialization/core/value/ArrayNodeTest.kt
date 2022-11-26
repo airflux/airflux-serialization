@@ -102,7 +102,6 @@ internal class ArrayNodeTest {
         )
     }
 
-    //TODO
     @Test
     fun `Testing the equals contract of the StringNode class`() {
         ObjectContract.checkEqualsContract(

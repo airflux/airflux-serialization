@@ -22,28 +22,28 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class NullablePropertyWriterTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The writeNullable function" - {
-            val writer: Writer<String> = DummyWriter { StringNode(it) }
+            val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
 
             "when a value is not null" - {
                 val value = "value"
 
                 "should return the StringNode value" {
                     val result: ValueNode? =
-                        writeNullable(context = CONTEXT, location = LOCATION, using = writer, value = value)
+                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
                     result shouldBe StringNode(value)
                 }
             }
@@ -53,7 +53,7 @@ internal class NullablePropertyWriterTest : FreeSpec() {
 
                 "should return the NullNode value" {
                     val result: ValueNode? =
-                        writeNullable(context = CONTEXT, location = LOCATION, using = writer, value = value)
+                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
                     result shouldBe NullNode
                 }
             }

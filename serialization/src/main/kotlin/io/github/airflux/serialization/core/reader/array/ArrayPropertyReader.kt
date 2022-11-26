@@ -17,12 +17,11 @@
 package io.github.airflux.serialization.core.reader.array
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.AdditionalItemsErrorBuilder
-import io.github.airflux.serialization.core.reader.context.option.failFast
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -33,32 +32,37 @@ import io.github.airflux.serialization.core.value.ArrayNode
  * @param errorIfAdditionalItems return error if the number of items of an array is more than the number of the reader
  * for prefix items of an array
  */
-public fun <T> readArray(
-    context: ReaderContext,
+public fun <EB, CTX, T> readArray(
+    env: ReaderEnv<EB, CTX>,
     location: Location,
     source: ArrayNode<*>,
-    prefixItems: List<Reader<T>>,
+    prefixItems: List<Reader<EB, CTX, T>>,
     errorIfAdditionalItems: Boolean
-): ReaderResult<List<T>> = source.read(
-    context = context,
-    location = location,
-    prefixItems = prefixItems,
-    items = null,
-    errorIfAdditionalItems = errorIfAdditionalItems
-)
+): ReaderResult<List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption =
+    source.read(
+        env = env,
+        location = location,
+        prefixItems = prefixItems,
+        items = null,
+        errorIfAdditionalItems = errorIfAdditionalItems
+    )
 
 /**
  * Read a node which represent as array.
  * @param items the reader for items of an array
  */
-public fun <T> readArray(
-    context: ReaderContext,
+public fun <EB, CTX, T> readArray(
+    env: ReaderEnv<EB, CTX>,
     location: Location,
     source: ArrayNode<*>,
-    items: Reader<T>
-): ReaderResult<List<T>> =
+    items: Reader<EB, CTX, T>
+): ReaderResult<List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption =
     source.read(
-        context = context,
+        env = env,
         location = location,
         prefixItems = emptyList(),
         items = items,
@@ -70,47 +74,55 @@ public fun <T> readArray(
  * @param prefixItems the reader for prefix items of an array
  * @param items the reader for items of an array
  */
-public fun <T> readArray(
-    context: ReaderContext,
+public fun <EB, CTX, T> readArray(
+    env: ReaderEnv<EB, CTX>,
     location: Location,
     source: ArrayNode<*>,
-    prefixItems: List<Reader<T>>,
-    items: Reader<T>
-): ReaderResult<List<T>> = source.read(
-    context = context,
-    location = location,
-    prefixItems = prefixItems,
-    items = items,
-    errorIfAdditionalItems = false
-)
+    prefixItems: List<Reader<EB, CTX, T>>,
+    items: Reader<EB, CTX, T>
+): ReaderResult<List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption =
+    source.read(
+        env = env,
+        location = location,
+        prefixItems = prefixItems,
+        items = items,
+        errorIfAdditionalItems = false
+    )
 
-internal fun <T> ArrayNode<*>.read(
-    context: ReaderContext,
+internal fun <EB, CTX, T> ArrayNode<*>.read(
+    env: ReaderEnv<EB, CTX>,
     location: Location,
-    prefixItems: List<Reader<T>>,
-    items: Reader<T>?,
+    prefixItems: List<Reader<EB, CTX, T>>,
+    items: Reader<EB, CTX, T>?,
     errorIfAdditionalItems: Boolean
-): ReaderResult<List<T>> {
+): ReaderResult<List<T>>
+    where EB : AdditionalItemsErrorBuilder,
+          CTX : FailFastOption {
 
-    fun <T> getReader(idx: Int, prefixItems: List<Reader<T>>, itemsReader: Reader<T>?): Reader<T>? =
+    fun <EB, CTX, T> getReader(
+        idx: Int,
+        prefixItems: List<Reader<EB, CTX, T>>,
+        itemsReader: Reader<EB, CTX, T>?
+    ): Reader<EB, CTX, T>? =
         if (idx < prefixItems.size) prefixItems[idx] else itemsReader
 
-    val failFast = context.failFast
+    val failFast = env.context.failFast
     val initial: ReaderResult<MutableList<T>> = ReaderResult.Success(ArrayList(this.size))
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
-        val reader: Reader<T> = getReader(idx, prefixItems, items)
-            ?: return if (errorIfAdditionalItems) {
-                val errorBuilder = context[AdditionalItemsErrorBuilder]
-                acc + ReaderResult.Failure(currentLocation, errorBuilder.build())
-            } else
-                acc
-
-        reader.read(context, currentLocation, elem)
-            .fold(
+        getReader(idx, prefixItems, items)
+            ?.read(env, currentLocation, elem)
+            ?.fold(
                 ifFailure = { failure -> if (!failFast) acc + failure else return failure },
                 ifSuccess = { success -> acc + success }
             )
+            ?: if (errorIfAdditionalItems) {
+                val failure = ReaderResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
+                if (failFast) return failure else acc + failure
+            } else
+                acc
     }
 }
 

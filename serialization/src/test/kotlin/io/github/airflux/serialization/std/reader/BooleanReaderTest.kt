@@ -20,8 +20,8 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -31,7 +31,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
+        private val BooleanReader = booleanReader<EB, Unit>()
     }
 
     init {
@@ -40,19 +42,19 @@ internal class BooleanReaderTest : FreeSpec() {
 
             "should return value the true" {
                 val source: ValueNode = BooleanNode.valueOf(true)
-                val result = BooleanReader.read(CONTEXT, Location.empty, source)
+                val result = BooleanReader.read(ENV, LOCATION, source)
                 result.assertAsSuccess(value = true)
             }
 
             "should return value the false" {
                 val source: ValueNode = BooleanNode.valueOf(false)
-                val result = BooleanReader.read(CONTEXT, Location.empty, source)
+                val result = BooleanReader.read(ENV, LOCATION, source)
                 result.assertAsSuccess(value = false)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = BooleanReader.read(CONTEXT, Location.empty, source)
+                val result = BooleanReader.read(ENV, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -64,5 +66,10 @@ internal class BooleanReaderTest : FreeSpec() {
                 )
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

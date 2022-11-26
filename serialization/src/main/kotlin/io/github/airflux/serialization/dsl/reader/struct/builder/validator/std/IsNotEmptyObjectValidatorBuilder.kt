@@ -21,12 +21,13 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.Objec
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.std.validator.struct.IsNotEmptyObjectValidator
 
-internal class IsNotEmptyObjectValidatorBuilder : ObjectValidatorBuilder {
+internal class IsNotEmptyObjectValidatorBuilder<EB, CTX> : ObjectValidatorBuilder<EB, CTX>
+    where EB : IsNotEmptyObjectValidator.ErrorBuilder {
 
     override val key: ObjectValidatorBuilder.Key<*> = Key
-    override fun build(properties: ObjectProperties): ObjectValidator = validator
+    override fun build(properties: ObjectProperties<EB, CTX>): ObjectValidator<EB, CTX> = validator
 
-    private val validator = IsNotEmptyObjectValidator()
+    private val validator = IsNotEmptyObjectValidator<EB, CTX>()
 
-    companion object Key : ObjectValidatorBuilder.Key<IsNotEmptyObjectValidatorBuilder>
+    companion object Key : ObjectValidatorBuilder.Key<IsNotEmptyObjectValidatorBuilder<*, *>>
 }

@@ -20,18 +20,17 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsNumberTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("user")
-        private val reader =
-            { _: ReaderContext, _: Location, text: String -> ReaderResult.Success(text.toInt()) }
+        private val READER = { _: ReaderEnv<EB, Unit>, _: Location, text: String -> ReaderResult.Success(text.toInt()) }
     }
 
     init {
@@ -41,7 +40,7 @@ internal class ReadAsNumberTest : FreeSpec() {
 
                 "should return the number value" {
                     val json: ValueNode = NumberNode.valueOf(Int.MAX_VALUE)
-                    val result = json.readAsNumber(CONTEXT, LOCATION, reader)
+                    val result = json.readAsNumber(ENV, LOCATION, READER)
                     result.assertAsSuccess(value = Int.MAX_VALUE)
                 }
             }
@@ -49,7 +48,7 @@ internal class ReadAsNumberTest : FreeSpec() {
 
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
-                    val result = json.readAsNumber(CONTEXT, LOCATION, reader)
+                    val result = json.readAsNumber(ENV, LOCATION, READER)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = LOCATION,
@@ -62,5 +61,10 @@ internal class ReadAsNumberTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

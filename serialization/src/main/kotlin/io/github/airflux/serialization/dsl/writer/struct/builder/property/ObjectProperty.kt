@@ -19,49 +19,49 @@ package io.github.airflux.serialization.dsl.writer.struct.builder.property
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.struct.writeNonNullable
 import io.github.airflux.serialization.core.writer.struct.writeNullable
 import io.github.airflux.serialization.core.writer.struct.writeOptional
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.ObjectPropertySpec
 
-public sealed class ObjectProperty<T : Any> {
+public sealed class ObjectProperty<CTX, T : Any> {
     public abstract val name: String
-    public abstract fun write(context: WriterContext, location: Location, value: T): ValueNode?
+    public abstract fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode?
 
-    public class NonNullable<T : Any, P : Any> private constructor(
+    public class NonNullable<CTX, T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P,
-        private val writer: Writer<P>
-    ) : ObjectProperty<T>() {
+        private val writer: Writer<CTX, P>
+    ) : ObjectProperty<CTX, T>() {
 
-        internal constructor(spec: ObjectPropertySpec.NonNullable<T, P>) : this(spec.name, spec.from, spec.writer)
+        internal constructor(spec: ObjectPropertySpec.NonNullable<CTX, T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: WriterContext, location: Location, value: T): ValueNode? =
-            writeNonNullable(context = context, location = location, using = writer, value = from(value))
+        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
+            writeNonNullable(env = env, location = location, using = writer, value = from(value))
     }
 
-    public class Optional<T : Any, P : Any> private constructor(
+    public class Optional<CTX, T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P?,
-        private val writer: Writer<P>
-    ) : ObjectProperty<T>() {
+        private val writer: Writer<CTX, P>
+    ) : ObjectProperty<CTX, T>() {
 
-        internal constructor(spec: ObjectPropertySpec.Optional<T, P>) : this(spec.name, spec.from, spec.writer)
+        internal constructor(spec: ObjectPropertySpec.Optional<CTX, T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: WriterContext, location: Location, value: T): ValueNode? =
-            writeOptional(context = context, location = location, using = writer, value = from(value))
+        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
+            writeOptional(env = env, location = location, using = writer, value = from(value))
     }
 
-    public class Nullable<T : Any, P : Any> private constructor(
+    public class Nullable<CTX, T : Any, P : Any> private constructor(
         override val name: String,
         private val from: (T) -> P?,
-        private val writer: Writer<P>
-    ) : ObjectProperty<T>() {
+        private val writer: Writer<CTX, P>
+    ) : ObjectProperty<CTX, T>() {
 
-        internal constructor(spec: ObjectPropertySpec.Nullable<T, P>) : this(spec.name, spec.from, spec.writer)
+        internal constructor(spec: ObjectPropertySpec.Nullable<CTX, T, P>) : this(spec.name, spec.from, spec.writer)
 
-        override fun write(context: WriterContext, location: Location, value: T): ValueNode? =
-            writeNullable(context = context, location = location, using = writer, value = from(value))
+        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
+            writeNullable(env = env, location = location, using = writer, value = from(value))
     }
 }

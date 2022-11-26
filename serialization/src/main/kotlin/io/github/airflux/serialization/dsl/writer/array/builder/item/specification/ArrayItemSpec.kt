@@ -18,9 +18,12 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item.specificat
 
 import io.github.airflux.serialization.core.writer.Writer
 
-public sealed interface ArrayItemSpec<in T> {
+public sealed interface ArrayItemSpec<CTX, in T> {
 
-    public class NonNullable<T : Any> internal constructor(public val writer: Writer<T>) : ArrayItemSpec<T>
-    public class Optional<T> internal constructor(public val writer: Writer<T & Any>) : ArrayItemSpec<T>
-    public class Nullable<T> internal constructor(public val writer: Writer<T & Any>) : ArrayItemSpec<T>
+    public class NonNullable<CTX, T : Any> internal constructor(public val writer: Writer<CTX, T>) :
+        ArrayItemSpec<CTX, T>
+
+    public class Optional<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
+
+    public class Nullable<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
 }

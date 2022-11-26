@@ -17,44 +17,10 @@
 package io.github.airflux.serialization.dsl.reader.array.builder.validator
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 
-public fun interface ArrayValidator {
-
-    public fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure?
-
-    /*
-    * | This | Other  | Result |
-    * |------|--------|--------|
-    * | S    | ignore | S      |
-    * | F    | S      | S      |
-    * | F    | F`     | F + F` |
-    */
-    public infix fun or(alt: ArrayValidator): ArrayValidator {
-        val self = this
-        return ArrayValidator { context, location, source ->
-            self.validate(context, location, source)
-                ?.let { error ->
-                    alt.validate(context, location, source)
-                        ?.let { error + it }
-                }
-        }
-    }
-
-    /*
-     * | This | Other  | Result |
-     * |------|--------|--------|
-     * | S    | S      | S      |
-     * | S    | F      | F      |
-     * | F    | ignore | F      |
-     */
-    public infix fun and(alt: ArrayValidator): ArrayValidator {
-        val self = this
-        return ArrayValidator { context, location, source ->
-            val result = self.validate(context, location, source)
-            result ?: alt.validate(context, location, source)
-        }
-    }
+public fun interface ArrayValidator<EB, CTX> {
+    public fun validate(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure?
 }

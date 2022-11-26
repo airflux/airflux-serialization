@@ -18,5 +18,5 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item.specificat
 
 import io.github.airflux.serialization.core.writer.Writer
 
-public fun <T : Any> nonNullable(writer: Writer<T>): ArrayItemSpec.NonNullable<T> =
+public fun <CTX, T : Any> nonNullable(writer: Writer<CTX, T>): ArrayItemSpec.NonNullable<CTX, T> =
     ArrayItemSpec.NonNullable(writer)

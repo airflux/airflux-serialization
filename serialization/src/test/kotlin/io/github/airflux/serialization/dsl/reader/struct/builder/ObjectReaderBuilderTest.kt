@@ -20,9 +20,11 @@ import io.github.airflux.serialization.common.DummyObjectValidatorBuilder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.option.FailFast
+import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ObjectNode
@@ -46,11 +48,9 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
         private const val PROPERTY_NAME = "name"
         private const val USER_NAME = "user"
         private const val DEFAULT_VALUE = "none"
-        private val DEFAULT = { _: ReaderContext, _: Location -> DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderEnv<EB, CTX> -> DEFAULT_VALUE }
 
-        private val CONTEXT = ReaderContext(InvalidTypeErrorBuilder(JsonErrors::InvalidType))
         private val LOCATION = Location.empty
-
         private val MinPropertiesError = JsonErrors.Validation.Object.MinProperties(expected = 1, actual = 0)
     }
 
@@ -59,11 +59,11 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
         "The ObjectReaderBuilder type" - {
 
             "when no errors in the reader" - {
-                val validator = DummyObjectValidatorBuilder(
-                    key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                    key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
                     result = null
                 )
-                val reader = structReader<DTO> {
+                val reader: Reader<EB, CTX, DTO> = structReader {
                     validation {
                         +validator
                     }
@@ -73,49 +73,63 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
                 }
 
-                "then should return successful value" {
-                    val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                    val result = reader.read(context = CONTEXT, location = LOCATION, source)
-                    result as ReaderResult.Success
-                    result.value shouldBe DTO(name = USER_NAME)
+                "when fail-fast is true" - {
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+
+                    "then should return successful value" {
+                        val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                        val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                        result as ReaderResult.Success
+                        result.value shouldBe DTO(name = USER_NAME)
+                    }
+                }
+
+                "when fail-fast is false" - {
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                    "then should return successful value" {
+                        val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                        val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                        result as ReaderResult.Success
+                        result.value shouldBe DTO(name = USER_NAME)
+                    }
                 }
             }
 
             "when errors occur in the reader" - {
 
-                "when source is not the object type" - {
-                    val source = StringNode(USER_NAME)
-                    val reader = structReader<DTO> {
-                        val name = property(propertySpec(value = USER_NAME))
-                        returns { _, _ ->
-                            DTO(name = +name).success()
+                "when fail-fast is true" - {
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+
+                    "when source is not the object type" - {
+                        val source = StringNode(USER_NAME)
+                        val reader: Reader<EB, CTX, DTO> = structReader {
+                            val name = property(propertySpec(value = USER_NAME))
+                            returns { _, _ ->
+                                DTO(name = +name).success()
+                            }
+                        }
+
+                        "then the reader should return the invalid type error" {
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION,
+                                    error = JsonErrors.InvalidType(
+                                        expected = ValueNode.Type.OBJECT,
+                                        actual = ValueNode.Type.STRING
+                                    )
+                                )
+                            )
                         }
                     }
 
-                    "then the reader should return the invalid type error" {
-                        val result = reader.read(context = CONTEXT, location = LOCATION, source)
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(
-                                location = LOCATION,
-                                error = JsonErrors.InvalidType(
-                                    expected = ValueNode.Type.OBJECT,
-                                    actual = ValueNode.Type.STRING
-                                )
-                            )
-                        )
-                    }
-                }
-
-                "when fail-fast is true" - {
-                    val contextWithFailFastTrue = CONTEXT + FailFast(true)
-
                     "when the validator returns an error" - {
-                        val validator = DummyObjectValidatorBuilder(
-                            key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                        val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                            key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
-                        val reader = structReader<DTO> {
+                        val reader: Reader<EB, CTX, DTO> = structReader {
                             validation {
                                 +validator
                             }
@@ -127,7 +141,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                         "then the reader should return the validation error" {
                             val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                            val result = reader.read(context = contextWithFailFastTrue, location = LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError)
@@ -136,15 +150,15 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                     }
 
                     "when the reader of an property returns an error" - {
-                        val validator = DummyObjectValidatorBuilder(
-                            key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
+                        val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                            key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
                             result = null
                         )
-                        val reader = structReader<DTO> {
+                        val reader: Reader<EB, CTX, DTO> = structReader {
                             validation {
                                 +validator
                             }
-                            val name: ObjectProperty.Required<String> =
+                            val name: ObjectProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, _ ->
                                 DTO(name = +name).success()
@@ -153,8 +167,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                         "then the reader should return the validation error" {
                             val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                            val result =
-                                reader.read(context = contextWithFailFastTrue, location = LOCATION, source = source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result as ReaderResult.Failure
                             result.causes shouldContainExactly listOf(
                                 ReaderResult.Failure.Cause(
@@ -164,42 +177,149 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                             )
                         }
                     }
+
+                    "when the validator and the reader of an property may return some errors" - {
+                        val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                            key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
+                            result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
+                        )
+                        val reader: Reader<EB, CTX, DTO> = structReader {
+                            validation {
+                                +validator
+                            }
+                            val name: ObjectProperty.Required<EB, CTX, String> =
+                                property(propertySpec(error = JsonErrors.PathMissing))
+                            returns { _, _ ->
+                                DTO(name = +name).success()
+                            }
+                        }
+
+                        "then only an error of validation should be returns" {
+                            val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
+                            )
+                        }
+                    }
                 }
 
                 "when fail-fast is false" - {
-                    val contextWithFailFastFalse = CONTEXT + FailFast(false)
-                    val validator = DummyObjectValidatorBuilder(
-                        key = DummyObjectValidatorBuilder.key<DummyObjectValidatorBuilder>(),
-                        result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
-                    )
-                    val reader = structReader<DTO> {
-                        validation {
-                            +validator
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+
+                    "when source is not the object type" - {
+                        val source = StringNode(USER_NAME)
+                        val reader: Reader<EB, CTX, DTO> = structReader {
+                            val name = property(propertySpec(value = USER_NAME))
+                            returns { _, _ ->
+                                DTO(name = +name).success()
+                            }
                         }
-                        val name: ObjectProperty.Required<String> =
-                            property(propertySpec(error = JsonErrors.PathMissing))
-                        returns { _, _ ->
-                            DTO(name = +name).success()
+
+                        "then the reader should return the invalid type error" {
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION,
+                                    error = JsonErrors.InvalidType(
+                                        expected = ValueNode.Type.OBJECT,
+                                        actual = ValueNode.Type.STRING
+                                    )
+                                )
+                            )
                         }
                     }
 
-                    "then all error should be returns" {
-                        val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
-                        val result = reader.read(context = contextWithFailFastFalse, location = LOCATION, source)
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
-                            ReaderResult.Failure.Cause(
-                                location = LOCATION.append(PROPERTY_NAME),
-                                error = JsonErrors.PathMissing
-                            )
+                    "when the validator returns an error" - {
+                        val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                            key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
+                            result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
+                        val reader: Reader<EB, CTX, DTO> = structReader {
+                            validation {
+                                +validator
+                            }
+                            val name = property(propertySpec(value = USER_NAME))
+                            returns { _, _ ->
+                                DTO(name = +name).success()
+                            }
+                        }
+
+                        "then the reader should return the validation error" {
+                            val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError)
+                            )
+                        }
+                    }
+
+                    "when the reader of an property returns an error" - {
+                        val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                            key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
+                            result = null
+                        )
+                        val reader: Reader<EB, CTX, DTO> = structReader {
+                            validation {
+                                +validator
+                            }
+                            val name: ObjectProperty.Required<EB, CTX, String> =
+                                property(propertySpec(error = JsonErrors.PathMissing))
+                            returns { _, _ ->
+                                DTO(name = +name).success()
+                            }
+                        }
+
+                        "then the reader should return the validation error" {
+                            val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append(PROPERTY_NAME),
+                                    error = JsonErrors.PathMissing
+                                )
+                            )
+                        }
+                    }
+
+                    "when the validator and the reader of an property may return some errors" - {
+                        val validator = DummyObjectValidatorBuilder<EB, CTX>(
+                            key = DummyObjectValidatorBuilder.key<EB, CTX, DummyObjectValidatorBuilder<EB, CTX>>(),
+                            result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
+                        )
+                        val reader: Reader<EB, CTX, DTO> = structReader {
+                            validation {
+                                +validator
+                            }
+                            val name: ObjectProperty.Required<EB, CTX, String> =
+                                property(propertySpec(error = JsonErrors.PathMissing))
+                            returns { _, _ ->
+                                DTO(name = +name).success()
+                            }
+                        }
+
+                        "then all error should be returns" {
+                            val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result as ReaderResult.Failure
+                            result.causes shouldContainExactly listOf(
+                                ReaderResult.Failure.Cause(location = LOCATION, error = MinPropertiesError),
+                                ReaderResult.Failure.Cause(
+                                    location = LOCATION.append(PROPERTY_NAME),
+                                    error = JsonErrors.PathMissing
+                                )
+                            )
+                        }
                     }
                 }
             }
 
             "when some exception was thrown in the result builder" - {
-                val reader = structReader<DTO> {
+                val reader: Reader<EB, CTX, DTO> = structReader {
                     property(propertySpec(value = USER_NAME))
 
                     returns { _, _ ->
@@ -209,18 +329,33 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                 val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
 
-                "then it exception should be thrown out from the reader" {
-                    shouldThrow<IllegalStateException> {
-                        reader.read(context = CONTEXT, location = LOCATION, source)
+                "when fail-fast is true" - {
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+
+                    "then it exception should be thrown out from the reader" {
+                        shouldThrow<IllegalStateException> {
+                            reader.read(envWithFailFastIsTrue, LOCATION, source)
+                        }
+                    }
+                }
+
+                "when fail-fast is false" - {
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+
+                    "then it exception should be thrown out from the reader" {
+                        shouldThrow<IllegalStateException> {
+                            reader.read(envWithFailFastIsFalse, LOCATION, source)
+                        }
                     }
                 }
             }
 
             "the StructNode#read extension-function" - {
+                val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
                 val source = ObjectNode(PROPERTY_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
-                    val property: ObjectProperty = ObjectProperty.Required(
+                    val property: ObjectProperty<EB, CTX> = ObjectProperty.Required(
                         required(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME)
@@ -229,7 +364,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            source.read(CONTEXT, LOCATION, property)
+                            source.read(envWithFailFastIsTrue, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -237,7 +372,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the defaultable" - {
-                    val property: ObjectProperty = ObjectProperty.Defaultable(
+                    val property: ObjectProperty<EB, CTX> = ObjectProperty.Defaultable(
                         defaultable(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
@@ -247,7 +382,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            source.read(CONTEXT, LOCATION, property)
+                            source.read(envWithFailFastIsTrue, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -255,7 +390,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the optional" - {
-                    val property: ObjectProperty = ObjectProperty.Optional(
+                    val property: ObjectProperty<EB, CTX> = ObjectProperty.Optional(
                         optional(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME)
@@ -264,7 +399,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            source.read(CONTEXT, LOCATION, property)
+                            source.read(envWithFailFastIsTrue, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -272,7 +407,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the optional with default" - {
-                    val property: ObjectProperty = ObjectProperty.OptionalWithDefault(
+                    val property: ObjectProperty<EB, CTX> = ObjectProperty.OptionalWithDefault(
                         optionalWithDefault(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
@@ -282,7 +417,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            source.read(CONTEXT, LOCATION, property)
+                            source.read(envWithFailFastIsTrue, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -290,7 +425,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the nullable" - {
-                    val property: ObjectProperty = ObjectProperty.Nullable(
+                    val property: ObjectProperty<EB, CTX> = ObjectProperty.Nullable(
                         nullable(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME)
@@ -299,7 +434,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            source.read(CONTEXT, LOCATION, property)
+                            source.read(envWithFailFastIsTrue, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -307,7 +442,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the nullable with default" - {
-                    val property: ObjectProperty = ObjectProperty.NullableWithDefault(
+                    val property: ObjectProperty<EB, CTX> = ObjectProperty.NullableWithDefault(
                         nullableWithDefault(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
@@ -317,7 +452,7 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
 
                     "then function should return a result" {
                         val result = with(ObjectReader) {
-                            source.read(CONTEXT, LOCATION, property)
+                            source.read(envWithFailFastIsTrue, LOCATION, property)
                         }
                         result as ReaderResult.Success
                         result.value shouldBe USER_NAME
@@ -327,15 +462,30 @@ internal class ObjectReaderBuilderTest : FreeSpec() {
         }
     }
 
-    fun <T : Any> propertySpec(value: T) = required(name = PROPERTY_NAME, reader = createReader(value = value))
+    private fun <T : Any> propertySpec(value: T) = required(name = PROPERTY_NAME, reader = createReader(value = value))
 
-    fun <T : Any> propertySpec(error: ReaderResult.Error) = required(
+    private fun <T : Any> propertySpec(error: ReaderResult.Error) = required(
         name = PROPERTY_NAME,
-        reader = DummyReader<T>(result = ReaderResult.Failure(location = LOCATION.append(PROPERTY_NAME), error = error))
+        reader = DummyReader<EB, CTX, T>(
+            result = ReaderResult.Failure(
+                location = LOCATION.append(PROPERTY_NAME),
+                error = error
+            )
+        )
     )
 
-    fun <T : Any> createReader(value: T): DummyReader<T> =
+    private fun <T : Any> createReader(value: T): DummyReader<EB, CTX, T> =
         DummyReader(result = ReaderResult.Success(value = value))
 
     internal data class DTO(val name: String)
+
+    internal class EB : InvalidTypeErrorBuilder,
+                        PathMissingErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
+
+        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+    }
+
+    internal class CTX(override val failFast: Boolean) : FailFastOption
 }

@@ -17,13 +17,12 @@
 package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.kotest.assertions.throwables.shouldThrow
+import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -32,55 +31,41 @@ import io.kotest.matchers.shouldBe
 internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
 
     companion object {
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The array validator IsNotEmpty" - {
-            val validator = StdArrayValidator.isNotEmpty.build()
+            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.isNotEmpty<EB, Unit>().build()
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when an array is empty" - {
+                val source: ArrayNode<StringNode> = ArrayNode()
 
-                "when the test condition is false" {
-                    val source: ArrayNode<StringNode> = ArrayNode()
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, source)
 
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, source)
-                    }
-                    exception.message shouldBe "The error builder '${IsNotEmptyArrayValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Arrays.IsEmpty
+                    )
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    IsNotEmptyArrayValidator.ErrorBuilder { JsonErrors.Validation.Arrays.IsEmpty }
-                )
+            "when an array is not empty" - {
+                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
 
-                "when an array is empty" - {
-                    val source: ArrayNode<StringNode> = ArrayNode()
-
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, source)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Arrays.IsEmpty
-                        )
-                    }
-                }
-
-                "when an array is not empty" - {
-                    val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
-
-                    "then the validator should do not return any errors" {
-                        val failure = validator.validate(context, LOCATION, source)
-                        failure.shouldBeNull()
-                    }
+                "then the validator should do not return any errors" {
+                    val failure = validator.validate(ENV, LOCATION, source)
+                    failure.shouldBeNull()
                 }
             }
         }
+    }
+
+    internal class EB : IsNotEmptyArrayValidator.ErrorBuilder {
+        override fun isNotEmptyArrayError(): ReaderResult.Error = JsonErrors.Validation.Arrays.IsEmpty
     }
 }

@@ -16,28 +16,25 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.error.get
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.value.readAsNumber
 
 /**
  * Reader for primitive [Byte] type.
  */
-public object ByteReader : Reader<Byte> {
-    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<Byte> =
-        source.readAsNumber(context, location) { ctx, l, value ->
+public fun <EB, CTX> byteReader(): Reader<EB, CTX, Byte>
+    where EB : InvalidTypeErrorBuilder,
+          EB : ValueCastErrorBuilder =
+    Reader { env, location, source ->
+        source.readAsNumber(env, location) { e, l, value ->
             try {
                 value.toByte().success()
             } catch (expected: NumberFormatException) {
-                val errorBuilder = ctx[ValueCastErrorBuilder]
-                errorBuilder.build(value, Byte::class).failure(location = l)
+                e.errorBuilders.valueCastError(value, Byte::class).failure(location = l)
             }
         }
-}
+    }

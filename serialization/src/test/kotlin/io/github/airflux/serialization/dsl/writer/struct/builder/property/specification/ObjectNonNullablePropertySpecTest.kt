@@ -19,7 +19,8 @@ package io.github.airflux.serialization.dsl.writer.struct.builder.property.speci
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -30,7 +31,7 @@ internal class ObjectNonNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
 
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
@@ -40,7 +41,7 @@ internal class ObjectNonNullablePropertySpecTest : FreeSpec() {
 
             "when created the instance of a spec of the non-nullable property" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nonNullable(name = PROPERTY_NAME, from = from, writer = writer)
 
                 "then the property name should equal the passed property name" {
@@ -52,14 +53,14 @@ internal class ObjectNonNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "then the initialized writer should return a property value" {
-                    val result = spec.writer.write(CONTEXT, LOCATION, PROPERTY_VALUE)
+                    val result = spec.writer.write(ENV, LOCATION, PROPERTY_VALUE)
                     result shouldBe StringNode(PROPERTY_VALUE)
                 }
             }
 
             "when the filter was added to the spec" - {
                 val from: (String) -> String = { it }
-                val writer = DummyWriter<String> { StringNode(it) }
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nonNullable(name = PROPERTY_NAME, from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
@@ -72,7 +73,7 @@ internal class ObjectNonNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, PROPERTY_VALUE)
+                    val result = specWithFilter.writer.write(ENV, LOCATION, PROPERTY_VALUE)
 
                     "then a non-null property value should be returned" {
                         result shouldBe StringNode(PROPERTY_VALUE)
@@ -80,7 +81,7 @@ internal class ObjectNonNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(CONTEXT, LOCATION, "")
+                    val result = specWithFilter.writer.write(ENV, LOCATION, "")
 
                     "then the null value should be returned" {
                         result.shouldBeNull()

@@ -21,7 +21,13 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.optional
 import io.kotest.core.spec.style.FreeSpec
@@ -33,8 +39,6 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
     companion object {
         private const val PROPERTY_NAME = "name"
         private const val PROPERTY_VALUE = "user"
-
-        private val CONTEXT = WriterContext()
         private val LOCATION = Location.empty
     }
 
@@ -42,68 +46,55 @@ internal class ObjectWriterBuilderTest : FreeSpec() {
 
         "The ObjectWriterBuilder type" - {
 
-            "when have some propertys for writing to an object" - {
+            "when have some properties for writing to an object" - {
                 val from: (String) -> String = { it }
-                val writer = structWriter {
+                val writer: Writer<CTX, String> = structWriter {
                     property(nonNullable(name = PROPERTY_NAME, from = from, writer = DummyWriter { StringNode(it) }))
                 }
 
-                "then should return the object with some propertys" {
-                    val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
+                "then should return the object with some properties" {
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                    val result = writer.write(env = env, location = LOCATION, value = PROPERTY_VALUE)
                     result shouldBe ObjectNode(PROPERTY_NAME to StringNode(PROPERTY_VALUE))
                 }
             }
 
-            "when no propertys for writing to an object" - {
+            "when no properties for writing to an object" - {
                 val from: (String) -> String? = { null }
-
-                "when the action of the writer was not set" - {
-                    val writer = structWriter {
-                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
-                    }
-
-                    "then should return the empty value of the StructNode type" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
-                        result shouldBe ObjectNode()
-                    }
+                val writer: Writer<CTX, String> = structWriter {
+                    property(optional(name = PROPERTY_NAME, from = from, writer = DummyWriter { StringNode(it) }))
                 }
 
                 "when the action of the writer was set to return empty value" - {
-                    val writer = structWriter {
-                        actionIfEmpty = returnEmptyValue()
-                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
-                    }
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                     "then should return the empty value of the StructNode type" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
+                        val result = writer.write(env = env, location = LOCATION, value = PROPERTY_VALUE)
                         result shouldBe ObjectNode()
                     }
                 }
 
                 "when the action of the writer was set to return nothing" - {
-                    val writer = structWriter {
-                        actionIfEmpty = returnNothing()
-                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
-                    }
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                     "then should return the null value" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
+                        val result = writer.write(env = env, location = LOCATION, value = PROPERTY_VALUE)
                         result.shouldBeNull()
                     }
                 }
 
                 "when the action of the writer was set to return null value" - {
-                    val writer = structWriter {
-                        actionIfEmpty = returnNullValue()
-                        property(optional(name = PROPERTY_NAME, from = from, DummyWriter { StringNode(it) }))
-                    }
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
                     "then should return the NullNode value" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = PROPERTY_VALUE)
+                        val result = writer.write(env = env, location = LOCATION, value = PROPERTY_VALUE)
                         result shouldBe NullNode
                     }
                 }
             }
         }
     }
+
+    internal class CTX(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
+        WriterActionBuilderIfResultIsEmptyOption
 }

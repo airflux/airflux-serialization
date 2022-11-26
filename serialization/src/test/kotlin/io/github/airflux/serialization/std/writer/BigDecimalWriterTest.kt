@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NumberNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
@@ -26,6 +26,7 @@ import java.math.BigDecimal
 internal class BigDecimalWriterTest : FreeSpec() {
 
     companion object {
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
         private const val TEXT_VALUE = "10.50"
         private const val TEXT_VALUE_WITHOUT_TRAILING_ZEROS = "10.5"
@@ -35,37 +36,21 @@ internal class BigDecimalWriterTest : FreeSpec() {
 
         "The big decimal type writer" - {
 
-            "when the writer context does not contain the stripTrailingZeros option" - {
-                val context = WriterContext()
+            "when the stripTrailingZeros option is true" - {
+                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = true)
 
-                "then the writer should return original value" {
-                    val result = BigDecimalWriter.write(context, LOCATION, BigDecimal(TEXT_VALUE))
-                    result shouldBe NumberNode.valueOf(TEXT_VALUE)
+                "then the writer should return the value without trailing zeros" {
+                    val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
+                    result shouldBe NumberNode.valueOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
                 }
             }
 
-            "when the writer context contain the stripTrailingZeros option" - {
+            "when the stripTrailingZeros option is false" - {
+                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = false)
 
-                "when the stripTrailingZeros option is true" - {
-                    val context = WriterContext(
-                        BigDecimalWriter.StripTrailingZeros(true)
-                    )
-
-                    "then the writer should return the value without trailing zeros" {
-                        val result = BigDecimalWriter.write(context, LOCATION, BigDecimal(TEXT_VALUE))
-                        result shouldBe NumberNode.valueOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
-                    }
-                }
-
-                "when the stripTrailingZeros option is false" - {
-                    val context = WriterContext(
-                        BigDecimalWriter.StripTrailingZeros(false)
-                    )
-
-                    "then the writer should return the original value" {
-                        val result = BigDecimalWriter.write(context, LOCATION, BigDecimal(TEXT_VALUE))
-                        result shouldBe NumberNode.valueOf(TEXT_VALUE)
-                    }
+                "then the writer should return the original value" {
+                    val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
+                    result shouldBe NumberNode.valueOf(TEXT_VALUE)
                 }
             }
         }

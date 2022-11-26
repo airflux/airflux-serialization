@@ -10,11 +10,17 @@ import io.github.airflux.quickstart.dto.model.LotStatus
 import io.github.airflux.quickstart.dto.model.Lots
 import io.github.airflux.quickstart.dto.model.Tender
 import io.github.airflux.quickstart.dto.model.Value
-import io.github.airflux.quickstart.dto.reader.context.DefaultReaderContext
 import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
+import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
+import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.dto.writer.ResponseWriter
-import io.github.airflux.quickstart.dto.writer.context.DefaultWriterContext
+import io.github.airflux.quickstart.dto.writer.env.WriterCtx
+import io.github.airflux.quickstart.json.error.JsonErrors
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
 import java.math.BigDecimal
 
 fun main() {
@@ -22,7 +28,17 @@ fun main() {
         registerModule(AirFluxJsonModule)
     }
 
-    val result = JSON.deserialization(mapper = mapper, context = DefaultReaderContext, reader = RequestReader)
+    val env =
+        ReaderEnv(
+            errorBuilders = ReaderErrorBuilders,
+            context = ReaderCtx(failFast = true),
+            exceptionsHandler = exceptionsHandler {
+                exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
+                exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
+            }
+        )
+
+    val result = JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
     when (result) {
         is ReaderResult.Success -> println(result.value)
         is ReaderResult.Failure -> println(result.causes)
@@ -33,7 +49,9 @@ fun main() {
     val tender = Tender(id = "tender-1", title = "title", value = value, lots = Lots(listOf(lot)))
     val response = Response(tender = tender)
 
-    val output = response.serialization(mapper, DefaultWriterContext, ResponseWriter)
+    val writerEnv =
+        WriterEnv(context = WriterCtx(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+    val output = response.serialization(mapper, writerEnv, ResponseWriter)
     println(output)
 }
 

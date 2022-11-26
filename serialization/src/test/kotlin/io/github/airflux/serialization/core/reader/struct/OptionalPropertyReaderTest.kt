@@ -21,8 +21,8 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
@@ -31,10 +31,10 @@ import io.kotest.matchers.shouldBe
 internal class OptionalPropertyReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(PathMissingErrorBuilder(builder = { JsonErrors.PathMissing }))
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
-        private val READER: Reader<String> = DummyReader(ReaderResult.Success(value = VALUE))
+        private val READER: Reader<EB, Unit, String> = DummyReader(ReaderResult.Success(value = VALUE))
     }
 
     init {
@@ -45,7 +45,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 val lookup: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
 
                 "then should return the result of applying the reader" {
-                    val result: ReaderResult<String?> = readOptional(context = CONTEXT, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> = readOptional(env = ENV, lookup = lookup, using = READER)
                     result shouldBe ReaderResult.Success(value = VALUE)
                 }
             }
@@ -54,10 +54,14 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 val lookup: Lookup = Lookup.Undefined(location = LOCATION)
 
                 "then should return the null value" {
-                    val result: ReaderResult<String?> = readOptional(context = CONTEXT, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> = readOptional(env = ENV, lookup = lookup, using = READER)
                     result shouldBe ReaderResult.Success(value = null)
                 }
             }
         }
+    }
+
+    internal class EB : PathMissingErrorBuilder {
+        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
     }
 }

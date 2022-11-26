@@ -21,11 +21,13 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.Objec
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidatorBuilder
 import io.github.airflux.serialization.std.validator.struct.MaxPropertiesObjectValidator
 
-internal class MaxPropertiesObjectValidatorBuilder(private val value: Int) : ObjectValidatorBuilder {
+internal class MaxPropertiesObjectValidatorBuilder<EB, CTX>(private val value: Int) : ObjectValidatorBuilder<EB, CTX>
+    where EB : MaxPropertiesObjectValidator.ErrorBuilder {
 
     override val key: ObjectValidatorBuilder.Key<*> = Key
 
-    override fun build(properties: ObjectProperties): ObjectValidator = MaxPropertiesObjectValidator(value)
+    override fun build(properties: ObjectProperties<EB, CTX>): ObjectValidator<EB, CTX> =
+        MaxPropertiesObjectValidator(value)
 
-    companion object Key : ObjectValidatorBuilder.Key<MaxPropertiesObjectValidatorBuilder>
+    companion object Key : ObjectValidatorBuilder.Key<MaxPropertiesObjectValidatorBuilder<*, *>>
 }

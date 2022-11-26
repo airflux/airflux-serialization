@@ -20,25 +20,23 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
 import io.github.airflux.serialization.common.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.context.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.context.error.ValueCastErrorBuilder
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
+import kotlin.reflect.KClass
 
 internal class ShortReaderTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = ReaderContext(
-            listOf(
-                InvalidTypeErrorBuilder(JsonErrors::InvalidType),
-                ValueCastErrorBuilder(JsonErrors::ValueCast)
-            )
-        )
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
+        private val ShortReader = shortReader<EB, Unit>()
     }
 
     init {
@@ -54,14 +52,14 @@ internal class ShortReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: ValueNode = NumberNode.valueOf(value)
-                    val result = ShortReader.read(CONTEXT, Location.empty, source)
+                    val result = ShortReader.read(ENV, LOCATION, source)
                     result.assertAsSuccess(value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = ShortReader.read(CONTEXT, Location.empty, source)
+                val result = ShortReader.read(ENV, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -81,7 +79,7 @@ internal class ShortReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = NumberNode.valueOf(value)!!
-                    val result = ShortReader.read(CONTEXT, Location.empty, source)
+                    val result = ShortReader.read(ENV, LOCATION, source)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = Location.empty,
@@ -95,4 +93,13 @@ internal class ShortReaderTest : FreeSpec() {
 
     private fun getLessValue(): String = (Short.MIN_VALUE.toInt() - 1).toString()
     private fun getMoreValue(): String = (Short.MAX_VALUE.toInt() + 1).toString()
+
+    internal class EB : InvalidTypeErrorBuilder,
+                        ValueCastErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
+
+        override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =
+            JsonErrors.ValueCast(value, target)
+    }
 }

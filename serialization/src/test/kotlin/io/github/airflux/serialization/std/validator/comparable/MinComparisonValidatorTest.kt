@@ -17,14 +17,12 @@
 package io.github.airflux.serialization.std.validator.comparable
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.validator.comparison.MinComparisonValidator
 import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -33,63 +31,52 @@ import io.kotest.matchers.shouldBe
 internal class MinComparisonValidatorTest : FreeSpec() {
 
     companion object {
-        private val LOCATION: Location = Location.empty
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val LOCATION = Location.empty
         private const val MIN_VALUE: Int = 2
     }
 
     init {
 
         "The string validator Min" - {
-            val validator: Validator<Int> = StdComparisonValidator.min(MIN_VALUE)
+            val validator: Validator<EB, Unit, Int> = StdComparisonValidator.min(MIN_VALUE)
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when a value is less than the min allowed" - {
+                val value = MIN_VALUE - 1
 
-                "when the test condition is false" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, MIN_VALUE - 1)
-                    }
-                    exception.message shouldBe "The error builder '${MinComparisonValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, value)
+
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Numbers.Min(expected = MIN_VALUE, actual = value)
+                    )
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    MinComparisonValidator.ErrorBuilder(JsonErrors.Validation.Numbers::Min)
-                )
+            "when a value is equal to the min allowed" - {
+                val value = MIN_VALUE
 
-                "when a value is less than the min allowed" - {
-                    val value = MIN_VALUE - 1
-
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, value)
-
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Numbers.Min(expected = MIN_VALUE, actual = value)
-                        )
-                    }
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
                 }
+            }
 
-                "when a value is equal to the min allowed" - {
-                    val value = MIN_VALUE
+            "when a value is more than the min allowed" - {
+                val value = MIN_VALUE + 1
 
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, value)
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when a value is more than the min allowed" - {
-                    val value = MIN_VALUE + 1
-
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(context, LOCATION, value)
-                        errors.shouldBeNull()
-                    }
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
                 }
             }
         }
+    }
+
+    internal class EB : MinComparisonValidator.ErrorBuilder {
+        override fun minComparisonError(expected: Number, actual: Number): ReaderResult.Error =
+            JsonErrors.Validation.Numbers.Min(expected = expected, actual = actual)
     }
 }

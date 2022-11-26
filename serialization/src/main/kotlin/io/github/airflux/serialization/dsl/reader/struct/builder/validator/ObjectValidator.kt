@@ -17,50 +17,17 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.validator
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 
-public fun interface ObjectValidator {
+public fun interface ObjectValidator<EB, CTX> {
 
     public fun validate(
-        context: ReaderContext,
+        env: ReaderEnv<EB, CTX>,
         location: Location,
-        properties: ObjectProperties,
+        properties: ObjectProperties<EB, CTX>,
         source: ObjectNode
     ): ReaderResult.Failure?
-
-    /*
-    * | This | Other  | Result |
-    * |------|--------|--------|
-    * | S    | ignore | S      |
-    * | F    | S      | S      |
-    * | F    | F`     | F + F` |
-    */
-    public infix fun or(alt: ObjectValidator): ObjectValidator {
-        val self = this
-        return ObjectValidator { context, location, properties, source ->
-            self.validate(context, location, properties, source)
-                ?.let { error ->
-                    alt.validate(context, location, properties, source)
-                        ?.let { error + it }
-                }
-        }
-    }
-
-    /*
-     * | This | Other  | Result |
-     * |------|--------|--------|
-     * | S    | S      | S      |
-     * | S    | F      | F      |
-     * | F    | ignore | F      |
-     */
-    public infix fun and(alt: ObjectValidator): ObjectValidator {
-        val self = this
-        return ObjectValidator { context, location, properties, source ->
-            val result = self.validate(context, location, properties, source)
-            result ?: alt.validate(context, location, properties, source)
-        }
-    }
 }

@@ -20,54 +20,54 @@ import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.ObjectPropertySpec
 
-public sealed class ObjectProperty {
+public sealed class ObjectProperty<out EB, out CTX> {
     public abstract val path: PropertyPaths
 
-    public class Required<T : Any> private constructor(
+    public class Required<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<T>
-    ) : ObjectProperty() {
+        public val reader: Reader<EB, CTX, T>
+    ) : ObjectProperty<EB, CTX>() {
 
-        internal constructor(spec: ObjectPropertySpec.Required<T>) : this(spec.path, spec.reader)
+        internal constructor(spec: ObjectPropertySpec.Required<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
-    public class Defaultable<T : Any> private constructor(
+    public class Defaultable<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<T>
-    ) : ObjectProperty() {
+        public val reader: Reader<EB, CTX, T>
+    ) : ObjectProperty<EB, CTX>() {
 
-        internal constructor(spec: ObjectPropertySpec.Defaultable<T>) : this(spec.path, spec.reader)
+        internal constructor(spec: ObjectPropertySpec.Defaultable<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
-    public class Optional<T : Any> private constructor(
+    public class Optional<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<T?>
-    ) : ObjectProperty() {
+        public val reader: Reader<EB, CTX, T?>
+    ) : ObjectProperty<EB, CTX>() {
 
-        internal constructor(spec: ObjectPropertySpec.Optional<T>) : this(spec.path, spec.reader)
+        internal constructor(spec: ObjectPropertySpec.Optional<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
-    public class OptionalWithDefault<T : Any> private constructor(
+    public class OptionalWithDefault<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<T>
-    ) : ObjectProperty() {
+        public val reader: Reader<EB, CTX, T>
+    ) : ObjectProperty<EB, CTX>() {
 
-        internal constructor(spec: ObjectPropertySpec.OptionalWithDefault<T>) : this(spec.path, spec.reader)
+        internal constructor(spec: ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
-    public class Nullable<T : Any> private constructor(
+    public class Nullable<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<T?>
-    ) : ObjectProperty() {
+        public val reader: Reader<EB, CTX, T?>
+    ) : ObjectProperty<EB, CTX>() {
 
-        internal constructor(spec: ObjectPropertySpec.Nullable<T>) : this(spec.path, spec.reader)
+        internal constructor(spec: ObjectPropertySpec.Nullable<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
-    public class NullableWithDefault<T : Any> private constructor(
+    public class NullableWithDefault<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<T?>
-    ) : ObjectProperty() {
+        public val reader: Reader<EB, CTX, T?>
+    ) : ObjectProperty<EB, CTX>() {
 
-        internal constructor(spec: ObjectPropertySpec.NullableWithDefault<T>) : this(spec.path, spec.reader)
+        internal constructor(spec: ObjectPropertySpec.NullableWithDefault<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 }

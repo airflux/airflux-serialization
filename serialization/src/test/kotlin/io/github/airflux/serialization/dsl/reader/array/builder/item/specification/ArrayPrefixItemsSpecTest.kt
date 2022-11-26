@@ -16,12 +16,21 @@
 
 package io.github.airflux.serialization.dsl.reader.array.builder.item.specification
 
-import io.github.airflux.serialization.std.reader.IntReader
-import io.github.airflux.serialization.std.reader.StringReader
+import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyIntReader
+import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
 internal class ArrayPrefixItemsSpecTest : FreeSpec() {
+
+    companion object {
+        private val StringReader = dummyStringReader<EB, Unit>()
+        private val IntReader = dummyIntReader<EB, Unit>()
+    }
 
     init {
 
@@ -37,5 +46,10 @@ internal class ArrayPrefixItemsSpecTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+            JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

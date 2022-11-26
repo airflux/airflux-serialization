@@ -18,9 +18,13 @@ package io.github.airflux.serialization.dsl.reader.array.builder.item.specificat
 
 import io.github.airflux.serialization.core.reader.Reader
 
-public sealed class ArrayItemSpec<out T> {
-    public abstract val reader: Reader<T>
+public sealed class ArrayItemSpec<EB, CTX, out T> {
 
-    public class NonNullable<out T> internal constructor(override val reader: Reader<T>) : ArrayItemSpec<T>()
-    public class Nullable<out T> internal constructor(override val reader: Reader<T?>) : ArrayItemSpec<T?>()
+    public abstract val reader: Reader<EB, CTX, T>
+
+    public class NonNullable<EB, CTX, out T> internal constructor(override val reader: Reader<EB, CTX, T>) :
+        ArrayItemSpec<EB, CTX, T>()
+
+    public class Nullable<EB, CTX, out T> internal constructor(override val reader: Reader<EB, CTX, T?>) :
+        ArrayItemSpec<EB, CTX, T?>()
 }

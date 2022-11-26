@@ -16,27 +16,28 @@
 
 package io.github.airflux.serialization.core.reader.predicate
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 
-@Suppress("unused")
-public fun interface ReaderPredicate<T> {
+public fun interface ReaderPredicate<EB, CTX, T> {
+    public fun test(env: ReaderEnv<EB, CTX>, value: T): Boolean
+}
 
-    public fun test(context: ReaderContext, location: Location, value: T): Boolean
-
-    public infix fun or(other: ReaderPredicate<T>): ReaderPredicate<T> {
-        val self = this
-        return ReaderPredicate { context, location, value ->
-            val result = self.test(context, location, value)
-            if (result) result else other.test(context, location, value)
-        }
+public infix fun <EB, CTX, T> ReaderPredicate<EB, CTX, T>.or(
+    other: ReaderPredicate<EB, CTX, T>
+): ReaderPredicate<EB, CTX, T> {
+    val self = this
+    return ReaderPredicate { env, value ->
+        val result = self.test(env, value)
+        if (result) result else other.test(env, value)
     }
+}
 
-    public infix fun and(other: ReaderPredicate<T>): ReaderPredicate<T> {
-        val self = this
-        return ReaderPredicate { context, location, value ->
-            val result = self.test(context, location, value)
-            if (result) other.test(context, location, value) else result
-        }
+public infix fun <EB, CTX, T> ReaderPredicate<EB, CTX, T>.and(
+    other: ReaderPredicate<EB, CTX, T>
+): ReaderPredicate<EB, CTX, T> {
+    val self = this
+    return ReaderPredicate { env, value ->
+        val result = self.test(env, value)
+        if (result) other.test(env, value) else result
     }
 }

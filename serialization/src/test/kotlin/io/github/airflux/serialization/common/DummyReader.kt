@@ -18,14 +18,76 @@ package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
-internal class DummyReader<T>(val result: (ReaderContext, Location) -> ReaderResult<T>) : Reader<T> {
+internal class DummyReader<EB, CTX, T>(
+    val result: (ReaderEnv<EB, CTX>, Location, ValueNode) -> ReaderResult<T>
+) : Reader<EB, CTX, T> {
 
-    constructor(result: ReaderResult<T>) : this({ _, _ -> result })
+    constructor(result: ReaderResult<T>) : this({ _, _, _ -> result })
 
-    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<T> =
-        result(context, location)
+    override fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
+        result(env, location, source)
 }
+
+internal fun <EB, CTX> dummyBooleanReader(): Reader<EB, CTX, Boolean>
+    where EB : InvalidTypeErrorBuilder =
+    DummyReader(
+        result = { env, location, source ->
+            if (source is BooleanNode)
+                ReaderResult.Success(source.get)
+            else
+                ReaderResult.Failure(
+                    location = location,
+                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.BOOLEAN, actual = source.type)
+                )
+        }
+    )
+
+internal fun <EB, CTX> dummyStringReader(): Reader<EB, CTX, String>
+    where EB : InvalidTypeErrorBuilder =
+    DummyReader(
+        result = { env, location, source ->
+            if (source is StringNode)
+                ReaderResult.Success(source.get)
+            else
+                ReaderResult.Failure(
+                    location = location,
+                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.STRING, actual = source.type)
+                )
+        }
+    )
+
+internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
+    where EB : InvalidTypeErrorBuilder =
+    DummyReader(
+        result = { env, location, source ->
+            if (source is NumberNode)
+                ReaderResult.Success(source.get.toInt())
+            else
+                ReaderResult.Failure(
+                    location = location,
+                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.NUMBER, actual = source.type)
+                )
+        }
+    )
+
+internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
+    where EB : InvalidTypeErrorBuilder =
+    DummyReader(
+        result = { env, location, source ->
+            if (source is NumberNode)
+                ReaderResult.Success(source.get.toLong())
+            else
+                ReaderResult.Failure(
+                    location = location,
+                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.NUMBER, actual = source.type)
+                )
+        }
+    )

@@ -22,7 +22,13 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
+import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nullable
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.optional
@@ -36,7 +42,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val FIRST_ITEM = "item-1"
         private const val SECOND_ITEM = "item-2"
 
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
         private val LOCATION = Location.empty
     }
 
@@ -45,11 +51,11 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         "The ArrayWriterBuilder type" - {
 
             "when have some non-nullable items for writing to an array" - {
-                val writer = arrayWriter<String> {
+                val writer: Writer<CTX, Iterable<String>> = arrayWriter {
                     items(nonNullable(writer = DummyWriter { StringNode(it) }))
                 }
                 val value = listOf(FIRST_ITEM, SECOND_ITEM)
-                val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                val result = writer.write(env = ENV, location = LOCATION, value = value)
 
                 "then should return the array with items" {
                     result as ArrayNode<*>
@@ -58,11 +64,11 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
             }
 
             "when have some optional items for writing to an array" - {
-                val writer = arrayWriter<String?> {
+                val writer: Writer<CTX, Iterable<String?>> = arrayWriter {
                     items(optional(writer = DummyWriter { StringNode(it) }))
                 }
                 val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
-                val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                val result = writer.write(env = ENV, location = LOCATION, value = value)
 
                 "then should return the array with items" {
                     result as ArrayNode<*>
@@ -71,11 +77,11 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
             }
 
             "when have some nullable items for writing to an array" - {
-                val writer = arrayWriter<String?> {
+                val writer: Writer<CTX, Iterable<String?>> = arrayWriter {
                     items(nullable(writer = DummyWriter { StringNode(it) }))
                 }
                 val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
-                val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                val result = writer.write(env = ENV, location = LOCATION, value = value)
 
                 "then should return the array with items" {
                     result as ArrayNode<*>
@@ -91,54 +97,40 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
             "when no items for writing to an array" - {
                 val value = emptyList<String>()
-
-                "when the action of the writer was not set" - {
-                    val writer = arrayWriter<String> {
-                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
-                    }
-
-                    "then should return the empty value of the ArrayNode type" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
-                        result shouldBe ArrayNode<ValueNode>()
-                    }
+                val writer: Writer<CTX, Iterable<String>> = arrayWriter {
+                    items(nonNullable(writer = DummyWriter { StringNode(it) }))
                 }
 
                 "when the action of the writer was set to return empty value" - {
-                    val writer = arrayWriter<String> {
-                        actionIfEmpty = returnEmptyValue()
-                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
-                    }
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                     "then should return the empty value of the ArrayNode type" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        val result = writer.write(env = env, location = LOCATION, value = value)
                         result shouldBe ArrayNode<ValueNode>()
                     }
                 }
 
                 "when the action of the writer was set to return nothing" - {
-                    val writer = arrayWriter<String> {
-                        actionIfEmpty = returnNothing()
-                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
-                    }
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                     "then should return the null value" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        val result = writer.write(env = env, location = LOCATION, value = value)
                         result.shouldBeNull()
                     }
                 }
 
                 "when the action of the writer was set to return null value" - {
-                    val writer = arrayWriter<String> {
-                        actionIfEmpty = returnNullValue()
-                        items(nonNullable(writer = DummyWriter { StringNode(it) }))
-                    }
+                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
                     "then should return the NullNode value" {
-                        val result = writer.write(context = CONTEXT, location = LOCATION, value = value)
+                        val result = writer.write(env = env, location = LOCATION, value = value)
                         result shouldBe NullNode
                     }
                 }
             }
         }
     }
+
+    internal class CTX(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
+        WriterActionBuilderIfResultIsEmptyOption
 }

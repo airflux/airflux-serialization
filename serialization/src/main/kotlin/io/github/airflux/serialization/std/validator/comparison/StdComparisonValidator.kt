@@ -23,56 +23,64 @@ public object StdComparisonValidator {
     /**
      * Validation of a value, if a value is less than an expected [value] then an error, otherwise a success.
      */
-    public fun <T> min(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> min(value: T): Validator<EB, CTX, T>
+        where EB : MinComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = MinComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is more than an expected [value] then error, otherwise a success.
      */
-    public fun <T> max(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> max(value: T): Validator<EB, CTX, T>
+        where EB : MaxComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = MaxComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is equal to an expected [value] then success, otherwise an error.
      */
-    public fun <T> eq(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> eq(value: T): Validator<EB, CTX, T>
+        where EB : EqComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = EqComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is not equal to an expected [value] then a success, otherwise an error.
      */
-    public fun <T> ne(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> ne(value: T): Validator<EB, CTX, T>
+        where EB : NeComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = NeComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is greater than an expected [value] then a success, otherwise an error.
      */
-    public fun <T> gt(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> gt(value: T): Validator<EB, CTX, T>
+        where EB : GtComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = GtComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is greater than or equal to an expected [value] then a success, otherwise an error.
      */
-    public fun <T> ge(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> ge(value: T): Validator<EB, CTX, T>
+        where EB : GeComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = GeComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is less than an expected [value] then a success, otherwise an error.
      */
-    public fun <T> lt(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> lt(value: T): Validator<EB, CTX, T>
+        where EB : LtComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = LtComparisonValidator(value)
 
     /**
      * Validation of a value, if a value is less than or equal to an expected [value] then a success, otherwise an error.
      */
-    public fun <T> le(value: T): Validator<T>
-        where T : Number,
+    public fun <EB, CTX, T> le(value: T): Validator<EB, CTX, T>
+        where EB : LeComparisonValidator.ErrorBuilder,
+              T : Number,
               T : Comparable<T> = LeComparisonValidator(value)
 }

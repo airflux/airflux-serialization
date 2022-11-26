@@ -18,24 +18,26 @@ package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NumberNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class IntWriterTest : FreeSpec() {
 
     companion object {
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The int type writer" - {
+            val writer: Writer<Unit, Int> = intWriter()
             val value: Int = Int.MAX_VALUE
 
             "should return the NumberNode value" {
-                val result = IntWriter.write(CONTEXT, LOCATION, value)
+                val result = writer.write(ENV, LOCATION, value)
                 result shouldBe NumberNode.valueOf(value)
             }
         }

@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.builder.property
 
-public class ObjectProperties<T : Any> internal constructor(
-    private val items: List<ObjectProperty<T>>
-) : Collection<ObjectProperty<T>> by items
+public class ObjectProperties<CTX, T : Any> internal constructor(
+    private val items: List<ObjectProperty<CTX, T>>
+) : Collection<ObjectProperty<CTX, T>> by items

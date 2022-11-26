@@ -19,7 +19,8 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.context.WriterContext
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -29,7 +30,7 @@ internal class ArrayNonNullableItemWriterTest : FreeSpec() {
     companion object {
         private const val ITEM_VALUE = "value"
 
-        private val CONTEXT = WriterContext()
+        private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
     }
 
@@ -37,14 +38,14 @@ internal class ArrayNonNullableItemWriterTest : FreeSpec() {
         "The ArrayItems#NonNullable type" - {
 
             "when created an instance of the non-nullable item" - {
-                val writer = DummyWriter<String> { StringNode(it) }
-                val itemWriter: ArrayItemWriter.NonNullable<String> = createItemWriter(writer = writer)
+                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val itemWriter: ArrayItemWriter.NonNullable<Unit, String> = createItemWriter(writer = writer)
 
                 "when an item is the not null value" - {
                     val value = "value"
 
                     "then the method write should return the null value" {
-                        val result = itemWriter.write(CONTEXT, LOCATION, value)
+                        val result = itemWriter.write(ENV, LOCATION, value)
                         result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
@@ -52,6 +53,6 @@ internal class ArrayNonNullableItemWriterTest : FreeSpec() {
         }
     }
 
-    private fun <T : Any> createItemWriter(writer: DummyWriter<T>): ArrayItemWriter.NonNullable<T> =
+    private fun <CTX, T : Any> createItemWriter(writer: Writer<CTX, T>): ArrayItemWriter.NonNullable<CTX, T> =
         ArrayItemWriter.NonNullable(ArrayItemSpec.NonNullable(writer = writer))
 }

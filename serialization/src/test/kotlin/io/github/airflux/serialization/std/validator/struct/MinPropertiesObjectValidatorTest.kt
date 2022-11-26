@@ -17,15 +17,13 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.core.context.error.errorBuilderName
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.ObjectValidator
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -41,83 +39,72 @@ internal class MinPropertiesObjectValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MIN_PROPERTIES = 2
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
-        private val PROPERTIES: ObjectProperties = ObjectProperties(emptyList())
+        private val PROPERTIES: ObjectProperties<EB, Unit> = ObjectProperties(emptyList())
     }
 
     init {
 
         "The object validator MinProperties" - {
-            val validator: ObjectValidator = StdObjectValidator.minProperties(MIN_PROPERTIES).build(PROPERTIES)
+            val validator: ObjectValidator<EB, Unit> =
+                StdObjectValidator.minProperties<EB, Unit>(MIN_PROPERTIES).build(PROPERTIES)
 
-            "when the reader context does not contain the error builder" - {
-                val context = ReaderContext()
+            "when the object is empty" - {
                 val source = ObjectNode()
 
-                "when the test condition is false" {
-                    val exception = shouldThrow<NoSuchElementException> {
-                        validator.validate(context, LOCATION, PROPERTIES, source)
-                    }
-                    exception.message shouldBe "The error builder '${MinPropertiesObjectValidator.ErrorBuilder.errorBuilderName()}' is missing in the context."
+                "then the validator should return an error" {
+                    val errors = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    errors.shouldNotBeNull()
+                    errors shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Object.MinProperties(expected = MIN_PROPERTIES, actual = 0)
+                    )
                 }
             }
 
-            "when the reader context contains the error builder" - {
-                val context = ReaderContext(
-                    MinPropertiesObjectValidator.ErrorBuilder(JsonErrors.Validation.Object::MinProperties)
+            "when the object contains a number of properties less than the minimum" - {
+                val source = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Object.MinProperties(expected = MIN_PROPERTIES, actual = 1)
+                    )
+                }
+            }
+
+            "when the object contains a number of properties equal to the minimum" - {
+                val source = ObjectNode(
+                    ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
+                    NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                 )
 
-                "when the object is empty" - {
-                    val source = ObjectNode()
-
-                    "then the validator should return an error" {
-                        val errors = validator.validate(context, LOCATION, PROPERTIES, source)
-                        errors.shouldNotBeNull()
-                        errors shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Object.MinProperties(expected = MIN_PROPERTIES, actual = 0)
-                        )
-                    }
+                "then the validator should do not return any errors" {
+                    val errors = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    errors.shouldBeNull()
                 }
+            }
 
-                "when the object contains a number of properties less than the minimum" - {
-                    val source = ObjectNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+            "when the object contains a number of properties more than the minimum" - {
+                val source = ObjectNode(
+                    ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
+                    NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                    TITLE_PROPERTY_NAME to StringNode(TITLE_PROPERTY_VALUE)
+                )
 
-                    "then the validator should return an error" {
-                        val failure = validator.validate(context, LOCATION, PROPERTIES, source)
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
-                            location = LOCATION,
-                            error = JsonErrors.Validation.Object.MinProperties(expected = MIN_PROPERTIES, actual = 1)
-                        )
-                    }
-                }
-
-                "when the object contains a number of properties equal to the minimum" - {
-                    val source = ObjectNode(
-                        ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
-                        NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
-                    )
-
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, PROPERTIES, source)
-                        errors.shouldBeNull()
-                    }
-                }
-
-                "when the object contains a number of properties more than the minimum" - {
-                    val source = ObjectNode(
-                        ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
-                        NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
-                        TITLE_PROPERTY_NAME to StringNode(TITLE_PROPERTY_VALUE)
-                    )
-
-                    "then the validator should do not return any errors" {
-                        val errors = validator.validate(context, LOCATION, PROPERTIES, source)
-                        errors.shouldBeNull()
-                    }
+                "then the validator should do not return any errors" {
+                    val errors = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    errors.shouldBeNull()
                 }
             }
         }
+    }
+
+    internal class EB : MinPropertiesObjectValidator.ErrorBuilder {
+        override fun minPropertiesObjectError(expected: Int, actual: Int): ReaderResult.Error =
+            JsonErrors.Validation.Object.MinProperties(expected = expected, actual = actual)
     }
 }

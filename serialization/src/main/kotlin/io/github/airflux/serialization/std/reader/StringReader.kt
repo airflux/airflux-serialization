@@ -16,17 +16,15 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.context.ReaderContext
-import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.value.readAsString
 
 /**
  * Reader for primitive [String] type.
  */
-public object StringReader : Reader<String> {
-    override fun read(context: ReaderContext, location: Location, source: ValueNode): ReaderResult<String> =
-        source.readAsString(context, location)
-}
+public fun <EB, CTX> stringReader(): Reader<EB, CTX, String>
+    where EB : InvalidTypeErrorBuilder =
+    Reader { env, location, source ->
+        source.readAsString(env, location)
+    }

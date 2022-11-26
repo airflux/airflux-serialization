@@ -6,8 +6,7 @@ nav:
   - Quickstart: quickstart.md
   - Readers: readers.md
   - Writers: writers.md
-  - Configuration: configuration.md
-  - Context: context.md
+  - Environment: env.md
   - Standard tools: standard-tools.md
 
 theme:

@@ -16,32 +16,22 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.core.context.error.AbstractErrorBuilderContextElement
-import io.github.airflux.serialization.core.context.error.ContextErrorBuilderKey
-import io.github.airflux.serialization.core.context.error.errorBuilderName
-import io.github.airflux.serialization.core.context.error.get
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.context.ReaderContext
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 
-public class IsNotEmptyArrayValidator internal constructor() : ArrayValidator {
+public class IsNotEmptyArrayValidator<EB, CTX> internal constructor() : ArrayValidator<EB, CTX>
+    where EB : IsNotEmptyArrayValidator.ErrorBuilder {
 
-    override fun validate(context: ReaderContext, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
-        if (source.isEmpty()) {
-            val errorBuilder = context[ErrorBuilder]
-            ReaderResult.Failure(location, errorBuilder.build())
-        } else
+    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+        if (source.isEmpty())
+            ReaderResult.Failure(location, env.errorBuilders.isNotEmptyArrayError())
+        else
             null
 
-    public class ErrorBuilder(private val function: () -> ReaderResult.Error) :
-        AbstractErrorBuilderContextElement<ErrorBuilder>(key = ErrorBuilder) {
-
-        public fun build(): ReaderResult.Error = function()
-
-        public companion object Key : ContextErrorBuilderKey<ErrorBuilder> {
-            override val name: String = errorBuilderName()
-        }
+    public interface ErrorBuilder {
+        public fun isNotEmptyArrayError(): ReaderResult.Error
     }
 }
