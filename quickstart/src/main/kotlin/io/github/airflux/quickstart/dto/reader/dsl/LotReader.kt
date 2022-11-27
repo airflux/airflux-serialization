@@ -24,7 +24,7 @@ import io.github.airflux.quickstart.dto.reader.base.asEnum
 import io.github.airflux.quickstart.dto.reader.base.isNotBlank
 import io.github.airflux.quickstart.dto.reader.base.isNotEmpty
 import io.github.airflux.quickstart.dto.reader.dsl.property.identifierPropertySpec
-import io.github.airflux.quickstart.dto.reader.dsl.validator.CommonObjectReaderValidators
+import io.github.airflux.quickstart.dto.reader.dsl.validator.CommonStructReaderValidators
 import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
 import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.serialization.core.reader.Reader
@@ -39,7 +39,7 @@ val LotStatusReader: Reader<ReaderErrorBuilders, ReaderCtx, LotStatus> = StringR
 val LotReader: Reader<ReaderErrorBuilders, ReaderCtx, Lot> = structReader {
 
     validation {
-        +CommonObjectReaderValidators
+        +CommonStructReaderValidators
         +additionalProperties
         +isNotEmpty
     }

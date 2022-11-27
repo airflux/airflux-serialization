@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPath.Element
 import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.ObjectNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 
 @Suppress("unused")
@@ -59,7 +59,7 @@ public fun ValueNode.lookup(location: Location, path: PropertyPath): Lookup =
         ?.let { Lookup.Defined(location = location.append(path), value = it) }
         ?: Lookup.Undefined(location = location.append(path))
 
-internal fun ValueNode.lookup(key: Element.Key): ValueNode? = if (this is ObjectNode) this[key] else null
+internal fun ValueNode.lookup(key: Element.Key): ValueNode? = if (this is StructNode) this[key] else null
 
 internal fun ValueNode.lookup(idx: Element.Idx): ValueNode? = if (this is ArrayNode<*>) this[idx] else null
 
@@ -67,7 +67,7 @@ internal fun ValueNode.lookup(path: PropertyPath): ValueNode? {
     tailrec fun lookup(path: PropertyPath, idxElement: Int, value: ValueNode?): ValueNode? {
         if (value == null || idxElement == path.elements.size) return value
         return when (val element = path.elements[idxElement]) {
-            is Element.Key -> if (value is ObjectNode) lookup(path, idxElement + 1, value[element]) else null
+            is Element.Key -> if (value is StructNode) lookup(path, idxElement + 1, value[element]) else null
             is Element.Idx -> if (value is ArrayNode<*>) lookup(path, idxElement + 1, value[element]) else null
         }
     }

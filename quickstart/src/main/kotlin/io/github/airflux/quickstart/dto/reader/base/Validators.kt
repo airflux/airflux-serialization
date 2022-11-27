@@ -19,9 +19,9 @@ package io.github.airflux.quickstart.dto.reader.base
 import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
 import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
-import io.github.airflux.serialization.std.validator.struct.StdObjectValidator
+import io.github.airflux.serialization.std.validator.struct.StdStructValidator
 
 val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderCtx>()
 
-val isNotEmpty = StdObjectValidator.isNotEmpty<ReaderErrorBuilders, ReaderCtx>()
-val additionalProperties = StdObjectValidator.additionalProperties<ReaderErrorBuilders, ReaderCtx>()
+val isNotEmpty = StdStructValidator.isNotEmpty<ReaderErrorBuilders, ReaderCtx>()
+val additionalProperties = StdStructValidator.additionalProperties<ReaderErrorBuilders, ReaderCtx>()

@@ -36,7 +36,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
     init {
 
-        "The ObjectPropertySpec#Nullable type" - {
+        "The ArrayPropertySpec#Nullable type" - {
 
             "when created the instance of a spec of the nullable item" - {
                 val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }

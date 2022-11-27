@@ -31,15 +31,15 @@ public fun <EB, CTX, T : Any> optionalWithDefault(
     name: String,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
+): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
     optionalWithDefault(PropertyPath(name), reader, default)
 
 public fun <EB, CTX, T : Any> optionalWithDefault(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    ObjectPropertySpec.OptionalWithDefault(
+): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
+    StructPropertySpec.OptionalWithDefault(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
@@ -51,8 +51,8 @@ public fun <EB, CTX, T : Any> optionalWithDefault(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    ObjectPropertySpec.OptionalWithDefault(
+): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
+    StructPropertySpec.OptionalWithDefault(
         path = paths,
         reader = { env, location, source ->
             val lookup: Lookup = paths.fold(
@@ -66,17 +66,17 @@ public fun <EB, CTX, T : Any> optionalWithDefault(
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>.validation(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.OptionalWithDefault<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T>
-): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    ObjectPropertySpec.OptionalWithDefault(
+): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
+    StructPropertySpec.OptionalWithDefault(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>.or(
-    alt: ObjectPropertySpec.OptionalWithDefault<EB, CTX, T>
-): ObjectPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    ObjectPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <EB, CTX, T : Any> StructPropertySpec.OptionalWithDefault<EB, CTX, T>.or(
+    alt: StructPropertySpec.OptionalWithDefault<EB, CTX, T>
+): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
+    StructPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)

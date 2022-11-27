@@ -88,7 +88,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
 
-                    "when source is not the object type" - {
+                    "when source is not the struct type" - {
                         val source = StringNode(USER_NAME)
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             returns(items = itemSpec())
@@ -191,7 +191,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                 "when fail-fast is false" - {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
 
-                    "when source is not the object type" - {
+                    "when source is not the struct type" - {
                         val source = StringNode(USER_NAME)
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             returns(items = itemSpec())

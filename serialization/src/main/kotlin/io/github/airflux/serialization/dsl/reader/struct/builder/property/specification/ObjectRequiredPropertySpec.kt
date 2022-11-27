@@ -32,16 +32,16 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 public fun <EB, CTX, T : Any> required(
     name: String,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Required<EB, CTX, T>
+): StructPropertySpec.Required<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
     required(PropertyPath(name), reader)
 
 public fun <EB, CTX, T : Any> required(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Required<EB, CTX, T>
+): StructPropertySpec.Required<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
-    ObjectPropertySpec.Required(
+    StructPropertySpec.Required(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
@@ -52,9 +52,9 @@ public fun <EB, CTX, T : Any> required(
 public fun <EB, CTX, T : Any> required(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Required<EB, CTX, T>
+): StructPropertySpec.Required<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
-    ObjectPropertySpec.Required(
+    StructPropertySpec.Required(
         path = paths,
         reader = Reader { env, location, source ->
             val failures = paths.items
@@ -70,17 +70,17 @@ public fun <EB, CTX, T : Any> required(
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Required<EB, CTX, T>.validation(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Required<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T>
-): ObjectPropertySpec.Required<EB, CTX, T> =
-    ObjectPropertySpec.Required(
+): StructPropertySpec.Required<EB, CTX, T> =
+    StructPropertySpec.Required(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Required<EB, CTX, T>.or(
-    alt: ObjectPropertySpec.Required<EB, CTX, T>
-): ObjectPropertySpec.Required<EB, CTX, T> =
-    ObjectPropertySpec.Required(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Required<EB, CTX, T>.or(
+    alt: StructPropertySpec.Required<EB, CTX, T>
+): StructPropertySpec.Required<EB, CTX, T> =
+    StructPropertySpec.Required(path = path.append(alt.path), reader = reader or alt.reader)

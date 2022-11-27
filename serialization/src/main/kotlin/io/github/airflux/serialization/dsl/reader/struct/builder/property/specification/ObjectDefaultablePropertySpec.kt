@@ -31,15 +31,15 @@ public fun <EB, CTX, T : Any> defaultable(
     name: String,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): ObjectPropertySpec.Defaultable<EB, CTX, T> =
+): StructPropertySpec.Defaultable<EB, CTX, T> =
     defaultable(PropertyPath(name), reader, default)
 
 public fun <EB, CTX, T : Any> defaultable(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): ObjectPropertySpec.Defaultable<EB, CTX, T> =
-    ObjectPropertySpec.Defaultable(
+): StructPropertySpec.Defaultable<EB, CTX, T> =
+    StructPropertySpec.Defaultable(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
@@ -51,8 +51,8 @@ public fun <EB, CTX, T : Any> defaultable(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): ObjectPropertySpec.Defaultable<EB, CTX, T> =
-    ObjectPropertySpec.Defaultable(
+): StructPropertySpec.Defaultable<EB, CTX, T> =
+    StructPropertySpec.Defaultable(
         path = paths,
         reader = { env, location, source ->
             val lookup: Lookup = paths.fold(
@@ -66,17 +66,17 @@ public fun <EB, CTX, T : Any> defaultable(
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Defaultable<EB, CTX, T>.validation(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Defaultable<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T>
-): ObjectPropertySpec.Defaultable<EB, CTX, T> =
-    ObjectPropertySpec.Defaultable(
+): StructPropertySpec.Defaultable<EB, CTX, T> =
+    StructPropertySpec.Defaultable(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Defaultable<EB, CTX, T>.or(
-    alt: ObjectPropertySpec.Defaultable<EB, CTX, T>
-): ObjectPropertySpec.Defaultable<EB, CTX, T> =
-    ObjectPropertySpec.Defaultable(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Defaultable<EB, CTX, T>.or(
+    alt: StructPropertySpec.Defaultable<EB, CTX, T>
+): StructPropertySpec.Defaultable<EB, CTX, T> =
+    StructPropertySpec.Defaultable(path = path.append(alt.path), reader = reader or alt.reader)

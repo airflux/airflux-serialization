@@ -19,8 +19,8 @@ package io.github.airflux.serialization.dsl.value
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -46,7 +46,7 @@ internal class ValueNodeOpsTest : FreeSpec() {
             "when lookup by a key element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val json: ValueNode = ObjectNode(KEY_NAME to StringNode(VALUE))
+                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / KEY_NAME
@@ -55,7 +55,7 @@ internal class ValueNodeOpsTest : FreeSpec() {
                 }
 
                 "when the value does not contain the finding key" - {
-                    val json: ValueNode = ObjectNode(KEY_NAME to StringNode(VALUE))
+                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = json / UNKNOWN_KEY_NAME

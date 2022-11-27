@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.path.PropertyPath
 
 public sealed class ValueNode {
 
-    public enum class Type { ARRAY, BOOLEAN, NULL, NUMBER, OBJECT, STRING }
+    public enum class Type { ARRAY, BOOLEAN, NULL, NUMBER, STRING, STRUCT }
 
     public abstract val type: Type
 }
@@ -113,18 +113,18 @@ public class ArrayNode<out T : ValueNode>(private val items: List<T> = emptyList
     override fun hashCode(): Int = items.hashCode()
 }
 
-public class ObjectNode(
+public class StructNode(
     private val properties: Map<String, ValueNode> = emptyMap()
 ) : ValueNode(),
     Iterable<Map.Entry<String, ValueNode>> {
 
     public companion object {
 
-        public operator fun invoke(vararg properties: Pair<String, ValueNode>): ObjectNode =
-            ObjectNode(properties.toMap())
+        public operator fun invoke(vararg properties: Pair<String, ValueNode>): StructNode =
+            StructNode(properties.toMap())
     }
 
-    override val type: Type = Type.OBJECT
+    override val type: Type = Type.STRUCT
 
     public operator fun get(key: PropertyPath.Element.Key): ValueNode? = get(key.get)
 
@@ -141,7 +141,7 @@ public class ObjectNode(
         .joinToString(prefix = "{", postfix = "}")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is ObjectNode && this.properties.keys == other.properties.keys)
+        this === other || (other is StructNode && this.properties.keys == other.properties.keys)
 
     override fun hashCode(): Int = properties.keys.hashCode()
 }

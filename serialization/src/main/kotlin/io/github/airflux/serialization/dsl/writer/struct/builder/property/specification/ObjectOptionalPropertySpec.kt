@@ -24,10 +24,10 @@ public fun <CTX, T : Any, P : Any> optional(
     name: String,
     from: (T) -> P?,
     writer: Writer<CTX, P>
-): ObjectPropertySpec.Optional<CTX, T, P> =
-    ObjectPropertySpec.Optional(name = name, from = from, writer = writer)
+): StructPropertySpec.Optional<CTX, T, P> =
+    StructPropertySpec.Optional(name = name, from = from, writer = writer)
 
-public infix fun <CTX, T : Any, P : Any> ObjectPropertySpec.Optional<CTX, T, P>.filter(
+public infix fun <CTX, T : Any, P : Any> StructPropertySpec.Optional<CTX, T, P>.filter(
     predicate: WriterPredicate<CTX, P>
-): ObjectPropertySpec.Optional<CTX, T, P> =
-    ObjectPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))
+): StructPropertySpec.Optional<CTX, T, P> =
+    StructPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

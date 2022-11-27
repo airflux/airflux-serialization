@@ -31,14 +31,14 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 public fun <EB, CTX, T : Any> optional(
     name: String,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Optional<EB, CTX, T> =
+): StructPropertySpec.Optional<EB, CTX, T> =
     optional(PropertyPath(name), reader)
 
 public fun <EB, CTX, T : Any> optional(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Optional<EB, CTX, T> =
-    ObjectPropertySpec.Optional(
+): StructPropertySpec.Optional<EB, CTX, T> =
+    StructPropertySpec.Optional(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
@@ -49,8 +49,8 @@ public fun <EB, CTX, T : Any> optional(
 public fun <EB, CTX, T : Any> optional(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Optional<EB, CTX, T> =
-    ObjectPropertySpec.Optional(
+): StructPropertySpec.Optional<EB, CTX, T> =
+    StructPropertySpec.Optional(
         path = paths,
         reader = { env, location, source ->
             val lookup: Lookup = paths.fold(
@@ -64,27 +64,27 @@ public fun <EB, CTX, T : Any> optional(
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Optional<EB, CTX, T>.validation(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Optional<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T?>
-): ObjectPropertySpec.Optional<EB, CTX, T> =
-    ObjectPropertySpec.Optional(
+): StructPropertySpec.Optional<EB, CTX, T> =
+    StructPropertySpec.Optional(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Optional<EB, CTX, T>.filter(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Optional<EB, CTX, T>.filter(
     predicate: ReaderPredicate<EB, CTX, T>
-): ObjectPropertySpec.Optional<EB, CTX, T> =
-    ObjectPropertySpec.Optional(
+): StructPropertySpec.Optional<EB, CTX, T> =
+    StructPropertySpec.Optional(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).filter(env, predicate)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Optional<EB, CTX, T>.or(
-    alt: ObjectPropertySpec.Optional<EB, CTX, T>
-): ObjectPropertySpec.Optional<EB, CTX, T> =
-    ObjectPropertySpec.Optional(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Optional<EB, CTX, T>.or(
+    alt: StructPropertySpec.Optional<EB, CTX, T>
+): StructPropertySpec.Optional<EB, CTX, T> =
+    StructPropertySpec.Optional(path = path.append(alt.path), reader = reader or alt.reader)

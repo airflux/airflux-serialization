@@ -25,14 +25,14 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
 import io.github.airflux.serialization.std.validator.comparison.GtComparisonValidator
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
-import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesObjectValidator
-import io.github.airflux.serialization.std.validator.struct.IsNotEmptyObjectValidator
+import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesStructValidator
+import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructValidator
 
 object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              PathMissingErrorBuilder,
                              IsNotBlankStringValidator.ErrorBuilder,
-                             IsNotEmptyObjectValidator.ErrorBuilder,
-                             AdditionalPropertiesObjectValidator.ErrorBuilder,
+                             IsNotEmptyStructValidator.ErrorBuilder,
+                             AdditionalPropertiesStructValidator.ErrorBuilder,
                              GtComparisonValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
@@ -43,10 +43,10 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 
     override fun isNotBlankStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsBlank
 
-    override fun isNotEmptyObjectError(): ReaderResult.Error = JsonErrors.Validation.Object.IsEmpty
+    override fun isNotEmptyStructError(): ReaderResult.Error = JsonErrors.Validation.Struct.IsEmpty
 
-    override fun additionalPropertiesObjectError(): ReaderResult.Error =
-        JsonErrors.Validation.Object.AdditionalProperties
+    override fun additionalPropertiesStructError(): ReaderResult.Error =
+        JsonErrors.Validation.Struct.AdditionalProperties
 
     override fun gtComparisonError(expected: Number, actual: Number): ReaderResult.Error =
         JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)

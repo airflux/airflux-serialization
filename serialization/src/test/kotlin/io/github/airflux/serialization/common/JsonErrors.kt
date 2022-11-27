@@ -32,11 +32,11 @@ internal sealed class JsonErrors : ReaderResult.Error {
 
     sealed class Validation : JsonErrors() {
 
-        sealed class Object : Validation() {
-            object AdditionalProperties : Object()
-            object IsEmpty : Object()
-            data class MinProperties(val expected: Int, val actual: Int) : Object()
-            data class MaxProperties(val expected: Int, val actual: Int) : Object()
+        sealed class Struct : Validation() {
+            object AdditionalProperties : Struct()
+            object IsEmpty : Struct()
+            data class MinProperties(val expected: Int, val actual: Int) : Struct()
+            data class MaxProperties(val expected: Int, val actual: Int) : Struct()
         }
 
         sealed class Arrays : Validation() {

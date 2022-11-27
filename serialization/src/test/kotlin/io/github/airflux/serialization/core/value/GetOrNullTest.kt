@@ -27,11 +27,11 @@ internal class GetOrNullTest : FreeSpec() {
     companion object {
         private const val USER_NAME_VALUE = "user"
         private const val PHONE_NUMBER_VALUE = "123456789"
-        val SOURCE: ValueNode = ObjectNode(
-            "user" to ObjectNode(
+        val SOURCE: ValueNode = StructNode(
+            "user" to StructNode(
                 "name" to StringNode(USER_NAME_VALUE),
                 "phones" to ArrayNode(
-                    ObjectNode(
+                    StructNode(
                         "value" to StringNode(PHONE_NUMBER_VALUE)
                     )
                 )

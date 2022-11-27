@@ -23,21 +23,21 @@ public sealed interface PropertyValues<EB, CTX> {
     public val isNotEmpty: Boolean
     public val size: Int
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Required<EB, CTX, T>): T
-    public operator fun <T : Any> ObjectProperty.Required<EB, CTX, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.Required<EB, CTX, T>): T
+    public operator fun <T : Any> StructProperty.Required<EB, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Defaultable<EB, CTX, T>): T
-    public operator fun <T : Any> ObjectProperty.Defaultable<EB, CTX, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.Defaultable<EB, CTX, T>): T
+    public operator fun <T : Any> StructProperty.Defaultable<EB, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Optional<EB, CTX, T>): T?
-    public operator fun <T : Any> ObjectProperty.Optional<EB, CTX, T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.Optional<EB, CTX, T>): T?
+    public operator fun <T : Any> StructProperty.Optional<EB, CTX, T>.unaryPlus(): T? = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.OptionalWithDefault<EB, CTX, T>): T
-    public operator fun <T : Any> ObjectProperty.OptionalWithDefault<EB, CTX, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.OptionalWithDefault<EB, CTX, T>): T
+    public operator fun <T : Any> StructProperty.OptionalWithDefault<EB, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.Nullable<EB, CTX, T>): T?
-    public operator fun <T : Any> ObjectProperty.Nullable<EB, CTX, T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T?
+    public operator fun <T : Any> StructProperty.Nullable<EB, CTX, T>.unaryPlus(): T? = get(this)
 
-    public infix operator fun <T : Any> get(property: ObjectProperty.NullableWithDefault<EB, CTX, T>): T?
-    public operator fun <T : Any> ObjectProperty.NullableWithDefault<EB, CTX, T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.NullableWithDefault<EB, CTX, T>): T?
+    public operator fun <T : Any> StructProperty.NullableWithDefault<EB, CTX, T>.unaryPlus(): T? = get(this)
 }

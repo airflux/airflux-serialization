@@ -34,16 +34,16 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 public fun <EB, CTX, T : Any> nullable(
     name: String,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Nullable<EB, CTX, T>
+): StructPropertySpec.Nullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
     nullable(PropertyPath(name), reader)
 
 public fun <EB, CTX, T : Any> nullable(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Nullable<EB, CTX, T>
+): StructPropertySpec.Nullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
-    ObjectPropertySpec.Nullable(
+    StructPropertySpec.Nullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
@@ -54,9 +54,9 @@ public fun <EB, CTX, T : Any> nullable(
 public fun <EB, CTX, T : Any> nullable(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>
-): ObjectPropertySpec.Nullable<EB, CTX, T>
+): StructPropertySpec.Nullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
-    ObjectPropertySpec.Nullable(
+    StructPropertySpec.Nullable(
         path = paths,
         reader = Reader { env, location, source ->
             val failures = paths.items
@@ -72,27 +72,27 @@ public fun <EB, CTX, T : Any> nullable(
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Nullable<EB, CTX, T>.validation(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Nullable<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T?>
-): ObjectPropertySpec.Nullable<EB, CTX, T> =
-    ObjectPropertySpec.Nullable(
+): StructPropertySpec.Nullable<EB, CTX, T> =
+    StructPropertySpec.Nullable(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).validation(env, location, validator)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Nullable<EB, CTX, T>.filter(
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Nullable<EB, CTX, T>.filter(
     predicate: ReaderPredicate<EB, CTX, T>
-): ObjectPropertySpec.Nullable<EB, CTX, T> =
-    ObjectPropertySpec.Nullable(
+): StructPropertySpec.Nullable<EB, CTX, T> =
+    StructPropertySpec.Nullable(
         path = path,
         reader = { env, location, source ->
             reader.read(env, location, source).filter(env, predicate)
         }
     )
 
-public infix fun <EB, CTX, T : Any> ObjectPropertySpec.Nullable<EB, CTX, T>.or(
-    alt: ObjectPropertySpec.Nullable<EB, CTX, T>
-): ObjectPropertySpec.Nullable<EB, CTX, T> =
-    ObjectPropertySpec.Nullable(path = path.append(alt.path), reader = reader or alt.reader)
+public infix fun <EB, CTX, T : Any> StructPropertySpec.Nullable<EB, CTX, T>.or(
+    alt: StructPropertySpec.Nullable<EB, CTX, T>
+): StructPropertySpec.Nullable<EB, CTX, T> =
+    StructPropertySpec.Nullable(path = path.append(alt.path), reader = reader or alt.reader)

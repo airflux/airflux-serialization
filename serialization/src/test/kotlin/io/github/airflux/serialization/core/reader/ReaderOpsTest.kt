@@ -122,7 +122,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
                 "then validation does not execute and the original result should be returned" {
                     val validator: Validator<Unit, Unit, String> = DummyValidator(
-                        result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Object.IsEmpty)
+                        result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Struct.IsEmpty)
                     )
                     val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
                     validated shouldBe ReaderResult.Failure(

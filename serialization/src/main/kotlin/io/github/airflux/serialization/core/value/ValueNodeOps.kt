@@ -56,18 +56,18 @@ public fun <EB, CTX, T : Number> ValueNode.readAsNumber(
             error = env.errorBuilders.invalidTypeError(ValueNode.Type.NUMBER, this.type)
         )
 
-public inline fun <EB, CTX, T> ValueNode.readAsObject(
+public inline fun <EB, CTX, T> ValueNode.readAsStruct(
     env: ReaderEnv<EB, CTX>,
     location: Location,
-    reader: (ReaderEnv<EB, CTX>, Location, ObjectNode) -> ReaderResult<T>
+    reader: (ReaderEnv<EB, CTX>, Location, StructNode) -> ReaderResult<T>
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is ObjectNode)
+    if (this is StructNode)
         reader(env, location, this)
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(ValueNode.Type.OBJECT, this.type)
+            error = env.errorBuilders.invalidTypeError(ValueNode.Type.STRUCT, this.type)
         )
 
 public inline fun <EB, CTX, T> ValueNode.readAsArray(
@@ -88,7 +88,7 @@ internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
     tailrec fun ValueNode.getOrNull(path: PropertyPath, idxElement: Int): ValueNode? {
         if (idxElement == path.elements.size) return this
         return when (val element = path.elements[idxElement]) {
-            is PropertyPath.Element.Key -> if (this is ObjectNode)
+            is PropertyPath.Element.Key -> if (this is StructNode)
                 this[element]?.getOrNull(path, idxElement + 1)
             else
                 null
@@ -103,4 +103,4 @@ internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
     return this.getOrNull(path, 0)
 }
 
-internal operator fun ObjectNode.contains(path: PropertyPath): Boolean = this.getOrNull(path) != null
+internal operator fun StructNode.contains(path: PropertyPath): Boolean = this.getOrNull(path) != null

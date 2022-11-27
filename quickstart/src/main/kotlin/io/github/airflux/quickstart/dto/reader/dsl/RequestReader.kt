@@ -17,7 +17,7 @@
 package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.quickstart.dto.Request
-import io.github.airflux.quickstart.dto.reader.dsl.validator.CommonObjectReaderValidators
+import io.github.airflux.quickstart.dto.reader.dsl.validator.CommonStructReaderValidators
 import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
 import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.serialization.core.reader.Reader
@@ -28,7 +28,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 
 val RequestReader: Reader<ReaderErrorBuilders, ReaderCtx, Request> = structReader {
     validation {
-        +CommonObjectReaderValidators
+        +CommonStructReaderValidators
     }
 
     val tender = property(required(name = "tender", reader = TenderReader))

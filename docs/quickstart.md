@@ -67,9 +67,9 @@ sealed class JsonErrors : ReaderResult.Error {
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 
     sealed class Validation : JsonErrors() {
-        sealed class Object : Validation() {
-            object IsEmpty : Object()
-            object AdditionalProperties : Object()
+        sealed class Struct : Validation() {
+            object IsEmpty : Struct()
+            object AdditionalProperties : Struct()
         }
 
         sealed class Arrays : Validation() {
@@ -97,8 +97,8 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              ValueCastErrorBuilder,
                              IsNotBlankStringValidator.ErrorBuilder,
                              PatternStringValidator.ErrorBuilder,
-                             IsNotEmptyObjectValidator.ErrorBuilder,
-                             AdditionalPropertiesObjectValidator.ErrorBuilder,
+                             IsNotEmptyStructValidator.ErrorBuilder,
+                             AdditionalPropertiesStructValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder,
                              GtComparisonValidator.ErrorBuilder {
@@ -118,11 +118,11 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
     override fun patternStringError(value: String, pattern: Regex): ReaderResult.Error =
         JsonErrors.Validation.Strings.Pattern(value, pattern)
 
-    //Object validation error builders
-    override fun isNotEmptyObjectError(): ReaderResult.Error = JsonErrors.Validation.Object.IsEmpty
+    //Struct validation error builders
+    override fun isNotEmptyStructError(): ReaderResult.Error = JsonErrors.Validation.Struct.IsEmpty
 
-    override fun additionalPropertiesObjectError(): ReaderResult.Error =
-        JsonErrors.Validation.Object.AdditionalProperties
+    override fun additionalPropertiesStructError(): ReaderResult.Error =
+        JsonErrors.Validation.Struct.AdditionalProperties
 
     //Array validation error builders
     override fun isNotEmptyArrayError(): ReaderResult.Error = JsonErrors.Validation.Arrays.IsEmpty

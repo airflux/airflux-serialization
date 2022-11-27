@@ -19,8 +19,8 @@ package io.github.airflux.serialization.dsl.lookup
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.ObjectNode
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -46,7 +46,7 @@ internal class LookupOpsTest : FreeSpec() {
             "when lookup by a key element of the path" - {
 
                 "when the receiver is of type Defined" - {
-                    val defined = Lookup.Defined(LOCATION, ObjectNode(KEY_NAME to StringNode(VALUE)))
+                    val defined = Lookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
                     "when the value contains the finding key" - {
 

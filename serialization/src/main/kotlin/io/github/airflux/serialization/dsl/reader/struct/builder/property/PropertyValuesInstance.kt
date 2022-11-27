@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
 internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
-    private val properties: MutableSet<ObjectProperty<EB, CTX>> = mutableSetOf()
-    private val values: MutableMap<ObjectProperty<EB, CTX>, Any> = mutableMapOf()
+    private val properties: MutableSet<StructProperty<EB, CTX>> = mutableSetOf()
+    private val values: MutableMap<StructProperty<EB, CTX>, Any> = mutableMapOf()
 
     override val isEmpty: Boolean
         get() = values.isEmpty()
@@ -29,30 +29,30 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
     override val size: Int
         get() = values.size
 
-    override operator fun <T : Any> get(property: ObjectProperty.Required<EB, CTX, T>): T =
+    override operator fun <T : Any> get(property: StructProperty.Required<EB, CTX, T>): T =
         getNonNullable(property)
 
-    override operator fun <T : Any> get(property: ObjectProperty.Defaultable<EB, CTX, T>): T =
+    override operator fun <T : Any> get(property: StructProperty.Defaultable<EB, CTX, T>): T =
         getNonNullable(property)
 
-    override operator fun <T : Any> get(property: ObjectProperty.Optional<EB, CTX, T>): T? =
+    override operator fun <T : Any> get(property: StructProperty.Optional<EB, CTX, T>): T? =
         getNullable(property)
 
-    override operator fun <T : Any> get(property: ObjectProperty.OptionalWithDefault<EB, CTX, T>): T =
+    override operator fun <T : Any> get(property: StructProperty.OptionalWithDefault<EB, CTX, T>): T =
         getNonNullable(property)
 
-    override operator fun <T : Any> get(property: ObjectProperty.Nullable<EB, CTX, T>): T? =
+    override operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T? =
         getNullable(property)
 
-    override operator fun <T : Any> get(property: ObjectProperty.NullableWithDefault<EB, CTX, T>): T? =
+    override operator fun <T : Any> get(property: StructProperty.NullableWithDefault<EB, CTX, T>): T? =
         getNullable(property)
 
-    operator fun set(property: ObjectProperty<EB, CTX>, value: Any?) {
+    operator fun set(property: StructProperty<EB, CTX>, value: Any?) {
         if (value != null) values[property] = value
         properties.add(property)
     }
 
-    private fun <T> getNonNullable(property: ObjectProperty<EB, CTX>): T {
+    private fun <T> getNonNullable(property: StructProperty<EB, CTX>): T {
         val value = values[property]
         return if (value != null)
             @Suppress("UNCHECKED_CAST")
@@ -61,7 +61,7 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
             throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
     }
 
-    private fun <T> getNullable(property: ObjectProperty<EB, CTX>): T? {
+    private fun <T> getNullable(property: StructProperty<EB, CTX>): T? {
         val value = values[property]
         return if (value != null)
             @Suppress("UNCHECKED_CAST")

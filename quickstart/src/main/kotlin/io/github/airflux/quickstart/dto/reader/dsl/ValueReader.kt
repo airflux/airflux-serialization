@@ -18,7 +18,7 @@ package io.github.airflux.quickstart.dto.reader.dsl
 
 import io.github.airflux.quickstart.dto.model.Value
 import io.github.airflux.quickstart.dto.reader.base.additionalProperties
-import io.github.airflux.quickstart.dto.reader.dsl.validator.CommonObjectReaderValidators
+import io.github.airflux.quickstart.dto.reader.dsl.validator.CommonStructReaderValidators
 import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
 import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
 import io.github.airflux.serialization.core.reader.Reader
@@ -30,7 +30,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 val ValueReader: Reader<ReaderErrorBuilders, ReaderCtx, Value> = structReader {
 
     validation {
-        +CommonObjectReaderValidators
+        +CommonStructReaderValidators
         +additionalProperties
     }
 

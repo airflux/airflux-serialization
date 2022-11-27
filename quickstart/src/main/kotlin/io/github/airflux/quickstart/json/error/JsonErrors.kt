@@ -44,9 +44,9 @@ sealed class JsonErrors : ReaderResult.Error {
             object IsBlank : Strings()
         }
 
-        sealed class Object : Validation() {
-            object IsEmpty : Object()
-            object AdditionalProperties : Object()
+        sealed class Struct : Validation() {
+            object IsEmpty : Struct()
+            object AdditionalProperties : Struct()
         }
     }
 }

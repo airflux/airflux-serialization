@@ -23,9 +23,9 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.ObjectProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
@@ -69,7 +69,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for required property" - {
-                    val property = ObjectProperty.Required(required(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Required(required(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -86,7 +86,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
+                        StructProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -102,7 +102,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for optional property" - {
-                    val property = ObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Optional(optional(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -118,7 +118,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for optional with default property" - {
-                    val property = ObjectProperty.OptionalWithDefault(
+                    val property = StructProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
 
@@ -136,7 +136,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = ObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -152,7 +152,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable with default property" - {
-                    val property = ObjectProperty.NullableWithDefault(
+                    val property = StructProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
 
@@ -173,7 +173,7 @@ internal class PropertyValuesTest : FreeSpec() {
             "when the added value is not null" - {
 
                 "for required property" - {
-                    val property = ObjectProperty.Required(required(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Required(required(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -206,7 +206,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.Required(required(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty.Required(required(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -224,7 +224,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
+                        StructProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -257,7 +257,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.Defaultable(
+                        val unknownProperty = StructProperty.Defaultable(
                             defaultable(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
@@ -276,7 +276,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for optional property" - {
-                    val property = ObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Optional(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -309,7 +309,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -326,7 +326,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for optional with default property" - {
-                    val property = ObjectProperty.OptionalWithDefault(
+                    val property = StructProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
@@ -361,7 +361,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.OptionalWithDefault(
+                        val unknownProperty = StructProperty.OptionalWithDefault(
                             optionalWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
@@ -380,7 +380,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = ObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -413,7 +413,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -430,7 +430,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable with default property" - {
-                    val property = ObjectProperty.NullableWithDefault(
+                    val property = StructProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
@@ -465,7 +465,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.NullableWithDefault(
+                        val unknownProperty = StructProperty.NullableWithDefault(
                             nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
@@ -487,7 +487,7 @@ internal class PropertyValuesTest : FreeSpec() {
             "when the added value is null" - {
 
                 "for required property" - {
-                    val property = ObjectProperty.Required(required(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Required(required(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -519,7 +519,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for defaultable property" - {
                     val property =
-                        ObjectProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
+                        StructProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -550,7 +550,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for optional property" - {
-                    val property = ObjectProperty.Optional(optional(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Optional(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -583,7 +583,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -600,7 +600,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for optional with default property" - {
-                    val property = ObjectProperty.OptionalWithDefault(
+                    val property = StructProperty.OptionalWithDefault(
                         optionalWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
@@ -633,7 +633,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = ObjectProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -666,7 +666,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -683,7 +683,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable with default property" - {
-                    val property = ObjectProperty.NullableWithDefault(
+                    val property = StructProperty.NullableWithDefault(
                         nullableWithDefault(PROPERTY_NAME, StringReader, DEFAULT)
                     )
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
@@ -718,7 +718,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = ObjectProperty.NullableWithDefault(
+                        val unknownProperty = StructProperty.NullableWithDefault(
                             nullableWithDefault(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
                         )
 
