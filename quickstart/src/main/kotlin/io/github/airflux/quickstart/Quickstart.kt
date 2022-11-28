@@ -20,18 +20,17 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.parser.deserialization
 import io.github.airflux.parser.serialization
-import io.github.airflux.quickstart.dto.Response
-import io.github.airflux.quickstart.dto.model.Lot
-import io.github.airflux.quickstart.dto.model.LotStatus
-import io.github.airflux.quickstart.dto.model.Lots
-import io.github.airflux.quickstart.dto.model.Tender
-import io.github.airflux.quickstart.dto.model.Value
-import io.github.airflux.quickstart.dto.reader.dsl.RequestReader
-import io.github.airflux.quickstart.dto.reader.env.ReaderCtx
-import io.github.airflux.quickstart.dto.reader.env.ReaderErrorBuilders
-import io.github.airflux.quickstart.dto.writer.ResponseWriter
-import io.github.airflux.quickstart.dto.writer.env.WriterCtx
-import io.github.airflux.quickstart.json.error.JsonErrors
+import io.github.airflux.quickstart.domain.model.Lot
+import io.github.airflux.quickstart.domain.model.LotStatus
+import io.github.airflux.quickstart.domain.model.Lots
+import io.github.airflux.quickstart.domain.model.Tender
+import io.github.airflux.quickstart.domain.model.Value
+import io.github.airflux.quickstart.infrastructure.web.model.Response
+import io.github.airflux.quickstart.infrastructure.web.model.reader.RequestReader
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
+import io.github.airflux.quickstart.infrastructure.web.model.writer.ResponseWriter
+import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.writer.env.WriterEnv
@@ -49,8 +48,8 @@ fun main() {
             errorBuilders = ReaderErrorBuilders,
             context = ReaderCtx(failFast = true),
             exceptionsHandler = exceptionsHandler {
-                exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
-                exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
+                exception<IllegalArgumentException> { _, _, _ -> io.github.airflux.quickstart.infrastructure.web.error.JsonErrors.PathMissing }
+                exception<Exception> { _, _, _ -> io.github.airflux.quickstart.infrastructure.web.error.JsonErrors.PathMissing }
             }
         )
 
