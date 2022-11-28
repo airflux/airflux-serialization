@@ -49,44 +49,13 @@ val parsedUser = JSON.deserialization(
 
 #### Define the environment for reading
 
-Define the environment to deserialization of some domain type using the reade
+Define the environment to deserialization of some domain type using the reader
 
 ```kotlin
 val readerEnv = ReaderEnv(
     errorBuilders = ReaderErrorBuilders,
     context = ReaderCtx(failFast = true)
 )
-```
-
-- Define the parsing and validation errors
-
-```kotlin
-sealed class JsonErrors : ReaderResult.Error {
-    object PathMissing : JsonErrors()
-    data class InvalidType(val expected: ValueNode.Type, val actual: ValueNode.Type) : JsonErrors()
-    data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
-
-    sealed class Validation : JsonErrors() {
-        sealed class Struct : Validation() {
-            object IsEmpty : Struct()
-            object AdditionalProperties : Struct()
-        }
-
-        sealed class Arrays : Validation() {
-            object IsEmpty : Arrays()
-            object AdditionalItems : Arrays()
-        }
-
-        sealed class Strings : Validation() {
-            object IsBlank : Strings()
-            class Pattern(val value: String, val pattern: Regex) : Strings()
-        }
-
-        sealed class Numbers : Validation() {
-            class Gt<T>(val expected: T, val actual: T) : Numbers()
-        }
-    }
-}
 ```
 
 - Define error builders for the reading environment
@@ -132,6 +101,37 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
     //Comparison validation error builders
     override fun gtComparisonError(expected: Number, actual: Number): ReaderResult.Error =
         JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)
+}
+```
+
+- Define parsing and validation errors
+
+```kotlin
+sealed class JsonErrors : ReaderResult.Error {
+    object PathMissing : JsonErrors()
+    data class InvalidType(val expected: ValueNode.Type, val actual: ValueNode.Type) : JsonErrors()
+    data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
+
+    sealed class Validation : JsonErrors() {
+        sealed class Struct : Validation() {
+            object IsEmpty : Struct()
+            object AdditionalProperties : Struct()
+        }
+
+        sealed class Arrays : Validation() {
+            object IsEmpty : Arrays()
+            object AdditionalItems : Arrays()
+        }
+
+        sealed class Strings : Validation() {
+            object IsBlank : Strings()
+            class Pattern(val value: String, val pattern: Regex) : Strings()
+        }
+
+        sealed class Numbers : Validation() {
+            class Gt<T>(val expected: T, val actual: T) : Numbers()
+        }
+    }
 }
 ```
 
