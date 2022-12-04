@@ -19,18 +19,11 @@ package io.github.airflux.parser
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.core.Version
-import com.fasterxml.jackson.databind.BeanDescription
-import com.fasterxml.jackson.databind.DeserializationConfig
 import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.SerializationConfig
 import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.databind.ser.Serializers
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
@@ -40,39 +33,45 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import java.util.*
 
-public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion()) {
+public object AirFluxJsonModule : SimpleModule() {
 
-    public class ParsingException(message: String) : RuntimeException(message)
-
-    override fun setupModule(context: SetupContext) {
-        context.addDeserializers(AirFluxDeserializers())
-        context.addSerializers(AirFluxSerializers())
+    init {
+        addSerializer(ValueNode::class.java, AirFluxSerializer())
+        addDeserializer(ValueNode::class.java, AirFluxDeserializer())
     }
 
-    private class AirFluxDeserializers : Deserializers.Base() {
-        override fun findBeanDeserializer(
-            javaType: JavaType,
-            config: DeserializationConfig,
-            beanDesc: BeanDescription
-        ): JsonDeserializer<*>? {
-            val klass = javaType.rawClass
-            return if (ValueNode::class.java.isAssignableFrom(klass) || klass == NullNode::class.java)
-                ValueNodeDeserializer(klass)
-            else
-                null
+    private class AirFluxSerializer : JsonSerializer<ValueNode>() {
+
+        override fun serialize(value: ValueNode, gen: JsonGenerator, provider: SerializerProvider?) {
+            when (value) {
+                is NullNode -> gen.writeNull()
+                is StringNode -> gen.writeString(value.get)
+                is BooleanNode -> gen.writeBoolean(value.get)
+                is NumberNode -> gen.writeNumber(value.get)
+                is ArrayNode<*> -> {
+                    gen.writeStartArray()
+                    value.forEach { element ->
+                        serialize(element, gen, provider)
+                    }
+                    gen.writeEndArray()
+                }
+
+                is StructNode -> {
+                    gen.writeStartObject()
+                    value.forEach { (name, element) ->
+                        gen.writeFieldName(name)
+                        serialize(element, gen, provider)
+                    }
+                    gen.writeEndObject()
+                }
+            }
         }
     }
 
-    private class ValueNodeDeserializer(val klass: Class<*>) : JsonDeserializer<Any>() {
-
-        override fun isCachable(): Boolean = true
+    private class AirFluxDeserializer : JsonDeserializer<ValueNode>() {
 
         override fun deserialize(jp: JsonParser, ctxt: DeserializationContext): ValueNode =
             deserialize(jp, ctxt, Stack())
-                .also { value ->
-                    if (!klass.isAssignableFrom(value::class.java))
-                        ctxt.handleUnexpectedToken(klass, jp)
-                }
 
         private tailrec fun deserialize(
             jp: JsonParser,
@@ -90,29 +89,36 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                     maybeValue = BooleanNode.True
                     nextContext = parserContext
                 }
+
                 JsonToken.VALUE_FALSE -> {
                     maybeValue = BooleanNode.False
                     nextContext = parserContext
                 }
+
                 JsonToken.VALUE_STRING -> {
                     maybeValue = StringNode(jp.text)
                     nextContext = parserContext
                 }
+
                 JsonToken.VALUE_NUMBER_INT,
                 JsonToken.VALUE_NUMBER_FLOAT -> {
-                    maybeValue = NumberNode.valueOf(jp.text) ?: throw ParsingException("Invalid number value.")
+                    maybeValue =
+                        NumberNode.valueOf(jp.text) ?: throw ParsingException("Invalid number value.")
                     nextContext = parserContext
                 }
+
                 JsonToken.VALUE_NULL -> {
                     maybeValue = NullNode
                     nextContext = parserContext
                 }
+
                 JsonToken.START_ARRAY -> {
                     maybeValue = null
                     nextContext = parserContext.apply {
                         push(DeserializerContext.ReadingList(mutableListOf()))
                     }
                 }
+
                 JsonToken.END_ARRAY -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingList) {
@@ -121,12 +127,14 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                     } else
                         throw ParsingException("We should have been reading list, something got wrong")
                 }
+
                 JsonToken.START_OBJECT -> {
                     maybeValue = null
                     nextContext = parserContext.apply {
                         push(DeserializerContext.ReadingObject(LinkedList()))
                     }
                 }
+
                 JsonToken.FIELD_NAME -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingObject) {
@@ -136,6 +144,7 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                     } else
                         throw ParsingException("We should be reading map, something got wrong")
                 }
+
                 JsonToken.END_OBJECT -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingObject) {
@@ -144,8 +153,10 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                     } else
                         throw ParsingException("We should have been reading an object, something got wrong ($head)")
                 }
+
                 JsonToken.NOT_AVAILABLE ->
                     throw ParsingException("We should have been reading an object, something got wrong")
+
                 JsonToken.VALUE_EMBEDDED_OBJECT ->
                     throw ParsingException("We should have been reading an object, something got wrong")
             }
@@ -189,39 +200,7 @@ public object AirFluxJsonModule : SimpleModule("AirFlux", Version.unknownVersion
                     throw ParsingException("Cannot add a value on an object without a key, malformed JSON object!")
             }
         }
-    }
 
-    private class AirFluxSerializers : Serializers.Base() {
-        override fun findSerializer(
-            config: SerializationConfig,
-            type: JavaType,
-            beanDesc: BeanDescription
-        ): JsonSerializer<*> = ValueNodeSerializer()
-    }
-
-    private class ValueNodeSerializer : JsonSerializer<ValueNode>() {
-        override fun serialize(value: ValueNode, gen: JsonGenerator, provider: SerializerProvider) {
-            when (value) {
-                is NullNode -> gen.writeNull()
-                is StringNode -> gen.writeString(value.get)
-                is BooleanNode -> gen.writeBoolean(value.get)
-                is NumberNode -> gen.writeNumber(value.get)
-                is ArrayNode<*> -> {
-                    gen.writeStartArray()
-                    value.forEach { element ->
-                        serialize(element, gen, provider)
-                    }
-                    gen.writeEndArray()
-                }
-                is StructNode -> {
-                    gen.writeStartObject()
-                    value.forEach { (name, element) ->
-                        gen.writeFieldName(name)
-                        serialize(element, gen, provider)
-                    }
-                    gen.writeEndObject()
-                }
-            }
-        }
+        class ParsingException(message: String) : RuntimeException(message)
     }
 }
