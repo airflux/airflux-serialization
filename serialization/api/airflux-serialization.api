@@ -1006,93 +1006,53 @@ public final class io/github/airflux/serialization/std/validator/array/StdArrayV
 	public final fun minItems (I)Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;
 }
 
-public final class io/github/airflux/serialization/std/validator/comparison/EqComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/EqComparisonValidator$ErrorBuilder {
-	public abstract fun eqComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/GeComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/GeComparisonValidator$ErrorBuilder {
-	public abstract fun geComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/GtComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/GtComparisonValidator$ErrorBuilder {
-	public abstract fun gtComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/LeComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/LeComparisonValidator$ErrorBuilder {
-	public abstract fun leComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/LtComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/LtComparisonValidator$ErrorBuilder {
-	public abstract fun ltComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/MaxComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/MaxComparisonValidator$ErrorBuilder {
-	public abstract fun maxComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/MinComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/MinComparisonValidator$ErrorBuilder {
-	public abstract fun minComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/NeComparisonValidator : io/github/airflux/serialization/core/reader/validator/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
-}
-
-public abstract interface class io/github/airflux/serialization/std/validator/comparison/NeComparisonValidator$ErrorBuilder {
-	public abstract fun neComparisonError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
-}
-
-public final class io/github/airflux/serialization/std/validator/comparison/StdComparisonValidator {
-	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/comparison/StdComparisonValidator;
-	public final fun eq (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun ge (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun gt (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun le (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun lt (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun max (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun min (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-	public final fun ne (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
-}
-
 public final class io/github/airflux/serialization/std/validator/condition/ConditionValidatorsKt {
 	public static final fun applyIf (Lio/github/airflux/serialization/core/reader/validator/Validator;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 	public static final fun applyIfNotNull (Lio/github/airflux/serialization/core/reader/validator/Validator;)Lio/github/airflux/serialization/core/reader/validator/Validator;
+}
+
+public final class io/github/airflux/serialization/std/validator/number/ExclusiveMaximumNumberValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+}
+
+public abstract interface class io/github/airflux/serialization/std/validator/number/ExclusiveMaximumNumberValidator$ErrorBuilder {
+	public abstract fun exclusiveMaximumNumberError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
+public final class io/github/airflux/serialization/std/validator/number/ExclusiveMinimumNumberValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+}
+
+public abstract interface class io/github/airflux/serialization/std/validator/number/ExclusiveMinimumNumberValidator$ErrorBuilder {
+	public abstract fun exclusiveMinimumNumberError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
+public final class io/github/airflux/serialization/std/validator/number/MaximumNumberValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+}
+
+public abstract interface class io/github/airflux/serialization/std/validator/number/MaximumNumberValidator$ErrorBuilder {
+	public abstract fun maximumNumberError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
+public final class io/github/airflux/serialization/std/validator/number/MinimumNumberValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+}
+
+public abstract interface class io/github/airflux/serialization/std/validator/number/MinimumNumberValidator$ErrorBuilder {
+	public abstract fun minimumNumberError (Ljava/lang/Number;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
+public final class io/github/airflux/serialization/std/validator/number/StdNumberValidator {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/number/StdNumberValidator;
+	public final fun exclusiveMaximum (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
+	public final fun exclusiveMinimum (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
+	public final fun maximum (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
+	public final fun minimum (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 }
 
 public final class io/github/airflux/serialization/std/validator/string/IsAStringValidator : io/github/airflux/serialization/core/reader/validator/Validator {

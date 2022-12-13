@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
-import io.github.airflux.serialization.std.validator.comparison.GtComparisonValidator
+import io.github.airflux.serialization.std.validator.number.ExclusiveMinimumNumberValidator
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
 import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesStructValidator
 import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructValidator
@@ -32,7 +32,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              IsNotBlankStringValidator.ErrorBuilder,
                              IsNotEmptyStructValidator.ErrorBuilder,
                              AdditionalPropertiesStructValidator.ErrorBuilder,
-                             GtComparisonValidator.ErrorBuilder,
+                             ExclusiveMinimumNumberValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
     override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
@@ -47,7 +47,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
     override fun additionalPropertiesStructError(): ReaderResult.Error =
         JsonErrors.Validation.Struct.AdditionalProperties
 
-    override fun gtComparisonError(expected: Number, actual: Number): ReaderResult.Error =
+    override fun exclusiveMinimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
         JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)
 
     override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems

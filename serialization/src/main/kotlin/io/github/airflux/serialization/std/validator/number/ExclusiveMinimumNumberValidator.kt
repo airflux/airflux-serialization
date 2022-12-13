@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.validator.comparison
+package io.github.airflux.serialization.std.validator.number
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class GeComparisonValidator<EB, CTX, T> internal constructor(private val expected: T) : Validator<EB, CTX, T>
-    where EB : GeComparisonValidator.ErrorBuilder,
+public class ExclusiveMinimumNumberValidator<EB, CTX, T> internal constructor(
+    private val expected: T
+) : Validator<EB, CTX, T>
+    where EB : ExclusiveMinimumNumberValidator.ErrorBuilder,
           T : Number,
           T : Comparable<T> {
 
     override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure? =
-        if (value >= expected)
+        if (value > expected)
             null
         else
-            ReaderResult.Failure(location = location, error = env.errorBuilders.geComparisonError(expected, value))
+            ReaderResult.Failure(
+                location = location,
+                error = env.errorBuilders.exclusiveMinimumNumberError(expected, value)
+            )
 
     public interface ErrorBuilder {
-        public fun geComparisonError(expected: Number, actual: Number): ReaderResult.Error
+        public fun exclusiveMinimumNumberError(expected: Number, actual: Number): ReaderResult.Error
     }
 }

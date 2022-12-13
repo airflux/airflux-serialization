@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.validator.comparison
+package io.github.airflux.serialization.std.validator.number
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class LeComparisonValidator<EB, CTX, T> internal constructor(private val expected: T) : Validator<EB, CTX, T>
-    where EB : LeComparisonValidator.ErrorBuilder,
+public class ExclusiveMaximumNumberValidator<EB, CTX, T> internal constructor(
+    private val expected: T
+) : Validator<EB, CTX, T>
+    where EB : ExclusiveMaximumNumberValidator.ErrorBuilder,
           T : Number,
           T : Comparable<T> {
 
     override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure? =
-        if (value <= expected)
+        if (value < expected)
             null
         else
-            ReaderResult.Failure(location = location, error = env.errorBuilders.leComparisonError(expected, value))
+            ReaderResult.Failure(
+                location = location,
+                error = env.errorBuilders.exclusiveMaximumNumberError(expected, value)
+            )
 
     public interface ErrorBuilder {
-        public fun leComparisonError(expected: Number, actual: Number): ReaderResult.Error
+        public fun exclusiveMaximumNumberError(expected: Number, actual: Number): ReaderResult.Error
     }
 }

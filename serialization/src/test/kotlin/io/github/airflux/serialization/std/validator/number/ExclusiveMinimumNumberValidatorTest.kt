@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.validator.comparable
+package io.github.airflux.serialization.std.validator.number
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
-import io.github.airflux.serialization.std.validator.comparison.LtComparisonValidator
-import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class LtComparisonValidatorTest : FreeSpec() {
+internal class ExclusiveMinimumNumberValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
@@ -38,15 +36,20 @@ internal class LtComparisonValidatorTest : FreeSpec() {
 
     init {
 
-        "The string validator Gt" - {
-            val validator: Validator<EB, Unit, Int> = StdComparisonValidator.lt(VALUE)
+        "The numeric validator of the exclusive minimum allowed value" - {
+            val validator: Validator<EB, Unit, Int> = StdNumberValidator.exclusiveMinimum(VALUE)
 
             "when a value is less than the allowed value" - {
                 val value = VALUE - 1
 
-                "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, LOCATION, value)
-                    errors.shouldBeNull()
+                "then the validator should return an error" {
+                    val failure = validator.validate(ENV, LOCATION, value)
+
+                    failure.shouldNotBeNull()
+                    failure shouldBe ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.Validation.Numbers.Gt(expected = VALUE, actual = value)
+                    )
                 }
             }
 
@@ -59,7 +62,7 @@ internal class LtComparisonValidatorTest : FreeSpec() {
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
                         location = LOCATION,
-                        error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
+                        error = JsonErrors.Validation.Numbers.Gt(expected = VALUE, actual = value)
                     )
                 }
             }
@@ -67,21 +70,16 @@ internal class LtComparisonValidatorTest : FreeSpec() {
             "when a value is greater than the allowed value" - {
                 val value = VALUE + 1
 
-                "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, value)
-
-                    failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(
-                        location = LOCATION,
-                        error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
-                    )
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
                 }
             }
         }
     }
 
-    internal class EB : LtComparisonValidator.ErrorBuilder {
-        override fun ltComparisonError(expected: Number, actual: Number): ReaderResult.Error =
-            JsonErrors.Validation.Numbers.Lt(expected = expected, actual = actual)
+    internal class EB : ExclusiveMinimumNumberValidator.ErrorBuilder {
+        override fun exclusiveMinimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
+            JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)
     }
 }

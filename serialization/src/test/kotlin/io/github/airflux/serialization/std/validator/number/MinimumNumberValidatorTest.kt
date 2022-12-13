@@ -14,44 +14,33 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.validator.comparable
+package io.github.airflux.serialization.std.validator.number
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
-import io.github.airflux.serialization.std.validator.comparison.NeComparisonValidator
-import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class NeComparisonValidatorTest : FreeSpec() {
+internal class MinimumNumberValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
-        private const val VALUE: Int = 2
+        private const val MIN_VALUE: Int = 2
     }
 
     init {
 
-        "The string validator Eq" - {
-            val validator: Validator<EB, Unit, Int> = StdComparisonValidator.ne(VALUE)
+        "The numeric validator of the minimum allowed value" - {
+            val validator: Validator<EB, Unit, Int> = StdNumberValidator.minimum(MIN_VALUE)
 
-            "when a value is less than the allowed value" - {
-                val value = VALUE - 1
-
-                "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, LOCATION, value)
-                    errors.shouldBeNull()
-                }
-            }
-
-            "when a value is equal to the allowed value" - {
-                val value = VALUE
+            "when a value is less than the min allowed" - {
+                val value = MIN_VALUE - 1
 
                 "then the validator should return an error" {
                     val failure = validator.validate(ENV, LOCATION, value)
@@ -59,13 +48,22 @@ internal class NeComparisonValidatorTest : FreeSpec() {
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
                         location = LOCATION,
-                        error = JsonErrors.Validation.Numbers.Ne(expected = VALUE, actual = value)
+                        error = JsonErrors.Validation.Numbers.Min(expected = MIN_VALUE, actual = value)
                     )
                 }
             }
 
-            "when a value is more than the allowed value" - {
-                val value = VALUE + 1
+            "when a value is equal to the min allowed" - {
+                val value = MIN_VALUE
+
+                "then the validator should return the null value" {
+                    val errors = validator.validate(ENV, LOCATION, value)
+                    errors.shouldBeNull()
+                }
+            }
+
+            "when a value is more than the min allowed" - {
+                val value = MIN_VALUE + 1
 
                 "then the validator should return the null value" {
                     val errors = validator.validate(ENV, LOCATION, value)
@@ -75,8 +73,8 @@ internal class NeComparisonValidatorTest : FreeSpec() {
         }
     }
 
-    internal class EB : NeComparisonValidator.ErrorBuilder {
-        override fun neComparisonError(expected: Number, actual: Number): ReaderResult.Error =
-            JsonErrors.Validation.Numbers.Ne(expected = expected, actual = actual)
+    internal class EB : MinimumNumberValidator.ErrorBuilder {
+        override fun minimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
+            JsonErrors.Validation.Numbers.Min(expected = expected, actual = actual)
     }
 }

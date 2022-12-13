@@ -22,10 +22,10 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderEr
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
-import io.github.airflux.serialization.std.validator.comparison.StdComparisonValidator
+import io.github.airflux.serialization.std.validator.number.StdNumberValidator
 import java.math.BigDecimal
 
 private val amountMoreZero: Validator<ReaderErrorBuilders, ReaderCtx, BigDecimal> =
-    StdComparisonValidator.gt<ReaderErrorBuilders, ReaderCtx, BigDecimal>(BigDecimal.ZERO)
+    StdNumberValidator.exclusiveMinimum<ReaderErrorBuilders, ReaderCtx, BigDecimal>(BigDecimal.ZERO)
 
 val AmountReader: Reader<ReaderErrorBuilders, ReaderCtx, BigDecimal> = BigDecimalReader.validation(amountMoreZero)
