@@ -46,8 +46,8 @@ internal fun <EB, CTX> dummyBooleanReader(): Reader<EB, CTX, Boolean>
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(ValueNode.Type.BOOLEAN),
-                        actual = source.type
+                        expected = listOf(BooleanNode.nameOfType),
+                        actual = source.nameOfType
                     )
                 )
         }
@@ -63,8 +63,8 @@ internal fun <EB, CTX> dummyStringReader(): Reader<EB, CTX, String>
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(ValueNode.Type.STRING),
-                        actual = source.type
+                        expected = listOf(StringNode.nameOfType),
+                        actual = source.nameOfType
                     )
                 )
         }
@@ -80,8 +80,8 @@ internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(ValueNode.Type.NUMBER),
-                        actual = source.type
+                        expected = listOf(NumberNode.nameOfType),
+                        actual = source.nameOfType
                     )
                 )
         }
@@ -97,8 +97,8 @@ internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(ValueNode.Type.NUMBER),
-                        actual = source.type
+                        expected = listOf(NumberNode.nameOfType),
+                        actual = source.nameOfType
                     )
                 )
         }

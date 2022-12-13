@@ -18,7 +18,8 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.nulls.beNull
@@ -40,12 +41,12 @@ internal class ReaderResultErrorsTest : FreeSpec() {
             "#invoke(ReaderResult#Error, ReaderResult#Error) should return JsErrors with all errors" {
                 val errors = ReaderResult.Errors(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.BOOLEAN), actual = ValueNode.Type.STRING)
+                    JsonErrors.InvalidType(expected = listOf(BooleanNode.nameOfType), actual = StringNode.nameOfType)
                 )
 
                 errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.BOOLEAN), actual = ValueNode.Type.STRING)
+                    JsonErrors.InvalidType(expected = listOf(BooleanNode.nameOfType), actual = StringNode.nameOfType)
                 )
             }
 
@@ -62,8 +63,8 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                         listOf(
                             JsonErrors.PathMissing,
                             JsonErrors.InvalidType(
-                                expected = listOf(ValueNode.Type.BOOLEAN),
-                                actual = ValueNode.Type.STRING
+                                expected = listOf(BooleanNode.nameOfType),
+                                actual = StringNode.nameOfType
                             )
                         )
                     )
@@ -73,8 +74,8 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                             listOf(
                                 JsonErrors.PathMissing,
                                 JsonErrors.InvalidType(
-                                    expected = listOf(ValueNode.Type.BOOLEAN),
-                                    actual = ValueNode.Type.STRING
+                                    expected = listOf(BooleanNode.nameOfType),
+                                    actual = StringNode.nameOfType
                                 )
                             )
                         )
@@ -86,8 +87,8 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                 val secondErrors =
                     ReaderResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(ValueNode.Type.BOOLEAN),
-                            actual = ValueNode.Type.STRING
+                            expected = listOf(BooleanNode.nameOfType),
+                            actual = StringNode.nameOfType
                         )
                     )
 
@@ -95,7 +96,7 @@ internal class ReaderResultErrorsTest : FreeSpec() {
 
                 errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.BOOLEAN), actual = ValueNode.Type.STRING)
+                    JsonErrors.InvalidType(expected = listOf(BooleanNode.nameOfType), actual = StringNode.nameOfType)
                 )
             }
 
@@ -107,8 +108,8 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                     z = ReaderResult.Errors(JsonErrors.PathMissing),
                     other = ReaderResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(ValueNode.Type.BOOLEAN),
-                            actual = ValueNode.Type.STRING
+                            expected = listOf(BooleanNode.nameOfType),
+                            actual = StringNode.nameOfType
                         )
                     )
                 )

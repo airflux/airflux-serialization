@@ -38,7 +38,9 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.validator.Struc
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructReaderValidationInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidator
 
-public fun <EB, CTX, T> structReader(block: StructReaderBuilder<EB, CTX, T>.() -> ResultBuilder<EB, CTX, T>): Reader<EB, CTX, T>
+public fun <EB, CTX, T> structReader(
+    block: StructReaderBuilder<EB, CTX, T>.() -> ResultBuilder<EB, CTX, T>
+): Reader<EB, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           CTX : FailFastOption {
     val readerBuilder = StructReaderBuilder<EB, CTX, T>(
@@ -92,7 +94,7 @@ internal class StructReader<EB, CTX, T>(
         else
             ReaderResult.Failure(
                 location = location,
-                error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.STRUCT), source.type)
+                error = env.errorBuilders.invalidTypeError(listOf(StructNode.nameOfType), source.nameOfType)
             )
 
     private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: StructNode): ReaderResult<T> {

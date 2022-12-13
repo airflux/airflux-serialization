@@ -29,7 +29,6 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.nonNullable
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -101,8 +100,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ValueNode.Type.ARRAY),
-                                        actual = ValueNode.Type.STRING
+                                        expected = listOf(ArrayNode.nameOfType),
+                                        actual = StringNode.nameOfType
                                     )
                                 )
                             )
@@ -204,8 +203,8 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ValueNode.Type.ARRAY),
-                                        actual = ValueNode.Type.STRING
+                                        expected = listOf(ArrayNode.nameOfType),
+                                        actual = StringNode.nameOfType
                                     )
                                 )
                             )
@@ -313,7 +312,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         InvalidTypeErrorBuilder {
         override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 

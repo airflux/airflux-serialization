@@ -29,7 +29,6 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
@@ -116,8 +115,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ValueNode.Type.STRUCT),
-                                        actual = ValueNode.Type.STRING
+                                        expected = listOf(StructNode.nameOfType),
+                                        actual = StringNode.nameOfType
                                     )
                                 )
                             )
@@ -224,8 +223,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ValueNode.Type.STRUCT),
-                                        actual = ValueNode.Type.STRING
+                                        expected = listOf(StructNode.nameOfType),
+                                        actual = StringNode.nameOfType
                                     )
                                 )
                             )
@@ -481,7 +480,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing

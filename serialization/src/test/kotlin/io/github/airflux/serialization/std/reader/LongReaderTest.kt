@@ -64,7 +64,10 @@ internal class LongReaderTest : FreeSpec() {
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
-                        error = JsonErrors.InvalidType(expected = listOf(ValueNode.Type.NUMBER), actual = ValueNode.Type.STRING)
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(NumberNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
                     )
                 )
             }
@@ -97,7 +100,7 @@ internal class LongReaderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         ValueCastErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =

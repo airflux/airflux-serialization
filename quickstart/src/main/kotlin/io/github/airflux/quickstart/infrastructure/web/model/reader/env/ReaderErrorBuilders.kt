@@ -21,7 +21,6 @@ import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBui
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
 import io.github.airflux.serialization.std.validator.comparison.GtComparisonValidator
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
@@ -36,7 +35,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              GtComparisonValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
-    override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+    override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
 
     override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing

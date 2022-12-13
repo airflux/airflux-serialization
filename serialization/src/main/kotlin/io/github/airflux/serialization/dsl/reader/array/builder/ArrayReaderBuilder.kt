@@ -125,7 +125,7 @@ internal class ArrayReader<EB, CTX, T>(
         else
             ReaderResult.Failure(
                 location = location,
-                error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.ARRAY), source.type)
+                error = env.errorBuilders.invalidTypeError(listOf(ArrayNode.nameOfType), source.nameOfType)
             )
 
     private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult<T> {

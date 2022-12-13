@@ -17,14 +17,13 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.ValueNode
 import kotlin.reflect.KClass
 
 internal sealed class JsonErrors : ReaderResult.Error {
 
     object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: Iterable<ValueNode.Type>, val actual: ValueNode.Type) : JsonErrors()
+    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
 
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 

@@ -19,35 +19,34 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.path.PropertyPath
 
 public sealed class ValueNode {
-
-    public enum class Type { ARRAY, BOOLEAN, NULL, NUMBER, STRING, STRUCT }
-
-    public abstract val type: Type
+    public abstract val nameOfType: String
 }
 
 public object NullNode : ValueNode() {
-    override val type: Type = Type.NULL
+    override val nameOfType: String = "null"
 
     override fun toString(): String = "null"
 }
 
 public sealed class BooleanNode(public val get: Boolean) : ValueNode() {
 
-    public companion object {
-        public fun valueOf(value: Boolean): BooleanNode = if (value) True else False
-    }
-
-    override val type: Type = Type.BOOLEAN
+    override val nameOfType: String = BooleanNode.nameOfType
 
     public object True : BooleanNode(true)
     public object False : BooleanNode(false)
 
     override fun toString(): String = get.toString()
+
+    public companion object {
+        public fun valueOf(value: Boolean): BooleanNode = if (value) True else False
+
+        public const val nameOfType: String = "boolean"
+    }
 }
 
 public class StringNode(public val get: String) : ValueNode() {
 
-    override val type: Type = Type.STRING
+    override val nameOfType: String = StringNode.nameOfType
 
     override fun toString(): String = """"$get""""
 
@@ -55,24 +54,15 @@ public class StringNode(public val get: String) : ValueNode() {
         this === other || (other is StringNode && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
+
+    public companion object {
+        public const val nameOfType: String = "string"
+    }
 }
 
 public class NumberNode private constructor(public val get: String) : ValueNode() {
 
-    public companion object {
-        private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
-        private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
-        private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
-
-        public fun valueOf(value: Byte): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: Short): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: Int): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: Long): NumberNode = NumberNode(value.toString())
-
-        public fun valueOf(value: String): NumberNode? = if (value.matches(pattern)) NumberNode(value) else null
-    }
-
-    override val type: Type = Type.NUMBER
+    override val nameOfType: String = NumberNode.nameOfType
 
     public val isInteger: Boolean = get.matches(integerNumberPattern)
 
@@ -84,15 +74,25 @@ public class NumberNode private constructor(public val get: String) : ValueNode(
         this === other || (other is NumberNode && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
+
+    public companion object {
+        private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
+        private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
+        private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
+
+        public const val nameOfType: String = "number"
+
+        public fun valueOf(value: Byte): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: Short): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: Int): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: Long): NumberNode = NumberNode(value.toString())
+        public fun valueOf(value: String): NumberNode? = if (value.matches(pattern)) NumberNode(value) else null
+    }
 }
 
 public class ArrayNode<out T : ValueNode>(private val items: List<T> = emptyList()) : ValueNode(), Iterable<T> {
 
-    public companion object {
-        public operator fun <T : ValueNode> invoke(vararg elements: T): ArrayNode<T> = ArrayNode(elements.toList())
-    }
-
-    override val type: Type = Type.ARRAY
+    override val nameOfType: String = ArrayNode.nameOfType
 
     public operator fun get(idx: PropertyPath.Element.Idx): ValueNode? = get(idx.get)
 
@@ -111,6 +111,12 @@ public class ArrayNode<out T : ValueNode>(private val items: List<T> = emptyList
         this === other || (other is ArrayNode<*> && this.items == other.items)
 
     override fun hashCode(): Int = items.hashCode()
+
+    public companion object {
+        public const val nameOfType: String = "array"
+
+        public operator fun <T : ValueNode> invoke(vararg elements: T): ArrayNode<T> = ArrayNode(elements.toList())
+    }
 }
 
 public class StructNode(
@@ -118,13 +124,7 @@ public class StructNode(
 ) : ValueNode(),
     Iterable<Map.Entry<String, ValueNode>> {
 
-    public companion object {
-
-        public operator fun invoke(vararg properties: Pair<String, ValueNode>): StructNode =
-            StructNode(properties.toMap())
-    }
-
-    override val type: Type = Type.STRUCT
+    override val nameOfType: String = StructNode.nameOfType
 
     public operator fun get(key: PropertyPath.Element.Key): ValueNode? = get(key.get)
 
@@ -144,4 +144,11 @@ public class StructNode(
         this === other || (other is StructNode && this.properties.keys == other.properties.keys)
 
     override fun hashCode(): Int = properties.keys.hashCode()
+
+    public companion object {
+        public const val nameOfType: String = "object"
+
+        public operator fun invoke(vararg properties: Pair<String, ValueNode>): StructNode =
+            StructNode(properties.toMap())
+    }
 }

@@ -27,7 +27,6 @@ import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
@@ -90,8 +89,8 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ValueNode.Type.STRING),
-                                        actual = ValueNode.Type.NUMBER
+                                        expected = listOf(StringNode.nameOfType),
+                                        actual = NumberNode.nameOfType
                                     )
                                 )
                             )
@@ -142,8 +141,8 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ValueNode.Type.STRING),
-                                    actual = ValueNode.Type.NUMBER
+                                    expected = listOf(StringNode.nameOfType),
+                                    actual = NumberNode.nameOfType
                                 )
                             )
                         )
@@ -186,15 +185,15 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ValueNode.Type.STRING),
-                                    actual = ValueNode.Type.BOOLEAN
+                                    expected = listOf(StringNode.nameOfType),
+                                    actual = BooleanNode.nameOfType
                                 )
                             ),
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ValueNode.Type.NUMBER),
-                                    actual = ValueNode.Type.BOOLEAN
+                                    expected = listOf(NumberNode.nameOfType),
+                                    actual = BooleanNode.nameOfType
                                 )
                             )
                         )
@@ -207,7 +206,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         IsNotEmptyStringValidator.ErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun isNotEmptyStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsEmpty

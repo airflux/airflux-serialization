@@ -21,7 +21,6 @@ import io.github.airflux.serialization.common.dummyIntReader
 import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
@@ -49,7 +48,7 @@ internal class ArrayPrefixItemsSpecTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

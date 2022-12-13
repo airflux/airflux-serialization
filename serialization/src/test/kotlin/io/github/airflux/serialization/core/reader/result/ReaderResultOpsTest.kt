@@ -22,7 +22,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -73,8 +74,8 @@ internal class ReaderResultOpsTest : FreeSpec() {
                 val result: ReaderResult<String> = ReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(ValueNode.Type.STRING),
-                        actual = ValueNode.Type.BOOLEAN
+                        expected = listOf(StringNode.nameOfType),
+                        actual = BooleanNode.nameOfType
                     )
                 )
 
@@ -131,7 +132,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

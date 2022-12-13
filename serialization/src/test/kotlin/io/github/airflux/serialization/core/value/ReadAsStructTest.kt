@@ -57,8 +57,8 @@ internal class ReadAsStructTest : FreeSpec() {
                         ReaderResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
-                                expected = listOf(ValueNode.Type.STRUCT),
-                                actual = ValueNode.Type.BOOLEAN
+                                expected = listOf(StructNode.nameOfType),
+                                actual = BooleanNode.nameOfType
                             )
                         )
                     )
@@ -70,7 +70,7 @@ internal class ReadAsStructTest : FreeSpec() {
     private data class DTO(val name: String)
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

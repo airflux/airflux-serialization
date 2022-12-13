@@ -23,7 +23,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -99,8 +100,8 @@ internal class ReaderTest : FreeSpec() {
                             ReaderResult.Failure(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ValueNode.Type.STRING),
-                                    actual = ValueNode.Type.NUMBER
+                                    expected = listOf(StringNode.nameOfType),
+                                    actual = NumberNode.nameOfType
                                 )
                             )
                         }
@@ -119,8 +120,8 @@ internal class ReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ValueNode.Type.STRING),
-                                        actual = ValueNode.Type.NUMBER
+                                        expected = listOf(StringNode.nameOfType),
+                                        actual = NumberNode.nameOfType
                                     )
                                 )
                             )
