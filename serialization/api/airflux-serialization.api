@@ -163,7 +163,7 @@ public abstract interface class io/github/airflux/serialization/core/reader/erro
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/error/InvalidTypeErrorBuilder {
-	public abstract fun invalidTypeError (Lio/github/airflux/serialization/core/value/ValueNode$Type;Lio/github/airflux/serialization/core/value/ValueNode$Type;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+	public abstract fun invalidTypeError (Ljava/lang/Iterable;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/error/PathMissingErrorBuilder {
@@ -304,14 +304,15 @@ public final class io/github/airflux/serialization/core/reader/validator/Validat
 
 public final class io/github/airflux/serialization/core/value/ArrayNode : io/github/airflux/serialization/core/value/ValueNode, java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
 	public static final field Companion Lio/github/airflux/serialization/core/value/ArrayNode$Companion;
+	public static final field nameOfType Ljava/lang/String;
 	public fun <init> ()V
 	public fun <init> (Ljava/util/List;)V
 	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun get (I)Lio/github/airflux/serialization/core/value/ValueNode;
 	public final fun get (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/value/ValueNode;
+	public fun getNameOfType ()Ljava/lang/String;
 	public final fun getSize ()I
-	public fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
 	public fun hashCode ()I
 	public final fun isEmpty ()Z
 	public fun iterator ()Ljava/util/Iterator;
@@ -324,9 +325,10 @@ public final class io/github/airflux/serialization/core/value/ArrayNode$Companio
 
 public abstract class io/github/airflux/serialization/core/value/BooleanNode : io/github/airflux/serialization/core/value/ValueNode {
 	public static final field Companion Lio/github/airflux/serialization/core/value/BooleanNode$Companion;
+	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (ZLkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getGet ()Z
-	public fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
+	public fun getNameOfType ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -344,16 +346,17 @@ public final class io/github/airflux/serialization/core/value/BooleanNode$True :
 
 public final class io/github/airflux/serialization/core/value/NullNode : io/github/airflux/serialization/core/value/ValueNode {
 	public static final field INSTANCE Lio/github/airflux/serialization/core/value/NullNode;
-	public fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
+	public fun getNameOfType ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/serialization/core/value/NumberNode : io/github/airflux/serialization/core/value/ValueNode {
 	public static final field Companion Lio/github/airflux/serialization/core/value/NumberNode$Companion;
+	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getGet ()Ljava/lang/String;
-	public fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
+	public fun getNameOfType ()Ljava/lang/String;
 	public fun hashCode ()I
 	public final fun isInteger ()Z
 	public final fun isReal ()Z
@@ -369,16 +372,22 @@ public final class io/github/airflux/serialization/core/value/NumberNode$Compani
 }
 
 public final class io/github/airflux/serialization/core/value/StringNode : io/github/airflux/serialization/core/value/ValueNode {
+	public static final field Companion Lio/github/airflux/serialization/core/value/StringNode$Companion;
+	public static final field nameOfType Ljava/lang/String;
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getGet ()Ljava/lang/String;
-	public fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
+	public fun getNameOfType ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/airflux/serialization/core/value/StringNode$Companion {
+}
+
 public final class io/github/airflux/serialization/core/value/StructNode : io/github/airflux/serialization/core/value/ValueNode, java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
 	public static final field Companion Lio/github/airflux/serialization/core/value/StructNode$Companion;
+	public static final field nameOfType Ljava/lang/String;
 	public fun <init> ()V
 	public fun <init> (Ljava/util/Map;)V
 	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -386,7 +395,7 @@ public final class io/github/airflux/serialization/core/value/StructNode : io/gi
 	public final fun get (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/value/ValueNode;
 	public final fun get (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/ValueNode;
 	public final fun getCount ()I
-	public fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
+	public fun getNameOfType ()Ljava/lang/String;
 	public fun hashCode ()I
 	public final fun isEmpty ()Z
 	public fun iterator ()Ljava/util/Iterator;
@@ -398,18 +407,7 @@ public final class io/github/airflux/serialization/core/value/StructNode$Compani
 }
 
 public abstract class io/github/airflux/serialization/core/value/ValueNode {
-	public abstract fun getType ()Lio/github/airflux/serialization/core/value/ValueNode$Type;
-}
-
-public final class io/github/airflux/serialization/core/value/ValueNode$Type : java/lang/Enum {
-	public static final field ARRAY Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static final field BOOLEAN Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static final field NULL Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static final field NUMBER Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static final field STRING Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static final field STRUCT Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/ValueNode$Type;
-	public static fun values ()[Lio/github/airflux/serialization/core/value/ValueNode$Type;
+	public abstract fun getNameOfType ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/serialization/core/value/ValueNodeOpsKt {
