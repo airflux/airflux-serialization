@@ -72,7 +72,10 @@ internal class ReaderResultOpsTest : FreeSpec() {
             "when result is failure" - {
                 val result: ReaderResult<String> = ReaderResult.Failure(
                     location = LOCATION,
-                    error = JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(ValueNode.Type.STRING),
+                        actual = ValueNode.Type.BOOLEAN
+                    )
                 )
 
                 "then filter should return the original value" {
@@ -128,7 +131,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

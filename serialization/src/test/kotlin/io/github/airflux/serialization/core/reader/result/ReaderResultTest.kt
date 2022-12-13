@@ -129,7 +129,7 @@ internal class ReaderResultTest : FreeSpec() {
             "constructor(JsLocation, ReaderResult#Errors)" {
                 val errors = ReaderResult.Errors(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                 )
 
                 val failure = ReaderResult.Failure(location = LOCATION, errors = errors)
@@ -143,7 +143,7 @@ internal class ReaderResultTest : FreeSpec() {
                 val secondFailure = ReaderResult.Failure(
                     location = LOCATION,
                     errors = ReaderResult.Errors(
-                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                     )
                 )
 
@@ -157,7 +157,7 @@ internal class ReaderResultTest : FreeSpec() {
                     ReaderResult.Failure.Cause(
                         location = LOCATION,
                         errors = ReaderResult.Errors(
-                            JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                            JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                         )
                     )
                 )
@@ -245,14 +245,14 @@ internal class ReaderResultTest : FreeSpec() {
                     location = LOCATION,
                     errors = ReaderResult.Errors(
                         JsonErrors.PathMissing,
-                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                     )
                 )
 
                 cause.location shouldBe LOCATION
                 cause.errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                 )
             }
         }
@@ -263,7 +263,7 @@ internal class ReaderResultTest : FreeSpec() {
                 ReaderResult.Failure(
                     location = LOCATION,
                     errors = ReaderResult.Errors(
-                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                     )
                 )
             )
@@ -275,7 +275,7 @@ internal class ReaderResultTest : FreeSpec() {
                 ReaderResult.Failure.Cause(
                     location = LOCATION,
                     errors = ReaderResult.Errors(
-                        JsonErrors.InvalidType(expected = ValueNode.Type.STRING, actual = ValueNode.Type.BOOLEAN)
+                        JsonErrors.InvalidType(expected = listOf(ValueNode.Type.STRING), actual = ValueNode.Type.BOOLEAN)
                     )
                 )
             )

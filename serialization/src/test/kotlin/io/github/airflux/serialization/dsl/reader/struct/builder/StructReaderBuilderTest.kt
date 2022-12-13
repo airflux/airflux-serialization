@@ -116,7 +116,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.STRUCT,
+                                        expected = listOf(ValueNode.Type.STRUCT),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -224,7 +224,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.STRUCT,
+                                        expected = listOf(ValueNode.Type.STRUCT),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -481,7 +481,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing

@@ -23,7 +23,7 @@ sealed class JsonErrors : ReaderResult.Error {
 
     object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: ValueNode.Type, val actual: ValueNode.Type) : JsonErrors()
+    data class InvalidType(val expected: Iterable<ValueNode.Type>, val actual: ValueNode.Type) : JsonErrors()
 
     data class EnumCast(val expected: String, val actual: String) : JsonErrors()
 

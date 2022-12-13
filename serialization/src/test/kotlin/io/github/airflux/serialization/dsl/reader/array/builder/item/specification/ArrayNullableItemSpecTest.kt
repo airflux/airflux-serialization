@@ -90,7 +90,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.STRING,
+                                        expected = listOf(ValueNode.Type.STRING),
                                         actual = ValueNode.Type.NUMBER
                                     )
                                 )
@@ -142,7 +142,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = ValueNode.Type.STRING,
+                                    expected = listOf(ValueNode.Type.STRING),
                                     actual = ValueNode.Type.NUMBER
                                 )
                             )
@@ -186,14 +186,14 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = ValueNode.Type.STRING,
+                                    expected = listOf(ValueNode.Type.STRING),
                                     actual = ValueNode.Type.BOOLEAN
                                 )
                             ),
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = ValueNode.Type.NUMBER,
+                                    expected = listOf(ValueNode.Type.NUMBER),
                                     actual = ValueNode.Type.BOOLEAN
                                 )
                             )
@@ -207,7 +207,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         IsNotEmptyStringValidator.ErrorBuilder {
 
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun isNotEmptyStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsEmpty

@@ -29,7 +29,7 @@ public fun <EB, CTX> ValueNode.readAsBoolean(env: ReaderEnv<EB, CTX>, location: 
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(ValueNode.Type.BOOLEAN, this.type)
+            error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.BOOLEAN), this.type)
         )
 
 public fun <EB, CTX> ValueNode.readAsString(env: ReaderEnv<EB, CTX>, location: Location): ReaderResult<String>
@@ -39,7 +39,7 @@ public fun <EB, CTX> ValueNode.readAsString(env: ReaderEnv<EB, CTX>, location: L
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(ValueNode.Type.STRING, this.type)
+            error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.STRING), this.type)
         )
 
 public fun <EB, CTX, T : Number> ValueNode.readAsNumber(
@@ -53,7 +53,7 @@ public fun <EB, CTX, T : Number> ValueNode.readAsNumber(
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(ValueNode.Type.NUMBER, this.type)
+            error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.NUMBER), this.type)
         )
 
 public inline fun <EB, CTX, T> ValueNode.readAsStruct(
@@ -67,7 +67,7 @@ public inline fun <EB, CTX, T> ValueNode.readAsStruct(
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(ValueNode.Type.STRUCT, this.type)
+            error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.STRUCT), this.type)
         )
 
 public inline fun <EB, CTX, T> ValueNode.readAsArray(
@@ -81,7 +81,7 @@ public inline fun <EB, CTX, T> ValueNode.readAsArray(
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(ValueNode.Type.ARRAY, this.type)
+            error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.ARRAY), this.type)
         )
 
 internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {

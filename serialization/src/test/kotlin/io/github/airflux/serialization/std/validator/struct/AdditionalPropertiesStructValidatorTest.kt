@@ -154,7 +154,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         override fun additionalPropertiesStructError(): ReaderResult.Error =
             JsonErrors.Validation.Struct.AdditionalProperties
 
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing

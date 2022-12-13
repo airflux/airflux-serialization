@@ -92,7 +92,7 @@ internal class StructReader<EB, CTX, T>(
         else
             ReaderResult.Failure(
                 location = location,
-                error = env.errorBuilders.invalidTypeError(ValueNode.Type.STRUCT, source.type)
+                error = env.errorBuilders.invalidTypeError(listOf(ValueNode.Type.STRUCT), source.type)
             )
 
     private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: StructNode): ReaderResult<T> {

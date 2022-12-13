@@ -36,7 +36,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              GtComparisonValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
-    override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+    override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
 
     override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing

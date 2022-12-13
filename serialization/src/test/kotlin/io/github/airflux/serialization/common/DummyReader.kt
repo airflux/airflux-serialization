@@ -45,7 +45,10 @@ internal fun <EB, CTX> dummyBooleanReader(): Reader<EB, CTX, Boolean>
             else
                 ReaderResult.Failure(
                     location = location,
-                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.BOOLEAN, actual = source.type)
+                    error = env.errorBuilders.invalidTypeError(
+                        expected = listOf(ValueNode.Type.BOOLEAN),
+                        actual = source.type
+                    )
                 )
         }
     )
@@ -59,7 +62,10 @@ internal fun <EB, CTX> dummyStringReader(): Reader<EB, CTX, String>
             else
                 ReaderResult.Failure(
                     location = location,
-                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.STRING, actual = source.type)
+                    error = env.errorBuilders.invalidTypeError(
+                        expected = listOf(ValueNode.Type.STRING),
+                        actual = source.type
+                    )
                 )
         }
     )
@@ -73,7 +79,10 @@ internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
             else
                 ReaderResult.Failure(
                     location = location,
-                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.NUMBER, actual = source.type)
+                    error = env.errorBuilders.invalidTypeError(
+                        expected = listOf(ValueNode.Type.NUMBER),
+                        actual = source.type
+                    )
                 )
         }
     )
@@ -87,7 +96,10 @@ internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
             else
                 ReaderResult.Failure(
                     location = location,
-                    error = env.errorBuilders.invalidTypeError(expected = ValueNode.Type.NUMBER, actual = source.type)
+                    error = env.errorBuilders.invalidTypeError(
+                        expected = listOf(ValueNode.Type.NUMBER),
+                        actual = source.type
+                    )
                 )
         }
     )

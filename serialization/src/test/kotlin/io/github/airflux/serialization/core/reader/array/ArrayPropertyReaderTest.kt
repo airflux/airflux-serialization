@@ -114,7 +114,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.STRING,
+                                        expected = listOf(ValueNode.Type.STRING),
                                         actual = ValueNode.Type.NUMBER
                                     )
                                 )
@@ -138,14 +138,14 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.STRING,
+                                        expected = listOf(ValueNode.Type.STRING),
                                         actual = ValueNode.Type.NUMBER
                                     )
                                 ),
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.STRING,
+                                        expected = listOf(ValueNode.Type.STRING),
                                         actual = ValueNode.Type.BOOLEAN
                                     )
                                 )
@@ -332,7 +332,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.NUMBER,
+                                        expected = listOf(ValueNode.Type.NUMBER),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -357,14 +357,14 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.NUMBER,
+                                        expected = listOf(ValueNode.Type.NUMBER),
                                         actual = ValueNode.Type.STRING
                                     )
                                 ),
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.BOOLEAN,
+                                        expected = listOf(ValueNode.Type.BOOLEAN),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -442,7 +442,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.NUMBER,
+                                        expected = listOf(ValueNode.Type.NUMBER),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -467,14 +467,14 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.NUMBER,
+                                        expected = listOf(ValueNode.Type.NUMBER),
                                         actual = ValueNode.Type.STRING
                                     )
                                 ),
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.NUMBER,
+                                        expected = listOf(ValueNode.Type.NUMBER),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -519,7 +519,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
             "when receiver is failure" {
                 val receiver: ReaderResult<MutableList<String>> =
-                    JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.BOOLEAN)
+                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.NUMBER), actual = ValueNode.Type.BOOLEAN)
                         .failure(LOCATION.append(0))
 
                 val result = receiver + parameter
@@ -529,7 +529,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     ReaderResult.Failure.Cause(
                         location = LOCATION.append(0),
                         error = JsonErrors.InvalidType(
-                            expected = ValueNode.Type.NUMBER,
+                            expected = listOf(ValueNode.Type.NUMBER),
                             actual = ValueNode.Type.BOOLEAN
                         )
                     ),
@@ -547,7 +547,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         ValueCastErrorBuilder {
         override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
 
         override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =

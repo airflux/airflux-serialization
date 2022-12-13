@@ -40,12 +40,12 @@ internal class ReaderResultErrorsTest : FreeSpec() {
             "#invoke(ReaderResult#Error, ReaderResult#Error) should return JsErrors with all errors" {
                 val errors = ReaderResult.Errors(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
+                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.BOOLEAN), actual = ValueNode.Type.STRING)
                 )
 
                 errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
+                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.BOOLEAN), actual = ValueNode.Type.STRING)
                 )
             }
 
@@ -61,7 +61,10 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                     val errors = ReaderResult.Errors(
                         listOf(
                             JsonErrors.PathMissing,
-                            JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
+                            JsonErrors.InvalidType(
+                                expected = listOf(ValueNode.Type.BOOLEAN),
+                                actual = ValueNode.Type.STRING
+                            )
                         )
                     )
 
@@ -69,7 +72,10 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                         .items.shouldContainAll(
                             listOf(
                                 JsonErrors.PathMissing,
-                                JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
+                                JsonErrors.InvalidType(
+                                    expected = listOf(ValueNode.Type.BOOLEAN),
+                                    actual = ValueNode.Type.STRING
+                                )
                             )
                         )
                 }
@@ -78,13 +84,18 @@ internal class ReaderResultErrorsTest : FreeSpec() {
             "calling plus function should return a new ReaderResult#Errors object with all errors" {
                 val firstErrors = ReaderResult.Errors(JsonErrors.PathMissing)
                 val secondErrors =
-                    ReaderResult.Errors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
+                    ReaderResult.Errors(
+                        JsonErrors.InvalidType(
+                            expected = listOf(ValueNode.Type.BOOLEAN),
+                            actual = ValueNode.Type.STRING
+                        )
+                    )
 
                 val errors = firstErrors + secondErrors
 
                 errors.items shouldContainAll listOf(
                     JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING)
+                    JsonErrors.InvalidType(expected = listOf(ValueNode.Type.BOOLEAN), actual = ValueNode.Type.STRING)
                 )
             }
 
@@ -94,7 +105,12 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                 errors.shouldBeEqualsContract(
                     y = ReaderResult.Errors(JsonErrors.PathMissing),
                     z = ReaderResult.Errors(JsonErrors.PathMissing),
-                    other = ReaderResult.Errors(JsonErrors.InvalidType(ValueNode.Type.BOOLEAN, ValueNode.Type.STRING))
+                    other = ReaderResult.Errors(
+                        JsonErrors.InvalidType(
+                            expected = listOf(ValueNode.Type.BOOLEAN),
+                            actual = ValueNode.Type.STRING
+                        )
+                    )
                 )
             }
         }

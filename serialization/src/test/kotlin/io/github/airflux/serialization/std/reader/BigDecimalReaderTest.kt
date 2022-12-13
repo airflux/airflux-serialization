@@ -58,7 +58,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
-                        error = JsonErrors.InvalidType(expected = ValueNode.Type.NUMBER, actual = ValueNode.Type.STRING)
+                        error = JsonErrors.InvalidType(expected = listOf(ValueNode.Type.NUMBER), actual = ValueNode.Type.STRING)
                     )
                 )
             }
@@ -66,7 +66,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

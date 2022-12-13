@@ -101,7 +101,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.ARRAY,
+                                        expected = listOf(ValueNode.Type.ARRAY),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -204,7 +204,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = ValueNode.Type.ARRAY,
+                                        expected = listOf(ValueNode.Type.ARRAY),
                                         actual = ValueNode.Type.STRING
                                     )
                                 )
@@ -313,7 +313,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         InvalidTypeErrorBuilder {
         override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<ValueNode.Type>, actual: ValueNode.Type): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 
