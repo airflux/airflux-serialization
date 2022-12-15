@@ -27,14 +27,14 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <EB, CTX, T : Any> optionalWithDefault(
+public fun <EB, CTX, T : Any> optional(
     name: String,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
 ): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    optionalWithDefault(PropertyPath(name), reader, default)
+    optional(PropertyPath(name), reader, default)
 
-public fun <EB, CTX, T : Any> optionalWithDefault(
+public fun <EB, CTX, T : Any> optional(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
@@ -47,7 +47,7 @@ public fun <EB, CTX, T : Any> optionalWithDefault(
         }
     )
 
-public fun <EB, CTX, T : Any> optionalWithDefault(
+public fun <EB, CTX, T : Any> optional(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T

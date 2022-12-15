@@ -26,7 +26,6 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.specif
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optionalWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -83,7 +82,7 @@ internal class StructPropertyTest : FreeSpec() {
             }
 
             "when created an instance of the optional with default property" - {
-                val spec = optionalWithDefault(name = "id", reader = StringReader, default = DEFAULT)
+                val spec = optional(name = "id", reader = StringReader, default = DEFAULT)
                 val property = StructProperty.OptionalWithDefault(spec)
 
                 "then the path should equal the path from the spec" {

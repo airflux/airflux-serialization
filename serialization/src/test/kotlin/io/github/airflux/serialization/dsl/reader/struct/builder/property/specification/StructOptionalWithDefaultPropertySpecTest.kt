@@ -55,7 +55,7 @@ internal class StructOptionalWithDefaultPropertySpecTest : FreeSpec() {
         "The StructPropertySpec#OptionalWithDefault type" - {
 
             "when creating the instance by a property name" - {
-                val spec = optionalWithDefault(name = "id", reader = StringReader, default = DEFAULT)
+                val spec = optional(name = "id", reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(PropertyPath("id"))
@@ -102,7 +102,7 @@ internal class StructOptionalWithDefaultPropertySpecTest : FreeSpec() {
 
             "when creating the instance by a single-path" - {
                 val path = PropertyPath("id")
-                val spec = optionalWithDefault(path = path, reader = StringReader, default = DEFAULT)
+                val spec = optional(path = path, reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(path)
@@ -150,7 +150,7 @@ internal class StructOptionalWithDefaultPropertySpecTest : FreeSpec() {
             "when creating the instance by a multi-path" - {
                 val idPath = PropertyPath("id")
                 val identifierPath = PropertyPath("identifier")
-                val spec = optionalWithDefault(
+                val spec = optional(
                     paths = PropertyPaths(idPath, identifierPath),
                     reader = StringReader,
                     default = DEFAULT
@@ -264,8 +264,8 @@ internal class StructOptionalWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when an alternative spec was added" - {
-                val spec = optionalWithDefault(name = "id", reader = StringReader, default = DEFAULT)
-                val alt = optionalWithDefault(
+                val spec = optional(name = "id", reader = StringReader, default = DEFAULT)
+                val alt = optional(
                     name = "id",
                     reader = IntReader.map { it.toString() },
                     default = DEFAULT

@@ -34,7 +34,6 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.specif
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optionalWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -407,7 +406,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the optional with default" - {
                     val property: StructProperty<EB, CTX> = StructProperty.OptionalWithDefault(
-                        optionalWithDefault(
+                        optional(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
                             default = DEFAULT
