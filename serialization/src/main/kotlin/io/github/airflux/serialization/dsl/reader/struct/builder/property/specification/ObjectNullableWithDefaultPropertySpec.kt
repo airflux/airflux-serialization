@@ -29,14 +29,14 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readNullable
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <EB, CTX, T : Any> nullableWithDefault(
+public fun <EB, CTX, T : Any> nullable(
     name: String,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T?
 ): StructPropertySpec.NullableWithDefault<EB, CTX, T> =
-    nullableWithDefault(PropertyPath(name), reader, default)
+    nullable(PropertyPath(name), reader, default)
 
-public fun <EB, CTX, T : Any> nullableWithDefault(
+public fun <EB, CTX, T : Any> nullable(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T?
@@ -49,7 +49,7 @@ public fun <EB, CTX, T : Any> nullableWithDefault(
         }
     )
 
-public fun <EB, CTX, T : Any> nullableWithDefault(
+public fun <EB, CTX, T : Any> nullable(
     paths: PropertyPaths,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T?

@@ -57,7 +57,7 @@ internal class StructNullableWithDefaultPropertySpecTest : FreeSpec() {
         "The StructPropertySpec#NullableWithDefault type" - {
 
             "when creating the instance by a property name" - {
-                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
+                val spec = nullable(name = "id", reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(PropertyPath("id"))
@@ -104,7 +104,7 @@ internal class StructNullableWithDefaultPropertySpecTest : FreeSpec() {
 
             "when creating the instance by a single-path" - {
                 val path = PropertyPath("id")
-                val spec = nullableWithDefault(path = path, reader = StringReader, default = DEFAULT)
+                val spec = nullable(path = path, reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(path)
@@ -152,7 +152,7 @@ internal class StructNullableWithDefaultPropertySpecTest : FreeSpec() {
             "when creating the instance by a multi-path" - {
                 val idPath = PropertyPath("id")
                 val identifierPath = PropertyPath("identifier")
-                val spec = nullableWithDefault(
+                val spec = nullable(
                     paths = PropertyPaths(idPath, identifierPath),
                     reader = StringReader,
                     default = DEFAULT
@@ -315,8 +315,8 @@ internal class StructNullableWithDefaultPropertySpecTest : FreeSpec() {
             }
 
             "when an alternative spec was added" - {
-                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
-                val alt = nullableWithDefault(
+                val spec = nullable(name = "id", reader = StringReader, default = DEFAULT)
+                val alt = nullable(
                     name = "id",
                     reader = IntReader.map { it.toString() },
                     default = DEFAULT

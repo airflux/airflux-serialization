@@ -32,7 +32,6 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.kotest.assertions.throwables.shouldThrow
@@ -441,7 +440,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the nullable with default" - {
                     val property: StructProperty<EB, CTX> = StructProperty.NullableWithDefault(
-                        nullableWithDefault(
+                        nullable(
                             name = PROPERTY_NAME,
                             reader = createReader(value = USER_NAME),
                             default = DEFAULT

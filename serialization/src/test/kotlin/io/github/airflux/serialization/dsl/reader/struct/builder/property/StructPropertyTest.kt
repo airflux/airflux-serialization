@@ -24,7 +24,6 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullableWithDefault
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.kotest.core.spec.style.FreeSpec
@@ -108,7 +107,7 @@ internal class StructPropertyTest : FreeSpec() {
             }
 
             "when created an instance of the nullable with default property" - {
-                val spec = nullableWithDefault(name = "id", reader = StringReader, default = DEFAULT)
+                val spec = nullable(name = "id", reader = StringReader, default = DEFAULT)
                 val property = StructProperty.NullableWithDefault(spec)
 
                 "then the path should equal the path from the spec" {
