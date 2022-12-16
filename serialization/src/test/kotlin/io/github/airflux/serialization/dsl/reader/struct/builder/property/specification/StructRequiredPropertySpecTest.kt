@@ -51,7 +51,7 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The StructPropertySpec#Defaultable type" - {
+        "The StructPropertySpec#Required type" - {
 
             "when creating the instance by a property name" - {
                 val spec = required(name = "id", reader = StringReader)

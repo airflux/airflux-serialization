@@ -140,6 +140,7 @@ internal class StructReader<EB, CTX, T>(
         ): ReaderResult<Any?> {
             val reader = when (property) {
                 is StructProperty.Required<EB, CTX, *> -> property.reader
+                is StructProperty.RequiredIf<EB, CTX, *> -> property.reader
                 is StructProperty.Defaultable<EB, CTX, *> -> property.reader
                 is StructProperty.Optional<EB, CTX, *> -> property.reader
                 is StructProperty.OptionalWithDefault<EB, CTX, *> -> property.reader

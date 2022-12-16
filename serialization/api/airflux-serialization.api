@@ -571,6 +571,7 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/Str
 	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Optional;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Optional;
 	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$OptionalWithDefault;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$OptionalWithDefault;
 	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Required;
+	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$RequiredIf;
 	public fun validation (Lkotlin/jvm/functions/Function1;)V
 }
 
@@ -590,6 +591,7 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 	public abstract fun get (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Optional;)Ljava/lang/Object;
 	public abstract fun get (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$OptionalWithDefault;)Ljava/lang/Object;
 	public abstract fun get (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Required;)Ljava/lang/Object;
+	public abstract fun get (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$RequiredIf;)Ljava/lang/Object;
 	public abstract fun getSize ()I
 	public abstract fun isEmpty ()Z
 	public abstract fun isNotEmpty ()Z
@@ -599,6 +601,7 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 	public fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Optional;)Ljava/lang/Object;
 	public fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$OptionalWithDefault;)Ljava/lang/Object;
 	public fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Required;)Ljava/lang/Object;
+	public fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$RequiredIf;)Ljava/lang/Object;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperties : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker {
@@ -655,6 +658,11 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/pro
 	public final fun getReader ()Lio/github/airflux/serialization/core/reader/Reader;
 }
 
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$RequiredIf : io/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty {
+	public fun getPath ()Lio/github/airflux/serialization/core/path/PropertyPaths;
+	public final fun getReader ()Lio/github/airflux/serialization/core/reader/Reader;
+}
+
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/property/StructReaderPropertiesBuilder {
 	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Defaultable;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Defaultable;
 	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Nullable;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Nullable;
@@ -662,6 +670,7 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Optional;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Optional;
 	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$OptionalWithDefault;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$OptionalWithDefault;
 	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Required;
+	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$RequiredIf;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectDefaultablePropertySpecKt {
@@ -707,6 +716,15 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/pro
 	public static final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$OptionalWithDefault;Lio/github/airflux/serialization/core/reader/validator/Validator;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$OptionalWithDefault;
 }
 
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectRequiredIfPropertySpecKt {
+	public static final fun filter (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;Lio/github/airflux/serialization/core/reader/predicate/ReaderPredicate;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;
+	public static final fun or (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;
+	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;
+	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPaths;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;
+	public static final fun required (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;
+	public static final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;Lio/github/airflux/serialization/core/reader/validator/Validator;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;
+}
+
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectRequiredPropertySpecKt {
 	public static final fun or (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;
 	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;
@@ -746,6 +764,11 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/pro
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required : io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec {
+	public fun getPath ()Lio/github/airflux/serialization/core/path/PropertyPaths;
+	public fun getReader ()Lio/github/airflux/serialization/core/reader/Reader;
+}
+
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf : io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec {
 	public fun getPath ()Lio/github/airflux/serialization/core/path/PropertyPaths;
 	public fun getReader ()Lio/github/airflux/serialization/core/reader/Reader;
 }

@@ -54,6 +54,19 @@ internal class StructPropertyTest : FreeSpec() {
                 }
             }
 
+            "when created an instance of the requiredIf property" - {
+                val spec = required(name = "id", reader = StringReader, predicate = { _, _ -> true })
+                val property = StructProperty.RequiredIf(spec)
+
+                "then the path should equal the path from the spec" {
+                    property.path shouldBe spec.path
+                }
+
+                "then the reader should equal the reader from the spec" {
+                    property.reader shouldBe spec.reader
+                }
+            }
+
             "when created an instance of the defaultable property" - {
                 val spec = defaultable(name = "id", reader = StringReader, default = DEFAULT)
                 val property = StructProperty.Defaultable(spec)

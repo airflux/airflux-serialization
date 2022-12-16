@@ -26,6 +26,9 @@ public sealed interface PropertyValues<EB, CTX> {
     public infix operator fun <T : Any> get(property: StructProperty.Required<EB, CTX, T>): T
     public operator fun <T : Any> StructProperty.Required<EB, CTX, T>.unaryPlus(): T = get(this)
 
+    public infix operator fun <T : Any> get(property: StructProperty.RequiredIf<EB, CTX, T>): T?
+    public operator fun <T : Any> StructProperty.RequiredIf<EB, CTX, T>.unaryPlus(): T? = get(this)
+
     public infix operator fun <T : Any> get(property: StructProperty.Defaultable<EB, CTX, T>): T
     public operator fun <T : Any> StructProperty.Defaultable<EB, CTX, T>.unaryPlus(): T = get(this)
 

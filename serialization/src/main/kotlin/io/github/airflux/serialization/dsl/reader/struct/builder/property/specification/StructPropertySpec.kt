@@ -28,6 +28,11 @@ public sealed class StructPropertySpec<EB, CTX, T> {
         override val reader: Reader<EB, CTX, T>
     ) : StructPropertySpec<EB, CTX, T>()
 
+    public class RequiredIf<EB, CTX, T : Any> internal constructor(
+        override val path: PropertyPaths,
+        override val reader: Reader<EB, CTX, T?>
+    ) : StructPropertySpec<EB, CTX, T?>()
+
     public class Defaultable<EB, CTX, T : Any> internal constructor(
         override val path: PropertyPaths,
         override val reader: Reader<EB, CTX, T>

@@ -23,6 +23,10 @@ public interface StructReaderPropertiesBuilder<EB, CTX> {
     public fun <P : Any> property(spec: StructPropertySpec.Required<EB, CTX, P>): StructProperty.Required<EB, CTX, P>
 
     public fun <P : Any> property(
+        spec: StructPropertySpec.RequiredIf<EB, CTX, P>
+    ): StructProperty.RequiredIf<EB, CTX, P>
+
+    public fun <P : Any> property(
         spec: StructPropertySpec.Defaultable<EB, CTX, P>
     ): StructProperty.Defaultable<EB, CTX, P>
 
@@ -46,6 +50,12 @@ internal class StructReaderPropertiesBuilderInstance<EB, CTX> : StructReaderProp
         spec: StructPropertySpec.Required<EB, CTX, P>
     ): StructProperty.Required<EB, CTX, P> =
         StructProperty.Required(spec)
+            .also { properties.add(it) }
+
+    override fun <P : Any> property(
+        spec: StructPropertySpec.RequiredIf<EB, CTX, P>
+    ): StructProperty.RequiredIf<EB, CTX, P> =
+        StructProperty.RequiredIf(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(

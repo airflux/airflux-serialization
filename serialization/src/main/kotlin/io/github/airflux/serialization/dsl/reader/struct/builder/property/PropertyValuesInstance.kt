@@ -32,6 +32,9 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
     override operator fun <T : Any> get(property: StructProperty.Required<EB, CTX, T>): T =
         getNonNullable(property)
 
+    override fun <T : Any> get(property: StructProperty.RequiredIf<EB, CTX, T>): T? =
+        getNullable(property)
+
     override operator fun <T : Any> get(property: StructProperty.Defaultable<EB, CTX, T>): T =
         getNonNullable(property)
 
