@@ -34,5 +34,5 @@ public fun <EB, CTX, T : Any> readOptional(
 ): ReaderResult<T?> =
     when (lookup) {
         is Lookup.Defined -> using.read(env, lookup.location, lookup.value)
-        is Lookup.Undefined -> ReaderResult.Success(value = null)
+        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = null)
     }

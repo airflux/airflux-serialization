@@ -42,7 +42,7 @@ internal class ReaderResultTest : FreeSpec() {
     init {
 
         "A ReaderResult#Success type" - {
-            val original: ReaderResult<String> = ReaderResult.Success(value = ORIGINAL_VALUE)
+            val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
             "calling fold function should return an original value" {
                 val result = original.fold(
@@ -56,19 +56,24 @@ internal class ReaderResultTest : FreeSpec() {
             "calling map function should return a result of applying the [transform] function to the value" {
                 val result = original.map { it.toInt() }
 
-                result shouldBe ReaderResult.Success(value = ORIGINAL_VALUE.toInt())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling flatMap function should return a result of applying the [transform] function to the value" {
-                val result = original.flatMap { value -> ReaderResult.Success(value.toInt()) }
+                val result = original.flatMap { location, value ->
+                    ReaderResult.Success(
+                        location = location,
+                        value = value.toInt()
+                    )
+                }
 
-                result shouldBe ReaderResult.Success(value = ORIGINAL_VALUE.toInt())
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling recovery function should return an original" {
-                val result = original.recovery { ReaderResult.Success(ELSE_VALUE) }
+                val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
 
-                result shouldBe ReaderResult.Success(value = ORIGINAL_VALUE)
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
             }
 
             "calling getOrNull function should return a value" {
@@ -90,7 +95,7 @@ internal class ReaderResultTest : FreeSpec() {
             }
 
             "calling orElse function should return a value" {
-                val elseResult = ReaderResult.Success(value = ELSE_VALUE)
+                val elseResult = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
 
                 val result = original.orElse { elseResult }
 
@@ -105,9 +110,9 @@ internal class ReaderResultTest : FreeSpec() {
 
             "should comply with equals() and hashCode() contract" {
                 original.shouldBeEqualsContract(
-                    y = ReaderResult.Success(value = ORIGINAL_VALUE),
-                    z = ReaderResult.Success(value = ORIGINAL_VALUE),
-                    other = ReaderResult.Success(value = ELSE_VALUE)
+                    y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    other = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
                 )
             }
         }
@@ -186,15 +191,17 @@ internal class ReaderResultTest : FreeSpec() {
             }
 
             "calling flatMap function should return an original do not apply the [transform] function to the value" {
-                val result = original.flatMap { value -> ReaderResult.Success(value.toInt()) }
+                val result = original.flatMap { location, value ->
+                    ReaderResult.Success(location = location, value = value.toInt())
+                }
 
                 result shouldBe original
             }
 
             "calling recovery function should return the result of invoking the recovery function" {
-                val result = original.recovery { ReaderResult.Success(ELSE_VALUE) }
+                val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
 
-                result shouldBe ReaderResult.Success(value = ELSE_VALUE)
+                result shouldBe ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
             }
 
             "calling getOrNull function should return the null value" {
@@ -216,7 +223,7 @@ internal class ReaderResultTest : FreeSpec() {
             }
 
             "calling orElse function should return the result of calling the [defaultValue] function" {
-                val elseResult = ReaderResult.Success(value = ELSE_VALUE)
+                val elseResult = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
 
                 val result = original.orElse { elseResult }
 
@@ -300,7 +307,7 @@ internal class ReaderResultTest : FreeSpec() {
         "ReaderResult#withCatching" - {
 
             "when no exception is thrown in the block" - {
-                val block: () -> ReaderResult<String> = { ORIGINAL_VALUE.success() }
+                val block: () -> ReaderResult<String> = { ORIGINAL_VALUE.success(LOCATION) }
 
                 "when the context contains the exceptions handler" - {
                     val env = ReaderEnv(
@@ -359,9 +366,9 @@ internal class ReaderResultTest : FreeSpec() {
         }
 
         "asSuccess(JsLocation) extension function" {
-            val result = ORIGINAL_VALUE.success()
+            val result = ORIGINAL_VALUE.success(LOCATION)
 
-            result shouldBe ReaderResult.Success(value = ORIGINAL_VALUE)
+            result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
         "asFailure(JsLocation) extension function" {

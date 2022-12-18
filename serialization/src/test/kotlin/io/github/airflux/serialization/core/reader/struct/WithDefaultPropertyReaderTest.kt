@@ -16,12 +16,13 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
-import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
@@ -36,7 +37,7 @@ internal class WithDefaultPropertyReaderTest : FreeSpec() {
         private val LOCATION = Location.empty.append("name")
         private const val VALUE = "user-1"
         private const val DEFAULT_VALUE = "default-user"
-        private val READER: Reader<EB, Unit, String> = DummyReader(ReaderResult.Success(value = VALUE))
+        private val READER: Reader<EB, Unit, String> = dummyStringReader()
         private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
     }
 
@@ -47,40 +48,42 @@ internal class WithDefaultPropertyReaderTest : FreeSpec() {
             "when the element is defined" - {
 
                 "when the value of the element is not the NullNode" - {
-                    val lookup: Lookup = Lookup.Defined(location = LOCATION, value = StringNode(VALUE))
+                    val lookup: Lookup = Lookup.Defined(location = LOCATION.append("id"), value = StringNode(VALUE))
 
                     "then should return the result of applying the reader" {
                         val result: ReaderResult<String?> =
                             readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBe ReaderResult.Success(value = VALUE)
+                        result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = VALUE)
                     }
                 }
 
                 "when the value of the element is the NullNode" - {
-                    val lookup: Lookup = Lookup.Defined(location = Location.empty.append("name"), NullNode)
+                    val lookup: Lookup = Lookup.Defined(location = LOCATION.append("id"), NullNode)
 
                     "then should return the default value" {
                         val result: ReaderResult<String?> =
                             readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBe ReaderResult.Success(value = DEFAULT_VALUE)
+                        result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = DEFAULT_VALUE)
                     }
                 }
             }
 
             "when the element is undefined" - {
-                val lookup: Lookup = Lookup.Undefined(location = LOCATION)
+                val lookup: Lookup = Lookup.Undefined(location = LOCATION.append("id"))
 
                 "then should return the default value" {
                     val result: ReaderResult<String?> =
                         readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
 
-                    result shouldBe ReaderResult.Success(value = DEFAULT_VALUE)
+                    result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = DEFAULT_VALUE)
                 }
             }
         }
     }
 
-    internal class EB : PathMissingErrorBuilder {
+    internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+            JsonErrors.InvalidType(expected, actual)
     }
 }

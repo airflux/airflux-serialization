@@ -43,12 +43,12 @@ public fun <EB, CTX, T : Any> readWithDefault(
         defaultValue: (ReaderEnv<EB, CTX>) -> T
     ): ReaderResult<T> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(value = defaultValue(env))
+            ReaderResult.Success(location = lookup.location, value = defaultValue(env))
         else
             using.read(env, lookup.location, lookup.value)
 
     return when (lookup) {
         is Lookup.Defined -> readWithDefault(env, lookup, using, defaultValue)
-        is Lookup.Undefined -> ReaderResult.Success(value = defaultValue(env))
+        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue(env))
     }
 }

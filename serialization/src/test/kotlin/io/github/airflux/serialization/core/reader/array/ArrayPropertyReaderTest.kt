@@ -70,7 +70,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result: ReaderResult<List<String>> =
                             readArray(env = env, location = LOCATION, source = source, items = StringReader)
 
-                        result shouldBe ReaderResult.Success(value = emptyList())
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -89,7 +89,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             val result: ReaderResult<List<String>> =
                                 readArray(env = env, location = LOCATION, source = source, items = StringReader)
 
-                            result shouldBe ReaderResult.Success(value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+                            result shouldBe ReaderResult.Success(
+                                location = LOCATION,
+                                value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
+                            )
                         }
                     }
                 }
@@ -174,7 +177,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBe ReaderResult.Success(value = emptyList())
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -258,7 +261,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBe ReaderResult.Success(value = listOf(FIRST_PHONE_VALUE))
+                                result shouldBe ReaderResult.Success(
+                                    location = LOCATION,
+                                    value = listOf(FIRST_PHONE_VALUE)
+                                )
                             }
                         }
                     }
@@ -282,6 +288,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             )
 
                             result shouldBe ReaderResult.Success(
+                                location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
                         }
@@ -306,6 +313,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             )
 
                             result shouldBe ReaderResult.Success(
+                                location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
                         }
@@ -393,7 +401,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             items = StringReader
                         )
 
-                        result shouldBe ReaderResult.Success(value = emptyList())
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -417,7 +425,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = StringReader
                             )
 
-                            result shouldBe ReaderResult.Success(value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+                            result shouldBe ReaderResult.Success(
+                                location = LOCATION,
+                                value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
+                            )
                         }
                     }
                 }
@@ -485,15 +496,19 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
         }
 
         "The extension-function ReaderResult<MutableList<T>>#plus(ReaderResult.Success<T>)" - {
-            val parameter: ReaderResult.Success<String> = ReaderResult.Success(SECOND_PHONE_VALUE)
+            val parameter: ReaderResult.Success<String> =
+                ReaderResult.Success(location = LOCATION, value = SECOND_PHONE_VALUE)
 
             "when receiver is success" {
                 val receiver: ReaderResult<MutableList<String>> =
-                    mutableListOf(FIRST_PHONE_VALUE).success()
+                    mutableListOf(FIRST_PHONE_VALUE).success(LOCATION)
 
                 val result = receiver + parameter
 
-                result shouldBe ReaderResult.Success(value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE))
+                result shouldBe ReaderResult.Success(
+                    location = LOCATION,
+                    value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
+                )
             }
 
             "when receiver is failure" {
@@ -509,7 +524,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
             val parameter: ReaderResult.Failure = ReaderResult.Failure(LOCATION.append(1), JsonErrors.PathMissing)
 
             "when receiver is success" {
-                val receiver: ReaderResult<MutableList<String>> = mutableListOf(FIRST_PHONE_VALUE).success()
+                val receiver: ReaderResult<MutableList<String>> = mutableListOf(FIRST_PHONE_VALUE).success(LOCATION)
 
                 val result = receiver + parameter
 

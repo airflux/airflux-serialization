@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -35,17 +34,16 @@ public fun <EB, CTX, T> ReaderResult<T?>.filter(
                 if (predicate.test(env, result.value))
                     result
                 else
-                    ReaderResult.Success(null)
+                    ReaderResult.Success(location = result.location, value = null)
             }
         }
     )
 
 public fun <EB, CTX, T> ReaderResult<T>.validation(
     env: ReaderEnv<EB, CTX>,
-    location: Location,
     validator: Validator<EB, CTX, T>
 ): ReaderResult<T> =
     fold(
         ifFailure = ::identity,
-        ifSuccess = { result -> validator.validate(env, location, result.value) ?: result }
+        ifSuccess = { result -> validator.validate(env, result.location, result.value) ?: result }
     )

@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 public fun <EB, CTX> ValueNode.readAsBoolean(env: ReaderEnv<EB, CTX>, location: Location): ReaderResult<Boolean>
     where EB : InvalidTypeErrorBuilder =
     if (this is BooleanNode)
-        ReaderResult.Success(this.get)
+        ReaderResult.Success(location = location, value = this.get)
     else
         ReaderResult.Failure(
             location = location,
@@ -35,7 +35,7 @@ public fun <EB, CTX> ValueNode.readAsBoolean(env: ReaderEnv<EB, CTX>, location: 
 public fun <EB, CTX> ValueNode.readAsString(env: ReaderEnv<EB, CTX>, location: Location): ReaderResult<String>
     where EB : InvalidTypeErrorBuilder =
     if (this is StringNode)
-        ReaderResult.Success(this.get)
+        ReaderResult.Success(location = location, value = this.get)
     else
         ReaderResult.Failure(
             location = location,

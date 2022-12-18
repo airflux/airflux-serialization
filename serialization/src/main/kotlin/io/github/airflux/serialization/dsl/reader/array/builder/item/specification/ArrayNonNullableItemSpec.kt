@@ -29,7 +29,7 @@ public infix fun <EB, CTX, T> ArrayItemSpec.NonNullable<EB, CTX, T>.validation(
 ): ArrayItemSpec.NonNullable<EB, CTX, T> =
     ArrayItemSpec.NonNullable(
         reader = { env, location, source ->
-            reader.read(env, location, source).validation(env, location, validator)
+            reader.read(env, location, source).validation(env, validator)
         }
     )
 

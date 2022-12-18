@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
 import io.github.airflux.serialization.common.DummyReader
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.result.ReaderResult
@@ -30,23 +31,30 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
     companion object {
+        private val LOCATION = Location.empty
         private val REQUIRED_PATH = PropertyPaths(PropertyPath("required-id"))
-        private val REQUIRED_READER = DummyReader<Unit, Unit, String>(ReaderResult.Success(""))
+        private val REQUIRED_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
 
         private val DEFAULTABLE_PATH = PropertyPaths(PropertyPath("defaultable-id"))
-        private val DEFAULTABLE_READER = DummyReader<Unit, Unit, String>(ReaderResult.Success(""))
+        private val DEFAULTABLE_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
 
         private val OPTIONAL_PATH = PropertyPaths(PropertyPath("optional-id"))
-        private val OPTIONAL_READER = DummyReader<Unit, Unit, String>(ReaderResult.Success(""))
+        private val OPTIONAL_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
 
         private val OPTIONAL_WITH_DEFAULT_PATH = PropertyPaths(PropertyPath("optional-with-default-id"))
-        private val OPTIONAL_WITH_DEFAULT_READER = DummyReader<Unit, Unit, String>(ReaderResult.Success(""))
+        private val OPTIONAL_WITH_DEFAULT_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
 
         private val NULLABLE_PATH = PropertyPaths(PropertyPath("nullable-id"))
-        private val NULLABLE_READER = DummyReader<Unit, Unit, String>(ReaderResult.Success(""))
+        private val NULLABLE_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
 
         private val NULLABLE_WITH_DEFAULT_PATH = PropertyPaths(PropertyPath("nullable-with-default-id"))
-        private val NULLABLE_WITH_DEFAULT_READER = DummyReader<Unit, Unit, String>(ReaderResult.Success(""))
+        private val NULLABLE_WITH_DEFAULT_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
     }
 
     init {

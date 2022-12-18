@@ -18,8 +18,11 @@ package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.NullNode
@@ -33,9 +36,9 @@ internal class ReaderTest : FreeSpec() {
 
     companion object {
         private const val VALUE = "42"
-        private const val LEFT_VALUE = "2b26f8fa-dfdf-40bd-82ba-6e7cde08036d"
-        private const val RIGHT_VALUE = "bbbbb1f0-606e-4bd3-9ccb-41b52e6287f2"
-        private val ENV = ReaderEnv(Unit, Unit)
+        private const val LEFT_VALUE = "true"
+        private const val RIGHT_VALUE = "false"
+        private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
     }
 
@@ -44,59 +47,67 @@ internal class ReaderTest : FreeSpec() {
         "The Reader type" - {
 
             "Reader#map" - {
-                val reader: Reader<Unit, Unit, String> = DummyReader(ReaderResult.Success(value = VALUE))
+                val reader: Reader<EB, Unit, String> = dummyStringReader()
 
                 "should return new reader" {
+                    val source = StringNode(VALUE)
                     val transformedReader = reader.map { value -> value.toInt() }
-                    val result = transformedReader.read(ENV, LOCATION, NullNode)
+                    val result = transformedReader.read(ENV, LOCATION, source)
 
-                    result shouldBe ReaderResult.Success(value = VALUE.toInt())
+                    result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
                 }
             }
 
             "Reader#flatMapResult" - {
-                val reader: Reader<Unit, Unit, String> = DummyReader(ReaderResult.Success(value = VALUE))
+                val reader: Reader<EB, Unit, String> = dummyStringReader()
 
                 "should return new reader" {
-                    val transformedReader = reader.flatMapResult { _, _, value -> value.toInt().success() }
-                    val result = transformedReader.read(ENV, LOCATION, NullNode)
+                    val source = StringNode(VALUE)
+                    val transformedReader =
+                        reader.flatMapResult { _, location, value ->
+                            value.toInt().success(location)
+                        }
+                    val result = transformedReader.read(ENV, LOCATION, source)
 
-                    result shouldBe ReaderResult.Success(value = VALUE.toInt())
+                    result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
                 }
             }
 
             "Reader#or" - {
 
                 "when left reader returns an value" - {
-                    val leftReader: Reader<Unit, Unit, String> = DummyReader(ReaderResult.Success(value = LEFT_VALUE))
-                    val rightReader: Reader<Unit, Unit, String> = DummyReader(ReaderResult.Success(value = RIGHT_VALUE))
+                    val leftReader: Reader<EB, Unit, String> =
+                        DummyReader(ReaderResult.Success(location = LOCATION, value = LEFT_VALUE))
+                    val rightReader: Reader<EB, Unit, String> =
+                        DummyReader(ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE))
 
                     val reader = leftReader or rightReader
 
                     "then the right reader doesn't execute" {
                         val result = reader.read(ENV, LOCATION, NullNode)
-                        result shouldBe ReaderResult.Success(value = LEFT_VALUE)
+                        result shouldBe ReaderResult.Success(location = LOCATION, value = LEFT_VALUE)
                     }
                 }
 
                 "when left reader returns an error" - {
-                    val leftReader: Reader<Unit, Unit, String> = DummyReader { _, _, _ ->
+                    val leftReader: Reader<EB, Unit, String> = DummyReader { _, _, _ ->
                         ReaderResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                     }
 
                     "when the right reader returns an value" - {
-                        val rightReader: Reader<Unit, Unit, String> =
-                            DummyReader(ReaderResult.Success(value = RIGHT_VALUE))
+                        val rightReader: Reader<EB, Unit, String> =
+                            DummyReader(ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE))
+
                         val reader = leftReader or rightReader
 
                         "then the result of the right reader should be returned" {
                             val result = reader.read(ENV, LOCATION, NullNode)
-                            result shouldBe ReaderResult.Success(value = RIGHT_VALUE)
+                            result shouldBe ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE)
                         }
                     }
 
                     "when the right reader returns an error" - {
-                        val rightReader: Reader<Unit, Unit, String> = DummyReader { _, _, _ ->
+                        val rightReader: Reader<EB, Unit, String> = DummyReader { _, _, _ ->
                             ReaderResult.Failure(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
@@ -130,5 +141,11 @@ internal class ReaderTest : FreeSpec() {
                 }
             }
         }
+    }
+
+    internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
+        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+            JsonErrors.InvalidType(expected, actual)
     }
 }

@@ -84,5 +84,5 @@ public infix fun <EB, CTX, T> Reader<EB, CTX, T?>.filter(predicate: ReaderPredic
 public infix fun <EB, CTX, T> Reader<EB, CTX, T>.validation(validator: Validator<EB, CTX, T>): Reader<EB, CTX, T> =
     Reader { env, location, source ->
         this@validation.read(env, location, source)
-            .validation(env, location, validator)
+            .validation(env, validator)
     }

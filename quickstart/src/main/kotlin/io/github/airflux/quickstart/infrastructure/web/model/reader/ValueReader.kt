@@ -37,7 +37,7 @@ val ValueReader: Reader<ReaderErrorBuilders, ReaderCtx, Value> = structReader {
     val amount = property(required(name = "amount", reader = AmountReader))
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
-    returns { _, _ ->
-        Value(amount = +amount, currency = +currency).success()
+    returns { _, location ->
+        Value(amount = +amount, currency = +currency).success(location)
     }
 }

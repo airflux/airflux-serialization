@@ -28,7 +28,7 @@ import java.math.BigDecimal
 public fun <EB, CTX> bigDecimalReader(): Reader<EB, CTX, BigDecimal>
     where EB : InvalidTypeErrorBuilder =
     Reader { env, location, source ->
-        source.readAsNumber(env, location) { _, _, value ->
-            BigDecimal(value).success()
+        source.readAsNumber(env, location) { _, l, value ->
+            BigDecimal(value).success(l)
         }
     }

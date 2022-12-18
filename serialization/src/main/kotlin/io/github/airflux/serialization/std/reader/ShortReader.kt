@@ -32,7 +32,7 @@ public fun <EB, CTX> shortReader(): Reader<EB, CTX, Short>
     Reader { env, location, source ->
         source.readAsNumber(env, location) { e, l, value ->
             try {
-                value.toShort().success()
+                value.toShort().success(l)
             } catch (expected: NumberFormatException) {
                 e.errorBuilders.valueCastError(value, Short::class).failure(location = l)
             }

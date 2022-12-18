@@ -41,7 +41,7 @@ internal fun <EB, CTX> dummyBooleanReader(): Reader<EB, CTX, Boolean>
     DummyReader(
         result = { env, location, source ->
             if (source is BooleanNode)
-                ReaderResult.Success(source.get)
+                ReaderResult.Success(location = location, value = source.get)
             else
                 ReaderResult.Failure(
                     location = location,
@@ -58,7 +58,7 @@ internal fun <EB, CTX> dummyStringReader(): Reader<EB, CTX, String>
     DummyReader(
         result = { env, location, source ->
             if (source is StringNode)
-                ReaderResult.Success(source.get)
+                ReaderResult.Success(location = location, value = source.get)
             else
                 ReaderResult.Failure(
                     location = location,
@@ -75,7 +75,7 @@ internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
     DummyReader(
         result = { env, location, source ->
             if (source is NumberNode)
-                ReaderResult.Success(source.get.toInt())
+                ReaderResult.Success(location = location, value = source.get.toInt())
             else
                 ReaderResult.Failure(
                     location = location,
@@ -92,7 +92,7 @@ internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
     DummyReader(
         result = { env, location, source ->
             if (source is NumberNode)
-                ReaderResult.Success(source.get.toLong())
+                ReaderResult.Success(location = location, value = source.get.toLong())
             else
                 ReaderResult.Failure(
                     location = location,

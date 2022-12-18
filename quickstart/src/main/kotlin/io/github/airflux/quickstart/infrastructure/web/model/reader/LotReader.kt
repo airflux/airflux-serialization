@@ -46,7 +46,7 @@ val LotReader: Reader<ReaderErrorBuilders, ReaderCtx, Lot> = structReader {
     val status = property(required(name = "status", reader = LotStatusReader))
     val value = property(required(name = "value", reader = ValueReader))
 
-    returns { _, _ ->
-        Lot(id = +id, status = +status, value = +value).success()
+    returns { _, location ->
+        Lot(id = +id, status = +status, value = +value).success(location)
     }
 }

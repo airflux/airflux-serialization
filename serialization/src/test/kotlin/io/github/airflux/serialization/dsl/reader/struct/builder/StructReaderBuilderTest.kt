@@ -19,6 +19,7 @@ package io.github.airflux.serialization.dsl.reader.struct.builder
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.DummyStructValidatorBuilder
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -30,6 +31,7 @@ import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
@@ -64,9 +66,9 @@ internal class StructReaderBuilderTest : FreeSpec() {
                     validation {
                         +validator
                     }
-                    val name = property(propertySpec(value = USER_NAME))
-                    returns { _, _ ->
-                        DTO(name = +name).success()
+                    val name = property(propertySpec)
+                    returns { _, location ->
+                        DTO(name = +name).success(location)
                     }
                 }
 
@@ -100,9 +102,9 @@ internal class StructReaderBuilderTest : FreeSpec() {
                     "when source is not the struct type" - {
                         val source = StringNode(USER_NAME)
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            val name = property(propertySpec(value = USER_NAME))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            val name = property(propertySpec)
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -130,9 +132,9 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             validation {
                                 +validator
                             }
-                            val name = property(propertySpec(value = USER_NAME))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            val name = property(propertySpec)
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -157,8 +159,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             }
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -186,8 +188,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             }
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -208,9 +210,9 @@ internal class StructReaderBuilderTest : FreeSpec() {
                     "when source is not the struct type" - {
                         val source = StringNode(USER_NAME)
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            val name = property(propertySpec(value = USER_NAME))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            val name = property(propertySpec)
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -238,9 +240,9 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             validation {
                                 +validator
                             }
-                            val name = property(propertySpec(value = USER_NAME))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            val name = property(propertySpec)
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -265,8 +267,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             }
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -294,8 +296,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             }
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
-                            returns { _, _ ->
-                                DTO(name = +name).success()
+                            returns { _, location ->
+                                DTO(name = +name).success(location)
                             }
                         }
 
@@ -317,7 +319,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
             "when some exception was thrown in the result builder" - {
                 val reader: Reader<EB, CTX, DTO> = structReader {
-                    property(propertySpec(value = USER_NAME))
+                    property(propertySpec)
 
                     returns { _, _ ->
                         throw IllegalStateException()
@@ -353,10 +355,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the required" - {
                     val property: StructProperty<EB, CTX> = StructProperty.Required(
-                        required(
-                            name = PROPERTY_NAME,
-                            reader = createReader(value = USER_NAME)
-                        )
+                        required(name = PROPERTY_NAME, reader = dummyStringReader())
                     )
 
                     "then function should return a result" {
@@ -370,11 +369,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the defaultable" - {
                     val property: StructProperty<EB, CTX> = StructProperty.Defaultable(
-                        defaultable(
-                            name = PROPERTY_NAME,
-                            reader = createReader(value = USER_NAME),
-                            default = DEFAULT
-                        )
+                        defaultable(name = PROPERTY_NAME, reader = dummyStringReader(), default = DEFAULT)
                     )
 
                     "then function should return a result" {
@@ -388,10 +383,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the optional" - {
                     val property: StructProperty<EB, CTX> = StructProperty.Optional(
-                        optional(
-                            name = PROPERTY_NAME,
-                            reader = createReader(value = USER_NAME)
-                        )
+                        optional(name = PROPERTY_NAME, reader = dummyStringReader())
                     )
 
                     "then function should return a result" {
@@ -405,11 +397,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the optional with default" - {
                     val property: StructProperty<EB, CTX> = StructProperty.OptionalWithDefault(
-                        optional(
-                            name = PROPERTY_NAME,
-                            reader = createReader(value = USER_NAME),
-                            default = DEFAULT
-                        )
+                        optional(name = PROPERTY_NAME, reader = dummyStringReader(), default = DEFAULT)
                     )
 
                     "then function should return a result" {
@@ -423,10 +411,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the nullable" - {
                     val property: StructProperty<EB, CTX> = StructProperty.Nullable(
-                        nullable(
-                            name = PROPERTY_NAME,
-                            reader = createReader(value = USER_NAME)
-                        )
+                        nullable(name = PROPERTY_NAME, reader = dummyStringReader())
                     )
 
                     "then function should return a result" {
@@ -440,11 +425,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                 "when property is the nullable with default" - {
                     val property: StructProperty<EB, CTX> = StructProperty.NullableWithDefault(
-                        nullable(
-                            name = PROPERTY_NAME,
-                            reader = createReader(value = USER_NAME),
-                            default = DEFAULT
-                        )
+                        nullable(name = PROPERTY_NAME, reader = dummyStringReader(), default = DEFAULT)
                     )
 
                     "then function should return a result" {
@@ -459,7 +440,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
         }
     }
 
-    private fun <T : Any> propertySpec(value: T) = required(name = PROPERTY_NAME, reader = createReader(value = value))
+    private val propertySpec: StructPropertySpec.Required<EB, CTX, String> =
+        required(name = PROPERTY_NAME, reader = dummyStringReader())
 
     private fun <T : Any> propertySpec(error: ReaderResult.Error) = required(
         name = PROPERTY_NAME,
@@ -470,9 +452,6 @@ internal class StructReaderBuilderTest : FreeSpec() {
             )
         )
     )
-
-    private fun <T : Any> createReader(value: T): DummyReader<EB, CTX, T> =
-        DummyReader(result = ReaderResult.Success(value = value))
 
     internal data class DTO(val name: String)
 

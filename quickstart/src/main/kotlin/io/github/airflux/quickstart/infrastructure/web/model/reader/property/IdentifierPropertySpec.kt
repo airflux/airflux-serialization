@@ -18,10 +18,9 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.property
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.base.StringReader
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.isNotBlank
-import io.github.airflux.serialization.dsl.path.or
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.validation
 
 val identifierPropertySpec =
-    required("id" or "identifier", reader = StringReader)
+    required(name = "id", reader = StringReader)
         .validation(isNotBlank)

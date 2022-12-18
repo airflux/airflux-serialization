@@ -21,7 +21,6 @@ import io.github.airflux.serialization.common.dummyIntReader
 import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -40,6 +39,9 @@ import io.kotest.matchers.shouldBe
 internal class StructRequiredPropertySpecTest : FreeSpec() {
 
     companion object {
+        private const val ID_PROPERTY_NAME = "id"
+        private const val CODE_PROPERTY_NAME = "code"
+
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
 
@@ -54,34 +56,35 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
         "The StructPropertySpec#Required type" - {
 
             "when creating the instance by a property name" - {
-                val spec = required(name = "id", reader = StringReader)
+                val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
 
-                "then the paths parameter must contain only the passed path" {
-                    spec.path.items shouldContainExactly listOf(PropertyPath("id"))
+                "then the paths parameter must contain only the passed name" {
+                    spec.path.items shouldContainExactly listOf(PropertyPath(ID_PROPERTY_NAME))
                 }
 
                 "when the reader has read a property named id" - {
 
                     "if the property value is not the null type" - {
-                        val source = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then the not-null value should be returned" {
                             result as ReaderResult.Success<String>
+                            result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                             result.value shouldBe ID_VALUE_AS_UUID
                         }
                     }
                 }
 
                 "when the property does not founded" - {
-                    val source = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then an error should be returned" {
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.PathMissing
                             )
                         )
@@ -89,14 +92,14 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val source = StructNode("id" to NumberNode.valueOf(10))
+                    val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then should be returned a read error" {
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
                                     actual = NumberNode.nameOfType
@@ -107,8 +110,8 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
                 }
             }
 
-            "when creating the instance by a single-path" - {
-                val path = PropertyPath("id")
+            "when creating the instance by a property path" - {
+                val path = PropertyPath(ID_PROPERTY_NAME)
                 val spec = required(path = path, reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
@@ -118,95 +121,26 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
                 "when the reader has read a property named id" - {
 
                     "if the property value is not the null type" - {
-                        val source = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then the not-null value should be returned" {
                             result as ReaderResult.Success<String>
+                            result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                             result.value shouldBe ID_VALUE_AS_UUID
                         }
                     }
                 }
 
                 "when the property does not founded" - {
-                    val source = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
+                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then an error should be returned" {
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
-                        )
-                    }
-                }
-
-                "when an error occurs while reading" - {
-                    val source = StructNode("id" to NumberNode.valueOf(10))
-                    val result = spec.reader.read(ENV, LOCATION, source)
-
-                    "then should be returned a read error" {
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
-                                error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = NumberNode.nameOfType
-                                )
-                            )
-                        )
-                    }
-                }
-            }
-
-            "when creating the instance by a multi-path" - {
-                val idPath = PropertyPath("id")
-                val identifierPath = PropertyPath("identifier")
-                val spec = required(paths = PropertyPaths(idPath, identifierPath), reader = StringReader)
-
-                "then the paths parameter must contain only the passed paths" {
-                    spec.path.items shouldContainExactly listOf(idPath, identifierPath)
-                }
-
-                "when the reader has read a property named id" - {
-
-                    "if the property value is not the null type" - {
-                        val source = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
-                        val result = spec.reader.read(ENV, LOCATION, source)
-
-                        "then the not-null value should be returned" {
-                            result as ReaderResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
-                        }
-                    }
-                }
-
-                "when the reader has read a property named identifier" - {
-
-                    "if the property value is not the null type" - {
-                        val source = StructNode("identifier" to StringNode(ID_VALUE_AS_UUID))
-                        val result = spec.reader.read(ENV, LOCATION, source)
-
-                        "then the not-null value should be returned" {
-                            result as ReaderResult.Success<String>
-                            result.value shouldBe ID_VALUE_AS_UUID
-                        }
-                    }
-                }
-
-                "when the property does not founded" - {
-                    val source = StructNode("code" to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, LOCATION, source)
-
-                    "then all errors should be returned" {
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
-                                error = JsonErrors.PathMissing
-                            ),
-                            ReaderResult.Failure.Cause(
-                                location = LOCATION.append("identifier"),
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.PathMissing
                             )
                         )
@@ -214,14 +148,14 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val source = StructNode("id" to NumberNode.valueOf(10))
+                    val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then should be returned a read error" {
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
                                     actual = NumberNode.nameOfType
@@ -233,29 +167,30 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = StructPropertySpec.Required(path = PropertyPaths(PropertyPath("id")), reader = StringReader)
+                val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
                 val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
 
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
-                        val source = StringNode(ID_VALUE_AS_UUID)
+                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result as ReaderResult.Success<String>
+                        result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
 
                     "then a validation error should be returned if validation is a failure" {
-                        val source = StringNode("")
+                        val source = StructNode(ID_PROPERTY_NAME to StringNode(""))
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION,
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.Validation.Strings.IsEmpty
                             )
                         )
@@ -265,14 +200,14 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = NumberNode.valueOf(10)
+                        val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION,
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
                                     actual = NumberNode.nameOfType
@@ -284,50 +219,52 @@ internal class StructRequiredPropertySpecTest : FreeSpec() {
             }
 
             "when an alternative spec was added" - {
-                val spec = required(name = "id", reader = StringReader)
-                val alt = required(name = "id", reader = IntReader.map { it.toString() })
+                val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
+                val alt = required(name = ID_PROPERTY_NAME, reader = IntReader.map { it.toString() })
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
-                    specWithAlternative.path.items shouldContainExactly listOf(PropertyPath("id"))
+                    specWithAlternative.path.items shouldContainExactly listOf(PropertyPath(ID_PROPERTY_NAME))
                 }
 
                 "when the main reader has successfully read" - {
-                    val source = StructNode("id" to StringNode(ID_VALUE_AS_UUID))
+                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned" {
                         result as ReaderResult.Success<String>
+                        result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
                 }
 
                 "when the main reader has failure read" - {
-                    val source = StructNode("id" to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
+                    val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result as ReaderResult.Success<String>
+                        result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_INT
                     }
                 }
 
                 "when the alternative reader has failure read" - {
-                    val source = StructNode("id" to BooleanNode.True)
+                    val source = StructNode(ID_PROPERTY_NAME to BooleanNode.True)
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then should be returned all read errors" {
                         result as ReaderResult.Failure
                         result.causes shouldContainExactly listOf(
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
                                     actual = BooleanNode.nameOfType
                                 )
                             ),
                             ReaderResult.Failure.Cause(
-                                location = LOCATION.append("id"),
+                                location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(NumberNode.nameOfType),
                                     actual = BooleanNode.nameOfType

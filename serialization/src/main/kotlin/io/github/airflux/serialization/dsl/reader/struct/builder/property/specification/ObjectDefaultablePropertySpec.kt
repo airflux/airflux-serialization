@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property.specification
 
-import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
@@ -47,32 +46,13 @@ public fun <EB, CTX, T : Any> defaultable(
         }
     )
 
-public fun <EB, CTX, T : Any> defaultable(
-    paths: PropertyPaths,
-    reader: Reader<EB, CTX, T>,
-    default: (ReaderEnv<EB, CTX>) -> T
-): StructPropertySpec.Defaultable<EB, CTX, T> =
-    StructPropertySpec.Defaultable(
-        path = paths,
-        reader = { env, location, source ->
-            val lookup: Lookup = paths.fold(
-                initial = { path -> source.lookup(location, path) },
-                operation = { lookup, path ->
-                    if (lookup is Lookup.Defined) return@fold lookup
-                    source.lookup(location, path)
-                }
-            )
-            readWithDefault(env, lookup, reader, default)
-        }
-    )
-
 public infix fun <EB, CTX, T : Any> StructPropertySpec.Defaultable<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T>
 ): StructPropertySpec.Defaultable<EB, CTX, T> =
     StructPropertySpec.Defaultable(
         path = path,
         reader = { env, location, source ->
-            reader.read(env, location, source).validation(env, location, validator)
+            reader.read(env, location, source).validation(env, validator)
         }
     )
 

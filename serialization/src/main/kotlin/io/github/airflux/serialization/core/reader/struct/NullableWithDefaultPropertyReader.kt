@@ -42,12 +42,12 @@ public fun <EB, CTX, T : Any> readNullable(
         using: Reader<EB, CTX, T>
     ): ReaderResult<T?> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(value = null)
+            ReaderResult.Success(location = lookup.location, value = null)
         else
             using.read(env, lookup.location, lookup.value)
 
     return when (lookup) {
         is Lookup.Defined -> readNullable(env, lookup, using)
-        is Lookup.Undefined -> ReaderResult.Success(value = defaultValue(env))
+        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue(env))
     }
 }

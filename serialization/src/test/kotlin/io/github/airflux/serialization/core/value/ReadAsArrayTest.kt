@@ -20,6 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -30,9 +31,9 @@ internal class ReadAsArrayTest : FreeSpec() {
         private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("user")
         private const val USER_NAME = "user"
-        private val READER = { _: ReaderEnv<EB, Unit>, _: Location, source: ArrayNode<*> ->
+        private val READER = { _: ReaderEnv<EB, Unit>, location: Location, source: ArrayNode<*> ->
             val result = source.map { (it as StringNode).get }
-            ReaderResult.Success(result)
+            ReaderResult.Success(location = location, value = result)
         }
     }
 
@@ -47,7 +48,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                     val result = json.readAsArray(ENV, LOCATION, READER)
 
                     result as ReaderResult.Success
-                    result shouldBe ReaderResult.Success(value = listOf(USER_NAME))
+                    result shouldBe ReaderResult.Success(location = LOCATION, value = listOf(USER_NAME))
                 }
             }
 
@@ -71,8 +72,9 @@ internal class ReadAsArrayTest : FreeSpec() {
         }
     }
 
-    internal class EB : InvalidTypeErrorBuilder {
+    internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
+        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
-            JsonErrors.InvalidType(expected = expected, actual = actual)
+            JsonErrors.InvalidType(expected, actual)
     }
 }

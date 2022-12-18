@@ -44,7 +44,7 @@ public fun <EB, CTX, T : Any> readNullable(
         using: Reader<EB, CTX, T>
     ): ReaderResult<T?> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(value = null)
+            ReaderResult.Success(location = lookup.location, value = null)
         else
             using.read(env, lookup.location, lookup.value)
 

@@ -32,7 +32,7 @@ public fun <EB, CTX> longReader(): Reader<EB, CTX, Long>
     Reader { env, location, source ->
         source.readAsNumber(env, location) { e, l, value ->
             try {
-                value.toLong().success()
+                value.toLong().success(l)
             } catch (expected: NumberFormatException) {
                 e.errorBuilders.valueCastError(value, Long::class).failure(location = l)
             }

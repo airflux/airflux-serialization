@@ -32,7 +32,7 @@ public fun <EB, CTX> intReader(): Reader<EB, CTX, Int>
     Reader { env, location, source ->
         source.readAsNumber(env, location) { e, l, value ->
             try {
-                value.toInt().success()
+                value.toInt().success(l)
             } catch (expected: NumberFormatException) {
                 e.errorBuilders.valueCastError(value, Int::class).failure(location = l)
             }

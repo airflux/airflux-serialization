@@ -109,7 +109,7 @@ internal fun <EB, CTX, T> ArrayNode<*>.read(
         if (idx < prefixItems.size) prefixItems[idx] else itemsReader
 
     val failFast = env.context.failFast
-    val initial: ReaderResult<MutableList<T>> = ReaderResult.Success(ArrayList(this.size))
+    val initial: ReaderResult<MutableList<T>> = ReaderResult.Success(location = location, value = ArrayList(this.size))
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItems, items)

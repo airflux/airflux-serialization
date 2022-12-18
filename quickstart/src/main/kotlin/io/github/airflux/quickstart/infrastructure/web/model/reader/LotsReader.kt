@@ -35,6 +35,6 @@ val LotsReader: Reader<ReaderErrorBuilders, ReaderCtx, Lots> = arrayReader {
     returns(items = nonNullable(LotReader))
 }.flatMapResult { env, location, items ->
     withCatching(env, location) {
-        Lots(items).success()
+        Lots(items).success(location)
     }
 }

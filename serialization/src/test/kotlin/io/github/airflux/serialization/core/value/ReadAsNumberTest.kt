@@ -30,7 +30,9 @@ internal class ReadAsNumberTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty.append("user")
-        private val READER = { _: ReaderEnv<EB, Unit>, _: Location, text: String -> ReaderResult.Success(text.toInt()) }
+        private val READER = { _: ReaderEnv<EB, Unit>, location: Location, text: String ->
+            ReaderResult.Success(location = location, value = text.toInt())
+        }
     }
 
     init {

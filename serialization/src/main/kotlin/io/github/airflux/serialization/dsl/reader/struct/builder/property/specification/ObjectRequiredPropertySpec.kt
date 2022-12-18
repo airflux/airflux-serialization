@@ -16,15 +16,12 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.builder.property.specification
 
-import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.reader.validator.Validator
@@ -49,34 +46,13 @@ public fun <EB, CTX, T : Any> required(
         }
     )
 
-public fun <EB, CTX, T : Any> required(
-    paths: PropertyPaths,
-    reader: Reader<EB, CTX, T>
-): StructPropertySpec.Required<EB, CTX, T>
-    where EB : PathMissingErrorBuilder =
-    StructPropertySpec.Required(
-        path = paths,
-        reader = Reader { env, location, source ->
-            val failures = paths.items
-                .map { path ->
-                    val lookup = source.lookup(location, path)
-                    if (lookup is Lookup.Defined) return@Reader readRequired(env, lookup, reader)
-                    ReaderResult.Failure(
-                        location = location.append(path),
-                        error = env.errorBuilders.pathMissingError()
-                    )
-                }
-            failures.merge()
-        }
-    )
-
 public infix fun <EB, CTX, T : Any> StructPropertySpec.Required<EB, CTX, T>.validation(
     validator: Validator<EB, CTX, T>
 ): StructPropertySpec.Required<EB, CTX, T> =
     StructPropertySpec.Required(
         path = path,
         reader = { env, location, source ->
-            reader.read(env, location, source).validation(env, location, validator)
+            reader.read(env, location, source).validation(env, validator)
         }
     )
 
