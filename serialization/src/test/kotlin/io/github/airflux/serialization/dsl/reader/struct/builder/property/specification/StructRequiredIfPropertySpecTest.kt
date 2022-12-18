@@ -217,7 +217,7 @@ internal class StructRequiredIfPropertySpecTest : FreeSpec() {
 
                 "when the filter was added to the spec" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = predicate)
-                    val specWithValidator = spec.filter { _, value -> value.isNotEmpty() }
+                    val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                     "when the reader has successfully read" - {
 
@@ -477,7 +477,7 @@ internal class StructRequiredIfPropertySpecTest : FreeSpec() {
 
                 "when the filter was added to the spec" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = predicate)
-                    val specWithValidator = spec.filter { _, value -> value.isNotEmpty() }
+                    val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                     "when the reader has successfully read" - {
 

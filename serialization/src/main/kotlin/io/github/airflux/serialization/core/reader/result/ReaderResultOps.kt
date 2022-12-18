@@ -31,7 +31,7 @@ public fun <EB, CTX, T> ReaderResult<T?>.filter(
             if (result.value == null)
                 result
             else {
-                if (predicate.test(env, result.value))
+                if (predicate.test(env, result.location, result.value))
                     result
                 else
                     ReaderResult.Success(location = result.location, value = null)

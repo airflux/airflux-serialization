@@ -37,7 +37,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
     init {
 
         "The extension-function the filter" - {
-            val isNotBlank = ReaderPredicate<EB, Unit, String> { _, value -> value.isNotBlank() }
+            val isNotBlank = ReaderPredicate<EB, Unit, String> { _, _, value -> value.isNotBlank() }
 
             "when result is success" - {
 

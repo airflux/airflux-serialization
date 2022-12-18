@@ -207,7 +207,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
 
             "when the filter was added to the spec" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                val specWithValidator = spec.filter { _, value -> value.isNotEmpty() }
+                val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when the reader has successfully read" - {
 

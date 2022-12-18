@@ -209,7 +209,7 @@ internal class StructNullableWithDefaultPropertySpecTest : FreeSpec() {
 
             "when the filter was added to the spec" - {
                 val spec = nullable(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
-                val specWithValidator = spec.filter { _, value -> value.isNotEmpty() }
+                val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when the reader has successfully read" - {
 
