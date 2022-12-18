@@ -22,9 +22,7 @@ import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.should
 
 internal class ReaderResultErrorsTest : FreeSpec() {
 
@@ -52,20 +50,12 @@ internal class ReaderResultErrorsTest : FreeSpec() {
 
             "#invoke(List<ReaderResult#Error>)" - {
 
-                "should return null if list is empty" {
-                    val errors = ReaderResult.Errors(emptyList())
-
-                    errors should beNull()
-                }
-
                 "should return ReaderResult#Errors with errors from the list" {
                     val errors = ReaderResult.Errors(
-                        listOf(
-                            JsonErrors.PathMissing,
-                            JsonErrors.InvalidType(
-                                expected = listOf(BooleanNode.nameOfType),
-                                actual = StringNode.nameOfType
-                            )
+                        JsonErrors.PathMissing,
+                        JsonErrors.InvalidType(
+                            expected = listOf(BooleanNode.nameOfType),
+                            actual = StringNode.nameOfType
                         )
                     )
 

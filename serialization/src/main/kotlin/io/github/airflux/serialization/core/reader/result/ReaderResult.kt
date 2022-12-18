@@ -85,9 +85,6 @@ public sealed class ReaderResult<out T> {
                 Errors(listOf(error))
             else
                 Errors(listOf(error) + errors.asList())
-
-            public operator fun invoke(errors: List<Error>): Errors? =
-                errors.takeIf { it.isNotEmpty() }?.let { Errors(it) }
         }
     }
 }
