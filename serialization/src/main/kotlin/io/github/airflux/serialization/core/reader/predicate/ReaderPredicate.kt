@@ -28,8 +28,7 @@ public infix fun <EB, CTX, T> ReaderPredicate<EB, CTX, T>.or(
 ): ReaderPredicate<EB, CTX, T> {
     val self = this
     return ReaderPredicate { env, location, value ->
-        val result = self.test(env, location, value)
-        if (result) true else other.test(env, location, value)
+        self.test(env, location, value) || other.test(env, location, value)
     }
 }
 
@@ -38,7 +37,6 @@ public infix fun <EB, CTX, T> ReaderPredicate<EB, CTX, T>.and(
 ): ReaderPredicate<EB, CTX, T> {
     val self = this
     return ReaderPredicate { env, location, value ->
-        val result = self.test(env, location, value)
-        if (result) other.test(env, location, value) else false
+        self.test(env, location, value) && other.test(env, location, value)
     }
 }
