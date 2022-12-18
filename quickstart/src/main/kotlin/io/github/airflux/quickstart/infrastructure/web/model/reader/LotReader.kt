@@ -36,11 +36,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 val LotStatusReader: Reader<ReaderErrorBuilders, ReaderCtx, LotStatus> = StringReader.validation(isNotBlank).asEnum()
 
 val LotReader: Reader<ReaderErrorBuilders, ReaderCtx, Lot> = structReader {
-
-    validation {
-        +CommonStructReaderValidators
-        +additionalProperties
-    }
+    validation(CommonStructReaderValidators + additionalProperties)
 
     val id = property(identifierPropertySpec)
     val status = property(required(name = "status", reader = LotStatusReader))

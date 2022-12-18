@@ -23,7 +23,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class StructReaderValidatorsBuilderInstanceTest : FreeSpec() {
+internal class StructReaderValidationInstanceTest : FreeSpec() {
 
     companion object {
         private val PROPERTIES = StructProperties<Unit, Unit>(emptyList())
@@ -31,7 +31,7 @@ internal class StructReaderValidatorsBuilderInstanceTest : FreeSpec() {
 
     init {
 
-        "The StructReaderValidatorsBuilderInstance type" - {
+        "The StructReaderValidationInstance type" - {
 
             "when validators were not added" - {
                 val validatorsBuilder = StructReaderValidationInstance<Unit, Unit>()
@@ -53,10 +53,7 @@ internal class StructReaderValidatorsBuilderInstanceTest : FreeSpec() {
                 )
 
                 val validatorsBuilder = StructReaderValidationInstance<Unit, Unit>().apply {
-                    validation {
-                        +firstValidatorBuilder
-                        +secondValidatorBuilder
-                    }
+                    validation(firstValidatorBuilder, secondValidatorBuilder)
                 }
 
                 "then the builder returns a collection of validators" {

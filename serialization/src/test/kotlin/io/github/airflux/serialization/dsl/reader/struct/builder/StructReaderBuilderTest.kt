@@ -63,9 +63,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                     result = null
                 )
                 val reader: Reader<EB, CTX, DTO> = structReader {
-                    validation {
-                        +validator
-                    }
+                    validation(validator)
+
                     val name = property(propertySpec)
                     returns { _, location ->
                         DTO(name = +name).success(location)
@@ -129,9 +128,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            validation {
-                                +validator
-                            }
+                            validation(validator)
+
                             val name = property(propertySpec)
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -154,9 +152,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             result = null
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            validation {
-                                +validator
-                            }
+                            validation(validator)
+
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
@@ -183,9 +180,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            validation {
-                                +validator
-                            }
+                            validation(validator)
+
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
@@ -237,9 +233,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            validation {
-                                +validator
-                            }
+                            validation(validator)
+
                             val name = property(propertySpec)
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -262,9 +257,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             result = null
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            validation {
-                                +validator
-                            }
+                            validation(validator)
+
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
@@ -291,9 +285,8 @@ internal class StructReaderBuilderTest : FreeSpec() {
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
-                            validation {
-                                +validator
-                            }
+                            validation(validator)
+
                             val name: StructProperty.Required<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->

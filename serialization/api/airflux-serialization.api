@@ -573,7 +573,8 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/Str
 	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$OptionalWithDefault;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$OptionalWithDefault;
 	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Required;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Required;
 	public fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$RequiredIf;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$RequiredIf;
-	public fun validation (Lkotlin/jvm/functions/Function1;)V
+	public fun validation (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;[Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;)V
+	public fun validation (Ljava/util/List;)V
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/StructReaderBuilder$ResultBuilder {
@@ -768,18 +769,8 @@ public final class io/github/airflux/serialization/dsl/reader/struct/builder/pro
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/validator/StructReaderValidation {
-	public abstract fun validation (Lkotlin/jvm/functions/Function1;)V
-}
-
-public final class io/github/airflux/serialization/dsl/reader/struct/builder/validator/StructReaderValidation$Builder {
-	public final fun add (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;)V
-	public final fun addAll (Ljava/util/Collection;)V
-	public final fun remove (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;)V
-	public final fun removeAll (Ljava/util/Collection;)V
-	public final fun unaryMinus (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;)V
-	public final fun unaryMinus (Ljava/util/Collection;)V
-	public final fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;)V
-	public final fun unaryPlus (Ljava/util/Collection;)V
+	public fun validation (Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;[Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder;)V
+	public abstract fun validation (Ljava/util/List;)V
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidator {

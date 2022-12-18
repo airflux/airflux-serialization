@@ -27,9 +27,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.returns
 import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
 
 val RequestReader: Reader<ReaderErrorBuilders, ReaderCtx, Request> = structReader {
-    validation {
-        +CommonStructReaderValidators
-    }
+    validation(CommonStructReaderValidators)
 
     val tender = property(required(name = "tender", reader = TenderReader))
 
