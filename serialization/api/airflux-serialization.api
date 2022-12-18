@@ -484,7 +484,8 @@ public final class io/github/airflux/serialization/dsl/path/PropertyPathsOpsKt {
 }
 
 public final class io/github/airflux/serialization/dsl/reader/array/builder/ArrayReaderBuilder : io/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayReaderValidation {
-	public fun validation (Lkotlin/jvm/functions/Function1;)V
+	public fun validation (Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;[Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;)V
+	public fun validation (Ljava/util/List;)V
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/builder/ArrayReaderBuilder$ResultBuilder {
@@ -530,18 +531,8 @@ public final class io/github/airflux/serialization/dsl/reader/array/builder/item
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayReaderValidation {
-	public abstract fun validation (Lkotlin/jvm/functions/Function1;)V
-}
-
-public final class io/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayReaderValidation$Builder {
-	public final fun add (Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;)V
-	public final fun addAll (Ljava/util/Collection;)V
-	public final fun remove (Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;)V
-	public final fun removeAll (Ljava/util/Collection;)V
-	public final fun unaryMinus (Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;)V
-	public final fun unaryMinus (Ljava/util/Collection;)V
-	public final fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;)V
-	public final fun unaryPlus (Ljava/util/Collection;)V
+	public fun validation (Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;[Lio/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidatorBuilder;)V
+	public abstract fun validation (Ljava/util/List;)V
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/builder/validator/ArrayValidator {

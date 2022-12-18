@@ -29,9 +29,7 @@ import io.github.airflux.serialization.dsl.reader.array.builder.item.specificati
 import io.github.airflux.serialization.dsl.reader.array.builder.returns
 
 val LotsReader: Reader<ReaderErrorBuilders, ReaderCtx, Lots> = arrayReader {
-    validation {
-        +CommonArrayReaderValidators
-    }
+    validation(CommonArrayReaderValidators)
     returns(items = nonNullable(LotReader))
 }.flatMapResult { env, location, items ->
     withCatching(env, location) {

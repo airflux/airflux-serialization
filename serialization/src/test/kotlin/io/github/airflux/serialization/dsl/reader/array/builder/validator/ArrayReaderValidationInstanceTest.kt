@@ -22,11 +22,11 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
-internal class ArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
+internal class ArrayReaderValidationInstanceTest : FreeSpec() {
 
     init {
 
-        "The ArrayReaderValidatorsBuilderInstance type" - {
+        "The ArrayReaderValidationInstance type" - {
 
             "when validators were not added" - {
                 val validatorsBuilder = ArrayReaderValidationInstance<Unit, Unit>()
@@ -48,10 +48,10 @@ internal class ArrayReaderValidatorsBuilderInstanceTest : FreeSpec() {
                 )
 
                 val validatorsBuilder = ArrayReaderValidationInstance<Unit, Unit>().apply {
-                    validation {
-                        +firstValidatorBuilder
-                        +secondValidatorBuilder
-                    }
+                    validation(
+                        firstValidatorBuilder,
+                        secondValidatorBuilder
+                    )
                 }
 
                 "then the builder returns a collection of validators" {
