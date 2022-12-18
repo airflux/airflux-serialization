@@ -28,8 +28,6 @@ internal class AdditionalPropertiesStructValidatorBuilder<EB, CTX> : StructValid
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           CTX : FailFastOption {
 
-    override val key: StructValidatorBuilder.Key<*> = Key
-
     override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> {
         val names: Set<String> = properties.names()
         return AdditionalPropertiesStructValidator(names)
@@ -46,6 +44,4 @@ internal class AdditionalPropertiesStructValidatorBuilder<EB, CTX> : StructValid
 
         return flatMap { property -> property.names() }.toSet()
     }
-
-    companion object Key : StructValidatorBuilder.Key<AdditionalPropertiesStructValidatorBuilder<*, *>>
 }

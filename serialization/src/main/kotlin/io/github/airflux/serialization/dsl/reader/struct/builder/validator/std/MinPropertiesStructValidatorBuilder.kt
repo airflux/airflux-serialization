@@ -24,10 +24,6 @@ import io.github.airflux.serialization.std.validator.struct.MinPropertiesStructV
 internal class MinPropertiesStructValidatorBuilder<EB, CTX>(private val value: Int) : StructValidatorBuilder<EB, CTX>
     where EB : MinPropertiesStructValidator.ErrorBuilder {
 
-    override val key: StructValidatorBuilder.Key<*> = Key
-
     override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> =
         MinPropertiesStructValidator(value)
-
-    companion object Key : StructValidatorBuilder.Key<MinPropertiesStructValidatorBuilder<*, *>>
 }

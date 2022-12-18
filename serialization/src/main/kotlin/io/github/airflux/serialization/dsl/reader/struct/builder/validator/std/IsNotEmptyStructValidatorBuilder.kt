@@ -24,10 +24,7 @@ import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructVali
 internal class IsNotEmptyStructValidatorBuilder<EB, CTX> : StructValidatorBuilder<EB, CTX>
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
-    override val key: StructValidatorBuilder.Key<*> = Key
     override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> = validator
 
     private val validator = IsNotEmptyStructValidator<EB, CTX>()
-
-    companion object Key : StructValidatorBuilder.Key<IsNotEmptyStructValidatorBuilder<*, *>>
 }

@@ -24,10 +24,6 @@ import io.github.airflux.serialization.std.validator.struct.MaxPropertiesStructV
 internal class MaxPropertiesStructValidatorBuilder<EB, CTX>(private val value: Int) : StructValidatorBuilder<EB, CTX>
     where EB : MaxPropertiesStructValidator.ErrorBuilder {
 
-    override val key: StructValidatorBuilder.Key<*> = Key
-
     override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> =
         MaxPropertiesStructValidator(value)
-
-    companion object Key : StructValidatorBuilder.Key<MaxPropertiesStructValidatorBuilder<*, *>>
 }

@@ -770,10 +770,6 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder {
 	public abstract fun build (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperties;)Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidator;
-	public abstract fun getKey ()Lio/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder$Key;
-}
-
-public abstract interface class io/github/airflux/serialization/dsl/reader/struct/builder/validator/StructValidatorBuilder$Key {
 }
 
 public final class io/github/airflux/serialization/dsl/value/ValueNodeOpsKt {

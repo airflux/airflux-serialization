@@ -19,8 +19,5 @@ package io.github.airflux.serialization.dsl.reader.struct.builder.validator
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperties
 
 public interface StructValidatorBuilder<EB, CTX> {
-    public val key: Key<*>
     public fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX>
-
-    public interface Key<E : StructValidatorBuilder<*, *>>
 }

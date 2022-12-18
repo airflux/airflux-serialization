@@ -58,10 +58,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
         "The StructReaderBuilder type" - {
 
             "when no errors in the reader" - {
-                val validator = DummyStructValidatorBuilder<EB, CTX>(
-                    key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
-                    result = null
-                )
+                val validator = DummyStructValidatorBuilder<EB, CTX>(result = null)
                 val reader: Reader<EB, CTX, DTO> = structReader {
                     validation(validator)
 
@@ -124,7 +121,6 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                     "when the validator returns an error" - {
                         val validator = DummyStructValidatorBuilder<EB, CTX>(
-                            key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
@@ -147,10 +143,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                     }
 
                     "when the reader of an property returns an error" - {
-                        val validator = DummyStructValidatorBuilder<EB, CTX>(
-                            key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
-                            result = null
-                        )
+                        val validator = DummyStructValidatorBuilder<EB, CTX>(result = null)
                         val reader: Reader<EB, CTX, DTO> = structReader {
                             validation(validator)
 
@@ -176,7 +169,6 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                     "when the validator and the reader of an property may return some errors" - {
                         val validator = DummyStructValidatorBuilder<EB, CTX>(
-                            key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
@@ -229,7 +221,6 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                     "when the validator returns an error" - {
                         val validator = DummyStructValidatorBuilder<EB, CTX>(
-                            key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {
@@ -252,10 +243,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                     }
 
                     "when the reader of an property returns an error" - {
-                        val validator = DummyStructValidatorBuilder<EB, CTX>(
-                            key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
-                            result = null
-                        )
+                        val validator = DummyStructValidatorBuilder<EB, CTX>(result = null)
                         val reader: Reader<EB, CTX, DTO> = structReader {
                             validation(validator)
 
@@ -281,7 +269,6 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
                     "when the validator and the reader of an property may return some errors" - {
                         val validator = DummyStructValidatorBuilder<EB, CTX>(
-                            key = DummyStructValidatorBuilder.key<EB, CTX, DummyStructValidatorBuilder<EB, CTX>>(),
                             result = ReaderResult.Failure(location = LOCATION, error = MinPropertiesError)
                         )
                         val reader: Reader<EB, CTX, DTO> = structReader {

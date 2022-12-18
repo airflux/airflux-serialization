@@ -24,10 +24,7 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.Struct
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidatorBuilder
 
-internal class DummyStructValidatorBuilder<EB, CTX>(
-    override val key: StructValidatorBuilder.Key<*>,
-    result: ReaderResult.Failure?
-) : StructValidatorBuilder<EB, CTX> {
+internal class DummyStructValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : StructValidatorBuilder<EB, CTX> {
 
     val validator = Validator<EB, CTX>(result)
     override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> = validator
@@ -39,9 +36,5 @@ internal class DummyStructValidatorBuilder<EB, CTX>(
             properties: StructProperties<EB, CTX>,
             source: StructNode
         ): ReaderResult.Failure? = result
-    }
-
-    companion object {
-        fun <EB, CTX, E : StructValidatorBuilder<EB, CTX>> key() = object : StructValidatorBuilder.Key<E> {}
     }
 }

@@ -43,14 +43,8 @@ internal class StructReaderValidationInstanceTest : FreeSpec() {
             }
 
             "when some validators were added" - {
-                val firstValidatorBuilder = DummyStructValidatorBuilder<Unit, Unit>(
-                    key = DummyStructValidatorBuilder.key<Unit, Unit, DummyStructValidatorBuilder<Unit, Unit>>(),
-                    result = null
-                )
-                val secondValidatorBuilder = DummyStructValidatorBuilder<Unit, Unit>(
-                    key = DummyStructValidatorBuilder.key<Unit, Unit, DummyStructValidatorBuilder<Unit, Unit>>(),
-                    result = null
-                )
+                val firstValidatorBuilder = DummyStructValidatorBuilder<Unit, Unit>(result = null)
+                val secondValidatorBuilder = DummyStructValidatorBuilder<Unit, Unit>(result = null)
 
                 val validatorsBuilder = StructReaderValidationInstance<Unit, Unit>().apply {
                     validation(firstValidatorBuilder, secondValidatorBuilder)
