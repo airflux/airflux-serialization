@@ -23,10 +23,7 @@ import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValida
 internal class IsNotEmptyArrayValidatorBuilder<EB, CTX> : ArrayValidatorBuilder<EB, CTX>
     where EB : IsNotEmptyArrayValidator.ErrorBuilder {
 
-    override val key: ArrayValidatorBuilder.Key<*> = Key
     override fun build(): ArrayValidator<EB, CTX> = validator
 
     private val validator = IsNotEmptyArrayValidator<EB, CTX>()
-
-    companion object Key : ArrayValidatorBuilder.Key<IsNotEmptyArrayValidatorBuilder<*, *>>
 }

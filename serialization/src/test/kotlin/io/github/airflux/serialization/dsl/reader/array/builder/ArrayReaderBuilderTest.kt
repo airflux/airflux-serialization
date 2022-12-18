@@ -52,10 +52,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
             "when no errors in the reader" - {
                 val reader: Reader<EB, CTX, List<String>> = arrayReader {
                     validation(
-                        DummyArrayValidatorBuilder(
-                            key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
-                            result = null
-                        )
+                        DummyArrayValidatorBuilder(result = null)
                     )
                     returns(items = itemSpec())
                 }
@@ -112,7 +109,6 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             validation(
                                 DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                                     result = ReaderResult.Failure(
                                         location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
@@ -137,12 +133,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                     "when the reader of items returns an error" - {
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
-                            validation(
-                                DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
-                                    result = null
-                                )
-                            )
+                            validation(DummyArrayValidatorBuilder(result = null))
                             returns(itemSpec(JsonErrors.PathMissing))
                         }
 
@@ -163,7 +154,6 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             validation(
                                 DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                                     result = ReaderResult.Failure(
                                         location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
@@ -215,7 +205,6 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             validation(
                                 DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                                     result = ReaderResult.Failure(
                                         location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError
@@ -240,12 +229,7 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
 
                     "when the reader of items returns an error" - {
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
-                            validation(
-                                DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
-                                    result = null
-                                )
-                            )
+                            validation(DummyArrayValidatorBuilder(result = null))
                             returns(itemSpec(JsonErrors.PathMissing))
                         }
 
@@ -266,7 +250,6 @@ internal class ArrayReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, List<String>> = arrayReader {
                             validation(
                                 DummyArrayValidatorBuilder(
-                                    key = DummyArrayValidatorBuilder.key<EB, CTX, DummyArrayValidatorBuilder<EB, CTX>>(),
                                     result = ReaderResult.Failure(
                                         location = LOCATION.append(PROPERTY_NAME),
                                         error = MinItemsError

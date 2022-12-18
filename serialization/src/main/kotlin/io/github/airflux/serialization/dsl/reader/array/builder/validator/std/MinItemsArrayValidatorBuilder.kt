@@ -23,8 +23,5 @@ import io.github.airflux.serialization.std.validator.array.MinItemsArrayValidato
 internal class MinItemsArrayValidatorBuilder<EB, CTX>(private val value: Int) : ArrayValidatorBuilder<EB, CTX>
     where EB : MinItemsArrayValidator.ErrorBuilder {
 
-    override val key: ArrayValidatorBuilder.Key<*> = Key
     override fun build(): ArrayValidator<EB, CTX> = MinItemsArrayValidator(value)
-
-    companion object Key : ArrayValidatorBuilder.Key<MinItemsArrayValidatorBuilder<*, *>>
 }

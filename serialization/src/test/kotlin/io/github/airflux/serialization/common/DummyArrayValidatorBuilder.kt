@@ -23,10 +23,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidatorBuilder
 
-internal class DummyArrayValidatorBuilder<EB, CTX>(
-    override val key: ArrayValidatorBuilder.Key<*>,
-    result: ReaderResult.Failure?
-) : ArrayValidatorBuilder<EB, CTX> {
+internal class DummyArrayValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : ArrayValidatorBuilder<EB, CTX> {
 
     val validator = Validator<EB, CTX>(result)
     override fun build(): ArrayValidator<EB, CTX> = validator
@@ -37,9 +34,5 @@ internal class DummyArrayValidatorBuilder<EB, CTX>(
             location: Location,
             source: ArrayNode<*>
         ): ReaderResult.Failure? = result
-    }
-
-    companion object {
-        fun <EB, CTX, E : ArrayValidatorBuilder<EB, CTX>> key() = object : ArrayValidatorBuilder.Key<E> {}
     }
 }

@@ -38,14 +38,8 @@ internal class ArrayReaderValidationInstanceTest : FreeSpec() {
             }
 
             "when some validators were added" - {
-                val firstValidatorBuilder = DummyArrayValidatorBuilder<Unit, Unit>(
-                    key = DummyArrayValidatorBuilder.key<Unit, Unit, DummyArrayValidatorBuilder<Unit, Unit>>(),
-                    result = null
-                )
-                val secondValidatorBuilder = DummyArrayValidatorBuilder<Unit, Unit>(
-                    key = DummyArrayValidatorBuilder.key<Unit, Unit, DummyArrayValidatorBuilder<Unit, Unit>>(),
-                    result = null
-                )
+                val firstValidatorBuilder = DummyArrayValidatorBuilder<Unit, Unit>(result = null)
+                val secondValidatorBuilder = DummyArrayValidatorBuilder<Unit, Unit>(result = null)
 
                 val validatorsBuilder = ArrayReaderValidationInstance<Unit, Unit>().apply {
                     validation(

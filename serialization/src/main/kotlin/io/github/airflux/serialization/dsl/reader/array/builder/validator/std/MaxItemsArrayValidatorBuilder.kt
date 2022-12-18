@@ -23,8 +23,5 @@ import io.github.airflux.serialization.std.validator.array.MaxItemsArrayValidato
 internal class MaxItemsArrayValidatorBuilder<EB, CTX>(private val value: Int) : ArrayValidatorBuilder<EB, CTX>
     where EB : MaxItemsArrayValidator.ErrorBuilder {
 
-    override val key: ArrayValidatorBuilder.Key<*> = Key
     override fun build(): ArrayValidator<EB, CTX> = MaxItemsArrayValidator(value)
-
-    companion object Key : ArrayValidatorBuilder.Key<MaxItemsArrayValidatorBuilder<*, *>>
 }
