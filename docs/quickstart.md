@@ -70,10 +70,10 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              AdditionalPropertiesStructValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder,
-                             GtComparisonValidator.ErrorBuilder {
+                             MinimumNumberValidator.ErrorBuilder {
 
     //Reading error builders
-    override fun invalidTypeError(expected: ValueNode.Type, actual: ValueNode.Type): ReaderResult.Error =
+    override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
 
     override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
@@ -87,7 +87,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
     override fun patternStringError(value: String, pattern: Regex): ReaderResult.Error =
         JsonErrors.Validation.Strings.Pattern(value, pattern)
 
-    //Struct validation error builders
+    //Object validation error builders
     override fun isNotEmptyStructError(): ReaderResult.Error = JsonErrors.Validation.Struct.IsEmpty
 
     override fun additionalPropertiesStructError(): ReaderResult.Error =
@@ -98,9 +98,9 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 
     override fun additionalItemsError(): ReaderResult.Error = JsonErrors.Validation.Arrays.AdditionalItems
 
-    //Comparison validation error builders
-    override fun gtComparisonError(expected: Number, actual: Number): ReaderResult.Error =
-        JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)
+    //Number validation error builders
+    override fun minimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
+        JsonErrors.Validation.Numbers.Min(expected = expected, actual = actual)
 }
 ```
 
@@ -109,7 +109,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 ```kotlin
 sealed class JsonErrors : ReaderResult.Error {
     object PathMissing : JsonErrors()
-    data class InvalidType(val expected: ValueNode.Type, val actual: ValueNode.Type) : JsonErrors()
+    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 
     sealed class Validation : JsonErrors() {
@@ -129,7 +129,7 @@ sealed class JsonErrors : ReaderResult.Error {
         }
 
         sealed class Numbers : Validation() {
-            class Gt<T>(val expected: T, val actual: T) : Numbers()
+            class Min<T>(val expected: T, val actual: T) : Numbers()
         }
     }
 }
@@ -152,7 +152,7 @@ val StringReader = stringReader<ReaderErrorBuilders, ReaderCtx>()
 
 // The generic reader for the id property
 val PositiveNumberReader: Reader<ReaderErrorBuilders, ReaderCtx, Int> =
-    IntReader.validation(StdComparisonValidator.gt(0))
+    IntReader.validation(StdNumberValidator.minimum(0))
 
 // The generic reader for the username property
 val NonEmptyStringReader: Reader<ReaderErrorBuilders, ReaderCtx, String> =
@@ -167,15 +167,13 @@ val PhoneNumberReader: Reader<ReaderErrorBuilders, ReaderCtx, String> =
 
 ```kotlin
 val PhoneReader: Reader<ReaderErrorBuilders, ReaderCtx, Phone> = structReader {
-    validation {
-        +additionalProperties
-    }
+    validation(additionalProperties)
 
     val title = property(required(name = "title", reader = NonEmptyStringReader))
     val number = property(required(name = "number", reader = PhoneNumberReader))
 
-    returns { _, _ ->
-        Phone(title = +title, number = +number).success()
+    returns { _, location ->
+        Phone(title = +title, number = +number).success(location)
     }
 }
 ```
@@ -184,9 +182,7 @@ val PhoneReader: Reader<ReaderErrorBuilders, ReaderCtx, Phone> = structReader {
 
 ```kotlin
 val PhonesReader: Reader<ReaderErrorBuilders, ReaderCtx, Phones> = arrayReader {
-    validation {
-        +isNotEmptyArray
-    }
+    validation(isNotEmptyArray)
     returns(items = nonNullable(PhoneReader))
 }.map { phones -> Phones(phones) }
 ```
@@ -198,10 +194,10 @@ val UserReader: Reader<ReaderErrorBuilders, ReaderCtx, User> = structReader {
 
     val id = property(required(name = "id", reader = PositiveNumberReader))
     val name = property(required(name = "name", reader = NonEmptyStringReader))
-    val phones = property(optionalWithDefault(name = "phones", reader = PhonesReader, default = { _ -> Phones() }))
+    val phones = property(optional(name = "phones", reader = PhonesReader, default = { Phones() }))
 
-    returns { _, _ ->
-        User(id = +id, name = +name, phones = +phones).success()
+    returns { _, location ->
+        User(id = +id, name = +name, phones = +phones).success(location)
     }
 }
 ```
