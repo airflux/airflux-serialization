@@ -36,7 +36,7 @@ internal class ReaderResultTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
-        private val LOCATION = Location.empty.append("id")
+        private val LOCATION = Location.empty
     }
 
     init {
@@ -113,6 +113,11 @@ internal class ReaderResultTest : FreeSpec() {
                     y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
                     z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
                     other = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
+                )
+                original.shouldBeEqualsContract(
+                    y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    other = ReaderResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
                 )
             }
         }
@@ -240,7 +245,13 @@ internal class ReaderResultTest : FreeSpec() {
                 original.shouldBeEqualsContract(
                     y = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
                     z = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    other = ReaderResult.Failure(location = Location.empty, error = JsonErrors.PathMissing)
+                    other = ReaderResult.Failure(location = LOCATION, error = JsonErrors.AdditionalItems)
+                )
+
+                original.shouldBeEqualsContract(
+                    y = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    other = ReaderResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                 )
             }
         }
