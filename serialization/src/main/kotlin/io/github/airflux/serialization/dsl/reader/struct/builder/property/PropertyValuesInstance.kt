@@ -29,33 +29,7 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
     override val size: Int
         get() = values.size
 
-    override operator fun <T : Any> get(property: StructProperty.Required<EB, CTX, T>): T =
-        getNonNullable(property)
-
-    override fun <T : Any> get(property: StructProperty.RequiredIf<EB, CTX, T>): T? =
-        getNullable(property)
-
-    override operator fun <T : Any> get(property: StructProperty.Defaultable<EB, CTX, T>): T =
-        getNonNullable(property)
-
-    override operator fun <T : Any> get(property: StructProperty.Optional<EB, CTX, T>): T? =
-        getNullable(property)
-
-    override operator fun <T : Any> get(property: StructProperty.OptionalWithDefault<EB, CTX, T>): T =
-        getNonNullable(property)
-
-    override operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T? =
-        getNullable(property)
-
-    override operator fun <T : Any> get(property: StructProperty.NullableWithDefault<EB, CTX, T>): T? =
-        getNullable(property)
-
-    operator fun set(property: StructProperty<EB, CTX>, value: Any?) {
-        if (value != null) values[property] = value
-        properties.add(property)
-    }
-
-    private fun <T> getNonNullable(property: StructProperty<EB, CTX>): T {
+    override operator fun <T : Any> get(property: StructProperty.NonNullable<EB, CTX, T>): T {
         val value = values[property]
         return if (value != null)
             @Suppress("UNCHECKED_CAST")
@@ -64,7 +38,7 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
             throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
     }
 
-    private fun <T> getNullable(property: StructProperty<EB, CTX>): T? {
+    override operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T? {
         val value = values[property]
         return if (value != null)
             @Suppress("UNCHECKED_CAST")
@@ -75,5 +49,10 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
             else
                 throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
         }
+    }
+
+    operator fun set(property: StructProperty<EB, CTX>, value: Any?) {
+        if (value != null) values[property] = value
+        properties.add(property)
     }
 }

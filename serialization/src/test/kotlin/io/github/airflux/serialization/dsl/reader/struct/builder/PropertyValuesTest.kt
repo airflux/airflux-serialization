@@ -18,15 +18,12 @@ package io.github.airflux.serialization.dsl.reader.struct.builder
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyStringReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
@@ -41,8 +38,6 @@ internal class PropertyValuesTest : FreeSpec() {
         private const val UNKNOWN_PROPERTY_NAME = "name"
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "dd7c5dab-0f8b-4436-a8e8-72b841c90acc"
-        private const val DEFAULT_VALUE = "None"
-        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
         private val StringReader = dummyStringReader<EB, Unit>()
     }
 
@@ -65,59 +60,8 @@ internal class PropertyValuesTest : FreeSpec() {
                     map.size shouldBe 0
                 }
 
-                "for required property" - {
-                    val property = StructProperty.Required(required(PROPERTY_NAME, StringReader))
-
-                    "then the method 'get' should throw an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "then the method 'unaryPlus' should throw an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
-                "for defaultable property" - {
-                    val property =
-                        StructProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
-
-                    "then the method 'get' should throw an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "then the method 'unaryPlus' should throw an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
-                "for optional property" - {
-                    val property = StructProperty.Optional(optional(PROPERTY_NAME, StringReader))
-
-                    "then the method 'get' should throw an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "then the method 'unaryPlus' should throw an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
-                "for optional with default property" - {
-                    val property = StructProperty.OptionalWithDefault(
-                        optional(PROPERTY_NAME, StringReader, DEFAULT)
-                    )
+                "for non-nullable property" - {
+                    val property = StructProperty.NonNullable(required(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -133,25 +77,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
-
-                    "then the method 'get' should throw an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "then the method 'unaryPlus' should throw an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
-                "for nullable with default property" - {
-                    val property = StructProperty.NullableWithDefault(
-                        nullable(PROPERTY_NAME, StringReader, DEFAULT)
-                    )
+                    val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -169,8 +95,8 @@ internal class PropertyValuesTest : FreeSpec() {
 
             "when the added value is not null" - {
 
-                "for required property" - {
-                    val property = StructProperty.Required(required(PROPERTY_NAME, StringReader))
+                "for non-nullable property" - {
+                    val property = StructProperty.NonNullable(required(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -203,164 +129,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty.Required(required(UNKNOWN_PROPERTY_NAME, StringReader))
-
-                        "the method 'get' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> { map[unknownProperty] }
-                        }
-
-                        "the method 'unaryPlus' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> {
-                                with(map) {
-                                    +unknownProperty
-                                }
-                            }
-                        }
-                    }
-                }
-
-                "for defaultable property" - {
-                    val property =
-                        StructProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = PROPERTY_VALUE
-                    }
-
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
-                    }
-
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
-                    }
-
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
-                    }
-
-                    "then for known property" - {
-
-                        "the method 'get' should return the appended value" {
-                            val value = map[property]
-                            value shouldBe PROPERTY_VALUE
-                        }
-
-                        "the method 'unaryPlus' should return the appended value" {
-                            with(map) {
-                                val value = +property
-                                value shouldBe PROPERTY_VALUE
-                            }
-                        }
-                    }
-
-                    "then for unknown property" - {
-                        val unknownProperty = StructProperty.Defaultable(
-                            defaultable(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
-                        )
-
-                        "the method 'get' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> { map[unknownProperty] }
-                        }
-
-                        "the method 'unaryPlus' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> {
-                                with(map) {
-                                    +unknownProperty
-                                }
-                            }
-                        }
-                    }
-                }
-
-                "for optional property" - {
-                    val property = StructProperty.Optional(optional(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = PROPERTY_VALUE
-                    }
-
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
-                    }
-
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
-                    }
-
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
-                    }
-
-                    "then for known property" - {
-
-                        "the method 'get' should return the appended value" {
-                            val value = map[property]
-                            value shouldBe PROPERTY_VALUE
-                        }
-
-                        "the method 'unaryPlus' should return the appended value" {
-                            with(map) {
-                                val value = +property
-                                value shouldBe PROPERTY_VALUE
-                            }
-                        }
-                    }
-
-                    "then for unknown property" - {
-                        val unknownProperty = StructProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
-
-                        "the method 'get' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> { map[unknownProperty] }
-                        }
-
-                        "the method 'unaryPlus' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> {
-                                with(map) {
-                                    +unknownProperty
-                                }
-                            }
-                        }
-                    }
-                }
-
-                "for optional with default property" - {
-                    val property = StructProperty.OptionalWithDefault(
-                        optional(PROPERTY_NAME, StringReader, DEFAULT)
-                    )
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = PROPERTY_VALUE
-                    }
-
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
-                    }
-
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
-                    }
-
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
-                    }
-
-                    "then for known property" - {
-
-                        "the method 'get' should return the appended value" {
-                            val value = map[property]
-                            value shouldBe PROPERTY_VALUE
-                        }
-
-                        "the method 'unaryPlus' should return the appended value" {
-                            with(map) {
-                                val value = +property
-                                value shouldBe PROPERTY_VALUE
-                            }
-                        }
-                    }
-
-                    "then for unknown property" - {
-                        val unknownProperty = StructProperty.OptionalWithDefault(
-                            optional(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
-                        )
+                        val unknownProperty = StructProperty.NonNullable(required(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -377,7 +146,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -410,61 +179,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
-
-                        "the method 'get' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> { map[unknownProperty] }
-                        }
-
-                        "the method 'unaryPlus' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> {
-                                with(map) {
-                                    +unknownProperty
-                                }
-                            }
-                        }
-                    }
-                }
-
-                "for nullable with default property" - {
-                    val property = StructProperty.NullableWithDefault(
-                        nullable(PROPERTY_NAME, StringReader, DEFAULT)
-                    )
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = PROPERTY_VALUE
-                    }
-
-                    "then the property isEmpty should return false" {
-                        map.isEmpty shouldBe false
-                    }
-
-                    "then the property isNotEmpty should return true" {
-                        map.isNotEmpty shouldBe true
-                    }
-
-                    "then the property size should return 1" {
-                        map.size shouldBe 1
-                    }
-
-                    "then for known property" - {
-
-                        "the method 'get' should return the appended value" {
-                            val value = map[property]
-                            value shouldBe PROPERTY_VALUE
-                        }
-
-                        "the method 'unaryPlus' should return the appended value" {
-                            with(map) {
-                                val value = +property
-                                value shouldBe PROPERTY_VALUE
-                            }
-                        }
-                    }
-
-                    "then for unknown property" - {
-                        val unknownProperty = StructProperty.NullableWithDefault(
-                            nullable(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
-                        )
+                        val unknownProperty = StructProperty.Nullable(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -483,123 +198,8 @@ internal class PropertyValuesTest : FreeSpec() {
 
             "when the added value is null" - {
 
-                "for required property" - {
-                    val property = StructProperty.Required(required(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = null
-                    }
-
-                    "then the property isEmpty should return true" {
-                        map.isEmpty shouldBe true
-                    }
-
-                    "then the property isNotEmpty should return false" {
-                        map.isNotEmpty shouldBe false
-                    }
-
-                    "then the property size should return 0" {
-                        map.size shouldBe 0
-                    }
-
-                    "the method 'get' should thrown an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "the method 'unaryPlus' should thrown an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
-                "for defaultable property" - {
-                    val property =
-                        StructProperty.Defaultable(defaultable(PROPERTY_NAME, StringReader, DEFAULT))
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = null
-                    }
-
-                    "then the property isEmpty should return true" {
-                        map.isEmpty shouldBe true
-                    }
-
-                    "then the property isNotEmpty should return false" {
-                        map.isNotEmpty shouldBe false
-                    }
-
-                    "then the property size should return 0" {
-                        map.size shouldBe 0
-                    }
-
-                    "the method 'get' should thrown an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "the method 'unaryPlus' should thrown an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
-                "for optional property" - {
-                    val property = StructProperty.Optional(optional(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = null
-                    }
-
-                    "then the property isEmpty should return true" {
-                        map.isEmpty shouldBe true
-                    }
-
-                    "then the property isNotEmpty should return false" {
-                        map.isNotEmpty shouldBe false
-                    }
-
-                    "then the property size should return 0" {
-                        map.size shouldBe 0
-                    }
-
-                    "then for known property" - {
-
-                        "the method 'get' should return the appended value" {
-                            val value = map[property]
-                            value.shouldBeNull()
-                        }
-
-                        "the method 'unaryPlus' should return the appended value" {
-                            with(map) {
-                                val value = +property
-                                value.shouldBeNull()
-                            }
-                        }
-                    }
-
-                    "then for unknown property" - {
-                        val unknownProperty = StructProperty.Optional(optional(UNKNOWN_PROPERTY_NAME, StringReader))
-
-                        "the method 'get' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> { map[unknownProperty] }
-                        }
-
-                        "the method 'unaryPlus' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> {
-                                with(map) {
-                                    +unknownProperty
-                                }
-                            }
-                        }
-                    }
-                }
-
-                "for optional with default property" - {
-                    val property = StructProperty.OptionalWithDefault(
-                        optional(PROPERTY_NAME, StringReader, DEFAULT)
-                    )
+                "for non-nullable property" - {
+                    val property = StructProperty.NonNullable(required(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -630,7 +230,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty.Nullable(nullable(PROPERTY_NAME, StringReader))
+                    val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -663,61 +263,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty.Nullable(nullable(UNKNOWN_PROPERTY_NAME, StringReader))
-
-                        "the method 'get' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> { map[unknownProperty] }
-                        }
-
-                        "the method 'unaryPlus' should thrown an exception" {
-                            shouldThrow<NoSuchElementException> {
-                                with(map) {
-                                    +unknownProperty
-                                }
-                            }
-                        }
-                    }
-                }
-
-                "for nullable with default property" - {
-                    val property = StructProperty.NullableWithDefault(
-                        nullable(PROPERTY_NAME, StringReader, DEFAULT)
-                    )
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = null
-                    }
-
-                    "then the property isEmpty should return true" {
-                        map.isEmpty shouldBe true
-                    }
-
-                    "then the property isNotEmpty should return false" {
-                        map.isNotEmpty shouldBe false
-                    }
-
-                    "then the property size should return 0" {
-                        map.size shouldBe 0
-                    }
-
-                    "then for known property" - {
-
-                        "the method 'get' should return the appended value" {
-                            val value = map[property]
-                            value.shouldBeNull()
-                        }
-
-                        "the method 'unaryPlus' should return the appended value" {
-                            with(map) {
-                                val value = +property
-                                value.shouldBeNull()
-                            }
-                        }
-                    }
-
-                    "then for unknown property" - {
-                        val unknownProperty = StructProperty.NullableWithDefault(
-                            nullable(UNKNOWN_PROPERTY_NAME, StringReader, DEFAULT)
-                        )
+                        val unknownProperty = StructProperty.Nullable(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }

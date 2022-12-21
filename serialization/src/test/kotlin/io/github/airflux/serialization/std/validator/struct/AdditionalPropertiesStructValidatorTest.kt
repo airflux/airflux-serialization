@@ -47,8 +47,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private const val NAME_PROPERTY_VALUE = "property-title"
         private val StringReader = dummyStringReader<EB, CTX>()
         private val LOCATION = Location.empty
-        private val idProperty: StructProperty.Required<EB, CTX, String> =
-            StructProperty.Required(required(ID_PROPERTY_NAME, StringReader))
+        private val idProperty: StructProperty.NonNullable<EB, CTX, String> =
+            StructProperty.NonNullable(required(ID_PROPERTY_NAME, StringReader))
         private val PROPERTIES: StructProperties<EB, CTX> = StructProperties(listOf(idProperty))
     }
 

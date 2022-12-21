@@ -20,27 +20,27 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.specif
 
 public interface StructReaderPropertiesBuilder<EB, CTX> {
 
-    public fun <P : Any> property(spec: StructPropertySpec.Required<EB, CTX, P>): StructProperty.Required<EB, CTX, P>
+    public fun <P : Any> property(spec: StructPropertySpec.Required<EB, CTX, P>): StructProperty.NonNullable<EB, CTX, P>
 
     public fun <P : Any> property(
         spec: StructPropertySpec.RequiredIf<EB, CTX, P>
-    ): StructProperty.RequiredIf<EB, CTX, P>
+    ): StructProperty.Nullable<EB, CTX, P>
 
     public fun <P : Any> property(
         spec: StructPropertySpec.Defaultable<EB, CTX, P>
-    ): StructProperty.Defaultable<EB, CTX, P>
+    ): StructProperty.NonNullable<EB, CTX, P>
 
-    public fun <P : Any> property(spec: StructPropertySpec.Optional<EB, CTX, P>): StructProperty.Optional<EB, CTX, P>
+    public fun <P : Any> property(spec: StructPropertySpec.Optional<EB, CTX, P>): StructProperty.Nullable<EB, CTX, P>
 
     public fun <P : Any> property(
         spec: StructPropertySpec.OptionalWithDefault<EB, CTX, P>
-    ): StructProperty.OptionalWithDefault<EB, CTX, P>
+    ): StructProperty.NonNullable<EB, CTX, P>
 
     public fun <P : Any> property(spec: StructPropertySpec.Nullable<EB, CTX, P>): StructProperty.Nullable<EB, CTX, P>
 
     public fun <P : Any> property(
         spec: StructPropertySpec.NullableWithDefault<EB, CTX, P>
-    ): StructProperty.NullableWithDefault<EB, CTX, P>
+    ): StructProperty.Nullable<EB, CTX, P>
 }
 
 internal class StructReaderPropertiesBuilderInstance<EB, CTX> : StructReaderPropertiesBuilder<EB, CTX> {
@@ -48,32 +48,32 @@ internal class StructReaderPropertiesBuilderInstance<EB, CTX> : StructReaderProp
 
     override fun <P : Any> property(
         spec: StructPropertySpec.Required<EB, CTX, P>
-    ): StructProperty.Required<EB, CTX, P> =
-        StructProperty.Required(spec)
+    ): StructProperty.NonNullable<EB, CTX, P> =
+        StructProperty.NonNullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
         spec: StructPropertySpec.RequiredIf<EB, CTX, P>
-    ): StructProperty.RequiredIf<EB, CTX, P> =
-        StructProperty.RequiredIf(spec)
+    ): StructProperty.Nullable<EB, CTX, P> =
+        StructProperty.Nullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
         spec: StructPropertySpec.Defaultable<EB, CTX, P>
-    ): StructProperty.Defaultable<EB, CTX, P> =
-        StructProperty.Defaultable(spec)
+    ): StructProperty.NonNullable<EB, CTX, P> =
+        StructProperty.NonNullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
         spec: StructPropertySpec.Optional<EB, CTX, P>
-    ): StructProperty.Optional<EB, CTX, P> =
-        StructProperty.Optional(spec)
+    ): StructProperty.Nullable<EB, CTX, P> =
+        StructProperty.Nullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
         spec: StructPropertySpec.OptionalWithDefault<EB, CTX, P>
-    ): StructProperty.OptionalWithDefault<EB, CTX, P> =
-        StructProperty.OptionalWithDefault(spec)
+    ): StructProperty.NonNullable<EB, CTX, P> =
+        StructProperty.NonNullable(spec)
             .also { properties.add(it) }
 
     override fun <P : Any> property(
@@ -84,8 +84,8 @@ internal class StructReaderPropertiesBuilderInstance<EB, CTX> : StructReaderProp
 
     override fun <P : Any> property(
         spec: StructPropertySpec.NullableWithDefault<EB, CTX, P>
-    ): StructProperty.NullableWithDefault<EB, CTX, P> =
-        StructProperty.NullableWithDefault(spec)
+    ): StructProperty.Nullable<EB, CTX, P> =
+        StructProperty.Nullable(spec)
             .also { properties.add(it) }
 
     fun build(): StructProperties<EB, CTX> = StructProperties(properties)

@@ -147,7 +147,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, DTO> = structReader {
                             validation(validator)
 
-                            val name: StructProperty.Required<EB, CTX, String> =
+                            val name: StructProperty.NonNullable<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -174,7 +174,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, DTO> = structReader {
                             validation(validator)
 
-                            val name: StructProperty.Required<EB, CTX, String> =
+                            val name: StructProperty.NonNullable<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -247,7 +247,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, DTO> = structReader {
                             validation(validator)
 
-                            val name: StructProperty.Required<EB, CTX, String> =
+                            val name: StructProperty.NonNullable<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -274,7 +274,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                         val reader: Reader<EB, CTX, DTO> = structReader {
                             validation(validator)
 
-                            val name: StructProperty.Required<EB, CTX, String> =
+                            val name: StructProperty.NonNullable<EB, CTX, String> =
                                 property(propertySpec(error = JsonErrors.PathMissing))
                             returns { _, location ->
                                 DTO(name = +name).success(location)
@@ -334,7 +334,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                 val source = StructNode(PROPERTY_NAME to StringNode(USER_NAME))
 
                 "when property is the required" - {
-                    val property: StructProperty<EB, CTX> = StructProperty.Required(
+                    val property: StructProperty<EB, CTX> = StructProperty.NonNullable(
                         required(name = PROPERTY_NAME, reader = dummyStringReader())
                     )
 
@@ -348,7 +348,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the defaultable" - {
-                    val property: StructProperty<EB, CTX> = StructProperty.Defaultable(
+                    val property: StructProperty<EB, CTX> = StructProperty.NonNullable(
                         defaultable(name = PROPERTY_NAME, reader = dummyStringReader(), default = DEFAULT)
                     )
 
@@ -362,7 +362,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the optional" - {
-                    val property: StructProperty<EB, CTX> = StructProperty.Optional(
+                    val property: StructProperty<EB, CTX> = StructProperty.Nullable(
                         optional(name = PROPERTY_NAME, reader = dummyStringReader())
                     )
 
@@ -376,7 +376,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the optional with default" - {
-                    val property: StructProperty<EB, CTX> = StructProperty.OptionalWithDefault(
+                    val property: StructProperty<EB, CTX> = StructProperty.NonNullable(
                         optional(name = PROPERTY_NAME, reader = dummyStringReader(), default = DEFAULT)
                     )
 
@@ -404,7 +404,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
                 }
 
                 "when property is the nullable with default" - {
-                    val property: StructProperty<EB, CTX> = StructProperty.NullableWithDefault(
+                    val property: StructProperty<EB, CTX> = StructProperty.Nullable(
                         nullable(name = PROPERTY_NAME, reader = dummyStringReader(), default = DEFAULT)
                     )
 

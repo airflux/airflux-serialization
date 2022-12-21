@@ -23,43 +23,13 @@ import io.github.airflux.serialization.dsl.reader.struct.builder.property.specif
 public sealed class StructProperty<out EB, out CTX> {
     public abstract val path: PropertyPaths
 
-    public class Required<EB, CTX, T : Any> private constructor(
+    public class NonNullable<EB, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
         public val reader: Reader<EB, CTX, T>
     ) : StructProperty<EB, CTX>() {
 
         internal constructor(spec: StructPropertySpec.Required<EB, CTX, T>) : this(spec.path, spec.reader)
-    }
-
-    public class RequiredIf<EB, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T?>
-    ) : StructProperty<EB, CTX>() {
-
-        internal constructor(spec: StructPropertySpec.RequiredIf<EB, CTX, T>) : this(spec.path, spec.reader)
-    }
-
-    public class Defaultable<EB, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T>
-    ) : StructProperty<EB, CTX>() {
-
         internal constructor(spec: StructPropertySpec.Defaultable<EB, CTX, T>) : this(spec.path, spec.reader)
-    }
-
-    public class Optional<EB, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T?>
-    ) : StructProperty<EB, CTX>() {
-
-        internal constructor(spec: StructPropertySpec.Optional<EB, CTX, T>) : this(spec.path, spec.reader)
-    }
-
-    public class OptionalWithDefault<EB, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T>
-    ) : StructProperty<EB, CTX>() {
-
         internal constructor(spec: StructPropertySpec.OptionalWithDefault<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
@@ -68,14 +38,9 @@ public sealed class StructProperty<out EB, out CTX> {
         public val reader: Reader<EB, CTX, T?>
     ) : StructProperty<EB, CTX>() {
 
+        internal constructor(spec: StructPropertySpec.RequiredIf<EB, CTX, T>) : this(spec.path, spec.reader)
+        internal constructor(spec: StructPropertySpec.Optional<EB, CTX, T>) : this(spec.path, spec.reader)
         internal constructor(spec: StructPropertySpec.Nullable<EB, CTX, T>) : this(spec.path, spec.reader)
-    }
-
-    public class NullableWithDefault<EB, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T?>
-    ) : StructProperty<EB, CTX>() {
-
         internal constructor(spec: StructPropertySpec.NullableWithDefault<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 }

@@ -43,7 +43,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "when created an instance of the required property" - {
                 val spec = required(name = "id", reader = StringReader)
-                val property = StructProperty.Required(spec)
+                val property = StructProperty.NonNullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -56,7 +56,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "when created an instance of the requiredIf property" - {
                 val spec = required(name = "id", reader = StringReader, predicate = { _, _ -> true })
-                val property = StructProperty.RequiredIf(spec)
+                val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -69,7 +69,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "when created an instance of the defaultable property" - {
                 val spec = defaultable(name = "id", reader = StringReader, default = DEFAULT)
-                val property = StructProperty.Defaultable(spec)
+                val property = StructProperty.NonNullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -82,7 +82,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "when created an instance of the optional property" - {
                 val spec = optional(name = "id", reader = StringReader)
-                val property = StructProperty.Optional(spec)
+                val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -95,7 +95,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "when created an instance of the optional with default property" - {
                 val spec = optional(name = "id", reader = StringReader, default = DEFAULT)
-                val property = StructProperty.OptionalWithDefault(spec)
+                val property = StructProperty.NonNullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path
@@ -121,7 +121,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "when created an instance of the nullable with default property" - {
                 val spec = nullable(name = "id", reader = StringReader, default = DEFAULT)
-                val property = StructProperty.NullableWithDefault(spec)
+                val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path

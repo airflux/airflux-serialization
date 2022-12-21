@@ -23,24 +23,9 @@ public sealed interface PropertyValues<EB, CTX> {
     public val isNotEmpty: Boolean
     public val size: Int
 
-    public infix operator fun <T : Any> get(property: StructProperty.Required<EB, CTX, T>): T
-    public operator fun <T : Any> StructProperty.Required<EB, CTX, T>.unaryPlus(): T = get(this)
-
-    public infix operator fun <T : Any> get(property: StructProperty.RequiredIf<EB, CTX, T>): T?
-    public operator fun <T : Any> StructProperty.RequiredIf<EB, CTX, T>.unaryPlus(): T? = get(this)
-
-    public infix operator fun <T : Any> get(property: StructProperty.Defaultable<EB, CTX, T>): T
-    public operator fun <T : Any> StructProperty.Defaultable<EB, CTX, T>.unaryPlus(): T = get(this)
-
-    public infix operator fun <T : Any> get(property: StructProperty.Optional<EB, CTX, T>): T?
-    public operator fun <T : Any> StructProperty.Optional<EB, CTX, T>.unaryPlus(): T? = get(this)
-
-    public infix operator fun <T : Any> get(property: StructProperty.OptionalWithDefault<EB, CTX, T>): T
-    public operator fun <T : Any> StructProperty.OptionalWithDefault<EB, CTX, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.NonNullable<EB, CTX, T>): T
+    public operator fun <T : Any> StructProperty.NonNullable<EB, CTX, T>.unaryPlus(): T = get(this)
 
     public infix operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T?
     public operator fun <T : Any> StructProperty.Nullable<EB, CTX, T>.unaryPlus(): T? = get(this)
-
-    public infix operator fun <T : Any> get(property: StructProperty.NullableWithDefault<EB, CTX, T>): T?
-    public operator fun <T : Any> StructProperty.NullableWithDefault<EB, CTX, T>.unaryPlus(): T? = get(this)
 }

@@ -36,6 +36,10 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
         private val REQUIRED_READER =
             DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
 
+        private val REQUIRED_IF_PATH = PropertyPaths(PropertyPath("required-if-id"))
+        private val REQUIRED_IF_READER =
+            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
+
         private val DEFAULTABLE_PATH = PropertyPaths(PropertyPath("defaultable-id"))
         private val DEFAULTABLE_READER =
             DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
@@ -73,6 +77,7 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
                 val properties: StructProperties<Unit, Unit> = StructReaderPropertiesBuilderInstance<Unit, Unit>()
                     .apply {
                         property(StructPropertySpec.Required(path = REQUIRED_PATH, reader = REQUIRED_READER))
+                        property(StructPropertySpec.RequiredIf(path = REQUIRED_IF_PATH, reader = REQUIRED_IF_READER))
                         property(StructPropertySpec.Defaultable(path = DEFAULTABLE_PATH, reader = DEFAULTABLE_READER))
                         property(StructPropertySpec.Optional(path = OPTIONAL_PATH, reader = OPTIONAL_READER))
                         property(
@@ -93,15 +98,23 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the required property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.Required<Unit, Unit, *>>()
+                        it.shouldBeInstanceOf<StructProperty.NonNullable<Unit, Unit, *>>()
                         it.path shouldBe REQUIRED_PATH
                         it.reader shouldBe REQUIRED_READER
                     }
                 }
 
+                "then the container should contain the requiredIf property" {
+                    properties.forOne {
+                        it.shouldBeInstanceOf<StructProperty.Nullable<Unit, Unit, *>>()
+                        it.path shouldBe REQUIRED_IF_PATH
+                        it.reader shouldBe REQUIRED_IF_READER
+                    }
+                }
+
                 "then the container should contain the defaultable property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.Defaultable<Unit, Unit, *>>()
+                        it.shouldBeInstanceOf<StructProperty.NonNullable<Unit, Unit, *>>()
                         it.path shouldBe DEFAULTABLE_PATH
                         it.reader shouldBe DEFAULTABLE_READER
                     }
@@ -109,7 +122,7 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the optional property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.Optional<Unit, Unit, *>>()
+                        it.shouldBeInstanceOf<StructProperty.Nullable<Unit, Unit, *>>()
                         it.path shouldBe OPTIONAL_PATH
                         it.reader shouldBe OPTIONAL_READER
                     }
@@ -117,7 +130,7 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the optional with default property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.OptionalWithDefault<Unit, Unit, *>>()
+                        it.shouldBeInstanceOf<StructProperty.NonNullable<Unit, Unit, *>>()
                         it.path shouldBe OPTIONAL_WITH_DEFAULT_PATH
                         it.reader shouldBe OPTIONAL_WITH_DEFAULT_READER
                     }
@@ -133,7 +146,7 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
 
                 "then the container should contain the nullable with default property" {
                     properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.NullableWithDefault<Unit, Unit, *>>()
+                        it.shouldBeInstanceOf<StructProperty.Nullable<Unit, Unit, *>>()
                         it.path shouldBe NULLABLE_WITH_DEFAULT_PATH
                         it.reader shouldBe NULLABLE_WITH_DEFAULT_READER
                     }
