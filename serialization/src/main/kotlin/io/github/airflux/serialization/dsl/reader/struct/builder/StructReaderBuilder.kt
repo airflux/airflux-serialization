@@ -112,16 +112,29 @@ internal class StructReader<EB, CTX, T>(
         val propertyValues: PropertyValues<EB, CTX> = PropertyValuesInstance<EB, CTX>()
             .apply {
                 properties.forEach { property ->
-                    source.read(env, location, property)
-                        .fold(
-                            ifFailure = { failure ->
-                                if (failFast) return failure
-                                failures.add(failure)
-                            },
-                            ifSuccess = { success ->
-                                this[property] = success.value
-                            }
-                        )
+                    when (property) {
+                        is StructProperty.NonNullable<EB, CTX, *> -> property.reader.read(env, location, source)
+                            .fold(
+                                ifFailure = { failure ->
+                                    if (failFast) return failure
+                                    failures.add(failure)
+                                },
+                                ifSuccess = { success ->
+                                    this[property] = success.value
+                                }
+                            )
+
+                        is StructProperty.Nullable<EB, CTX, *> -> property.reader.read(env, location, source)
+                            .fold(
+                                ifFailure = { failure ->
+                                    if (failFast) return failure
+                                    failures.add(failure)
+                                },
+                                ifSuccess = { success ->
+                                    this[property] = success.value
+                                }
+                            )
+                    }
                 }
             }
 
@@ -129,20 +142,5 @@ internal class StructReader<EB, CTX, T>(
             resultBuilder.build(env, location, propertyValues)
         else
             failures.merge()
-    }
-
-    internal companion object {
-
-        fun <EB, CTX> StructNode.read(
-            env: ReaderEnv<EB, CTX>,
-            location: Location,
-            property: StructProperty<EB, CTX>
-        ): ReaderResult<Any?> {
-            val reader = when (property) {
-                is StructProperty.NonNullable<EB, CTX, *> -> property.reader
-                is StructProperty.Nullable<EB, CTX, *> -> property.reader
-            }
-            return reader.read(env, location, this)
-        }
     }
 }

@@ -198,37 +198,6 @@ internal class PropertyValuesTest : FreeSpec() {
 
             "when the added value is null" - {
 
-                "for non-nullable property" - {
-                    val property = StructProperty.NonNullable(required(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
-                        this[property] = null
-                    }
-
-                    "then the property isEmpty should return true" {
-                        map.isEmpty shouldBe true
-                    }
-
-                    "then the property isNotEmpty should return false" {
-                        map.isNotEmpty shouldBe false
-                    }
-
-                    "then the property size should return 0" {
-                        map.size shouldBe 0
-                    }
-
-                    "the method 'get' should thrown an exception" {
-                        shouldThrow<NoSuchElementException> { map[property] }
-                    }
-
-                    "the method 'unaryPlus' should thrown an exception" {
-                        shouldThrow<NoSuchElementException> {
-                            with(map) {
-                                +property
-                            }
-                        }
-                    }
-                }
-
                 "for nullable property" - {
                     val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {

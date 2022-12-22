@@ -17,42 +17,51 @@
 package io.github.airflux.serialization.dsl.reader.struct.builder.property
 
 internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
-    private val properties: MutableSet<StructProperty<EB, CTX>> = mutableSetOf()
-    private val values: MutableMap<StructProperty<EB, CTX>, Any> = mutableMapOf()
+    private val values: MutableMap<StructProperty<EB, CTX>, Value> = mutableMapOf()
 
     override val isEmpty: Boolean
-        get() = values.isEmpty()
+        get() = !isNotEmpty
 
     override val isNotEmpty: Boolean
-        get() = values.isNotEmpty()
+        get() = values.any { r -> r.value is Value.Some }
 
     override val size: Int
-        get() = values.size
+        get() = values.count { r -> r.value is Value.Some }
 
     override operator fun <T : Any> get(property: StructProperty.NonNullable<EB, CTX, T>): T {
         val value = values[property]
         return if (value != null)
             @Suppress("UNCHECKED_CAST")
-            value as T
+            (value as Value.Some).get as T
         else
             throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
     }
 
     override operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T? {
         val value = values[property]
-        return if (value != null)
+        return if (value != null) {
             @Suppress("UNCHECKED_CAST")
-            value as T
-        else {
-            if (property in properties)
-                null
+            if (value is Value.Some)
+                value.get as T
             else
-                throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
-        }
+                null
+        } else
+            throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
     }
 
-    operator fun set(property: StructProperty<EB, CTX>, value: Any?) {
-        if (value != null) values[property] = value
-        properties.add(property)
+    operator fun set(property: StructProperty.NonNullable<EB, CTX, *>, value: Any) {
+        values[property] = Value.Some(value)
+    }
+
+    operator fun set(property: StructProperty.Nullable<EB, CTX, *>, value: Any?) {
+        if (value != null)
+            values[property] = Value.Some(value)
+        else
+            values[property] = Value.None
+    }
+
+    internal sealed class Value {
+        data class Some(val get: Any) : Value()
+        object None : Value()
     }
 }
