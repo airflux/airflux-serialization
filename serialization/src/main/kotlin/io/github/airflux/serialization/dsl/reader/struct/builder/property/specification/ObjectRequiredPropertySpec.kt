@@ -21,42 +21,24 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readRequired
-import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <EB, CTX, T : Any> required(
     name: String,
     reader: Reader<EB, CTX, T>
-): StructPropertySpec.Required<EB, CTX, T>
+): StructPropertySpec.NonNullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
     required(PropertyPath(name), reader)
 
 public fun <EB, CTX, T : Any> required(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>
-): StructPropertySpec.Required<EB, CTX, T>
+): StructPropertySpec.NonNullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
-    StructPropertySpec.Required(
+    StructPropertySpec.NonNullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
             readRequired(env, lookup, reader)
         }
     )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.Required<EB, CTX, T>.validation(
-    validator: Validator<EB, CTX, T>
-): StructPropertySpec.Required<EB, CTX, T> =
-    StructPropertySpec.Required(
-        path = path,
-        reader = { env, location, source ->
-            reader.read(env, location, source).validation(env, validator)
-        }
-    )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.Required<EB, CTX, T>.or(
-    alt: StructPropertySpec.Required<EB, CTX, T>
-): StructPropertySpec.Required<EB, CTX, T> =
-    StructPropertySpec.Required(path = path.append(alt.path), reader = reader or alt.reader)

@@ -21,42 +21,24 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readOptional
-import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <EB, CTX, T : Any> optional(
     name: String,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
+): StructPropertySpec.NonNullable<EB, CTX, T> =
     optional(PropertyPath(name), reader, default)
 
 public fun <EB, CTX, T : Any> optional(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    StructPropertySpec.OptionalWithDefault(
+): StructPropertySpec.NonNullable<EB, CTX, T> =
+    StructPropertySpec.NonNullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
             readOptional(env, lookup, reader, default)
         }
     )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.OptionalWithDefault<EB, CTX, T>.validation(
-    validator: Validator<EB, CTX, T>
-): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    StructPropertySpec.OptionalWithDefault(
-        path = path,
-        reader = { env, location, source ->
-            reader.read(env, location, source).validation(env, validator)
-        }
-    )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.OptionalWithDefault<EB, CTX, T>.or(
-    alt: StructPropertySpec.OptionalWithDefault<EB, CTX, T>
-): StructPropertySpec.OptionalWithDefault<EB, CTX, T> =
-    StructPropertySpec.OptionalWithDefault(path = path.append(alt.path), reader = reader or alt.reader)

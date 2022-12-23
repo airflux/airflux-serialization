@@ -23,19 +23,14 @@ import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.result.filter
-import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.struct.readRequired
-import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <EB, CTX, T : Any> required(
     name: String,
     reader: Reader<EB, CTX, T>,
     predicate: (ReaderEnv<EB, CTX>, Location) -> Boolean
-): StructPropertySpec.RequiredIf<EB, CTX, T>
+): StructPropertySpec.Nullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
     required(PropertyPath(name), reader, predicate)
 
@@ -43,9 +38,9 @@ public fun <EB, CTX, T : Any> required(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     predicate: (ReaderEnv<EB, CTX>, Location) -> Boolean
-): StructPropertySpec.RequiredIf<EB, CTX, T>
+): StructPropertySpec.Nullable<EB, CTX, T>
     where EB : PathMissingErrorBuilder =
-    StructPropertySpec.RequiredIf(
+    StructPropertySpec.Nullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->
             val lookup = source.lookup(location, path)
@@ -55,28 +50,3 @@ public fun <EB, CTX, T : Any> required(
                 readOptional(env, lookup, reader)
         }
     )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.RequiredIf<EB, CTX, T>.validation(
-    validator: Validator<EB, CTX, T?>
-): StructPropertySpec.RequiredIf<EB, CTX, T> =
-    StructPropertySpec.RequiredIf(
-        path = path,
-        reader = { env, location, source ->
-            reader.read(env, location, source).validation(env, validator)
-        }
-    )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.RequiredIf<EB, CTX, T>.filter(
-    predicate: ReaderPredicate<EB, CTX, T>
-): StructPropertySpec.RequiredIf<EB, CTX, T> =
-    StructPropertySpec.RequiredIf(
-        path = path,
-        reader = { env, location, source ->
-            reader.read(env, location, source).filter(env, predicate)
-        }
-    )
-
-public infix fun <EB, CTX, T : Any> StructPropertySpec.RequiredIf<EB, CTX, T>.or(
-    alt: StructPropertySpec.RequiredIf<EB, CTX, T>
-): StructPropertySpec.RequiredIf<EB, CTX, T> =
-    StructPropertySpec.RequiredIf(path = path.append(alt.path), reader = reader or alt.reader)

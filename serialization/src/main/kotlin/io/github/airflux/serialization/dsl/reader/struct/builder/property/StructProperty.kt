@@ -28,9 +28,7 @@ public sealed class StructProperty<out EB, out CTX> {
         public val reader: Reader<EB, CTX, T>
     ) : StructProperty<EB, CTX>() {
 
-        internal constructor(spec: StructPropertySpec.Required<EB, CTX, T>) : this(spec.path, spec.reader)
-        internal constructor(spec: StructPropertySpec.Defaultable<EB, CTX, T>) : this(spec.path, spec.reader)
-        internal constructor(spec: StructPropertySpec.OptionalWithDefault<EB, CTX, T>) : this(spec.path, spec.reader)
+        internal constructor(spec: StructPropertySpec.NonNullable<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 
     public class Nullable<EB, CTX, T : Any> private constructor(
@@ -38,7 +36,6 @@ public sealed class StructProperty<out EB, out CTX> {
         public val reader: Reader<EB, CTX, T?>
     ) : StructProperty<EB, CTX>() {
 
-        internal constructor(spec: StructPropertySpec.RequiredIf<EB, CTX, T>) : this(spec.path, spec.reader)
-        internal constructor(spec: StructPropertySpec.Optional<EB, CTX, T>) : this(spec.path, spec.reader)
+        internal constructor(spec: StructPropertySpec.Nullable<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 }
