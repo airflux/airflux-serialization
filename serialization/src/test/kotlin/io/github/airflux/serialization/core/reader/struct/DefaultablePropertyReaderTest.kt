@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class WithDefaultPropertyReaderTest : FreeSpec() {
+internal class DefaultablePropertyReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
