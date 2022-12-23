@@ -35,12 +35,6 @@ public interface StructReaderPropertiesBuilder<EB, CTX> {
     public fun <P : Any> property(
         spec: StructPropertySpec.OptionalWithDefault<EB, CTX, P>
     ): StructProperty.NonNullable<EB, CTX, P>
-
-    public fun <P : Any> property(spec: StructPropertySpec.Nullable<EB, CTX, P>): StructProperty.Nullable<EB, CTX, P>
-
-    public fun <P : Any> property(
-        spec: StructPropertySpec.NullableWithDefault<EB, CTX, P>
-    ): StructProperty.Nullable<EB, CTX, P>
 }
 
 internal class StructReaderPropertiesBuilderInstance<EB, CTX> : StructReaderPropertiesBuilder<EB, CTX> {
@@ -74,18 +68,6 @@ internal class StructReaderPropertiesBuilderInstance<EB, CTX> : StructReaderProp
         spec: StructPropertySpec.OptionalWithDefault<EB, CTX, P>
     ): StructProperty.NonNullable<EB, CTX, P> =
         StructProperty.NonNullable(spec)
-            .also { properties.add(it) }
-
-    override fun <P : Any> property(
-        spec: StructPropertySpec.Nullable<EB, CTX, P>
-    ): StructProperty.Nullable<EB, CTX, P> =
-        StructProperty.Nullable(spec)
-            .also { properties.add(it) }
-
-    override fun <P : Any> property(
-        spec: StructPropertySpec.NullableWithDefault<EB, CTX, P>
-    ): StructProperty.Nullable<EB, CTX, P> =
-        StructProperty.Nullable(spec)
             .also { properties.add(it) }
 
     fun build(): StructProperties<EB, CTX> = StructProperties(properties)

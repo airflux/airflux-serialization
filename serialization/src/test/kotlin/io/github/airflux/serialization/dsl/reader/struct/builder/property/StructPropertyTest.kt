@@ -23,7 +23,6 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.defaultable
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.nullable
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
 import io.kotest.core.spec.style.FreeSpec
@@ -96,32 +95,6 @@ internal class StructPropertyTest : FreeSpec() {
             "when created an instance of the optional with default property" - {
                 val spec = optional(name = "id", reader = StringReader, default = DEFAULT)
                 val property = StructProperty.NonNullable(spec)
-
-                "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
-                }
-
-                "then the reader should equal the reader from the spec" {
-                    property.reader shouldBe spec.reader
-                }
-            }
-
-            "when created an instance of the nullable property" - {
-                val spec = nullable(name = "id", reader = StringReader)
-                val property = StructProperty.Nullable(spec)
-
-                "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
-                }
-
-                "then the reader should equal the reader from the spec" {
-                    property.reader shouldBe spec.reader
-                }
-            }
-
-            "when created an instance of the nullable with default property" - {
-                val spec = nullable(name = "id", reader = StringReader, default = DEFAULT)
-                val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
                     property.path shouldBe spec.path

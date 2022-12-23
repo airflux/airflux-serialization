@@ -47,14 +47,4 @@ public sealed class StructPropertySpec<EB, CTX, T> {
         override val path: PropertyPaths,
         override val reader: Reader<EB, CTX, T>
     ) : StructPropertySpec<EB, CTX, T>()
-
-    public class Nullable<EB, CTX, T : Any> internal constructor(
-        override val path: PropertyPaths,
-        override val reader: Reader<EB, CTX, T?>
-    ) : StructPropertySpec<EB, CTX, T?>()
-
-    public class NullableWithDefault<EB, CTX, T : Any> internal constructor(
-        override val path: PropertyPaths,
-        override val reader: Reader<EB, CTX, T?>
-    ) : StructPropertySpec<EB, CTX, T?>()
 }

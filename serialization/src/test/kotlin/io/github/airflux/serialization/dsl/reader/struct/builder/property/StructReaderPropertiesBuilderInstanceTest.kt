@@ -51,14 +51,6 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
         private val OPTIONAL_WITH_DEFAULT_PATH = PropertyPaths(PropertyPath("optional-with-default-id"))
         private val OPTIONAL_WITH_DEFAULT_READER =
             DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
-
-        private val NULLABLE_PATH = PropertyPaths(PropertyPath("nullable-id"))
-        private val NULLABLE_READER =
-            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
-
-        private val NULLABLE_WITH_DEFAULT_PATH = PropertyPaths(PropertyPath("nullable-with-default-id"))
-        private val NULLABLE_WITH_DEFAULT_READER =
-            DummyReader<Unit, Unit, String>(ReaderResult.Success(location = LOCATION, value = ""))
     }
 
     init {
@@ -84,13 +76,6 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
                             StructPropertySpec.OptionalWithDefault(
                                 path = OPTIONAL_WITH_DEFAULT_PATH,
                                 reader = OPTIONAL_WITH_DEFAULT_READER
-                            )
-                        )
-                        property(StructPropertySpec.Nullable(path = NULLABLE_PATH, reader = NULLABLE_READER))
-                        property(
-                            StructPropertySpec.NullableWithDefault(
-                                path = NULLABLE_WITH_DEFAULT_PATH,
-                                reader = NULLABLE_WITH_DEFAULT_READER
                             )
                         )
                     }
@@ -133,22 +118,6 @@ internal class StructReaderPropertiesBuilderInstanceTest : FreeSpec() {
                         it.shouldBeInstanceOf<StructProperty.NonNullable<Unit, Unit, *>>()
                         it.path shouldBe OPTIONAL_WITH_DEFAULT_PATH
                         it.reader shouldBe OPTIONAL_WITH_DEFAULT_READER
-                    }
-                }
-
-                "then the container should contain the nullable property" {
-                    properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.Nullable<Unit, Unit, *>>()
-                        it.path shouldBe NULLABLE_PATH
-                        it.reader shouldBe NULLABLE_READER
-                    }
-                }
-
-                "then the container should contain the nullable with default property" {
-                    properties.forOne {
-                        it.shouldBeInstanceOf<StructProperty.Nullable<Unit, Unit, *>>()
-                        it.path shouldBe NULLABLE_WITH_DEFAULT_PATH
-                        it.reader shouldBe NULLABLE_WITH_DEFAULT_READER
                     }
                 }
             }

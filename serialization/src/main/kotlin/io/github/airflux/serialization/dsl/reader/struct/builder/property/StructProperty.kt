@@ -40,7 +40,5 @@ public sealed class StructProperty<out EB, out CTX> {
 
         internal constructor(spec: StructPropertySpec.RequiredIf<EB, CTX, T>) : this(spec.path, spec.reader)
         internal constructor(spec: StructPropertySpec.Optional<EB, CTX, T>) : this(spec.path, spec.reader)
-        internal constructor(spec: StructPropertySpec.Nullable<EB, CTX, T>) : this(spec.path, spec.reader)
-        internal constructor(spec: StructPropertySpec.NullableWithDefault<EB, CTX, T>) : this(spec.path, spec.reader)
     }
 }
