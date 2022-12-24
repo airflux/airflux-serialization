@@ -609,27 +609,27 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 	public abstract fun property (Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Nullable;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/StructProperty$Nullable;
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectDefaultablePropertySpecKt {
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/DefaultablePropertySpecKt {
 	public static final fun defaultable (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$NonNullable;
 	public static final fun defaultable (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$NonNullable;
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectOptionalPropertySpecKt {
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/OptionalPropertySpecKt {
 	public static final fun optional (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Nullable;
 	public static final fun optional (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Nullable;
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectOptionalWithDefaultPropertySpecKt {
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/OptionalWithDefaultPropertySpecKt {
 	public static final fun optional (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$NonNullable;
 	public static final fun optional (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$NonNullable;
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectRequiredIfPropertySpecKt {
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/RequiredIfPropertySpecKt {
 	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Nullable;
 	public static final fun required (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$Nullable;
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/ObjectRequiredPropertySpecKt {
+public final class io/github/airflux/serialization/dsl/reader/struct/builder/property/specification/RequiredPropertySpecKt {
 	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$NonNullable;
 	public static final fun required (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/builder/property/specification/StructPropertySpec$NonNullable;
 }
