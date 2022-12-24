@@ -29,15 +29,13 @@ import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumberNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class StructOptionalPropertySpecTest : FreeSpec() {
+internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -45,19 +43,21 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
 
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
+        private const val DEFAULT_VALUE = "none"
 
         private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
+        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
         private val StringReader = dummyStringReader<EB, Unit>()
         private val IntReader = dummyIntReader<EB, Unit>()
     }
 
     init {
 
-        "The StructPropertySpec#Optional type" - {
+        "The StructPropertySpec#OptionalWithDefault type" - {
 
             "when creating the instance by a property name" - {
-                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
+                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed name" {
                     spec.path.items shouldContainExactly listOf(PropertyPath(ID_PROPERTY_NAME))
@@ -68,7 +68,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned" {
-                        result as ReaderResult.Success<String?>
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
@@ -78,10 +78,10 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
-                    "then the null value should be returned" {
-                        result as ReaderResult.Success<String?>
+                    "then a default value should be returned" {
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
-                        result.value.shouldBeNull()
+                        result.value shouldBe DEFAULT_VALUE
                     }
                 }
 
@@ -106,7 +106,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
 
             "when creating the instance by a property path" - {
                 val path = PropertyPath(ID_PROPERTY_NAME)
-                val spec = optional(path = path, reader = StringReader)
+                val spec = optional(path = path, reader = StringReader, default = DEFAULT)
 
                 "then the paths parameter must contain only the passed path" {
                     spec.path.items shouldContainExactly listOf(path)
@@ -117,7 +117,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned" {
-                        result as ReaderResult.Success<String?>
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
@@ -127,10 +127,10 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
-                    "then the null value should be returned" {
-                        result as ReaderResult.Success<String?>
+                    "then a default value should be returned" {
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
-                        result.value.shouldBeNull()
+                        result.value shouldBe DEFAULT_VALUE
                     }
                 }
 
@@ -154,8 +154,8 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
             }
 
             "when the validator was added to the spec" - {
-                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
+                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
+                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty())
 
                 "when the reader has successfully read" - {
 
@@ -164,7 +164,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                        result as ReaderResult.Success<String?>
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
@@ -205,57 +205,13 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                 }
             }
 
-            "when the filter was added to the spec" - {
-                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                val specWithValidator = spec.filter { _, _, value -> value.isNotEmpty() }
-
-                "when the reader has successfully read" - {
-
-                    "then a value should be returned if the result was not filtered" {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
-
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
-
-                        result as ReaderResult.Success<String?>
-                        result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
-                        result.value shouldBe ID_VALUE_AS_UUID
-                    }
-
-                    "then the null value should be returned if the result was filtered" {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(""))
-
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
-
-                        result as ReaderResult.Success<String?>
-                        result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
-                        result.value.shouldBeNull()
-                    }
-                }
-
-                "when an error occurs while reading" - {
-
-                    "then should be returned a read error" {
-                        val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
-
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
-
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(
-                                location = LOCATION.append(ID_PROPERTY_NAME),
-                                error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = NumberNode.nameOfType
-                                )
-                            )
-                        )
-                    }
-                }
-            }
-
             "when an alternative spec was added" - {
-                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                val alt = optional(name = ID_PROPERTY_NAME, reader = IntReader.map { it.toString() })
+                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
+                val alt = optional(
+                    name = ID_PROPERTY_NAME,
+                    reader = IntReader.map { it.toString() },
+                    default = DEFAULT
+                )
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
@@ -267,7 +223,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned" {
-                        result as ReaderResult.Success<String?>
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_UUID
                     }
@@ -278,7 +234,7 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
-                        result as ReaderResult.Success<String?>
+                        result as ReaderResult.Success<String>
                         result.location shouldBe LOCATION.append(ID_PROPERTY_NAME)
                         result.value shouldBe ID_VALUE_AS_INT
                     }
@@ -315,7 +271,6 @@ internal class StructOptionalPropertySpecTest : FreeSpec() {
     internal class EB : PathMissingErrorBuilder,
                         InvalidTypeErrorBuilder,
                         IsNotEmptyStringValidator.ErrorBuilder {
-
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =

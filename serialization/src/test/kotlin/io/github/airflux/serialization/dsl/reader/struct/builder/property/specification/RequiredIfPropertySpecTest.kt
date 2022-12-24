@@ -37,7 +37,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class StructRequiredIfPropertySpecTest : FreeSpec() {
+internal class RequiredIfPropertySpecTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
