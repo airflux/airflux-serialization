@@ -27,63 +27,33 @@ import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.struct.builder.StructReaderBuilder.ResultBuilder
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructReaderPropertiesBuilder
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructReaderPropertiesBuilderInstance
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructReaderValidation
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructReaderValidationInstance
+import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidatorBuilder
 
 public fun <EB, CTX, T> structReader(
-    block: StructReaderBuilder<EB, CTX, T>.() -> ResultBuilder<EB, CTX, T>
+    block: StructReader.Builder<EB, CTX, T>.() -> Reader<EB, CTX, T>
 ): Reader<EB, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           CTX : FailFastOption {
-    val readerBuilder = StructReaderBuilder<EB, CTX, T>(
-        StructReaderPropertiesBuilderInstance(),
-        StructReaderValidationInstance()
-    )
-    val resultBuilder: ResultBuilder<EB, CTX, T> = readerBuilder.block()
-    return readerBuilder.build(resultBuilder)
+    val builder = StructReader.Builder<EB, CTX, T>()
+    return block(builder)
 }
 
-@AirfluxMarker
-public class StructReaderBuilder<EB, CTX, T> internal constructor(
-    private val propertiesBuilder: StructReaderPropertiesBuilderInstance<EB, CTX>,
-    private val validatorsBuilder: StructReaderValidationInstance<EB, CTX>
-) : StructReaderPropertiesBuilder<EB, CTX> by propertiesBuilder,
-    StructReaderValidation<EB, CTX> by validatorsBuilder
+public fun <EB, CTX, T> StructReader.Builder<EB, CTX, T>.returns(
+    block: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
+): Reader<EB, CTX, T>
     where EB : InvalidTypeErrorBuilder,
-          CTX : FailFastOption {
+          CTX : FailFastOption = this.build(block)
 
-    public fun interface ResultBuilder<EB, CTX, T> {
-        public fun build(
-            env: ReaderEnv<EB, CTX>,
-            location: Location,
-            propertyValues: PropertyValues<EB, CTX>
-        ): ReaderResult<T>
-    }
-
-    internal fun build(resultBuilder: ResultBuilder<EB, CTX, T>): Reader<EB, CTX, T> {
-        val properties: StructProperties<EB, CTX> = propertiesBuilder.build()
-        val validators: List<StructValidator<EB, CTX>> = validatorsBuilder.build(properties)
-        return StructReader(validators, properties, resultBuilder)
-    }
-}
-
-public fun <EB, CTX, T> returns(
-    builder: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
-): ResultBuilder<EB, CTX, T> =
-    ResultBuilder { env, location, values -> values.builder(env, location) }
-
-internal class StructReader<EB, CTX, T>(
+public class StructReader<EB, CTX, T>(
     private val validators: List<StructValidator<EB, CTX>>,
     private val properties: StructProperties<EB, CTX>,
-    private val resultBuilder: ResultBuilder<EB, CTX, T>
+    private val readerResultBuilder: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
 ) : Reader<EB, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           CTX : FailFastOption {
@@ -139,8 +109,57 @@ internal class StructReader<EB, CTX, T>(
             }
 
         return if (failures.isEmpty())
-            resultBuilder.build(env, location, propertyValues)
+            readerResultBuilder(propertyValues, env, location)
         else
             failures.merge()
+    }
+
+    @AirfluxMarker
+    public class Builder<EB, CTX, T>
+        where EB : InvalidTypeErrorBuilder,
+              CTX : FailFastOption {
+
+        private val properties = mutableListOf<StructProperty<EB, CTX>>()
+        private val validatorBuilders = mutableListOf<StructValidatorBuilder<EB, CTX>>()
+
+        public fun validation(
+            validator: StructValidatorBuilder<EB, CTX>,
+            vararg validators: StructValidatorBuilder<EB, CTX>
+        ) {
+            validation(
+                validators = mutableListOf<StructValidatorBuilder<EB, CTX>>()
+                    .apply {
+                        add(validator)
+                        addAll(validators)
+                    }
+            )
+        }
+
+        public fun validation(validators: List<StructValidatorBuilder<EB, CTX>>) {
+            validatorBuilders.addAll(validators)
+        }
+
+        public fun <P : Any> property(
+            spec: StructPropertySpec.NonNullable<EB, CTX, P>
+        ): StructProperty.NonNullable<EB, CTX, P> =
+            StructProperty.NonNullable(spec)
+                .also { properties.add(it) }
+
+        public fun <P : Any> property(
+            spec: StructPropertySpec.Nullable<EB, CTX, P>
+        ): StructProperty.Nullable<EB, CTX, P> =
+            StructProperty.Nullable(spec)
+                .also { properties.add(it) }
+
+        public fun build(
+            block: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
+        ): Reader<EB, CTX, T> {
+            val props = StructProperties(properties)
+            val validators: List<StructValidator<EB, CTX>> =
+                validatorBuilders.map { validatorBuilder -> validatorBuilder.build(props) }
+                    .takeIf { it.isNotEmpty() }
+                    .orEmpty()
+            return StructReader(validators, props, block)
+        }
     }
 }

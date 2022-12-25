@@ -39,7 +39,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class StructReaderBuilderTest : FreeSpec() {
+internal class StructReaderTest : FreeSpec() {
 
     companion object {
 
@@ -57,7 +57,7 @@ internal class StructReaderBuilderTest : FreeSpec() {
 
     init {
 
-        "The StructReaderBuilder type" - {
+        "The StructReader type" - {
 
             "when was created reader" - {
                 val validator = DummyStructValidatorBuilder.additionalProperties<EB, CTX>(
