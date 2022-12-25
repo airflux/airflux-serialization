@@ -17,6 +17,8 @@
 package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.shouldBeFailure
+import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -34,7 +36,6 @@ import io.github.airflux.serialization.dsl.reader.array.item.specification.prefi
 import io.github.airflux.serialization.std.reader.booleanReader
 import io.github.airflux.serialization.std.reader.stringReader
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
 
 internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
@@ -72,14 +73,11 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION,
-                                    error = JsonErrors.InvalidType(
-                                        expected = listOf(ArrayNode.nameOfType),
-                                        actual = StringNode.nameOfType
-                                    )
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION,
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(ArrayNode.nameOfType),
+                                    actual = StringNode.nameOfType
                                 )
                             )
                         }
@@ -90,8 +88,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result as ReaderResult.Success
-                            result.value shouldContainExactly listOf(FIRST_ITEM)
+                            result shouldBeSuccess listOf(FIRST_ITEM)
                         }
                     }
 
@@ -101,8 +98,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result as ReaderResult.Success
-                            result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                            result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
                         }
                     }
 
@@ -117,8 +113,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all items read" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result as ReaderResult.Success
-                                result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM, true)
+                                result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM, true)
                             }
                         }
 
@@ -132,14 +127,11 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return an error" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result as ReaderResult.Failure
-                                result.causes shouldContainExactly listOf(
-                                    ReaderResult.Failure.Cause(
-                                        location = LOCATION.append(2),
-                                        error = JsonErrors.InvalidType(
-                                            expected = listOf(BooleanNode.nameOfType),
-                                            actual = StringNode.nameOfType
-                                        )
+                                result shouldBeFailure ReaderResult.Failure(
+                                    location = LOCATION.append(2),
+                                    error = JsonErrors.InvalidType(
+                                        expected = listOf(BooleanNode.nameOfType),
+                                        actual = StringNode.nameOfType
                                     )
                                 )
                             }
@@ -155,14 +147,11 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION,
-                                    error = JsonErrors.InvalidType(
-                                        expected = listOf(ArrayNode.nameOfType),
-                                        actual = StringNode.nameOfType
-                                    )
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION,
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(ArrayNode.nameOfType),
+                                    actual = StringNode.nameOfType
                                 )
                             )
                         }
@@ -173,8 +162,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                            result as ReaderResult.Success
-                            result.value shouldContainExactly listOf(FIRST_ITEM)
+                            result shouldBeSuccess listOf(FIRST_ITEM)
                         }
                     }
 
@@ -184,8 +172,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                            result as ReaderResult.Success
-                            result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                            result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
                         }
                     }
 
@@ -200,8 +187,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all items read" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result as ReaderResult.Success
-                                result.value shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM, true)
+                                result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM, true)
                             }
                         }
 
@@ -215,8 +201,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result as ReaderResult.Failure
-                                result.causes shouldContainExactly listOf(
+                                result shouldBeFailure listOf(
                                     ReaderResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.InvalidType(

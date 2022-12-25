@@ -17,13 +17,14 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.shouldBeFailure
+import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
 
 internal class ReadAsArrayTest : FreeSpec() {
 
@@ -47,8 +48,7 @@ internal class ReadAsArrayTest : FreeSpec() {
 
                     val result = json.readAsArray(ENV, LOCATION, READER)
 
-                    result as ReaderResult.Success
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = listOf(USER_NAME))
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = listOf(USER_NAME))
                 }
             }
 
@@ -59,8 +59,7 @@ internal class ReadAsArrayTest : FreeSpec() {
 
                     val result = json.readAsArray(ENV, LOCATION, READER)
 
-                    result as ReaderResult.Failure
-                    result shouldBe ReaderResult.Failure(
+                    result shouldBeFailure ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(ArrayNode.nameOfType),

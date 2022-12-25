@@ -21,6 +21,8 @@ import io.github.airflux.serialization.common.dummyBooleanReader
 import io.github.airflux.serialization.common.dummyIntReader
 import io.github.airflux.serialization.common.dummyLongReader
 import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.common.shouldBeFailure
+import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -37,7 +39,6 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.valueOf
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import kotlin.reflect.KClass
 
@@ -71,7 +72,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val result: ReaderResult<List<String>> =
                             readArray(env = env, location = LOCATION, source = source, items = StringReader)
 
-                        result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -90,7 +91,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             val result: ReaderResult<List<String>> =
                                 readArray(env = env, location = LOCATION, source = source, items = StringReader)
 
-                            result shouldBe ReaderResult.Success(
+                            result shouldBeSuccess ReaderResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                             )
@@ -112,14 +113,11 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = StringReader
                             )
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(0),
-                                    error = JsonErrors.InvalidType(
-                                        expected = listOf(StringNode.nameOfType),
-                                        actual = NumericNode.Integer.nameOfType
-                                    )
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION.append(0),
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(StringNode.nameOfType),
+                                    actual = NumericNode.Integer.nameOfType
                                 )
                             )
                         }
@@ -136,8 +134,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = StringReader
                             )
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
+                            result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
@@ -178,7 +175,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -208,12 +205,9 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result as ReaderResult.Failure
-                                result.causes shouldContainExactly listOf(
-                                    ReaderResult.Failure.Cause(
-                                        location = LOCATION.append(1),
-                                        error = JsonErrors.AdditionalItems
-                                    )
+                                result shouldBeFailure ReaderResult.Failure(
+                                    location = LOCATION.append(1),
+                                    error = JsonErrors.AdditionalItems
                                 )
                             }
                         }
@@ -230,8 +224,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result as ReaderResult.Failure
-                                result.causes shouldContainExactly listOf(
+                                result shouldBeFailure listOf(
                                     ReaderResult.Failure.Cause(
                                         location = LOCATION.append(1),
                                         error = JsonErrors.AdditionalItems
@@ -262,7 +255,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBe ReaderResult.Success(
+                                result shouldBeSuccess ReaderResult.Success(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -288,7 +281,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 errorIfAdditionalItems = true
                             )
 
-                            result shouldBe ReaderResult.Success(
+                            result shouldBeSuccess ReaderResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -313,7 +306,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 errorIfAdditionalItems = true
                             )
 
-                            result shouldBe ReaderResult.Success(
+                            result shouldBeSuccess ReaderResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -335,14 +328,11 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 errorIfAdditionalItems = true
                             )
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(0),
-                                    error = JsonErrors.InvalidType(
-                                        expected = listOf(NumericNode.Integer.nameOfType),
-                                        actual = StringNode.nameOfType
-                                    )
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION.append(0),
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(NumericNode.Integer.nameOfType),
+                                    actual = StringNode.nameOfType
                                 )
                             )
                         }
@@ -360,8 +350,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 errorIfAdditionalItems = true
                             )
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
+                            result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
@@ -402,7 +391,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             items = StringReader
                         )
 
-                        result shouldBe ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -426,7 +415,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = StringReader
                             )
 
-                            result shouldBe ReaderResult.Success(
+                            result shouldBeSuccess ReaderResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                             )
@@ -448,14 +437,11 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = IntReader
                             )
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-                                ReaderResult.Failure.Cause(
-                                    location = LOCATION.append(0),
-                                    error = JsonErrors.InvalidType(
-                                        expected = listOf(NumericNode.Integer.nameOfType),
-                                        actual = StringNode.nameOfType
-                                    )
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION.append(0),
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(NumericNode.Integer.nameOfType),
+                                    actual = StringNode.nameOfType
                                 )
                             )
                         }
@@ -473,8 +459,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = IntReader
                             )
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
+                            result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
@@ -506,7 +491,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
                 val result = receiver + parameter
 
-                result shouldBe ReaderResult.Success(
+                result shouldBeSuccess ReaderResult.Success(
                     location = LOCATION,
                     value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                 )
@@ -542,8 +527,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
                 val result = receiver + parameter
 
-                result as ReaderResult.Failure
-                result.causes shouldContainExactly listOf(
+                result shouldBeFailure listOf(
                     ReaderResult.Failure.Cause(
                         location = LOCATION.append(0),
                         error = JsonErrors.InvalidType(

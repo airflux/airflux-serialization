@@ -18,6 +18,8 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.common.shouldBeFailure
+import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
@@ -27,7 +29,6 @@ import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandle
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
@@ -56,7 +57,7 @@ internal class ReaderResultTest : FreeSpec() {
             "calling map function should return a result of applying the [transform] function to the value" {
                 val result = original.map { it.toInt() }
 
-                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling flatMap function should return a result of applying the [transform] function to the value" {
@@ -67,13 +68,13 @@ internal class ReaderResultTest : FreeSpec() {
                     )
                 }
 
-                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
             }
 
             "calling recovery function should return an original" {
                 val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
 
-                result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
             }
 
             "calling getOrNull function should return a value" {
@@ -206,7 +207,7 @@ internal class ReaderResultTest : FreeSpec() {
             "calling recovery function should return the result of invoking the recovery function" {
                 val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
 
-                result shouldBe ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
             }
 
             "calling getOrNull function should return the null value" {
@@ -334,8 +335,7 @@ internal class ReaderResultTest : FreeSpec() {
                     "then should return the value" {
                         val result = withCatching(env, LOCATION, block)
 
-                        result as ReaderResult.Success
-                        result.value shouldBe ORIGINAL_VALUE
+                        result shouldBeSuccess ORIGINAL_VALUE
                     }
                 }
             }
@@ -357,9 +357,9 @@ internal class ReaderResultTest : FreeSpec() {
                     "then should return an error value" {
                         val result = withCatching(env, LOCATION, block)
 
-                        result as ReaderResult.Failure
-                        result.causes shouldContainExactly listOf(
-                            ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                        result shouldBeFailure ReaderResult.Failure(
+                            location = LOCATION,
+                            error = JsonErrors.PathMissing
                         )
                     }
                 }
@@ -379,16 +379,15 @@ internal class ReaderResultTest : FreeSpec() {
         "asSuccess(JsLocation) extension function" {
             val result = ORIGINAL_VALUE.success(LOCATION)
 
-            result shouldBe ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
         "asFailure(JsLocation) extension function" {
             val result = JsonErrors.PathMissing.failure(LOCATION)
 
-            result as ReaderResult.Failure
-
-            result.causes shouldContainAll listOf(
-                ReaderResult.Failure.Cause(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing))
+            result shouldBeFailure ReaderResult.Failure(
+                location = LOCATION,
+                errors = ReaderResult.Errors(JsonErrors.PathMissing)
             )
         }
     }

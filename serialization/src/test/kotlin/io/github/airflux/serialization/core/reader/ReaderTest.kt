@@ -19,6 +19,8 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.common.shouldBeFailure
+import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -29,8 +31,6 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
 
 internal class ReaderTest : FreeSpec() {
 
@@ -54,7 +54,7 @@ internal class ReaderTest : FreeSpec() {
                     val transformedReader = reader.map { value -> value.toInt() }
                     val result = transformedReader.read(ENV, LOCATION, source)
 
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
                 }
             }
 
@@ -69,7 +69,7 @@ internal class ReaderTest : FreeSpec() {
                         }
                     val result = transformedReader.read(ENV, LOCATION, source)
 
-                    result shouldBe ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
                 }
             }
 
@@ -85,7 +85,7 @@ internal class ReaderTest : FreeSpec() {
 
                     "then the right reader doesn't execute" {
                         val result = reader.read(ENV, LOCATION, NullNode)
-                        result shouldBe ReaderResult.Success(location = LOCATION, value = LEFT_VALUE)
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = LEFT_VALUE)
                     }
                 }
 
@@ -102,7 +102,7 @@ internal class ReaderTest : FreeSpec() {
 
                         "then the result of the right reader should be returned" {
                             val result = reader.read(ENV, LOCATION, NullNode)
-                            result shouldBe ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE)
+                            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE)
                         }
                     }
 
@@ -121,9 +121,7 @@ internal class ReaderTest : FreeSpec() {
                         "then both errors should be returned" {
                             val result = reader.read(ENV, LOCATION, NullNode)
 
-                            result as ReaderResult.Failure
-                            result.causes shouldContainExactly listOf(
-
+                            result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append("id"),
                                     error = JsonErrors.PathMissing

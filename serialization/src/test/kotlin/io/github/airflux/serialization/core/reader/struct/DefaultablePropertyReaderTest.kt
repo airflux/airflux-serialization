@@ -18,6 +18,7 @@ package io.github.airflux.serialization.core.reader.struct
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.Lookup
 import io.github.airflux.serialization.core.reader.Reader
@@ -28,7 +29,6 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
 
 internal class DefaultablePropertyReaderTest : FreeSpec() {
 
@@ -53,7 +53,7 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                     "then should return the result of applying the reader" {
                         val result: ReaderResult<String?> =
                             readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = VALUE)
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION.append("id"), value = VALUE)
                     }
                 }
 
@@ -63,7 +63,10 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                     "then should return the default value" {
                         val result: ReaderResult<String?> =
                             readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = DEFAULT_VALUE)
+                        result shouldBeSuccess ReaderResult.Success(
+                            location = LOCATION.append("id"),
+                            value = DEFAULT_VALUE
+                        )
                     }
                 }
             }
@@ -75,7 +78,7 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                     val result: ReaderResult<String?> =
                         readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
 
-                    result shouldBe ReaderResult.Success(location = LOCATION.append("id"), value = DEFAULT_VALUE)
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION.append("id"), value = DEFAULT_VALUE)
                 }
             }
         }
