@@ -26,6 +26,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
@@ -63,7 +64,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = NumericNode.valueOf(10)
+                        val source = NumericNode.Integer.valueOf(10)
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -73,7 +74,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(StringNode.nameOfType),
-                                        actual = NumericNode.nameOfType
+                                        actual = NumericNode.Integer.nameOfType
                                     )
                                 )
                             )
@@ -115,7 +116,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = NumericNode.valueOf(10)
+                        val source = NumericNode.Integer.valueOf(10)
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
@@ -125,7 +126,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
-                                    actual = NumericNode.nameOfType
+                                    actual = NumericNode.Integer.nameOfType
                                 )
                             )
                         )
@@ -149,7 +150,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                 }
 
                 "when the main reader has failure read" - {
-                    val source = NumericNode.valueOf(ID_VALUE_AS_INT)!!
+                    val source = NumericNode.Integer.valueOrNullOf(ID_VALUE_AS_INT)!!
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
@@ -175,7 +176,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                             ReaderResult.Failure.Cause(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.nameOfType),
+                                    expected = listOf(NumericNode.Integer.nameOfType),
                                     actual = BooleanNode.nameOfType
                                 )
                             )

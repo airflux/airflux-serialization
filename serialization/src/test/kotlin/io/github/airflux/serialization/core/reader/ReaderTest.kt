@@ -112,7 +112,7 @@ internal class ReaderTest : FreeSpec() {
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
-                                    actual = NumericNode.nameOfType
+                                    actual = NumericNode.Integer.nameOfType
                                 )
                             )
                         }
@@ -132,7 +132,7 @@ internal class ReaderTest : FreeSpec() {
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(StringNode.nameOfType),
-                                        actual = NumericNode.nameOfType
+                                        actual = NumericNode.Integer.nameOfType
                                     )
                                 )
                             )

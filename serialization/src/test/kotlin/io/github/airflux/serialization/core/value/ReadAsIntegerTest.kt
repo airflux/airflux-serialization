@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.reader
+package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.assertAsFailure
@@ -23,47 +23,44 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.datatest.withData
-import java.math.BigDecimal
 
-internal class BigDecimalReaderTest : FreeSpec() {
+internal class ReadAsIntegerTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
-        private val LOCATION = Location.empty
-        private val BigDecimalReader = bigDecimalReader<EB, Unit>()
+        private val LOCATION = Location.empty.append("user")
+        private val READER = { _: ReaderEnv<EB, Unit>, location: Location, text: String ->
+            ReaderResult.Success(location = location, value = text.toInt())
+        }
     }
 
     init {
+        "The readAsNumber function" - {
 
-        "The big decimal type reader" - {
+            "when called with a receiver of the NumericNode type" - {
 
-            "should return the big decimal value" - {
-                withData(
-                    listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
-                ) { value ->
-                    val source: ValueNode = NumericNode.Number.valueOrNullOf(value)!!
-                    val result = BigDecimalReader.read(ENV, LOCATION, source)
-                    result.assertAsSuccess(value = BigDecimal(value))
+                "should return the number value" {
+                    val json: ValueNode = NumericNode.Integer.valueOf(Int.MAX_VALUE)
+                    val result = json.readAsInteger(ENV, LOCATION, READER)
+                    result.assertAsSuccess(value = Int.MAX_VALUE)
                 }
             }
+            "when called with a receiver of not the NumericNode type" - {
 
-            "should return the invalid type error" {
-                val source: ValueNode = StringNode("abc")
-                val result = BigDecimalReader.read(ENV, LOCATION, source)
-                result.assertAsFailure(
-                    ReaderResult.Failure.Cause(
-                        location = Location.empty,
-                        error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.Number.nameOfType),
-                            actual = StringNode.nameOfType
+                "should return the invalid type error" {
+                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val result = json.readAsInteger(ENV, LOCATION, READER)
+                    result.assertAsFailure(
+                        ReaderResult.Failure.Cause(
+                            location = LOCATION,
+                            error = JsonErrors.InvalidType(
+                                expected = listOf(NumericNode.Integer.nameOfType),
+                                actual = BooleanNode.nameOfType
+                            )
                         )
                     )
-                )
+                }
             }
         }
     }

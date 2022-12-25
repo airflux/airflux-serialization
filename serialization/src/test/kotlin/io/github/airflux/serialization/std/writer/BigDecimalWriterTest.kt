@@ -41,7 +41,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
 
                 "then the writer should return the value without trailing zeros" {
                     val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
-                    result shouldBe NumericNode.valueOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
+                    result shouldBe NumericNode.Number.valueOrNullOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
                 }
             }
 
@@ -50,7 +50,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
 
                 "then the writer should return the original value" {
                     val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
-                    result shouldBe NumericNode.valueOf(TEXT_VALUE)
+                    result shouldBe NumericNode.Number.valueOrNullOf(TEXT_VALUE)
                 }
             }
         }

@@ -25,6 +25,7 @@ import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.valueOf
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -131,7 +132,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     }
 
                     "with property as a number value" {
-                        val json = StructNode("id" to NumericNode.valueOf(123))
+                        val json = StructNode("id" to NumericNode.Integer.valueOf(123))
                         val value = json.serialization()
                         value shouldBe """{"id":123}"""
                     }

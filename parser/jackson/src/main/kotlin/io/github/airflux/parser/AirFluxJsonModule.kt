@@ -100,10 +100,14 @@ public object AirFluxJsonModule : SimpleModule() {
                     nextContext = parserContext
                 }
 
-                JsonToken.VALUE_NUMBER_INT,
+                JsonToken.VALUE_NUMBER_INT -> {
+                    maybeValue = NumericNode.Integer.valueOrNullOf(jp.text)
+                        ?: throw ParsingException("Invalid number value.")
+                    nextContext = parserContext
+                }
+
                 JsonToken.VALUE_NUMBER_FLOAT -> {
-                    maybeValue =
-                        NumericNode.valueOf(jp.text) ?: throw ParsingException("Invalid number value.")
+                    maybeValue = NumericNode.Number.valueOrNullOf(jp.text) ?: throw ParsingException("Invalid number value.")
                     nextContext = parserContext
                 }
 

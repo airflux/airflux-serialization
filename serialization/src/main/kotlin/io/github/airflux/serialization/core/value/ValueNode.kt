@@ -60,13 +60,12 @@ public class StringNode(public val get: String) : ValueNode() {
     }
 }
 
-public class NumericNode private constructor(public val get: String) : ValueNode() {
+public fun NumericNode.Integer.Companion.valueOf(value: Byte): NumericNode.Integer = valueOrNullOf(value.toString())!!
+public fun NumericNode.Integer.Companion.valueOf(value: Short): NumericNode.Integer = valueOrNullOf(value.toString())!!
+public fun NumericNode.Integer.Companion.valueOf(value: Int): NumericNode.Integer = valueOrNullOf(value.toString())!!
+public fun NumericNode.Integer.Companion.valueOf(value: Long): NumericNode.Integer = valueOrNullOf(value.toString())!!
 
-    override val nameOfType: String = NumericNode.nameOfType
-
-    public val isInteger: Boolean = get.matches(integerNumberPattern)
-
-    public val isReal: Boolean = get.matches(realNumberPattern)
+public sealed class NumericNode private constructor(public val get: String) : ValueNode() {
 
     override fun toString(): String = get
 
@@ -75,18 +74,26 @@ public class NumericNode private constructor(public val get: String) : ValueNode
 
     override fun hashCode(): Int = get.hashCode()
 
-    public companion object {
-        private val integerNumberPattern = "^-?(0|[1-9][0-9]*)$".toRegex()
-        private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
-        private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
+    public class Integer private constructor(value: String) : NumericNode(value) {
+        override val nameOfType: String = Integer.nameOfType
 
-        public const val nameOfType: String = "numeric"
+        public companion object {
+            public const val nameOfType: String = "integer"
+            private val pattern = "^-?(0|[1-9][0-9]*)$".toRegex()
 
-        public fun valueOf(value: Byte): NumericNode = NumericNode(value.toString())
-        public fun valueOf(value: Short): NumericNode = NumericNode(value.toString())
-        public fun valueOf(value: Int): NumericNode = NumericNode(value.toString())
-        public fun valueOf(value: Long): NumericNode = NumericNode(value.toString())
-        public fun valueOf(value: String): NumericNode? = if (value.matches(pattern)) NumericNode(value) else null
+            public fun valueOrNullOf(value: String): Integer? = if (value.matches(pattern)) Integer(value) else null
+        }
+    }
+
+    public class Number(value: String) : NumericNode(value) {
+        override val nameOfType: String = Number.nameOfType
+
+        public companion object {
+            public const val nameOfType: String = "number"
+            private val pattern = "^(-?(0|[1-9][0-9]*))((\\.[0-9]+)?|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
+
+            public fun valueOrNullOf(value: String): Number? = if (value.matches(pattern)) Number(value) else null
+        }
     }
 }
 

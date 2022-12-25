@@ -29,5 +29,5 @@ public fun <CTX> bigDecimalWriter(stripTrailingZeros: Boolean): Writer<CTX, BigD
             value.stripTrailingZeros().toPlainString()
         else
             value.toPlainString()
-        NumericNode.valueOf(text)!!
+        NumericNode.Number.valueOrNullOf(text)!!
     }

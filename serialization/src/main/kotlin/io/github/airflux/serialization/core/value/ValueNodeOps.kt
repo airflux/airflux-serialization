@@ -42,18 +42,38 @@ public fun <EB, CTX> ValueNode.readAsString(env: ReaderEnv<EB, CTX>, location: L
             error = env.errorBuilders.invalidTypeError(listOf(StringNode.nameOfType), this.nameOfType)
         )
 
+public fun <EB, CTX, T : Number> ValueNode.readAsInteger(
+    env: ReaderEnv<EB, CTX>,
+    location: Location,
+    reader: (ReaderEnv<EB, CTX>, Location, String) -> ReaderResult<T>
+): ReaderResult<T>
+    where EB : InvalidTypeErrorBuilder =
+    if (this is NumericNode.Integer)
+        reader(env, location, this.get)
+    else
+        ReaderResult.Failure(
+            location = location,
+            error = env.errorBuilders.invalidTypeError(
+                expected = listOf(NumericNode.Integer.nameOfType),
+                actual = this.nameOfType
+            )
+        )
+
 public fun <EB, CTX, T : Number> ValueNode.readAsNumber(
     env: ReaderEnv<EB, CTX>,
     location: Location,
     reader: (ReaderEnv<EB, CTX>, Location, String) -> ReaderResult<T>
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is NumericNode)
+    if (this is NumericNode.Number)
         reader(env, location, this.get)
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(NumericNode.nameOfType), this.nameOfType)
+            error = env.errorBuilders.invalidTypeError(
+                expected = listOf(NumericNode.Number.nameOfType),
+                actual = this.nameOfType
+            )
         )
 
 public inline fun <EB, CTX, T> ValueNode.readAsStruct(

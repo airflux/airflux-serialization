@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.readAsNumber
+import io.github.airflux.serialization.core.value.readAsInteger
 
 /**
  * Reader for primitive [Int] type.
@@ -30,7 +30,7 @@ public fun <EB, CTX> intReader(): Reader<EB, CTX, Int>
     where EB : InvalidTypeErrorBuilder,
           EB : ValueCastErrorBuilder =
     Reader { env, location, source ->
-        source.readAsNumber(env, location) { e, l, value ->
+        source.readAsInteger(env, location) { e, l, value ->
             try {
                 value.toInt().success(l)
             } catch (expected: NumberFormatException) {

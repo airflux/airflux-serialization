@@ -74,13 +74,13 @@ internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->
-            if (source is NumericNode)
+            if (source is NumericNode.Integer)
                 ReaderResult.Success(location = location, value = source.get.toInt())
             else
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(NumericNode.nameOfType),
+                        expected = listOf(NumericNode.Integer.nameOfType),
                         actual = source.nameOfType
                     )
                 )
@@ -97,7 +97,7 @@ internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(NumericNode.nameOfType),
+                        expected = listOf(NumericNode.Integer.nameOfType, NumericNode.Number.nameOfType),
                         actual = source.nameOfType
                     )
                 )

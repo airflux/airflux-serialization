@@ -27,6 +27,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.valueOf
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import java.math.BigInteger
@@ -52,7 +53,7 @@ internal class LongReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Long.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: ValueNode = NumericNode.valueOf(value)
+                    val source: ValueNode = NumericNode.Integer.valueOf(value)
                     val result = LongReader.read(ENV, LOCATION, source)
                     result.assertAsSuccess(value = value)
                 }
@@ -65,7 +66,7 @@ internal class LongReaderTest : FreeSpec() {
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.nameOfType),
+                            expected = listOf(NumericNode.Integer.nameOfType),
                             actual = StringNode.nameOfType
                         )
                     )
@@ -78,11 +79,17 @@ internal class LongReaderTest : FreeSpec() {
                     listOf(
                         Pair("Value is less than the allowed range", getLessValue()),
                         Pair("Value is more than the allowed range", getMoreValue()),
-                        Pair("The value is in an invalid format, negative with a fractional part", "-10.5"),
-                        Pair("The value is in an invalid format, positive with a fractional part.", "10.5"),
+                        Pair(
+                            "The value is in an invalid format, negative with a fractional part",
+                            Long.MIN_VALUE.toString() + "0"
+                        ),
+                        Pair(
+                            "The value is in an invalid format, positive with a fractional part.",
+                            Long.MAX_VALUE.toString() + "0"
+                        ),
                     )
                 ) { (_, value) ->
-                    val source = NumericNode.valueOf(value)!!
+                    val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = LongReader.read(ENV, LOCATION, source)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(

@@ -16,115 +16,125 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.common.ObjectContract
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.datatest.withData
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 
-internal class NumericNodeTest {
+internal class NumericNodeTest : FreeSpec() {
 
-    @Test
-    fun `Testing the valueOf function of the NumericNode class for Byte type`() {
-        val min: Byte = Byte.MIN_VALUE
-        val max: Byte = Byte.MAX_VALUE
+    init {
 
-        assertEquals(min, NumericNode.valueOf(min).get.toByte())
-        assertEquals(max, NumericNode.valueOf(max).get.toByte())
-    }
+        "The NumericNode#Integer type" - {
 
-    @Test
-    fun `Testing the valueOf function of the NumericNode class for Short type`() {
-        val min: Short = Short.MIN_VALUE
-        val max: Short = Short.MAX_VALUE
+            "when the object creating from Byte type" - {
 
-        assertEquals(min, NumericNode.valueOf(min).get.toShort())
-        assertEquals(max, NumericNode.valueOf(max).get.toShort())
-    }
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    listOf(Byte.MIN_VALUE, Byte.MAX_VALUE)
+                ) { value ->
+                    NumericNode.Integer.valueOf(value).get.toByte() shouldBe value
+                }
+            }
 
-    @Test
-    fun `Testing the valueOf function of the NumericNode class for Int type`() {
-        val min: Int = Int.MIN_VALUE
-        val max: Int = Int.MAX_VALUE
+            "when the object creating from Short type" - {
 
-        assertEquals(min, NumericNode.valueOf(min).get.toInt())
-        assertEquals(max, NumericNode.valueOf(max).get.toInt())
-    }
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    listOf(Short.MIN_VALUE, Short.MAX_VALUE)
+                ) { value ->
+                    NumericNode.Integer.valueOf(value).get.toShort() shouldBe value
+                }
+            }
 
-    @Test
-    fun `Testing the valueOf function of the NumericNode class for Long type`() {
-        val min: Long = Long.MIN_VALUE
-        val max: Long = Long.MAX_VALUE
+            "when the object creating from Int type" - {
 
-        assertEquals(min, NumericNode.valueOf(min).get.toLong())
-        assertEquals(max, NumericNode.valueOf(max).get.toLong())
-    }
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    listOf(Int.MIN_VALUE, Int.MAX_VALUE)
+                ) { value ->
+                    NumericNode.Integer.valueOf(value).get.toInt() shouldBe value
+                }
+            }
 
-    @TestFactory
-    fun `Testing the valueOf function of the NumericNode class for String type`(): List<DynamicTest> = listOf(
-        Triple("false", "false", null),
-        Triple(".0", ".0", null),
-        Triple("+.0", "+.0", null),
-        Triple("-.0", "-.0", null),
-        Triple("1", "1", "1"),
-        Triple("-1", "-1", "-1"),
-        Triple("1.5", "1.5", "1.5"),
-        Triple("-1.5", "-1.5", "-1.5"),
-        Triple("1.50", "1.50", "1.50"),
-        Triple("-1.50", "-1.50", "-1.50")
-    ).map { (displayName: String, text: String, expected: String?) ->
-        DynamicTest.dynamicTest(displayName) {
-            assertEquals(expected, NumericNode.valueOf(text)?.get)
+            "when the object creating from Long type" - {
+
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    listOf(Long.MIN_VALUE, Long.MAX_VALUE)
+                ) { value ->
+                    NumericNode.Integer.valueOf(value).get.toLong() shouldBe value
+                }
+            }
+
+            "when the object creating from a valid string representing a numeric value" - {
+
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    listOf(Long.MIN_VALUE.toString(), "-1", "1", Long.MAX_VALUE.toString())
+                ) { value ->
+                    NumericNode.Integer.valueOrNullOf(value)?.get shouldBe value
+                }
+            }
+
+            "when an object creating from an invalid string" - {
+
+                withData(
+                    nameFn = { "with value '$it' should return the null value" },
+                    listOf(".0", "+.0", "-.0", "1.5", "-1.5", "1.50", "-1.50")
+                ) { value ->
+                    NumericNode.Integer.valueOrNullOf(value).shouldBeNull()
+                }
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                NumericNode.Integer.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
+                    y = NumericNode.Integer.valueOf(Byte.MIN_VALUE),
+                    z = NumericNode.Integer.valueOf(Byte.MIN_VALUE),
+                    other = NumericNode.Integer.valueOf(Byte.MAX_VALUE)
+                )
+            }
+
+            "test the toString function" {
+                val value = Byte.MIN_VALUE.toString()
+                NumericNode.Integer.valueOrNullOf(value).toString() shouldBe value
+            }
         }
-    }
 
-    @TestFactory
-    fun `Testing the internal representation as an integer number`(): List<DynamicTest> = listOf(
-        "0" to "0", "-0" to "-0",
-        "1" to "1", "-1" to "-1",
-        "100" to "100", "-100" to "-100"
-    ).map { (displayName: String, text: String) ->
-        DynamicTest.dynamicTest(displayName) {
-            val number = NumericNode.valueOf(text)!!
-            assertTrue(number.isInteger)
-            assertFalse(number.isReal)
+        "The NumericNode#Number type" - {
+
+            "when an object creating from a valid string representing a numeric value" - {
+
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    listOf("-10", "-10.5", "10", "10.5")
+                ) { value ->
+                    NumericNode.Number.valueOrNullOf(value)?.get shouldBe value
+                }
+            }
+
+            "when an object creating from an invalid string" - {
+                withData(
+                    nameFn = { "with value '$it' should return the null value" },
+                    listOf("false")
+                ) { value ->
+                    NumericNode.Number.valueOrNullOf(value)?.get.shouldBeNull()
+                }
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                NumericNode.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!.shouldBeEqualsContract(
+                    y = NumericNode.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
+                    z = NumericNode.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
+                    other = NumericNode.Number.valueOrNullOf(Byte.MAX_VALUE.toString())!!
+                )
+            }
+
+            "test the toString function" {
+                val value = Byte.MIN_VALUE.toString()
+                NumericNode.Number.valueOrNullOf(value).toString() shouldBe value
+            }
         }
-    }
-
-    @TestFactory
-    fun `Testing the internal representation as a real number`(): List<DynamicTest> = listOf(
-        "0.0" to "0.0", "-0.0" to "-0.0",
-        "0.1" to "0.1", "-0.1" to "-0.1",
-        "1.5" to "1.5", "-1.5" to "-1.5",
-        "1.50" to "1.50", "-1.50" to "-1.50"
-    ).map { (displayName: String, text: String) ->
-        DynamicTest.dynamicTest(displayName) {
-            val number = NumericNode.valueOf(text)!!
-            assertFalse(number.isInteger)
-            assertTrue(number.isReal)
-        }
-    }
-
-    @TestFactory
-    fun `Testing the toString function of the NumericNode class`(): List<DynamicTest> = listOf(
-        "1" to "1", "-1" to "-1",
-        "1.5" to "1.5", "-1.5" to "-1.5",
-        "1.50" to "1.50", "-1.50" to "-1.50"
-    ).map { (displayName: String, text: String) ->
-        DynamicTest.dynamicTest(displayName) {
-
-            ObjectContract.checkToString(NumericNode.valueOf(text)!!.toString(), text)
-        }
-    }
-
-    @Test
-    fun `Testing the equals contract of the NumericNode class`() {
-        ObjectContract.checkEqualsContract(
-            NumericNode.valueOf(10),
-            NumericNode.valueOf(10),
-            NumericNode.valueOf(100)
-        )
     }
 }

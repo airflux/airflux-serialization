@@ -28,6 +28,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.reader.array.item.specification.prefixItems
 import io.github.airflux.serialization.std.reader.booleanReader
@@ -126,7 +127,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 StringNode(FIRST_ITEM),
                                 StringNode(SECOND_ITEM),
                                 StringNode(THIRD_ITEM),
-                                NumericNode.valueOf(10)
+                                NumericNode.Integer.valueOf(10)
                             )
 
                             "then should return an error" {
@@ -209,7 +210,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 StringNode(FIRST_ITEM),
                                 StringNode(SECOND_ITEM),
                                 StringNode(THIRD_ITEM),
-                                NumericNode.valueOf(10)
+                                NumericNode.Integer.valueOf(10)
                             )
 
                             "then should return all errors" {
@@ -227,7 +228,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(BooleanNode.nameOfType),
-                                            actual = NumericNode.nameOfType
+                                            actual = NumericNode.Integer.nameOfType
                                         )
                                     )
                                 )
