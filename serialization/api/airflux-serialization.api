@@ -343,8 +343,8 @@ public final class io/github/airflux/serialization/core/value/NullNode : io/gith
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/core/value/NumberNode : io/github/airflux/serialization/core/value/ValueNode {
-	public static final field Companion Lio/github/airflux/serialization/core/value/NumberNode$Companion;
+public final class io/github/airflux/serialization/core/value/NumericNode : io/github/airflux/serialization/core/value/ValueNode {
+	public static final field Companion Lio/github/airflux/serialization/core/value/NumericNode$Companion;
 	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
@@ -356,12 +356,12 @@ public final class io/github/airflux/serialization/core/value/NumberNode : io/gi
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/core/value/NumberNode$Companion {
-	public final fun valueOf (B)Lio/github/airflux/serialization/core/value/NumberNode;
-	public final fun valueOf (I)Lio/github/airflux/serialization/core/value/NumberNode;
-	public final fun valueOf (J)Lio/github/airflux/serialization/core/value/NumberNode;
-	public final fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/NumberNode;
-	public final fun valueOf (S)Lio/github/airflux/serialization/core/value/NumberNode;
+public final class io/github/airflux/serialization/core/value/NumericNode$Companion {
+	public final fun valueOf (B)Lio/github/airflux/serialization/core/value/NumericNode;
+	public final fun valueOf (I)Lio/github/airflux/serialization/core/value/NumericNode;
+	public final fun valueOf (J)Lio/github/airflux/serialization/core/value/NumericNode;
+	public final fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/NumericNode;
+	public final fun valueOf (S)Lio/github/airflux/serialization/core/value/NumericNode;
 }
 
 public final class io/github/airflux/serialization/core/value/StringNode : io/github/airflux/serialization/core/value/ValueNode {

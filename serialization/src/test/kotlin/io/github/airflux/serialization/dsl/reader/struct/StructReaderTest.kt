@@ -29,7 +29,7 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
@@ -97,7 +97,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when no errors in the reader" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                         )
 
@@ -121,7 +121,7 @@ internal class StructReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumberNode.nameOfType),
+                                        expected = listOf(NumericNode.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 )
@@ -131,7 +131,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when error occur of reading property the name" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                         )
 
@@ -163,7 +163,7 @@ internal class StructReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumberNode.nameOfType),
+                                        expected = listOf(NumericNode.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 )
@@ -173,7 +173,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when error occur of validation the structure" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -233,7 +233,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when no errors in the reader" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                         )
 
@@ -257,7 +257,7 @@ internal class StructReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumberNode.nameOfType),
+                                        expected = listOf(NumericNode.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 )
@@ -267,7 +267,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when error occur of reading property the name" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                         )
 
@@ -299,7 +299,7 @@ internal class StructReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumberNode.nameOfType),
+                                        expected = listOf(NumericNode.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 ),
@@ -316,7 +316,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when error occur of validation the structure" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -351,7 +351,7 @@ internal class StructReaderTest : FreeSpec() {
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumberNode.nameOfType),
+                                        expected = listOf(NumericNode.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 ),
@@ -376,7 +376,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 val source = StructNode(
-                    ID_PROPERTY_NAME to NumberNode.valueOf(ID_PROPERTY_VALUE),
+                    ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                     NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                 )
 

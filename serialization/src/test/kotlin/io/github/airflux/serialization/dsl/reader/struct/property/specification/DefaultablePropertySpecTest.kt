@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
@@ -102,7 +102,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
+                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then should be returned a read error" {
@@ -112,7 +112,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
-                                    actual = NumberNode.nameOfType
+                                    actual = NumericNode.nameOfType
                                 )
                             )
                         )
@@ -165,7 +165,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
+                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
                     val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then should be returned a read error" {
@@ -175,7 +175,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
-                                    actual = NumberNode.nameOfType
+                                    actual = NumericNode.nameOfType
                                 )
                             )
                         )
@@ -217,7 +217,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(10))
+                        val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
@@ -227,7 +227,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
-                                    actual = NumberNode.nameOfType
+                                    actual = NumericNode.nameOfType
                                 )
                             )
                         )
@@ -260,7 +260,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has failure read" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumberNode.valueOf(ID_VALUE_AS_INT)!!)
+                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(ID_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
@@ -287,7 +287,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                             ReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumberNode.nameOfType),
+                                    expected = listOf(NumericNode.nameOfType),
                                     actual = BooleanNode.nameOfType
                                 )
                             )

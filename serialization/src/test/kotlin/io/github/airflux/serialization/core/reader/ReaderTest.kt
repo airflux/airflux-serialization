@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -112,7 +112,7 @@ internal class ReaderTest : FreeSpec() {
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
-                                    actual = NumberNode.nameOfType
+                                    actual = NumericNode.nameOfType
                                 )
                             )
                         }
@@ -132,7 +132,7 @@ internal class ReaderTest : FreeSpec() {
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(StringNode.nameOfType),
-                                        actual = NumberNode.nameOfType
+                                        actual = NumericNode.nameOfType
                                     )
                                 )
                             )

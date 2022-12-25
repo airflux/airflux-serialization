@@ -21,7 +21,7 @@ import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -49,12 +49,12 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                 "the value as the StructNode type" - {
 
                     //TODO
-                    "with the value as the NumberNode type" {
+                    "with the value as the NumericNode type" {
                         val json = """{"id": 123}""".deserialization()
 
                         val root = json.shouldBeInstanceOf<StructNode>()
                         val id = root["id"]
-                        val value = id.shouldBeInstanceOf<NumberNode>()
+                        val value = id.shouldBeInstanceOf<NumericNode>()
                         value.get shouldBe "123"
                     }
 
@@ -131,7 +131,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     }
 
                     "with property as a number value" {
-                        val json = StructNode("id" to NumberNode.valueOf(123))
+                        val json = StructNode("id" to NumericNode.valueOf(123))
                         val value = json.serialization()
                         value shouldBe """{"id":123}"""
                     }

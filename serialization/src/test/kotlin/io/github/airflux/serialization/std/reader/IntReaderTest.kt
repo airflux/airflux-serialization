@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
@@ -51,7 +51,7 @@ internal class IntReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Int.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: ValueNode = NumberNode.valueOf(value)
+                    val source: ValueNode = NumericNode.valueOf(value)
                     val result = IntReader.read(ENV, LOCATION, source)
                     result.assertAsSuccess(value = value)
                 }
@@ -64,7 +64,7 @@ internal class IntReaderTest : FreeSpec() {
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(NumberNode.nameOfType),
+                            expected = listOf(NumericNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
                     )
@@ -81,7 +81,7 @@ internal class IntReaderTest : FreeSpec() {
                         Pair("The value is in an invalid format, positive with a fractional part.", "10.5"),
                     )
                 ) { (_, value) ->
-                    val source = NumberNode.valueOf(value)!!
+                    val source = NumericNode.valueOf(value)!!
                     val result = IntReader.read(ENV, LOCATION, source)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(

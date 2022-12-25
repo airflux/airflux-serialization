@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
@@ -74,13 +74,13 @@ internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->
-            if (source is NumberNode)
+            if (source is NumericNode)
                 ReaderResult.Success(location = location, value = source.get.toInt())
             else
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(NumberNode.nameOfType),
+                        expected = listOf(NumericNode.nameOfType),
                         actual = source.nameOfType
                     )
                 )
@@ -91,13 +91,13 @@ internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->
-            if (source is NumberNode)
+            if (source is NumericNode)
                 ReaderResult.Success(location = location, value = source.get.toLong())
             else
                 ReaderResult.Failure(
                     location = location,
                     error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(NumberNode.nameOfType),
+                        expected = listOf(NumericNode.nameOfType),
                         actual = source.nameOfType
                     )
                 )

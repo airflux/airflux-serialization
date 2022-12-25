@@ -38,15 +38,15 @@ internal class ReadAsNumberTest : FreeSpec() {
     init {
         "The readAsNumber function" - {
 
-            "when called with a receiver of the NumberNode type" - {
+            "when called with a receiver of the NumericNode type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumberNode.valueOf(Int.MAX_VALUE)
+                    val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(ENV, LOCATION, READER)
                     result.assertAsSuccess(value = Int.MAX_VALUE)
                 }
             }
-            "when called with a receiver of not the NumberNode type" - {
+            "when called with a receiver of not the NumericNode type" - {
 
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
@@ -55,7 +55,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                         ReaderResult.Failure.Cause(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
-                                expected = listOf(NumberNode.nameOfType),
+                                expected = listOf(NumericNode.nameOfType),
                                 actual = BooleanNode.nameOfType
                             )
                         )

@@ -48,12 +48,12 @@ public fun <EB, CTX, T : Number> ValueNode.readAsNumber(
     reader: (ReaderEnv<EB, CTX>, Location, String) -> ReaderResult<T>
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is NumberNode)
+    if (this is NumericNode)
         reader(env, location, this.get)
     else
         ReaderResult.Failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(NumberNode.nameOfType), this.nameOfType)
+            error = env.errorBuilders.invalidTypeError(listOf(NumericNode.nameOfType), this.nameOfType)
         )
 
 public inline fun <EB, CTX, T> ValueNode.readAsStruct(

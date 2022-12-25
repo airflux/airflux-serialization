@@ -60,9 +60,9 @@ public class StringNode(public val get: String) : ValueNode() {
     }
 }
 
-public class NumberNode private constructor(public val get: String) : ValueNode() {
+public class NumericNode private constructor(public val get: String) : ValueNode() {
 
-    override val nameOfType: String = NumberNode.nameOfType
+    override val nameOfType: String = NumericNode.nameOfType
 
     public val isInteger: Boolean = get.matches(integerNumberPattern)
 
@@ -71,7 +71,7 @@ public class NumberNode private constructor(public val get: String) : ValueNode(
     override fun toString(): String = get
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is NumberNode && this.get == other.get)
+        this === other || (other is NumericNode && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
 
@@ -80,13 +80,13 @@ public class NumberNode private constructor(public val get: String) : ValueNode(
         private val realNumberPattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
         private val pattern = "^(-?(0|[1-9][0-9]*))(\\.[0-9]+|(\\.[0-9]+)?[eE][+-]?[0-9]+)?$".toRegex()
 
-        public const val nameOfType: String = "number"
+        public const val nameOfType: String = "numeric"
 
-        public fun valueOf(value: Byte): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: Short): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: Int): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: Long): NumberNode = NumberNode(value.toString())
-        public fun valueOf(value: String): NumberNode? = if (value.matches(pattern)) NumberNode(value) else null
+        public fun valueOf(value: Byte): NumericNode = NumericNode(value.toString())
+        public fun valueOf(value: Short): NumericNode = NumericNode(value.toString())
+        public fun valueOf(value: Int): NumericNode = NumericNode(value.toString())
+        public fun valueOf(value: Long): NumericNode = NumericNode(value.toString())
+        public fun valueOf(value: String): NumericNode? = if (value.matches(pattern)) NumericNode(value) else null
     }
 }
 

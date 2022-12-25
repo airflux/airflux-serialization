@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -41,7 +41,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
 
                 "then the writer should return the value without trailing zeros" {
                     val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
-                    result shouldBe NumberNode.valueOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
+                    result shouldBe NumericNode.valueOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
                 }
             }
 
@@ -50,7 +50,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
 
                 "then the writer should return the original value" {
                     val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
-                    result shouldBe NumberNode.valueOf(TEXT_VALUE)
+                    result shouldBe NumericNode.valueOf(TEXT_VALUE)
                 }
             }
         }

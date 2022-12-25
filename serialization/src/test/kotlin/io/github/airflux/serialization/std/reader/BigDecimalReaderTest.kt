@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
@@ -46,7 +46,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 withData(
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
-                    val source: ValueNode = NumberNode.valueOf(value)!!
+                    val source: ValueNode = NumericNode.valueOf(value)!!
                     val result = BigDecimalReader.read(ENV, LOCATION, source)
                     result.assertAsSuccess(value = BigDecimal(value))
                 }
@@ -59,7 +59,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(NumberNode.nameOfType),
+                            expected = listOf(NumericNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
                     )

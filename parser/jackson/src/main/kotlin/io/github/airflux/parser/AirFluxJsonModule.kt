@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -47,7 +47,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 is NullNode -> gen.writeNull()
                 is StringNode -> gen.writeString(value.get)
                 is BooleanNode -> gen.writeBoolean(value.get)
-                is NumberNode -> gen.writeNumber(value.get)
+                is NumericNode -> gen.writeNumber(value.get)
                 is ArrayNode<*> -> {
                     gen.writeStartArray()
                     value.forEach { element ->
@@ -103,7 +103,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 JsonToken.VALUE_NUMBER_INT,
                 JsonToken.VALUE_NUMBER_FLOAT -> {
                     maybeValue =
-                        NumberNode.valueOf(jp.text) ?: throw ParsingException("Invalid number value.")
+                        NumericNode.valueOf(jp.text) ?: throw ParsingException("Invalid number value.")
                     nextContext = parserContext
                 }
 

@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumberNode
+import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.reader.array.item.specification.prefixItems
@@ -126,7 +126,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 StringNode(FIRST_ITEM),
                                 StringNode(SECOND_ITEM),
                                 StringNode(THIRD_ITEM),
-                                NumberNode.valueOf(10)
+                                NumericNode.valueOf(10)
                             )
 
                             "then should return an error" {
@@ -209,7 +209,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 StringNode(FIRST_ITEM),
                                 StringNode(SECOND_ITEM),
                                 StringNode(THIRD_ITEM),
-                                NumberNode.valueOf(10)
+                                NumericNode.valueOf(10)
                             )
 
                             "then should return all errors" {
@@ -227,7 +227,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(BooleanNode.nameOfType),
-                                            actual = NumberNode.nameOfType
+                                            actual = NumericNode.nameOfType
                                         )
                                     )
                                 )
