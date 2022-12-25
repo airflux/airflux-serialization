@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.std.IsNotEmptyArrayValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.std.MaxItemsArrayValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.std.MinItemsArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validator.std.IsNotEmptyArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validator.std.MaxItemsArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validator.std.MinItemsArrayValidatorBuilder
 
 public object StdArrayValidator {
 

@@ -23,10 +23,10 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.property.ide
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonStructReaderValidators
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.optional
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.builder.returns
-import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
+import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
+import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
+import io.github.airflux.serialization.dsl.reader.struct.returns
+import io.github.airflux.serialization.dsl.reader.struct.structReader
 
 val TenderReader: Reader<ReaderErrorBuilders, ReaderCtx, Tender> = structReader {
     validation(CommonStructReaderValidators)

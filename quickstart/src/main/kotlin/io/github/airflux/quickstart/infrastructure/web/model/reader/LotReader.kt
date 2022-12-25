@@ -29,9 +29,9 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.is
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.validation
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.builder.returns
-import io.github.airflux.serialization.dsl.reader.struct.builder.structReader
+import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
+import io.github.airflux.serialization.dsl.reader.struct.returns
+import io.github.airflux.serialization.dsl.reader.struct.structReader
 
 val LotStatusReader: Reader<ReaderErrorBuilders, ReaderCtx, LotStatus> = StringReader.validation(isNotBlank).asEnum()
 

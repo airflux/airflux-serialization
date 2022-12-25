@@ -20,9 +20,9 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidator
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 
 internal class DummyStructValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : StructValidatorBuilder<EB, CTX> {
 

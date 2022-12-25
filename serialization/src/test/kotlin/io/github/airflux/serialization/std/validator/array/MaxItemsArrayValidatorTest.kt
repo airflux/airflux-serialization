@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull

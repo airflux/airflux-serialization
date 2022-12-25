@@ -20,8 +20,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 
 internal class DummyArrayValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : ArrayValidatorBuilder<EB, CTX> {
 

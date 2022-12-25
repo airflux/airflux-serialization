@@ -24,9 +24,9 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.flatMapResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.withCatching
-import io.github.airflux.serialization.dsl.reader.array.builder.arrayReader
-import io.github.airflux.serialization.dsl.reader.array.builder.item.specification.nonNullable
-import io.github.airflux.serialization.dsl.reader.array.builder.returns
+import io.github.airflux.serialization.dsl.reader.array.arrayReader
+import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
+import io.github.airflux.serialization.dsl.reader.array.returns
 
 val LotsReader: Reader<ReaderErrorBuilders, ReaderCtx, Lots> = arrayReader {
     validation(CommonArrayReaderValidators)

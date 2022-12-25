@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.dsl.reader.array.builder.validator.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
 public class MaxItemsArrayValidator<EB, CTX> internal constructor(private val expected: Int) : ArrayValidator<EB, CTX>
     where EB : MaxItemsArrayValidator.ErrorBuilder {

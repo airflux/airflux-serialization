@@ -27,10 +27,10 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.builder.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.builder.validator.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
+import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
+import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
