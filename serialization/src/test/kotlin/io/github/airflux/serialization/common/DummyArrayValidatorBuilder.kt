@@ -35,4 +35,23 @@ internal class DummyArrayValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?
             source: ArrayNode<*>
         ): ReaderResult.Failure? = result
     }
+
+    companion object {
+        internal fun <EB, CTX> minItems(
+            expected: Int,
+            error: (expected: Int, actual: Int) -> ReaderResult.Error
+        ): ArrayValidatorBuilder<EB, CTX> =
+            object : ArrayValidatorBuilder<EB, CTX> {
+                override fun build(): ArrayValidator<EB, CTX> =
+                    ArrayValidator { _, location, source ->
+                        if (source.size < expected)
+                            return@ArrayValidator ReaderResult.Failure(
+                                location = location,
+                                error = error(expected, source.size)
+                            )
+                        else
+                            null
+                    }
+            }
+    }
 }
