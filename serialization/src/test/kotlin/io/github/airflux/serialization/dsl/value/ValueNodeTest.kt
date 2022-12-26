@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ValueNodeOpsTest : FreeSpec() {
+internal class ValueNodeTest : FreeSpec() {
 
     companion object {
         private const val KEY_NAME = "id"

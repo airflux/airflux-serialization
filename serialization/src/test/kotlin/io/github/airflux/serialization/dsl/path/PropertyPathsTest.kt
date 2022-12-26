@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.path.PropertyPaths
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class PropertyPathsOpsTest : FreeSpec() {
+internal class PropertyPathsTest : FreeSpec() {
 
     companion object {
         private val pathUser = PropertyPath("user")

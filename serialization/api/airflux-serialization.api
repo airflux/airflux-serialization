@@ -487,14 +487,14 @@ public final class io/github/airflux/serialization/dsl/lookup/LookupKt {
 	public static final fun div (Lio/github/airflux/serialization/core/lookup/Lookup;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/Lookup;
 }
 
-public final class io/github/airflux/serialization/dsl/path/PropertyPathOpsKt {
+public final class io/github/airflux/serialization/dsl/path/PropertyPathKt {
 	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath$Companion;I)Lio/github/airflux/serialization/core/path/PropertyPath;
 	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath$Companion;Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
 	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath;I)Lio/github/airflux/serialization/core/path/PropertyPath;
 	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath;Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
 }
 
-public final class io/github/airflux/serialization/dsl/path/PropertyPathsOpsKt {
+public final class io/github/airflux/serialization/dsl/path/PropertyPathsKt {
 	public static final fun or (Lio/github/airflux/serialization/core/path/PropertyPaths;Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/path/PropertyPaths;
 	public static final fun or (Lio/github/airflux/serialization/core/path/PropertyPaths;Lio/github/airflux/serialization/core/path/PropertyPaths;)Lio/github/airflux/serialization/core/path/PropertyPaths;
 	public static final fun or (Ljava/lang/String;Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPaths;
@@ -685,7 +685,7 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 	public abstract fun build (Lio/github/airflux/serialization/dsl/reader/struct/property/StructProperties;)Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidator;
 }
 
-public final class io/github/airflux/serialization/dsl/value/ValueNodeOpsKt {
+public final class io/github/airflux/serialization/dsl/value/ValueNodeKt {
 	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;I)Lio/github/airflux/serialization/core/lookup/Lookup;
 	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/Lookup;
 }

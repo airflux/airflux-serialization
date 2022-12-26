@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class PropertyPathOpsTest : FreeSpec() {
+internal class PropertyPathTest : FreeSpec() {
 
     init {
 
