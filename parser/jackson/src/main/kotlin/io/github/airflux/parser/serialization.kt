@@ -17,19 +17,15 @@
 package io.github.airflux.parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.serialization.core.deserialization
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.result.withCatching
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.serialization
+import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <EB, CTX, T : Any> String.deserialization(
+public fun <CTX, T : Any> T.serialization(
     mapper: ObjectMapper,
-    env: ReaderEnv<EB, CTX>,
-    reader: Reader<EB, CTX, T>
-): ReaderResult<T> =
-    withCatching(env, Location.empty) {
-        mapper.readValue(this, ValueNode::class.java).deserialization(env, reader)
-    }
+    env: WriterEnv<CTX>,
+    writer: Writer<CTX, T>
+): String? =
+    this.serialization(env, Location.empty, writer)
+        ?.let { mapper.writeValueAsString(it) }

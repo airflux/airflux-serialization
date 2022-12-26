@@ -1,3 +1,11 @@
+public final class io/github/airflux/serialization/core/DeserializationKt {
+	public static final fun deserialization (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
+}
+
+public final class io/github/airflux/serialization/core/SerializationKt {
+	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/core/value/ValueNode;
+}
+
 public final class io/github/airflux/serialization/core/common/IdentityKt {
 	public static final fun identity (Ljava/lang/Object;)Ljava/lang/Object;
 }
@@ -678,7 +686,6 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 }
 
 public final class io/github/airflux/serialization/dsl/value/ValueNodeOpsKt {
-	public static final fun deserialization (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;I)Lio/github/airflux/serialization/core/lookup/Lookup;
 	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/Lookup;
 }
@@ -689,10 +696,6 @@ public final class io/github/airflux/serialization/dsl/writer/WriterActionIfResu
 	public static final field RETURN_NULL_VALUE Lio/github/airflux/serialization/dsl/writer/WriterActionIfResultIsEmpty;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/dsl/writer/WriterActionIfResultIsEmpty;
 	public static fun values ()[Lio/github/airflux/serialization/dsl/writer/WriterActionIfResultIsEmpty;
-}
-
-public final class io/github/airflux/serialization/dsl/writer/WriterOpsKt {
-	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/array/builder/ArrayWriterBuilder {
