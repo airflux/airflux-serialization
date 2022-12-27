@@ -44,7 +44,7 @@ public fun <CTX, T : Any> ArrayWriter.Builder<CTX>.items(
     where CTX : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
 
 public fun <CTX, T> ArrayWriter.Builder<CTX>.items(
-    spec: ArrayItemSpec.Optional<CTX, T>
+    spec: ArrayItemSpec.Nullable<CTX, T>
 ): Writer<CTX, Iterable<T>>
     where CTX : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
 
@@ -72,7 +72,7 @@ public class ArrayWriter<CTX, T> private constructor(
         public fun <T : Any> build(spec: ArrayItemSpec.NonNullable<CTX, T>): Writer<CTX, Iterable<T>> =
             ArrayWriter(ArrayItemWriter.NonNullable(spec))
 
-        public fun <T> build(spec: ArrayItemSpec.Optional<CTX, T>): Writer<CTX, Iterable<T>> =
-            ArrayWriter(ArrayItemWriter.Optional(spec))
+        public fun <T> build(spec: ArrayItemSpec.Nullable<CTX, T>): Writer<CTX, Iterable<T>> =
+            ArrayWriter(ArrayItemWriter.Nullable(spec))
     }
 }

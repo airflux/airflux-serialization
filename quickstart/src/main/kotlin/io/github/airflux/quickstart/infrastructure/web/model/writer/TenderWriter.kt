@@ -21,12 +21,12 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringW
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.optional
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val TenderWriter: Writer<WriterCtx, Tender> = structWriter {
     property(nonNullable(name = "id", from = Tender::id, writer = StringWriter))
-    property(optional(name = "title", from = Tender::title, writer = StringWriter))
-    property(optional(name = "value", from = Tender::value, writer = ValueWriter))
-    property(optional(name = "lots", from = Tender::lots, writer = LotsWriter))
+    property(nullable(name = "title", from = Tender::title, writer = StringWriter))
+    property(nullable(name = "value", from = Tender::value, writer = ValueWriter))
+    property(nullable(name = "lots", from = Tender::lots, writer = LotsWriter))
 }

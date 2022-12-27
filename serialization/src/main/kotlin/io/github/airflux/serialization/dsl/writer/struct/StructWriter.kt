@@ -72,9 +72,9 @@ public class StructWriter<CTX, T : Any> private constructor(
                 .also { properties.add(it) }
 
         public fun <P : Any> property(
-            spec: StructPropertySpec.Optional<CTX, T, P>
-        ): StructProperty.Optional<CTX, T, P> =
-            StructProperty.Optional(spec)
+            spec: StructPropertySpec.Nullable<CTX, T, P>
+        ): StructProperty.Nullable<CTX, T, P> =
+            StructProperty.Nullable(spec)
                 .also { properties.add(it) }
 
         public fun build(): Writer<CTX, T> = StructWriter(StructProperties(properties))

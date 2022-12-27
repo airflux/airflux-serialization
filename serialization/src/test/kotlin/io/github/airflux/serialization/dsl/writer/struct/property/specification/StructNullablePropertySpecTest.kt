@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.builder.property.specification
+package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.filter
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class StructNonNullablePropertySpecTest : FreeSpec() {
+internal class StructNullablePropertySpecTest : FreeSpec() {
 
     companion object {
         private const val PROPERTY_NAME = "id"
-        private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
+        private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = WriterEnv(context = Unit)
         private val LOCATION = Location.empty
@@ -39,12 +37,12 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
     init {
 
-        "The StructPropertySpec#NonNullable type" - {
+        "The StructPropertySpec#Nullable type" - {
 
-            "when created the instance of a spec of the non-nullable property" - {
-                val from: (String) -> String = { it }
+            "when created the instance of a spec of the nullable property" - {
+                val from: (String) -> String? = { it }
                 val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
-                val spec = nonNullable(name = PROPERTY_NAME, from = from, writer = writer)
+                val spec = nullable(name = PROPERTY_NAME, from = from, writer = writer)
 
                 "then the property name should equal the passed property name" {
                     spec.name shouldBe PROPERTY_NAME
@@ -61,9 +59,9 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val from: (String) -> String = { it }
+                val from: (String) -> String? = { it }
                 val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
-                val spec = nonNullable(name = PROPERTY_NAME, from = from, writer = writer)
+                val spec = nullable(name = "id", from = from, writer = writer)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "then the property name should equal the passed property name" {

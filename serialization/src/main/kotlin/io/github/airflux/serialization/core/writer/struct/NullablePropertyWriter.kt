@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.item.specification
+package io.github.airflux.serialization.core.writer.struct
 
+import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.filter
-import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <CTX, T> optional(writer: Writer<CTX, T & Any>): ArrayItemSpec.Optional<CTX, T> =
-    ArrayItemSpec.Optional(writer)
-
-public infix fun <CTX, T> ArrayItemSpec.Optional<CTX, T>.filter(
-    predicate: WriterPredicate<CTX, T & Any>
-): ArrayItemSpec.Optional<CTX, T> =
-    ArrayItemSpec.Optional(writer = writer.filter(predicate))
+public fun <CTX, T : Any> writeNullable(
+    env: WriterEnv<CTX>,
+    location: Location,
+    using: Writer<CTX, T>,
+    value: T?
+): ValueNode? =
+    if (value != null) using.write(env, location, value) else null

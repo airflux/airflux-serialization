@@ -26,7 +26,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class OptionalPropertyWriterTest : FreeSpec() {
+internal class NullablePropertyWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = WriterEnv(context = Unit)
@@ -43,7 +43,7 @@ internal class OptionalPropertyWriterTest : FreeSpec() {
 
                 "should return the StringNode value" {
                     val result: ValueNode? =
-                        writeOptional(env = ENV, location = LOCATION, using = writer, value = value)
+                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
                     result shouldBe StringNode(value)
                 }
             }
@@ -53,7 +53,7 @@ internal class OptionalPropertyWriterTest : FreeSpec() {
 
                 "should return the null value" {
                     val result: ValueNode? =
-                        writeOptional(env = ENV, location = LOCATION, using = writer, value = value)
+                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
                     result.shouldBeNull()
                 }
             }

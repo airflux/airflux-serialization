@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
+package io.github.airflux.serialization.dsl.writer.array.item
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.dsl.writer.array.item.specification.filter
-import io.github.airflux.serialization.dsl.writer.array.item.specification.optional
+import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class ArrayOptionalItemSpecTest : FreeSpec() {
+internal class ArrayNullableItemWriterTest : FreeSpec() {
 
     companion object {
         private const val ITEM_VALUE = "value"
@@ -38,38 +37,33 @@ internal class ArrayOptionalItemSpecTest : FreeSpec() {
 
     init {
 
-        "The ArrayItemSpec#Optional type" - {
+        "The ArrayItems#Nullable type" - {
 
-            "when created the instance of a spec of the optional item" - {
+            "when created an instance of the nullable item" - {
                 val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
-                val spec = optional(writer = writer)
+                val itemWriter: ArrayItemWriter.Nullable<Unit, String?> = createItemWriter(writer = writer)
 
-                "then the instance should contain the writer passed during initialization" {
-                    spec.writer shouldBe writer
-                }
-            }
+                "when an item is the not null value" - {
+                    val value = "value"
 
-            "when the filter was added to the spec" - {
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
-                val spec = optional(writer = writer)
-                val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
-
-                "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(ENV, LOCATION, ITEM_VALUE)
-
-                    "then the not null value should be returned" {
+                    "then the method write should return the null value" {
+                        val result = itemWriter.write(ENV, LOCATION, value)
                         result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
 
-                "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(ENV, LOCATION, "")
+                "when an item is the null value" - {
+                    val value: String? = null
 
-                    "then the null value should be returned" {
+                    "then the method write should return the not null value" {
+                        val result = itemWriter.write(ENV, LOCATION, value)
                         result.shouldBeNull()
                     }
                 }
             }
         }
     }
+
+    private fun <CTX, T> createItemWriter(writer: Writer<CTX, T & Any>): ArrayItemWriter.Nullable<CTX, T> =
+        ArrayItemWriter.Nullable(ArrayItemSpec.Nullable(writer = writer))
 }
