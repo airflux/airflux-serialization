@@ -24,10 +24,10 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
-import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
-import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
-import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NOTHING
-import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.optional
 import io.kotest.core.spec.style.FreeSpec

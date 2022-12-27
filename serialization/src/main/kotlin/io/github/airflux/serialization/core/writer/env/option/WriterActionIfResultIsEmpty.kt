@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer
+package io.github.airflux.serialization.core.writer.env.option
 
 public enum class WriterActionIfResultIsEmpty {
     RETURN_EMPTY_VALUE,

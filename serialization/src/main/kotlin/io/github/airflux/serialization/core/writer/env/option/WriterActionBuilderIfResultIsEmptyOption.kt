@@ -16,8 +16,6 @@
 
 package io.github.airflux.serialization.core.writer.env.option
 
-import io.github.airflux.serialization.dsl.writer.WriterActionIfResultIsEmpty
-
 public interface WriterActionBuilderIfResultIsEmptyOption {
     public val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty
 }
