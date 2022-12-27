@@ -22,7 +22,8 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.StructPropertySpec
+import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe

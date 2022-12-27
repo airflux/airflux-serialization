@@ -14,16 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
+package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.writer.Writer
-
-public sealed interface ArrayItemSpec<CTX, in T> {
-
-    public class NonNullable<CTX, T : Any> internal constructor(public val writer: Writer<CTX, T>) :
-        ArrayItemSpec<CTX, T>
-
-    public class Optional<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
-
-    public class Nullable<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
-}
+public class StructProperties<CTX, T : Any> internal constructor(
+    private val items: List<StructProperty<CTX, T>>
+) : Collection<StructProperty<CTX, T>> by items

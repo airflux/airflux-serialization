@@ -22,11 +22,11 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringW
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.dsl.writer.array.builder.arrayWriter
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nullable
-import io.github.airflux.serialization.dsl.writer.array.builder.items
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.builder.structWriter
+import io.github.airflux.serialization.dsl.writer.array.arrayWriter
+import io.github.airflux.serialization.dsl.writer.array.item.specification.nullable
+import io.github.airflux.serialization.dsl.writer.array.items
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val LotStatus = Writer<WriterCtx, LotStatus> { _, _, value ->
     StringNode(value.name)

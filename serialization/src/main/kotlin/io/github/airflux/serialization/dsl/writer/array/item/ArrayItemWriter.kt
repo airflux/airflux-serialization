@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder.item
+package io.github.airflux.serialization.dsl.writer.array.item
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.struct.writeNonNullable
 import io.github.airflux.serialization.core.writer.struct.writeNullable
 import io.github.airflux.serialization.core.writer.struct.writeOptional
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
+import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 
 public sealed class ArrayItemWriter<CTX, T> {
 

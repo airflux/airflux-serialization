@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
+package io.github.airflux.serialization.dsl.writer.array.item.specification
 
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.filter
-import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun <CTX, T> optional(writer: Writer<CTX, T & Any>): ArrayItemSpec.Optional<CTX, T> =
-    ArrayItemSpec.Optional(writer)
+public sealed interface ArrayItemSpec<CTX, in T> {
 
-public infix fun <CTX, T> ArrayItemSpec.Optional<CTX, T>.filter(
-    predicate: WriterPredicate<CTX, T & Any>
-): ArrayItemSpec.Optional<CTX, T> =
-    ArrayItemSpec.Optional(writer = writer.filter(predicate))
+    public class NonNullable<CTX, T : Any> internal constructor(public val writer: Writer<CTX, T>) :
+        ArrayItemSpec<CTX, T>
+
+    public class Optional<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
+
+    public class Nullable<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
+}

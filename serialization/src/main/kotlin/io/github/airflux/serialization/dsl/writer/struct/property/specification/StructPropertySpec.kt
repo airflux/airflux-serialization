@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.builder.property.specification
+package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.writer.Writer
 

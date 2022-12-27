@@ -21,7 +21,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
+import io.github.airflux.serialization.dsl.writer.array.item.ArrayItemWriter
+import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe

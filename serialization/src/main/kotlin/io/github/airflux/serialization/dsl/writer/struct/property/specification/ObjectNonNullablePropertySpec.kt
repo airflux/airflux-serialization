@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
+package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun <CTX, T> nullable(writer: Writer<CTX, T & Any>): ArrayItemSpec.Nullable<CTX, T> =
-    ArrayItemSpec.Nullable(writer)
+public fun <CTX, T : Any, P : Any> nonNullable(
+    name: String,
+    from: (T) -> P,
+    writer: Writer<CTX, P>
+): StructPropertySpec.NonNullable<CTX, T, P> =
+    StructPropertySpec.NonNullable(name = name, from = from, writer = writer)
 
-public infix fun <CTX, T> ArrayItemSpec.Nullable<CTX, T>.filter(
-    predicate: WriterPredicate<CTX, T & Any>
-): ArrayItemSpec.Optional<CTX, T> =
-    ArrayItemSpec.Optional(writer = writer.filter(predicate))
+public infix fun <CTX, T : Any, P : Any> StructPropertySpec.NonNullable<CTX, T, P>.filter(
+    predicate: WriterPredicate<CTX, P>
+): StructPropertySpec.Optional<CTX, T, P> =
+    StructPropertySpec.Optional(name = name, from = from, writer = writer.filter(predicate))

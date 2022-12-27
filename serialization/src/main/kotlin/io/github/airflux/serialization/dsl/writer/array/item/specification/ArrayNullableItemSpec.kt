@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder.item.specification
+package io.github.airflux.serialization.dsl.writer.array.item.specification
 
 import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.filter
+import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun <CTX, T : Any> nonNullable(writer: Writer<CTX, T>): ArrayItemSpec.NonNullable<CTX, T> =
-    ArrayItemSpec.NonNullable(writer)
+public fun <CTX, T> nullable(writer: Writer<CTX, T & Any>): ArrayItemSpec.Nullable<CTX, T> =
+    ArrayItemSpec.Nullable(writer)
+
+public infix fun <CTX, T> ArrayItemSpec.Nullable<CTX, T>.filter(
+    predicate: WriterPredicate<CTX, T & Any>
+): ArrayItemSpec.Optional<CTX, T> =
+    ArrayItemSpec.Optional(writer = writer.filter(predicate))

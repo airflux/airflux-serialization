@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.builder.property
+package io.github.airflux.serialization.dsl.writer.struct.property
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.struct.writeNonNullable
 import io.github.airflux.serialization.core.writer.struct.writeNullable
 import io.github.airflux.serialization.core.writer.struct.writeOptional
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.StructPropertySpec
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
 public sealed class StructProperty<CTX, T : Any> {
     public abstract val name: String

@@ -19,8 +19,8 @@ package io.github.airflux.quickstart.infrastructure.web.model.writer
 import io.github.airflux.quickstart.infrastructure.web.model.Response
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.builder.structWriter
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val ResponseWriter: Writer<WriterCtx, Response> = structWriter {
     property(nonNullable(name = "tender", from = Response::tender, writer = TenderWriter))

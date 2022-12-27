@@ -19,6 +19,7 @@ package io.github.airflux.serialization.dsl.writer.array.builder.item.specificat
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.dsl.writer.array.item.specification.nonNullable
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

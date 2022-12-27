@@ -21,8 +21,8 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.base.BigDeci
 import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.builder.structWriter
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val ValueWriter: Writer<WriterCtx, Value> = structWriter {
     property(nonNullable(name = "amount", from = Value::amount, writer = BigDecimalWriter))

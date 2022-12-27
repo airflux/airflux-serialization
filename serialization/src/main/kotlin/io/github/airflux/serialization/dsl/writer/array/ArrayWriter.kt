@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.array.builder
+package io.github.airflux.serialization.dsl.writer.array
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -27,8 +27,8 @@ import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResu
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.writer.array.builder.item.ArrayItemWriter
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.ArrayItemSpec
+import io.github.airflux.serialization.dsl.writer.array.item.ArrayItemWriter
+import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 
 public fun <CTX, T> arrayWriter(
     block: ArrayWriter.Builder<CTX>.() -> Writer<CTX, Iterable<T>>

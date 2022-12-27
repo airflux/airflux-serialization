@@ -29,9 +29,11 @@ import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResu
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.nullable
-import io.github.airflux.serialization.dsl.writer.array.builder.item.specification.optional
+import io.github.airflux.serialization.dsl.writer.array.arrayWriter
+import io.github.airflux.serialization.dsl.writer.array.item.specification.nonNullable
+import io.github.airflux.serialization.dsl.writer.array.item.specification.nullable
+import io.github.airflux.serialization.dsl.writer.array.item.specification.optional
+import io.github.airflux.serialization.dsl.writer.array.items
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe

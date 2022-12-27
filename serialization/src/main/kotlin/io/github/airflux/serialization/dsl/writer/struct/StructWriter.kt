@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.builder
+package io.github.airflux.serialization.dsl.writer.struct
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
@@ -27,9 +27,9 @@ import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResu
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.StructProperties
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.StructProperty
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.StructPropertySpec
+import io.github.airflux.serialization.dsl.writer.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
 public fun <CTX, T : Any> structWriter(block: StructWriter.Builder<CTX, T>.() -> Unit): Writer<CTX, T>
     where CTX : WriterActionBuilderIfResultIsEmptyOption =

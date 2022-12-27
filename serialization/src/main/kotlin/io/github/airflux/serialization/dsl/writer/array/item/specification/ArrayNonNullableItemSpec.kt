@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.builder.property
+package io.github.airflux.serialization.dsl.writer.array.item.specification
 
-public class StructProperties<CTX, T : Any> internal constructor(
-    private val items: List<StructProperty<CTX, T>>
-) : Collection<StructProperty<CTX, T>> by items
+import io.github.airflux.serialization.core.writer.Writer
+
+public fun <CTX, T : Any> nonNullable(writer: Writer<CTX, T>): ArrayItemSpec.NonNullable<CTX, T> =
+    ArrayItemSpec.NonNullable(writer)
