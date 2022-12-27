@@ -17,10 +17,21 @@
 package io.github.airflux.serialization.common
 
 import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.value.NumericNode
+import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
 internal class DummyWriter<CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<CTX, T> {
     override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? = result(value)
+
+    companion object {
+        internal fun <CTX> intWriter(): Writer<CTX, Int> =
+            DummyWriter(result = { source -> NumericNode.Integer.valueOf(source) })
+
+        internal fun <CTX> stringWriter(): Writer<CTX, String> =
+            DummyWriter(result = { source -> StringNode(source) })
+    }
 }
