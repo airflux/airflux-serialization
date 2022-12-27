@@ -24,6 +24,4 @@ public sealed interface ArrayItemSpec<CTX, in T> {
         ArrayItemSpec<CTX, T>
 
     public class Optional<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
-
-    public class Nullable<CTX, T> internal constructor(public val writer: Writer<CTX, T & Any>) : ArrayItemSpec<CTX, T>
 }
