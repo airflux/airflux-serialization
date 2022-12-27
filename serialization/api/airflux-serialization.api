@@ -740,13 +740,13 @@ public final class io/github/airflux/serialization/dsl/writer/array/item/specifi
 	public final fun getWriter ()Lio/github/airflux/serialization/core/writer/Writer;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/array/item/specification/OptionalItemSpecKt {
-	public static final fun filter (Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;
-	public static final fun optional (Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;
+public final class io/github/airflux/serialization/dsl/writer/array/item/specification/NonNullableItemSpecKt {
+	public static final fun nonNullable (Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$NonNullable;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/array/item/specification/RequiredItemSpecKt {
-	public static final fun required (Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$NonNullable;
+public final class io/github/airflux/serialization/dsl/writer/array/item/specification/NullableItemSpecKt {
+	public static final fun filter (Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;
+	public static final fun nullable (Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriter : io/github/airflux/serialization/core/writer/Writer {
