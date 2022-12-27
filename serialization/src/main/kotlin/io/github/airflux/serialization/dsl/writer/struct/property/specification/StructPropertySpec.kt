@@ -32,10 +32,4 @@ public sealed interface StructPropertySpec<CTX, T : Any, P : Any> {
         public val from: (T) -> P?,
         public val writer: Writer<CTX, P>
     ) : StructPropertySpec<CTX, T, P>
-
-    public class Nullable<CTX, T : Any, P : Any> internal constructor(
-        override val name: String,
-        public val from: (T) -> P?,
-        public val writer: Writer<CTX, P>
-    ) : StructPropertySpec<CTX, T, P>
 }

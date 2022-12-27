@@ -473,10 +473,6 @@ public final class io/github/airflux/serialization/core/writer/struct/NonNullabl
 	public static final fun writeNonNullable (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
-public final class io/github/airflux/serialization/core/writer/struct/NullablePropertyWriterKt {
-	public static final fun writeNullable (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
-}
-
 public final class io/github/airflux/serialization/core/writer/struct/OptionalPropertyWriterKt {
 	public static final fun writeOptional (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
@@ -712,14 +708,12 @@ public final class io/github/airflux/serialization/dsl/writer/array/ArrayWriter 
 public final class io/github/airflux/serialization/dsl/writer/array/ArrayWriter$Builder {
 	public fun <init> ()V
 	public final fun build (Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$NonNullable;)Lio/github/airflux/serialization/core/writer/Writer;
-	public final fun build (Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;)Lio/github/airflux/serialization/core/writer/Writer;
 	public final fun build (Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Optional;)Lio/github/airflux/serialization/core/writer/Writer;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/array/ArrayWriterKt {
 	public static final fun arrayWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/Writer;
 	public static final fun items (Lio/github/airflux/serialization/dsl/writer/array/ArrayWriter$Builder;Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$NonNullable;)Lio/github/airflux/serialization/core/writer/Writer;
-	public static final fun items (Lio/github/airflux/serialization/dsl/writer/array/ArrayWriter$Builder;Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Nullable;)Lio/github/airflux/serialization/core/writer/Writer;
 	public static final fun items (Lio/github/airflux/serialization/dsl/writer/array/ArrayWriter$Builder;Lio/github/airflux/serialization/dsl/writer/array/item/specification/ArrayItemSpec$Optional;)Lio/github/airflux/serialization/core/writer/Writer;
 }
 
@@ -728,10 +722,6 @@ public abstract class io/github/airflux/serialization/dsl/writer/array/item/Arra
 }
 
 public final class io/github/airflux/serialization/dsl/writer/array/item/ArrayItemWriter$NonNullable : io/github/airflux/serialization/dsl/writer/array/item/ArrayItemWriter {
-	public fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
-}
-
-public final class io/github/airflux/serialization/dsl/writer/array/item/ArrayItemWriter$Nullable : io/github/airflux/serialization/dsl/writer/array/item/ArrayItemWriter {
 	public fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
@@ -777,7 +767,6 @@ public final class io/github/airflux/serialization/dsl/writer/struct/StructWrite
 	public fun <init> ()V
 	public final fun build ()Lio/github/airflux/serialization/core/writer/Writer;
 	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$NonNullable;)Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperty$NonNullable;
-	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Nullable;)Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperty$Nullable;
 	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Optional;)Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperty$Optional;
 }
 
@@ -815,11 +804,6 @@ public final class io/github/airflux/serialization/dsl/writer/struct/property/St
 	public fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/struct/property/StructProperty$Nullable : io/github/airflux/serialization/dsl/writer/struct/property/StructProperty {
-	public fun getName ()Ljava/lang/String;
-	public fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
-}
-
 public final class io/github/airflux/serialization/dsl/writer/struct/property/StructProperty$Optional : io/github/airflux/serialization/dsl/writer/struct/property/StructProperty {
 	public fun getName ()Ljava/lang/String;
 	public fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
@@ -828,11 +812,6 @@ public final class io/github/airflux/serialization/dsl/writer/struct/property/St
 public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/ObjectNonNullablePropertySpecKt {
 	public static final fun filter (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$NonNullable;Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Optional;
 	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$NonNullable;
-}
-
-public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/ObjectNullablePropertySpecKt {
-	public static final fun filter (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Nullable;Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Optional;
-	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/Writer;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Nullable;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/ObjectOptionalPropertySpecKt {
@@ -845,12 +824,6 @@ public abstract interface class io/github/airflux/serialization/dsl/writer/struc
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$NonNullable : io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec {
-	public final fun getFrom ()Lkotlin/jvm/functions/Function1;
-	public fun getName ()Ljava/lang/String;
-	public final fun getWriter ()Lio/github/airflux/serialization/core/writer/Writer;
-}
-
-public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Nullable : io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec {
 	public final fun getFrom ()Lkotlin/jvm/functions/Function1;
 	public fun getName ()Ljava/lang/String;
 	public final fun getWriter ()Lio/github/airflux/serialization/core/writer/Writer;

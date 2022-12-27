@@ -23,7 +23,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCt
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.dsl.writer.array.arrayWriter
-import io.github.airflux.serialization.dsl.writer.array.item.specification.nullable
+import io.github.airflux.serialization.dsl.writer.array.item.specification.optional
 import io.github.airflux.serialization.dsl.writer.array.items
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
@@ -39,5 +39,5 @@ val LotWriter: Writer<WriterCtx, Lot> = structWriter {
 }
 
 val LotsWriter: Writer<WriterCtx, Iterable<Lot>> = arrayWriter {
-    items(nullable(LotWriter))
+    items(optional(LotWriter))
 }

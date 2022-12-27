@@ -48,11 +48,6 @@ public fun <CTX, T> ArrayWriter.Builder<CTX>.items(
 ): Writer<CTX, Iterable<T>>
     where CTX : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
 
-public fun <CTX, T> ArrayWriter.Builder<CTX>.items(
-    spec: ArrayItemSpec.Nullable<CTX, T>
-): Writer<CTX, Iterable<T>>
-    where CTX : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
-
 public class ArrayWriter<CTX, T> private constructor(
     private val itemsWriter: ArrayItemWriter<CTX, T>
 ) : Writer<CTX, Iterable<T>>
@@ -79,46 +74,5 @@ public class ArrayWriter<CTX, T> private constructor(
 
         public fun <T> build(spec: ArrayItemSpec.Optional<CTX, T>): Writer<CTX, Iterable<T>> =
             ArrayWriter(ArrayItemWriter.Optional(spec))
-
-        public fun <T> build(spec: ArrayItemSpec.Nullable<CTX, T>): Writer<CTX, Iterable<T>> =
-            ArrayWriter(ArrayItemWriter.Nullable(spec))
     }
 }
-
-//@AirfluxMarker
-//public class ArrayWriterBuilder<CTX> internal constructor()
-//    where CTX : WriterActionBuilderIfResultIsEmptyOption {
-//
-//    public fun interface WriterBuilder<CTX, T> {
-//        public fun build(): Writer<CTX, Iterable<T>>
-//    }
-//
-//    public fun <T : Any> items(spec: ArrayItemSpec.NonNullable<CTX, T>): WriterBuilder<CTX, T> =
-//        WriterBuilder {
-//            buildArrayWriter(ArrayItemWriter.NonNullable(spec))
-//        }
-//
-//    public fun <T> items(spec: ArrayItemSpec.Optional<CTX, T>): WriterBuilder<CTX, T> =
-//        WriterBuilder {
-//            buildArrayWriter(ArrayItemWriter.Optional(spec))
-//        }
-//
-//    public fun <T> items(spec: ArrayItemSpec.Nullable<CTX, T>): WriterBuilder<CTX, T> =
-//        WriterBuilder {
-//            buildArrayWriter(ArrayItemWriter.Nullable(spec))
-//        }
-//}
-
-//internal fun <CTX, T> buildArrayWriter(itemsWriter: ArrayItemWriter<CTX, T>): Writer<CTX, Iterable<T>>
-//    where CTX : WriterActionBuilderIfResultIsEmptyOption =
-//    Writer { env: WriterEnv<CTX>, location: Location, values ->
-//        val result = values.mapNotNull { value -> itemsWriter.write(env, location, value) }
-//        if (result.isNotEmpty())
-//            ArrayNode(result)
-//        else
-//            when (env.context.writerActionIfResultIsEmpty) {
-//                RETURN_EMPTY_VALUE -> ArrayNode<Nothing>()
-//                RETURN_NOTHING -> null
-//                RETURN_NULL_VALUE -> NullNode
-//            }
-//    }

@@ -21,7 +21,6 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.struct.writeNonNullable
-import io.github.airflux.serialization.core.writer.struct.writeNullable
 import io.github.airflux.serialization.core.writer.struct.writeOptional
 import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 
@@ -47,15 +46,5 @@ public sealed class ArrayItemWriter<CTX, T> {
 
         override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
             writeOptional(env = env, location = location, using = writer, value = value)
-    }
-
-    public class Nullable<CTX, T> private constructor(
-        private val writer: Writer<CTX, T & Any>
-    ) : ArrayItemWriter<CTX, T>() {
-
-        internal constructor(spec: ArrayItemSpec.Nullable<CTX, T>) : this(spec.writer)
-
-        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
-            writeNullable(env = env, location = location, using = writer, value = value)
     }
 }

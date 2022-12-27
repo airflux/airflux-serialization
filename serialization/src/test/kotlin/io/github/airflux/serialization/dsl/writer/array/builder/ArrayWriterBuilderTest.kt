@@ -31,7 +31,6 @@ import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResu
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.array.arrayWriter
 import io.github.airflux.serialization.dsl.writer.array.item.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.array.item.specification.nullable
 import io.github.airflux.serialization.dsl.writer.array.item.specification.optional
 import io.github.airflux.serialization.dsl.writer.array.items
 import io.kotest.core.spec.style.FreeSpec
@@ -75,25 +74,6 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
                 "then should return the array with items" {
                     result as ArrayNode<*>
                     result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
-                }
-            }
-
-            "when have some nullable items for writing to an array" - {
-                val writer: Writer<CTX, Iterable<String?>> = arrayWriter {
-                    items(nullable(writer = DummyWriter { StringNode(it) }))
-                }
-                val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
-                val result = writer.write(env = ENV, location = LOCATION, value = value)
-
-                "then should return the array with items" {
-                    result as ArrayNode<*>
-                    result shouldBe ArrayNode(
-                        NullNode,
-                        StringNode(FIRST_ITEM),
-                        NullNode,
-                        StringNode(SECOND_ITEM),
-                        NullNode
-                    )
                 }
             }
 

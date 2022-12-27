@@ -21,7 +21,6 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.struct.writeNonNullable
-import io.github.airflux.serialization.core.writer.struct.writeNullable
 import io.github.airflux.serialization.core.writer.struct.writeOptional
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
@@ -51,17 +50,5 @@ public sealed class StructProperty<CTX, T : Any> {
 
         override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
             writeOptional(env = env, location = location, using = writer, value = from(value))
-    }
-
-    public class Nullable<CTX, T : Any, P : Any> private constructor(
-        override val name: String,
-        private val from: (T) -> P?,
-        private val writer: Writer<CTX, P>
-    ) : StructProperty<CTX, T>() {
-
-        internal constructor(spec: StructPropertySpec.Nullable<CTX, T, P>) : this(spec.name, spec.from, spec.writer)
-
-        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
-            writeNullable(env = env, location = location, using = writer, value = from(value))
     }
 }
