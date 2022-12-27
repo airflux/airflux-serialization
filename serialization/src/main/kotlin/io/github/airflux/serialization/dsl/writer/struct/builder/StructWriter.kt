@@ -16,38 +16,31 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.builder
 
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.struct.builder.property.StructProperties
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.StructWriterPropertiesBuilder
-import io.github.airflux.serialization.dsl.writer.struct.builder.property.StructWriterPropertiesBuilderInstance
+import io.github.airflux.serialization.dsl.writer.struct.builder.property.StructProperty
+import io.github.airflux.serialization.dsl.writer.struct.builder.property.specification.StructPropertySpec
 
-public fun <CTX, T : Any> structWriter(block: StructWriterBuilder<CTX, T>.() -> Unit): Writer<CTX, T>
+public fun <CTX, T : Any> structWriter(block: StructWriter.Builder<CTX, T>.() -> Unit): Writer<CTX, T>
     where CTX : WriterActionBuilderIfResultIsEmptyOption =
-    StructWriterBuilder<CTX, T>(StructWriterPropertiesBuilderInstance()).apply(block).build()
+    StructWriter.Builder<CTX, T>().apply(block).build()
 
-@AirfluxMarker
-public class StructWriterBuilder<CTX, T : Any> internal constructor(
-    private val propertiesBuilder: StructWriterPropertiesBuilderInstance<CTX, T>
-) : StructWriterPropertiesBuilder<CTX, T> by propertiesBuilder
+public class StructWriter<CTX, T : Any> private constructor(
+    private val properties: StructProperties<CTX, T>
+) : Writer<CTX, T>
     where CTX : WriterActionBuilderIfResultIsEmptyOption {
 
-    internal fun build(): Writer<CTX, T> {
-        val properties: StructProperties<CTX, T> = propertiesBuilder.build()
-        return buildStructWriter(properties)
-    }
-}
-
-internal fun <CTX, T : Any> buildStructWriter(properties: StructProperties<CTX, T>): Writer<CTX, T>
-    where CTX : WriterActionBuilderIfResultIsEmptyOption =
-    Writer { env, location, value ->
+    override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? {
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->
@@ -56,7 +49,7 @@ internal fun <CTX, T : Any> buildStructWriter(properties: StructProperties<CTX, 
                         ?.let { value -> this[property.name] = value }
                 }
             }
-        if (items.isNotEmpty())
+        return if (items.isNotEmpty())
             StructNode(items)
         else
             when (env.context.writerActionIfResultIsEmpty) {
@@ -65,3 +58,31 @@ internal fun <CTX, T : Any> buildStructWriter(properties: StructProperties<CTX, 
                 RETURN_NULL_VALUE -> NullNode
             }
     }
+
+    @AirfluxMarker
+    public class Builder<CTX, T : Any>
+        where CTX : WriterActionBuilderIfResultIsEmptyOption {
+
+        private val properties = mutableListOf<StructProperty<CTX, T>>()
+
+        public fun <P : Any> property(
+            spec: StructPropertySpec.NonNullable<CTX, T, P>
+        ): StructProperty.NonNullable<CTX, T, P> =
+            StructProperty.NonNullable(spec)
+                .also { properties.add(it) }
+
+        public fun <P : Any> property(
+            spec: StructPropertySpec.Optional<CTX, T, P>
+        ): StructProperty.Optional<CTX, T, P> =
+            StructProperty.Optional(spec)
+                .also { properties.add(it) }
+
+        public fun <P : Any> property(
+            spec: StructPropertySpec.Nullable<CTX, T, P>
+        ): StructProperty.Nullable<CTX, T, P> =
+            StructProperty.Nullable(spec)
+                .also { properties.add(it) }
+
+        public fun build(): Writer<CTX, T> = StructWriter(StructProperties(properties))
+    }
+}
