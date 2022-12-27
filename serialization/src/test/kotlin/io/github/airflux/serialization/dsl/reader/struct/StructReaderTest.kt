@@ -78,10 +78,10 @@ internal class StructReaderTest : FreeSpec() {
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
 
-                    "when source is not the struct type" - {
+                    "when the source is not the struct type" - {
                         val source = StringNode("")
 
-                        "then the reader should return the invalid type error" {
+                        "then the reader should return an error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION,
@@ -93,10 +93,10 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when no errors in the reader" - {
+                    "when the source contains all properties" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -105,13 +105,38 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when error occur of reading properties the id" - {
+                    "when the source does not contain required properties" - {
+                        val source = StructNode(
+                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
+                        )
+
+                        "then should return an error" {
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                error = JsonErrors.PathMissing
+                            )
+                        }
+                    }
+
+                    "when the source does not contain optional properties" - {
+                        val source = StructNode(
+                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE)
+                        )
+
+                        "then should return successful value" {
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result shouldBeSuccess DTO(id = ID_PROPERTY_VALUE, name = null)
+                        }
+                    }
+
+                    "when the source contains the required property of an invalid type" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to StringNode(""),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                         )
 
-                        "then the reader should return it error" {
+                        "then the reader should return an error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
@@ -123,13 +148,13 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when error occur of reading property the name" - {
+                    "when the source contains the optional property of an invalid type" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                         )
 
-                        "then the reader should return it error" {
+                        "then the reader should return an error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION.append(NAME_PROPERTY_NAME),
@@ -141,7 +166,7 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when errors occur of reading properties the id and the name" - {
+                    "when the source contains all properties of an invalid type" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to StringNode(""),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true)
@@ -159,7 +184,7 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when error occur of validation the structure" - {
+                    "when an error occur of validation the structure" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
@@ -175,7 +200,7 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when errors occur of validation the structure and reading properties the id and the name" - {
+                    "when errors occur of validation the structure and reading properties" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to StringNode(""),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
@@ -195,7 +220,7 @@ internal class StructReaderTest : FreeSpec() {
                 "when fail-fast is false" - {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
 
-                    "when source is not the struct type" - {
+                    "when the source is not the struct type" - {
                         val source = StringNode("")
 
                         "then the reader should return the invalid type error" {
@@ -210,10 +235,10 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when no errors in the reader" - {
+                    "when the source contains all properties" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -222,13 +247,38 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when error occur of reading properties the id" - {
+                    "when the source does not contain required property" - {
+                        val source = StructNode(
+                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                        )
+
+                        "then should return an error" {
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result shouldBeFailure ReaderResult.Failure(
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                error = JsonErrors.PathMissing
+                            )
+                        }
+                    }
+
+                    "when the source does not contain optional property" - {
+                        val source = StructNode(
+                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE)
+                        )
+
+                        "then should return successful value" {
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            result shouldBeSuccess DTO(id = ID_PROPERTY_VALUE, name = null)
+                        }
+                    }
+
+                    "when the source contains the required property of an invalid type" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to StringNode(""),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                         )
 
-                        "then the reader should return it error" {
+                        "then the reader should return an error" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
@@ -240,13 +290,13 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when error occur of reading property the name" - {
+                    "when the source contains the optional property of an invalid type" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                         )
 
-                        "then the reader should return it error" {
+                        "then the reader should return an error" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION.append(NAME_PROPERTY_NAME),
@@ -258,13 +308,13 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when errors occur of reading properties the id and the name" - {
+                    "when the source contains all properties of an invalid type" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to StringNode(""),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true)
                         )
 
-                        "then the reader should return first error" {
+                        "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
@@ -285,7 +335,7 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when error occur of validation the structure" - {
+                    "when an error occur of validation the structure" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
@@ -301,14 +351,14 @@ internal class StructReaderTest : FreeSpec() {
                         }
                     }
 
-                    "when errors occur of validation the structure and reading properties the id and the name" - {
+                    "when errors occur of validation the structure and reading properties" - {
                         val source = StructNode(
                             ID_PROPERTY_NAME to StringNode(""),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                             IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
 
-                        "then the reader should return first error" {
+                        "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
