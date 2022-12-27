@@ -573,11 +573,6 @@ public final class io/github/airflux/serialization/dsl/reader/env/exception/Exce
 	public static final fun exceptionsHandler (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/FffKt {
-	public static final fun returns2 (Lio/github/airflux/serialization/dsl/reader/struct/StructReader$Builder;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/Reader;
-	public static final fun returns3 (Lio/github/airflux/serialization/dsl/reader/struct/StructReader$Builder;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/Reader;
-}
-
 public final class io/github/airflux/serialization/dsl/reader/struct/StructReader : io/github/airflux/serialization/core/reader/Reader {
 	public fun <init> (Ljava/util/List;Lio/github/airflux/serialization/dsl/reader/struct/property/StructProperties;Lkotlin/jvm/functions/Function3;)V
 	public fun read (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
