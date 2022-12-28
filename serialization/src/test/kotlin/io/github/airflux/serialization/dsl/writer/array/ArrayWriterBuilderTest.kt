@@ -41,70 +41,225 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val FIRST_ITEM = "item-1"
         private const val SECOND_ITEM = "item-2"
 
-        private val ENV = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
         private val LOCATION = Location.empty
     }
 
     init {
 
-        "The ArrayWriterBuilder type" - {
+        "The ArrayWriter type" - {
 
-            "when have some non-nullable items for writing to an array" - {
+            "when a writer was created for non-nullable items" - {
                 val writer: Writer<CTX, Iterable<String>> = arrayWriter {
-                    items(nonNullable(writer = DummyWriter { StringNode(it) }))
+                    items(nonNullable(writer = DummyWriter.stringWriter()))
                 }
-                val value = listOf(FIRST_ITEM, SECOND_ITEM)
-                val result = writer.write(env = ENV, location = LOCATION, value = value)
 
-                "then should return the array with items" {
-                    result as ArrayNode<*>
-                    result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                "when the source contains items" - {
+                    val source = listOf(FIRST_ITEM, SECOND_ITEM)
+
+                    "when the action of the writer was set to return empty value" - {
+                        val action = RETURN_EMPTY_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+
+                    "when the action of the writer was set to return nothing" - {
+                        val action = RETURN_NOTHING
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+
+                    "when the action of the writer was set to return null value" - {
+                        val action = RETURN_NULL_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+                }
+
+                "when the source does not contain any items" - {
+                    val source = emptyList<String>()
+
+                    "when the action of the writer was set to return empty value" - {
+                        val action = RETURN_EMPTY_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type without items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode<ValueNode>()
+                        }
+                    }
+
+                    "when the action of the writer was set to return nothing" - {
+                        val action = RETURN_NOTHING
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return the null value" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result.shouldBeNull()
+                        }
+                    }
+
+                    "when the action of the writer was set to return null value" - {
+                        val action = RETURN_NULL_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the NullNode type" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe NullNode
+                        }
+                    }
                 }
             }
 
-            "when have some optional items for writing to an array" - {
+            "when a writer was created for nullable items" - {
                 val writer: Writer<CTX, Iterable<String?>> = arrayWriter {
-                    items(nullable(writer = DummyWriter { StringNode(it) }))
-                }
-                val value = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
-                val result = writer.write(env = ENV, location = LOCATION, value = value)
-
-                "then should return the array with items" {
-                    result as ArrayNode<*>
-                    result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
-                }
-            }
-
-            "when no items for writing to an array" - {
-                val value = emptyList<String>()
-                val writer: Writer<CTX, Iterable<String>> = arrayWriter {
-                    items(nonNullable(writer = DummyWriter { StringNode(it) }))
+                    items(nullable(writer = DummyWriter.stringWriter()))
                 }
 
-                "when the action of the writer was set to return empty value" - {
-                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                "when the source contains only non-nullable items" - {
+                    val source = listOf(FIRST_ITEM, SECOND_ITEM)
 
-                    "then should return the empty value of the ArrayNode type" {
-                        val result = writer.write(env = env, location = LOCATION, value = value)
-                        result shouldBe ArrayNode<ValueNode>()
+                    "when the action of the writer was set to return empty value" - {
+                        val action = RETURN_EMPTY_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+
+                    "when the action of the writer was set to return nothing" - {
+                        val action = RETURN_NOTHING
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+
+                    "when the action of the writer was set to return null value" - {
+                        val action = RETURN_NULL_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
                     }
                 }
 
-                "when the action of the writer was set to return nothing" - {
-                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                "when the source contains some nullable items" - {
+                    val source = listOf(null, FIRST_ITEM, null, SECOND_ITEM, null)
 
-                    "then should return the null value" {
-                        val result = writer.write(env = env, location = LOCATION, value = value)
-                        result.shouldBeNull()
+                    "when the action of the writer was set to return empty value" - {
+                        val action = RETURN_EMPTY_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+
+                    "when the action of the writer was set to return nothing" - {
+                        val action = RETURN_NOTHING
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
+                    }
+
+                    "when the action of the writer was set to return null value" - {
+                        val action = RETURN_NULL_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type with items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        }
                     }
                 }
 
-                "when the action of the writer was set to return null value" - {
-                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                "when the source contains all nullable items" - {
+                    val source = listOf(null, null, null)
 
-                    "then should return the NullNode value" {
-                        val result = writer.write(env = env, location = LOCATION, value = value)
-                        result shouldBe NullNode
+                    "when the action of the writer was set to return empty value" - {
+                        val action = RETURN_EMPTY_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type without items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode<ValueNode>()
+                        }
+                    }
+
+                    "when the action of the writer was set to return nothing" - {
+                        val action = RETURN_NOTHING
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return the null value" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result.shouldBeNull()
+                        }
+                    }
+
+                    "when the action of the writer was set to return null value" - {
+                        val action = RETURN_NULL_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the NullNode type" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe NullNode
+                        }
+                    }
+                }
+
+                "when the source does not contain any items" - {
+                    val source = emptyList<String>()
+
+                    "when the action of the writer was set to return empty value" - {
+                        val action = RETURN_EMPTY_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the ArrayNode type without items" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe ArrayNode<ValueNode>()
+                        }
+                    }
+
+                    "when the action of the writer was set to return nothing" - {
+                        val action = RETURN_NOTHING
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return the null value" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result.shouldBeNull()
+                        }
+                    }
+
+                    "when the action of the writer was set to return null value" - {
+                        val action = RETURN_NULL_VALUE
+                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+
+                        "then should return a value of the NullNode type" {
+                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            result shouldBe NullNode
+                        }
                     }
                 }
             }
