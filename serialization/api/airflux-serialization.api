@@ -436,6 +436,14 @@ public final class io/github/airflux/serialization/core/value/ValueNodeOpsKt {
 	public static final fun readAsStruct (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
+public final class io/github/airflux/serialization/core/writer/NonNullableValueWriterKt {
+	public static final fun writeNonNullable (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
+}
+
+public final class io/github/airflux/serialization/core/writer/NullableValueWriterKt {
+	public static final fun writeNullable (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
+}
+
 public abstract interface class io/github/airflux/serialization/core/writer/Writer {
 	public abstract fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
@@ -467,14 +475,6 @@ public abstract interface class io/github/airflux/serialization/core/writer/pred
 	public fun and (Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;
 	public fun or (Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;
 	public abstract fun test (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Z
-}
-
-public final class io/github/airflux/serialization/core/writer/struct/NonNullablePropertyWriterKt {
-	public static final fun writeNonNullable (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
-}
-
-public final class io/github/airflux/serialization/core/writer/struct/NullablePropertyWriterKt {
-	public static final fun writeNullable (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/writer/Writer;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
 public abstract interface annotation class io/github/airflux/serialization/dsl/AirfluxMarker : java/lang/annotation/Annotation {

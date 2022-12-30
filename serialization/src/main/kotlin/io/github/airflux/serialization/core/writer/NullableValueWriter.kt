@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.writer.struct
+package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <CTX, T : Any> writeNonNullable(
+public fun <CTX, T : Any> writeNullable(
     env: WriterEnv<CTX>,
     location: Location,
     using: Writer<CTX, T>,
-    value: T
+    value: T?
 ): ValueNode? =
-    using.write(env, location, value)
+    if (value != null) using.write(env, location, value) else null

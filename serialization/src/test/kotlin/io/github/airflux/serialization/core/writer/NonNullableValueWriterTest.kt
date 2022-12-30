@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.writer.struct
+package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class NullablePropertyWriterTest : FreeSpec() {
+internal class NonNullableValueWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = WriterEnv(context = Unit)
@@ -35,7 +33,7 @@ internal class NullablePropertyWriterTest : FreeSpec() {
 
     init {
 
-        "The writeNullable function" - {
+        "The writeNonNullable function" - {
             val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
 
             "when a value is not null" - {
@@ -43,18 +41,8 @@ internal class NullablePropertyWriterTest : FreeSpec() {
 
                 "should return the StringNode value" {
                     val result: ValueNode? =
-                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
+                        writeNonNullable(env = ENV, location = LOCATION, using = writer, value = value)
                     result shouldBe StringNode(value)
-                }
-            }
-
-            "when a value is null" - {
-                val value: String? = null
-
-                "should return the null value" {
-                    val result: ValueNode? =
-                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
-                    result.shouldBeNull()
                 }
             }
         }
