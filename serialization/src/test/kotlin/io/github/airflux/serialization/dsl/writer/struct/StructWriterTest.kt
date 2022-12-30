@@ -59,7 +59,7 @@ internal class StructWriterTest : FreeSpec() {
                 "when the source contains all properties" - {
                     val source = DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
                     val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                    val result = writer.write(env = env, location = LOCATION, value = source)
+                    val result = writer.write(env = env, location = LOCATION, source = source)
 
                     "then should return a struct with all properties" {
                         result shouldBe StructNode(
@@ -72,7 +72,7 @@ internal class StructWriterTest : FreeSpec() {
                 "when the source contains only non-nullable properties" - {
                     val source = DTO(id = ID_PROPERTY_VALUE, name = null)
                     val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                    val result = writer.write(env = env, location = LOCATION, value = source)
+                    val result = writer.write(env = env, location = LOCATION, source = source)
 
                     "then should return a struct with only non-nullable properties" {
                         result shouldBe StructNode(
@@ -103,7 +103,7 @@ internal class StructWriterTest : FreeSpec() {
                 "when the source contains all properties" - {
                     val source = NullableDTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
                     val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                    val result = writer.write(env = env, location = LOCATION, value = source)
+                    val result = writer.write(env = env, location = LOCATION, source = source)
 
                     "then should return a struct with all properties" {
                         result shouldBe StructNode(
@@ -120,7 +120,7 @@ internal class StructWriterTest : FreeSpec() {
                         val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                         "then should return the empty value of the StructNode type" {
-                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            val result = writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe StructNode()
                         }
                     }
@@ -129,7 +129,7 @@ internal class StructWriterTest : FreeSpec() {
                         val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                         "then should return the null value" {
-                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            val result = writer.write(env = env, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
@@ -138,7 +138,7 @@ internal class StructWriterTest : FreeSpec() {
                         val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
                         "then should return the NullNode value" {
-                            val result = writer.write(env = env, location = LOCATION, value = source)
+                            val result = writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe NullNode
                         }
                     }

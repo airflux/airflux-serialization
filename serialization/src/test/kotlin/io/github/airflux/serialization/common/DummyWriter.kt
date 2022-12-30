@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
 internal class DummyWriter<CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<CTX, T> {
-    override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? = result(value)
+    override fun write(env: WriterEnv<CTX>, location: Location, source: T): ValueNode? = result(source)
 
     companion object {
         internal fun <CTX> intWriter(): Writer<CTX, Int> =

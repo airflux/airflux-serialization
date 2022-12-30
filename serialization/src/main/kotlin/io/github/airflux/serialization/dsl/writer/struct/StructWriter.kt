@@ -40,12 +40,12 @@ public class StructWriter<CTX, T : Any> private constructor(
 ) : Writer<CTX, T>
     where CTX : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? {
+    override fun write(env: WriterEnv<CTX>, location: Location, source: T): ValueNode? {
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
-                    property.write(env, currentLocation, value)
+                    property.write(env, currentLocation, source)
                         ?.let { value -> this[property.name] = value }
                 }
             }

@@ -53,8 +53,8 @@ public class ArrayWriter<CTX, T> private constructor(
 ) : Writer<CTX, Iterable<T>>
     where CTX : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<CTX>, location: Location, value: Iterable<T>): ValueNode? {
-        val result = value.mapNotNull { item -> itemsWriter.write(env, location, item) }
+    override fun write(env: WriterEnv<CTX>, location: Location, source: Iterable<T>): ValueNode? {
+        val result = source.mapNotNull { item -> itemsWriter.write(env, location, item) }
         return if (result.isNotEmpty())
             ArrayNode(result)
         else
