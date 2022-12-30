@@ -65,7 +65,7 @@ public fun <EB, CTX, T : Number> ValueNode.readAsNumber(
     reader: (ReaderEnv<EB, CTX>, Location, String) -> ReaderResult<T>
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is NumericNode.Number)
+    if (this is NumericNode)
         reader(env, location, this.get)
     else
         ReaderResult.Failure(
