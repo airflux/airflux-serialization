@@ -36,9 +36,9 @@ internal class ReadAsIntegerTest : FreeSpec() {
     }
 
     init {
-        "The readAsNumber function" - {
+        "The readAsInteger function" - {
 
-            "when called with a receiver of the NumericNode type" - {
+            "when called with a receiver of the NumericNode#Integer type" - {
 
                 "should return the number value" {
                     val json: ValueNode = NumericNode.Integer.valueOf(Int.MAX_VALUE)
@@ -46,7 +46,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
                     result.assertAsSuccess(value = Int.MAX_VALUE)
                 }
             }
-            "when called with a receiver of not the NumericNode type" - {
+            "when called with a receiver of not the NumericNode#Integer type" - {
 
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)

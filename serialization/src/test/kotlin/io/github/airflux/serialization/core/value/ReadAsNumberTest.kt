@@ -39,7 +39,7 @@ internal class ReadAsNumberTest : FreeSpec() {
     init {
         "The readAsNumber function" - {
 
-            "when called with a receiver of the NumericNode type" - {
+            "when called with a receiver of the NumericNode#Number type" - {
 
                 "should return the number value" {
                     val json: ValueNode = NumericNode.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
@@ -47,7 +47,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                     result.assertAsSuccess(value = BigDecimal(Int.MAX_VALUE))
                 }
             }
-            "when called with a receiver of not the NumericNode type" - {
+            "when called with a receiver of not the NumericNode#Number type" - {
 
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
