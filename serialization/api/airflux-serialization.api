@@ -26,22 +26,22 @@ public final class io/github/airflux/serialization/core/location/Location$Compan
 	public final fun getEmpty ()Lio/github/airflux/serialization/core/location/Location;
 }
 
-public abstract class io/github/airflux/serialization/core/lookup/Lookup {
-	public final fun apply (I)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public abstract fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public abstract fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public final fun apply (Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/Lookup;
+public abstract class io/github/airflux/serialization/core/lookup/LookupResult {
+	public final fun apply (I)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public abstract fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public abstract fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public final fun apply (Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public abstract fun getLocation ()Lio/github/airflux/serialization/core/location/Location;
 }
 
-public final class io/github/airflux/serialization/core/lookup/Lookup$Defined : io/github/airflux/serialization/core/lookup/Lookup {
+public final class io/github/airflux/serialization/core/lookup/LookupResult$Defined : io/github/airflux/serialization/core/lookup/LookupResult {
 	public fun <init> (Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;)V
-	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/Lookup;
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public final fun component1 ()Lio/github/airflux/serialization/core/location/Location;
 	public final fun component2 ()Lio/github/airflux/serialization/core/value/ValueNode;
-	public final fun copy (Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;)Lio/github/airflux/serialization/core/lookup/Lookup$Defined;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/Lookup$Defined;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/Lookup$Defined;
+	public final fun copy (Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;)Lio/github/airflux/serialization/core/lookup/LookupResult$Defined;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/LookupResult$Defined;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ValueNode;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/LookupResult$Defined;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getLocation ()Lio/github/airflux/serialization/core/location/Location;
 	public final fun getValue ()Lio/github/airflux/serialization/core/value/ValueNode;
@@ -49,23 +49,23 @@ public final class io/github/airflux/serialization/core/lookup/Lookup$Defined : 
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/core/lookup/Lookup$Undefined : io/github/airflux/serialization/core/lookup/Lookup {
+public final class io/github/airflux/serialization/core/lookup/LookupResult$Undefined : io/github/airflux/serialization/core/lookup/LookupResult {
 	public fun <init> (Lio/github/airflux/serialization/core/location/Location;)V
-	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/Lookup;
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public final fun component1 ()Lio/github/airflux/serialization/core/location/Location;
-	public final fun copy (Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/lookup/Lookup$Undefined;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/Lookup$Undefined;Lio/github/airflux/serialization/core/location/Location;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/Lookup$Undefined;
+	public final fun copy (Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined;Lio/github/airflux/serialization/core/location/Location;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getLocation ()Lio/github/airflux/serialization/core/location/Location;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/core/lookup/LookupKt {
-	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/lookup/Lookup;
+public final class io/github/airflux/serialization/core/lookup/LookupResultKt {
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 }
 
 public final class io/github/airflux/serialization/core/path/PropertyPath {
@@ -279,19 +279,19 @@ public final class io/github/airflux/serialization/core/reader/result/ReaderResu
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/DefaultablePropertyReaderKt {
-	public static final fun readWithDefault (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/Lookup;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
+	public static final fun readWithDefault (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/OptionalPropertyReaderKt {
-	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/Lookup;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
+	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/OptionalWithDefaultPropertyReaderKt {
-	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/Lookup;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
+	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/RequiredPropertyReaderKt {
-	public static final fun readRequired (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/Lookup;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
+	public static final fun readRequired (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/validator/Validator {
@@ -487,8 +487,8 @@ public final class io/github/airflux/serialization/dsl/location/LocationKt {
 }
 
 public final class io/github/airflux/serialization/dsl/lookup/LookupKt {
-	public static final fun div (Lio/github/airflux/serialization/core/lookup/Lookup;I)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public static final fun div (Lio/github/airflux/serialization/core/lookup/Lookup;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/Lookup;
+	public static final fun div (Lio/github/airflux/serialization/core/lookup/LookupResult;I)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public static final fun div (Lio/github/airflux/serialization/core/lookup/LookupResult;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 }
 
 public final class io/github/airflux/serialization/dsl/path/PropertyPathKt {
@@ -690,8 +690,8 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 }
 
 public final class io/github/airflux/serialization/dsl/value/ValueNodeKt {
-	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;I)Lio/github/airflux/serialization/core/lookup/Lookup;
-	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/Lookup;
+	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;I)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public static final fun div (Lio/github/airflux/serialization/core/value/ValueNode;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/array/ArrayWriter : io/github/airflux/serialization/core/writer/Writer {

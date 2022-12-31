@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.lookup
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.lookup.Lookup
+import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -41,18 +41,18 @@ internal class LookupOpsTest : FreeSpec() {
 
     init {
 
-        "The Lookup#div extension-function" - {
+        "The LookupResult#div extension-function" - {
 
             "when lookup by a key element of the path" - {
 
                 "when the receiver is of type Defined" - {
-                    val defined = Lookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
+                    val defined = LookupResult.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
                     "when the value contains the finding key" - {
 
                         "then should return the value as an instance of type Defined" {
                             val lookup = defined / KEY_NAME
-                            lookup shouldBe Lookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
+                            lookup shouldBe LookupResult.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                         }
                     }
 
@@ -60,13 +60,13 @@ internal class LookupOpsTest : FreeSpec() {
 
                         "then should return the value as an instance of type Undefined" {
                             val lookup = defined / UNKNOWN_KEY_NAME
-                            lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                            lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
                         }
                     }
                 }
 
                 "when the receiver is of type Undefined" - {
-                    val undefined = Lookup.Undefined(LOCATION)
+                    val undefined = LookupResult.Undefined(LOCATION)
 
                     "then should return the same instance of Undefined type" {
                         val lookup = undefined / KEY_NAME
@@ -78,13 +78,13 @@ internal class LookupOpsTest : FreeSpec() {
             "when lookup by an index element of the path" - {
 
                 "when the receiver is of type Defined" - {
-                    val defined = Lookup.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
+                    val defined = LookupResult.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
 
                     "when the value contains the finding index" - {
 
                         "then should return the value as an instance of type Defined" {
                             val lookup = defined / IDX
-                            lookup shouldBe Lookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
+                            lookup shouldBe LookupResult.Defined(LOCATION.append(IDX), StringNode(VALUE))
                         }
                     }
 
@@ -92,13 +92,13 @@ internal class LookupOpsTest : FreeSpec() {
 
                         "then should return the value as an instance of type Undefined" {
                             val lookup = defined / UNKNOWN_IDX
-                            lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_IDX))
+                            lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_IDX))
                         }
                     }
                 }
 
                 "when the receiver is of type Undefined" - {
-                    val undefined = Lookup.Undefined(LOCATION)
+                    val undefined = LookupResult.Undefined(LOCATION)
 
                     "then should return the same instance of Undefined type" {
                         val lookup = undefined / IDX

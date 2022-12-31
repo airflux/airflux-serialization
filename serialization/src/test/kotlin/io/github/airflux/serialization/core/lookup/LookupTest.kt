@@ -51,7 +51,7 @@ internal class LookupTest : FreeSpec() {
 
                 "then should return the value as an instance of type Defined" {
                     val lookup = value.lookup(LOCATION, KEY_ELEMENT_PATH)
-                    lookup shouldBe Lookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
+                    lookup shouldBe LookupResult.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                 }
             }
 
@@ -60,7 +60,7 @@ internal class LookupTest : FreeSpec() {
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, UNKNOWN_KEY_ELEMENT_PATH)
-                    lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                    lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
                 }
             }
 
@@ -69,7 +69,7 @@ internal class LookupTest : FreeSpec() {
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, KEY_ELEMENT_PATH)
-                    lookup shouldBe Lookup.Undefined(LOCATION.append(KEY_NAME))
+                    lookup shouldBe LookupResult.Undefined(LOCATION.append(KEY_NAME))
                 }
             }
         }
@@ -81,7 +81,7 @@ internal class LookupTest : FreeSpec() {
 
                 "then should return the value as an instance of type Defined" {
                     val lookup = value.lookup(LOCATION, IDX_ELEMENT_PATH)
-                    lookup shouldBe Lookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
+                    lookup shouldBe LookupResult.Defined(LOCATION.append(IDX), StringNode(VALUE))
                 }
             }
 
@@ -90,7 +90,7 @@ internal class LookupTest : FreeSpec() {
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, IDX_ELEMENT_PATH)
-                    lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
+                    lookup shouldBe LookupResult.Undefined(LOCATION.append(IDX))
                 }
             }
 
@@ -99,7 +99,7 @@ internal class LookupTest : FreeSpec() {
 
                 "then should return the value as an instance of type Undefined" {
                     val lookup = value.lookup(LOCATION, IDX_ELEMENT_PATH)
-                    lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
+                    lookup shouldBe LookupResult.Undefined(LOCATION.append(IDX))
                 }
             }
         }
@@ -113,7 +113,7 @@ internal class LookupTest : FreeSpec() {
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(KEY_ELEMENT_PATH))
-                        lookup shouldBe Lookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
+                        lookup shouldBe LookupResult.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
 
@@ -122,7 +122,7 @@ internal class LookupTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(UNKNOWN_KEY_ELEMENT_PATH))
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
                     }
                 }
 
@@ -131,7 +131,7 @@ internal class LookupTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(KEY_ELEMENT_PATH))
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(KEY_NAME))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(KEY_NAME))
                     }
                 }
             }
@@ -143,7 +143,7 @@ internal class LookupTest : FreeSpec() {
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(IDX_ELEMENT_PATH))
-                        lookup shouldBe Lookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
+                        lookup shouldBe LookupResult.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
 
@@ -152,7 +152,7 @@ internal class LookupTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(IDX_ELEMENT_PATH))
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(IDX))
                     }
                 }
 
@@ -161,31 +161,31 @@ internal class LookupTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = value.lookup(LOCATION, PropertyPath(IDX_ELEMENT_PATH))
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(IDX))
                     }
                 }
             }
         }
 
-        "The JsLookup#Defined" - {
+        "The LookupResult#Defined" - {
 
             "when lookup by a key element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val defined = Lookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
+                    val defined = LookupResult.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = defined.apply(KEY_NAME)
-                        lookup shouldBe Lookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
+                        lookup shouldBe LookupResult.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val defined = Lookup.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
+                    val defined = LookupResult.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = defined.apply(UNKNOWN_KEY_NAME)
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
                     }
                 }
             }
@@ -193,27 +193,27 @@ internal class LookupTest : FreeSpec() {
             "when lookup by an index element of the path" - {
 
                 "when the value contains the finding index" - {
-                    val defined = Lookup.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
+                    val defined = LookupResult.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = defined.apply(IDX)
-                        lookup shouldBe Lookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
+                        lookup shouldBe LookupResult.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding index" - {
-                    val defined = Lookup.Defined(LOCATION, ArrayNode<StringNode>())
+                    val defined = LookupResult.Defined(LOCATION, ArrayNode<StringNode>())
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = defined.apply(IDX)
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(IDX))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(IDX))
                     }
                 }
             }
         }
 
-        "The JsLookup#Undefined" - {
-            val undefined = Lookup.Undefined(LOCATION)
+        "The LookupResult#Undefined" - {
+            val undefined = LookupResult.Undefined(LOCATION)
 
             "when lookup by a key element of the path" - {
                 val lookup = undefined.apply(KEY_ELEMENT_PATH)

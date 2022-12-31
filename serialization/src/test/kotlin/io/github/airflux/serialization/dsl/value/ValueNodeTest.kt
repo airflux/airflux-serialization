@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.value
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.lookup.Lookup
+import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -50,7 +50,7 @@ internal class ValueNodeTest : FreeSpec() {
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / KEY_NAME
-                        lookup shouldBe Lookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
+                        lookup shouldBe LookupResult.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
                     }
                 }
 
@@ -59,7 +59,7 @@ internal class ValueNodeTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = json / UNKNOWN_KEY_NAME
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
                     }
                 }
             }
@@ -71,7 +71,7 @@ internal class ValueNodeTest : FreeSpec() {
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / IDX
-                        lookup shouldBe Lookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
+                        lookup shouldBe LookupResult.Defined(LOCATION.append(IDX), StringNode(VALUE))
                     }
                 }
 
@@ -80,7 +80,7 @@ internal class ValueNodeTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined" {
                         val lookup = json / UNKNOWN_IDX
-                        lookup shouldBe Lookup.Undefined(LOCATION.append(UNKNOWN_IDX))
+                        lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_IDX))
                     }
                 }
             }

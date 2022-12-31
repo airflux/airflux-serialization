@@ -20,7 +20,7 @@ import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.lookup.Lookup
+import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -45,7 +45,8 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
         "The readOptional (with default) function" - {
 
             "when the element is defined" - {
-                val lookup: Lookup = Lookup.Defined(location = LOCATION.append("id"), value = StringNode(VALUE))
+                val lookup: LookupResult =
+                    LookupResult.Defined(location = LOCATION.append("id"), value = StringNode(VALUE))
 
                 "then should return the result of applying the reader" {
                     val result: ReaderResult<String?> =
@@ -56,7 +57,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is undefined" - {
-                val lookup: Lookup = Lookup.Undefined(location = LOCATION.append("id"))
+                val lookup: LookupResult = LookupResult.Undefined(location = LOCATION.append("id"))
 
                 "then should return the default value" {
                     val result: ReaderResult<String?> =

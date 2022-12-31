@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
-import io.github.airflux.serialization.core.lookup.Lookup
+import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
@@ -24,16 +24,16 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 /**
  * Reads optional property or return default if a property is not found.
  *
- * - If a node is found ([lookup] is [Lookup.Defined]) then applies [reader]
- * - If a node is not found ([lookup] is [Lookup.Undefined]) then returns [defaultValue]
+ * - If a node is found ([lookup] is [LookupResult.Defined]) then applies [reader]
+ * - If a node is not found ([lookup] is [LookupResult.Undefined]) then returns [defaultValue]
  */
 public fun <EB, CTX, T : Any> readOptional(
     env: ReaderEnv<EB, CTX>,
-    lookup: Lookup,
+    lookup: LookupResult,
     using: Reader<EB, CTX, T>,
     defaultValue: (ReaderEnv<EB, CTX>) -> T
 ): ReaderResult<T> =
     when (lookup) {
-        is Lookup.Defined -> using.read(env, lookup.location, lookup.value)
-        is Lookup.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue(env))
+        is LookupResult.Defined -> using.read(env, lookup.location, lookup.value)
+        is LookupResult.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue(env))
     }
