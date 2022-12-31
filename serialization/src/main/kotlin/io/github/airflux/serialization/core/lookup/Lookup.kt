@@ -44,33 +44,36 @@ public sealed class Lookup {
     }
 }
 
-public fun ValueNode.lookup(location: Location, key: Element.Key): Lookup =
-    this.lookup(key)
+public fun ValueNode.lookup(location: Location, key: Element.Key): Lookup {
+    fun ValueNode.lookup(key: Element.Key): ValueNode? = if (this is StructNode) this[key] else null
+
+    return this.lookup(key)
         ?.let { Lookup.Defined(location = location.append(key), value = it) }
         ?: Lookup.Undefined(location = location.append(key))
+}
 
-public fun ValueNode.lookup(location: Location, idx: Element.Idx): Lookup =
-    this.lookup(idx)
+public fun ValueNode.lookup(location: Location, idx: Element.Idx): Lookup {
+    fun ValueNode.lookup(idx: Element.Idx): ValueNode? = if (this is ArrayNode<*>) this[idx] else null
+
+    return this.lookup(idx)
         ?.let { Lookup.Defined(location = location.append(idx), value = it) }
         ?: Lookup.Undefined(location = location.append(idx))
+}
 
-public fun ValueNode.lookup(location: Location, path: PropertyPath): Lookup =
-    this.lookup(path)
-        ?.let { Lookup.Defined(location = location.append(path), value = it) }
-        ?: Lookup.Undefined(location = location.append(path))
-
-internal fun ValueNode.lookup(key: Element.Key): ValueNode? = if (this is StructNode) this[key] else null
-
-internal fun ValueNode.lookup(idx: Element.Idx): ValueNode? = if (this is ArrayNode<*>) this[idx] else null
-
-internal fun ValueNode.lookup(path: PropertyPath): ValueNode? {
-    tailrec fun lookup(path: PropertyPath, idxElement: Int, value: ValueNode?): ValueNode? {
-        if (value == null || idxElement == path.elements.size) return value
-        return when (val element = path.elements[idxElement]) {
-            is Element.Key -> if (value is StructNode) lookup(path, idxElement + 1, value[element]) else null
-            is Element.Idx -> if (value is ArrayNode<*>) lookup(path, idxElement + 1, value[element]) else null
+public fun ValueNode.lookup(location: Location, path: PropertyPath): Lookup {
+    fun ValueNode.lookup(path: PropertyPath): ValueNode? {
+        tailrec fun lookup(path: PropertyPath, idxElement: Int, value: ValueNode?): ValueNode? {
+            if (value == null || idxElement == path.elements.size) return value
+            return when (val element = path.elements[idxElement]) {
+                is Element.Key -> if (value is StructNode) lookup(path, idxElement + 1, value[element]) else null
+                is Element.Idx -> if (value is ArrayNode<*>) lookup(path, idxElement + 1, value[element]) else null
+            }
         }
+
+        return lookup(path, 0, this)
     }
 
-    return lookup(path, 0, this)
+    return this.lookup(path)
+        ?.let { Lookup.Defined(location = location.append(path), value = it) }
+        ?: Lookup.Undefined(location = location.append(path))
 }
