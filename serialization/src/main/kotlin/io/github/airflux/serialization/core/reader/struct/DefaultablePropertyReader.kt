@@ -19,6 +19,7 @@ package io.github.airflux.serialization.core.reader.struct
 import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 
@@ -34,7 +35,8 @@ public fun <EB, CTX, T : Any> readWithDefault(
     lookup: LookupResult,
     using: Reader<EB, CTX, T>,
     defaultValue: (ReaderEnv<EB, CTX>) -> T
-): ReaderResult<T> {
+): ReaderResult<T>
+    where EB : InvalidTypeErrorBuilder {
 
     fun <EB, CTX, T : Any> readWithDefault(
         env: ReaderEnv<EB, CTX>,
@@ -49,6 +51,15 @@ public fun <EB, CTX, T : Any> readWithDefault(
 
     return when (lookup) {
         is LookupResult.Defined -> readWithDefault(env, lookup, using, defaultValue)
-        is LookupResult.Undefined -> ReaderResult.Success(location = lookup.location, value = defaultValue(env))
+
+        is LookupResult.Undefined -> when (lookup) {
+            is LookupResult.Undefined.PathMissing ->
+                ReaderResult.Success(location = lookup.location, value = defaultValue(env))
+
+            is LookupResult.Undefined.InvalidType -> ReaderResult.Failure(
+                location = lookup.location,
+                error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
+            )
+        }
     }
 }

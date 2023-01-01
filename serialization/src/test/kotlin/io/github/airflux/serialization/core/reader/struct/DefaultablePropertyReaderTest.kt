@@ -18,6 +18,7 @@ package io.github.airflux.serialization.core.reader.struct
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.common.shouldBeFailure
 import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.LookupResult
@@ -28,17 +29,20 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
 
 internal class DefaultablePropertyReaderTest : FreeSpec() {
 
     companion object {
+        private const val ID_PROPERTY_NAME = "id"
+        private const val ID_PROPERTY_VALUE = "37bbcb7c-c62c-4cc6-9fb2-71954f5c0192"
+        private const val ID_PROPERTY_DEFAULT_VALUE = "9ebe2411-8bd7-4876-b6f4-fbe8195c4b80"
+
         private val ENV = ReaderEnv(EB(), Unit)
-        private val LOCATION = Location.empty.append("name")
-        private const val VALUE = "user-1"
-        private const val DEFAULT_VALUE = "default-user"
+        private val LOCATION = Location.empty
         private val READER: Reader<EB, Unit, String> = dummyStringReader()
-        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> ID_PROPERTY_DEFAULT_VALUE }
     }
 
     init {
@@ -48,38 +52,71 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
             "when the element is defined" - {
 
                 "when the value of the element is not the NullNode" - {
-                    val lookup: LookupResult =
-                        LookupResult.Defined(location = LOCATION.append("id"), value = StringNode(VALUE))
+                    val lookup: LookupResult = LookupResult.Defined(
+                        location = LOCATION.append(ID_PROPERTY_NAME),
+                        value = StringNode(ID_PROPERTY_VALUE)
+                    )
 
                     "then should return the result of applying the reader" {
                         val result: ReaderResult<String?> =
                             readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION.append("id"), value = VALUE)
+                        result shouldBeSuccess ReaderResult.Success(
+                            location = LOCATION.append(ID_PROPERTY_NAME),
+                            value = ID_PROPERTY_VALUE
+                        )
                     }
                 }
 
                 "when the value of the element is the NullNode" - {
-                    val lookup: LookupResult = LookupResult.Defined(location = LOCATION.append("id"), NullNode)
+                    val lookup: LookupResult = LookupResult.Defined(
+                        location = LOCATION.append(ID_PROPERTY_NAME),
+                        value = NullNode
+                    )
 
                     "then should return the default value" {
                         val result: ReaderResult<String?> =
                             readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
                         result shouldBeSuccess ReaderResult.Success(
-                            location = LOCATION.append("id"),
-                            value = DEFAULT_VALUE
+                            location = LOCATION.append(ID_PROPERTY_NAME),
+                            value = ID_PROPERTY_DEFAULT_VALUE
                         )
                     }
                 }
             }
 
-            "when the element is undefined" - {
-                val lookup: LookupResult = LookupResult.Undefined(location = LOCATION.append("id"))
+            "when the element is missing" - {
+                val lookup: LookupResult =
+                    LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the default value" {
                     val result: ReaderResult<String?> =
                         readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
 
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION.append("id"), value = DEFAULT_VALUE)
+                    result shouldBeSuccess ReaderResult.Success(
+                        location = LOCATION.append(ID_PROPERTY_NAME),
+                        value = ID_PROPERTY_DEFAULT_VALUE
+                    )
+                }
+            }
+
+            "when the element is invalid type" - {
+                val lookup: LookupResult = LookupResult.Undefined.InvalidType(
+                    expected = listOf(StructNode.nameOfType),
+                    actual = StringNode.nameOfType,
+                    location = LOCATION.append(ID_PROPERTY_NAME)
+                )
+
+                "then should return the invalid type error" {
+                    val result: ReaderResult<String?> =
+                        readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
+
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = LOCATION.append(ID_PROPERTY_NAME),
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    )
                 }
             }
         }

@@ -37,42 +37,77 @@ public sealed class LookupResult {
         override fun apply(idx: Element.Idx): LookupResult = value.lookup(location, idx)
     }
 
-    public data class Undefined(override val location: Location) : LookupResult() {
+    public sealed class Undefined : LookupResult() {
         override fun apply(key: Element.Key): LookupResult = this
         override fun apply(idx: Element.Idx): LookupResult = this
+
+        public data class PathMissing(override val location: Location) : Undefined()
+
+        public data class InvalidType(
+            public val expected: Iterable<String>,
+            public val actual: String,
+            override val location: Location
+        ) : Undefined()
     }
 }
 
-public fun ValueNode.lookup(location: Location, key: Element.Key): LookupResult {
-    fun ValueNode.lookup(key: Element.Key): ValueNode? = if (this is StructNode) this[key] else null
+public fun ValueNode.lookup(location: Location, key: Element.Key): LookupResult =
+    if (this is StructNode)
+        this[key]
+            ?.let { LookupResult.Defined(location = location.append(key), value = it) }
+            ?: LookupResult.Undefined.PathMissing(location = location.append(key))
+    else
+        LookupResult.Undefined.InvalidType(
+            expected = listOf(StructNode.nameOfType),
+            actual = this.nameOfType,
+            location = location
+        )
 
-    return this.lookup(key)
-        ?.let { LookupResult.Defined(location = location.append(key), value = it) }
-        ?: LookupResult.Undefined(location = location.append(key))
-}
-
-public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult {
-    fun ValueNode.lookup(idx: Element.Idx): ValueNode? = if (this is ArrayNode<*>) this[idx] else null
-
-    return this.lookup(idx)
-        ?.let { LookupResult.Defined(location = location.append(idx), value = it) }
-        ?: LookupResult.Undefined(location = location.append(idx))
-}
+public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult =
+    if (this is ArrayNode<*>)
+        this[idx]
+            ?.let { LookupResult.Defined(location = location.append(idx), value = it) }
+            ?: LookupResult.Undefined.PathMissing(location = location.append(idx))
+    else
+        LookupResult.Undefined.InvalidType(
+            expected = listOf(ArrayNode.nameOfType),
+            actual = this.nameOfType,
+            location = location
+        )
 
 public fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResult {
-    fun ValueNode.lookup(path: PropertyPath): ValueNode? {
-        tailrec fun lookup(path: PropertyPath, idxElement: Int, value: ValueNode?): ValueNode? {
-            if (value == null || idxElement == path.elements.size) return value
-            return when (val element = path.elements[idxElement]) {
-                is Element.Key -> if (value is StructNode) lookup(path, idxElement + 1, value[element]) else null
-                is Element.Idx -> if (value is ArrayNode<*>) lookup(path, idxElement + 1, value[element]) else null
-            }
+    fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResult {
+        tailrec fun lookup(path: PropertyPath, idxElement: Int, location: Location, source: ValueNode): LookupResult {
+            return if (idxElement == path.elements.size)
+                LookupResult.Defined(location = location, value = source)
+            else
+                when (val pathElement = path.elements[idxElement]) {
+                    is Element.Key -> if (source is StructNode) {
+                        val value = source[pathElement]
+                            ?: return LookupResult.Undefined.PathMissing(location = location.append(pathElement))
+                        lookup(path, idxElement + 1, location.append(pathElement), value)
+                    } else
+                        LookupResult.Undefined.InvalidType(
+                            expected = listOf(StructNode.nameOfType),
+                            actual = this.nameOfType,
+                            location = location.append(pathElement)
+                        )
+
+                    is Element.Idx -> if (source is ArrayNode<*>) {
+                        val value = source[pathElement]
+                            ?: return LookupResult.Undefined.PathMissing(location = location.append(pathElement))
+                        lookup(path, idxElement + 1, location.append(pathElement), value)
+                    } else
+                        LookupResult.Undefined.InvalidType(
+                            expected = listOf(ArrayNode.nameOfType),
+                            actual = this.nameOfType,
+                            location = location.append(pathElement)
+                        )
+                }
         }
 
-        return lookup(path, 0, this)
+        return lookup(path, 0, location, this)
     }
 
-    return this.lookup(path)
-        ?.let { LookupResult.Defined(location = location.append(path), value = it) }
-        ?: LookupResult.Undefined(location = location.append(path))
+    return this.lookup(location, path)
 }

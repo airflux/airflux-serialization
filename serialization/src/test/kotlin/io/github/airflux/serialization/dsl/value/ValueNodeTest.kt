@@ -57,9 +57,22 @@ internal class ValueNodeTest : FreeSpec() {
                 "when the value does not contain the finding key" - {
                     val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
 
-                    "then should return the value as an instance of type Undefined" {
+                    "then should return the value as an instance of type Undefined#PathMissing" {
                         val lookup = json / UNKNOWN_KEY_NAME
-                        lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_KEY_NAME))
+                        lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(UNKNOWN_KEY_NAME))
+                    }
+                }
+
+                "when the value is invalid element type" - {
+                    val json: ValueNode = ArrayNode(StringNode(VALUE))
+
+                    "then should return the value as an instance of type Undefined#InvalidType" {
+                        val lookup = json / KEY_NAME
+                        lookup shouldBe LookupResult.Undefined.InvalidType(
+                            expected = listOf(StructNode.nameOfType),
+                            actual = ArrayNode.nameOfType,
+                            location = LOCATION
+                        )
                     }
                 }
             }
@@ -78,9 +91,22 @@ internal class ValueNodeTest : FreeSpec() {
                 "when the value does not contain the finding key" - {
                     val json: ValueNode = ArrayNode(StringNode(VALUE))
 
-                    "then should return the value as an instance of type Undefined" {
+                    "then should return the value as an instance of type Undefined#PathMissing" {
                         val lookup = json / UNKNOWN_IDX
-                        lookup shouldBe LookupResult.Undefined(LOCATION.append(UNKNOWN_IDX))
+                        lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(UNKNOWN_IDX))
+                    }
+                }
+
+                "when the value is invalid element type" - {
+                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
+
+                    "then should return the value as an instance of type Undefined#InvalidType" {
+                        val lookup = json / IDX
+                        lookup shouldBe LookupResult.Undefined.InvalidType(
+                            expected = listOf(ArrayNode.nameOfType),
+                            actual = StructNode.nameOfType,
+                            location = LOCATION
+                        )
                     }
                 }
             }

@@ -28,14 +28,17 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
 
 internal class RequiredPropertyReaderTest : FreeSpec() {
 
     companion object {
+        private const val ID_PROPERTY_NAME = "id"
+        private const val ID_PROPERTY_VALUE = "a64d62c7-4a57-4282-bce3-3cd52b815204"
+
         private val ENV = ReaderEnv(EB(), Unit)
-        private val LOCATION = Location.empty.append("name")
-        private const val VALUE = "user-1"
+        private val LOCATION = Location.empty
         private val READER: Reader<EB, Unit, String> = dummyStringReader()
     }
 
@@ -44,23 +47,48 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
         "The readRequired function" - {
 
             "when the element is defined" - {
-                val lookup: LookupResult =
-                    LookupResult.Defined(location = LOCATION.append("id"), value = StringNode(VALUE))
+                val lookup: LookupResult = LookupResult.Defined(
+                    location = LOCATION.append(ID_PROPERTY_NAME),
+                    value = StringNode(ID_PROPERTY_VALUE)
+                )
 
                 "then should return the result of applying the reader" {
                     val result: ReaderResult<String?> = readRequired(env = ENV, lookup = lookup, using = READER)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION.append("id"), value = VALUE)
+                    result shouldBeSuccess ReaderResult.Success(
+                        location = LOCATION.append(ID_PROPERTY_NAME),
+                        value = ID_PROPERTY_VALUE
+                    )
                 }
             }
 
-            "when the element is undefined" - {
-                val lookup: LookupResult = LookupResult.Undefined(location = LOCATION.append("id"))
+            "when the element is missing" - {
+                val lookup: LookupResult =
+                    LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the missing path error" {
                     val result: ReaderResult<String?> = readRequired(env = ENV, lookup = lookup, using = READER)
                     result shouldBeFailure ReaderResult.Failure(
-                        location = LOCATION.append("id"),
+                        location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
+                    )
+                }
+            }
+
+            "when the element is invalid type" - {
+                val lookup: LookupResult = LookupResult.Undefined.InvalidType(
+                    expected = listOf(StructNode.nameOfType),
+                    actual = StringNode.nameOfType,
+                    location = LOCATION.append(ID_PROPERTY_NAME)
+                )
+
+                "then should return the invalid type error" {
+                    val result: ReaderResult<String?> = readRequired(env = ENV, lookup = lookup, using = READER)
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = LOCATION.append(ID_PROPERTY_NAME),
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
                     )
                 }
             }

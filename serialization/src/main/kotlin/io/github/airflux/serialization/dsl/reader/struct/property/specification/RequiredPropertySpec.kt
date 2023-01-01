@@ -20,6 +20,7 @@ import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readRequired
 
@@ -27,14 +28,16 @@ public fun <EB, CTX, T : Any> required(
     name: String,
     reader: Reader<EB, CTX, T>
 ): StructPropertySpec.NonNullable<EB, CTX, T>
-    where EB : PathMissingErrorBuilder =
+    where EB : PathMissingErrorBuilder,
+          EB : InvalidTypeErrorBuilder =
     required(PropertyPath(name), reader)
 
 public fun <EB, CTX, T : Any> required(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>
 ): StructPropertySpec.NonNullable<EB, CTX, T>
-    where EB : PathMissingErrorBuilder =
+    where EB : PathMissingErrorBuilder,
+          EB : InvalidTypeErrorBuilder =
     StructPropertySpec.NonNullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->

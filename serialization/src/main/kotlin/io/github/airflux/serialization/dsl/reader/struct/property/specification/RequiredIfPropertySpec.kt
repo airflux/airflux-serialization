@@ -22,6 +22,7 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.struct.readRequired
@@ -31,7 +32,8 @@ public fun <EB, CTX, T : Any> required(
     reader: Reader<EB, CTX, T>,
     predicate: (ReaderEnv<EB, CTX>, Location) -> Boolean
 ): StructPropertySpec.Nullable<EB, CTX, T>
-    where EB : PathMissingErrorBuilder =
+    where EB : PathMissingErrorBuilder,
+          EB : InvalidTypeErrorBuilder =
     required(PropertyPath(name), reader, predicate)
 
 public fun <EB, CTX, T : Any> required(
@@ -39,7 +41,8 @@ public fun <EB, CTX, T : Any> required(
     reader: Reader<EB, CTX, T>,
     predicate: (ReaderEnv<EB, CTX>, Location) -> Boolean
 ): StructPropertySpec.Nullable<EB, CTX, T>
-    where EB : PathMissingErrorBuilder =
+    where EB : PathMissingErrorBuilder,
+          EB : InvalidTypeErrorBuilder =
     StructPropertySpec.Nullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->

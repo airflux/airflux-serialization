@@ -49,13 +49,31 @@ public final class io/github/airflux/serialization/core/lookup/LookupResult$Defi
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/airflux/serialization/core/lookup/LookupResult$Undefined : io/github/airflux/serialization/core/lookup/LookupResult {
-	public fun <init> (Lio/github/airflux/serialization/core/location/Location;)V
+public abstract class io/github/airflux/serialization/core/lookup/LookupResult$Undefined : io/github/airflux/serialization/core/lookup/LookupResult {
 	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+}
+
+public final class io/github/airflux/serialization/core/lookup/LookupResult$Undefined$InvalidType : io/github/airflux/serialization/core/lookup/LookupResult$Undefined {
+	public fun <init> (Ljava/lang/Iterable;Ljava/lang/String;Lio/github/airflux/serialization/core/location/Location;)V
+	public final fun component1 ()Ljava/lang/Iterable;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/airflux/serialization/core/location/Location;
+	public final fun copy (Ljava/lang/Iterable;Ljava/lang/String;Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$InvalidType;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$InvalidType;Ljava/lang/Iterable;Ljava/lang/String;Lio/github/airflux/serialization/core/location/Location;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$InvalidType;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActual ()Ljava/lang/String;
+	public final fun getExpected ()Ljava/lang/Iterable;
+	public fun getLocation ()Lio/github/airflux/serialization/core/location/Location;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing : io/github/airflux/serialization/core/lookup/LookupResult$Undefined {
+	public fun <init> (Lio/github/airflux/serialization/core/location/Location;)V
 	public final fun component1 ()Lio/github/airflux/serialization/core/location/Location;
-	public final fun copy (Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined;Lio/github/airflux/serialization/core/location/Location;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined;
+	public final fun copy (Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing;Lio/github/airflux/serialization/core/location/Location;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getLocation ()Lio/github/airflux/serialization/core/location/Location;
 	public fun hashCode ()I

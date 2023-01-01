@@ -59,17 +59,36 @@ internal class ReaderTest : FreeSpec() {
             }
 
             "Reader#flatMapResult" - {
-                val reader: Reader<EB, Unit, String> = dummyStringReader()
 
-                "should return new reader" {
-                    val source = StringNode(VALUE)
-                    val transformedReader =
-                        reader.flatMapResult { _, location, value ->
-                            value.toInt().success(location)
-                        }
-                    val result = transformedReader.read(ENV, LOCATION, source)
+                "when the original reader returns a successful result" - {
+                    val reader: Reader<EB, Unit, String> = dummyStringReader()
 
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
+                    "then the new reader should return the transformed value" {
+                        val source = StringNode(VALUE)
+                        val transformedReader =
+                            reader.flatMapResult { _, location, value ->
+                                value.toInt().success(location)
+                            }
+                        val result = transformedReader.read(ENV, LOCATION, source)
+
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
+                    }
+                }
+
+                "when the original reader returns an error" - {
+                    val failure = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val reader: Reader<EB, Unit, String> = DummyReader(result = failure)
+
+                    "then the new reader should return it error" {
+                        val source = StringNode(VALUE)
+                        val transformedReader =
+                            reader.flatMapResult { _, location, value ->
+                                value.toInt().success(location)
+                            }
+                        val result = transformedReader.read(ENV, LOCATION, source)
+
+                        result shouldBeFailure failure
+                    }
                 }
             }
 

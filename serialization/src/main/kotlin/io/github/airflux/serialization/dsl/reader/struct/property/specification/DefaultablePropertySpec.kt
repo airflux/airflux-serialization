@@ -21,20 +21,23 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readWithDefault
 
 public fun <EB, CTX, T : Any> defaultable(
     name: String,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): StructPropertySpec.NonNullable<EB, CTX, T> =
+): StructPropertySpec.NonNullable<EB, CTX, T>
+    where EB : InvalidTypeErrorBuilder =
     defaultable(PropertyPath(name), reader, default)
 
 public fun <EB, CTX, T : Any> defaultable(
     path: PropertyPath,
     reader: Reader<EB, CTX, T>,
     default: (ReaderEnv<EB, CTX>) -> T
-): StructPropertySpec.NonNullable<EB, CTX, T> =
+): StructPropertySpec.NonNullable<EB, CTX, T>
+    where EB : InvalidTypeErrorBuilder =
     StructPropertySpec.NonNullable(
         path = PropertyPaths(path),
         reader = { env, location, source ->
