@@ -64,20 +64,10 @@ public sealed class ReaderResult<out T> {
 
     public interface Error
 
-    public class Errors private constructor(public val items: List<Error>) {
+    @JvmInline
+    public value class Errors private constructor(public val items: List<Error>) {
 
         public operator fun plus(other: Errors): Errors = Errors(items + other.items)
-
-        override fun equals(other: Any?): Boolean =
-            this === other || (other is Errors && this.items == other.items)
-
-        override fun hashCode(): Int = items.hashCode()
-
-        override fun toString(): String = buildString {
-            append("Errors(items=")
-            append(items.toString())
-            append(")")
-        }
 
         public companion object {
 
