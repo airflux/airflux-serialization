@@ -18,90 +18,40 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainAll
-import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.collections.shouldContainExactly
 
 internal class ReaderResultErrorsTest : FreeSpec() {
 
+    companion object {
+        private val FIRST_ERROR = JsonErrors.PathMissing
+        private val SECOND_ERROR = JsonErrors.AdditionalItems
+    }
+
     init {
+        "The Errors type" - {
 
-        "A ReaderResult#Errors type" - {
+            "when the value of the Errors type is created with only one item" - {
+                val errors = ReaderResult.Errors(FIRST_ERROR)
 
-            "#invoke(ReaderResult#Error, _) should return JsErrors with a single error" {
-                val errors = ReaderResult.Errors(JsonErrors.PathMissing)
+                "then the value should have only the passed element" {
+                    errors.items shouldContainExactly listOf(FIRST_ERROR)
+                }
 
-                errors.items shouldContainAll listOf(JsonErrors.PathMissing)
-            }
+                "when to the value appended other errors" - {
+                    val mergedErrors = errors + ReaderResult.Errors(SECOND_ERROR)
 
-            "#invoke(ReaderResult#Error, ReaderResult#Error) should return JsErrors with all errors" {
-                val errors = ReaderResult.Errors(
-                    JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(BooleanNode.nameOfType), actual = StringNode.nameOfType)
-                )
-
-                errors.items shouldContainAll listOf(
-                    JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(BooleanNode.nameOfType), actual = StringNode.nameOfType)
-                )
-            }
-
-            "#invoke(List<ReaderResult#Error>)" - {
-
-                "should return ReaderResult#Errors with errors from the list" {
-                    val errors = ReaderResult.Errors(
-                        JsonErrors.PathMissing,
-                        JsonErrors.InvalidType(
-                            expected = listOf(BooleanNode.nameOfType),
-                            actual = StringNode.nameOfType
-                        )
-                    )
-
-                    errors.shouldNotBeNull()
-                        .items.shouldContainAll(
-                            listOf(
-                                JsonErrors.PathMissing,
-                                JsonErrors.InvalidType(
-                                    expected = listOf(BooleanNode.nameOfType),
-                                    actual = StringNode.nameOfType
-                                )
-                            )
-                        )
+                    "then the new value should have all elements" {
+                        mergedErrors.items shouldContainExactly listOf(FIRST_ERROR, SECOND_ERROR)
+                    }
                 }
             }
 
-            "calling plus function should return a new ReaderResult#Errors object with all errors" {
-                val firstErrors = ReaderResult.Errors(JsonErrors.PathMissing)
-                val secondErrors =
-                    ReaderResult.Errors(
-                        JsonErrors.InvalidType(
-                            expected = listOf(BooleanNode.nameOfType),
-                            actual = StringNode.nameOfType
-                        )
-                    )
-
-                val errors = firstErrors + secondErrors
-
-                errors.items shouldContainAll listOf(
-                    JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(BooleanNode.nameOfType), actual = StringNode.nameOfType)
-                )
-            }
-
             "should comply with equals() and hashCode() contract" {
-                val errors = ReaderResult.Errors(JsonErrors.PathMissing)
-
-                errors.shouldBeEqualsContract(
-                    y = ReaderResult.Errors(JsonErrors.PathMissing),
-                    z = ReaderResult.Errors(JsonErrors.PathMissing),
-                    other = ReaderResult.Errors(
-                        JsonErrors.InvalidType(
-                            expected = listOf(BooleanNode.nameOfType),
-                            actual = StringNode.nameOfType
-                        )
-                    )
+                ReaderResult.Errors(FIRST_ERROR).shouldBeEqualsContract(
+                    y = ReaderResult.Errors(FIRST_ERROR),
+                    z = ReaderResult.Errors(FIRST_ERROR),
+                    other = ReaderResult.Errors(SECOND_ERROR)
                 )
             }
         }

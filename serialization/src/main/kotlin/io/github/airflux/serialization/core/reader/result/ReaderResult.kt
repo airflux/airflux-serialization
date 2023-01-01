@@ -70,11 +70,7 @@ public sealed class ReaderResult<out T> {
         public operator fun plus(other: Errors): Errors = Errors(items + other.items)
 
         public companion object {
-
-            public operator fun invoke(error: Error, vararg errors: Error): Errors = if (errors.isEmpty())
-                Errors(listOf(error))
-            else
-                Errors(listOf(error) + errors.asList())
+            public operator fun invoke(error: Error): Errors = Errors(listOf(error))
         }
     }
 }

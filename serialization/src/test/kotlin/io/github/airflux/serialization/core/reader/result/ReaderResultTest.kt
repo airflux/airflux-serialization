@@ -139,10 +139,7 @@ internal class ReaderResultTest : FreeSpec() {
             }
 
             "constructor(JsLocation, ReaderResult#Errors)" {
-                val errors = ReaderResult.Errors(
-                    JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(StringNode.nameOfType), actual = BooleanNode.nameOfType)
-                )
+                val errors = ReaderResult.Errors(JsonErrors.PathMissing)
 
                 val failure = ReaderResult.Failure(location = LOCATION, errors = errors)
 
@@ -269,20 +266,11 @@ internal class ReaderResultTest : FreeSpec() {
             "constructor(Location, ReaderResult#Errors)" {
                 val cause = ReaderResult.Failure.Cause(
                     location = LOCATION,
-                    errors = ReaderResult.Errors(
-                        JsonErrors.PathMissing,
-                        JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
-                        )
-                    )
+                    errors = ReaderResult.Errors(JsonErrors.PathMissing)
                 )
 
                 cause.location shouldBe LOCATION
-                cause.errors.items shouldContainAll listOf(
-                    JsonErrors.PathMissing,
-                    JsonErrors.InvalidType(expected = listOf(StringNode.nameOfType), actual = BooleanNode.nameOfType)
-                )
+                cause.errors.items shouldContainAll listOf(JsonErrors.PathMissing)
             }
         }
 

@@ -237,7 +237,7 @@ public final class io/github/airflux/serialization/core/reader/result/ReaderResu
 }
 
 public final class io/github/airflux/serialization/core/reader/result/ReaderResult$Errors$Companion {
-	public final fun invoke-Gk7wbD8 (Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;[Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;)Ljava/util/List;
+	public final fun invoke-D7fgQ4M (Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;)Ljava/util/List;
 }
 
 public final class io/github/airflux/serialization/core/reader/result/ReaderResult$Failure : io/github/airflux/serialization/core/reader/result/ReaderResult {
