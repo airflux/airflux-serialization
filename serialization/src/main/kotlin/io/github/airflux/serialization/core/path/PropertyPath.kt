@@ -16,12 +16,8 @@
 
 package io.github.airflux.serialization.core.path
 
-@Suppress("unused")
-public class PropertyPath private constructor(public val elements: List<Element>) {
-
-    public constructor(key: String) : this(Element.Key(key))
-    public constructor(idx: Int) : this(Element.Idx(idx))
-    public constructor(element: Element) : this(listOf(element))
+@JvmInline
+public value class PropertyPath private constructor(public val elements: List<Element>) {
 
     public fun append(key: String): PropertyPath = append(Element.Key(key))
     public fun append(idx: Int): PropertyPath = append(Element.Idx(idx))
@@ -31,11 +27,6 @@ public class PropertyPath private constructor(public val elements: List<Element>
         append("#")
         elements.forEach { element -> append(element) }
     }
-
-    override fun equals(other: Any?): Boolean =
-        this === other || (other is PropertyPath && this.elements == other.elements)
-
-    override fun hashCode(): Int = elements.hashCode()
 
     public sealed class Element {
 
@@ -48,5 +39,9 @@ public class PropertyPath private constructor(public val elements: List<Element>
         }
     }
 
-    public companion object
+    public companion object {
+        public operator fun invoke(key: String): PropertyPath = invoke(Element.Key(key))
+        public operator fun invoke(idx: Int): PropertyPath = invoke(Element.Idx(idx))
+        public operator fun invoke(element: Element): PropertyPath = PropertyPath(listOf(element))
+    }
 }
