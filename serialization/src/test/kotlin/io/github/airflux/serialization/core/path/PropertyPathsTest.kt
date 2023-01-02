@@ -16,127 +16,103 @@
 
 package io.github.airflux.serialization.core.path
 
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 internal class PropertyPathsTest : FreeSpec() {
 
     companion object {
-        private val pathUser = PropertyPath("user")
-        private val pathId = PropertyPath("id")
-        private val pathName = PropertyPath("name")
+        private const val FIRST_PROPERTY_NAME = "first"
+        private val FIRST_PATH = PropertyPath(FIRST_PROPERTY_NAME)
+
+        private const val SECOND_PROPERTY_NAME = "second"
+        private val SECOND_PATH = PropertyPath(SECOND_PROPERTY_NAME)
     }
 
     init {
 
         "The PropertyPaths type" - {
-            val paths = PropertyPaths(pathUser)
 
-            "after creating" - {
+            "when the value of the PropertyPaths type is created with only one item" - {
+                val paths = PropertyPaths(FIRST_PATH)
 
-                "should be non-empty" {
-                    paths.items.isNotEmpty() shouldBe true
+                "then the value should have only the passed element" {
+                    paths.items shouldContainExactly listOf(FIRST_PATH)
                 }
 
-                "should have size 1" {
-                    paths.items.size shouldBe 1
+                "method 'toString() should return '[$FIRST_PROPERTY_NAME]'" {
+                    paths.toString() shouldBe "[#/$FIRST_PROPERTY_NAME]"
+                }
+            }
+
+            "when the value of the PropertyPaths type is created with two items" - {
+                val paths = PropertyPaths(FIRST_PATH, SECOND_PATH)
+
+                "then the value should have only the passed elements" {
+                    paths.items shouldContainExactly listOf(FIRST_PATH, SECOND_PATH)
                 }
 
-                "should have elements in the order they were passed" {
-                    paths.items shouldContainExactly listOf(pathUser)
+                "method 'toString() should return '[$FIRST_PROPERTY_NAME, $SECOND_PROPERTY_NAME]'" {
+                    paths.toString() shouldBe "[#/$FIRST_PROPERTY_NAME, #/$SECOND_PROPERTY_NAME]"
                 }
+            }
 
-                "method 'toString() should return '[$pathUser]'" {
-                    paths.toString() shouldBe "[$pathUser]"
-                }
+            "when some path is added to the value of the PropertyPaths type" - {
+                val paths = PropertyPaths(FIRST_PATH)
 
-                "and adding a unique path" - {
-                    val updatedPaths = paths.append(pathId)
+                "when another path is unique" - {
+                    val mergedPaths = paths.append(SECOND_PATH)
 
-                    "should be non-empty" {
-                        updatedPaths.items.isNotEmpty() shouldBe true
-                    }
-
-                    "should have size 2" {
-                        updatedPaths.items.size shouldBe 2
-                    }
-
-                    "should have elements in the order they were passed" {
-                        updatedPaths.items shouldContainExactly listOf(pathUser, pathId)
-                    }
-
-                    "method 'toString() should return '[$pathUser, $pathId]'" {
-                        updatedPaths.toString() shouldBe "[$pathUser, $pathId]"
+                    "then the new value should have all elements" {
+                        mergedPaths.items shouldContainExactly listOf(FIRST_PATH, SECOND_PATH)
                     }
                 }
 
-                "and adding a non-unique path" - {
-                    val updatedPaths = paths.append(pathUser)
+                "when another path is not unique" - {
+                    val mergedPaths = paths.append(FIRST_PATH)
 
-                    "should return origin instance" {
-                        updatedPaths shouldBe paths
-                    }
-                }
-
-                "and adding a unique paths" - {
-                    val updatedPaths = paths.append(PropertyPaths(pathId, pathName))
-
-                    "should be non-empty" {
-                        updatedPaths.items.isNotEmpty() shouldBe true
-                    }
-
-                    "should have size 3" {
-                        updatedPaths.items.size shouldBe 3
-                    }
-
-                    "should have elements in the order they were passed" {
-                        updatedPaths.items shouldContainExactly listOf(pathUser, pathId, pathName)
-                    }
-
-                    "method 'toString() should return '[$pathUser, $pathId, $pathName]'" {
-                        updatedPaths.toString() shouldBe "[$pathUser, $pathId, $pathName]"
-                    }
-                }
-
-                "and adding a non-unique paths" - {
-
-                    "all adding elements is a non-unique" - {
-                        val updatedPaths = paths.append(PropertyPaths(pathUser))
-
-                        "should return origin instance" {
-                            updatedPaths shouldBe paths
-                        }
-                    }
-
-                    "some adding elements is a non-unique" - {
-                        val updatedPaths = paths.append(PropertyPaths(pathUser, pathId))
-
-                        "should be non-empty" {
-                            updatedPaths.items.isNotEmpty() shouldBe true
-                        }
-
-                        "should have size 2" {
-                            updatedPaths.items.size shouldBe 2
-                        }
-
-                        "should have elements in the order they were passed" {
-                            updatedPaths.items shouldContainExactly listOf(pathUser, pathId)
-                        }
-
-                        "method 'toString() should return '[$pathUser, $pathId]'" {
-                            updatedPaths.toString() shouldBe "[$pathUser, $pathId]"
-                        }
+                    "then the same instance should be returned" {
+                        mergedPaths.items shouldBeSameInstanceAs paths.items
                     }
                 }
             }
 
-            "calling the fold function should return a folding value" {
-                val result = PropertyPaths(pathUser)
-                    .append(pathId)
-                    .fold({ path -> path.toString() }) { acc, path -> "$acc, $path" }
+            "when some paths are added to the value of the PropertyPaths type" - {
+                val paths = PropertyPaths(FIRST_PATH)
 
-                result shouldBe "#/user, #/id"
+                "when added paths are unique" - {
+                    val mergedPaths = paths.append(PropertyPaths(SECOND_PATH))
+
+                    "then the new value should have all elements" {
+                        mergedPaths.items shouldContainExactly listOf(FIRST_PATH, SECOND_PATH)
+                    }
+                }
+
+                "when added paths are not unique" - {
+                    val mergedPaths = paths.append(PropertyPaths(FIRST_PATH))
+
+                    "then the same instance should be returned" {
+                        mergedPaths.items shouldBeSameInstanceAs paths.items
+                    }
+                }
+            }
+
+            "the fold function should return a folding value" {
+                val paths = PropertyPaths(FIRST_PATH).append(SECOND_PATH)
+                val result = paths.fold({ path -> path.toString() }) { acc, path -> "$acc, $path" }
+
+                result shouldBe "#/$FIRST_PROPERTY_NAME, #/$SECOND_PROPERTY_NAME"
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                PropertyPaths(FIRST_PATH).shouldBeEqualsContract(
+                    y = PropertyPaths(FIRST_PATH),
+                    z = PropertyPaths(FIRST_PATH),
+                    other = PropertyPaths(SECOND_PATH)
+                )
             }
         }
     }

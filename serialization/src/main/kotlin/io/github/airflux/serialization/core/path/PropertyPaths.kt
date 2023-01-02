@@ -16,13 +16,11 @@
 
 package io.github.airflux.serialization.core.path
 
-@Suppress("unused")
-public class PropertyPaths private constructor(public val items: List<PropertyPath>) {
-
-    public constructor(path: PropertyPath, vararg other: PropertyPath) : this(path, other.asList())
-    public constructor(path: PropertyPath, other: List<PropertyPath>) : this(listOf(path) + other)
+@JvmInline
+public value class PropertyPaths private constructor(public val items: List<PropertyPath>) {
 
     public fun append(path: PropertyPath): PropertyPaths = if (path in items) this else PropertyPaths(items + path)
+
     public fun append(paths: PropertyPaths): PropertyPaths {
         val newPaths = paths.items.filter { path -> path !in items }
         return if (newPaths.isEmpty()) this else PropertyPaths(items + newPaths)
@@ -39,5 +37,9 @@ public class PropertyPaths private constructor(public val items: List<PropertyPa
 
     override fun toString(): String = items.toString()
 
-    public companion object
+    public companion object {
+        public operator fun invoke(path: PropertyPath): PropertyPaths = PropertyPaths(listOf(path))
+        public operator fun invoke(path: PropertyPath, other: PropertyPath): PropertyPaths =
+            PropertyPaths(listOf(path, other))
+    }
 }
