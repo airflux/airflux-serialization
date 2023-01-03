@@ -19,7 +19,6 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.kotest.core.spec.style.FreeSpec
@@ -27,7 +26,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
-internal class MandatoryPropertyValidatorTest : FreeSpec() {
+internal class ForbiddenPropertyValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
@@ -40,10 +39,19 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
         "The property value validator the Mandatory" - {
 
             "when the predicate returns the true value" - {
-                val validator: Validator<EB, Unit, Int?> = StdPropertyValidator.mandatory { _, _ -> true }
+                val validator: Validator<EB, Unit, Int?> = StdPropertyValidator.forbidden { _, _ -> true }
 
                 "when a value is missing" - {
                     val value: Int? = null
+
+                    "then the validator should return the null value" {
+                        val errors = validator.validate(ENV, LOCATION, value)
+                        errors.shouldBeNull()
+                    }
+                }
+
+                "when a value is present" - {
+                    val value = VALUE
 
                     "then the validator should return an error" {
                         val failure = validator.validate(ENV, LOCATION, value)
@@ -51,23 +59,14 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
                             location = LOCATION,
-                            error = JsonErrors.PathMissing
+                            error = JsonErrors.Validation.Struct.ForbiddenProperty
                         )
-                    }
-                }
-
-                "when a value is present" - {
-                    val value = VALUE
-
-                    "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, value)
-                        errors.shouldBeNull()
                     }
                 }
             }
 
             "when the predicate returns the false value" - {
-                val validator: Validator<EB, Unit, Int?> = StdPropertyValidator.mandatory { _, _ -> false }
+                val validator: Validator<EB, Unit, Int?> = StdPropertyValidator.forbidden { _, _ -> false }
 
                 "when a value is missing" - {
                     val value: Int? = null
@@ -90,7 +89,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
         }
     }
 
-    internal class EB : PathMissingErrorBuilder {
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+    internal class EB : ForbiddenPropertyValidator.ErrorBuilder {
+        override fun forbiddenPropertyError(): ReaderResult.Error = JsonErrors.Validation.Struct.ForbiddenProperty
     }
 }

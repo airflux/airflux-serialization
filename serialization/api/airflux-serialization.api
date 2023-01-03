@@ -926,12 +926,21 @@ public final class io/github/airflux/serialization/std/validator/number/StdNumbe
 	public final fun minimum (Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 }
 
+public final class io/github/airflux/serialization/std/validator/property/ForbiddenPropertyValidator : io/github/airflux/serialization/core/reader/validator/Validator {
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+}
+
+public abstract interface class io/github/airflux/serialization/std/validator/property/ForbiddenPropertyValidator$ErrorBuilder {
+	public abstract fun forbiddenPropertyError ()Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
 public final class io/github/airflux/serialization/std/validator/property/MandatoryPropertyValidator : io/github/airflux/serialization/core/reader/validator/Validator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
 public final class io/github/airflux/serialization/std/validator/property/StdPropertyValidator {
 	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/property/StdPropertyValidator;
+	public final fun forbidden (Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 	public final fun mandatory (Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/validator/Validator;
 }
 

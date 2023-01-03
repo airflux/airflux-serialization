@@ -25,6 +25,15 @@ public object StdPropertyValidator {
 
     /**
      * Validation of a value if the predicate returns the true value,
+     * if a value is present (not equal to null), then an error, otherwise a success.
+     */
+    public fun <EB, CTX, T> forbidden(
+        predicate: (env: ReaderEnv<EB, CTX>, location: Location) -> Boolean
+    ): Validator<EB, CTX, T>
+        where EB : ForbiddenPropertyValidator.ErrorBuilder = ForbiddenPropertyValidator(predicate)
+
+    /**
+     * Validation of a value if the predicate returns the true value,
      * if a value is missing (equal to null), then an error, otherwise a success.
      */
     public fun <EB, CTX, T> mandatory(
