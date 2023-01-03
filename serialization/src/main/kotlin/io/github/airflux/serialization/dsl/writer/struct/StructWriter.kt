@@ -27,7 +27,6 @@ import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResu
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.writer.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
@@ -36,7 +35,7 @@ public fun <CTX, T : Any> structWriter(block: StructWriter.Builder<CTX, T>.() ->
     StructWriter.Builder<CTX, T>().apply(block).build()
 
 public class StructWriter<CTX, T : Any> private constructor(
-    private val properties: StructProperties<CTX, T>
+    private val properties: List<StructProperty<CTX, T>>
 ) : Writer<CTX, T>
     where CTX : WriterActionBuilderIfResultIsEmptyOption {
 
@@ -77,6 +76,6 @@ public class StructWriter<CTX, T : Any> private constructor(
             StructProperty.Nullable(spec)
                 .also { properties.add(it) }
 
-        public fun build(): Writer<CTX, T> = StructWriter(StructProperties(properties))
+        public fun build(): Writer<CTX, T> = StructWriter(properties)
     }
 }

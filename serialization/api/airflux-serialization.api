@@ -762,7 +762,7 @@ public final class io/github/airflux/serialization/dsl/writer/array/item/specifi
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriter : io/github/airflux/serialization/core/writer/Writer {
-	public synthetic fun <init> (Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperties;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun write (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/ValueNode;
 }
 
@@ -775,26 +775,6 @@ public final class io/github/airflux/serialization/dsl/writer/struct/StructWrite
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriterKt {
 	public static final fun structWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/Writer;
-}
-
-public final class io/github/airflux/serialization/dsl/writer/struct/property/StructProperties : java/util/Collection, kotlin/jvm/internal/markers/KMappedMarker {
-	public fun add (Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperty;)Z
-	public synthetic fun add (Ljava/lang/Object;)Z
-	public fun addAll (Ljava/util/Collection;)Z
-	public fun clear ()V
-	public fun contains (Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperty;)Z
-	public final fun contains (Ljava/lang/Object;)Z
-	public fun containsAll (Ljava/util/Collection;)Z
-	public fun getSize ()I
-	public fun isEmpty ()Z
-	public fun iterator ()Ljava/util/Iterator;
-	public fun remove (Ljava/lang/Object;)Z
-	public fun removeAll (Ljava/util/Collection;)Z
-	public fun removeIf (Ljava/util/function/Predicate;)Z
-	public fun retainAll (Ljava/util/Collection;)Z
-	public final fun size ()I
-	public fun toArray ()[Ljava/lang/Object;
-	public fun toArray ([Ljava/lang/Object;)[Ljava/lang/Object;
 }
 
 public abstract class io/github/airflux/serialization/dsl/writer/struct/property/StructProperty {
