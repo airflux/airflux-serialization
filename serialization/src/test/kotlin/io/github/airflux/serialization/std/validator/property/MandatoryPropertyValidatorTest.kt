@@ -19,7 +19,6 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.kotest.core.spec.style.FreeSpec
@@ -90,7 +89,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
         }
     }
 
-    internal class EB : PathMissingErrorBuilder {
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+    internal class EB : MandatoryPropertyValidator.ErrorBuilder {
+        override fun mandatoryPropertyError(): ReaderResult.Error = JsonErrors.PathMissing
     }
 }

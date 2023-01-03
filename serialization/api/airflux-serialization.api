@@ -938,6 +938,10 @@ public final class io/github/airflux/serialization/std/validator/property/Mandat
 	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
+public abstract interface class io/github/airflux/serialization/std/validator/property/MandatoryPropertyValidator$ErrorBuilder {
+	public abstract fun mandatoryPropertyError ()Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;
+}
+
 public final class io/github/airflux/serialization/std/validator/property/StdPropertyValidator {
 	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/property/StdPropertyValidator;
 	public final fun forbidden (Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/validator/Validator;

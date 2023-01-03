@@ -18,7 +18,6 @@ package io.github.airflux.serialization.std.validator.property
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public object StdPropertyValidator {
@@ -39,5 +38,5 @@ public object StdPropertyValidator {
     public fun <EB, CTX, T> mandatory(
         predicate: (env: ReaderEnv<EB, CTX>, location: Location) -> Boolean
     ): Validator<EB, CTX, T>
-        where EB : PathMissingErrorBuilder = MandatoryPropertyValidator(predicate)
+        where EB : MandatoryPropertyValidator.ErrorBuilder = MandatoryPropertyValidator(predicate)
 }

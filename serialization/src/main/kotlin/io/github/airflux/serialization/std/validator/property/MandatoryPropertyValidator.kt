@@ -18,21 +18,24 @@ package io.github.airflux.serialization.std.validator.property
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class MandatoryPropertyValidator<EB, CTX, T> internal constructor(
     private val predicate: (env: ReaderEnv<EB, CTX>, location: Location) -> Boolean
 ) : Validator<EB, CTX, T>
-    where EB : PathMissingErrorBuilder {
+    where EB : MandatoryPropertyValidator.ErrorBuilder {
 
     override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure? =
         if (predicate(env, location)) {
             if (value != null)
                 null
             else
-                ReaderResult.Failure(location = location, error = env.errorBuilders.pathMissingError())
+                ReaderResult.Failure(location = location, error = env.errorBuilders.mandatoryPropertyError())
         } else
             null
+
+    public interface ErrorBuilder {
+        public fun mandatoryPropertyError(): ReaderResult.Error
+    }
 }
