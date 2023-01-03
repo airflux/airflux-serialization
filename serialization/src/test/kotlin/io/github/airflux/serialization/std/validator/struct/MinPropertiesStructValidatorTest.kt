@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -41,7 +41,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
         private const val MIN_PROPERTIES = 2
         private val ENV = ReaderEnv(EB(), Unit)
         private val LOCATION = Location.empty
-        private val PROPERTIES: StructProperties<EB, Unit> = StructProperties(emptyList())
+        private val PROPERTIES = emptyList<StructProperty<EB, Unit>>()
     }
 
     init {

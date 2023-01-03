@@ -27,7 +27,6 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
@@ -49,7 +48,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private val LOCATION = Location.empty
         private val idProperty: StructProperty.NonNullable<EB, CTX, String> =
             StructProperty.NonNullable(required(ID_PROPERTY_NAME, StringReader))
-        private val PROPERTIES: StructProperties<EB, CTX> = StructProperties(listOf(idProperty))
+        private val PROPERTIES = listOf(idProperty)
     }
 
     init {

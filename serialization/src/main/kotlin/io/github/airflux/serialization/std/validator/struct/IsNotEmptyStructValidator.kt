@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
 public class IsNotEmptyStructValidator<EB, CTX> internal constructor() : StructValidator<EB, CTX>
@@ -29,7 +29,7 @@ public class IsNotEmptyStructValidator<EB, CTX> internal constructor() : StructV
     override fun validate(
         env: ReaderEnv<EB, CTX>,
         location: Location,
-        properties: StructProperties<EB, CTX>,
+        properties: List<StructProperty<EB, CTX>>,
         source: StructNode
     ): ReaderResult.Failure? =
         if (source.isEmpty())

@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.validator.std
 
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructValidator
@@ -24,7 +24,7 @@ import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructVali
 internal class IsNotEmptyStructValidatorBuilder<EB, CTX> : StructValidatorBuilder<EB, CTX>
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
-    override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> = validator
+    override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> = validator
 
     private val validator = IsNotEmptyStructValidator<EB, CTX>()
 }

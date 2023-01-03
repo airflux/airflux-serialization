@@ -20,20 +20,20 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 
 internal class DummyStructValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : StructValidatorBuilder<EB, CTX> {
 
     val validator = Validator<EB, CTX>(result)
-    override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> = validator
+    override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> = validator
 
     internal class Validator<EB, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, CTX> {
         override fun validate(
             env: ReaderEnv<EB, CTX>,
             location: Location,
-            properties: StructProperties<EB, CTX>,
+            properties: List<StructProperty<EB, CTX>>,
             source: StructNode
         ): ReaderResult.Failure? = result
     }
@@ -44,7 +44,7 @@ internal class DummyStructValidatorBuilder<EB, CTX>(result: ReaderResult.Failure
             error: ReaderResult.Error
         ): StructValidatorBuilder<EB, CTX> =
             object : StructValidatorBuilder<EB, CTX> {
-                override fun build(properties: StructProperties<EB, CTX>): StructValidator<EB, CTX> =
+                override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> =
                     StructValidator { _, location, _, node ->
                         node.forEach { (name, _) ->
                             if (name !in nameProperties)
