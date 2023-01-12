@@ -4,6 +4,7 @@ import Configuration.Publishing.mavenSonatypeRepository
 import Configuration.Versions
 import info.solidsoft.gradle.pitest.PitestPluginExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import kotlinx.kover.api.KoverTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -14,6 +15,12 @@ plugins {
     `java-library`
 
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.10.0"
+
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -49,6 +56,9 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+        extensions.configure(KoverTaskExtension::class) {
+            includes.addAll("io.github.airflux.serialization.*")
+        }
     }
 
     withType<KotlinCompile>()

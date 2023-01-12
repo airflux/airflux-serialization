@@ -3,6 +3,7 @@ import Configuration.Publishing.mavenCentralMetadata
 import Configuration.Publishing.mavenSonatypeRepository
 import Configuration.Versions
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import kotlinx.kover.api.KoverTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -10,6 +11,8 @@ plugins {
     id("detekt-convention")
     id("publishing-convention")
     `java-library`
+
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 dependencies {
@@ -40,6 +43,9 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+        extensions.configure(KoverTaskExtension::class) {
+            includes.addAll("io.github.airflux.parser.*")
+        }
     }
 
     withType<KotlinCompile>()
