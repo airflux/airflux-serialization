@@ -7,6 +7,7 @@ plugins {
 
 dependencies{
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${Configuration.Versions.Detekt.Tool}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${Configuration.Versions.Detekt.Tool}")
 }
 configure<DetektExtension> {
     ignoreFailures = true
