@@ -21,10 +21,10 @@ import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidat
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructValidator
 
-internal class IsNotEmptyStructValidatorBuilder<EB, CTX> : StructValidatorBuilder<EB, CTX>
+internal class IsNotEmptyStructValidatorBuilder<EB, O, CTX> : StructValidatorBuilder<EB, O, CTX>
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
-    override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> = validator
+    override fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX> = validator
 
-    private val validator = IsNotEmptyStructValidator<EB, CTX>()
+    private val validator = IsNotEmptyStructValidator<EB, O, CTX>()
 }

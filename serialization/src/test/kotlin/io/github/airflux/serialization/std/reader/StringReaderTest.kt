@@ -31,9 +31,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val StringReader = stringReader<EB, Unit>()
+        private val StringReader = stringReader<EB, Unit, Unit>()
         private const val TEXT = "abc"
     }
 

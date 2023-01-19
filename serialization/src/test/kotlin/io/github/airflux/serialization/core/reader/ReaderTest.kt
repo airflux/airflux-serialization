@@ -38,7 +38,7 @@ internal class ReaderTest : FreeSpec() {
         private const val VALUE = "42"
         private const val LEFT_VALUE = "true"
         private const val RIGHT_VALUE = "false"
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
     }
 
@@ -47,7 +47,7 @@ internal class ReaderTest : FreeSpec() {
         "The Reader type" - {
 
             "Reader#map" - {
-                val reader: Reader<EB, Unit, String> = dummyStringReader()
+                val reader: Reader<EB, Unit, Unit, String> = dummyStringReader()
 
                 "should return new reader" {
                     val source = StringNode(VALUE)
@@ -61,7 +61,7 @@ internal class ReaderTest : FreeSpec() {
             "Reader#flatMapResult" - {
 
                 "when the original reader returns a successful result" - {
-                    val reader: Reader<EB, Unit, String> = dummyStringReader()
+                    val reader: Reader<EB, Unit, Unit, String> = dummyStringReader()
 
                     "then the new reader should return the transformed value" {
                         val source = StringNode(VALUE)
@@ -77,7 +77,7 @@ internal class ReaderTest : FreeSpec() {
 
                 "when the original reader returns an error" - {
                     val failure = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
-                    val reader: Reader<EB, Unit, String> = DummyReader(result = failure)
+                    val reader: Reader<EB, Unit, Unit, String> = DummyReader(result = failure)
 
                     "then the new reader should return it error" {
                         val source = StringNode(VALUE)
@@ -95,9 +95,9 @@ internal class ReaderTest : FreeSpec() {
             "Reader#or" - {
 
                 "when left reader returns an value" - {
-                    val leftReader: Reader<EB, Unit, String> =
+                    val leftReader: Reader<EB, Unit, Unit, String> =
                         DummyReader(ReaderResult.Success(location = LOCATION, value = LEFT_VALUE))
-                    val rightReader: Reader<EB, Unit, String> =
+                    val rightReader: Reader<EB, Unit, Unit, String> =
                         DummyReader(ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE))
 
                     val reader = leftReader or rightReader
@@ -109,12 +109,12 @@ internal class ReaderTest : FreeSpec() {
                 }
 
                 "when left reader returns an error" - {
-                    val leftReader: Reader<EB, Unit, String> = DummyReader { _, _, _ ->
+                    val leftReader: Reader<EB, Unit, Unit, String> = DummyReader { _, _, _ ->
                         ReaderResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                     }
 
                     "when the right reader returns an value" - {
-                        val rightReader: Reader<EB, Unit, String> =
+                        val rightReader: Reader<EB, Unit, Unit, String> =
                             DummyReader(ReaderResult.Success(location = LOCATION, value = RIGHT_VALUE))
 
                         val reader = leftReader or rightReader
@@ -126,7 +126,7 @@ internal class ReaderTest : FreeSpec() {
                     }
 
                     "when the right reader returns an error" - {
-                        val rightReader: Reader<EB, Unit, String> = DummyReader { _, _, _ ->
+                        val rightReader: Reader<EB, Unit, Unit, String> = DummyReader { _, _, _ ->
                             ReaderResult.Failure(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(

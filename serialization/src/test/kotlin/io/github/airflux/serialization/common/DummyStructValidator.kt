@@ -23,12 +23,12 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
-internal class DummyStructValidator<EB, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, CTX> {
+internal class DummyStructValidator<EB, O, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, O, CTX> {
 
     override fun validate(
-        env: ReaderEnv<EB, CTX>,
+        env: ReaderEnv<EB, O, CTX>,
         location: Location,
-        properties: List<StructProperty<EB, CTX>>,
+        properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode
     ): ReaderResult.Failure? = result
 }

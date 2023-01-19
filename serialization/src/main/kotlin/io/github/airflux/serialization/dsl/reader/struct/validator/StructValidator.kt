@@ -22,12 +22,12 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 
-public fun interface StructValidator<EB, CTX> {
+public fun interface StructValidator<EB, O, CTX> {
 
     public fun validate(
-        env: ReaderEnv<EB, CTX>,
+        env: ReaderEnv<EB, O, CTX>,
         location: Location,
-        properties: List<StructProperty<EB, CTX>>,
+        properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode
     ): ReaderResult.Failure?
 }

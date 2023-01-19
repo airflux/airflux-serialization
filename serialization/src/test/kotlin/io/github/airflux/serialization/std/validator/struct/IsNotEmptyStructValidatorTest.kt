@@ -34,15 +34,16 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
     companion object {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "property-id"
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val PROPERTIES = emptyList<StructProperty<EB, Unit>>()
+        private val PROPERTIES = emptyList<StructProperty<EB, Unit, Unit>>()
     }
 
     init {
 
         "The struct validator IsNotEmpty" - {
-            val validator: StructValidator<EB, Unit> = StdStructValidator.isNotEmpty<EB, Unit>().build(PROPERTIES)
+            val validator: StructValidator<EB, Unit, Unit> =
+                StdStructValidator.isNotEmpty<EB, Unit, Unit>().build(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = StructNode()

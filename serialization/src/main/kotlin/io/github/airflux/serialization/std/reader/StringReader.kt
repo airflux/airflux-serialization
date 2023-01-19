@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.value.readAsString
 /**
  * Reader for primitive [String] type.
  */
-public fun <EB, CTX> stringReader(): Reader<EB, CTX, String>
+public fun <EB, O, CTX> stringReader(): Reader<EB, O, CTX, String>
     where EB : InvalidTypeErrorBuilder =
     Reader { env, location, source ->
         source.readAsString(env, location)

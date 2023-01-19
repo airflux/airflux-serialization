@@ -39,16 +39,16 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MAX_PROPERTIES = 2
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val PROPERTIES = emptyList<StructProperty<EB, Unit>>()
+        private val PROPERTIES = emptyList<StructProperty<EB, Unit, Unit>>()
     }
 
     init {
 
         "The struct validator MaxProperties" - {
-            val validator: StructValidator<EB, Unit> =
-                StdStructValidator.maxProperties<EB, Unit>(MAX_PROPERTIES).build(PROPERTIES)
+            val validator: StructValidator<EB, Unit, Unit> =
+                StdStructValidator.maxProperties<EB, Unit, Unit>(MAX_PROPERTIES).build(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = StructNode()

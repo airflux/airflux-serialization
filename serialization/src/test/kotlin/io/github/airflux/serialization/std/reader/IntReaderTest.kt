@@ -35,9 +35,9 @@ import kotlin.reflect.KClass
 internal class IntReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val IntReader = intReader<EB, Unit>()
+        private val IntReader = intReader<EB, Unit, Unit>()
     }
 
     init {

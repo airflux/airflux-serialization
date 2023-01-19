@@ -20,22 +20,22 @@ import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 
-public sealed class StructProperty<out EB, out CTX> {
+public sealed class StructProperty<out EB, out O, out CTX> {
     public abstract val path: PropertyPaths
 
-    public class NonNullable<EB, CTX, T : Any> private constructor(
+    public class NonNullable<EB, O, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T>
-    ) : StructProperty<EB, CTX>() {
+        public val reader: Reader<EB, O, CTX, T>
+    ) : StructProperty<EB, O, CTX>() {
 
-        internal constructor(spec: StructPropertySpec.NonNullable<EB, CTX, T>) : this(spec.path, spec.reader)
+        internal constructor(spec: StructPropertySpec.NonNullable<EB, O, CTX, T>) : this(spec.path, spec.reader)
     }
 
-    public class Nullable<EB, CTX, T : Any> private constructor(
+    public class Nullable<EB, O, CTX, T : Any> private constructor(
         override val path: PropertyPaths,
-        public val reader: Reader<EB, CTX, T?>
-    ) : StructProperty<EB, CTX>() {
+        public val reader: Reader<EB, O, CTX, T?>
+    ) : StructProperty<EB, O, CTX>() {
 
-        internal constructor(spec: StructPropertySpec.Nullable<EB, CTX, T>) : this(spec.path, spec.reader)
+        internal constructor(spec: StructPropertySpec.Nullable<EB, O, CTX, T>) : this(spec.path, spec.reader)
     }
 }

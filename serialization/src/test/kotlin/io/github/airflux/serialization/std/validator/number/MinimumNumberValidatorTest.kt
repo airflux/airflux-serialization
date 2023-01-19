@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class MinimumNumberValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val MIN_VALUE: Int = 2
     }
@@ -37,7 +37,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
     init {
 
         "The numeric validator of the minimum allowed value" - {
-            val validator: Validator<EB, Unit, Int> = StdNumberValidator.minimum(MIN_VALUE)
+            val validator: Validator<EB, Unit, Unit, Int> = StdNumberValidator.minimum(MIN_VALUE)
 
             "when a value is less than the min allowed" - {
                 val value = MIN_VALUE - 1

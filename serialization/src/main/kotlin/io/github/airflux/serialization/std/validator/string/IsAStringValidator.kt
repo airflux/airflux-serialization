@@ -21,12 +21,12 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class IsAStringValidator<EB, CTX> internal constructor(
+public class IsAStringValidator<EB, O, CTX> internal constructor(
     private val predicate: (String) -> Boolean
-) : Validator<EB, CTX, String>
+) : Validator<EB, O, CTX, String>
     where EB : IsAStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: String): ReaderResult.Failure? =
         if (predicate(value))
             null
         else

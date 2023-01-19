@@ -124,8 +124,8 @@ public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<
  * catching any [Throwable] exception that was thrown from the [block] function execution
  * and using the [io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler] from env to handle it.
  */
-public inline fun <EB, CTX, T> withCatching(
-    env: ReaderEnv<EB, CTX>,
+public inline fun <EB, O, CTX, T> withCatching(
+    env: ReaderEnv<EB, O, CTX>,
     location: Location,
     block: () -> ReaderResult<T>
 ): ReaderResult<T> =

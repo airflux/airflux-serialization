@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class IsAValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private val PATTERN: Regex = "\\d+".toRegex()
         private val IS_DIGITAL: (String) -> Boolean = { value: String -> PATTERN.matches(value) }
@@ -38,7 +38,7 @@ internal class IsAValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: Validator<EB, Unit, String> = StdStringValidator.isA(IS_DIGITAL)
+            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.isA(IS_DIGITAL)
 
             "when a string is empty" - {
                 val str = ""

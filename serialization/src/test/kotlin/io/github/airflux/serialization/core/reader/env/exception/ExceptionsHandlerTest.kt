@@ -27,13 +27,13 @@ import org.junit.jupiter.api.assertThrows
 internal class ExceptionsHandlerTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(Unit, Unit)
+        private val ENV = ReaderEnv(Unit, Unit, Unit)
         private val LOCATION = Location.empty
     }
 
     init {
         "The ExceptionsHandler" - {
-            val handler = exceptionsHandler<Unit, Unit> {
+            val handler = exceptionsHandler<Unit, Unit, Unit> {
                 exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
             }
 

@@ -27,8 +27,8 @@ import io.kotest.matchers.collections.shouldContainExactly
 internal class ArrayPrefixItemsSpecTest : FreeSpec() {
 
     companion object {
-        private val StringReader = dummyStringReader<EB, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit>()
+        private val StringReader = dummyStringReader<EB, Unit, Unit>()
+        private val IntReader = dummyIntReader<EB, Unit, Unit>()
     }
 
     init {

@@ -21,11 +21,11 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class PatternStringValidator<EB, CTX> internal constructor(private val pattern: Regex) :
-    Validator<EB, CTX, String>
+public class PatternStringValidator<EB, O, CTX> internal constructor(private val pattern: Regex) :
+    Validator<EB, O, CTX, String>
     where EB : PatternStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: String): ReaderResult.Failure? =
         if (pattern.matches(value))
             null
         else

@@ -16,6 +16,4 @@
 
 package io.github.airflux.quickstart.infrastructure.web.model.reader.env
 
-import io.github.airflux.serialization.core.reader.env.option.FailFastOption
-
-class ReaderCtx(override val failFast: Boolean) : FailFastOption
+class ReaderCtx

@@ -52,8 +52,8 @@ internal class StructReaderTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_VALUE = true
 
         private val LOCATION = Location.empty
-        private val StringReader = dummyStringReader<EB, CTX>()
-        private val IntReader = dummyIntReader<EB, CTX>()
+        private val StringReader = dummyStringReader<EB, OPTS, Unit>()
+        private val IntReader = dummyIntReader<EB, OPTS, Unit>()
     }
 
     init {
@@ -61,11 +61,11 @@ internal class StructReaderTest : FreeSpec() {
         "The StructReader type" - {
 
             "when was created reader" - {
-                val validator = DummyStructValidatorBuilder.additionalProperties<EB, CTX>(
+                val validator = DummyStructValidatorBuilder.additionalProperties<EB, OPTS, Unit>(
                     nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )
-                val reader: Reader<EB, CTX, DTO> = structReader {
+                val reader: Reader<EB, OPTS, Unit, DTO> = structReader {
                     validation(validator)
 
                     val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
@@ -76,7 +76,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
 
                     "when the source is not the struct type" - {
                         val source = StringNode("")
@@ -218,7 +218,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
 
                     "when the source is not the struct type" - {
                         val source = StringNode("")
@@ -386,7 +386,7 @@ internal class StructReaderTest : FreeSpec() {
             }
 
             "when was created reader and the result builder throw some exception" - {
-                val reader: Reader<EB, CTX, DTO> = structReader {
+                val reader: Reader<EB, OPTS, Unit, DTO> = structReader {
                     returns { _, _ ->
                         throw IllegalStateException()
                     }
@@ -398,7 +398,7 @@ internal class StructReaderTest : FreeSpec() {
                 )
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
 
                     "then it exception should be thrown out from the reader" {
                         shouldThrow<IllegalStateException> {
@@ -408,7 +408,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
 
                     "then it exception should be thrown out from the reader" {
                         shouldThrow<IllegalStateException> {
@@ -430,5 +430,5 @@ internal class StructReaderTest : FreeSpec() {
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
     }
 
-    internal class CTX(override val failFast: Boolean) : FailFastOption
+    internal class OPTS(override val failFast: Boolean) : FailFastOption
 }

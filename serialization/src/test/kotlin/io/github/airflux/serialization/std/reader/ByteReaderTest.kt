@@ -35,9 +35,9 @@ import kotlin.reflect.KClass
 internal class ByteReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val ByteReader = byteReader<EB, Unit>()
+        private val ByteReader = byteReader<EB, Unit, Unit>()
     }
 
     init {

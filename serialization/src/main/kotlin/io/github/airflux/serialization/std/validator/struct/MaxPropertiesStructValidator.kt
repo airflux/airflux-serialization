@@ -23,14 +23,14 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
-public class MaxPropertiesStructValidator<EB, CTX> internal constructor(private val value: Int) :
-    StructValidator<EB, CTX>
+public class MaxPropertiesStructValidator<EB, O, CTX> internal constructor(private val value: Int) :
+    StructValidator<EB, O, CTX>
     where EB : MaxPropertiesStructValidator.ErrorBuilder {
 
     override fun validate(
-        env: ReaderEnv<EB, CTX>,
+        env: ReaderEnv<EB, O, CTX>,
         location: Location,
-        properties: List<StructProperty<EB, CTX>>,
+        properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode
     ): ReaderResult.Failure? =
         if (source.count > value)

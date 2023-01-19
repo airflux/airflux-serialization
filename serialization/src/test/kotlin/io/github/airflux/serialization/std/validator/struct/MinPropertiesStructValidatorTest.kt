@@ -39,16 +39,16 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MIN_PROPERTIES = 2
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val PROPERTIES = emptyList<StructProperty<EB, Unit>>()
+        private val PROPERTIES = emptyList<StructProperty<EB, Unit, Unit>>()
     }
 
     init {
 
         "The struct validator MinProperties" - {
-            val validator: StructValidator<EB, Unit> =
-                StdStructValidator.minProperties<EB, Unit>(MIN_PROPERTIES).build(PROPERTIES)
+            val validator: StructValidator<EB, Unit, Unit> =
+                StdStructValidator.minProperties<EB, Unit, Unit>(MIN_PROPERTIES).build(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = StructNode()

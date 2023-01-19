@@ -33,9 +33,9 @@ import java.math.BigDecimal
 internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val BigDecimalReader = bigDecimalReader<EB, Unit>()
+        private val BigDecimalReader = bigDecimalReader<EB, Unit, Unit>()
     }
 
     init {

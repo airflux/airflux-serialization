@@ -26,21 +26,21 @@ public object StdArrayValidator {
     /**
      * If the is empty then an error, otherwise a success.
      */
-    public fun <EB, CTX> isNotEmpty(): ArrayValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> isNotEmpty(): ArrayValidatorBuilder<EB, O, CTX>
         where EB : IsNotEmptyArrayValidator.ErrorBuilder =
         IsNotEmptyArrayValidatorBuilder()
 
     /**
      * If a number of elements in the array are less than an expected [value] then an error, otherwise a success.
      */
-    public fun <EB, CTX> minItems(value: Int): ArrayValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> minItems(value: Int): ArrayValidatorBuilder<EB, O, CTX>
         where EB : MinItemsArrayValidator.ErrorBuilder =
         MinItemsArrayValidatorBuilder(value)
 
     /**
      * If a number of elements in the array are more than an expected [value] then an error, otherwise a success.
      */
-    public fun <EB, CTX> maxItems(value: Int): ArrayValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> maxItems(value: Int): ArrayValidatorBuilder<EB, O, CTX>
         where EB : MaxItemsArrayValidator.ErrorBuilder =
         MaxItemsArrayValidatorBuilder(value)
 }

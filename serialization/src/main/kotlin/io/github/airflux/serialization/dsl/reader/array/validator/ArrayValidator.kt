@@ -21,6 +21,6 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 
-public fun interface ArrayValidator<EB, CTX> {
-    public fun validate(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure?
+public fun interface ArrayValidator<EB, O, CTX> {
+    public fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure?
 }

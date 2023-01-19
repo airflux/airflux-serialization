@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.array.validator
 
-public interface ArrayValidatorBuilder<EB, CTX> {
-    public fun build(): ArrayValidator<EB, CTX>
+public interface ArrayValidatorBuilder<EB, O, CTX> {
+    public fun build(): ArrayValidator<EB, O, CTX>
 }

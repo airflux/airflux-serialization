@@ -22,9 +22,9 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
-internal class DummyArrayValidator<EB, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, CTX> {
+internal class DummyArrayValidator<EB, O, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, O, CTX> {
     override fun validate(
-        env: ReaderEnv<EB, CTX>,
+        env: ReaderEnv<EB, O, CTX>,
         location: Location,
         source: ArrayNode<*>
     ): ReaderResult.Failure? = result

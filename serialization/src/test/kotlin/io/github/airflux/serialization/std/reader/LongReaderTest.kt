@@ -36,9 +36,9 @@ import kotlin.reflect.KClass
 internal class LongReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val LongReader = longReader<EB, Unit>()
+        private val LongReader = longReader<EB, Unit, Unit>()
     }
 
     init {

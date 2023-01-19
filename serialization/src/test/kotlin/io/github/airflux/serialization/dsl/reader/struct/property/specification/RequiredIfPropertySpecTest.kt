@@ -47,10 +47,10 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val StringReader = dummyStringReader<EB, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit>()
+        private val StringReader = dummyStringReader<EB, Unit, Unit>()
+        private val IntReader = dummyIntReader<EB, Unit, Unit>()
     }
 
     init {
@@ -58,7 +58,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
         "The StructPropertySpec#RequiredIf type" - {
 
             "when the predicate returns the true value" - {
-                val predicate = { _: ReaderEnv<EB, Unit>, _: Location -> true }
+                val predicate = { _: ReaderEnv<EB, Unit, Unit>, _: Location -> true }
 
                 "when creating the instance by a property name" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = predicate)
@@ -157,7 +157,8 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                 "when the validator was added to the spec" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = predicate)
-                    val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
+                    val specWithValidator =
+                        spec.validation(StdStringValidator.isNotEmpty<EB, Unit, Unit>().applyIfNotNull())
 
                     "when the reader has successfully read" - {
 
@@ -312,7 +313,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val predicate = { _: ReaderEnv<EB, Unit>, _: Location -> false }
+                val predicate = { _: ReaderEnv<EB, Unit, Unit>, _: Location -> false }
 
                 "when creating the instance by a property name" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = predicate)
@@ -411,7 +412,8 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                 "when the validator was added to the spec" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = predicate)
-                    val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
+                    val specWithValidator =
+                        spec.validation(StdStringValidator.isNotEmpty<EB, Unit, Unit>().applyIfNotNull())
 
                     "when the reader has successfully read" - {
 

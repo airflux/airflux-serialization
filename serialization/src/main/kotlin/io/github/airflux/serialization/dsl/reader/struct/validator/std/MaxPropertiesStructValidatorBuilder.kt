@@ -21,9 +21,11 @@ import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidat
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 import io.github.airflux.serialization.std.validator.struct.MaxPropertiesStructValidator
 
-internal class MaxPropertiesStructValidatorBuilder<EB, CTX>(private val value: Int) : StructValidatorBuilder<EB, CTX>
+internal class MaxPropertiesStructValidatorBuilder<EB, O, CTX>(
+    private val value: Int
+) : StructValidatorBuilder<EB, O, CTX>
     where EB : MaxPropertiesStructValidator.ErrorBuilder {
 
-    override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> =
+    override fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX> =
         MaxPropertiesStructValidator(value)
 }

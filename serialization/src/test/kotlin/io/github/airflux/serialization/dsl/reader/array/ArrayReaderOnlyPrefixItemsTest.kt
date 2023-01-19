@@ -47,7 +47,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
 
-        private val StringReader = stringReader<EB, CTX>()
+        private val StringReader = stringReader<EB, OPTS, Unit>()
     }
 
     init {
@@ -57,7 +57,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
             "when a reader was created for prefixItems" - {
 
                 "when the additional items do not cause an error" - {
-                    val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                    val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
                         validation(
                             minItems(
                                 expected = MIN_ITEMS,
@@ -75,7 +75,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
 
                         "when source is not the array type" - {
                             val source = StringNode("")
@@ -157,7 +157,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
 
                         "when source is not the array type" - {
                             val source = StringNode("")
@@ -249,7 +249,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                 }
 
                 "when the additional items do cause an error" - {
-                    val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                    val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
                         returns(
                             prefixItems = prefixItems(
                                 nonNullable(StringReader),
@@ -260,7 +260,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
 
                         "when source is not the array type" - {
                             val source = StringNode("")
@@ -314,7 +314,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
 
                         "when source is not the array type" - {
                             val source = StringNode("")
@@ -385,5 +385,5 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 
-    internal class CTX(override val failFast: Boolean) : FailFastOption
+    internal class OPTS(override val failFast: Boolean) : FailFastOption
 }

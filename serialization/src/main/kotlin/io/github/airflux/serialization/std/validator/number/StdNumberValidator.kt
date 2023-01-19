@@ -24,7 +24,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is less than an expected [value] then an error,
      * otherwise a success.
      */
-    public fun <EB, CTX, T> minimum(value: T): Validator<EB, CTX, T>
+    public fun <EB, O, CTX, T> minimum(value: T): Validator<EB, O, CTX, T>
         where EB : MinimumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = MinimumNumberValidator(value)
@@ -33,7 +33,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is greater than an expected [value] then error,
      * otherwise a success.
      */
-    public fun <EB, CTX, T> maximum(value: T): Validator<EB, CTX, T>
+    public fun <EB, O, CTX, T> maximum(value: T): Validator<EB, O, CTX, T>
         where EB : MaximumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = MaximumNumberValidator(value)
@@ -42,7 +42,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is less than or equal to an expected [value] then an error,
      * otherwise a success.
      */
-    public fun <EB, CTX, T> exclusiveMinimum(value: T): Validator<EB, CTX, T>
+    public fun <EB, O, CTX, T> exclusiveMinimum(value: T): Validator<EB, O, CTX, T>
         where EB : ExclusiveMinimumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = ExclusiveMinimumNumberValidator(value)
@@ -51,7 +51,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is greater than or equal to an expected [value] then error,
      * otherwise a success.
      */
-    public fun <EB, CTX, T> exclusiveMaximum(value: T): Validator<EB, CTX, T>
+    public fun <EB, O, CTX, T> exclusiveMaximum(value: T): Validator<EB, O, CTX, T>
         where EB : ExclusiveMaximumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = ExclusiveMaximumNumberValidator(value)

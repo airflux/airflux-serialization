@@ -26,17 +26,17 @@ import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
-internal class DummyReader<EB, CTX, T>(
-    val result: (ReaderEnv<EB, CTX>, Location, ValueNode) -> ReaderResult<T>
-) : Reader<EB, CTX, T> {
+internal class DummyReader<EB, O, CTX, T>(
+    val result: (ReaderEnv<EB, O, CTX>, Location, ValueNode) -> ReaderResult<T>
+) : Reader<EB, O, CTX, T> {
 
     constructor(result: ReaderResult<T>) : this({ _, _, _ -> result })
 
-    override fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
+    override fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
         result(env, location, source)
 }
 
-internal fun <EB, CTX> dummyBooleanReader(): Reader<EB, CTX, Boolean>
+internal fun <EB, O, CTX> dummyBooleanReader(): Reader<EB, O, CTX, Boolean>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->
@@ -53,7 +53,7 @@ internal fun <EB, CTX> dummyBooleanReader(): Reader<EB, CTX, Boolean>
         }
     )
 
-internal fun <EB, CTX> dummyStringReader(): Reader<EB, CTX, String>
+internal fun <EB, O, CTX> dummyStringReader(): Reader<EB, O, CTX, String>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->
@@ -70,7 +70,7 @@ internal fun <EB, CTX> dummyStringReader(): Reader<EB, CTX, String>
         }
     )
 
-internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
+internal fun <EB, O, CTX> dummyIntReader(): Reader<EB, O, CTX, Int>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->
@@ -87,7 +87,7 @@ internal fun <EB, CTX> dummyIntReader(): Reader<EB, CTX, Int>
         }
     )
 
-internal fun <EB, CTX> dummyLongReader(): Reader<EB, CTX, Long>
+internal fun <EB, O, CTX> dummyLongReader(): Reader<EB, O, CTX, Long>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
         result = { env, location, source ->

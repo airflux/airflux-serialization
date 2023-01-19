@@ -19,21 +19,21 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public object StdStringValidator {
-    public fun <EB, CTX> isNotEmpty(): Validator<EB, CTX, String>
+    public fun <EB, O, CTX> isNotEmpty(): Validator<EB, O, CTX, String>
         where EB : IsNotEmptyStringValidator.ErrorBuilder = IsNotEmptyStringValidator()
 
-    public fun <EB, CTX> isNotBlank(): Validator<EB, CTX, String>
+    public fun <EB, O, CTX> isNotBlank(): Validator<EB, O, CTX, String>
         where EB : IsNotBlankStringValidator.ErrorBuilder = IsNotBlankStringValidator()
 
-    public fun <EB, CTX> pattern(pattern: Regex): Validator<EB, CTX, String>
+    public fun <EB, O, CTX> pattern(pattern: Regex): Validator<EB, O, CTX, String>
         where EB : PatternStringValidator.ErrorBuilder = PatternStringValidator(pattern)
 
-    public fun <EB, CTX> minLength(value: Int): Validator<EB, CTX, String>
+    public fun <EB, O, CTX> minLength(value: Int): Validator<EB, O, CTX, String>
         where EB : MinLengthStringValidator.ErrorBuilder = MinLengthStringValidator(value)
 
-    public fun <EB, CTX> maxLength(value: Int): Validator<EB, CTX, String>
+    public fun <EB, O, CTX> maxLength(value: Int): Validator<EB, O, CTX, String>
         where EB : MaxLengthStringValidator.ErrorBuilder = MaxLengthStringValidator(value)
 
-    public fun <EB, CTX> isA(predicate: (String) -> Boolean): Validator<EB, CTX, String>
+    public fun <EB, O, CTX> isA(predicate: (String) -> Boolean): Validator<EB, O, CTX, String>
         where EB : IsAStringValidator.ErrorBuilder = IsAStringValidator(predicate)
 }

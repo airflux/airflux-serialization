@@ -28,10 +28,10 @@ internal class ExceptionHandlersContainerTest : FreeSpec() {
 
     companion object {
         private val specificExceptionHandler =
-            { _: ReaderEnv<Unit, Unit>, _: Location, _: IllegalArgumentException -> JsonErrors.PathMissing }
+            { _: ReaderEnv<Unit, Unit, Unit>, _: Location, _: IllegalArgumentException -> JsonErrors.PathMissing }
 
         private val genericExceptionHandler =
-            { _: ReaderEnv<Unit, Unit>, _: Location, _: Exception -> JsonErrors.PathMissing }
+            { _: ReaderEnv<Unit, Unit, Unit>, _: Location, _: Exception -> JsonErrors.PathMissing }
     }
 
     init {
@@ -68,7 +68,7 @@ internal class ExceptionHandlersContainerTest : FreeSpec() {
             }
 
             "when no the exception handlers" - {
-                val handlers = ExceptionHandlersContainer<Unit, Unit>(emptyList())
+                val handlers = ExceptionHandlersContainer<Unit, Unit, Unit>(emptyList())
 
                 "should return the null value" {
                     val handler = handlers[exception]
@@ -78,8 +78,8 @@ internal class ExceptionHandlersContainerTest : FreeSpec() {
         }
     }
 
-    private inline fun <EB, CTX, reified E : Throwable> exceptionHandlerSpec(
-        noinline handler: (ReaderEnv<EB, CTX>, Location, E) -> ReaderResult.Error
-    ): ExceptionHandlerSpec<EB, CTX> =
+    private inline fun <EB, O, CTX, reified E : Throwable> exceptionHandlerSpec(
+        noinline handler: (ReaderEnv<EB, O, CTX>, Location, E) -> ReaderResult.Error
+    ): ExceptionHandlerSpec<EB, O, CTX> =
         ExceptionHandlerSpec(E::class, handler)
 }

@@ -28,14 +28,14 @@ import kotlin.test.assertTrue
 internal class ReaderPredicateOrCombinatorTest {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
 
         private const val MIN_VALUE = 10
         private const val MAX_VALUE = 20
 
-        private val leftFilter = ReaderPredicate<EB, Unit, Int> { _, _, value -> value < MIN_VALUE }
-        private val rightFilter = ReaderPredicate<EB, Unit, Int> { _, _, value -> value > MAX_VALUE }
+        private val leftFilter = ReaderPredicate<EB, Unit, Unit, Int> { _, _, value -> value < MIN_VALUE }
+        private val rightFilter = ReaderPredicate<EB, Unit, Unit, Int> { _, _, value -> value > MAX_VALUE }
         private val composedFilter = leftFilter or rightFilter
     }
 

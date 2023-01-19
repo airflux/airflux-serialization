@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.reader
+package io.github.airflux.quickstart.infrastructure.web.model.reader.env
 
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.value.readAsBoolean
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 
-/**
- * Reader for primitive [Boolean] type.
- */
-public fun <EB, O, CTX> booleanReader(): Reader<EB, O, CTX, Boolean>
-    where EB : InvalidTypeErrorBuilder =
-    Reader { env, location, source ->
-        source.readAsBoolean(env, location)
-    }
+class ReaderOptions(override val failFast: Boolean) : FailFastOption

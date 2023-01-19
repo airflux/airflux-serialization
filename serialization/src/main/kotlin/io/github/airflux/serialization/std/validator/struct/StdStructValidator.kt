@@ -24,19 +24,19 @@ import io.github.airflux.serialization.dsl.reader.struct.validator.std.MaxProper
 import io.github.airflux.serialization.dsl.reader.struct.validator.std.MinPropertiesStructValidatorBuilder
 
 public object StdStructValidator {
-    public fun <EB, CTX> additionalProperties(): StructValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> additionalProperties(): StructValidatorBuilder<EB, O, CTX>
         where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
-              CTX : FailFastOption =
+              O : FailFastOption =
         AdditionalPropertiesStructValidatorBuilder()
 
-    public fun <EB, CTX> isNotEmpty(): StructValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> isNotEmpty(): StructValidatorBuilder<EB, O, CTX>
         where EB : IsNotEmptyStructValidator.ErrorBuilder = IsNotEmptyStructValidatorBuilder()
 
-    public fun <EB, CTX> minProperties(value: Int): StructValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> minProperties(value: Int): StructValidatorBuilder<EB, O, CTX>
         where EB : MinPropertiesStructValidator.ErrorBuilder =
         MinPropertiesStructValidatorBuilder(value)
 
-    public fun <EB, CTX> maxProperties(value: Int): StructValidatorBuilder<EB, CTX>
+    public fun <EB, O, CTX> maxProperties(value: Int): StructValidatorBuilder<EB, O, CTX>
         where EB : MaxPropertiesStructValidator.ErrorBuilder =
         MaxPropertiesStructValidatorBuilder(value)
 }

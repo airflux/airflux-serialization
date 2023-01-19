@@ -28,9 +28,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsIntegerTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty.append("user")
-        private val READER = { _: ReaderEnv<EB, Unit>, location: Location, text: String ->
+        private val READER = { _: ReaderEnv<EB, Unit, Unit>, location: Location, text: String ->
             ReaderResult.Success(location = location, value = text.toInt())
         }
     }

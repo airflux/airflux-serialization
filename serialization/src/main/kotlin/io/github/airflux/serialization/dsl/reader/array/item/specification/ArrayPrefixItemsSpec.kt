@@ -18,18 +18,18 @@ package io.github.airflux.serialization.dsl.reader.array.item.specification
 
 import io.github.airflux.serialization.core.reader.Reader
 
-public fun <EB, CTX, T> prefixItems(
-    item: ArrayItemSpec<EB, CTX, T>,
-    vararg items: ArrayItemSpec<EB, CTX, T>
-): ArrayPrefixItemsSpec<EB, CTX, T> =
+public fun <EB, O, CTX, T> prefixItems(
+    item: ArrayItemSpec<EB, O, CTX, T>,
+    vararg items: ArrayItemSpec<EB, O, CTX, T>
+): ArrayPrefixItemsSpec<EB, O, CTX, T> =
     ArrayPrefixItemsSpec(item = item, items = items)
 
-public class ArrayPrefixItemsSpec<EB, CTX, out T> private constructor(
-    internal val readers: List<Reader<EB, CTX, T>>
+public class ArrayPrefixItemsSpec<EB, O, CTX, out T> private constructor(
+    internal val readers: List<Reader<EB, O, CTX, T>>
 ) {
 
-    internal constructor(item: ArrayItemSpec<EB, CTX, T>, vararg items: ArrayItemSpec<EB, CTX, T>) : this(
-        mutableListOf<Reader<EB, CTX, T>>()
+    internal constructor(item: ArrayItemSpec<EB, O, CTX, T>, vararg items: ArrayItemSpec<EB, O, CTX, T>) : this(
+        mutableListOf<Reader<EB, O, CTX, T>>()
             .apply {
                 add(item.reader)
                 items.forEach { add(it.reader) }

@@ -34,48 +34,48 @@ import io.github.airflux.serialization.dsl.reader.array.item.specification.Array
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 
-public fun <EB, CTX, T> arrayReader(
-    block: ArrayReader.Builder<EB, CTX, T>.() -> Reader<EB, CTX, List<T>>
-): Reader<EB, CTX, List<T>>
+public fun <EB, O, CTX, T> arrayReader(
+    block: ArrayReader.Builder<EB, O, CTX, T>.() -> Reader<EB, O, CTX, List<T>>
+): Reader<EB, O, CTX, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
-          CTX : FailFastOption {
-    val readerBuilder = ArrayReader.Builder<EB, CTX, T>()
+          O : FailFastOption {
+    val readerBuilder = ArrayReader.Builder<EB, O, CTX, T>()
     return block(readerBuilder)
 }
 
-public fun <EB, CTX, T> ArrayReader.Builder<EB, CTX, T>.returns(
-    items: ArrayItemSpec<EB, CTX, T>
-): Reader<EB, CTX, List<T>>
+public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
+    items: ArrayItemSpec<EB, O, CTX, T>
+): Reader<EB, O, CTX, List<T>>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption = this.build(items)
+          O : FailFastOption = this.build(items)
 
-public fun <EB, CTX, T> ArrayReader.Builder<EB, CTX, T>.returns(
-    prefixItems: ArrayPrefixItemsSpec<EB, CTX, T>,
+public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
+    prefixItems: ArrayPrefixItemsSpec<EB, O, CTX, T>,
     items: Boolean
-): Reader<EB, CTX, List<T>>
+): Reader<EB, O, CTX, List<T>>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption = this.build(prefixItems, items)
+          O : FailFastOption = this.build(prefixItems, items)
 
-public fun <EB, CTX, T> ArrayReader.Builder<EB, CTX, T>.returns(
-    prefixItems: ArrayPrefixItemsSpec<EB, CTX, T>,
-    items: ArrayItemSpec<EB, CTX, T>
-): Reader<EB, CTX, List<T>>
+public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
+    prefixItems: ArrayPrefixItemsSpec<EB, O, CTX, T>,
+    items: ArrayItemSpec<EB, O, CTX, T>
+): Reader<EB, O, CTX, List<T>>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption = this.build(prefixItems, items)
+          O : FailFastOption = this.build(prefixItems, items)
 
-public class ArrayReader<EB, CTX, T> private constructor(
-    private val validators: List<ArrayValidator<EB, CTX>>,
-    private val readerResultBuilder: (ReaderEnv<EB, CTX>, Location, ArrayNode<*>) -> ReaderResult<List<T>>
-) : Reader<EB, CTX, List<T>>
+public class ArrayReader<EB, O, CTX, T> private constructor(
+    private val validators: List<ArrayValidator<EB, O, CTX>>,
+    private val readerResultBuilder: (ReaderEnv<EB, O, CTX>, Location, ArrayNode<*>) -> ReaderResult<List<T>>
+) : Reader<EB, O, CTX, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
-          CTX : FailFastOption {
+          O : FailFastOption {
 
-    override fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<List<T>> =
+    override fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ValueNode): ReaderResult<List<T>> =
         if (source is ArrayNode<*>)
             read(env, location, source)
         else
@@ -84,8 +84,8 @@ public class ArrayReader<EB, CTX, T> private constructor(
                 error = env.errorBuilders.invalidTypeError(listOf(ArrayNode.nameOfType), source.nameOfType)
             )
 
-    private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult<List<T>> {
-        val failFast = env.context.failFast
+    private fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ArrayNode<*>): ReaderResult<List<T>> {
+        val failFast = env.options.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
@@ -110,35 +110,38 @@ public class ArrayReader<EB, CTX, T> private constructor(
     }
 
     @AirfluxMarker
-    public class Builder<EB, CTX, T>
+    public class Builder<EB, O, CTX, T>
         where EB : AdditionalItemsErrorBuilder,
               EB : InvalidTypeErrorBuilder,
-              CTX : FailFastOption {
+              O : FailFastOption {
 
-        private val validatorBuilders = mutableListOf<ArrayValidatorBuilder<EB, CTX>>()
+        private val validatorBuilders = mutableListOf<ArrayValidatorBuilder<EB, O, CTX>>()
 
         public fun validation(
-            validator: ArrayValidatorBuilder<EB, CTX>,
-            vararg validators: ArrayValidatorBuilder<EB, CTX>
+            validator: ArrayValidatorBuilder<EB, O, CTX>,
+            vararg validators: ArrayValidatorBuilder<EB, O, CTX>
         ) {
             validation(
-                validators = mutableListOf<ArrayValidatorBuilder<EB, CTX>>().apply {
+                validators = mutableListOf<ArrayValidatorBuilder<EB, O, CTX>>().apply {
                     add(validator)
                     addAll(validators)
                 }
             )
         }
 
-        public fun validation(validators: List<ArrayValidatorBuilder<EB, CTX>>) {
+        public fun validation(validators: List<ArrayValidatorBuilder<EB, O, CTX>>) {
             validatorBuilders.addAll(validators)
         }
 
-        public fun build(items: ArrayItemSpec<EB, CTX, T>): Reader<EB, CTX, List<T>> =
+        public fun build(items: ArrayItemSpec<EB, O, CTX, T>): Reader<EB, O, CTX, List<T>> =
             build { env, location, source ->
                 readArray(env = env, location = location, source = source, items = items.reader)
             }
 
-        public fun build(prefixItems: ArrayPrefixItemsSpec<EB, CTX, T>, items: Boolean): Reader<EB, CTX, List<T>> {
+        public fun build(
+            prefixItems: ArrayPrefixItemsSpec<EB, O, CTX, T>,
+            items: Boolean
+        ): Reader<EB, O, CTX, List<T>> {
             val prefixItemReaders = prefixItems.readers
             return build { env, location, source ->
                 readArray(
@@ -152,9 +155,9 @@ public class ArrayReader<EB, CTX, T> private constructor(
         }
 
         public fun build(
-            prefixItems: ArrayPrefixItemsSpec<EB, CTX, T>,
-            items: ArrayItemSpec<EB, CTX, T>
-        ): Reader<EB, CTX, List<T>> {
+            prefixItems: ArrayPrefixItemsSpec<EB, O, CTX, T>,
+            items: ArrayItemSpec<EB, O, CTX, T>
+        ): Reader<EB, O, CTX, List<T>> {
             val prefixItemReaders = prefixItems.readers
             return build { env, location, source ->
                 readArray(
@@ -168,8 +171,8 @@ public class ArrayReader<EB, CTX, T> private constructor(
         }
 
         private fun build(
-            block: (ReaderEnv<EB, CTX>, Location, ArrayNode<*>) -> ReaderResult<List<T>>
-        ): Reader<EB, CTX, List<T>> {
+            block: (ReaderEnv<EB, O, CTX>, Location, ArrayNode<*>) -> ReaderResult<List<T>>
+        ): Reader<EB, O, CTX, List<T>> {
             val validators = validatorBuilders.map { builder -> builder.build() }
                 .takeIf { it.isNotEmpty() }
                 .orEmpty()

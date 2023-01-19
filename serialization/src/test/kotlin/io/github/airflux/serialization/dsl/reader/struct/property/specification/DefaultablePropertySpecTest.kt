@@ -49,11 +49,11 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_INT = "10"
         private const val DEFAULT_VALUE = "none"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val StringReader = dummyStringReader<EB, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit>()
-        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
+        private val StringReader = dummyStringReader<EB, Unit, Unit>()
+        private val IntReader = dummyIntReader<EB, Unit, Unit>()
+        private val DEFAULT = { _: ReaderEnv<EB, Unit, Unit> -> DEFAULT_VALUE }
     }
 
     init {
@@ -187,7 +187,8 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
 
             "when the validator was added to the spec" - {
                 val spec = defaultable(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
-                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
+                val specWithValidator =
+                    spec.validation(StdStringValidator.isNotEmpty<EB, Unit, Unit>().applyIfNotNull())
 
                 "when the reader has successfully read" - {
 

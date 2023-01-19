@@ -22,10 +22,10 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
-public class IsNotEmptyArrayValidator<EB, CTX> internal constructor() : ArrayValidator<EB, CTX>
+public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : ArrayValidator<EB, O, CTX>
     where EB : IsNotEmptyArrayValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
         if (source.isEmpty())
             ReaderResult.Failure(location, env.errorBuilders.isNotEmptyArrayError())
         else

@@ -30,14 +30,14 @@ import io.kotest.matchers.shouldBe
 internal class ReaderResultOpsTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The extension-function the filter" - {
-            val isNotBlank = ReaderPredicate<EB, Unit, String> { _, _, value -> value.isNotBlank() }
+            val isNotBlank = ReaderPredicate<EB, Unit, Unit, String> { _, _, value -> value.isNotBlank() }
 
             "when result is success" - {
 
@@ -87,7 +87,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
         }
 
         "The extension-function the validation" - {
-            val isNotEmpty = Validator<EB, Unit, String> { _, location, value ->
+            val isNotEmpty = Validator<EB, Unit, Unit, String> { _, location, value ->
                 if (value.isNotEmpty())
                     null
                 else

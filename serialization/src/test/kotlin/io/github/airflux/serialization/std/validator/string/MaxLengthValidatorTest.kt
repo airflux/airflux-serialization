@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class MaxLengthValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val MAX_VALUE: Int = 2
     }
@@ -37,7 +37,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MaxLength" - {
-            val validator: Validator<EB, Unit, String> = StdStringValidator.maxLength(MAX_VALUE)
+            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.maxLength(MAX_VALUE)
 
             "when a string is empty" - {
                 val str = ""

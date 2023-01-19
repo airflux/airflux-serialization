@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class PatternValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private val PATTERN: Regex = "\\d+".toRegex()
     }
@@ -37,7 +37,7 @@ internal class PatternValidatorTest : FreeSpec() {
     init {
 
         "The string validator Pattern" - {
-            val validator: Validator<EB, Unit, String> = StdStringValidator.pattern(PATTERN)
+            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.pattern(PATTERN)
 
             "when a string is empty" - {
                 val str = ""

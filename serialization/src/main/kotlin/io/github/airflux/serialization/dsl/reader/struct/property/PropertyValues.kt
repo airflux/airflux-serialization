@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.dsl.reader.struct.property
 
 @Suppress("TooManyFunctions")
-public sealed interface PropertyValues<EB, CTX> {
+public sealed interface PropertyValues<EB, O, CTX> {
 
     public val isEmpty: Boolean
     public val isNotEmpty: Boolean
     public val size: Int
 
-    public infix operator fun <T : Any> get(property: StructProperty.NonNullable<EB, CTX, T>): T
-    public operator fun <T : Any> StructProperty.NonNullable<EB, CTX, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.NonNullable<EB, O, CTX, T>): T
+    public operator fun <T : Any> StructProperty.NonNullable<EB, O, CTX, T>.unaryPlus(): T = get(this)
 
-    public infix operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T?
-    public operator fun <T : Any> StructProperty.Nullable<EB, CTX, T>.unaryPlus(): T? = get(this)
+    public infix operator fun <T : Any> get(property: StructProperty.Nullable<EB, O, CTX, T>): T?
+    public operator fun <T : Any> StructProperty.Nullable<EB, O, CTX, T>.unaryPlus(): T? = get(this)
 }

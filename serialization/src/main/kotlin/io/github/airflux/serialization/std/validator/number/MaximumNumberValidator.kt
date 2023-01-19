@@ -21,14 +21,14 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class MaximumNumberValidator<EB, CTX, T> internal constructor(
+public class MaximumNumberValidator<EB, O, CTX, T> internal constructor(
     private val expected: T
-) : Validator<EB, CTX, T>
+) : Validator<EB, O, CTX, T>
     where EB : MaximumNumberValidator.ErrorBuilder,
           T : Number,
           T : Comparable<T> {
 
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: T): ReaderResult.Failure? =
         if (value <= expected)
             null
         else

@@ -18,8 +18,9 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.base
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.serialization.std.reader.bigDecimalReader
 import io.github.airflux.serialization.std.reader.stringReader
 
-val StringReader = stringReader<ReaderErrorBuilders, ReaderCtx>()
-val BigDecimalReader = bigDecimalReader<ReaderErrorBuilders, ReaderCtx>()
+val StringReader = stringReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
+val BigDecimalReader = bigDecimalReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()

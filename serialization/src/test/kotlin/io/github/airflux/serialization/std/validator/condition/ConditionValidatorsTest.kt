@@ -30,9 +30,9 @@ import io.kotest.matchers.shouldBe
 internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val isNotEmpty: Validator<EB, Unit, String> =
+        private val isNotEmpty: Validator<EB, Unit, Unit, String> =
             Validator { _, location, value ->
                 if (value.isNotEmpty())
                     null

@@ -21,6 +21,6 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-internal class DummyValidator<EB, CTX, T>(val result: ReaderResult.Failure?) : Validator<EB, CTX, T> {
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: T): ReaderResult.Failure? = result
+internal class DummyValidator<EB, O, CTX, T>(val result: ReaderResult.Failure?) : Validator<EB, O, CTX, T> {
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: T): ReaderResult.Failure? = result
 }

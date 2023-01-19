@@ -21,12 +21,12 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class MaxLengthStringValidator<EB, CTX> internal constructor(
+public class MaxLengthStringValidator<EB, O, CTX> internal constructor(
     private val expected: Int
-) : Validator<EB, CTX, String>
+) : Validator<EB, O, CTX, String>
     where EB : MaxLengthStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: String): ReaderResult.Failure? =
         if (value.length <= expected)
             null
         else

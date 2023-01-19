@@ -32,8 +32,8 @@ internal class StructPropertyTest : FreeSpec() {
 
     companion object {
         private const val DEFAULT_VALUE = "none"
-        private val DEFAULT = { _: ReaderEnv<EB, Unit> -> DEFAULT_VALUE }
-        private val StringReader = dummyStringReader<EB, Unit>()
+        private val DEFAULT = { _: ReaderEnv<EB, Unit, Unit> -> DEFAULT_VALUE }
+        private val StringReader = dummyStringReader<EB, Unit, Unit>()
     }
 
     init {

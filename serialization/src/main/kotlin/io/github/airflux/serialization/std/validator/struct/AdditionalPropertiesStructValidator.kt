@@ -25,19 +25,19 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
-public class AdditionalPropertiesStructValidator<EB, CTX> internal constructor(
+public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructor(
     private val names: Set<String>
-) : StructValidator<EB, CTX>
+) : StructValidator<EB, O, CTX>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
-          CTX : FailFastOption {
+          O : FailFastOption {
 
     override fun validate(
-        env: ReaderEnv<EB, CTX>,
+        env: ReaderEnv<EB, O, CTX>,
         location: Location,
-        properties: List<StructProperty<EB, CTX>>,
+        properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode
     ): ReaderResult.Failure? {
-        val failFast = env.context.failFast
+        val failFast = env.options.failFast
 
         val failures = mutableListOf<ReaderResult.Failure>()
         source.forEach { (name, _) ->

@@ -31,9 +31,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val BooleanReader = booleanReader<EB, Unit>()
+        private val BooleanReader = booleanReader<EB, Unit, Unit>()
     }
 
     init {

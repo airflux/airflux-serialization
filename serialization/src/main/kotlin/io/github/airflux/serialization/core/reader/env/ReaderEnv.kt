@@ -24,8 +24,9 @@ import io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandl
  * @param context the context of reading.
  * @param exceptionsHandler handler **uncaught** exceptions.
  */
-public data class ReaderEnv<EB, CTX>(
+public class ReaderEnv<EB, O, CTX>(
     public val errorBuilders: EB,
+    public val options: O,
     public val context: CTX,
-    public val exceptionsHandler: ExceptionsHandler<EB, CTX>? = null
+    public val exceptionsHandler: ExceptionsHandler<EB, O, CTX>? = null
 )

@@ -22,10 +22,12 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
-public class MinItemsArrayValidator<EB, CTX> internal constructor(private val expected: Int) : ArrayValidator<EB, CTX>
+public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
+    private val expected: Int
+) : ArrayValidator<EB, O, CTX>
     where EB : MinItemsArrayValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
         if (source.size < expected)
             ReaderResult.Failure(location, env.errorBuilders.minItemsArrayError(expected, source.size))
         else

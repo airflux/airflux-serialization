@@ -34,30 +34,30 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 
-public fun <EB, CTX, T> structReader(
-    block: StructReader.Builder<EB, CTX, T>.() -> Reader<EB, CTX, T>
-): Reader<EB, CTX, T>
+public fun <EB, O, CTX, T> structReader(
+    block: StructReader.Builder<EB, O, CTX, T>.() -> Reader<EB, O, CTX, T>
+): Reader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
-          CTX : FailFastOption {
-    val builder = StructReader.Builder<EB, CTX, T>()
+          O : FailFastOption {
+    val builder = StructReader.Builder<EB, O, CTX, T>()
     return block(builder)
 }
 
-public fun <EB, CTX, T> StructReader.Builder<EB, CTX, T>.returns(
-    block: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
-): Reader<EB, CTX, T>
+public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
+    block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O, CTX>, Location) -> ReaderResult<T>
+): Reader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
-          CTX : FailFastOption = this.build(block)
+          O : FailFastOption = this.build(block)
 
-public class StructReader<EB, CTX, T>(
-    private val validators: List<StructValidator<EB, CTX>>,
-    private val properties: List<StructProperty<EB, CTX>>,
-    private val readerResultBuilder: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
-) : Reader<EB, CTX, T>
+public class StructReader<EB, O, CTX, T>(
+    private val validators: List<StructValidator<EB, O, CTX>>,
+    private val properties: List<StructProperty<EB, O, CTX>>,
+    private val readerResultBuilder: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O, CTX>, Location) -> ReaderResult<T>
+) : Reader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
-          CTX : FailFastOption {
+          O : FailFastOption {
 
-    override fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
+    override fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
         if (source is StructNode)
             read(env, location, source)
         else
@@ -66,8 +66,8 @@ public class StructReader<EB, CTX, T>(
                 error = env.errorBuilders.invalidTypeError(listOf(StructNode.nameOfType), source.nameOfType)
             )
 
-    private fun read(env: ReaderEnv<EB, CTX>, location: Location, source: StructNode): ReaderResult<T> {
-        val failFast = env.context.failFast
+    private fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: StructNode): ReaderResult<T> {
+        val failFast = env.options.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
@@ -78,11 +78,11 @@ public class StructReader<EB, CTX, T>(
             }
         }
 
-        val propertyValues: PropertyValues<EB, CTX> = PropertyValuesInstance<EB, CTX>()
+        val propertyValues: PropertyValues<EB, O, CTX> = PropertyValuesInstance<EB, O, CTX>()
             .apply {
                 properties.forEach { property ->
                     when (property) {
-                        is StructProperty.NonNullable<EB, CTX, *> -> property.reader.read(env, location, source)
+                        is StructProperty.NonNullable<EB, O, CTX, *> -> property.reader.read(env, location, source)
                             .fold(
                                 ifFailure = { failure ->
                                     if (failFast) return failure
@@ -93,7 +93,7 @@ public class StructReader<EB, CTX, T>(
                                 }
                             )
 
-                        is StructProperty.Nullable<EB, CTX, *> -> property.reader.read(env, location, source)
+                        is StructProperty.Nullable<EB, O, CTX, *> -> property.reader.read(env, location, source)
                             .fold(
                                 ifFailure = { failure ->
                                     if (failFast) return failure
@@ -114,19 +114,19 @@ public class StructReader<EB, CTX, T>(
     }
 
     @AirfluxMarker
-    public class Builder<EB, CTX, T>
+    public class Builder<EB, O, CTX, T>
         where EB : InvalidTypeErrorBuilder,
-              CTX : FailFastOption {
+              O : FailFastOption {
 
-        private val properties = mutableListOf<StructProperty<EB, CTX>>()
-        private val validatorBuilders = mutableListOf<StructValidatorBuilder<EB, CTX>>()
+        private val properties = mutableListOf<StructProperty<EB, O, CTX>>()
+        private val validatorBuilders = mutableListOf<StructValidatorBuilder<EB, O, CTX>>()
 
         public fun validation(
-            validator: StructValidatorBuilder<EB, CTX>,
-            vararg validators: StructValidatorBuilder<EB, CTX>
+            validator: StructValidatorBuilder<EB, O, CTX>,
+            vararg validators: StructValidatorBuilder<EB, O, CTX>
         ) {
             validation(
-                validators = mutableListOf<StructValidatorBuilder<EB, CTX>>()
+                validators = mutableListOf<StructValidatorBuilder<EB, O, CTX>>()
                     .apply {
                         add(validator)
                         addAll(validators)
@@ -134,26 +134,26 @@ public class StructReader<EB, CTX, T>(
             )
         }
 
-        public fun validation(validators: List<StructValidatorBuilder<EB, CTX>>) {
+        public fun validation(validators: List<StructValidatorBuilder<EB, O, CTX>>) {
             validatorBuilders.addAll(validators)
         }
 
         public fun <P : Any> property(
-            spec: StructPropertySpec.NonNullable<EB, CTX, P>
-        ): StructProperty.NonNullable<EB, CTX, P> =
+            spec: StructPropertySpec.NonNullable<EB, O, CTX, P>
+        ): StructProperty.NonNullable<EB, O, CTX, P> =
             StructProperty.NonNullable(spec)
                 .also { properties.add(it) }
 
         public fun <P : Any> property(
-            spec: StructPropertySpec.Nullable<EB, CTX, P>
-        ): StructProperty.Nullable<EB, CTX, P> =
+            spec: StructPropertySpec.Nullable<EB, O, CTX, P>
+        ): StructProperty.Nullable<EB, O, CTX, P> =
             StructProperty.Nullable(spec)
                 .also { properties.add(it) }
 
         public fun build(
-            block: PropertyValues<EB, CTX>.(ReaderEnv<EB, CTX>, Location) -> ReaderResult<T>
-        ): Reader<EB, CTX, T> {
-            val validators: List<StructValidator<EB, CTX>> =
+            block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O, CTX>, Location) -> ReaderResult<T>
+        ): Reader<EB, O, CTX, T> {
+            val validators: List<StructValidator<EB, O, CTX>> =
                 validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }
                     .takeIf { it.isNotEmpty() }
                     .orEmpty()

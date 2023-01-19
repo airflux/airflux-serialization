@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class MinLengthValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val MIN_VALUE: Int = 2
     }
@@ -37,7 +37,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: Validator<EB, Unit, String> = StdStringValidator.minLength(MIN_VALUE)
+            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.minLength(MIN_VALUE)
 
             "when a string is empty" - {
                 val str = ""

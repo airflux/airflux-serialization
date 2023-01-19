@@ -175,19 +175,12 @@ public final class io/github/airflux/serialization/core/reader/array/ArrayProper
 }
 
 public final class io/github/airflux/serialization/core/reader/env/ReaderEnv {
-	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;)V
-	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/Object;
-	public final fun component2 ()Ljava/lang/Object;
-	public final fun component3 ()Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;
-	public final fun copy (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;)Lio/github/airflux/serialization/core/reader/env/ReaderEnv;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/env/ReaderEnv;
-	public fun equals (Ljava/lang/Object;)Z
+	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;)V
+	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getContext ()Ljava/lang/Object;
 	public final fun getErrorBuilders ()Ljava/lang/Object;
 	public final fun getExceptionsHandler ()Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+	public final fun getOptions ()Ljava/lang/Object;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler {

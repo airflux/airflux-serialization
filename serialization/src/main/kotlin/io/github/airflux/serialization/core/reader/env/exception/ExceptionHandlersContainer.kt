@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.dsl.common.instanceOf
 
-internal class ExceptionHandlersContainer<EB, CTX>(private val items: List<ExceptionHandlerSpec<EB, CTX>>) {
-    operator fun get(exception: Throwable): ((ReaderEnv<EB, CTX>, Location, Throwable) -> ReaderResult.Error)? =
+internal class ExceptionHandlersContainer<EB, O, CTX>(private val items: List<ExceptionHandlerSpec<EB, O, CTX>>) {
+    operator fun get(exception: Throwable): ((ReaderEnv<EB, O, CTX>, Location, Throwable) -> ReaderResult.Error)? =
         items.find { exception.instanceOf(it.exception) }?.handler
 }

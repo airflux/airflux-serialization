@@ -44,7 +44,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
 
-        private val StringReader = stringReader<EB, CTX>()
+        private val StringReader = stringReader<EB, OPTS, Unit>()
     }
 
     init {
@@ -52,7 +52,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         "The ArrayReader type" - {
 
             "when a reader was created for only items" - {
-                val reader: Reader<EB, CTX, List<String>> = arrayReader {
+                val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
                     validation(
                         minItems(
                             expected = MIN_ITEMS,
@@ -63,7 +63,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
 
                     "when source is not the array type" - {
                         val source = StringNode("")
@@ -121,7 +121,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
 
                     "when source is not the array type" - {
                         val source = StringNode("")
@@ -198,5 +198,5 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 
-    internal class CTX(override val failFast: Boolean) : FailFastOption
+    internal class OPTS(override val failFast: Boolean) : FailFastOption
 }

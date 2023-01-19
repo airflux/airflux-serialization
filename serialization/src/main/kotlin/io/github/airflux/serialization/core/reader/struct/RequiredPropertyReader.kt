@@ -30,10 +30,10 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
  * - If a node is not found ([lookup] is [LookupResult.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <EB, CTX, T : Any> readRequired(
-    env: ReaderEnv<EB, CTX>,
+public fun <EB, O, CTX, T : Any> readRequired(
+    env: ReaderEnv<EB, O, CTX>,
     lookup: LookupResult,
-    using: Reader<EB, CTX, T>
+    using: Reader<EB, O, CTX, T>
 ): ReaderResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =

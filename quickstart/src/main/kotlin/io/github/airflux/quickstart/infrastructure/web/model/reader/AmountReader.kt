@@ -19,13 +19,15 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader
 import io.github.airflux.quickstart.infrastructure.web.model.reader.base.BigDecimalReader
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.validator.number.StdNumberValidator
 import java.math.BigDecimal
 
-private val amountMoreZero: Validator<ReaderErrorBuilders, ReaderCtx, BigDecimal> =
-    StdNumberValidator.exclusiveMinimum<ReaderErrorBuilders, ReaderCtx, BigDecimal>(BigDecimal.ZERO)
+private val amountMoreZero: Validator<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal> =
+    StdNumberValidator.exclusiveMinimum<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal>(BigDecimal.ZERO)
 
-val AmountReader: Reader<ReaderErrorBuilders, ReaderCtx, BigDecimal> = BigDecimalReader.validation(amountMoreZero)
+val AmountReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal> =
+    BigDecimalReader.validation(amountMoreZero)

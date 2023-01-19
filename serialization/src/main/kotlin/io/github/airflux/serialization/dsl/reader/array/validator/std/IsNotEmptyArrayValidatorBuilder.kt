@@ -20,10 +20,10 @@ import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
 
-internal class IsNotEmptyArrayValidatorBuilder<EB, CTX> : ArrayValidatorBuilder<EB, CTX>
+internal class IsNotEmptyArrayValidatorBuilder<EB, O, CTX> : ArrayValidatorBuilder<EB, O, CTX>
     where EB : IsNotEmptyArrayValidator.ErrorBuilder {
 
-    override fun build(): ArrayValidator<EB, CTX> = validator
+    override fun build(): ArrayValidator<EB, O, CTX> = validator
 
-    private val validator = IsNotEmptyArrayValidator<EB, CTX>()
+    private val validator = IsNotEmptyArrayValidator<EB, O, CTX>()
 }

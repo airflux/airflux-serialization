@@ -30,19 +30,19 @@ import io.github.airflux.serialization.core.value.NullNode
  * - If a node is found with a value 'null' ([lookup] is [LookupResult.Defined]) then returns [defaultValue]
  * - If a node is not found ([lookup] is [LookupResult.Undefined]) then returns [defaultValue]
  */
-public fun <EB, CTX, T : Any> readWithDefault(
-    env: ReaderEnv<EB, CTX>,
+public fun <EB, O, CTX, T : Any> readWithDefault(
+    env: ReaderEnv<EB, O, CTX>,
     lookup: LookupResult,
-    using: Reader<EB, CTX, T>,
-    defaultValue: (ReaderEnv<EB, CTX>) -> T
+    using: Reader<EB, O, CTX, T>,
+    defaultValue: (ReaderEnv<EB, O, CTX>) -> T
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder {
 
-    fun <EB, CTX, T : Any> readWithDefault(
-        env: ReaderEnv<EB, CTX>,
+    fun <EB, O, CTX, T : Any> readWithDefault(
+        env: ReaderEnv<EB, O, CTX>,
         lookup: LookupResult.Defined,
-        using: Reader<EB, CTX, T>,
-        defaultValue: (ReaderEnv<EB, CTX>) -> T
+        using: Reader<EB, O, CTX, T>,
+        defaultValue: (ReaderEnv<EB, O, CTX>) -> T
     ): ReaderResult<T> =
         if (lookup.value is NullNode)
             ReaderResult.Success(location = lookup.location, value = defaultValue(env))

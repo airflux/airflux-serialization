@@ -23,26 +23,28 @@ import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 
-internal class DummyArrayValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : ArrayValidatorBuilder<EB, CTX> {
+internal class DummyArrayValidatorBuilder<EB, O, CTX>(
+    result: ReaderResult.Failure?
+) : ArrayValidatorBuilder<EB, O, CTX> {
 
-    val validator = Validator<EB, CTX>(result)
-    override fun build(): ArrayValidator<EB, CTX> = validator
+    val validator = Validator<EB, O, CTX>(result)
+    override fun build(): ArrayValidator<EB, O, CTX> = validator
 
-    internal class Validator<EB, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, CTX> {
+    internal class Validator<EB, O, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, O, CTX> {
         override fun validate(
-            env: ReaderEnv<EB, CTX>,
+            env: ReaderEnv<EB, O, CTX>,
             location: Location,
             source: ArrayNode<*>
         ): ReaderResult.Failure? = result
     }
 
     companion object {
-        internal fun <EB, CTX> minItems(
+        internal fun <EB, O, CTX> minItems(
             expected: Int,
             error: (expected: Int, actual: Int) -> ReaderResult.Error
-        ): ArrayValidatorBuilder<EB, CTX> =
-            object : ArrayValidatorBuilder<EB, CTX> {
-                override fun build(): ArrayValidator<EB, CTX> =
+        ): ArrayValidatorBuilder<EB, O, CTX> =
+            object : ArrayValidatorBuilder<EB, O, CTX> {
+                override fun build(): ArrayValidator<EB, O, CTX> =
                     ArrayValidator { _, location, source ->
                         if (source.size < expected)
                             return@ArrayValidator ReaderResult.Failure(

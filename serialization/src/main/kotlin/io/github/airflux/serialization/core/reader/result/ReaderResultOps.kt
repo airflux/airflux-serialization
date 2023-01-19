@@ -21,9 +21,9 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <EB, CTX, T> ReaderResult<T?>.filter(
-    env: ReaderEnv<EB, CTX>,
-    predicate: ReaderPredicate<EB, CTX, T>
+public fun <EB, O, CTX, T> ReaderResult<T?>.filter(
+    env: ReaderEnv<EB, O, CTX>,
+    predicate: ReaderPredicate<EB, O, CTX, T>
 ): ReaderResult<T?> =
     fold(
         ifFailure = ::identity,
@@ -39,9 +39,9 @@ public fun <EB, CTX, T> ReaderResult<T?>.filter(
         }
     )
 
-public fun <EB, CTX, T> ReaderResult<T>.validation(
-    env: ReaderEnv<EB, CTX>,
-    validator: Validator<EB, CTX, T>
+public fun <EB, O, CTX, T> ReaderResult<T>.validation(
+    env: ReaderEnv<EB, O, CTX>,
+    validator: Validator<EB, O, CTX, T>
 ): ReaderResult<T> =
     fold(
         ifFailure = ::identity,

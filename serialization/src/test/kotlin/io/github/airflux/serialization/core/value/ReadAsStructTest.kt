@@ -28,10 +28,10 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsStructTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty.append("user")
         private const val USER_NAME = "user"
-        private val reader = { _: ReaderEnv<EB, Unit>, location: Location, source: StructNode ->
+        private val reader = { _: ReaderEnv<EB, Unit, Unit>, location: Location, source: StructNode ->
             val name = source["name"] as StringNode
             ReaderResult.Success(location = location, value = DTO(name = name.get))
         }

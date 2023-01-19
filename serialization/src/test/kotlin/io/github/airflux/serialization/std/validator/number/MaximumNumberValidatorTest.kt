@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class MaximumNumberValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val MAX_VALUE: Int = 2
     }
@@ -37,7 +37,7 @@ internal class MaximumNumberValidatorTest : FreeSpec() {
     init {
 
         "The numeric validator of the maximum allowed value" - {
-            val validator: Validator<EB, Unit, Int> = StdNumberValidator.maximum(MAX_VALUE)
+            val validator: Validator<EB, Unit, Unit, Int> = StdNumberValidator.maximum(MAX_VALUE)
 
             "when a value is less than the max allowed" - {
                 val value = MAX_VALUE - 1

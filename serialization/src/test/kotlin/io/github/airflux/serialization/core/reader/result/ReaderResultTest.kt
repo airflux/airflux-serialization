@@ -312,6 +312,7 @@ internal class ReaderResultTest : FreeSpec() {
                 "when the context contains the exceptions handler" - {
                     val env = ReaderEnv(
                         errorBuilders = Unit,
+                        options = Unit,
                         context = Unit,
                         exceptionsHandler = exceptionsHandler {
                             exception<IllegalStateException> { _, _, _ ->
@@ -334,6 +335,7 @@ internal class ReaderResultTest : FreeSpec() {
                 "when the context contains the exceptions handler" - {
                     val env = ReaderEnv(
                         errorBuilders = Unit,
+                        options = Unit,
                         context = Unit,
                         exceptionsHandler = exceptionsHandler {
                             exception<IllegalStateException> { _, _, _ ->
@@ -353,7 +355,7 @@ internal class ReaderResultTest : FreeSpec() {
                 }
 
                 "when the context does not contain the exceptions handler" - {
-                    val env = ReaderEnv(Unit, Unit)
+                    val env = ReaderEnv(Unit, Unit, Unit)
 
                     "then should re-throwing the exception" {
                         shouldThrow<IllegalStateException> {

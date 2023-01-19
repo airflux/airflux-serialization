@@ -21,19 +21,19 @@ import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public fun <EB, CTX, T : Any> nonNullable(reader: Reader<EB, CTX, T>): ArrayItemSpec.NonNullable<EB, CTX, T> =
+public fun <EB, O, CTX, T : Any> nonNullable(reader: Reader<EB, O, CTX, T>): ArrayItemSpec.NonNullable<EB, O, CTX, T> =
     ArrayItemSpec.NonNullable(reader)
 
-public infix fun <EB, CTX, T> ArrayItemSpec.NonNullable<EB, CTX, T>.validation(
-    validator: Validator<EB, CTX, T>
-): ArrayItemSpec.NonNullable<EB, CTX, T> =
+public infix fun <EB, O, CTX, T> ArrayItemSpec.NonNullable<EB, O, CTX, T>.validation(
+    validator: Validator<EB, O, CTX, T>
+): ArrayItemSpec.NonNullable<EB, O, CTX, T> =
     ArrayItemSpec.NonNullable(
         reader = { env, location, source ->
             reader.read(env, location, source).validation(env, validator)
         }
     )
 
-public infix fun <EB, CTX, T> ArrayItemSpec.NonNullable<EB, CTX, T>.or(
-    alt: ArrayItemSpec.NonNullable<EB, CTX, T>
-): ArrayItemSpec.NonNullable<EB, CTX, T> =
+public infix fun <EB, O, CTX, T> ArrayItemSpec.NonNullable<EB, O, CTX, T>.or(
+    alt: ArrayItemSpec.NonNullable<EB, O, CTX, T>
+): ArrayItemSpec.NonNullable<EB, O, CTX, T> =
     ArrayItemSpec.NonNullable(reader = reader or alt.reader)

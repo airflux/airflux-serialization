@@ -18,6 +18,6 @@ package io.github.airflux.serialization.dsl.reader.struct.validator
 
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 
-public interface StructValidatorBuilder<EB, CTX> {
-    public fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX>
+public interface StructValidatorBuilder<EB, O, CTX> {
+    public fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX>
 }

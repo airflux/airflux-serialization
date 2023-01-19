@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
-internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
-    private val values: MutableMap<StructProperty<EB, CTX>, Value> = mutableMapOf()
+internal class PropertyValuesInstance<EB, O, CTX> : PropertyValues<EB, O, CTX> {
+    private val values: MutableMap<StructProperty<EB, O, CTX>, Value> = mutableMapOf()
 
     override val isEmpty: Boolean
         get() = !isNotEmpty
@@ -28,7 +28,7 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
     override val size: Int
         get() = values.count { r -> r.value is Value.Some }
 
-    override operator fun <T : Any> get(property: StructProperty.NonNullable<EB, CTX, T>): T {
+    override operator fun <T : Any> get(property: StructProperty.NonNullable<EB, O, CTX, T>): T {
         val value = values[property]
         return if (value != null)
             @Suppress("UNCHECKED_CAST")
@@ -37,7 +37,7 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
             throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
     }
 
-    override operator fun <T : Any> get(property: StructProperty.Nullable<EB, CTX, T>): T? {
+    override operator fun <T : Any> get(property: StructProperty.Nullable<EB, O, CTX, T>): T? {
         val value = values[property]
         return if (value != null) {
             @Suppress("UNCHECKED_CAST")
@@ -49,11 +49,11 @@ internal class PropertyValuesInstance<EB, CTX> : PropertyValues<EB, CTX> {
             throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
     }
 
-    operator fun set(property: StructProperty.NonNullable<EB, CTX, *>, value: Any) {
+    operator fun set(property: StructProperty.NonNullable<EB, O, CTX, *>, value: Any) {
         values[property] = Value.Some(value)
     }
 
-    operator fun set(property: StructProperty.Nullable<EB, CTX, *>, value: Any?) {
+    operator fun set(property: StructProperty.Nullable<EB, O, CTX, *>, value: Any?) {
         if (value != null)
             values[property] = Value.Some(value)
         else

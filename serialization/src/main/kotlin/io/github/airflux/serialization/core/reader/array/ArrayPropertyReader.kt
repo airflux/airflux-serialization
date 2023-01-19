@@ -32,15 +32,15 @@ import io.github.airflux.serialization.core.value.ArrayNode
  * @param errorIfAdditionalItems return error if the number of items of an array is more than the number of the reader
  * for prefix items of an array
  */
-public fun <EB, CTX, T> readArray(
-    env: ReaderEnv<EB, CTX>,
+public fun <EB, O, CTX, T> readArray(
+    env: ReaderEnv<EB, O, CTX>,
     location: Location,
     source: ArrayNode<*>,
-    prefixItems: List<Reader<EB, CTX, T>>,
+    prefixItems: List<Reader<EB, O, CTX, T>>,
     errorIfAdditionalItems: Boolean
 ): ReaderResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption =
+          O : FailFastOption =
     source.read(
         env = env,
         location = location,
@@ -53,14 +53,14 @@ public fun <EB, CTX, T> readArray(
  * Read a node which represent as array.
  * @param items the reader for items of an array
  */
-public fun <EB, CTX, T> readArray(
-    env: ReaderEnv<EB, CTX>,
+public fun <EB, O, CTX, T> readArray(
+    env: ReaderEnv<EB, O, CTX>,
     location: Location,
     source: ArrayNode<*>,
-    items: Reader<EB, CTX, T>
+    items: Reader<EB, O, CTX, T>
 ): ReaderResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption =
+          O : FailFastOption =
     source.read(
         env = env,
         location = location,
@@ -74,15 +74,15 @@ public fun <EB, CTX, T> readArray(
  * @param prefixItems the reader for prefix items of an array
  * @param items the reader for items of an array
  */
-public fun <EB, CTX, T> readArray(
-    env: ReaderEnv<EB, CTX>,
+public fun <EB, O, CTX, T> readArray(
+    env: ReaderEnv<EB, O, CTX>,
     location: Location,
     source: ArrayNode<*>,
-    prefixItems: List<Reader<EB, CTX, T>>,
-    items: Reader<EB, CTX, T>
+    prefixItems: List<Reader<EB, O, CTX, T>>,
+    items: Reader<EB, O, CTX, T>
 ): ReaderResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption =
+          O : FailFastOption =
     source.read(
         env = env,
         location = location,
@@ -91,24 +91,24 @@ public fun <EB, CTX, T> readArray(
         errorIfAdditionalItems = false
     )
 
-internal fun <EB, CTX, T> ArrayNode<*>.read(
-    env: ReaderEnv<EB, CTX>,
+internal fun <EB, O, CTX, T> ArrayNode<*>.read(
+    env: ReaderEnv<EB, O, CTX>,
     location: Location,
-    prefixItems: List<Reader<EB, CTX, T>>,
-    items: Reader<EB, CTX, T>?,
+    prefixItems: List<Reader<EB, O, CTX, T>>,
+    items: Reader<EB, O, CTX, T>?,
     errorIfAdditionalItems: Boolean
 ): ReaderResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
-          CTX : FailFastOption {
+          O : FailFastOption {
 
-    fun <EB, CTX, T> getReader(
+    fun <EB, O, CTX, T> getReader(
         idx: Int,
-        prefixItems: List<Reader<EB, CTX, T>>,
-        itemsReader: Reader<EB, CTX, T>?
-    ): Reader<EB, CTX, T>? =
+        prefixItems: List<Reader<EB, O, CTX, T>>,
+        itemsReader: Reader<EB, O, CTX, T>?
+    ): Reader<EB, O, CTX, T>? =
         if (idx < prefixItems.size) prefixItems[idx] else itemsReader
 
-    val failFast = env.context.failFast
+    val failFast = env.options.failFast
     val initial: ReaderResult<MutableList<T>> = ReaderResult.Success(location = location, value = ArrayList(this.size))
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)

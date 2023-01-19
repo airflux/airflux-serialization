@@ -30,10 +30,11 @@ import io.github.airflux.quickstart.infrastructure.web.model.Response
 import io.github.airflux.quickstart.infrastructure.web.model.reader.RequestReader
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.writer.ResponseWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
 import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
@@ -47,18 +48,19 @@ fun main() {
     val env =
         ReaderEnv(
             errorBuilders = ReaderErrorBuilders,
-            context = ReaderCtx(failFast = true),
+            options = ReaderOptions(failFast = true),
+            context = ReaderCtx(),
             exceptionsHandler = exceptionsHandler {
                 exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
                 exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
             }
         )
 
-    val result = JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
-    when (result) {
-        is ReaderResult.Success -> println(result.value)
-        is ReaderResult.Failure -> println(result.causes)
-    }
+    JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
+        .fold(
+            ifSuccess = { result -> println(result.value) },
+            ifFailure = { result -> println(result.causes) }
+        )
 
     val value = Value(amount = BigDecimal("125.52"), currency = "USD")
     val lot = Lot(id = "lot-1", status = LotStatus.ACTIVE, value = value)

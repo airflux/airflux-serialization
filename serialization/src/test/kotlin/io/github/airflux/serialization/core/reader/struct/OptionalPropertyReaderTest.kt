@@ -37,9 +37,9 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "08b513cf-b218-4d89-aa78-3c2b482ff405"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val READER: Reader<EB, Unit, String> = dummyStringReader()
+        private val READER: Reader<EB, Unit, Unit, String> = dummyStringReader()
     }
 
     init {

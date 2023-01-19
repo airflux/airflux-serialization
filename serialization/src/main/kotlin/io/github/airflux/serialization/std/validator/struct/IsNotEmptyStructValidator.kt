@@ -23,13 +23,13 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
-public class IsNotEmptyStructValidator<EB, CTX> internal constructor() : StructValidator<EB, CTX>
+public class IsNotEmptyStructValidator<EB, O, CTX> internal constructor() : StructValidator<EB, O, CTX>
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
     override fun validate(
-        env: ReaderEnv<EB, CTX>,
+        env: ReaderEnv<EB, O, CTX>,
         location: Location,
-        properties: List<StructProperty<EB, CTX>>,
+        properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode
     ): ReaderResult.Failure? =
         if (source.isEmpty())

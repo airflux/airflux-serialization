@@ -46,8 +46,8 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
         private val LOCATION = Location.empty
 
-        private val StringReader = stringReader<EB, CTX>()
-        private val BooleanReader = booleanReader<EB, CTX>()
+        private val StringReader = stringReader<EB, OPTS, Unit>()
+        private val BooleanReader = booleanReader<EB, OPTS, Unit>()
     }
 
     init {
@@ -55,7 +55,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         "The ArrayReader type" - {
 
             "when a reader was created for prefixItems and items" - {
-                val reader: Reader<EB, CTX, List<Any>> = arrayReader {
+                val reader: Reader<EB, OPTS, Unit, List<Any>> = arrayReader {
                     returns(
                         prefixItems = prefixItems(
                             nonNullable(StringReader),
@@ -66,7 +66,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), CTX(failFast = true))
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
 
                     "when source is not the array type" - {
                         val source = StringNode("")
@@ -140,7 +140,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), CTX(failFast = false))
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
 
                     "when source is not the array type" - {
                         val source = StringNode("")
@@ -233,5 +233,5 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 
-    internal class CTX(override val failFast: Boolean) : FailFastOption
+    internal class OPTS(override val failFast: Boolean) : FailFastOption
 }

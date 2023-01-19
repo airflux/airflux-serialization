@@ -28,12 +28,12 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 
-public fun interface Reader<EB, CTX, out T> {
+public fun interface Reader<EB, O, CTX, out T> {
 
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(env: ReaderEnv<EB, CTX>, location: Location, source: ValueNode): ReaderResult<T>
+    public fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ValueNode): ReaderResult<T>
 
     /**
      * Create a new [Reader] which maps the value produced by this [Reader].
@@ -43,13 +43,13 @@ public fun interface Reader<EB, CTX, out T> {
      * if successful
      * @return A new [Reader] with the updated behavior.
      */
-    public infix fun <R> map(transform: (T) -> R): Reader<EB, CTX, R> =
+    public infix fun <R> map(transform: (T) -> R): Reader<EB, O, CTX, R> =
         Reader { env, location, source -> read(env, location, source).map(transform) }
 }
 
-public infix fun <EB, CTX, T, R> Reader<EB, CTX, T>.flatMapResult(
-    transform: (ReaderEnv<EB, CTX>, Location, T) -> ReaderResult<R>
-): Reader<EB, CTX, R> =
+public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
+    transform: (ReaderEnv<EB, O, CTX>, Location, T) -> ReaderResult<R>
+): Reader<EB, O, CTX, R> =
     Reader { env, location, source ->
         read(env, location, source)
             .fold(
@@ -66,7 +66,7 @@ public infix fun <EB, CTX, T, R> Reader<EB, CTX, T>.flatMapResult(
  * @param other the [Reader] to run if this one gets a [ReaderResult.Error]
  * @return A new [Reader] with the updated behavior.
  */
-public infix fun <EB, CTX, T> Reader<EB, CTX, T>.or(other: Reader<EB, CTX, T>): Reader<EB, CTX, T> =
+public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(other: Reader<EB, O, CTX, T>): Reader<EB, O, CTX, T> =
     Reader { env, location, source ->
         read(env, location, source)
             .recovery { failure ->
@@ -75,13 +75,17 @@ public infix fun <EB, CTX, T> Reader<EB, CTX, T>.or(other: Reader<EB, CTX, T>): 
             }
     }
 
-public infix fun <EB, CTX, T> Reader<EB, CTX, T?>.filter(predicate: ReaderPredicate<EB, CTX, T>): Reader<EB, CTX, T?> =
+public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T?>.filter(
+    predicate: ReaderPredicate<EB, O, CTX, T>
+): Reader<EB, O, CTX, T?> =
     Reader { env, location, source ->
         this@filter.read(env, location, source)
             .filter(env, predicate)
     }
 
-public infix fun <EB, CTX, T> Reader<EB, CTX, T>.validation(validator: Validator<EB, CTX, T>): Reader<EB, CTX, T> =
+public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.validation(
+    validator: Validator<EB, O, CTX, T>
+): Reader<EB, O, CTX, T> =
     Reader { env, location, source ->
         this@validation.read(env, location, source)
             .validation(env, validator)

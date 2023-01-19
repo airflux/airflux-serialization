@@ -24,27 +24,29 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 
-internal class DummyStructValidatorBuilder<EB, CTX>(result: ReaderResult.Failure?) : StructValidatorBuilder<EB, CTX> {
+internal class DummyStructValidatorBuilder<EB, O, CTX>(
+    result: ReaderResult.Failure?
+) : StructValidatorBuilder<EB, O, CTX> {
 
-    val validator = Validator<EB, CTX>(result)
-    override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> = validator
+    val validator = Validator<EB, O, CTX>(result)
+    override fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX> = validator
 
-    internal class Validator<EB, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, CTX> {
+    internal class Validator<EB, O, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, O, CTX> {
         override fun validate(
-            env: ReaderEnv<EB, CTX>,
+            env: ReaderEnv<EB, O, CTX>,
             location: Location,
-            properties: List<StructProperty<EB, CTX>>,
+            properties: List<StructProperty<EB, O, CTX>>,
             source: StructNode
         ): ReaderResult.Failure? = result
     }
 
     companion object {
-        internal fun <EB, CTX> additionalProperties(
+        internal fun <EB, O, CTX> additionalProperties(
             nameProperties: Set<String>,
             error: ReaderResult.Error
-        ): StructValidatorBuilder<EB, CTX> =
-            object : StructValidatorBuilder<EB, CTX> {
-                override fun build(properties: List<StructProperty<EB, CTX>>): StructValidator<EB, CTX> =
+        ): StructValidatorBuilder<EB, O, CTX> =
+            object : StructValidatorBuilder<EB, O, CTX> {
+                override fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX> =
                     StructValidator { _, location, _, node ->
                         node.forEach { (name, _) ->
                             if (name !in nameProperties)

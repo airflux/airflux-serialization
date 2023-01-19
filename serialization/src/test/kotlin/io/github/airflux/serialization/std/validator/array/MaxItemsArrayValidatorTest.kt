@@ -31,7 +31,7 @@ import io.kotest.matchers.shouldBe
 internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val MAX_ITEMS = 2
     }
@@ -39,7 +39,8 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MaxItems" - {
-            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.maxItems<EB, Unit>(MAX_ITEMS).build()
+            val validator: ArrayValidator<EB, Unit, Unit> =
+                StdArrayValidator.maxItems<EB, Unit, Unit>(MAX_ITEMS).build()
 
             "when a collection is empty" - {
                 val source: ArrayNode<StringNode> = ArrayNode()

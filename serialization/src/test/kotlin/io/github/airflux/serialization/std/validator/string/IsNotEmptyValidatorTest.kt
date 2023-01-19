@@ -29,14 +29,14 @@ import io.kotest.matchers.shouldBe
 internal class IsNotEmptyValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The string validator IsNotEmpty" - {
-            val validator: Validator<EB, Unit, String> = StdStringValidator.isNotEmpty()
+            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.isNotEmpty()
 
             "when a string is empty" - {
                 val str = ""

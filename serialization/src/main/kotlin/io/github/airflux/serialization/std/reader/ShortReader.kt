@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.value.readAsInteger
 /**
  * Reader for primitive [Short] type.
  */
-public fun <EB, CTX> shortReader(): Reader<EB, CTX, Short>
+public fun <EB, O, CTX> shortReader(): Reader<EB, O, CTX, Short>
     where EB : InvalidTypeErrorBuilder,
           EB : ValueCastErrorBuilder =
     Reader { env, location, source ->

@@ -41,10 +41,10 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
-        private val StringReader = dummyStringReader<EB, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit>()
+        private val StringReader = dummyStringReader<EB, Unit, Unit>()
+        private val IntReader = dummyIntReader<EB, Unit, Unit>()
     }
 
     init {
@@ -102,7 +102,8 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
             "when the validator was added to the spec" - {
                 val spec = nullable(reader = StringReader)
-                val specWithValidator = spec.validation(StdStringValidator.isNotEmpty<EB, Unit>().applyIfNotNull())
+                val specWithValidator =
+                    spec.validation(StdStringValidator.isNotEmpty<EB, Unit, Unit>().applyIfNotNull())
 
                 "when the reader has successfully read" - {
 

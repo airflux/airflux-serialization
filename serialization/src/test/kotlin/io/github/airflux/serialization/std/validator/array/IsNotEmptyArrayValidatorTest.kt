@@ -31,14 +31,14 @@ import io.kotest.matchers.shouldBe
 internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The array validator IsNotEmpty" - {
-            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.isNotEmpty<EB, Unit>().build()
+            val validator: ArrayValidator<EB, Unit, Unit> = StdArrayValidator.isNotEmpty<EB, Unit, Unit>().build()
 
             "when an array is empty" - {
                 val source: ArrayNode<StringNode> = ArrayNode()

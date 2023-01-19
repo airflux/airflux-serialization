@@ -23,6 +23,6 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 /**
  * Handler **uncaught** exceptions.
  */
-public fun interface ExceptionsHandler<EB, CTX> {
-    public fun handle(env: ReaderEnv<EB, CTX>, location: Location, exception: Throwable): ReaderResult.Error
+public fun interface ExceptionsHandler<EB, O, CTX> {
+    public fun handle(env: ReaderEnv<EB, O, CTX>, location: Location, exception: Throwable): ReaderResult.Error
 }

@@ -17,9 +17,13 @@
 package io.github.airflux.quickstart.infrastructure.web.model.reader.property
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.base.StringReader
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
+import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.isNotBlank
+import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 
-val identifierPropertySpec =
+val identifierPropertySpec: StructPropertySpec.NonNullable<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
     required(name = "id", reader = StringReader)
         .validation(isNotBlank)

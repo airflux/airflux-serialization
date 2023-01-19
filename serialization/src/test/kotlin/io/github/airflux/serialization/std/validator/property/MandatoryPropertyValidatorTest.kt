@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class MandatoryPropertyValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val VALUE: Int = 2
     }
@@ -39,7 +39,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
         "The property value validator the Mandatory" - {
 
             "when the predicate returns the true value" - {
-                val validator: Validator<EB, Unit, Int?> = StdPropertyValidator.mandatory { _, _ -> true }
+                val validator: Validator<EB, Unit, Unit, Int?> = StdPropertyValidator.mandatory { _, _ -> true }
 
                 "when a value is missing" - {
                     val value: Int? = null
@@ -66,7 +66,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val validator: Validator<EB, Unit, Int?> = StdPropertyValidator.mandatory { _, _ -> false }
+                val validator: Validator<EB, Unit, Unit, Int?> = StdPropertyValidator.mandatory { _, _ -> false }
 
                 "when a value is missing" - {
                     val value: Int? = null

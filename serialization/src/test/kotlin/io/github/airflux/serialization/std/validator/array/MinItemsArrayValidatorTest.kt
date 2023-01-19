@@ -31,7 +31,7 @@ import io.kotest.matchers.shouldBe
 internal class MinItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = ReaderEnv(EB(), Unit, Unit)
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
     }
@@ -39,7 +39,8 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.minItems<EB, Unit>(MIN_ITEMS).build()
+            val validator: ArrayValidator<EB, Unit, Unit> =
+                StdArrayValidator.minItems<EB, Unit, Unit>(MIN_ITEMS).build()
 
             "when a collection is empty" - {
                 val source: ArrayNode<StringNode> = ArrayNode()
