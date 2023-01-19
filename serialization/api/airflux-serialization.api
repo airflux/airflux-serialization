@@ -501,9 +501,12 @@ public final class io/github/airflux/serialization/core/writer/env/option/Writer
 }
 
 public abstract interface class io/github/airflux/serialization/core/writer/predicate/WriterPredicate {
-	public fun and (Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;
-	public fun or (Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;
 	public abstract fun test (Lio/github/airflux/serialization/core/writer/env/WriterEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Z
+}
+
+public final class io/github/airflux/serialization/core/writer/predicate/WriterPredicateKt {
+	public static final fun and (Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;
+	public static final fun or (Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;)Lio/github/airflux/serialization/core/writer/predicate/WriterPredicate;
 }
 
 public abstract interface annotation class io/github/airflux/serialization/dsl/AirfluxMarker : java/lang/annotation/Annotation {
