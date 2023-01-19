@@ -36,7 +36,8 @@ import kotlin.reflect.KClass
 internal class LongReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val LongReader = longReader<EB, Unit, Unit>()
     }
@@ -54,14 +55,14 @@ internal class LongReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: ValueNode = NumericNode.Integer.valueOf(value)
-                    val result = LongReader.read(ENV, LOCATION, source)
+                    val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                     result.assertAsSuccess(value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = LongReader.read(ENV, LOCATION, source)
+                val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -90,7 +91,7 @@ internal class LongReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
-                    val result = LongReader.read(ENV, LOCATION, source)
+                    val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = Location.empty,

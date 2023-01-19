@@ -28,10 +28,11 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsStructTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty.append("user")
         private const val USER_NAME = "user"
-        private val reader = { _: ReaderEnv<EB, Unit, Unit>, location: Location, source: StructNode ->
+        private val reader = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: StructNode ->
             val name = source["name"] as StringNode
             ReaderResult.Success(location = location, value = DTO(name = name.get))
         }
@@ -44,7 +45,7 @@ internal class ReadAsStructTest : FreeSpec() {
 
                 "should return the DTO" {
                     val json: ValueNode = StructNode("name" to StringNode(USER_NAME))
-                    val result = json.readAsStruct(ENV, LOCATION, reader)
+                    val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
                     result.assertAsSuccess(value = DTO(name = USER_NAME))
                 }
             }
@@ -52,7 +53,7 @@ internal class ReadAsStructTest : FreeSpec() {
 
                 "should return the invalid type' error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
-                    val result = json.readAsStruct(ENV, LOCATION, reader)
+                    val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = LOCATION,

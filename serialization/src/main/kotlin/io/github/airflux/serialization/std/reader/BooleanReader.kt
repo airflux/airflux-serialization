@@ -25,6 +25,6 @@ import io.github.airflux.serialization.core.value.readAsBoolean
  */
 public fun <EB, O, CTX> booleanReader(): Reader<EB, O, CTX, Boolean>
     where EB : InvalidTypeErrorBuilder =
-    Reader { env, location, source ->
+    Reader { env, _, location, source ->
         source.readAsBoolean(env, location)
     }

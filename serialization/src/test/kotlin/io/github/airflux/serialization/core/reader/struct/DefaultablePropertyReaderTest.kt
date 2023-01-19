@@ -39,10 +39,11 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "37bbcb7c-c62c-4cc6-9fb2-71954f5c0192"
         private const val ID_PROPERTY_DEFAULT_VALUE = "9ebe2411-8bd7-4876-b6f4-fbe8195c4b80"
 
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val READER: Reader<EB, Unit, Unit, String> = dummyStringReader()
-        private val DEFAULT = { _: ReaderEnv<EB, Unit, Unit> -> ID_PROPERTY_DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> ID_PROPERTY_DEFAULT_VALUE }
     }
 
     init {
@@ -58,8 +59,13 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                     )
 
                     "then should return the result of applying the reader" {
-                        val result: ReaderResult<String?> =
-                            readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
+                        val result: ReaderResult<String?> = readWithDefault(
+                            env = ENV,
+                            context = CONTEXT,
+                            lookup = lookup,
+                            using = READER,
+                            defaultValue = DEFAULT
+                        )
                         result shouldBeSuccess ReaderResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
@@ -74,8 +80,13 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                     )
 
                     "then should return the default value" {
-                        val result: ReaderResult<String?> =
-                            readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
+                        val result: ReaderResult<String?> = readWithDefault(
+                            env = ENV,
+                            context = CONTEXT,
+                            lookup = lookup,
+                            using = READER,
+                            defaultValue = DEFAULT
+                        )
                         result shouldBeSuccess ReaderResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_DEFAULT_VALUE
@@ -89,8 +100,13 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                     LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the default value" {
-                    val result: ReaderResult<String?> =
-                        readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
+                    val result: ReaderResult<String?> = readWithDefault(
+                        env = ENV,
+                        context = CONTEXT,
+                        lookup = lookup,
+                        using = READER,
+                        defaultValue = DEFAULT
+                    )
 
                     result shouldBeSuccess ReaderResult.Success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
@@ -107,8 +123,13 @@ internal class DefaultablePropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: ReaderResult<String?> =
-                        readWithDefault(env = ENV, lookup = lookup, using = READER, defaultValue = DEFAULT)
+                    val result: ReaderResult<String?> = readWithDefault(
+                        env = ENV,
+                        context = CONTEXT,
+                        lookup = lookup,
+                        using = READER,
+                        defaultValue = DEFAULT
+                    )
 
                     result shouldBeFailure ReaderResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),

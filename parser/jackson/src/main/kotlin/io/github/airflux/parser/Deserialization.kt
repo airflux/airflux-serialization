@@ -27,9 +27,10 @@ import io.github.airflux.serialization.core.value.ValueNode
 
 public fun <EB, O, CTX, T : Any> String.deserialization(
     mapper: ObjectMapper,
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     reader: Reader<EB, O, CTX, T>
 ): ReaderResult<T> =
     withCatching(env, Location.empty) {
-        mapper.readValue(this, ValueNode::class.java).deserialization(env, reader)
+        mapper.readValue(this, ValueNode::class.java).deserialization(env, context, reader)
     }

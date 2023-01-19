@@ -29,10 +29,11 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsArrayTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty.append("user")
         private const val USER_NAME = "user"
-        private val READER = { _: ReaderEnv<EB, Unit, Unit>, location: Location, source: ArrayNode<*> ->
+        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: ArrayNode<*> ->
             val result = source.map { (it as StringNode).get }
             ReaderResult.Success(location = location, value = result)
         }
@@ -46,7 +47,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the collection of values" {
                     val json: ValueNode = ArrayNode(StringNode(USER_NAME))
 
-                    val result = json.readAsArray(ENV, LOCATION, READER)
+                    val result = json.readAsArray(ENV, CONTEXT, LOCATION, READER)
 
                     result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = listOf(USER_NAME))
                 }
@@ -57,7 +58,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
 
-                    val result = json.readAsArray(ENV, LOCATION, READER)
+                    val result = json.readAsArray(ENV, CONTEXT, LOCATION, READER)
 
                     result shouldBeFailure ReaderResult.Failure(
                         location = LOCATION,

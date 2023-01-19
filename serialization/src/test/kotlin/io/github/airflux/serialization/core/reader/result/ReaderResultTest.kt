@@ -313,7 +313,6 @@ internal class ReaderResultTest : FreeSpec() {
                     val env = ReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
-                        context = Unit,
                         exceptionsHandler = exceptionsHandler {
                             exception<IllegalStateException> { _, _, _ ->
                                 JsonErrors.PathMissing
@@ -336,7 +335,6 @@ internal class ReaderResultTest : FreeSpec() {
                     val env = ReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
-                        context = Unit,
                         exceptionsHandler = exceptionsHandler {
                             exception<IllegalStateException> { _, _, _ ->
                                 JsonErrors.PathMissing
@@ -355,7 +353,7 @@ internal class ReaderResultTest : FreeSpec() {
                 }
 
                 "when the context does not contain the exceptions handler" - {
-                    val env = ReaderEnv(Unit, Unit, Unit)
+                    val env = ReaderEnv(Unit, Unit)
 
                     "then should re-throwing the exception" {
                         shouldThrow<IllegalStateException> {

@@ -25,6 +25,6 @@ import io.github.airflux.serialization.core.value.readAsString
  */
 public fun <EB, O, CTX> stringReader(): Reader<EB, O, CTX, String>
     where EB : InvalidTypeErrorBuilder =
-    Reader { env, location, source ->
+    Reader { env, _, location, source ->
         source.readAsString(env, location)
     }

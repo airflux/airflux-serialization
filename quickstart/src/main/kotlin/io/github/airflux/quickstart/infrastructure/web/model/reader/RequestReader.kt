@@ -32,7 +32,7 @@ val RequestReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Request
 
     val tender = property(required(name = "tender", reader = TenderReader))
 
-    returns { _, location ->
+    returns { _, _, location ->
         Request(tender = this[tender]).success(location)
     }
 }

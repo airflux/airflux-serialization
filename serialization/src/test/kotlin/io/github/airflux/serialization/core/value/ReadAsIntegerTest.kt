@@ -28,9 +28,10 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsIntegerTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty.append("user")
-        private val READER = { _: ReaderEnv<EB, Unit, Unit>, location: Location, text: String ->
+        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, text: String ->
             ReaderResult.Success(location = location, value = text.toInt())
         }
     }
@@ -42,7 +43,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
                 "should return the number value" {
                     val json: ValueNode = NumericNode.Integer.valueOf(Int.MAX_VALUE)
-                    val result = json.readAsInteger(ENV, LOCATION, READER)
+                    val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
                     result.assertAsSuccess(value = Int.MAX_VALUE)
                 }
             }
@@ -50,7 +51,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
-                    val result = json.readAsInteger(ENV, LOCATION, READER)
+                    val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = LOCATION,

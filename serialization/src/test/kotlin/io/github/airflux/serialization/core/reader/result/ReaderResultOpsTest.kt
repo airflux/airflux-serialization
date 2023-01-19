@@ -30,14 +30,15 @@ import io.kotest.matchers.shouldBe
 internal class ReaderResultOpsTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The extension-function the filter" - {
-            val isNotBlank = ReaderPredicate<EB, Unit, Unit, String> { _, _, value -> value.isNotBlank() }
+            val isNotBlank = ReaderPredicate<EB, Unit, Unit, String> { _, _, _, value -> value.isNotBlank() }
 
             "when result is success" - {
 
@@ -45,7 +46,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "  ")
 
                     "then filter should return null" {
-                        val filtered = result.filter(ENV, isNotBlank)
+                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
                         filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
                     }
                 }
@@ -55,7 +56,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                         ReaderResult.Success(location = LOCATION, value = "user")
 
                     "then filter should return the original value" {
-                        val filtered = result.filter(ENV, isNotBlank)
+                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
                         filtered shouldBe result
                     }
                 }
@@ -64,7 +65,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String?> = ReaderResult.Success(location = LOCATION, value = null)
 
                     "then filter should return the original value" {
-                        val filtered = result.filter(ENV, isNotBlank)
+                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
                         filtered shouldBe result
                     }
                 }
@@ -80,14 +81,14 @@ internal class ReaderResultOpsTest : FreeSpec() {
                 )
 
                 "then filter should return the original value" {
-                    val filtered = result.filter(ENV, isNotBlank)
+                    val filtered = result.filter(ENV, CONTEXT, isNotBlank)
                     filtered shouldBe result
                 }
             }
         }
 
         "The extension-function the validation" - {
-            val isNotEmpty = Validator<EB, Unit, Unit, String> { _, location, value ->
+            val isNotEmpty = Validator<EB, Unit, Unit, String> { _, _, location, value ->
                 if (value.isNotEmpty())
                     null
                 else
@@ -100,7 +101,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "")
 
                     "then validator should return an error" {
-                        val validated = result.validation(ENV, isNotEmpty)
+                        val validated = result.validation(ENV, CONTEXT, isNotEmpty)
 
                         validated shouldBe ReaderResult.Failure(
                             location = LOCATION,
@@ -113,7 +114,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "user")
 
                     "then validator should return the original value" {
-                        val validated = result.validation(ENV, isNotEmpty)
+                        val validated = result.validation(ENV, CONTEXT, isNotEmpty)
                         validated shouldBe result
                     }
                 }
@@ -124,7 +125,7 @@ internal class ReaderResultOpsTest : FreeSpec() {
                     ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
-                    val validated = result.validation(ENV, isNotEmpty)
+                    val validated = result.validation(ENV, CONTEXT, isNotEmpty)
                     validated shouldBe result
                 }
             }

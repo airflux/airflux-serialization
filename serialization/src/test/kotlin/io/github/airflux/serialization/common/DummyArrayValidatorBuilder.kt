@@ -32,7 +32,8 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(
 
     internal class Validator<EB, O, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, O, CTX> {
         override fun validate(
-            env: ReaderEnv<EB, O, CTX>,
+            env: ReaderEnv<EB, O>,
+            context: CTX,
             location: Location,
             source: ArrayNode<*>
         ): ReaderResult.Failure? = result
@@ -45,7 +46,7 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(
         ): ArrayValidatorBuilder<EB, O, CTX> =
             object : ArrayValidatorBuilder<EB, O, CTX> {
                 override fun build(): ArrayValidator<EB, O, CTX> =
-                    ArrayValidator { _, location, source ->
+                    ArrayValidator { _, _, location, source ->
                         if (source.size < expected)
                             return@ArrayValidator ReaderResult.Failure(
                                 location = location,

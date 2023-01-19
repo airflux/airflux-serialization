@@ -49,14 +49,13 @@ fun main() {
         ReaderEnv(
             errorBuilders = ReaderErrorBuilders,
             options = ReaderOptions(failFast = true),
-            context = ReaderCtx(),
             exceptionsHandler = exceptionsHandler {
                 exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
                 exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
             }
         )
 
-    JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
+    JSON.deserialization(mapper = mapper, env = env, context = ReaderCtx(), reader = RequestReader)
         .fold(
             ifSuccess = { result -> println(result.value) },
             ifFailure = { result -> println(result.causes) }

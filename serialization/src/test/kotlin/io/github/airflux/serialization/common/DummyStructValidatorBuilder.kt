@@ -33,7 +33,8 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(
 
     internal class Validator<EB, O, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, O, CTX> {
         override fun validate(
-            env: ReaderEnv<EB, O, CTX>,
+            env: ReaderEnv<EB, O>,
+            context: CTX,
             location: Location,
             properties: List<StructProperty<EB, O, CTX>>,
             source: StructNode
@@ -47,7 +48,7 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(
         ): StructValidatorBuilder<EB, O, CTX> =
             object : StructValidatorBuilder<EB, O, CTX> {
                 override fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX> =
-                    StructValidator { _, location, _, node ->
+                    StructValidator { _, _, location, _, node ->
                         node.forEach { (name, _) ->
                             if (name !in nameProperties)
                                 return@StructValidator ReaderResult.Failure(

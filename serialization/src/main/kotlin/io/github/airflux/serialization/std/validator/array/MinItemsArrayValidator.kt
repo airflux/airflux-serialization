@@ -27,7 +27,12 @@ public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
 ) : ArrayValidator<EB, O, CTX>
     where EB : MinItemsArrayValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, source: ArrayNode<*>): ReaderResult.Failure? =
+    override fun validate(
+        env: ReaderEnv<EB, O>,
+        context: CTX,
+        location: Location,
+        source: ArrayNode<*>
+    ): ReaderResult.Failure? =
         if (source.size < expected)
             ReaderResult.Failure(location, env.errorBuilders.minItemsArrayError(expected, source.size))
         else

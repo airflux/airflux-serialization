@@ -22,7 +22,8 @@ import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <EB, O, CTX, T> ReaderResult<T?>.filter(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     predicate: ReaderPredicate<EB, O, CTX, T>
 ): ReaderResult<T?> =
     fold(
@@ -31,7 +32,7 @@ public fun <EB, O, CTX, T> ReaderResult<T?>.filter(
             if (result.value == null)
                 result
             else {
-                if (predicate.test(env, result.location, result.value))
+                if (predicate.test(env, context, result.location, result.value))
                     result
                 else
                     ReaderResult.Success(location = result.location, value = null)
@@ -40,10 +41,11 @@ public fun <EB, O, CTX, T> ReaderResult<T?>.filter(
     )
 
 public fun <EB, O, CTX, T> ReaderResult<T>.validation(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     validator: Validator<EB, O, CTX, T>
 ): ReaderResult<T> =
     fold(
         ifFailure = ::identity,
-        ifSuccess = { result -> validator.validate(env, result.location, result.value) ?: result }
+        ifSuccess = { result -> validator.validate(env, context, result.location, result.value) ?: result }
     )

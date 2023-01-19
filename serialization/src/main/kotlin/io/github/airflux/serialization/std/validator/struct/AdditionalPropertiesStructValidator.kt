@@ -32,7 +32,8 @@ public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructo
           O : FailFastOption {
 
     override fun validate(
-        env: ReaderEnv<EB, O, CTX>,
+        env: ReaderEnv<EB, O>,
+        context: CTX,
         location: Location,
         properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode

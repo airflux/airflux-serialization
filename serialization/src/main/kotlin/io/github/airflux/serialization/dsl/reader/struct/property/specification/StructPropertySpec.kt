@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public sealed class StructPropertySpec<EB, O, CTX, T> {
+public sealed class StructPropertySpec<EB, O, in CTX, T> {
     public abstract val path: PropertyPaths
     public abstract val reader: Reader<EB, O, CTX, T>
 
@@ -36,8 +36,8 @@ public sealed class StructPropertySpec<EB, O, CTX, T> {
         public infix fun validation(validator: Validator<EB, O, CTX, T>): NonNullable<EB, O, CTX, T> =
             NonNullable(
                 path = path,
-                reader = { env, location, source ->
-                    reader.read(env, location, source).validation(env, validator)
+                reader = { env, context, location, source ->
+                    reader.read(env, context, location, source).validation(env, context, validator)
                 }
             )
 
@@ -53,16 +53,16 @@ public sealed class StructPropertySpec<EB, O, CTX, T> {
         public infix fun validation(validator: Validator<EB, O, CTX, T?>): Nullable<EB, O, CTX, T> =
             Nullable(
                 path = path,
-                reader = { env, location, source ->
-                    reader.read(env, location, source).validation(env, validator)
+                reader = { env, context, location, source ->
+                    reader.read(env, context, location, source).validation(env, context, validator)
                 }
             )
 
         public infix fun filter(predicate: ReaderPredicate<EB, O, CTX, T>): Nullable<EB, O, CTX, T> =
             Nullable(
                 path = path,
-                reader = { env, location, source ->
-                    reader.read(env, location, source).filter(env, predicate)
+                reader = { env, context, location, source ->
+                    reader.read(env, context, location, source).filter(env, context, predicate)
                 }
             )
 

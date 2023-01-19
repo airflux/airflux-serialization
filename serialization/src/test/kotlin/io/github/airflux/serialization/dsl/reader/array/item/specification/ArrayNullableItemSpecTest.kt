@@ -41,7 +41,8 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_VALUE_AS_INT = "10"
 
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val StringReader = dummyStringReader<EB, Unit, Unit>()
         private val IntReader = dummyIntReader<EB, Unit, Unit>()
@@ -60,7 +61,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                         "if the property value is not the null type" - {
                             val source = StringNode(ID_VALUE_AS_UUID)
-                            val result = spec.reader.read(ENV, LOCATION, source)
+                            val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                             "then the not-null value should be returned" {
                                 result shouldBeSuccess ReaderResult.Success(
@@ -72,7 +73,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                         "if the property value is the null type" - {
                             val source = NullNode
-                            val result = spec.reader.read(ENV, LOCATION, source)
+                            val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                             "then the null value should be returned" {
                                 result shouldBeSuccess ReaderResult.Success(
@@ -85,7 +86,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                     "when a read error occurred" - {
                         val source = NumericNode.Integer.valueOf(10)
-                        val result = spec.reader.read(ENV, LOCATION, source)
+                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure ReaderResult.Failure(
@@ -110,7 +111,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                     "then a value should be returned if validation is a success" {
                         val source = StringNode(ID_VALUE_AS_UUID)
 
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess ReaderResult.Success(
                             location = LOCATION,
@@ -121,7 +122,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                     "then a validation error should be returned if validation is a failure" {
                         val source = StringNode("")
 
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure ReaderResult.Failure(
                             location = LOCATION,
@@ -135,7 +136,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                     "then should be returned a read error" {
                         val source = NumericNode.Integer.valueOf(10)
 
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure ReaderResult.Failure(
                             location = LOCATION,
@@ -155,7 +156,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                 "when the main reader has successfully read" - {
                     val source = StringNode(ID_VALUE_AS_UUID)
-                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -167,7 +168,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                 "when the main reader has failure read" - {
                     val source = NumericNode.Integer.valueOrNullOf(ID_VALUE_AS_INT)!!
-                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -179,7 +180,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
                 "when the alternative reader has failure read" - {
                     val source = BooleanNode.True
-                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned all read errors" {
                         result shouldBeFailure listOf(

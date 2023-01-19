@@ -32,7 +32,7 @@ internal class StructPropertyTest : FreeSpec() {
 
     companion object {
         private const val DEFAULT_VALUE = "none"
-        private val DEFAULT = { _: ReaderEnv<EB, Unit, Unit> -> DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
         private val StringReader = dummyStringReader<EB, Unit, Unit>()
     }
 
@@ -54,7 +54,7 @@ internal class StructPropertyTest : FreeSpec() {
             }
 
             "when created an instance of the requiredIf property" - {
-                val spec = required(name = "id", reader = StringReader, predicate = { _, _ -> true })
+                val spec = required(name = "id", reader = StringReader, predicate = { _, _, _ -> true })
                 val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {

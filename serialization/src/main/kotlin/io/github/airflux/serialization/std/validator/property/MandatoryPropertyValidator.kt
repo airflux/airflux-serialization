@@ -22,12 +22,12 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class MandatoryPropertyValidator<EB, O, CTX, T> internal constructor(
-    private val predicate: (env: ReaderEnv<EB, O, CTX>, location: Location) -> Boolean
+    private val predicate: (env: ReaderEnv<EB, O>, CTX, location: Location) -> Boolean
 ) : Validator<EB, O, CTX, T>
     where EB : MandatoryPropertyValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: T): ReaderResult.Failure? =
-        if (predicate(env, location)) {
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure? =
+        if (predicate(env, context, location)) {
             if (value != null)
                 null
             else

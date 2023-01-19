@@ -31,14 +31,15 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
  *   that was build using [PathMissingErrorBuilder]
  */
 public fun <EB, O, CTX, T : Any> readRequired(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     lookup: LookupResult,
     using: Reader<EB, O, CTX, T>
 ): ReaderResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     when (lookup) {
-        is LookupResult.Defined -> using.read(env, lookup.location, lookup.value)
+        is LookupResult.Defined -> using.read(env, context, lookup.location, lookup.value)
 
         is LookupResult.Undefined -> when (lookup) {
             is LookupResult.Undefined.PathMissing ->

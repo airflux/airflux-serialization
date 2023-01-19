@@ -21,5 +21,5 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 
 internal class DummyReaderPredicate<EB, O, CTX, T>(val result: Boolean) : ReaderPredicate<EB, O, CTX, T> {
-    override fun test(env: ReaderEnv<EB, O, CTX>, location: Location, value: T): Boolean = result
+    override fun test(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Boolean = result
 }

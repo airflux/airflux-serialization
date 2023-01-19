@@ -28,7 +28,8 @@ public class MinPropertiesStructValidator<EB, O, CTX> internal constructor(priva
     where EB : MinPropertiesStructValidator.ErrorBuilder {
 
     override fun validate(
-        env: ReaderEnv<EB, O, CTX>,
+        env: ReaderEnv<EB, O>,
+        context: CTX,
         location: Location,
         properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode

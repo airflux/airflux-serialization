@@ -20,8 +20,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
-public fun interface Validator<EB, O, CTX, in T> {
-    public fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: T): ReaderResult.Failure?
+public fun interface Validator<EB, O, in CTX, in T> {
+    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure?
 }
 
 /*
@@ -35,10 +35,10 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(
     other: Validator<EB, O, CTX, T>
 ): Validator<EB, O, CTX, T> {
     val self = this
-    return Validator { env, location, value ->
-        self.validate(env, location, value)
+    return Validator { env, context, location, value ->
+        self.validate(env, context, location, value)
             ?.let { error ->
-                other.validate(env, location, value)
+                other.validate(env, context, location, value)
                     ?.let { error + it }
             }
     }
@@ -55,8 +55,8 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.and(
     other: Validator<EB, O, CTX, T>
 ): Validator<EB, O, CTX, T> {
     val self = this
-    return Validator { env, location, value ->
-        val result = self.validate(env, location, value)
-        result ?: other.validate(env, location, value)
+    return Validator { env, context, location, value ->
+        val result = self.validate(env, context, location, value)
+        result ?: other.validate(env, context, location, value)
     }
 }

@@ -35,7 +35,8 @@ import kotlin.reflect.KClass
 internal class ByteReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val ByteReader = byteReader<EB, Unit, Unit>()
     }
@@ -53,14 +54,14 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: ValueNode = NumericNode.Integer.valueOf(value)
-                    val result = ByteReader.read(ENV, LOCATION, source)
+                    val result = ByteReader.read(ENV, CONTEXT, LOCATION, source)
                     result.assertAsSuccess(value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = ByteReader.read(ENV, LOCATION, source)
+                val result = ByteReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,
@@ -89,7 +90,7 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
-                    val result = ByteReader.read(ENV, LOCATION, source)
+                    val result = ByteReader.read(ENV, CONTEXT, LOCATION, source)
                     result.assertAsFailure(
                         ReaderResult.Failure.Cause(
                             location = Location.empty,

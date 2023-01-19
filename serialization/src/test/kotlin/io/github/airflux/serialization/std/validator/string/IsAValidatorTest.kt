@@ -29,7 +29,8 @@ import io.kotest.matchers.shouldBe
 internal class IsAValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val PATTERN: Regex = "\\d+".toRegex()
         private val IS_DIGITAL: (String) -> Boolean = { value: String -> PATTERN.matches(value) }
@@ -44,7 +45,7 @@ internal class IsAValidatorTest : FreeSpec() {
                 val str = ""
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, str)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
@@ -58,7 +59,7 @@ internal class IsAValidatorTest : FreeSpec() {
                 val str = " "
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, str)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
@@ -72,7 +73,7 @@ internal class IsAValidatorTest : FreeSpec() {
                 val str = "a"
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, str)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
@@ -86,7 +87,7 @@ internal class IsAValidatorTest : FreeSpec() {
                 val str = "123"
 
                 "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, LOCATION, str)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
                     errors.shouldBeNull()
                 }
             }

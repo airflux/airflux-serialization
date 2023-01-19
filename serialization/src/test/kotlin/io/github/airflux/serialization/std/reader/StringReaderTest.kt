@@ -31,7 +31,8 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val StringReader = stringReader<EB, Unit, Unit>()
         private const val TEXT = "abc"
@@ -42,13 +43,13 @@ internal class StringReaderTest : FreeSpec() {
 
             "should return the string value" {
                 val source: ValueNode = StringNode(TEXT)
-                val result = StringReader.read(ENV, LOCATION, source)
+                val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsSuccess(value = TEXT)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = BooleanNode.valueOf(true)
-                val result = StringReader.read(ENV, LOCATION, source)
+                val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,

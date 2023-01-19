@@ -47,9 +47,10 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_INT = "10"
         private const val DEFAULT_VALUE = "none"
 
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
-        private val DEFAULT = { _: ReaderEnv<EB, Unit, Unit> -> DEFAULT_VALUE }
+        private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
         private val StringReader = dummyStringReader<EB, Unit, Unit>()
         private val IntReader = dummyIntReader<EB, Unit, Unit>()
     }
@@ -67,7 +68,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the reader has read a property named id" - {
                     val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, LOCATION, source)
+                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -79,7 +80,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the property does not founded" - {
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, LOCATION, source)
+                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a default value should be returned" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -91,7 +92,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when a read error occurred" - {
                     val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOf(10))
-                    val result = spec.reader.read(ENV, LOCATION, source)
+                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result shouldBeFailure ReaderResult.Failure(
@@ -115,7 +116,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the reader has read a property named id" - {
                     val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, LOCATION, source)
+                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -127,7 +128,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the property does not founded" - {
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, LOCATION, source)
+                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a default value should be returned" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -139,7 +140,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when an error occurs while reading" - {
                     val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOf(10))
-                    val result = spec.reader.read(ENV, LOCATION, source)
+                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result shouldBeFailure ReaderResult.Failure(
@@ -162,7 +163,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                     "then a value should be returned if validation is a success" {
                         val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
 
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess ReaderResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -173,7 +174,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                     "then a validation error should be returned if validation is a failure" {
                         val source = StructNode(ID_PROPERTY_NAME to StringNode(""))
 
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure ReaderResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -187,7 +188,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                     "then should be returned a read error" {
                         val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOf(10))
 
-                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure ReaderResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -215,7 +216,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the main reader has successfully read" - {
                     val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
-                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -227,7 +228,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the main reader has failure read" - {
                     val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOrNullOf(ID_VALUE_AS_INT)!!)
-                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result shouldBeSuccess ReaderResult.Success(
@@ -239,7 +240,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
                 "when the alternative reader has failure read" - {
                     val source = StructNode(ID_PROPERTY_NAME to BooleanNode.True)
-                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned all read errors" {
                         result shouldBeFailure listOf(

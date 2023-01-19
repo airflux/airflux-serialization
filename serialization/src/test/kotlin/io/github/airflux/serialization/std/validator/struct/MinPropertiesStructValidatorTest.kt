@@ -39,7 +39,8 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MIN_PROPERTIES = 2
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val PROPERTIES = emptyList<StructProperty<EB, Unit, Unit>>()
     }
@@ -54,7 +55,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 val source = StructNode()
 
                 "then the validator should return an error" {
-                    val errors = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
                     errors.shouldNotBeNull()
                     errors shouldBe ReaderResult.Failure(
                         location = LOCATION,
@@ -67,7 +68,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
                         location = LOCATION,
@@ -83,7 +84,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
                     errors.shouldBeNull()
                 }
             }
@@ -96,7 +97,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, LOCATION, PROPERTIES, source)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
                     errors.shouldBeNull()
                 }
             }

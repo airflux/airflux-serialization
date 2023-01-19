@@ -33,7 +33,8 @@ import io.github.airflux.serialization.core.value.ArrayNode
  * for prefix items of an array
  */
 public fun <EB, O, CTX, T> readArray(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     location: Location,
     source: ArrayNode<*>,
     prefixItems: List<Reader<EB, O, CTX, T>>,
@@ -43,6 +44,7 @@ public fun <EB, O, CTX, T> readArray(
           O : FailFastOption =
     source.read(
         env = env,
+        context = context,
         location = location,
         prefixItems = prefixItems,
         items = null,
@@ -54,7 +56,8 @@ public fun <EB, O, CTX, T> readArray(
  * @param items the reader for items of an array
  */
 public fun <EB, O, CTX, T> readArray(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     location: Location,
     source: ArrayNode<*>,
     items: Reader<EB, O, CTX, T>
@@ -63,6 +66,7 @@ public fun <EB, O, CTX, T> readArray(
           O : FailFastOption =
     source.read(
         env = env,
+        context = context,
         location = location,
         prefixItems = emptyList(),
         items = items,
@@ -75,7 +79,8 @@ public fun <EB, O, CTX, T> readArray(
  * @param items the reader for items of an array
  */
 public fun <EB, O, CTX, T> readArray(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     location: Location,
     source: ArrayNode<*>,
     prefixItems: List<Reader<EB, O, CTX, T>>,
@@ -85,6 +90,7 @@ public fun <EB, O, CTX, T> readArray(
           O : FailFastOption =
     source.read(
         env = env,
+        context = context,
         location = location,
         prefixItems = prefixItems,
         items = items,
@@ -92,7 +98,8 @@ public fun <EB, O, CTX, T> readArray(
     )
 
 internal fun <EB, O, CTX, T> ArrayNode<*>.read(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     location: Location,
     prefixItems: List<Reader<EB, O, CTX, T>>,
     items: Reader<EB, O, CTX, T>?,
@@ -113,7 +120,7 @@ internal fun <EB, O, CTX, T> ArrayNode<*>.read(
     return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItems, items)
-            ?.read(env, currentLocation, elem)
+            ?.read(env, context, currentLocation, elem)
             ?.fold(
                 ifFailure = { failure -> if (!failFast) acc + failure else return failure },
                 ifSuccess = { success -> acc + success }

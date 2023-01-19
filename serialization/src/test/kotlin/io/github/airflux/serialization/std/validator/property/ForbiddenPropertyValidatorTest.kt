@@ -29,7 +29,8 @@ import io.kotest.matchers.shouldBe
 internal class ForbiddenPropertyValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val VALUE: Int = 2
     }
@@ -39,13 +40,13 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
         "The property value validator the Mandatory" - {
 
             "when the predicate returns the true value" - {
-                val validator: Validator<EB, Unit, Unit, Int?> = StdPropertyValidator.forbidden { _, _ -> true }
+                val validator: Validator<EB, Unit, Unit, Int?> = StdPropertyValidator.forbidden { _, _, _ -> true }
 
                 "when a value is missing" - {
                     val value: Int? = null
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, value)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
                         errors.shouldBeNull()
                     }
                 }
@@ -54,7 +55,7 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
                     val value = VALUE
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(ENV, LOCATION, value)
+                        val failure = validator.validate(ENV, CONTEXT, LOCATION, value)
 
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
@@ -66,13 +67,13 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val validator: Validator<EB, Unit, Unit, Int?> = StdPropertyValidator.forbidden { _, _ -> false }
+                val validator: Validator<EB, Unit, Unit, Int?> = StdPropertyValidator.forbidden { _, _, _ -> false }
 
                 "when a value is missing" - {
                     val value: Int? = null
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, value)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
                         errors.shouldBeNull()
                     }
                 }
@@ -81,7 +82,7 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
                     val value = VALUE
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, value)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
                         errors.shouldBeNull()
                     }
                 }

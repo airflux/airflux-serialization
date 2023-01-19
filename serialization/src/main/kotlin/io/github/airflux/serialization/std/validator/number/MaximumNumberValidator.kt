@@ -28,7 +28,7 @@ public class MaximumNumberValidator<EB, O, CTX, T> internal constructor(
           T : Number,
           T : Comparable<T> {
 
-    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: T): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure? =
         if (value <= expected)
             null
         else

@@ -29,7 +29,8 @@ import io.kotest.matchers.shouldBe
 internal class MinimumNumberValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val MIN_VALUE: Int = 2
     }
@@ -43,7 +44,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
                 val value = MIN_VALUE - 1
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, value)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, value)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
@@ -57,7 +58,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
                 val value = MIN_VALUE
 
                 "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, LOCATION, value)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
                     errors.shouldBeNull()
                 }
             }
@@ -66,7 +67,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
                 val value = MIN_VALUE + 1
 
                 "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, LOCATION, value)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
                     errors.shouldBeNull()
                 }
             }

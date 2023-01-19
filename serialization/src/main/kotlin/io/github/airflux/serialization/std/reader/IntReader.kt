@@ -29,8 +29,8 @@ import io.github.airflux.serialization.core.value.readAsInteger
 public fun <EB, O, CTX> intReader(): Reader<EB, O, CTX, Int>
     where EB : InvalidTypeErrorBuilder,
           EB : ValueCastErrorBuilder =
-    Reader { env, location, source ->
-        source.readAsInteger(env, location) { e, l, value ->
+    Reader { env, context, location, source ->
+        source.readAsInteger(env, context, location) { e, _, l, value ->
             try {
                 value.toInt().success(l)
             } catch (expected: NumberFormatException) {

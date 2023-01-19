@@ -26,7 +26,12 @@ public class MaxLengthStringValidator<EB, O, CTX> internal constructor(
 ) : Validator<EB, O, CTX, String>
     where EB : MaxLengthStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(
+        env: ReaderEnv<EB, O>,
+        context: CTX,
+        location: Location,
+        value: String
+    ): ReaderResult.Failure? =
         if (value.length <= expected)
             null
         else

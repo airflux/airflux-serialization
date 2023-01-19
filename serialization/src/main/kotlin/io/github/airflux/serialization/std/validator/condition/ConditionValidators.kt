@@ -21,13 +21,13 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.validator.Validator
 
 public fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.applyIfNotNull(): Validator<EB, O, CTX, T?> =
-    Validator { env, location, value ->
-        if (value != null) validate(env, location, value) else null
+    Validator { env, context, location, value ->
+        if (value != null) validate(env, context, location, value) else null
     }
 
 public fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.applyIf(
-    predicate: (ReaderEnv<EB, O, CTX>, Location, T) -> Boolean
+    predicate: (ReaderEnv<EB, O>, CTX, Location, T) -> Boolean
 ): Validator<EB, O, CTX, T> =
-    Validator { env, location, value ->
-        if (predicate(env, location, value)) validate(env, location, value) else null
+    Validator { env, context, location, value ->
+        if (predicate(env, context, location, value)) validate(env, context, location, value) else null
     }

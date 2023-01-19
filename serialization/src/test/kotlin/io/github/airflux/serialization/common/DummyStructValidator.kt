@@ -26,7 +26,8 @@ import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidat
 internal class DummyStructValidator<EB, O, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, O, CTX> {
 
     override fun validate(
-        env: ReaderEnv<EB, O, CTX>,
+        env: ReaderEnv<EB, O>,
+        context: CTX,
         location: Location,
         properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode

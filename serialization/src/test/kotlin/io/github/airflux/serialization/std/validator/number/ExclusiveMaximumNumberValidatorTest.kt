@@ -29,7 +29,8 @@ import io.kotest.matchers.shouldBe
 internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val VALUE: Int = 2
     }
@@ -43,7 +44,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 val value = VALUE - 1
 
                 "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, LOCATION, value)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
                     errors.shouldBeNull()
                 }
             }
@@ -52,7 +53,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 val value = VALUE
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, value)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, value)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
@@ -66,7 +67,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 val value = VALUE + 1
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, value)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, value)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(

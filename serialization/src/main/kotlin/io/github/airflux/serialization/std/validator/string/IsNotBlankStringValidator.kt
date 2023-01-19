@@ -24,7 +24,12 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 public class IsNotBlankStringValidator<EB, O, CTX> internal constructor() : Validator<EB, O, CTX, String>
     where EB : IsNotBlankStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(
+        env: ReaderEnv<EB, O>,
+        context: CTX,
+        location: Location,
+        value: String
+    ): ReaderResult.Failure? =
         if (value.isNotBlank())
             null
         else

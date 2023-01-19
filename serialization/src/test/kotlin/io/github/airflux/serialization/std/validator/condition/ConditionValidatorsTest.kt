@@ -30,10 +30,11 @@ import io.kotest.matchers.shouldBe
 internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val isNotEmpty: Validator<EB, Unit, Unit, String> =
-            Validator { _, location, value ->
+            Validator { _, _, location, value ->
                 if (value.isNotEmpty())
                     null
                 else
@@ -47,7 +48,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
             val validator = isNotEmpty.applyIfNotNull()
 
             "should return the result of applying the validator to the value if it is not the null value" {
-                val failure = validator.validate(ENV, LOCATION, "")
+                val failure = validator.validate(ENV, CONTEXT, LOCATION, "")
 
                 failure.shouldNotBeNull()
                 failure shouldBe ReaderResult.Failure(
@@ -57,7 +58,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
             }
 
             "should return the null value if the value is the null value" {
-                val errors = validator.validate(ENV, LOCATION, null)
+                val errors = validator.validate(ENV, CONTEXT, LOCATION, null)
 
                 errors.shouldBeNull()
             }
@@ -66,9 +67,9 @@ internal class ConditionValidatorsTest : FreeSpec() {
         "JsPropertyValidator<T>#applyIf(_)" - {
 
             "should return the result of applying the validator to the value if the predicate returns true" {
-                val validator = isNotEmpty.applyIf { _, _, _ -> true }
+                val validator = isNotEmpty.applyIf { _, _, _, _ -> true }
 
-                val failure = validator.validate(ENV, LOCATION, "")
+                val failure = validator.validate(ENV, CONTEXT, LOCATION, "")
 
                 failure.shouldNotBeNull()
                 failure shouldBe ReaderResult.Failure(
@@ -78,9 +79,9 @@ internal class ConditionValidatorsTest : FreeSpec() {
             }
 
             "should return the null value if the predicate returns false" {
-                val validator = isNotEmpty.applyIf { _, _, _ -> false }
+                val validator = isNotEmpty.applyIf { _, _, _, _ -> false }
 
-                val errors = validator.validate(ENV, LOCATION, "")
+                val errors = validator.validate(ENV, CONTEXT, LOCATION, "")
 
                 errors.shouldBeNull()
             }

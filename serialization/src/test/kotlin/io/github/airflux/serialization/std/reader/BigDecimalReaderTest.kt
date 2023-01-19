@@ -33,7 +33,8 @@ import java.math.BigDecimal
 internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val BigDecimalReader = bigDecimalReader<EB, Unit, Unit>()
     }
@@ -47,14 +48,14 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
                     val source: ValueNode = NumericNode.Number.valueOrNullOf(value)!!
-                    val result = BigDecimalReader.read(ENV, LOCATION, source)
+                    val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
                     result.assertAsSuccess(value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = BigDecimalReader.read(ENV, LOCATION, source)
+                val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,

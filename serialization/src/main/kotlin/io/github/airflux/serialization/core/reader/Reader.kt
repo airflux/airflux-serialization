@@ -28,12 +28,12 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 
-public fun interface Reader<EB, O, CTX, out T> {
+public fun interface Reader<EB, O, in CTX, out T> {
 
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ValueNode): ReaderResult<T>
+    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T>
 
     /**
      * Create a new [Reader] which maps the value produced by this [Reader].
@@ -44,17 +44,17 @@ public fun interface Reader<EB, O, CTX, out T> {
      * @return A new [Reader] with the updated behavior.
      */
     public infix fun <R> map(transform: (T) -> R): Reader<EB, O, CTX, R> =
-        Reader { env, location, source -> read(env, location, source).map(transform) }
+        Reader { env, context, location, source -> read(env, context, location, source).map(transform) }
 }
 
 public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
-    transform: (ReaderEnv<EB, O, CTX>, Location, T) -> ReaderResult<R>
+    transform: (ReaderEnv<EB, O>, CTX, Location, T) -> ReaderResult<R>
 ): Reader<EB, O, CTX, R> =
-    Reader { env, location, source ->
-        read(env, location, source)
+    Reader { env, context, location, source ->
+        read(env, context, location, source)
             .fold(
                 ifFailure = ::identity,
-                ifSuccess = { transform(env, location, it.value) }
+                ifSuccess = { transform(env, context, location, it.value) }
             )
     }
 
@@ -67,10 +67,10 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
  * @return A new [Reader] with the updated behavior.
  */
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(other: Reader<EB, O, CTX, T>): Reader<EB, O, CTX, T> =
-    Reader { env, location, source ->
-        read(env, location, source)
+    Reader { env, context, location, source ->
+        read(env, context, location, source)
             .recovery { failure ->
-                other.read(env, location, source)
+                other.read(env, context, location, source)
                     .recovery { alternative -> failure + alternative }
             }
     }
@@ -78,15 +78,15 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(other: Reader<EB, O, C
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T?>.filter(
     predicate: ReaderPredicate<EB, O, CTX, T>
 ): Reader<EB, O, CTX, T?> =
-    Reader { env, location, source ->
-        this@filter.read(env, location, source)
-            .filter(env, predicate)
+    Reader { env, context, location, source ->
+        this@filter.read(env, context, location, source)
+            .filter(env, context, predicate)
     }
 
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.validation(
     validator: Validator<EB, O, CTX, T>
 ): Reader<EB, O, CTX, T> =
-    Reader { env, location, source ->
-        this@validation.read(env, location, source)
-            .validation(env, validator)
+    Reader { env, context, location, source ->
+        this@validation.read(env, context, location, source)
+            .validation(env, context, validator)
     }

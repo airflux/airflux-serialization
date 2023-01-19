@@ -31,30 +31,32 @@ import io.github.airflux.serialization.core.value.NullNode
  * - If a node is not found ([lookup] is [LookupResult.Undefined]) then returns [defaultValue]
  */
 public fun <EB, O, CTX, T : Any> readWithDefault(
-    env: ReaderEnv<EB, O, CTX>,
+    env: ReaderEnv<EB, O>,
+    context: CTX,
     lookup: LookupResult,
     using: Reader<EB, O, CTX, T>,
-    defaultValue: (ReaderEnv<EB, O, CTX>) -> T
+    defaultValue: (ReaderEnv<EB, O>, CTX) -> T
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder {
 
     fun <EB, O, CTX, T : Any> readWithDefault(
-        env: ReaderEnv<EB, O, CTX>,
+        env: ReaderEnv<EB, O>,
+        context: CTX,
         lookup: LookupResult.Defined,
         using: Reader<EB, O, CTX, T>,
-        defaultValue: (ReaderEnv<EB, O, CTX>) -> T
+        defaultValue: (ReaderEnv<EB, O>, CTX) -> T
     ): ReaderResult<T> =
         if (lookup.value is NullNode)
-            ReaderResult.Success(location = lookup.location, value = defaultValue(env))
+            ReaderResult.Success(location = lookup.location, value = defaultValue(env, context))
         else
-            using.read(env, lookup.location, lookup.value)
+            using.read(env, context, lookup.location, lookup.value)
 
     return when (lookup) {
-        is LookupResult.Defined -> readWithDefault(env, lookup, using, defaultValue)
+        is LookupResult.Defined -> readWithDefault(env, context, lookup, using, defaultValue)
 
         is LookupResult.Undefined -> when (lookup) {
             is LookupResult.Undefined.PathMissing ->
-                ReaderResult.Success(location = lookup.location, value = defaultValue(env))
+                ReaderResult.Success(location = lookup.location, value = defaultValue(env, context))
 
             is LookupResult.Undefined.InvalidType -> ReaderResult.Failure(
                 location = lookup.location,

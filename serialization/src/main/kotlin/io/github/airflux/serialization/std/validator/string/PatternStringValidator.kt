@@ -25,7 +25,12 @@ public class PatternStringValidator<EB, O, CTX> internal constructor(private val
     Validator<EB, O, CTX, String>
     where EB : PatternStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O, CTX>, location: Location, value: String): ReaderResult.Failure? =
+    override fun validate(
+        env: ReaderEnv<EB, O>,
+        context: CTX,
+        location: Location,
+        value: String
+    ): ReaderResult.Failure? =
         if (pattern.matches(value))
             null
         else

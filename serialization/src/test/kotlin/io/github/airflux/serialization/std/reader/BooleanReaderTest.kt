@@ -31,7 +31,8 @@ import io.kotest.core.spec.style.FreeSpec
 internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val BooleanReader = booleanReader<EB, Unit, Unit>()
     }
@@ -42,19 +43,19 @@ internal class BooleanReaderTest : FreeSpec() {
 
             "should return value the true" {
                 val source: ValueNode = BooleanNode.valueOf(true)
-                val result = BooleanReader.read(ENV, LOCATION, source)
+                val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsSuccess(value = true)
             }
 
             "should return value the false" {
                 val source: ValueNode = BooleanNode.valueOf(false)
-                val result = BooleanReader.read(ENV, LOCATION, source)
+                val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsSuccess(value = false)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
-                val result = BooleanReader.read(ENV, LOCATION, source)
+                val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
                 result.assertAsFailure(
                     ReaderResult.Failure.Cause(
                         location = Location.empty,

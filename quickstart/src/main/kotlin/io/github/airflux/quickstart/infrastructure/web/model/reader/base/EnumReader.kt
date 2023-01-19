@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 
 inline fun <EB, O, CTX, reified T : Enum<T>> Reader<EB, O, CTX, String>.asEnum(): Reader<EB, O, CTX, T> =
-    flatMapResult { _, location, value ->
+    flatMapResult { _, _, location, value ->
         try {
             enumValueOf<T>(value.uppercase()).success(location)
         } catch (ignored: Exception) {

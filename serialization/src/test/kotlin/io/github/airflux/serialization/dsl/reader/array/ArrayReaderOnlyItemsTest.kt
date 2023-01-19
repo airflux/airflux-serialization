@@ -41,6 +41,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private const val FIRST_ITEM = "first"
         private const val SECOND_ITEM = "second"
 
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
 
@@ -63,13 +64,13 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "when source is not the array type" - {
                         val source = StringNode("")
 
                         "then the reader should return the invalid type error" {
-                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
@@ -84,7 +85,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
 
                         "then should return successful value" {
-                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
                         }
                     }
@@ -93,7 +94,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = ArrayNode<StringNode>()
 
                         "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Arrays.MinItems(
@@ -108,7 +109,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = ArrayNode<ValueNode>(BooleanNode.valueOf(true))
 
                         "then the reader should return validation error" {
-                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Arrays.MinItems(
@@ -121,13 +122,13 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "when source is not the array type" - {
                         val source = StringNode("")
 
                         "then the reader should return the invalid type error" {
-                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
@@ -142,7 +143,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
 
                         "then should return successful value" {
-                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
                         }
                     }
@@ -151,7 +152,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = ArrayNode<StringNode>()
 
                         "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeFailure ReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Arrays.MinItems(
@@ -166,7 +167,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = ArrayNode<ValueNode>(BooleanNode.valueOf(true))
 
                         "then the reader should return all errors" {
-                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeFailure listOf(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,

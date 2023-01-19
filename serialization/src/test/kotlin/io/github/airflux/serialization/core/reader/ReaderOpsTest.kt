@@ -33,7 +33,8 @@ import io.kotest.matchers.shouldBe
 internal class ReaderOpsTest : FreeSpec() {
 
     companion object {
-        private val ENV: ReaderEnv<Unit, Unit, Unit> = ReaderEnv(Unit, Unit, Unit)
+        private val ENV: ReaderEnv<Unit, Unit> = ReaderEnv(Unit, Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val VALUE = "ABC"
         private val JSON_VALUE: ValueNode = StringNode(VALUE)
@@ -52,7 +53,7 @@ internal class ReaderOpsTest : FreeSpec() {
                     val predicate: ReaderPredicate<Unit, Unit, Unit, String> = DummyReaderPredicate(result = false)
 
                     "then filter should return the null value" {
-                        val filtered = reader.filter(predicate).read(ENV, LOCATION, JSON_VALUE)
+                        val filtered = reader.filter(predicate).read(ENV, CONTEXT, LOCATION, JSON_VALUE)
                         filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
                     }
                 }
@@ -61,7 +62,7 @@ internal class ReaderOpsTest : FreeSpec() {
                     val predicate: ReaderPredicate<Unit, Unit, Unit, String> = DummyReaderPredicate(result = true)
 
                     "then filter should return the original value" {
-                        val filtered = reader.filter(predicate).read(ENV, LOCATION, JSON_VALUE)
+                        val filtered = reader.filter(predicate).read(ENV, CONTEXT, LOCATION, JSON_VALUE)
                         filtered shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                     }
                 }
@@ -74,7 +75,7 @@ internal class ReaderOpsTest : FreeSpec() {
 
                 "then filtering does not execute and the original result should be returned" {
                     val predicate: ReaderPredicate<Unit, Unit, Unit, String> = DummyReaderPredicate(result = false)
-                    val validated = reader.filter(predicate).read(ENV, LOCATION, JSON_VALUE)
+                    val validated = reader.filter(predicate).read(ENV, CONTEXT, LOCATION, JSON_VALUE)
                     validated shouldBe ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 }
             }
@@ -91,7 +92,7 @@ internal class ReaderOpsTest : FreeSpec() {
                     val validator: Validator<Unit, Unit, Unit, String> = DummyValidator(result = null)
 
                     "then should return the original result" {
-                        val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
+                        val validated = reader.validation(validator).read(ENV, CONTEXT, LOCATION, JSON_VALUE)
                         validated shouldBe ReaderResult.Success(location = LOCATION, value = VALUE)
                     }
                 }
@@ -105,7 +106,7 @@ internal class ReaderOpsTest : FreeSpec() {
                     )
 
                     "then should return the result of a validation" {
-                        val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
+                        val validated = reader.validation(validator).read(ENV, CONTEXT, LOCATION, JSON_VALUE)
 
                         validated shouldBe ReaderResult.Failure(
                             location = LOCATION,
@@ -124,7 +125,7 @@ internal class ReaderOpsTest : FreeSpec() {
                     val validator: Validator<Unit, Unit, Unit, String> = DummyValidator(
                         result = ReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Struct.IsEmpty)
                     )
-                    val validated = reader.validation(validator).read(ENV, LOCATION, JSON_VALUE)
+                    val validated = reader.validation(validator).read(ENV, CONTEXT, LOCATION, JSON_VALUE)
                     validated shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.PathMissing

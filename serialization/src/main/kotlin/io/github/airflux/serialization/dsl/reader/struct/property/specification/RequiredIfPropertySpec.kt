@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.reader.struct.readRequired
 public fun <EB, O, CTX, T : Any> required(
     name: String,
     reader: Reader<EB, O, CTX, T>,
-    predicate: (ReaderEnv<EB, O, CTX>, Location) -> Boolean
+    predicate: (ReaderEnv<EB, O>, CTX, Location) -> Boolean
 ): StructPropertySpec.Nullable<EB, O, CTX, T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
@@ -39,17 +39,17 @@ public fun <EB, O, CTX, T : Any> required(
 public fun <EB, O, CTX, T : Any> required(
     path: PropertyPath,
     reader: Reader<EB, O, CTX, T>,
-    predicate: (ReaderEnv<EB, O, CTX>, Location) -> Boolean
+    predicate: (ReaderEnv<EB, O>, CTX, Location) -> Boolean
 ): StructPropertySpec.Nullable<EB, O, CTX, T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec.Nullable(
         path = PropertyPaths(path),
-        reader = { env, location, source ->
+        reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
-            if (predicate(env, location))
-                readRequired(env, lookup, reader)
+            if (predicate(env, context, location))
+                readRequired(env, context, lookup, reader)
             else
-                readOptional(env, lookup, reader)
+                readOptional(env, context, lookup, reader)
         }
     )

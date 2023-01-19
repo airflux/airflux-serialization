@@ -40,8 +40,8 @@ public fun <EB, O, CTX, T : Any> required(
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec.NonNullable(
         path = PropertyPaths(path),
-        reader = { env, location, source ->
+        reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
-            readRequired(env, lookup, reader)
+            readRequired(env, context, lookup, reader)
         }
     )

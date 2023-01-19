@@ -45,6 +45,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private const val NAME_PROPERTY_NAME = "title"
         private const val NAME_PROPERTY_VALUE = "property-title"
         private val StringReader = dummyStringReader<EB, OPTS, Unit>()
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val idProperty: StructProperty.NonNullable<EB, OPTS, Unit, String> =
             StructProperty.NonNullable(required(ID_PROPERTY_NAME, StringReader))
@@ -61,19 +62,19 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 val source = StructNode()
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
+                        val errors = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
                         errors.shouldBeNull()
                     }
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
+                        val errors = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
                         errors.shouldBeNull()
                     }
                 }
@@ -83,19 +84,19 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
+                        val errors = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
                         errors.shouldBeNull()
                     }
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
+                        val errors = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
                         errors.shouldBeNull()
                     }
                 }
@@ -109,10 +110,10 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should return first error" {
-                        val failure = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
+                        val failure = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
 
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
@@ -123,10 +124,10 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should return all errors" {
-                        val failure = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
+                        val failure = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
 
                         failure.shouldNotBeNull()
                         failure shouldBe listOf(

@@ -31,7 +31,8 @@ import io.kotest.matchers.shouldBe
 internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val MAX_ITEMS = 2
     }
@@ -46,7 +47,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source: ArrayNode<StringNode> = ArrayNode()
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, LOCATION, source)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, source)
                     errors.shouldBeNull()
                 }
             }
@@ -55,7 +56,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, LOCATION, source)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, source)
                     errors.shouldBeNull()
                 }
             }
@@ -64,7 +65,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, LOCATION, source)
+                    val errors = validator.validate(ENV, CONTEXT, LOCATION, source)
                     errors.shouldBeNull()
                 }
             }
@@ -73,7 +74,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
                 "the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, source)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(

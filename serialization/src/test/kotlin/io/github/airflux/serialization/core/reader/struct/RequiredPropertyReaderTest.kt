@@ -37,7 +37,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "a64d62c7-4a57-4282-bce3-3cd52b815204"
 
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val READER: Reader<EB, Unit, Unit, String> = dummyStringReader()
     }
@@ -53,7 +54,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the result of applying the reader" {
-                    val result: ReaderResult<String?> = readRequired(env = ENV, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> =
+                        readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBeSuccess ReaderResult.Success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
@@ -66,7 +68,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                     LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the missing path error" {
-                    val result: ReaderResult<String?> = readRequired(env = ENV, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> =
+                        readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBeFailure ReaderResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
@@ -82,7 +85,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: ReaderResult<String?> = readRequired(env = ENV, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> =
+                        readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBeFailure ReaderResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(

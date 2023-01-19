@@ -27,7 +27,8 @@ public class IsNotEmptyStructValidator<EB, O, CTX> internal constructor() : Stru
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
     override fun validate(
-        env: ReaderEnv<EB, O, CTX>,
+        env: ReaderEnv<EB, O>,
+        context: CTX,
         location: Location,
         properties: List<StructProperty<EB, O, CTX>>,
         source: StructNode

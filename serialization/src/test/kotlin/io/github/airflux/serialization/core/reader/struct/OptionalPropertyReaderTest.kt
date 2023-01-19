@@ -37,7 +37,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "08b513cf-b218-4d89-aa78-3c2b482ff405"
 
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val READER: Reader<EB, Unit, Unit, String> = dummyStringReader()
     }
@@ -54,7 +55,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                     )
 
                 "then should return the result of applying the reader" {
-                    val result: ReaderResult<String?> = readOptional(env = ENV, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> =
+                        readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBeSuccess ReaderResult.Success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
@@ -67,7 +69,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                     LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the null value" {
-                    val result: ReaderResult<String?> = readOptional(env = ENV, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> =
+                        readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBeSuccess ReaderResult.Success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = null
@@ -83,7 +86,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: ReaderResult<String?> = readOptional(env = ENV, lookup = lookup, using = READER)
+                    val result: ReaderResult<String?> =
+                        readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
                     result shouldBeFailure ReaderResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(

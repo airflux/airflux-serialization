@@ -29,7 +29,8 @@ import io.kotest.matchers.shouldBe
 internal class MinLengthValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit, Unit)
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val MIN_VALUE: Int = 2
     }
@@ -43,7 +44,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                 val str = ""
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, LOCATION, str)
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     failure.shouldNotBeNull()
                     failure shouldBe ReaderResult.Failure(
@@ -62,7 +63,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = " "
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(ENV, LOCATION, str)
+                        val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
@@ -79,7 +80,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "  "
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, str)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
                         errors.shouldBeNull()
                     }
                 }
@@ -88,7 +89,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "   "
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, str)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
                         errors.shouldBeNull()
                     }
                 }
@@ -100,7 +101,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "a"
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(ENV, LOCATION, str)
+                        val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                         failure.shouldNotBeNull()
                         failure shouldBe ReaderResult.Failure(
@@ -117,7 +118,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "ab"
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, str)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
                         errors.shouldBeNull()
                     }
                 }
@@ -126,7 +127,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "abc"
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, LOCATION, str)
+                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
                         errors.shouldBeNull()
                     }
                 }

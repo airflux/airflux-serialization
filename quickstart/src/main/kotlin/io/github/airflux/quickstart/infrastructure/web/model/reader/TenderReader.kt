@@ -37,7 +37,7 @@ val TenderReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Tender> 
     val value = property(optional(name = "value", reader = ValueReader))
     val lots = property(required(name = "lots", reader = LotsReader))
 
-    returns { _, location ->
+    returns { _, _, location ->
         Tender(+id, +title, +value, +lots).success(location)
     }
 }

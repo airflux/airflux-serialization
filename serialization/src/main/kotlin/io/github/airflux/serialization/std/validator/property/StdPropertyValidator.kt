@@ -27,7 +27,7 @@ public object StdPropertyValidator {
      * if a value is present (not equal to null), then an error, otherwise a success.
      */
     public fun <EB, O, CTX, T> forbidden(
-        predicate: (env: ReaderEnv<EB, O, CTX>, location: Location) -> Boolean
+        predicate: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> Boolean
     ): Validator<EB, O, CTX, T>
         where EB : ForbiddenPropertyValidator.ErrorBuilder = ForbiddenPropertyValidator(predicate)
 
@@ -36,7 +36,7 @@ public object StdPropertyValidator {
      * if a value is missing (equal to null), then an error, otherwise a success.
      */
     public fun <EB, O, CTX, T> mandatory(
-        predicate: (env: ReaderEnv<EB, O, CTX>, location: Location) -> Boolean
+        predicate: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> Boolean
     ): Validator<EB, O, CTX, T>
         where EB : MandatoryPropertyValidator.ErrorBuilder = MandatoryPropertyValidator(predicate)
 }

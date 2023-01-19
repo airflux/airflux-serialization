@@ -49,6 +49,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
         private const val SECOND_PHONE_VALUE = "456"
         private const val THIRD_PHONE_VALUE = "789"
 
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private val IntReader = dummyIntReader<EB, OPTS, Unit>()
         private val LongReader = dummyLongReader<EB, OPTS, Unit>()
@@ -68,9 +69,14 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         nameFn = { "when fail-fast is $it" },
                         listOf(true, false)
                     ) { failFast ->
-                        val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
-                        val result: ReaderResult<List<String>> =
-                            readArray(env = env, location = LOCATION, source = source, items = StringReader)
+                        val env = ReaderEnv(EB(), OPTS(failFast = failFast))
+                        val result: ReaderResult<List<String>> = readArray(
+                            env = env,
+                            context = CONTEXT,
+                            location = LOCATION,
+                            source = source,
+                            items = StringReader
+                        )
 
                         result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
                     }
@@ -87,9 +93,14 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             nameFn = { "when fail-fast is $it" },
                             listOf(true, false)
                         ) { failFast ->
-                            val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
-                            val result: ReaderResult<List<String>> =
-                                readArray(env = env, location = LOCATION, source = source, items = StringReader)
+                            val env = ReaderEnv(EB(), OPTS(failFast = failFast))
+                            val result: ReaderResult<List<String>> = readArray(
+                                env = env,
+                                context = CONTEXT,
+                                location = LOCATION,
+                                source = source,
+                                items = StringReader
+                            )
 
                             result shouldBeSuccess ReaderResult.Success(
                                 location = LOCATION,
@@ -104,11 +115,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue =
-                            ReaderEnv(errorBuilders = EB(), options = OPTS(failFast = true), context = Unit)
+                            ReaderEnv(errorBuilders = EB(), options = OPTS(failFast = true))
 
                         "then the validator should return first error" {
                             val result: ReaderResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 items = StringReader
@@ -125,11 +137,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then the validator should return all errors" {
                             val result: ReaderResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 items = StringReader
@@ -167,9 +180,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         nameFn = { "when fail-fast is $it" },
                         listOf(true, false)
                     ) { failFast ->
-                        val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
+                        val env = ReaderEnv(EB(), OPTS(failFast = failFast))
                         val result: ReaderResult<List<String>> = readArray(
                             env = env,
+                            context = CONTEXT,
                             location = LOCATION,
                             source = source,
                             prefixItems = listOf(StringReader),
@@ -195,11 +209,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         val errorIfAdditionalItems = true
 
                         "when fail-fast is true" - {
-                            val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                            val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                             "then reader should return first error" {
                                 val result: ReaderResult<List<String>> = readArray(
                                     env = envWithFailFastIsTrue,
+                                    context = CONTEXT,
                                     location = LOCATION,
                                     source = source,
                                     prefixItems = readers,
@@ -214,11 +229,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         }
 
                         "when fail-fast is false" - {
-                            val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                            val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                             "then reader should return all errors" {
                                 val result: ReaderResult<List<String>> = readArray(
                                     env = envWithFailFastIsFalse,
+                                    context = CONTEXT,
                                     location = LOCATION,
                                     source = source,
                                     prefixItems = readers,
@@ -247,9 +263,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 nameFn = { "when fail-fast is $it" },
                                 listOf(true, false)
                             ) { failFast ->
-                                val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
+                                val env = ReaderEnv(EB(), OPTS(failFast = failFast))
                                 val result: ReaderResult<List<String>> = readArray(
                                     env = env,
+                                    context = CONTEXT,
                                     location = LOCATION,
                                     source = source,
                                     prefixItems = readers,
@@ -273,9 +290,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             nameFn = { "when fail-fast is $it" },
                             listOf(true, false)
                         ) { failFast ->
-                            val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
+                            val env = ReaderEnv(EB(), OPTS(failFast = failFast))
                             val result: ReaderResult<List<String>> = readArray(
                                 env = env,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = readers,
@@ -298,9 +316,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             nameFn = { "when fail-fast is $it" },
                             listOf(true, false)
                         ) { failFast ->
-                            val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
+                            val env = ReaderEnv(EB(), OPTS(failFast = failFast))
                             val result: ReaderResult<List<String>> = readArray(
                                 env = env,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = readers,
@@ -318,11 +337,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                 "when read was some errors" - {
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return first error" {
                             val result: ReaderResult<List<Number>> = readArray(
                                 env = envWithFailFastIsTrue,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = listOf(IntReader, LongReader),
@@ -340,11 +360,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return all errors" {
                             val result = readArray(
                                 env = envWithFailFastIsFalse,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = listOf(IntReader, StringReader, BooleanReader),
@@ -383,9 +404,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                         nameFn = { "when fail-fast is $it" },
                         listOf(true, false)
                     ) { failFast ->
-                        val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
+                        val env = ReaderEnv(EB(), OPTS(failFast = failFast))
                         val result: ReaderResult<List<String>> = readArray(
                             env = env,
+                            context = CONTEXT,
                             location = LOCATION,
                             source = source,
                             prefixItems = listOf(StringReader),
@@ -407,9 +429,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                             nameFn = { "when fail-fast is $it" },
                             listOf(true, false)
                         ) { failFast ->
-                            val env = ReaderEnv(EB(), OPTS(failFast = failFast), Unit)
+                            val env = ReaderEnv(EB(), OPTS(failFast = failFast))
                             val result: ReaderResult<List<String>> = readArray(
                                 env = env,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = listOf(StringReader),
@@ -427,11 +450,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                 "when read was some errors" - {
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true), Unit)
+                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return first error" {
                             val result: ReaderResult<List<Int>> = readArray(
                                 env = envWithFailFastIsTrue,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = listOf(IntReader),
@@ -449,11 +473,12 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false), Unit)
+                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return all errors" {
                             val result = readArray(
                                 env = envWithFailFastIsFalse,
+                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 prefixItems = listOf(IntReader),

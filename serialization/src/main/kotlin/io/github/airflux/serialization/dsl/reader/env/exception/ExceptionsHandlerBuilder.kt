@@ -28,32 +28,32 @@ import kotlin.reflect.KClass
 /**
  * Creates a [ExceptionsHandler] instance.
  */
-public fun <EB, O, CTX> exceptionsHandler(
-    block: ExceptionsHandlerBuilder<EB, O, CTX>.() -> Unit
-): ExceptionsHandler<EB, O, CTX> =
-    ExceptionsHandlerBuilder<EB, O, CTX>().apply(block).build()
+public fun <EB, O> exceptionsHandler(
+    block: ExceptionsHandlerBuilder<EB, O>.() -> Unit
+): ExceptionsHandler<EB, O> =
+    ExceptionsHandlerBuilder<EB, O>().apply(block).build()
 
 /**
  * The handle **uncaught** exceptions.
  */
 @AirfluxMarker
-public class ExceptionsHandlerBuilder<EB, O, CTX> {
+public class ExceptionsHandlerBuilder<EB, O> {
 
-    private val handlerSpecs: MutableList<ExceptionHandlerSpec<EB, O, CTX>> = mutableListOf()
+    private val handlerSpecs: MutableList<ExceptionHandlerSpec<EB, O>> = mutableListOf()
 
     public inline fun <reified E : Throwable> exception(
-        noinline handler: (ReaderEnv<EB, O, CTX>, Location, E) -> ReaderResult.Error
+        noinline handler: (ReaderEnv<EB, O>, Location, E) -> ReaderResult.Error
     ): Unit = exception(E::class, handler)
 
     public fun <E : Throwable> exception(
         exception: KClass<E>,
-        handler: (ReaderEnv<EB, O, CTX>, Location, E) -> ReaderResult.Error
+        handler: (ReaderEnv<EB, O>, Location, E) -> ReaderResult.Error
     ) {
         handlerSpecs.add(ExceptionHandlerSpec(exception = exception, handler = handler))
     }
 
-    internal fun build(): ExceptionsHandler<EB, O, CTX> {
-        val handlersContainer: ExceptionHandlersContainer<EB, O, CTX> = ExceptionHandlersContainer(handlerSpecs)
+    internal fun build(): ExceptionsHandler<EB, O> {
+        val handlersContainer: ExceptionHandlersContainer<EB, O> = ExceptionHandlersContainer(handlerSpecs)
         return ExceptionsHandler { env, location, exception ->
             val handler = handlersContainer[exception] ?: throw exception
             handler(env, location, exception)

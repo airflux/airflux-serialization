@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.struct.readWithDefault
 public fun <EB, O, CTX, T : Any> defaultable(
     name: String,
     reader: Reader<EB, O, CTX, T>,
-    default: (ReaderEnv<EB, O, CTX>) -> T
+    default: (ReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec.NonNullable<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
     defaultable(PropertyPath(name), reader, default)
@@ -35,13 +35,13 @@ public fun <EB, O, CTX, T : Any> defaultable(
 public fun <EB, O, CTX, T : Any> defaultable(
     path: PropertyPath,
     reader: Reader<EB, O, CTX, T>,
-    default: (ReaderEnv<EB, O, CTX>) -> T
+    default: (ReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec.NonNullable<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
     StructPropertySpec.NonNullable(
         path = PropertyPaths(path),
-        reader = { env, location, source ->
+        reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
-            readWithDefault(env, lookup, reader, default)
+            readWithDefault(env, context, lookup, reader, default)
         }
     )

@@ -27,19 +27,19 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
 internal class DummyReader<EB, O, CTX, T>(
-    val result: (ReaderEnv<EB, O, CTX>, Location, ValueNode) -> ReaderResult<T>
+    val result: (ReaderEnv<EB, O>, context: CTX, Location, ValueNode) -> ReaderResult<T>
 ) : Reader<EB, O, CTX, T> {
 
-    constructor(result: ReaderResult<T>) : this({ _, _, _ -> result })
+    constructor(result: ReaderResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: ReaderEnv<EB, O, CTX>, location: Location, source: ValueNode): ReaderResult<T> =
-        result(env, location, source)
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T> =
+        result(env, context, location, source)
 }
 
 internal fun <EB, O, CTX> dummyBooleanReader(): Reader<EB, O, CTX, Boolean>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
-        result = { env, location, source ->
+        result = { env, _, location, source ->
             if (source is BooleanNode)
                 ReaderResult.Success(location = location, value = source.get)
             else
@@ -56,7 +56,7 @@ internal fun <EB, O, CTX> dummyBooleanReader(): Reader<EB, O, CTX, Boolean>
 internal fun <EB, O, CTX> dummyStringReader(): Reader<EB, O, CTX, String>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
-        result = { env, location, source ->
+        result = { env, _, location, source ->
             if (source is StringNode)
                 ReaderResult.Success(location = location, value = source.get)
             else
@@ -73,7 +73,7 @@ internal fun <EB, O, CTX> dummyStringReader(): Reader<EB, O, CTX, String>
 internal fun <EB, O, CTX> dummyIntReader(): Reader<EB, O, CTX, Int>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
-        result = { env, location, source ->
+        result = { env, _, location, source ->
             if (source is NumericNode.Integer)
                 ReaderResult.Success(location = location, value = source.get.toInt())
             else
@@ -90,7 +90,7 @@ internal fun <EB, O, CTX> dummyIntReader(): Reader<EB, O, CTX, Int>
 internal fun <EB, O, CTX> dummyLongReader(): Reader<EB, O, CTX, Long>
     where EB : InvalidTypeErrorBuilder =
     DummyReader(
-        result = { env, location, source ->
+        result = { env, _, location, source ->
             if (source is NumericNode)
                 ReaderResult.Success(location = location, value = source.get.toLong())
             else
