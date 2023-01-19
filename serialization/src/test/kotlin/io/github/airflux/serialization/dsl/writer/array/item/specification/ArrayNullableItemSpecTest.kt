@@ -30,7 +30,8 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
     companion object {
         private const val ITEM_VALUE = "value"
 
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -39,7 +40,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         "The ArrayItemSpec#Nullable type" - {
 
             "when created the instance of a spec of the nullable item" - {
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nullable(writer = writer)
 
                 "then the instance should contain the writer passed during initialization" {
@@ -48,12 +49,12 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
             }
 
             "when the filter was added to the spec" - {
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nullable(writer = writer)
-                val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
+                val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
 
                 "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(ENV, LOCATION, ITEM_VALUE)
+                    val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, ITEM_VALUE)
 
                     "then the not null value should be returned" {
                         result shouldBe StringNode(ITEM_VALUE)
@@ -61,7 +62,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
                 }
 
                 "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(ENV, LOCATION, "")
+                    val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, "")
 
                     "then the null value should be returned" {
                         result.shouldBeNull()

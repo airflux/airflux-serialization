@@ -31,7 +31,8 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -41,7 +42,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
             "when created the instance of a spec of the nullable property" - {
                 val from: (String) -> String? = { it }
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nullable(name = PROPERTY_NAME, from = from, writer = writer)
 
                 "then the property name should equal the passed property name" {
@@ -53,16 +54,16 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "then the initialized writer should return a property value" {
-                    val result = spec.writer.write(ENV, LOCATION, PROPERTY_VALUE)
+                    val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
                     result shouldBe StringNode(PROPERTY_VALUE)
                 }
             }
 
             "when the filter was added to the spec" - {
                 val from: (String) -> String? = { it }
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nullable(name = "id", from = from, writer = writer)
-                val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
+                val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
 
                 "then the property name should equal the passed property name" {
                     spec.name shouldBe PROPERTY_NAME
@@ -73,7 +74,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(ENV, LOCATION, PROPERTY_VALUE)
+                    val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
 
                     "then a non-null property value should be returned" {
                         result shouldBe StringNode(PROPERTY_VALUE)
@@ -81,7 +82,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(ENV, LOCATION, "")
+                    val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, "")
 
                     "then the null value should be returned" {
                         result.shouldBeNull()

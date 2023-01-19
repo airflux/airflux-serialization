@@ -28,21 +28,22 @@ import io.kotest.matchers.shouldBe
 internal class NullableValueWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The writeNullable function" - {
-            val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+            val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
 
             "when a value is not null" - {
                 val value = "value"
 
                 "should return the StringNode value" {
                     val result: ValueNode? =
-                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
+                        writeNullable(env = ENV, context = CONTEXT, location = LOCATION, using = writer, value = value)
                     result shouldBe StringNode(value)
                 }
             }
@@ -52,7 +53,7 @@ internal class NullableValueWriterTest : FreeSpec() {
 
                 "should return the null value" {
                     val result: ValueNode? =
-                        writeNullable(env = ENV, location = LOCATION, using = writer, value = value)
+                        writeNullable(env = ENV, context = CONTEXT, location = LOCATION, using = writer, value = value)
                     result.shouldBeNull()
                 }
             }

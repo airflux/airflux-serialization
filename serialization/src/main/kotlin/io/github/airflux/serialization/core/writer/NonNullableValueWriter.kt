@@ -20,10 +20,11 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <CTX, T : Any> writeNonNullable(
-    env: WriterEnv<CTX>,
+public fun <O, CTX, T : Any> writeNonNullable(
+    env: WriterEnv<O>,
+    context: CTX,
     location: Location,
-    using: Writer<CTX, T>,
+    using: Writer<O, CTX, T>,
     value: T
 ): ValueNode? =
-    using.write(env, location, value)
+    using.write(env, context, location, value)

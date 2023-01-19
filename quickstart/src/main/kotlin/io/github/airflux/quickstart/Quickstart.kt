@@ -33,6 +33,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderEr
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.writer.ResponseWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
+import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.writer.env.WriterEnv
@@ -67,8 +68,9 @@ fun main() {
     val response = Response(tender = tender)
 
     val writerEnv =
-        WriterEnv(context = WriterCtx(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
-    val output = response.serialization(mapper, writerEnv, ResponseWriter)
+        WriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+    val writerCtx = WriterCtx()
+    val output = response.serialization(mapper, writerEnv, writerCtx, ResponseWriter)
     println(output)
 }
 

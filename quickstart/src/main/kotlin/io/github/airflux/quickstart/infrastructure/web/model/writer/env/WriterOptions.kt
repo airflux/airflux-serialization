@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.writer
+package io.github.airflux.quickstart.infrastructure.web.model.writer.env
 
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.writer.Writer
-import java.math.BigDecimal
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
 
-/**
- * Writer for primitive [BigDecimal] type.
- */
-public fun <O, CTX> bigDecimalWriter(stripTrailingZeros: Boolean): Writer<O, CTX, BigDecimal> =
-    Writer { _, _, _, value ->
-        val text = if (stripTrailingZeros)
-            value.stripTrailingZeros().toPlainString()
-        else
-            value.toPlainString()
-        NumericNode.Number.valueOrNullOf(text)!!
-    }
+class WriterOptions(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
+    WriterActionBuilderIfResultIsEmptyOption

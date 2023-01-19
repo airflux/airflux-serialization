@@ -22,5 +22,5 @@ import io.github.airflux.serialization.core.writer.Writer
 /**
  * Writer for primitive [String] type.
  */
-public fun <CTX> stringWriter(): Writer<CTX, String> =
-    Writer { _, _, value -> StringNode(value) }
+public fun <O, CTX> stringWriter(): Writer<O, CTX, String> =
+    Writer { _, _, _, value -> StringNode(value) }

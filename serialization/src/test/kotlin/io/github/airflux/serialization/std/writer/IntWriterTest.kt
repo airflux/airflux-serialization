@@ -27,18 +27,19 @@ import io.kotest.matchers.shouldBe
 internal class IntWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The int type writer" - {
-            val writer: Writer<Unit, Int> = intWriter()
+            val writer: Writer<Unit, Unit, Int> = intWriter()
             val value: Int = Int.MAX_VALUE
 
             "should return the NumericNode value" {
-                val result = writer.write(ENV, LOCATION, value)
+                val result = writer.write(ENV, CONTEXT, LOCATION, value)
                 result shouldBe NumericNode.Integer.valueOf(value)
             }
         }

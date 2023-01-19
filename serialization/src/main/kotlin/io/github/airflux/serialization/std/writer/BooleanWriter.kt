@@ -22,5 +22,5 @@ import io.github.airflux.serialization.core.writer.Writer
 /**
  * Writer for primitive [Boolean] type.
  */
-public fun <CTX> booleanWriter(): Writer<CTX, Boolean> =
-    Writer { _, _, value -> if (value) BooleanNode.True else BooleanNode.False }
+public fun <O, CTX> booleanWriter(): Writer<O, CTX, Boolean> =
+    Writer { _, _, _, value -> if (value) BooleanNode.True else BooleanNode.False }

@@ -41,6 +41,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val FIRST_ITEM = "item-1"
         private const val SECOND_ITEM = "item-2"
 
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -49,7 +50,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         "The ArrayWriter type" - {
 
             "when a writer was created for non-nullable items" - {
-                val writer: Writer<CTX, Iterable<String>> = arrayWriter {
+                val writer: Writer<OPTS, Unit, Iterable<String>> = arrayWriter {
                     items(nonNullable(writer = DummyWriter.stringWriter()))
                 }
 
@@ -58,30 +59,33 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                     "when the action of the writer was set to return empty value" - {
                         val action = RETURN_EMPTY_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
                         val action = RETURN_NOTHING
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
                         val action = RETURN_NULL_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
@@ -92,30 +96,33 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                     "when the action of the writer was set to return empty value" - {
                         val action = RETURN_EMPTY_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type without items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode<ValueNode>()
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
                         val action = RETURN_NOTHING
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return the null value" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
                         val action = RETURN_NULL_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the NullNode type" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe NullNode
                         }
                     }
@@ -123,7 +130,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
             }
 
             "when a writer was created for nullable items" - {
-                val writer: Writer<CTX, Iterable<String?>> = arrayWriter {
+                val writer: Writer<OPTS, Unit, Iterable<String?>> = arrayWriter {
                     items(nullable(writer = DummyWriter.stringWriter()))
                 }
 
@@ -132,30 +139,33 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                     "when the action of the writer was set to return empty value" - {
                         val action = RETURN_EMPTY_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
                         val action = RETURN_NOTHING
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
                         val action = RETURN_NULL_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
@@ -166,30 +176,33 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                     "when the action of the writer was set to return empty value" - {
                         val action = RETURN_EMPTY_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
                         val action = RETURN_NOTHING
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
                         val action = RETURN_NULL_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type with items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
                         }
                     }
@@ -200,30 +213,33 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                     "when the action of the writer was set to return empty value" - {
                         val action = RETURN_EMPTY_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type without items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode<ValueNode>()
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
                         val action = RETURN_NOTHING
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return the null value" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
                         val action = RETURN_NULL_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the NullNode type" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe NullNode
                         }
                     }
@@ -234,30 +250,33 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                     "when the action of the writer was set to return empty value" - {
                         val action = RETURN_EMPTY_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the ArrayNode type without items" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe ArrayNode<ValueNode>()
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
                         val action = RETURN_NOTHING
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return the null value" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
                         val action = RETURN_NULL_VALUE
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = action))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = action))
 
                         "then should return a value of the NullNode type" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe NullNode
                         }
                     }
@@ -266,6 +285,6 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         }
     }
 
-    internal class CTX(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
+    internal class OPTS(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
         WriterActionBuilderIfResultIsEmptyOption
 }

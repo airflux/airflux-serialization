@@ -26,18 +26,19 @@ import io.kotest.matchers.shouldBe
 internal class StringWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The string type writer" - {
-            val writer: Writer<Unit, String> = stringWriter()
+            val writer: Writer<Unit, Unit, String> = stringWriter()
             val value = "value"
 
             "should return the StringNode value" {
-                val result = writer.write(ENV, LOCATION, value)
+                val result = writer.write(ENV, CONTEXT, LOCATION, value)
                 result shouldBe StringNode(value)
             }
         }

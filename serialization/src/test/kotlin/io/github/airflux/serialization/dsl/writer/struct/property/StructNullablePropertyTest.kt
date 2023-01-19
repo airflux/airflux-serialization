@@ -32,7 +32,8 @@ internal class StructNullablePropertyTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -42,7 +43,7 @@ internal class StructNullablePropertyTest : FreeSpec() {
 
             "when created an instance of the nullable property" - {
                 val from: (String) -> String? = { it }
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val spec = StructPropertySpec.Nullable(name = PROPERTY_NAME, from = from, writer = writer)
                 val property = StructProperty.Nullable(spec)
 
@@ -53,11 +54,11 @@ internal class StructNullablePropertyTest : FreeSpec() {
 
             "when the extractor returns the null value" - {
                 val from: (String) -> String? = { null }
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val property = createProperty(from = from, writer = writer)
 
                 "then the method write should return the null value" {
-                    val result = property.write(ENV, LOCATION, PROPERTY_VALUE)
+                    val result = property.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
                     result shouldBe null
                 }
             }
@@ -66,21 +67,21 @@ internal class StructNullablePropertyTest : FreeSpec() {
                 val from: (String) -> String? = { it }
 
                 "when the writer of the property returns the null value" - {
-                    val writer: Writer<Unit, String> = DummyWriter { null }
+                    val writer: Writer<Unit, Unit, String> = DummyWriter { null }
                     val property = createProperty(from = from, writer = writer)
 
                     "then the method write should return the null value" {
-                        val result = property.write(ENV, LOCATION, PROPERTY_VALUE)
+                        val result = property.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
                         result.shouldBeNull()
                     }
                 }
 
                 "when the writer of the property returns the not null value" - {
-                    val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                    val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                     val property = createProperty(from = from, writer = writer)
 
                     "then the method write should return the not null value" {
-                        val result = property.write(ENV, LOCATION, PROPERTY_VALUE)
+                        val result = property.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
                         result shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
@@ -88,10 +89,10 @@ internal class StructNullablePropertyTest : FreeSpec() {
         }
     }
 
-    private fun <CTX, T : Any, P : Any> createProperty(
+    private fun <O, CTX, T : Any, P : Any> createProperty(
         from: (T) -> P?,
-        writer: Writer<CTX, P>
-    ): StructProperty.Nullable<CTX, T, P> =
+        writer: Writer<O, CTX, P>
+    ): StructProperty.Nullable<O, CTX, T, P> =
         StructProperty.Nullable(
             StructPropertySpec.Nullable(name = PROPERTY_NAME, from = from, writer = writer)
         )

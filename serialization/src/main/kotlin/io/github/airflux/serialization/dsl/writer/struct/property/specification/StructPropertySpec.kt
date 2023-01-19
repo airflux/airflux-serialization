@@ -18,18 +18,18 @@ package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.writer.Writer
 
-public sealed interface StructPropertySpec<CTX, T : Any, P : Any> {
+public sealed interface StructPropertySpec<O, CTX, T : Any, P : Any> {
     public val name: String
 
-    public class NonNullable<CTX, T : Any, P : Any> internal constructor(
+    public class NonNullable<O, CTX, T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P,
-        public val writer: Writer<CTX, P>
-    ) : StructPropertySpec<CTX, T, P>
+        public val writer: Writer<O, CTX, P>
+    ) : StructPropertySpec<O, CTX, T, P>
 
-    public class Nullable<CTX, T : Any, P : Any> internal constructor(
+    public class Nullable<O, CTX, T : Any, P : Any> internal constructor(
         override val name: String,
         public val from: (T) -> P?,
-        public val writer: Writer<CTX, P>
-    ) : StructPropertySpec<CTX, T, P>
+        public val writer: Writer<O, CTX, P>
+    ) : StructPropertySpec<O, CTX, T, P>
 }

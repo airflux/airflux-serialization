@@ -30,35 +30,35 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.array.item.ArrayItemWriter
 import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 
-public fun <CTX, T> arrayWriter(
-    block: ArrayWriter.Builder<CTX>.() -> Writer<CTX, Iterable<T>>
-): Writer<CTX, Iterable<T>>
-    where CTX : WriterActionBuilderIfResultIsEmptyOption {
-    val builder = ArrayWriter.Builder<CTX>()
+public fun <O, CTX, T> arrayWriter(
+    block: ArrayWriter.Builder<O, CTX>.() -> Writer<O, CTX, Iterable<T>>
+): Writer<O, CTX, Iterable<T>>
+    where O : WriterActionBuilderIfResultIsEmptyOption {
+    val builder = ArrayWriter.Builder<O, CTX>()
     return block(builder)
 }
 
-public fun <CTX, T : Any> ArrayWriter.Builder<CTX>.items(
-    spec: ArrayItemSpec.NonNullable<CTX, T>
-): Writer<CTX, Iterable<T>>
-    where CTX : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
+public fun <O, CTX, T : Any> ArrayWriter.Builder<O, CTX>.items(
+    spec: ArrayItemSpec.NonNullable<O, CTX, T>
+): Writer<O, CTX, Iterable<T>>
+    where O : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
 
-public fun <CTX, T> ArrayWriter.Builder<CTX>.items(
-    spec: ArrayItemSpec.Nullable<CTX, T>
-): Writer<CTX, Iterable<T>>
-    where CTX : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
+public fun <O, CTX, T> ArrayWriter.Builder<O, CTX>.items(
+    spec: ArrayItemSpec.Nullable<O, CTX, T>
+): Writer<O, CTX, Iterable<T>>
+    where O : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
 
-public class ArrayWriter<CTX, T> private constructor(
-    private val itemsWriter: ArrayItemWriter<CTX, T>
-) : Writer<CTX, Iterable<T>>
-    where CTX : WriterActionBuilderIfResultIsEmptyOption {
+public class ArrayWriter<O, CTX, T> private constructor(
+    private val itemsWriter: ArrayItemWriter<O, CTX, T>
+) : Writer<O, CTX, Iterable<T>>
+    where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<CTX>, location: Location, source: Iterable<T>): ValueNode? {
-        val result = source.mapNotNull { item -> itemsWriter.write(env, location, item) }
+    override fun write(env: WriterEnv<O>, context: CTX, location: Location, source: Iterable<T>): ValueNode? {
+        val result = source.mapNotNull { item -> itemsWriter.write(env, context, location, item) }
         return if (result.isNotEmpty())
             ArrayNode(result)
         else
-            when (env.context.writerActionIfResultIsEmpty) {
+            when (env.options.writerActionIfResultIsEmpty) {
                 RETURN_EMPTY_VALUE -> ArrayNode<Nothing>()
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> NullNode
@@ -66,13 +66,13 @@ public class ArrayWriter<CTX, T> private constructor(
     }
 
     @AirfluxMarker
-    public class Builder<CTX>
-        where CTX : WriterActionBuilderIfResultIsEmptyOption {
+    public class Builder<O, CTX>
+        where O : WriterActionBuilderIfResultIsEmptyOption {
 
-        public fun <T : Any> build(spec: ArrayItemSpec.NonNullable<CTX, T>): Writer<CTX, Iterable<T>> =
+        public fun <T : Any> build(spec: ArrayItemSpec.NonNullable<O, CTX, T>): Writer<O, CTX, Iterable<T>> =
             ArrayWriter(ArrayItemWriter.NonNullable(spec))
 
-        public fun <T> build(spec: ArrayItemSpec.Nullable<CTX, T>): Writer<CTX, Iterable<T>> =
+        public fun <T> build(spec: ArrayItemSpec.Nullable<O, CTX, T>): Writer<O, CTX, Iterable<T>> =
             ArrayWriter(ArrayItemWriter.Nullable(spec))
     }
 }

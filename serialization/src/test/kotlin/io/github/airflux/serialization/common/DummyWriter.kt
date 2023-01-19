@@ -24,14 +24,14 @@ import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-internal class DummyWriter<CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<CTX, T> {
-    override fun write(env: WriterEnv<CTX>, location: Location, source: T): ValueNode? = result(source)
+internal class DummyWriter<O, CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<O, CTX, T> {
+    override fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? = result(source)
 
     companion object {
-        internal fun <CTX> intWriter(): Writer<CTX, Int> =
+        internal fun <O, CTX> intWriter(): Writer<O, CTX, Int> =
             DummyWriter(result = { source -> NumericNode.Integer.valueOf(source) })
 
-        internal fun <CTX> stringWriter(): Writer<CTX, String> =
+        internal fun <O, CTX> stringWriter(): Writer<O, CTX, String> =
             DummyWriter(result = { source -> StringNode(source) })
     }
 }

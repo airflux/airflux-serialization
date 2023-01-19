@@ -28,7 +28,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
         "The ArrayItemSpec#NonNullable type" - {
 
             "when created the instance of a spec of the non-nullable item" - {
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
                 val spec = nonNullable(writer = writer)
 
                 "then the instance should contain the writer passed during initialization" {

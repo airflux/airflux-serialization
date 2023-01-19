@@ -31,7 +31,8 @@ internal class ArrayNullableItemWriterTest : FreeSpec() {
     companion object {
         private const val ITEM_VALUE = "value"
 
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -40,14 +41,14 @@ internal class ArrayNullableItemWriterTest : FreeSpec() {
         "The ArrayItems#Nullable type" - {
 
             "when created an instance of the nullable item" - {
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
-                val itemWriter: ArrayItemWriter.Nullable<Unit, String?> = createItemWriter(writer = writer)
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
+                val itemWriter: ArrayItemWriter.Nullable<Unit, Unit, String?> = createItemWriter(writer = writer)
 
                 "when an item is the not null value" - {
                     val value = "value"
 
                     "then the method write should return the null value" {
-                        val result = itemWriter.write(ENV, LOCATION, value)
+                        val result = itemWriter.write(ENV, CONTEXT, LOCATION, value)
                         result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
@@ -56,7 +57,7 @@ internal class ArrayNullableItemWriterTest : FreeSpec() {
                     val value: String? = null
 
                     "then the method write should return the not null value" {
-                        val result = itemWriter.write(ENV, LOCATION, value)
+                        val result = itemWriter.write(ENV, CONTEXT, LOCATION, value)
                         result.shouldBeNull()
                     }
                 }
@@ -64,6 +65,6 @@ internal class ArrayNullableItemWriterTest : FreeSpec() {
         }
     }
 
-    private fun <CTX, T> createItemWriter(writer: Writer<CTX, T & Any>): ArrayItemWriter.Nullable<CTX, T> =
+    private fun <O, CTX, T> createItemWriter(writer: Writer<O, CTX, T & Any>): ArrayItemWriter.Nullable<O, CTX, T> =
         ArrayItemWriter.Nullable(ArrayItemSpec.Nullable(writer = writer))
 }

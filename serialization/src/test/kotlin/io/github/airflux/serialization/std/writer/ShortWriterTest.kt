@@ -27,18 +27,19 @@ import io.kotest.matchers.shouldBe
 internal class ShortWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The short type writer" - {
-            val writer: Writer<Unit, Short> = shortWriter()
+            val writer: Writer<Unit, Unit, Short> = shortWriter()
             val value: Short = Short.MAX_VALUE
 
             "should return the NumericNode value" {
-                val result = writer.write(ENV, LOCATION, value)
+                val result = writer.write(ENV, CONTEXT, LOCATION, value)
                 result shouldBe NumericNode.Integer.valueOf(value)
             }
         }

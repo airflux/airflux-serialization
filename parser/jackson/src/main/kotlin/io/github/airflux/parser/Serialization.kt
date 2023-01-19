@@ -22,10 +22,11 @@ import io.github.airflux.serialization.core.serialization
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <CTX, T : Any> T.serialization(
+public fun <O, CTX, T : Any> T.serialization(
     mapper: ObjectMapper,
-    env: WriterEnv<CTX>,
-    writer: Writer<CTX, T>
+    env: WriterEnv<O>,
+    context: CTX,
+    writer: Writer<O, CTX, T>
 ): String? =
-    this.serialization(env, Location.empty, writer)
+    this.serialization(env, context, Location.empty, writer)
         ?.let { mapper.writeValueAsString(it) }

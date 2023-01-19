@@ -30,7 +30,8 @@ internal class ArrayNonNullableItemWriterTest : FreeSpec() {
     companion object {
         private const val ITEM_VALUE = "value"
 
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -38,14 +39,14 @@ internal class ArrayNonNullableItemWriterTest : FreeSpec() {
         "The ArrayItems#NonNullable type" - {
 
             "when created an instance of the non-nullable item" - {
-                val writer: Writer<Unit, String> = DummyWriter { StringNode(it) }
-                val itemWriter: ArrayItemWriter.NonNullable<Unit, String> = createItemWriter(writer = writer)
+                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
+                val itemWriter: ArrayItemWriter.NonNullable<Unit, Unit, String> = createItemWriter(writer = writer)
 
                 "when an item is the not null value" - {
                     val value = "value"
 
                     "then the method write should return the null value" {
-                        val result = itemWriter.write(ENV, LOCATION, value)
+                        val result = itemWriter.write(ENV, CONTEXT, LOCATION, value)
                         result shouldBe StringNode(ITEM_VALUE)
                     }
                 }
@@ -53,6 +54,6 @@ internal class ArrayNonNullableItemWriterTest : FreeSpec() {
         }
     }
 
-    private fun <CTX, T : Any> createItemWriter(writer: Writer<CTX, T>): ArrayItemWriter.NonNullable<CTX, T> =
+    private fun <O, CTX, T : Any> createItemWriter(writer: Writer<O, CTX, T>): ArrayItemWriter.NonNullable<O, CTX, T> =
         ArrayItemWriter.NonNullable(ArrayItemSpec.NonNullable(writer = writer))
 }

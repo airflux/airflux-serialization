@@ -43,6 +43,8 @@ internal class StructWriterTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = 42
         private const val NAME_PROPERTY_NAME = "name"
         private const val NAME_PROPERTY_VALUE = "user"
+
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
@@ -51,15 +53,15 @@ internal class StructWriterTest : FreeSpec() {
         "The StructWriter type" - {
 
             "when a writer was created with non-nullable property" - {
-                val writer: Writer<CTX, DTO> = structWriter {
+                val writer: Writer<OPTS, Unit, DTO> = structWriter {
                     property(nonNullable(name = ID_PROPERTY_NAME, from = DTO::id, writer = DummyWriter.intWriter()))
                     property(nullable(name = NAME_PROPERTY_NAME, from = DTO::name, writer = DummyWriter.stringWriter()))
                 }
 
                 "when the source contains all properties" - {
                     val source = DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
-                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                    val result = writer.write(env = env, location = LOCATION, source = source)
+                    val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                    val result = writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
 
                     "then should return a struct with all properties" {
                         result shouldBe StructNode(
@@ -71,8 +73,8 @@ internal class StructWriterTest : FreeSpec() {
 
                 "when the source contains only non-nullable properties" - {
                     val source = DTO(id = ID_PROPERTY_VALUE, name = null)
-                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                    val result = writer.write(env = env, location = LOCATION, source = source)
+                    val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                    val result = writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
 
                     "then should return a struct with only non-nullable properties" {
                         result shouldBe StructNode(
@@ -83,7 +85,7 @@ internal class StructWriterTest : FreeSpec() {
             }
 
             "when a writer was created with all nullable properties" - {
-                val writer: Writer<CTX, NullableDTO> = structWriter {
+                val writer: Writer<OPTS, Unit, NullableDTO> = structWriter {
                     property(
                         nullable(
                             name = ID_PROPERTY_NAME,
@@ -102,8 +104,8 @@ internal class StructWriterTest : FreeSpec() {
 
                 "when the source contains all properties" - {
                     val source = NullableDTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
-                    val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                    val result = writer.write(env = env, location = LOCATION, source = source)
+                    val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                    val result = writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
 
                     "then should return a struct with all properties" {
                         result shouldBe StructNode(
@@ -117,28 +119,31 @@ internal class StructWriterTest : FreeSpec() {
                     val source = NullableDTO(id = null, name = null)
 
                     "when the action of the writer was set to return empty value" - {
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                         "then should return the empty value of the StructNode type" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe StructNode()
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                         "then should return the null value" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
-                        val env = WriterEnv(context = CTX(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
                         "then should return the NullNode value" {
-                            val result = writer.write(env = env, location = LOCATION, source = source)
+                            val result =
+                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
                             result shouldBe NullNode
                         }
                     }
@@ -147,7 +152,7 @@ internal class StructWriterTest : FreeSpec() {
         }
     }
 
-    internal class CTX(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
+    internal class OPTS(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
         WriterActionBuilderIfResultIsEmptyOption
 
     internal class DTO(val id: Int, val name: String?)

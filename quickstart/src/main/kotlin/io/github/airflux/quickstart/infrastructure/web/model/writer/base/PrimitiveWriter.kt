@@ -17,8 +17,9 @@
 package io.github.airflux.quickstart.infrastructure.web.model.writer.base
 
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
+import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.std.writer.bigDecimalWriter
 import io.github.airflux.serialization.std.writer.stringWriter
 
-val StringWriter = stringWriter<WriterCtx>()
-val BigDecimalWriter = bigDecimalWriter<WriterCtx>(stripTrailingZeros = false)
+val StringWriter = stringWriter<WriterOptions, WriterCtx>()
+val BigDecimalWriter = bigDecimalWriter<WriterOptions, WriterCtx>(stripTrailingZeros = false)

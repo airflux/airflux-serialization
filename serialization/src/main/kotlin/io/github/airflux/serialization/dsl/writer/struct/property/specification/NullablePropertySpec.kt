@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun <CTX, T : Any, P : Any> nullable(
+public fun <O, CTX, T : Any, P : Any> nullable(
     name: String,
     from: (T) -> P?,
-    writer: Writer<CTX, P>
-): StructPropertySpec.Nullable<CTX, T, P> =
+    writer: Writer<O, CTX, P>
+): StructPropertySpec.Nullable<O, CTX, T, P> =
     StructPropertySpec.Nullable(name = name, from = from, writer = writer)
 
-public infix fun <CTX, T : Any, P : Any> StructPropertySpec.Nullable<CTX, T, P>.filter(
-    predicate: WriterPredicate<CTX, P>
-): StructPropertySpec.Nullable<CTX, T, P> =
+public infix fun <O, CTX, T : Any, P : Any> StructPropertySpec.Nullable<O, CTX, T, P>.filter(
+    predicate: WriterPredicate<O, CTX, P>
+): StructPropertySpec.Nullable<O, CTX, T, P> =
     StructPropertySpec.Nullable(name = name, from = from, writer = writer.filter(predicate))

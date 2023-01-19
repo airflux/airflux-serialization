@@ -24,27 +24,27 @@ import io.github.airflux.serialization.core.writer.writeNonNullable
 import io.github.airflux.serialization.core.writer.writeNullable
 import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 
-public sealed class ArrayItemWriter<CTX, T> {
+public sealed class ArrayItemWriter<O, CTX, T> {
 
-    public abstract fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode?
+    public abstract fun write(env: WriterEnv<O>, context: CTX, location: Location, value: T): ValueNode?
 
-    public class NonNullable<CTX, T : Any> private constructor(
-        private val writer: Writer<CTX, T>
-    ) : ArrayItemWriter<CTX, T>() {
+    public class NonNullable<O, CTX, T : Any> private constructor(
+        private val writer: Writer<O, CTX, T>
+    ) : ArrayItemWriter<O, CTX, T>() {
 
-        internal constructor(spec: ArrayItemSpec.NonNullable<CTX, T>) : this(spec.writer)
+        internal constructor(spec: ArrayItemSpec.NonNullable<O, CTX, T>) : this(spec.writer)
 
-        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
-            writeNonNullable(env = env, location = location, using = writer, value = value)
+        override fun write(env: WriterEnv<O>, context: CTX, location: Location, value: T): ValueNode? =
+            writeNonNullable(env = env, context = context, location = location, using = writer, value = value)
     }
 
-    public class Nullable<CTX, T> private constructor(
-        private val writer: Writer<CTX, T & Any>
-    ) : ArrayItemWriter<CTX, T>() {
+    public class Nullable<O, CTX, T> private constructor(
+        private val writer: Writer<O, CTX, T & Any>
+    ) : ArrayItemWriter<O, CTX, T>() {
 
-        internal constructor(spec: ArrayItemSpec.Nullable<CTX, T>) : this(spec.writer)
+        internal constructor(spec: ArrayItemSpec.Nullable<O, CTX, T>) : this(spec.writer)
 
-        override fun write(env: WriterEnv<CTX>, location: Location, value: T): ValueNode? =
-            writeNullable(env = env, location = location, using = writer, value = value)
+        override fun write(env: WriterEnv<O>, context: CTX, location: Location, value: T): ValueNode? =
+            writeNullable(env = env, context = context, location = location, using = writer, value = value)
     }
 }

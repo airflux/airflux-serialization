@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.core.writer.env
 
-public data class WriterEnv<CTX>(
-    public val context: CTX
+public data class WriterEnv<O>(
+    public val options: O
 )

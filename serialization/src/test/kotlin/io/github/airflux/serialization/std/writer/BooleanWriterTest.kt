@@ -26,20 +26,21 @@ import io.kotest.matchers.shouldBe
 internal class BooleanWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
         "The boolean type writer" - {
-            val writer: Writer<Unit, Boolean> = booleanWriter()
+            val writer: Writer<Unit, Unit, Boolean> = booleanWriter()
 
             "when the value contains the true value" - {
                 val value = true
 
                 "then writer should return the BooleanNode.True value" {
-                    val result = writer.write(ENV, LOCATION, value)
+                    val result = writer.write(ENV, CONTEXT, LOCATION, value)
                     result shouldBe BooleanNode.True
                 }
             }
@@ -48,7 +49,7 @@ internal class BooleanWriterTest : FreeSpec() {
                 val value = false
 
                 "then writer should return the BooleanNode.False value" {
-                    val result = writer.write(ENV, LOCATION, value)
+                    val result = writer.write(ENV, CONTEXT, LOCATION, value)
                     result shouldBe BooleanNode.False
                 }
             }

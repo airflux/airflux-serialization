@@ -26,7 +26,8 @@ import java.math.BigDecimal
 internal class BigDecimalWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(context = Unit)
+        private val ENV = WriterEnv(options = Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
         private const val TEXT_VALUE = "10.50"
         private const val TEXT_VALUE_WITHOUT_TRAILING_ZEROS = "10.5"
@@ -37,19 +38,19 @@ internal class BigDecimalWriterTest : FreeSpec() {
         "The big decimal type writer" - {
 
             "when the stripTrailingZeros option is true" - {
-                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = true)
+                val writer = bigDecimalWriter<Unit, Unit>(stripTrailingZeros = true)
 
                 "then the writer should return the value without trailing zeros" {
-                    val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
+                    val result = writer.write(ENV, CONTEXT, LOCATION, BigDecimal(TEXT_VALUE))
                     result shouldBe NumericNode.Number.valueOrNullOf(TEXT_VALUE_WITHOUT_TRAILING_ZEROS)
                 }
             }
 
             "when the stripTrailingZeros option is false" - {
-                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = false)
+                val writer = bigDecimalWriter<Unit, Unit>(stripTrailingZeros = false)
 
                 "then the writer should return the original value" {
-                    val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
+                    val result = writer.write(ENV, CONTEXT, LOCATION, BigDecimal(TEXT_VALUE))
                     result shouldBe NumericNode.Number.valueOrNullOf(TEXT_VALUE)
                 }
             }

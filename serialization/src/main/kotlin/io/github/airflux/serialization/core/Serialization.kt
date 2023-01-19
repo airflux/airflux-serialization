@@ -21,5 +21,10 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-public fun <CTX, T : Any> T.serialization(env: WriterEnv<CTX>, location: Location, writer: Writer<CTX, T>): ValueNode? =
-    writer.write(env, location, this)
+public fun <O, CTX, T : Any> T.serialization(
+    env: WriterEnv<O>,
+    context: CTX,
+    location: Location,
+    writer: Writer<O, CTX, T>
+): ValueNode? =
+    writer.write(env, context, location, this)
