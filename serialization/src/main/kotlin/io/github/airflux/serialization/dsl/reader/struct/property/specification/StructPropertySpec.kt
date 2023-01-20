@@ -24,49 +24,57 @@ import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public sealed class StructPropertySpec<EB, O, in CTX, T> {
+public sealed class StructPropertySpec<EB, O, in CTX, out T> {
     public abstract val path: PropertyPaths
     public abstract val reader: Reader<EB, O, CTX, T>
 
-    public class NonNullable<EB, O, CTX, T : Any> internal constructor(
+    public class NonNullable<EB, O, in CTX, out T : Any> internal constructor(
         override val path: PropertyPaths,
         override val reader: Reader<EB, O, CTX, T>
-    ) : StructPropertySpec<EB, O, CTX, T>() {
+    ) : StructPropertySpec<EB, O, CTX, T>()
 
-        public infix fun validation(validator: Validator<EB, O, CTX, T>): NonNullable<EB, O, CTX, T> =
-            NonNullable(
-                path = path,
-                reader = { env, context, location, source ->
-                    reader.read(env, context, location, source).validation(env, context, validator)
-                }
-            )
-
-        public infix fun or(alt: NonNullable<EB, O, CTX, T>): NonNullable<EB, O, CTX, T> =
-            NonNullable(path = path.append(alt.path), reader = reader or alt.reader)
-    }
-
-    public class Nullable<EB, O, CTX, T : Any> internal constructor(
+    public class Nullable<EB, O, in CTX, out T : Any> internal constructor(
         override val path: PropertyPaths,
         override val reader: Reader<EB, O, CTX, T?>
-    ) : StructPropertySpec<EB, O, CTX, T?>() {
-
-        public infix fun validation(validator: Validator<EB, O, CTX, T?>): Nullable<EB, O, CTX, T> =
-            Nullable(
-                path = path,
-                reader = { env, context, location, source ->
-                    reader.read(env, context, location, source).validation(env, context, validator)
-                }
-            )
-
-        public infix fun filter(predicate: ReaderPredicate<EB, O, CTX, T>): Nullable<EB, O, CTX, T> =
-            Nullable(
-                path = path,
-                reader = { env, context, location, source ->
-                    reader.read(env, context, location, source).filter(env, context, predicate)
-                }
-            )
-
-        public infix fun or(alt: Nullable<EB, O, CTX, T>): Nullable<EB, O, CTX, T> =
-            Nullable(path = path.append(alt.path), reader = reader or alt.reader)
-    }
+    ) : StructPropertySpec<EB, O, CTX, T?>()
 }
+
+public infix fun <EB, O, CTX, T : Any> StructPropertySpec.NonNullable<EB, O, CTX, T>.validation(
+    validator: Validator<EB, O, CTX, T>
+): StructPropertySpec.NonNullable<EB, O, CTX, T> =
+    StructPropertySpec.NonNullable(
+        path = path,
+        reader = { env, context, location, source ->
+            reader.read(env, context, location, source).validation(env, context, validator)
+        }
+    )
+
+public infix fun <EB, O, CTX, T : Any> StructPropertySpec.NonNullable<EB, O, CTX, T>.or(
+    alt: StructPropertySpec.NonNullable<EB, O, CTX, T>
+): StructPropertySpec.NonNullable<EB, O, CTX, T> =
+    StructPropertySpec.NonNullable(path = path.append(alt.path), reader = reader or alt.reader)
+
+public infix fun <EB, O, CTX, T : Any> StructPropertySpec.Nullable<EB, O, CTX, T>.validation(
+    validator: Validator<EB, O, CTX, T?>
+): StructPropertySpec.Nullable<EB, O, CTX, T> =
+    StructPropertySpec.Nullable(
+        path = path,
+        reader = { env, context, location, source ->
+            reader.read(env, context, location, source).validation(env, context, validator)
+        }
+    )
+
+public infix fun <EB, O, CTX, T : Any> StructPropertySpec.Nullable<EB, O, CTX, T>.filter(
+    predicate: ReaderPredicate<EB, O, CTX, T>
+): StructPropertySpec.Nullable<EB, O, CTX, T> =
+    StructPropertySpec.Nullable(
+        path = path,
+        reader = { env, context, location, source ->
+            reader.read(env, context, location, source).filter(env, context, predicate)
+        }
+    )
+
+public infix fun <EB, O, CTX, T : Any> StructPropertySpec.Nullable<EB, O, CTX, T>.or(
+    alt: StructPropertySpec.Nullable<EB, O, CTX, T>
+): StructPropertySpec.Nullable<EB, O, CTX, T> =
+    StructPropertySpec.Nullable(path = path.append(alt.path), reader = reader or alt.reader)
