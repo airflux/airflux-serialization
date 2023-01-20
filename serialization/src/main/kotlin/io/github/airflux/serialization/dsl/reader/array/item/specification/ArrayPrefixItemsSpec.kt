@@ -24,7 +24,7 @@ public fun <EB, O, CTX, T> prefixItems(
 ): ArrayPrefixItemsSpec<EB, O, CTX, T> =
     ArrayPrefixItemsSpec(item = item, items = items)
 
-public class ArrayPrefixItemsSpec<EB, O, CTX, out T> private constructor(
+public class ArrayPrefixItemsSpec<EB, O, in CTX, out T> private constructor(
     internal val readers: List<Reader<EB, O, CTX, T>>
 ) {
 
