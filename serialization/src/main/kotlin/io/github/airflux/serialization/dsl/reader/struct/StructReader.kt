@@ -32,8 +32,8 @@ import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidators
 
 public fun <EB, O, CTX, T> structReader(
     block: StructReader.Builder<EB, O, CTX, T>.() -> Reader<EB, O, CTX, T>
@@ -51,7 +51,7 @@ public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
           O : FailFastOption = this.build(block)
 
 public class StructReader<EB, O, CTX, T>(
-    private val validators: List<StructValidator<EB, O, CTX>>,
+    private val validators: StructValidators<EB, O, CTX>,
     private val properties: StructProperties<EB, O, CTX>,
     private val readerResultBuilder: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, Location) -> ReaderResult<T>
 ) : Reader<EB, O, CTX, T>
@@ -156,7 +156,7 @@ public class StructReader<EB, O, CTX, T>(
         public fun build(
             block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, Location) -> ReaderResult<T>
         ): Reader<EB, O, CTX, T> {
-            val validators: List<StructValidator<EB, O, CTX>> =
+            val validators: StructValidators<EB, O, CTX> =
                 validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }
                     .takeIf { it.isNotEmpty() }
                     .orEmpty()
