@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
 public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructor(
@@ -35,7 +35,7 @@ public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructo
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        properties: List<StructProperty<EB, O, CTX>>,
+        properties: StructProperties<EB, O, CTX>,
         source: StructNode
     ): ReaderResult.Failure? {
         val failFast = env.options.failFast

@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.validator
+package io.github.airflux.serialization.dsl.reader.struct.property
 
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-
-public interface StructValidatorBuilder<EB, O, CTX> {
-    public fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX>
-}
+public typealias StructProperties<EB, O, CTX> = List<StructProperty<EB, O, CTX>>

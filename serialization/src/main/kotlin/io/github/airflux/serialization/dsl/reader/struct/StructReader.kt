@@ -29,6 +29,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValuesInstance
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
@@ -51,7 +52,7 @@ public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
 
 public class StructReader<EB, O, CTX, T>(
     private val validators: List<StructValidator<EB, O, CTX>>,
-    private val properties: List<StructProperty<EB, O, CTX>>,
+    private val properties: StructProperties<EB, O, CTX>,
     private val readerResultBuilder: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, Location) -> ReaderResult<T>
 ) : Reader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,

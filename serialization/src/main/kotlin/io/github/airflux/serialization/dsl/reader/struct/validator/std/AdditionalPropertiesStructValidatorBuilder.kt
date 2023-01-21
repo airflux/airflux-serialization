@@ -18,6 +18,7 @@ package io.github.airflux.serialization.dsl.reader.struct.validator.std
 
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
@@ -27,12 +28,12 @@ internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructVa
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 
-    override fun build(properties: List<StructProperty<EB, O, CTX>>): StructValidator<EB, O, CTX> {
+    override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> {
         val names: Set<String> = properties.names()
         return AdditionalPropertiesStructValidator(names)
     }
 
-    internal fun List<StructProperty<EB, O, CTX>>.names(): Set<String> {
+    internal fun StructProperties<EB, O, CTX>.names(): Set<String> {
         fun StructProperty<EB, O, CTX>.names(): List<String> = path.items
             .mapNotNull { path ->
                 when (val element = path.elements.first()) {
