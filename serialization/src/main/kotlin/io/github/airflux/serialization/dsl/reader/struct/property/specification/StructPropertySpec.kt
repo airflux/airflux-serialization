@@ -24,16 +24,16 @@ import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public sealed class StructPropertySpec<EB, O, in CTX, out T> {
+public sealed class StructPropertySpec<EB, O, CTX, out T> {
     public abstract val path: PropertyPaths
     public abstract val reader: Reader<EB, O, CTX, T>
 
-    public class NonNullable<EB, O, in CTX, out T : Any> internal constructor(
+    public class NonNullable<EB, O, CTX, out T : Any> internal constructor(
         override val path: PropertyPaths,
         override val reader: Reader<EB, O, CTX, T>
     ) : StructPropertySpec<EB, O, CTX, T>()
 
-    public class Nullable<EB, O, in CTX, out T : Any> internal constructor(
+    public class Nullable<EB, O, CTX, out T : Any> internal constructor(
         override val path: PropertyPaths,
         override val reader: Reader<EB, O, CTX, T?>
     ) : StructPropertySpec<EB, O, CTX, T?>()

@@ -47,7 +47,7 @@ public fun <EB, O, CTX, T : Any> required(
         path = PropertyPaths(path),
         reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
-            if (predicate(env, context, location))
+            if (predicate(env, context, location.append(path)))
                 readRequired(env, context, lookup, reader)
             else
                 readOptional(env, context, lookup, reader)

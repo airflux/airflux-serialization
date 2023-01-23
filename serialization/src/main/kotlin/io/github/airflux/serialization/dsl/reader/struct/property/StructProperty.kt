@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 
-public sealed class StructProperty<out EB, out O, out CTX> {
+public sealed class StructProperty<EB, O, CTX> {
     public abstract val path: PropertyPaths
 
     public class NonNullable<EB, O, CTX, T : Any> private constructor(

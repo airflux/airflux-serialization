@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun interface Writer<O, in CTX, in T : Any> {
+public fun interface Writer<O, CTX, in T : Any> {
     public fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode?
 }
 

@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 
-public fun interface StructValidator<EB, O, in CTX> {
+public fun interface StructValidator<EB, O, CTX> {
 
     public fun validate(
         env: ReaderEnv<EB, O>,

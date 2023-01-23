@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 
-public fun interface Validator<EB, O, in CTX, in T> {
+public fun interface Validator<EB, O, CTX, in T> {
     public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure?
 }
 

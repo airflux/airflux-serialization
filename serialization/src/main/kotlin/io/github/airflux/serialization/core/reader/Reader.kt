@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.ValueNode
 
-public fun interface Reader<EB, O, in CTX, out T> {
+public fun interface Reader<EB, O, CTX, out T> {
 
     /**
      * Convert the [ValueNode] into a T
