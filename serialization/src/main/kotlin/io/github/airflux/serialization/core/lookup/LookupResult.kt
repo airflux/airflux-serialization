@@ -25,21 +25,19 @@ import io.github.airflux.serialization.core.value.ValueNode
 
 public sealed class LookupResult {
 
-    public abstract val location: Location
-
     public fun apply(key: String): LookupResult = apply(Element.Key(key))
     public fun apply(idx: Int): LookupResult = apply(Element.Idx(idx))
     public abstract fun apply(key: Element.Key): LookupResult
     public abstract fun apply(idx: Element.Idx): LookupResult
 
-    public data class Defined(override val location: Location, val value: ValueNode) : LookupResult() {
+    public data class Defined(val location: Location, val value: ValueNode) : LookupResult() {
         override fun apply(key: Element.Key): LookupResult = value.lookup(location, key)
         override fun apply(idx: Element.Idx): LookupResult = value.lookup(location, idx)
     }
 
     public sealed class Undefined : LookupResult() {
 
-        public data class PathMissing(override val location: Location) : Undefined() {
+        public data class PathMissing(val location: Location) : Undefined() {
             override fun apply(key: Element.Key): LookupResult = PathMissing(location = this.location.append(key))
             override fun apply(idx: Element.Idx): LookupResult = PathMissing(location = this.location.append(idx))
         }
@@ -47,7 +45,7 @@ public sealed class LookupResult {
         public data class InvalidType(
             public val expected: Iterable<String>,
             public val actual: String,
-            override val location: Location
+            val location: Location
         ) : Undefined() {
             override fun apply(key: Element.Key): LookupResult = this
             override fun apply(idx: Element.Idx): LookupResult = this
