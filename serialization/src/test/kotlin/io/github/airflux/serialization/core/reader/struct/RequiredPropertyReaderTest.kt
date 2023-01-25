@@ -81,7 +81,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 val lookup: LookupResult = LookupResult.Undefined.InvalidType(
                     expected = listOf(StructNode.nameOfType),
                     actual = StringNode.nameOfType,
-                    location = LOCATION.append(ID_PROPERTY_NAME)
+                    breakpoint = LOCATION.append(ID_PROPERTY_NAME)
                 )
 
                 "then should return the invalid type error" {

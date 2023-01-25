@@ -71,7 +71,7 @@ internal class ValueNodeTest : FreeSpec() {
                         lookup shouldBe LookupResult.Undefined.InvalidType(
                             expected = listOf(StructNode.nameOfType),
                             actual = ArrayNode.nameOfType,
-                            location = LOCATION
+                            breakpoint = LOCATION
                         )
                     }
                 }
@@ -105,7 +105,7 @@ internal class ValueNodeTest : FreeSpec() {
                         lookup shouldBe LookupResult.Undefined.InvalidType(
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StructNode.nameOfType,
-                            location = LOCATION
+                            breakpoint = LOCATION
                         )
                     }
                 }

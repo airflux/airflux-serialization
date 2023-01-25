@@ -89,7 +89,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         key = ID,
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -134,7 +134,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         index = IDX,
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -231,7 +231,7 @@ internal class LookupTest : FreeSpec() {
                         source = ArrayNode<StringNode>(),
                         path = PropertyPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
                             actual = ArrayNode.nameOfType
                         )
@@ -249,7 +249,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         path = PropertyPath(ID),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -259,7 +259,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         path = PropertyPath(USER).append(ID),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -269,7 +269,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         path = PropertyPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -281,7 +281,7 @@ internal class LookupTest : FreeSpec() {
                         source = StructNode(ACCOUNT to StringNode(VALUE)),
                         path = PropertyPath(ACCOUNT).append(USER),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION.append(ACCOUNT),
+                            breakpoint = LOCATION.append(ACCOUNT),
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -291,7 +291,7 @@ internal class LookupTest : FreeSpec() {
                         source = StructNode(ACCOUNT to StringNode(VALUE)),
                         path = PropertyPath(ACCOUNT).append(USER).append(ID),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION.append(ACCOUNT),
+                            breakpoint = LOCATION.append(ACCOUNT),
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -301,7 +301,7 @@ internal class LookupTest : FreeSpec() {
                         source = StructNode(ACCOUNT to StringNode(VALUE)),
                         path = PropertyPath(ACCOUNT).append(USER).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION.append(ACCOUNT),
+                            breakpoint = LOCATION.append(ACCOUNT),
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -313,7 +313,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         path = PropertyPath(IDX),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -323,7 +323,7 @@ internal class LookupTest : FreeSpec() {
                         source = StringNode(VALUE),
                         path = PropertyPath(IDX).append(ID),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION,
+                            breakpoint = LOCATION,
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -335,7 +335,7 @@ internal class LookupTest : FreeSpec() {
                         source = StructNode(PHONES to StringNode(VALUE)),
                         path = PropertyPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION.append(PHONES),
+                            breakpoint = LOCATION.append(PHONES),
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -345,7 +345,7 @@ internal class LookupTest : FreeSpec() {
                         source = StructNode(PHONES to StringNode(VALUE)),
                         path = PropertyPath(PHONES).append(IDX).append(ID),
                         result = LookupResult.Undefined.InvalidType(
-                            location = LOCATION.append(PHONES),
+                            breakpoint = LOCATION.append(PHONES),
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType
                         )
@@ -451,7 +451,7 @@ internal class LookupTest : FreeSpec() {
                         lookup shouldBe LookupResult.Undefined.InvalidType(
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType,
-                            location = LOCATION.append(USER)
+                            breakpoint = LOCATION.append(USER)
                         )
                     }
                 }
@@ -514,7 +514,7 @@ internal class LookupTest : FreeSpec() {
                         lookup shouldBe LookupResult.Undefined.InvalidType(
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType,
-                            location = LOCATION.append(USER)
+                            breakpoint = LOCATION.append(USER)
                         )
                     }
                 }
@@ -525,7 +525,7 @@ internal class LookupTest : FreeSpec() {
             val undefined = LookupResult.Undefined.InvalidType(
                 expected = listOf(ArrayNode.nameOfType),
                 actual = StringNode.nameOfType,
-                location = LOCATION.append(USER)
+                breakpoint = LOCATION.append(USER)
             )
 
             "when lookup by a key element" - {

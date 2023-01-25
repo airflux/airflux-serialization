@@ -59,7 +59,7 @@ public fun <EB, O, CTX, T : Any> readWithDefault(
                 ReaderResult.Success(location = lookup.location, value = defaultValue(env, context))
 
             is LookupResult.Undefined.InvalidType -> ReaderResult.Failure(
-                location = lookup.location,
+                location = lookup.breakpoint,
                 error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
             )
         }

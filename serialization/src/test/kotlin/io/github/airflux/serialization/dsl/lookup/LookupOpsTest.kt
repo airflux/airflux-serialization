@@ -71,7 +71,7 @@ internal class LookupOpsTest : FreeSpec() {
                             lookup shouldBe LookupResult.Undefined.InvalidType(
                                 expected = listOf(ArrayNode.nameOfType),
                                 actual = StructNode.nameOfType,
-                                location = LOCATION
+                                breakpoint = LOCATION
                             )
                         }
                     }
@@ -90,7 +90,7 @@ internal class LookupOpsTest : FreeSpec() {
                     val undefined = LookupResult.Undefined.InvalidType(
                         expected = listOf(StructNode.nameOfType),
                         actual = StringNode.nameOfType,
-                        location = LOCATION
+                        breakpoint = LOCATION
                     )
 
                     "then should return the same instance of Undefined#InvalidType type" {
@@ -128,7 +128,7 @@ internal class LookupOpsTest : FreeSpec() {
                             lookup shouldBe LookupResult.Undefined.InvalidType(
                                 expected = listOf(StructNode.nameOfType),
                                 actual = ArrayNode.nameOfType,
-                                location = LOCATION
+                                breakpoint = LOCATION
                             )
                         }
                     }
@@ -147,7 +147,7 @@ internal class LookupOpsTest : FreeSpec() {
                     val undefined = LookupResult.Undefined.InvalidType(
                         expected = listOf(ArrayNode.nameOfType),
                         actual = StructNode.nameOfType,
-                        location = LOCATION
+                        breakpoint = LOCATION
                     )
 
                     "then should return the same instance of Undefined#InvalidType type" {

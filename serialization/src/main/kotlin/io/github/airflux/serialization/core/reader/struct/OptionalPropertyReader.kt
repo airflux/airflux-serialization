@@ -41,7 +41,7 @@ public fun <EB, O, CTX, T : Any> readOptional(
             is LookupResult.Undefined.PathMissing -> ReaderResult.Success(location = lookup.location, value = null)
 
             is LookupResult.Undefined.InvalidType -> ReaderResult.Failure(
-                location = lookup.location,
+                location = lookup.breakpoint,
                 error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
             )
         }

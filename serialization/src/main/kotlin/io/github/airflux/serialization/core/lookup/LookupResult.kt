@@ -45,7 +45,7 @@ public sealed class LookupResult {
         public data class InvalidType(
             public val expected: Iterable<String>,
             public val actual: String,
-            val location: Location
+            val breakpoint: Location
         ) : Undefined() {
             override fun apply(key: Element.Key): LookupResult = this
             override fun apply(idx: Element.Idx): LookupResult = this
@@ -62,7 +62,7 @@ public fun ValueNode.lookup(location: Location, key: Element.Key): LookupResult 
         LookupResult.Undefined.InvalidType(
             expected = listOf(StructNode.nameOfType),
             actual = this.nameOfType,
-            location = location
+            breakpoint = location
         )
 
 public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult =
@@ -74,7 +74,7 @@ public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult 
         LookupResult.Undefined.InvalidType(
             expected = listOf(ArrayNode.nameOfType),
             actual = this.nameOfType,
-            location = location
+            breakpoint = location
         )
 
 public fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResult {
@@ -94,7 +94,7 @@ public fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResul
                         LookupResult.Undefined.InvalidType(
                             expected = listOf(StructNode.nameOfType),
                             actual = source.nameOfType,
-                            location = location
+                            breakpoint = location
                         )
 
                     is Element.Idx -> if (source is ArrayNode<*>) {
@@ -107,7 +107,7 @@ public fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResul
                         LookupResult.Undefined.InvalidType(
                             expected = listOf(ArrayNode.nameOfType),
                             actual = source.nameOfType,
-                            location = location
+                            breakpoint = location
                         )
                 }
         }
