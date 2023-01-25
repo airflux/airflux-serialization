@@ -21,353 +21,588 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.ValueNode
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.datatest.WithDataTestName
+import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 internal class LookupTest : FreeSpec() {
 
     companion object {
-        private const val KEY_NAME = "id"
-        private const val UNKNOWN_KEY_NAME = "identifier"
+        private const val ACCOUNT = "account"
+        private const val USER = "user"
+        private const val PHONES = "phones"
+        private const val ID = "id"
+        private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
         private const val IDX = 0
         private const val UNKNOWN_IDX = 1
-
-        private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
 
         private val LOCATION = Location.empty
     }
 
     init {
 
-        "The lookup by a key element of the path" - {
+        "The lookup by a key element" - {
+            withData(
+                listOf(
+                    //Defined
+                    TestCaseData.WithKey(
+                        description = "1",
+                        source = StructNode(ID to StringNode(VALUE)),
+                        key = ID,
+                        result = LookupResult.Defined(location = LOCATION.append(ID), value = StringNode(VALUE))
+                    ),
 
-            "when the source is the StructNode type" - {
+                    //Source is empty struct
+                    TestCaseData.WithKey(
+                        description = "2.1",
+                        source = StructNode(),
+                        key = ID,
+                        result = LookupResult.Undefined.PathMissing(LOCATION.append(ID))
+                    ),
 
-                "when the source is empty" - {
-                    val value = StructNode()
+                    //Find unknown key
+                    TestCaseData.WithKey(
+                        description = "3.1",
+                        source = StructNode(
+                            USER to StringNode(VALUE)
+                        ),
+                        key = ID,
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(ID))
+                    ),
+                    TestCaseData.WithKey(
+                        description = "3.2",
+                        source = StructNode(
+                            USER to StructNode(
+                                ID to StringNode(VALUE)
+                            )
+                        ),
+                        key = ID,
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(ID))
+                    ),
 
-                    "then should return the value as an instance of type Undefined#PathMissing" {
-                        val lookup = value.lookup(LOCATION, PropertyPath.Element.Key(KEY_NAME))
-                        lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(KEY_NAME))
-                    }
-                }
-
-                "when the source is not empty" - {
-                    val value = StructNode(KEY_NAME to StringNode(VALUE))
-
-                    "when the source contains the finding key" - {
-                        val searchKey = KEY_NAME
-
-                        "then should return the value as an instance of type Defined" {
-                            val lookup = value.lookup(LOCATION, PropertyPath.Element.Key(searchKey))
-                            lookup shouldBe LookupResult.Defined(LOCATION.append(searchKey), StringNode(VALUE))
-                        }
-                    }
-
-                    "when the source does not contain the finding key" - {
-                        val searchKey = UNKNOWN_KEY_NAME
-
-                        "then should return the value as an instance of type Undefined#PathMissing" {
-                            val lookup = value.lookup(LOCATION, PropertyPath.Element.Key(searchKey))
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(searchKey))
-                        }
-                    }
-                }
-            }
-
-            "when the source is not the StructNode type" - {
-                val value = StringNode(VALUE)
-
-                "then should return the value as an instance of type Undefined#InvalidType" {
-                    val lookup = value.lookup(LOCATION, PropertyPath.Element.Key(KEY_NAME))
-                    lookup shouldBe LookupResult.Undefined.InvalidType(
-                        expected = listOf(StructNode.nameOfType),
-                        actual = StringNode.nameOfType,
-                        location = LOCATION
-                    )
-                }
-            }
-        }
-
-        "The lookup by an index element of the path" - {
-
-            "when the source is the ArrayNode type" - {
-
-                "when the source is empty" - {
-                    val value = ArrayNode<StringNode>()
-
-                    "then should return the value as an instance of type Undefined#PathMissing" {
-                        val lookup = value.lookup(LOCATION, PropertyPath.Element.Idx(IDX))
-                        lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(IDX))
-                    }
-                }
-
-                "when the source is not empty" - {
-                    val value = ArrayNode(StringNode(VALUE))
-
-                    "when the source contains the finding index" - {
-                        val searchIndex = IDX
-
-                        "then should return the value as an instance of type Defined" {
-                            val lookup = value.lookup(LOCATION, PropertyPath.Element.Idx(searchIndex))
-                            lookup shouldBe LookupResult.Defined(LOCATION.append(searchIndex), StringNode(VALUE))
-                        }
-                    }
-
-                    "when the source does not contain the finding index" - {
-                        val searchIndex = UNKNOWN_IDX
-
-                        "then should return the value as an instance of type Undefined#PathMissing" {
-                            val lookup = value.lookup(LOCATION, PropertyPath.Element.Idx(searchIndex))
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(searchIndex))
-                        }
-                    }
-                }
-            }
-
-            "when the source is not the ArrayNode type" - {
-                val value = StringNode(VALUE)
-
-                "then should return the value as an instance of type Undefined#InvalidType" {
-                    val lookup = value.lookup(LOCATION, PropertyPath.Element.Idx(IDX))
-                    lookup shouldBe LookupResult.Undefined.InvalidType(
-                        expected = listOf(ArrayNode.nameOfType),
-                        actual = StringNode.nameOfType,
-                        location = LOCATION
-                    )
-                }
-            }
-        }
-
-        "The lookup by an path" - {
-
-            "when the path contains a key element" - {
-
-                "when the source is the StructNode type" - {
-
-                    "when the source is empty" - {
-                        val value = StructNode()
-
-                        "then should return the value as an instance of type Undefined#PathMissing" {
-                            val lookup = value.lookup(LOCATION, PropertyPath(KEY_NAME))
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(KEY_NAME))
-                        }
-                    }
-
-                    "when the source is not empty" - {
-                        val value = StructNode(KEY_NAME to StringNode(VALUE))
-
-                        "when the value contains the finding key" - {
-                            val searchKey = KEY_NAME
-
-                            "then should return the value as an instance of type Defined" {
-                                val lookup = value.lookup(LOCATION, PropertyPath(searchKey))
-                                lookup shouldBe LookupResult.Defined(LOCATION.append(searchKey), StringNode(VALUE))
-                            }
-                        }
-
-                        "when the value does not contain the finding key" - {
-                            val searchKey = UNKNOWN_KEY_NAME
-
-                            "then should return the value as an instance of type Undefined#PathMissing" {
-                                val lookup = value.lookup(LOCATION, PropertyPath(searchKey))
-                                lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(searchKey))
-                            }
-                        }
-                    }
-                }
-
-                "when the source is not the StructNode type" - {
-                    val value = StringNode(VALUE)
-
-                    "then should return the value as an instance of type Undefined#InvalidType" {
-                        val lookup = value.lookup(LOCATION, PropertyPath(KEY_NAME))
-                        lookup shouldBe LookupResult.Undefined.InvalidType(
+                    //Invalid source node (expected a structure)
+                    TestCaseData.WithKey(
+                        description = "4",
+                        source = StringNode(VALUE),
+                        key = ID,
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
                             expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType,
-                            location = LOCATION.append(KEY_NAME)
+                            actual = StringNode.nameOfType
                         )
-                    }
-                }
+                    )
+                )
+            ) { data ->
+                val lookup = data.source.lookup(location = LOCATION, key = data.key)
+                lookup shouldBe data.result
             }
+        }
 
-            "when the path contains a indexed element" - {
+        "The lookup by an index element" - {
+            withData(
+                listOf(
+                    //Defined
+                    TestCaseData.WithIndex(
+                        description = "1",
+                        source = ArrayNode(StringNode(VALUE)),
+                        index = IDX,
+                        result = LookupResult.Defined(location = LOCATION.append(IDX), value = StringNode(VALUE))
+                    ),
 
-                "when the source is the ArrayNode type" - {
+                    //Source is empty array
+                    TestCaseData.WithIndex(
+                        description = "2",
+                        source = ArrayNode<StringNode>(),
+                        index = IDX,
+                        result = LookupResult.Undefined.PathMissing(LOCATION.append(IDX))
+                    ),
 
-                    "when the source is empty" - {
-                        val value = ArrayNode<StringNode>()
+                    //Find unknown index
+                    TestCaseData.WithIndex(
+                        description = "3",
+                        source = ArrayNode(StringNode(VALUE)),
+                        index = UNKNOWN_IDX,
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(UNKNOWN_IDX))
+                    ),
 
-                        "then should return the value as an instance of type Undefined#PathMissing" {
-                            val lookup = value.lookup(LOCATION, PropertyPath(IDX))
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(IDX))
-                        }
-                    }
-
-                    "when the source is not empty" - {
-                        val value = ArrayNode(StringNode(VALUE))
-
-                        "when the value contains the finding index" - {
-                            val searchIndex = IDX
-
-                            "then should return the value as an instance of type Defined" {
-                                val lookup = value.lookup(LOCATION, PropertyPath(searchIndex))
-                                lookup shouldBe LookupResult.Defined(LOCATION.append(searchIndex), StringNode(VALUE))
-                            }
-                        }
-
-                        "when the value does not contain the finding index" - {
-                            val searchIndex = UNKNOWN_IDX
-
-                            "then should return the value as an instance of type Undefined#PathMissing" {
-                                val lookup = value.lookup(LOCATION, PropertyPath(searchIndex))
-                                lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(searchIndex))
-                            }
-                        }
-                    }
-                }
-
-                "when the source is not the ArrayNode type" - {
-                    val value = StringNode(VALUE)
-
-                    "then should return the value as an instance of type Undefined#InvalidType" {
-                        val lookup = value.lookup(LOCATION, PropertyPath(IDX))
-                        lookup shouldBe LookupResult.Undefined.InvalidType(
+                    //Invalid source node (expected an array)
+                    TestCaseData.WithIndex(
+                        description = "4",
+                        source = StringNode(VALUE),
+                        index = IDX,
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
                             expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType,
-                            location = LOCATION.append(IDX)
+                            actual = StringNode.nameOfType
                         )
-                    }
-                }
+                    )
+                )
+            ) { data ->
+                val lookup = data.source.lookup(location = LOCATION, idx = data.index)
+                lookup shouldBe data.result
+            }
+        }
+
+        "The lookup by a path" - {
+            withData(
+                listOf(
+                    //Defined level - 0
+                    TestCaseData.WithPath(
+                        description = "1.1",
+                        source = StructNode(ID to StringNode(VALUE)),
+                        path = PropertyPath(ID),
+                        result = LookupResult.Defined(location = LOCATION.append(ID), value = StringNode(VALUE))
+                    ),
+                    TestCaseData.WithPath(
+                        description = "1.2",
+                        source = ArrayNode(StringNode(VALUE)),
+                        path = PropertyPath(IDX),
+                        result = LookupResult.Defined(location = LOCATION.append(IDX), value = StringNode(VALUE))
+                    ),
+
+                    //Defined level - 1
+                    TestCaseData.WithPath(
+                        description = "2.1",
+                        source = StructNode(
+                            USER to StructNode(
+                                ID to StringNode(VALUE)
+                            )
+                        ),
+                        path = PropertyPath(USER).append(ID),
+                        result = LookupResult.Defined(
+                            location = LOCATION.append(USER).append(ID),
+                            value = StringNode(VALUE)
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "2.2",
+                        source = StructNode(PHONES to ArrayNode(StringNode(VALUE))),
+                        path = PropertyPath(PHONES).append(IDX),
+                        result = LookupResult.Defined(
+                            location = LOCATION.append(PHONES).append(IDX),
+                            value = StringNode(VALUE)
+                        )
+                    ),
+
+                    //Source is empty struct
+                    TestCaseData.WithPath(
+                        description = "3.1",
+                        source = StructNode(),
+                        path = PropertyPath(ID),
+                        result = LookupResult.Undefined.PathMissing(
+                            location = LOCATION.append(ID)
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "3.2",
+                        source = StructNode(),
+                        path = PropertyPath(USER).append(ID),
+                        result = LookupResult.Undefined.PathMissing(
+                            location = LOCATION.append(USER).append(ID)
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "3.3",
+                        source = StructNode(),
+                        path = PropertyPath(PHONES).append(IDX),
+                        result = LookupResult.Undefined.PathMissing(
+                            location = LOCATION.append(PHONES).append(IDX)
+                        )
+                    ),
+
+                    //Source is empty array
+                    TestCaseData.WithPath(
+                        description = "4.1",
+                        source = ArrayNode<StringNode>(),
+                        path = PropertyPath(IDX),
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(IDX))
+                    ),
+                    TestCaseData.WithPath(
+                        description = "4.2",
+                        source = ArrayNode<StringNode>(),
+                        path = PropertyPath(IDX).append(ID),
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(IDX).append(ID))
+                    ),
+                    TestCaseData.WithPath(
+                        description = "4.3",
+                        source = ArrayNode<StringNode>(),
+                        path = PropertyPath(PHONES).append(IDX),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
+                            expected = listOf(StructNode.nameOfType),
+                            actual = ArrayNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "4.4",
+                        source = StructNode(PHONES to ArrayNode<StringNode>()),
+                        path = PropertyPath(PHONES).append(IDX),
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(PHONES).append(IDX))
+                    ),
+
+                    //Invalid source node (expected a structure), level - 0
+                    TestCaseData.WithPath(
+                        description = "5.1",
+                        source = StringNode(VALUE),
+                        path = PropertyPath(ID),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "5.2",
+                        source = StringNode(VALUE),
+                        path = PropertyPath(USER).append(ID),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "5.3",
+                        source = StringNode(VALUE),
+                        path = PropertyPath(PHONES).append(IDX),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+
+                    //Invalid source node (expected a structure), level - 1
+                    TestCaseData.WithPath(
+                        description = "6.1",
+                        source = StructNode(ACCOUNT to StringNode(VALUE)),
+                        path = PropertyPath(ACCOUNT).append(USER),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION.append(ACCOUNT),
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "6.2",
+                        source = StructNode(ACCOUNT to StringNode(VALUE)),
+                        path = PropertyPath(ACCOUNT).append(USER).append(ID),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION.append(ACCOUNT),
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "6.3",
+                        source = StructNode(ACCOUNT to StringNode(VALUE)),
+                        path = PropertyPath(ACCOUNT).append(USER).append(IDX),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION.append(ACCOUNT),
+                            expected = listOf(StructNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+
+                    //Invalid source node (expected an array), level - 0
+                    TestCaseData.WithPath(
+                        description = "7.1",
+                        source = StringNode(VALUE),
+                        path = PropertyPath(IDX),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
+                            expected = listOf(ArrayNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "7.2",
+                        source = StringNode(VALUE),
+                        path = PropertyPath(IDX).append(ID),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION,
+                            expected = listOf(ArrayNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+
+                    //Invalid source node (expected an array), level - 1
+                    TestCaseData.WithPath(
+                        description = "8.1",
+                        source = StructNode(PHONES to StringNode(VALUE)),
+                        path = PropertyPath(PHONES).append(IDX),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION.append(PHONES),
+                            expected = listOf(ArrayNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+                    TestCaseData.WithPath(
+                        description = "8.2",
+                        source = StructNode(PHONES to StringNode(VALUE)),
+                        path = PropertyPath(PHONES).append(IDX).append(ID),
+                        result = LookupResult.Undefined.InvalidType(
+                            location = LOCATION.append(PHONES),
+                            expected = listOf(ArrayNode.nameOfType),
+                            actual = StringNode.nameOfType
+                        )
+                    ),
+
+                    //Find unknown key
+                    TestCaseData.WithPath(
+                        description = "9.1",
+                        source = StructNode(ID to StringNode(VALUE)),
+                        path = PropertyPath(USER),
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(USER))
+                    ),
+                    TestCaseData.WithPath(
+                        description = "9.2",
+                        source = StructNode(
+                            USER to StructNode(
+                                ID to StringNode(VALUE)
+                            )
+                        ),
+                        path = PropertyPath(ACCOUNT).append(USER),
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(ACCOUNT).append(USER))
+                    ),
+
+                    //Find unknown index
+                    TestCaseData.WithPath(
+                        description = "10.1",
+                        source = ArrayNode(StringNode(VALUE)),
+                        path = PropertyPath(UNKNOWN_IDX),
+                        result = LookupResult.Undefined.PathMissing(location = LOCATION.append(UNKNOWN_IDX))
+                    ),
+                    TestCaseData.WithPath(
+                        description = "10.2",
+                        source = StructNode(PHONES to ArrayNode(StringNode(VALUE))),
+                        path = PropertyPath(PHONES).append(UNKNOWN_IDX),
+                        result = LookupResult.Undefined.PathMissing(
+                            location = LOCATION.append(PHONES).append(UNKNOWN_IDX)
+                        )
+                    )
+                )
+            ) { data ->
+                val lookup = data.source.lookup(location = LOCATION, path = data.path)
+                lookup shouldBe data.result
             }
         }
 
         "The LookupResult#Defined" - {
 
-            "when lookup by a key element of the path" - {
+            "when lookup by a key element" - {
+                val searchKey = ID
 
                 "when the source is the StructNode type" - {
 
-                    "when the source is empty" - {
-                        val defined = LookupResult.Defined(LOCATION, StructNode())
+                    "when the value is empty" - {
+                        val defined = LookupResult.Defined(location = LOCATION.append(USER), value = StructNode())
 
-                        "then should return the value as an instance of type Undefined#PathMissing" {
-                            val lookup = defined.apply(KEY_NAME)
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(KEY_NAME))
+                        "then should return the value as an instance of the Undefined#PathMissing type" {
+                            val lookup = defined.apply(searchKey)
+                            lookup shouldBe LookupResult.Undefined.PathMissing(
+                                location = LOCATION.append(USER).append(searchKey)
+                            )
                         }
                     }
 
                     "when the source is not empty" - {
-                        val defined = LookupResult.Defined(LOCATION, StructNode(KEY_NAME to StringNode(VALUE)))
 
-                        "when the value contains the finding key" - {
-                            val searchKey = KEY_NAME
+                        "when the source contains the finding key" - {
+                            val defined = LookupResult.Defined(
+                                location = LOCATION.append(USER),
+                                value = StructNode(ID to StringNode(VALUE))
+                            )
 
-                            "then should return the value as an instance of type Defined" {
+                            "then should return the value as an instance of the Defined type" {
                                 val lookup = defined.apply(searchKey)
-                                lookup shouldBe LookupResult.Defined(LOCATION.append(searchKey), StringNode(VALUE))
+                                lookup shouldBe LookupResult.Defined(
+                                    location = LOCATION.append(USER).append(searchKey),
+                                    value = StringNode(VALUE)
+                                )
                             }
                         }
 
-                        "when the value does not contain the finding key" - {
-                            val searchKey = UNKNOWN_KEY_NAME
+                        "when the source does not contain the finding key" - {
+                            val defined = LookupResult.Defined(
+                                location = LOCATION.append(USER),
+                                value = StructNode(PHONES to StringNode(VALUE))
+                            )
 
-                            "then should return the value as an instance of type Undefined#PathMissing" {
+                            "then should return the value as an instance of the Undefined#PathMissing type" {
                                 val lookup = defined.apply(searchKey)
-                                lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(searchKey))
+                                lookup shouldBe LookupResult.Undefined.PathMissing(
+                                    location = LOCATION.append(USER).append(searchKey)
+                                )
                             }
                         }
                     }
                 }
 
                 "when the source is not the StructNode type" - {
-                    val defined = LookupResult.Defined(LOCATION, StringNode(VALUE))
 
-                    "then should return the value as an instance of type Undefined#InvalidType" {
-                        val lookup = defined.apply(KEY_NAME)
+                    val defined = LookupResult.Defined(location = LOCATION.append(USER), value = StringNode(VALUE))
+
+                    "then should return the value as an instance of the Undefined#InvalidType type" {
+                        val lookup = defined.apply(searchKey)
                         lookup shouldBe LookupResult.Undefined.InvalidType(
                             expected = listOf(StructNode.nameOfType),
                             actual = StringNode.nameOfType,
-                            location = LOCATION
+                            location = LOCATION.append(USER)
                         )
                     }
                 }
             }
 
-            "when lookup by an index element of the path" - {
+            "when lookup by an index element" - {
 
                 "when the source is the ArrayNode type" - {
 
                     "when the source is empty" - {
-                        val defined = LookupResult.Defined(LOCATION, ArrayNode<StringNode>())
+                        val searchIndex = IDX
+                        val defined =
+                            LookupResult.Defined(location = LOCATION.append(PHONES), value = ArrayNode<StringNode>())
 
-                        "then should return the value as an instance of type Undefined#PathMissing" {
-                            val lookup = defined.apply(IDX)
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(IDX))
+                        "then should return the value as an instance of the Undefined#PathMissing type" {
+                            val lookup = defined.apply(searchIndex)
+                            lookup shouldBe LookupResult.Undefined.PathMissing(
+                                location = LOCATION.append(PHONES).append(searchIndex)
+                            )
                         }
                     }
 
                     "when the source is not empty" - {
-                        val defined = LookupResult.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
+                        val defined = LookupResult.Defined(
+                            location = LOCATION.append(PHONES),
+                            value = ArrayNode(StringNode(VALUE))
+                        )
 
-                        "when the value contains the finding index" - {
+                        "when the source contains the finding index" - {
                             val searchIndex = IDX
 
-                            "then should return the value as an instance of type Defined" {
+                            "then should return the value as an instance of the Defined type" {
                                 val lookup = defined.apply(searchIndex)
-                                lookup shouldBe LookupResult.Defined(LOCATION.append(searchIndex), StringNode(VALUE))
+                                lookup shouldBe LookupResult.Defined(
+                                    location = LOCATION.append(PHONES).append(searchIndex),
+                                    value = StringNode(VALUE)
+                                )
                             }
                         }
 
-                        "when the value does not contain the finding index" - {
+                        "when the source does not contain the finding index" - {
                             val searchIndex = UNKNOWN_IDX
 
-                            "then should return the value as an instance of type Undefine#PathMissingd" {
+                            "then should return the value as an instance of the Undefine#PathMissingd type" {
                                 val lookup = defined.apply(searchIndex)
-                                lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(searchIndex))
+                                lookup shouldBe LookupResult.Undefined.PathMissing(
+                                    location = LOCATION.append(PHONES).append(searchIndex)
+                                )
                             }
                         }
                     }
                 }
 
                 "when the source is not the ArrayNode type" - {
-                    val defined = LookupResult.Defined(LOCATION, StringNode(VALUE))
+                    val searchIndex = IDX
+                    val defined = LookupResult.Defined(location = LOCATION.append(USER), value = StringNode(VALUE))
 
-                    "then should return the value as an instance of type Undefined#InvalidType" {
-                        val lookup = defined.apply(IDX)
+                    "then should return the value as an instance of the Undefined#InvalidType type" {
+                        val lookup = defined.apply(searchIndex)
                         lookup shouldBe LookupResult.Undefined.InvalidType(
                             expected = listOf(ArrayNode.nameOfType),
                             actual = StringNode.nameOfType,
-                            location = LOCATION
+                            location = LOCATION.append(USER)
                         )
                     }
                 }
             }
         }
 
-        "The LookupResult#Undefined" - {
+        "The LookupResult#Undefined#InvalidType" - {
             val undefined = LookupResult.Undefined.InvalidType(
                 expected = listOf(ArrayNode.nameOfType),
                 actual = StringNode.nameOfType,
-                location = LOCATION
+                location = LOCATION.append(USER)
             )
 
-            "when lookup by a key element of the path" - {
-                val lookup = undefined.apply(PropertyPath.Element.Key(KEY_NAME))
+            "when lookup by a key element" - {
+                val searchKey = ID
 
-                "then should return the same instance of Undefined type" {
+                "then should return the same instance of the Undefined type" {
+                    val lookup = undefined.apply(searchKey)
                     lookup shouldBeSameInstanceAs undefined
                 }
             }
 
-            "when lookup by an index element of the path" - {
-                val lookup = undefined.apply(PropertyPath.Element.Idx(IDX))
+            "when lookup by an index element" - {
+                val searchIndex = IDX
 
-                "then should return the same instance of Undefined type" {
+                "then should return the same instance of the Undefined type" {
+                    val lookup = undefined.apply(searchIndex)
                     lookup shouldBeSameInstanceAs undefined
                 }
             }
+        }
+
+        "The LookupResult#Undefined#PathMissing" - {
+            val undefined = LookupResult.Undefined.PathMissing(location = LOCATION.append(USER))
+
+            "when lookup by a key element" - {
+                val searchKey = ID
+
+                "then should return the new instance of the Undefined#PathMissing type" {
+                    val lookup = undefined.apply(searchKey)
+                    lookup shouldBe LookupResult.Undefined.PathMissing(
+                        location = LOCATION.append(USER).append(ID)
+                    )
+                }
+            }
+
+            "when lookup by an index element" - {
+                val searchIndex = IDX
+
+                "then should return the new instance of the Undefined#PathMissing type" {
+                    val lookup = undefined.apply(searchIndex)
+                    lookup shouldBe LookupResult.Undefined.PathMissing(
+                        location = LOCATION.append(USER).append(IDX)
+                    )
+                }
+            }
+        }
+    }
+
+    internal sealed class TestCaseData {
+
+        internal class WithKey(
+            val description: String,
+            val source: ValueNode,
+            key: String,
+            val result: LookupResult
+        ) : WithDataTestName {
+            val key: PropertyPath.Element.Key = PropertyPath.Element.Key(key)
+            override fun dataTestName(): String = "$description. source: $source, key: $key, result: $result"
+        }
+
+        internal class WithIndex(
+            val description: String,
+            val source: ValueNode,
+            index: Int,
+            val result: LookupResult
+        ) : WithDataTestName {
+            val index: PropertyPath.Element.Idx = PropertyPath.Element.Idx(index)
+            override fun dataTestName(): String = "$description. source: $source, index: $index, result: $result"
+        }
+
+        internal class WithPath(
+            val description: String,
+            val source: ValueNode,
+            val path: PropertyPath,
+            val result: LookupResult
+        ) : TestCaseData(), WithDataTestName {
+            override fun dataTestName(): String = "$description. source: $source, path: $path, result: $result"
         }
     }
 }

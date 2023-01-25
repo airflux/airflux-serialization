@@ -80,9 +80,9 @@ internal class LookupOpsTest : FreeSpec() {
                 "when the receiver is of type Undefined#PathMissing" - {
                     val undefined = LookupResult.Undefined.PathMissing(location = LOCATION)
 
-                    "then should return the same instance of Undefined#PathMissing type" {
+                    "then should return the new instance of Undefined#PathMissing type" {
                         val lookup = undefined / ID_PROPERTY_NAME
-                        lookup shouldBeSameInstanceAs undefined
+                        lookup shouldBe LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
                     }
                 }
 
@@ -137,9 +137,9 @@ internal class LookupOpsTest : FreeSpec() {
                 "when the receiver is of type Undefined#PathMissing" - {
                     val undefined = LookupResult.Undefined.PathMissing(location = LOCATION)
 
-                    "then should return the same instance of Undefined#PathMissing type" {
+                    "then should return the new instance of Undefined#PathMissing type" {
                         val lookup = undefined / ARRAY_INDEX
-                        lookup shouldBeSameInstanceAs undefined
+                        lookup shouldBe LookupResult.Undefined.PathMissing(location = LOCATION.append(ARRAY_INDEX))
                     }
                 }
 

@@ -50,12 +50,12 @@ public final class io/github/airflux/serialization/core/lookup/LookupResult$Defi
 }
 
 public abstract class io/github/airflux/serialization/core/lookup/LookupResult$Undefined : io/github/airflux/serialization/core/lookup/LookupResult {
-	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
-	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 }
 
 public final class io/github/airflux/serialization/core/lookup/LookupResult$Undefined$InvalidType : io/github/airflux/serialization/core/lookup/LookupResult$Undefined {
 	public fun <init> (Ljava/lang/Iterable;Ljava/lang/String;Lio/github/airflux/serialization/core/location/Location;)V
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public final fun component1 ()Ljava/lang/Iterable;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Lio/github/airflux/serialization/core/location/Location;
@@ -71,6 +71,8 @@ public final class io/github/airflux/serialization/core/lookup/LookupResult$Unde
 
 public final class io/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing : io/github/airflux/serialization/core/lookup/LookupResult$Undefined {
 	public fun <init> (Lio/github/airflux/serialization/core/location/Location;)V
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public fun apply (Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public final fun component1 ()Lio/github/airflux/serialization/core/location/Location;
 	public final fun copy (Lio/github/airflux/serialization/core/location/Location;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing;
 	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing;Lio/github/airflux/serialization/core/location/Location;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/LookupResult$Undefined$PathMissing;
