@@ -30,7 +30,7 @@ internal class PropertyPathTest : FreeSpec() {
                 val path = PropertyPath / "user"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PropertyPath.Element.Key("user"))
+                    path shouldContainExactly listOf(PropertyPath.Element.Key("user"))
                 }
             }
 
@@ -38,7 +38,7 @@ internal class PropertyPathTest : FreeSpec() {
                 val path = PropertyPath / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(PropertyPath.Element.Idx(0))
+                    path shouldContainExactly listOf(PropertyPath.Element.Idx(0))
                 }
             }
 
@@ -46,7 +46,7 @@ internal class PropertyPathTest : FreeSpec() {
                 val path = PropertyPath / "user" / "name"
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(
+                    path shouldContainExactly listOf(
                         PropertyPath.Element.Key("user"),
                         PropertyPath.Element.Key("name")
                     )
@@ -57,12 +57,18 @@ internal class PropertyPathTest : FreeSpec() {
                 val path = PropertyPath / "phones" / 0
 
                 "should have elements in the order they were passed" {
-                    path.elements shouldContainExactly listOf(
+                    path shouldContainExactly listOf(
                         PropertyPath.Element.Key("phones"),
                         PropertyPath.Element.Idx(0)
                     )
                 }
             }
         }
+    }
+
+    internal infix fun PropertyPath.shouldContainExactly(expected: Collection<PropertyPath.Element>) {
+        fun PropertyPath.toList(): List<PropertyPath.Element> =
+            foldLeft(mutableListOf()) { acc, elem -> acc.apply { add(elem) } }
+        this.toList() shouldContainExactly expected
     }
 }

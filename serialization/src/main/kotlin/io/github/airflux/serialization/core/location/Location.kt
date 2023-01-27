@@ -25,9 +25,8 @@ public sealed class Location {
     public fun append(key: String): Location = append(PropertyPath.Element.Key(key))
     public fun append(idx: Int): Location = append(PropertyPath.Element.Idx(idx))
     public fun append(element: PropertyPath.Element): Location = Element(this, element)
-    public fun append(path: PropertyPath): Location = append(path.elements)
-    public fun append(elements: Iterable<PropertyPath.Element>): Location =
-        elements.fold(this) { location, element -> location.append(element) }
+    public fun append(path: PropertyPath): Location =
+        path.foldLeft(this) { location, element -> location.append(element) }
 
     private object Empty : Location() {
         override val isEmpty: Boolean = true

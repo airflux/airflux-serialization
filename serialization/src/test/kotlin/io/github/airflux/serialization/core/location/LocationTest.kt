@@ -64,12 +64,8 @@ internal class LocationTest : FreeSpec() {
                     )
                 }
 
-                "the append() method with the parameter of path element collection type" {
-                    val path = listOf(
-                        PropertyPath.Element.Key("users"),
-                        PropertyPath.Element.Idx(0),
-                        PropertyPath.Element.Key("phone")
-                    )
+                "the append() method with the parameter of the path" {
+                    val path = PropertyPath("users").append(0).append("phone")
                     val newLocation = location.append(path)
 
                     val result: List<PropertyPath.Element> =
@@ -143,12 +139,8 @@ internal class LocationTest : FreeSpec() {
                     )
                 }
 
-                "the append() method with the parameter of path element collection type" {
-                    val path = listOf(
-                        PropertyPath.Element.Key("mobile"),
-                        PropertyPath.Element.Idx(0),
-                        PropertyPath.Element.Key("title")
-                    )
+                "the append() method with the parameter of the path" {
+                    val path = PropertyPath("mobile").append(0).append("title")
                     val newLocation = location.append(path)
 
                     val result: List<PropertyPath.Element> =

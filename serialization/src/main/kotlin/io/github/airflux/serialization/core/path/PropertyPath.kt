@@ -16,16 +16,46 @@
 
 package io.github.airflux.serialization.core.path
 
-@JvmInline
-public value class PropertyPath private constructor(public val elements: List<Element>) {
+public class PropertyPath private constructor(public val head: Element, public val tail: PropertyPath?) {
+
+    public constructor(key: String) : this(Element.Key(key))
+    public constructor(idx: Int) : this(Element.Idx(idx))
+    public constructor(element: Element) : this(element, null)
 
     public fun append(key: String): PropertyPath = append(Element.Key(key))
     public fun append(idx: Int): PropertyPath = append(Element.Idx(idx))
-    public fun append(element: Element): PropertyPath = PropertyPath(elements + element)
+    public fun append(element: Element): PropertyPath =
+        foldRight(PropertyPath(element)) { acc, item -> PropertyPath(item, acc) }
+
+    public fun <R> foldLeft(initial: R, operation: (R, Element) -> R): R {
+        tailrec fun <R> foldLeft(initial: R, path: PropertyPath?, operation: (R, Element) -> R): R =
+            if (path == null) initial else foldLeft(operation(initial, path.head), path.tail, operation)
+
+        return foldLeft(initial, this, operation)
+    }
+
+    public fun <R> foldRight(initial: R, operation: (R, Element) -> R): R {
+        fun <R> foldRight(initial: R, path: PropertyPath?, operation: (R, Element) -> R): R =
+            if (path == null) initial else operation(foldRight(initial, path.tail, operation), path.head)
+
+        return foldRight(initial, this, operation)
+    }
 
     override fun toString(): String = buildString {
         append("#")
-        elements.forEach { element -> append(element) }
+        this@PropertyPath.foldLeft(this) { acc, value -> acc.append(value) }
+    }
+
+    override fun hashCode(): Int = foldLeft(7) { acc, item -> acc * 31 + item.hashCode() }
+
+    override fun equals(other: Any?): Boolean {
+        tailrec fun equals(self: PropertyPath?, other: PropertyPath?): Boolean =
+            when {
+                self != null && other != null -> if (self.head == other.head) equals(self.tail, other.tail) else false
+                self == null && other == null -> true
+                else -> false
+            }
+        return this === other || (other is PropertyPath && equals(this, other))
     }
 
     public sealed class Element {
@@ -39,9 +69,5 @@ public value class PropertyPath private constructor(public val elements: List<El
         }
     }
 
-    public companion object {
-        public operator fun invoke(key: String): PropertyPath = invoke(Element.Key(key))
-        public operator fun invoke(idx: Int): PropertyPath = invoke(Element.Idx(idx))
-        public operator fun invoke(element: Element): PropertyPath = PropertyPath(listOf(element))
-    }
+    public companion object
 }

@@ -109,22 +109,16 @@ public inline fun <EB, O, CTX, T> ValueNode.readAsArray(
         )
 
 internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
-    tailrec fun ValueNode.getOrNull(path: PropertyPath, idxElement: Int): ValueNode? {
-        if (idxElement == path.elements.size) return this
-        return when (val element = path.elements[idxElement]) {
-            is PropertyPath.Element.Key -> if (this is StructNode)
-                this[element]?.getOrNull(path, idxElement + 1)
-            else
-                null
+    tailrec fun ValueNode.getOrNull(path: PropertyPath?): ValueNode? =
+        if (path != null)
+            when (val element = path.head) {
+                is PropertyPath.Element.Key -> if (this is StructNode) this[element]?.getOrNull(path.tail) else null
+                is PropertyPath.Element.Idx -> if (this is ArrayNode<*>) this[element]?.getOrNull(path.tail) else null
+            }
+        else
+            this
 
-            is PropertyPath.Element.Idx -> if (this is ArrayNode<*>)
-                this[element]?.getOrNull(path, idxElement + 1)
-            else
-                null
-        }
-    }
-
-    return this.getOrNull(path, 0)
+    return this.getOrNull(path)
 }
 
 internal operator fun StructNode.contains(path: PropertyPath): Boolean = this.getOrNull(path) != null

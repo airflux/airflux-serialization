@@ -35,8 +35,8 @@ internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructVa
 
     internal fun StructProperties<EB, O, CTX>.names(): Set<String> {
         fun StructProperty<EB, O, CTX>.names(): List<String> = path.items
-            .mapNotNull { path ->
-                when (val element = path.elements.first()) {
+            .mapNotNull { item ->
+                when (val element = item.head) {
                     is PropertyPath.Element.Key -> element.get
                     is PropertyPath.Element.Idx -> null
                 }

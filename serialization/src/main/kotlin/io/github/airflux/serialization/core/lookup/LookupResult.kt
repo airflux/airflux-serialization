@@ -78,42 +78,34 @@ public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult 
         )
 
 public fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResult {
-    fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResult {
-        tailrec fun lookup(path: PropertyPath, idxElement: Int, location: Location, source: ValueNode): LookupResult {
-            return if (idxElement == path.elements.size)
-                LookupResult.Defined(location = location, value = source)
-            else
-                when (val pathElement = path.elements[idxElement]) {
-                    is Element.Key -> if (source is StructNode) {
-                        val value = source[pathElement]
-                            ?: return LookupResult.Undefined.PathMissing(
-                                location = location.append(path.elements.subList(idxElement, path.elements.size))
-                            )
-                        lookup(path, idxElement + 1, location.append(pathElement), value)
-                    } else
-                        LookupResult.Undefined.InvalidType(
-                            expected = listOf(StructNode.nameOfType),
-                            actual = source.nameOfType,
-                            breakpoint = location
-                        )
+    tailrec fun lookup(location: Location, path: PropertyPath?, source: ValueNode): LookupResult {
+        return if (path != null) {
+            when (val element = path.head) {
+                is Element.Key -> if (source is StructNode) {
+                    val value = source[element]
+                        ?: return LookupResult.Undefined.PathMissing(location = location.append(path))
+                    lookup(location.append(element), path.tail, value)
+                } else
+                    LookupResult.Undefined.InvalidType(
+                        expected = listOf(StructNode.nameOfType),
+                        actual = source.nameOfType,
+                        breakpoint = location
+                    )
 
-                    is Element.Idx -> if (source is ArrayNode<*>) {
-                        val value = source[pathElement]
-                            ?: return LookupResult.Undefined.PathMissing(
-                                location = location.append(path.elements.subList(idxElement, path.elements.size))
-                            )
-                        lookup(path, idxElement + 1, location.append(pathElement), value)
-                    } else
-                        LookupResult.Undefined.InvalidType(
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = source.nameOfType,
-                            breakpoint = location
-                        )
-                }
-        }
-
-        return lookup(path, 0, location, this)
+                is Element.Idx -> if (source is ArrayNode<*>) {
+                    val value = source[element]
+                        ?: return LookupResult.Undefined.PathMissing(location = location.append(path))
+                    lookup(location.append(element), path.tail, value)
+                } else
+                    LookupResult.Undefined.InvalidType(
+                        expected = listOf(ArrayNode.nameOfType),
+                        actual = source.nameOfType,
+                        breakpoint = location
+                    )
+            }
+        } else
+            LookupResult.Defined(location = location, value = source)
     }
 
-    return this.lookup(location, path)
+    return lookup(location, path, this)
 }

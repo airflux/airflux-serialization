@@ -14,9 +14,8 @@ public abstract class io/github/airflux/serialization/core/location/Location {
 	public static final field Companion Lio/github/airflux/serialization/core/location/Location$Companion;
 	public final fun append (I)Lio/github/airflux/serialization/core/location/Location;
 	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/location/Location;
-	public final fun append (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/location/Location;
+	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/location/Location;
 	public final fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/location/Location;
-	public final fun append-X_QWoOM (Ljava/util/List;)Lio/github/airflux/serialization/core/location/Location;
 	public abstract fun isEmpty ()Z
 }
 
@@ -84,30 +83,28 @@ public final class io/github/airflux/serialization/core/lookup/LookupResult$Unde
 public final class io/github/airflux/serialization/core/lookup/LookupResultKt {
 	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/LookupResult;
-	public static final fun lookup-2Fp5Jps (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;)Lio/github/airflux/serialization/core/lookup/LookupResult;
+	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 }
 
 public final class io/github/airflux/serialization/core/path/PropertyPath {
 	public static final field Companion Lio/github/airflux/serialization/core/path/PropertyPath$Companion;
-	public static final fun append-xU09Edo (Ljava/util/List;I)Ljava/util/List;
-	public static final fun append-xU09Edo (Ljava/util/List;Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Ljava/util/List;
-	public static final fun append-xU09Edo (Ljava/util/List;Ljava/lang/String;)Ljava/util/List;
-	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public fun <init> (I)V
+	public fun <init> (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)V
+	public synthetic fun <init> (Lio/github/airflux/serialization/core/path/PropertyPath$Element;Lio/github/airflux/serialization/core/path/PropertyPath;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;)V
+	public final fun append (I)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public final fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
 	public fun equals (Ljava/lang/Object;)Z
-	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
-	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
-	public final fun getElements ()Ljava/util/List;
+	public final fun foldLeft (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public final fun foldRight (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public final fun getHead ()Lio/github/airflux/serialization/core/path/PropertyPath$Element;
+	public final fun getTail ()Lio/github/airflux/serialization/core/path/PropertyPath;
 	public fun hashCode ()I
-	public static fun hashCode-impl (Ljava/util/List;)I
 	public fun toString ()Ljava/lang/String;
-	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
-	public final synthetic fun unbox-impl ()Ljava/util/List;
 }
 
 public final class io/github/airflux/serialization/core/path/PropertyPath$Companion {
-	public final fun invoke-xU09Edo (I)Ljava/util/List;
-	public final fun invoke-xU09Edo (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Ljava/util/List;
-	public final fun invoke-xU09Edo (Ljava/lang/String;)Ljava/util/List;
 }
 
 public abstract class io/github/airflux/serialization/core/path/PropertyPath$Element {
@@ -137,7 +134,7 @@ public final class io/github/airflux/serialization/core/path/PropertyPath$Elemen
 
 public final class io/github/airflux/serialization/core/path/PropertyPaths {
 	public static final field Companion Lio/github/airflux/serialization/core/path/PropertyPaths$Companion;
-	public static final fun append-4VOhdFQ (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final fun append-2UZ9pH0 (Ljava/util/List;Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
 	public static final fun append-OiI3FfU (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
 	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/serialization/core/path/PropertyPaths;
 	public fun equals (Ljava/lang/Object;)Z
@@ -153,8 +150,8 @@ public final class io/github/airflux/serialization/core/path/PropertyPaths {
 }
 
 public final class io/github/airflux/serialization/core/path/PropertyPaths$Companion {
-	public final fun invoke-4VOhdFQ (Ljava/util/List;)Ljava/util/List;
-	public final fun invoke-IPqbhm0 (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public final fun invoke-2UZ9pH0 (Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
+	public final fun invoke-XdUYqX8 (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/Reader {
@@ -525,16 +522,16 @@ public final class io/github/airflux/serialization/dsl/lookup/LookupKt {
 }
 
 public final class io/github/airflux/serialization/dsl/path/PropertyPathKt {
-	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath$Companion;I)Ljava/util/List;
-	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath$Companion;Ljava/lang/String;)Ljava/util/List;
-	public static final fun div-oKz-c5o (Ljava/util/List;I)Ljava/util/List;
-	public static final fun div-oKz-c5o (Ljava/util/List;Ljava/lang/String;)Ljava/util/List;
+	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath$Companion;I)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath$Companion;Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath;I)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public static final fun div (Lio/github/airflux/serialization/core/path/PropertyPath;Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
 }
 
 public final class io/github/airflux/serialization/dsl/path/PropertyPathsKt {
 	public static final fun or (Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
 	public static final fun or-NLAiOLs (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
-	public static final fun or-pOToWBc (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final fun or-gewroXM (Ljava/util/List;Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/array/ArrayReader : io/github/airflux/serialization/core/reader/Reader {
@@ -650,28 +647,28 @@ public final class io/github/airflux/serialization/dsl/reader/struct/property/St
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/DefaultablePropertySpecKt {
+	public static final fun defaultable (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
 	public static final fun defaultable (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
-	public static final fun defaultable-S_Qvnos (Ljava/util/List;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/OptionalPropertySpecKt {
+	public static final fun optional (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$Nullable;
 	public static final fun optional (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$Nullable;
-	public static final fun optional-oKz-c5o (Ljava/util/List;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$Nullable;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/OptionalWithDefaultPropertySpecKt {
+	public static final fun optional (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
 	public static final fun optional (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
-	public static final fun optional-S_Qvnos (Ljava/util/List;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/RequiredIfPropertySpecKt {
+	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$Nullable;
 	public static final fun required (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$Nullable;
-	public static final fun required-S_Qvnos (Ljava/util/List;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$Nullable;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/RequiredPropertySpecKt {
+	public static final fun required (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
 	public static final fun required (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
-	public static final fun required-oKz-c5o (Ljava/util/List;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec$NonNullable;
 }
 
 public abstract class io/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec {
