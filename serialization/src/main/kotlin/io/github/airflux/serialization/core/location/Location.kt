@@ -28,6 +28,25 @@ public sealed class Location {
     public fun append(path: PropertyPath): Location =
         path.foldLeft(this) { location, element -> location.append(element) }
 
+    public fun <R> foldLeft(initial: R, operation: (R, PropertyPath.Element) -> R): R {
+        tailrec fun <R> foldLeft(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
+            when (location) {
+                is Empty -> initial
+                is Element -> foldLeft(operation(initial, location.value), location.begin, operation)
+            }
+
+        return foldLeft(initial, this, operation)
+    }
+
+    public fun <R> foldRight(initial: R, operation: (R, PropertyPath.Element) -> R): R {
+        fun <R> foldRight(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
+            when (location) {
+                is Empty -> initial
+                is Element -> operation(foldRight(initial, location.begin, operation), location.value)
+            }
+        return foldRight(initial, this, operation)
+    }
+
     private object Empty : Location() {
         override val isEmpty: Boolean = true
         override fun toString(): String = "#"
@@ -39,38 +58,25 @@ public sealed class Location {
 
         override fun toString(): String = buildString {
             append("#")
-            foldLeft(this, this@Element) { acc, value -> acc.append(value) }
+            this@Element.foldRight(this) { acc, value -> acc.append(value) }
         }
 
-        override fun hashCode(): Int = foldRight(7, this) { v, p -> v * 31 + p.hashCode() }
+        override fun hashCode(): Int = foldLeft(7) { v, p -> v * 31 + p.hashCode() }
 
         override fun equals(other: Any?): Boolean {
-            tailrec fun listEq(self: Location, other: Location): Boolean = when {
+            tailrec fun equals(self: Location, other: Location): Boolean = when {
                 self is Element && other is Element ->
-                    if (self.value == other.value) listEq(self.begin, other.begin) else false
+                    if (self.value == other.value) equals(self.begin, other.begin) else false
 
                 self is Empty && other is Empty -> true
                 else -> false
             }
 
-            return this === other || (other is Location && listEq(this, other))
+            return this === other || (other is Location && equals(this, other))
         }
     }
 
     public companion object {
-
         public val empty: Location = Empty
-
-        public tailrec fun <R> foldRight(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
-            when (location) {
-                is Empty -> initial
-                is Element -> foldRight(operation(initial, location.value), location.begin, operation)
-            }
-
-        public fun <R> foldLeft(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
-            when (location) {
-                is Empty -> initial
-                is Element -> operation(foldLeft(initial, location.begin, operation), location.value)
-            }
     }
 }

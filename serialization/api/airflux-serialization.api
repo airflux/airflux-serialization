@@ -16,12 +16,12 @@ public abstract class io/github/airflux/serialization/core/location/Location {
 	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/location/Location;
 	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/location/Location;
 	public final fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/location/Location;
+	public final fun foldLeft (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public final fun foldRight (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public abstract fun isEmpty ()Z
 }
 
 public final class io/github/airflux/serialization/core/location/Location$Companion {
-	public final fun foldLeft (Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
-	public final fun foldRight (Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public final fun getEmpty ()Lio/github/airflux/serialization/core/location/Location;
 }
 

@@ -20,59 +20,6 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
 
-/*
-@Suppress("ReplaceCallWithBinaryOperator", "EqualsNullCall")
-internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) {
-    val x = this
-    assertSoftly {
-        withClue("reflexive") {
-            withClue("equals") {
-                x.equals(x) shouldBe true
-            }
-            withClue("hashCode") {
-                x.hashCode() shouldBe x.hashCode()
-            }
-        }
-
-        withClue("symmetric") {
-            withClue("equals") {
-                x.equals(y) shouldBe true
-                y.equals(x) shouldBe true
-            }
-            withClue("hashCode") {
-                x.hashCode() shouldBe y.hashCode()
-                y.hashCode() shouldBe x.hashCode()
-            }
-        }
-
-        withClue("transitive") {
-            withClue("equals") {
-                x.equals(y) shouldBe true
-                y.equals(z) shouldBe true
-                x.equals(z) shouldBe true
-            }
-            withClue("hashCode") {
-                x.hashCode() shouldBe y.hashCode()
-                y.hashCode() shouldBe z.hashCode()
-                x.hashCode() shouldBe z.hashCode()
-            }
-        }
-
-        withClue("never equal to") {
-            withClue("null") {
-                x.equals(null) shouldBe false
-            }
-            withClue("Any") {
-                x.equals(Any()) shouldBe false
-            }
-            withClue("other") {
-                x.equals(other) shouldBe false
-            }
-        }
-    }
-}
-*/
-
 internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) =
     this.shouldBeEqualsContract(y, z, listOf(other))
 
@@ -81,7 +28,7 @@ internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, others: Collection<T
     val x = this
     assertSoftly {
         withClue("reflexive") {
-            withClue("equals") {
+            withClue("$x equal to $x") {
                 x.equals(x) shouldBe true
             }
             withClue("hashCode") {
@@ -90,8 +37,10 @@ internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, others: Collection<T
         }
 
         withClue("symmetric") {
-            withClue("equals") {
+            withClue("$x equal to $y") {
                 x.equals(y) shouldBe true
+            }
+            withClue("$y equal to $x") {
                 y.equals(x) shouldBe true
             }
             withClue("hashCode") {
@@ -101,9 +50,13 @@ internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, others: Collection<T
         }
 
         withClue("transitive") {
-            withClue("equals") {
+            withClue("$x equal to $y") {
                 x.equals(y) shouldBe true
+            }
+            withClue("$y equal to $z") {
                 y.equals(z) shouldBe true
+            }
+            withClue("$x equal to $z") {
                 x.equals(z) shouldBe true
             }
             withClue("hashCode") {
@@ -113,17 +66,20 @@ internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, others: Collection<T
             }
         }
 
-        withClue("never equal to") {
-            withClue("null") {
-                x.equals(null) shouldBe false
+        withClue("$x never equal to null") {
+            x.equals(null) shouldBe false
+        }
+
+        withClue("$x never equal to Any") {
+            x.equals(Any()) shouldBe false
+        }
+
+        others.forEach { other ->
+            withClue("$x never equal to $other") {
+                x.equals(other) shouldBe false
             }
-            withClue("Any") {
-                x.equals(Any()) shouldBe false
-            }
-            withClue("other") {
-                others.forEach { other ->
-                    x.equals(other) shouldBe false
-                }
+            withClue("$other never equal to $x") {
+                other.equals(x) shouldBe false
             }
         }
     }
