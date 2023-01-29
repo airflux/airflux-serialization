@@ -16,16 +16,15 @@
 
 package io.github.airflux.serialization.core.path
 
-public class PropertyPath private constructor(public val head: Element, public val tail: PropertyPath?) {
+public sealed class PropertyPath {
 
-    public constructor(key: String) : this(Element.Key(key))
-    public constructor(idx: Int) : this(Element.Idx(idx))
-    public constructor(element: Element) : this(element, null)
+    public abstract val head: Element
+    public abstract val tail: PropertyPath?
 
     public fun append(key: String): PropertyPath = append(Element.Key(key))
     public fun append(idx: Int): PropertyPath = append(Element.Idx(idx))
     public fun append(element: Element): PropertyPath =
-        foldRight(PropertyPath(element)) { acc, item -> PropertyPath(item, acc) }
+        foldRight(PropertyPath(element)) { acc, item -> Multiple(item, acc) }
 
     public fun <R> foldLeft(initial: R, operation: (R, Element) -> R): R {
         tailrec fun <R> foldLeft(initial: R, path: PropertyPath?, operation: (R, Element) -> R): R =
@@ -58,6 +57,13 @@ public class PropertyPath private constructor(public val head: Element, public v
         return this === other || (other is PropertyPath && equals(this, other))
     }
 
+    private class Single(override val head: Element) : PropertyPath() {
+        override val tail: PropertyPath?
+            get() = null
+    }
+
+    private class Multiple(override val head: Element, override val tail: PropertyPath?) : PropertyPath()
+
     public sealed class Element {
 
         public data class Key(val get: String) : Element() {
@@ -69,5 +75,9 @@ public class PropertyPath private constructor(public val head: Element, public v
         }
     }
 
-    public companion object
+    public companion object {
+        public operator fun invoke(key: String): PropertyPath = Single(Element.Key(key))
+        public operator fun invoke(idx: Int): PropertyPath = Single(Element.Idx(idx))
+        public operator fun invoke(element: Element): PropertyPath = Single(element)
+    }
 }
