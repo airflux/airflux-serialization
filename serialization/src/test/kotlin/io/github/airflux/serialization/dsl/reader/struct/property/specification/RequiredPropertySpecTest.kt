@@ -23,6 +23,7 @@ import io.github.airflux.serialization.common.shouldBeFailure
 import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -36,7 +37,7 @@ import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
 import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
 internal class RequiredPropertySpecTest : FreeSpec() {
 
@@ -62,7 +63,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
 
                 "then the paths parameter must contain only the passed name" {
-                    spec.path.items shouldContainExactly listOf(PropertyPath(ID_PROPERTY_NAME))
+                    spec.path shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
                 }
 
                 "when the reader has read a property named id" - {
@@ -113,7 +114,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val spec = required(path = path, reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
-                    spec.path.items shouldContainExactly listOf(path)
+                    spec.path shouldBe PropertyPaths(path)
                 }
 
                 "when the reader has read a property named id" - {
@@ -213,7 +214,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
-                    specWithAlternative.path.items shouldContainExactly listOf(PropertyPath(ID_PROPERTY_NAME))
+                    specWithAlternative.path shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
                 }
 
                 "when the main reader has successfully read" - {

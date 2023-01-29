@@ -24,34 +24,38 @@ import io.kotest.matchers.collections.shouldContainExactly
 internal class PropertyPathsTest : FreeSpec() {
 
     companion object {
-        private val pathUser = PropertyPath("user")
-        private val pathId = PropertyPath("id")
-        private val pathName = PropertyPath("name")
+        private const val USER = "user"
+        private const val ID = "id"
+        private const val NAME = "name"
+
+        private val USER_PATH = PropertyPath(USER)
+        private val ID_PATH = PropertyPath(ID)
+        private val NAME_PATH = PropertyPath(NAME)
     }
 
     init {
         "The PropertyPaths type" - {
 
             "String#or(String)" - {
-                val paths = "user" or "id"
-                paths.items shouldContainExactly listOf(pathUser, pathId)
+                val paths = USER or ID
+                paths.items shouldContainExactly listOf(USER_PATH, ID_PATH)
             }
 
-            val paths = PropertyPaths(pathUser)
+            val paths = PropertyPaths(USER_PATH)
 
             "PropertyPaths#or(PropertyPath) function" - {
-                val updatedPath = paths or pathId
+                val updatedPath = paths or ID_PATH
 
                 "should have elements in the order they were passed element" {
-                    updatedPath.items shouldContainExactly listOf(pathUser, pathId)
+                    updatedPath.items shouldContainExactly listOf(USER_PATH, ID_PATH)
                 }
             }
 
             "PropertyPaths#or(PropertyPaths) function" - {
-                val updatedPath = paths or PropertyPaths(pathId, pathName)
+                val updatedPath = paths or PropertyPaths(ID_PATH, NAME_PATH)
 
                 "should have elements in the order they were passed element" {
-                    updatedPath.items shouldContainExactly listOf(pathUser, pathId, pathName)
+                    updatedPath.items shouldContainExactly listOf(USER_PATH, ID_PATH, NAME_PATH)
                 }
             }
         }

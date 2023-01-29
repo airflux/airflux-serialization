@@ -104,7 +104,7 @@ internal class PropertyPathsTest : FreeSpec() {
                 PropertyPaths(FIRST_PATH).shouldBeEqualsContract(
                     y = PropertyPaths(FIRST_PATH),
                     z = PropertyPaths(FIRST_PATH),
-                    other = listOf(
+                    others = listOf(
                         PropertyPaths(SECOND_PATH),
                         PropertyPaths(FIRST_PATH).append(SECOND_PATH)
                     )
