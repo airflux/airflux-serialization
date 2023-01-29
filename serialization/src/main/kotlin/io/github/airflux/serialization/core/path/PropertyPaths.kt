@@ -19,27 +19,15 @@ package io.github.airflux.serialization.core.path
 @JvmInline
 public value class PropertyPaths private constructor(public val items: List<PropertyPath>) {
 
+    public constructor(path: PropertyPath) : this(listOf(path))
+    public constructor(path: PropertyPath, other: PropertyPath) : this(listOf(path, other))
+
     public fun append(path: PropertyPath): PropertyPaths = if (path in items) this else PropertyPaths(items + path)
 
     public fun append(paths: PropertyPaths): PropertyPaths {
-        val newPaths = paths.items.filter { path -> path !in items }
-        return if (newPaths.isEmpty()) this else PropertyPaths(items + newPaths)
-    }
-
-    public inline fun <R> fold(initial: (PropertyPath) -> R, operation: (acc: R, PropertyPath) -> R): R {
-        val iterator = items.iterator()
-        var accumulator = initial(iterator.next())
-        while (iterator.hasNext()) {
-            accumulator = operation(accumulator, iterator.next())
-        }
-        return accumulator
+        val appendablePaths = paths.items.filter { path -> path !in items }
+        return if (appendablePaths.isEmpty()) this else PropertyPaths(items + appendablePaths)
     }
 
     override fun toString(): String = items.toString()
-
-    public companion object {
-        public operator fun invoke(path: PropertyPath): PropertyPaths = PropertyPaths(listOf(path))
-        public operator fun invoke(path: PropertyPath, other: PropertyPath): PropertyPaths =
-            PropertyPaths(listOf(path, other))
-    }
 }

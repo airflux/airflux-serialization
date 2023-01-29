@@ -133,25 +133,20 @@ public final class io/github/airflux/serialization/core/path/PropertyPath$Elemen
 }
 
 public final class io/github/airflux/serialization/core/path/PropertyPaths {
-	public static final field Companion Lio/github/airflux/serialization/core/path/PropertyPaths$Companion;
 	public static final fun append-2UZ9pH0 (Ljava/util/List;Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
 	public static final fun append-OiI3FfU (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
 	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/serialization/core/path/PropertyPaths;
+	public static fun constructor-impl (Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
+	public static fun constructor-impl (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
 	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
-	public static final fun fold-impl (Ljava/util/List;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public final fun getItems ()Ljava/util/List;
 	public fun hashCode ()I
 	public static fun hashCode-impl (Ljava/util/List;)I
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/util/List;
-}
-
-public final class io/github/airflux/serialization/core/path/PropertyPaths$Companion {
-	public final fun invoke-2UZ9pH0 (Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
-	public final fun invoke-XdUYqX8 (Lio/github/airflux/serialization/core/path/PropertyPath;Lio/github/airflux/serialization/core/path/PropertyPath;)Ljava/util/List;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/Reader {

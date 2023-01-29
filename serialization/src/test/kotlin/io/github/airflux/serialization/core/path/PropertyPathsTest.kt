@@ -100,18 +100,14 @@ internal class PropertyPathsTest : FreeSpec() {
                 }
             }
 
-            "the fold function should return a folding value" {
-                val paths = PropertyPaths(FIRST_PATH).append(SECOND_PATH)
-                val result = paths.fold({ path -> path.toString() }) { acc, path -> "$acc, $path" }
-
-                result shouldBe "#/$FIRST_PROPERTY_NAME, #/$SECOND_PROPERTY_NAME"
-            }
-
             "should comply with equals() and hashCode() contract" {
                 PropertyPaths(FIRST_PATH).shouldBeEqualsContract(
                     y = PropertyPaths(FIRST_PATH),
                     z = PropertyPaths(FIRST_PATH),
-                    other = PropertyPaths(SECOND_PATH)
+                    other = listOf(
+                        PropertyPaths(SECOND_PATH),
+                        PropertyPaths(FIRST_PATH).append(SECOND_PATH)
+                    )
                 )
             }
         }
