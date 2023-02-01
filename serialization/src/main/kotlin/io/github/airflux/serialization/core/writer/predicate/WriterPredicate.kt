@@ -29,7 +29,7 @@ public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.or(
     val self = this
     return WriterPredicate { env, context, location, value ->
         val result = self.test(env, context, location, value)
-        if (result) result else alt.test(env, context, location, value)
+        if (result) true else alt.test(env, context, location, value)
     }
 }
 
@@ -39,6 +39,6 @@ public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.and(
     val self = this
     return WriterPredicate { env, context, location, value ->
         val result = self.test(env, context, location, value)
-        if (result) alt.test(env, context, location, value) else result
+        if (result) alt.test(env, context, location, value) else false
     }
 }
