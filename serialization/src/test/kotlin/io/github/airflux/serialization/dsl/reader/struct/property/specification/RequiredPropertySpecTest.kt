@@ -63,7 +63,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
 
                 "then the paths parameter must contain only the passed name" {
-                    spec.path shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
+                    spec.paths shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
                 }
 
                 "when the reader has read a property named id" - {
@@ -114,7 +114,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val spec = required(path = path, reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
-                    spec.path shouldBe PropertyPaths(path)
+                    spec.paths shouldBe PropertyPaths(path)
                 }
 
                 "when the reader has read a property named id" - {
@@ -214,7 +214,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
-                    specWithAlternative.path shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
+                    specWithAlternative.paths shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
                 }
 
                 "when the main reader has successfully read" - {

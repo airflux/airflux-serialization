@@ -45,7 +45,7 @@ internal class StructPropertyTest : FreeSpec() {
                 val property = StructProperty.NonNullable(spec)
 
                 "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
+                    property.path shouldBe spec.paths
                 }
 
                 "then the reader should equal the reader from the spec" {
@@ -58,7 +58,7 @@ internal class StructPropertyTest : FreeSpec() {
                 val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
+                    property.path shouldBe spec.paths
                 }
 
                 "then the reader should equal the reader from the spec" {
@@ -71,7 +71,7 @@ internal class StructPropertyTest : FreeSpec() {
                 val property = StructProperty.NonNullable(spec)
 
                 "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
+                    property.path shouldBe spec.paths
                 }
 
                 "then the reader should equal the reader from the spec" {
@@ -84,7 +84,7 @@ internal class StructPropertyTest : FreeSpec() {
                 val property = StructProperty.Nullable(spec)
 
                 "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
+                    property.path shouldBe spec.paths
                 }
 
                 "then the reader should equal the reader from the spec" {
@@ -97,7 +97,7 @@ internal class StructPropertyTest : FreeSpec() {
                 val property = StructProperty.NonNullable(spec)
 
                 "then the path should equal the path from the spec" {
-                    property.path shouldBe spec.path
+                    property.path shouldBe spec.paths
                 }
 
                 "then the reader should equal the reader from the spec" {

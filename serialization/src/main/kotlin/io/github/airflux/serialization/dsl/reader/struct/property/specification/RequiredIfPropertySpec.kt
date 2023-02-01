@@ -44,7 +44,7 @@ public fun <EB, O, CTX, T : Any> required(
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec.Nullable(
-        path = PropertyPaths(path),
+        paths = PropertyPaths(path),
         reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
             if (predicate(env, context, location.append(path)))

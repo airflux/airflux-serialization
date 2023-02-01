@@ -36,7 +36,7 @@ public fun <EB, O, CTX, T : Any> optional(
 ): StructPropertySpec.Nullable<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
     StructPropertySpec.Nullable(
-        path = PropertyPaths(path),
+        paths = PropertyPaths(path),
         reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
             readOptional(env, context, lookup, reader)
