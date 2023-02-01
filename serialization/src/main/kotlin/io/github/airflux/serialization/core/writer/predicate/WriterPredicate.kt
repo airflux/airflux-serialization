@@ -24,21 +24,21 @@ public fun interface WriterPredicate<O, CTX, T> {
 }
 
 public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.or(
-    other: WriterPredicate<O, CTX, T>
+    alt: WriterPredicate<O, CTX, T>
 ): WriterPredicate<O, CTX, T> {
     val self = this
     return WriterPredicate { env, context, location, value ->
         val result = self.test(env, context, location, value)
-        if (result) result else other.test(env, context, location, value)
+        if (result) result else alt.test(env, context, location, value)
     }
 }
 
 public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.and(
-    other: WriterPredicate<O, CTX, T>
+    alt: WriterPredicate<O, CTX, T>
 ): WriterPredicate<O, CTX, T> {
     val self = this
     return WriterPredicate { env, context, location, value ->
         val result = self.test(env, context, location, value)
-        if (result) other.test(env, context, location, value) else result
+        if (result) alt.test(env, context, location, value) else result
     }
 }

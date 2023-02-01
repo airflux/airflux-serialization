@@ -24,19 +24,19 @@ public fun interface ReaderPredicate<EB, O, CTX, T> {
 }
 
 public infix fun <EB, O, CTX, T> ReaderPredicate<EB, O, CTX, T>.or(
-    other: ReaderPredicate<EB, O, CTX, T>
+    alt: ReaderPredicate<EB, O, CTX, T>
 ): ReaderPredicate<EB, O, CTX, T> {
     val self = this
     return ReaderPredicate { env, context, location, value ->
-        self.test(env, context, location, value) || other.test(env, context, location, value)
+        self.test(env, context, location, value) || alt.test(env, context, location, value)
     }
 }
 
 public infix fun <EB, O, CTX, T> ReaderPredicate<EB, O, CTX, T>.and(
-    other: ReaderPredicate<EB, O, CTX, T>
+    alt: ReaderPredicate<EB, O, CTX, T>
 ): ReaderPredicate<EB, O, CTX, T> {
     val self = this
     return ReaderPredicate { env, context, location, value ->
-        self.test(env, context, location, value) && other.test(env, context, location, value)
+        self.test(env, context, location, value) && alt.test(env, context, location, value)
     }
 }

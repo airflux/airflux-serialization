@@ -20,7 +20,7 @@ package io.github.airflux.serialization.core.path
 public value class PropertyPaths private constructor(public val items: List<PropertyPath>) {
 
     public constructor(path: PropertyPath) : this(listOf(path))
-    public constructor(path: PropertyPath, other: PropertyPath) : this(listOf(path, other))
+    public constructor(path: PropertyPath, alt: PropertyPath) : this(listOf(path, alt))
 
     public fun append(path: PropertyPath): PropertyPaths = if (path in items) this else PropertyPaths(items + path)
 

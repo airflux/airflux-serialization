@@ -32,13 +32,13 @@ public fun interface Validator<EB, O, CTX, in T> {
  * | F    | F`     | F + F` |
  */
 public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(
-    other: Validator<EB, O, CTX, T>
+    alt: Validator<EB, O, CTX, T>
 ): Validator<EB, O, CTX, T> {
     val self = this
     return Validator { env, context, location, value ->
         self.validate(env, context, location, value)
             ?.let { error ->
-                other.validate(env, context, location, value)
+                alt.validate(env, context, location, value)
                     ?.let { error + it }
             }
     }
@@ -52,11 +52,11 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(
  * | F    | ignore | F      |
  */
 public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.and(
-    other: Validator<EB, O, CTX, T>
+    alt: Validator<EB, O, CTX, T>
 ): Validator<EB, O, CTX, T> {
     val self = this
     return Validator { env, context, location, value ->
         val result = self.validate(env, context, location, value)
-        result ?: other.validate(env, context, location, value)
+        result ?: alt.validate(env, context, location, value)
     }
 }

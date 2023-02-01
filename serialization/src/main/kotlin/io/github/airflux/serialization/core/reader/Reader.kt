@@ -63,14 +63,14 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
  * [Reader] logic then, if this [Reader] resulted in a [ReaderResult.Error], runs
  * the other [Reader] on the [ValueNode].
  *
- * @param other the [Reader] to run if this one gets a [ReaderResult.Error]
+ * @param alt the [Reader] to run if this one gets a [ReaderResult.Error]
  * @return A new [Reader] with the updated behavior.
  */
-public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(other: Reader<EB, O, CTX, T>): Reader<EB, O, CTX, T> =
+public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(alt: Reader<EB, O, CTX, T>): Reader<EB, O, CTX, T> =
     Reader { env, context, location, source ->
         read(env, context, location, source)
             .recovery { failure ->
-                other.read(env, context, location, source)
+                alt.read(env, context, location, source)
                     .recovery { alternative -> failure + alternative }
             }
     }
