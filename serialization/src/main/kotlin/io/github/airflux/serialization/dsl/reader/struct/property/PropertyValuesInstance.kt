@@ -34,7 +34,7 @@ internal class PropertyValuesInstance<EB, O, CTX> : PropertyValues<EB, O, CTX> {
             @Suppress("UNCHECKED_CAST")
             (value as Value.Some).get as T
         else
-            throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
+            throw NoSuchElementException("Property by paths '${property.paths}' is missing in the map.")
     }
 
     override operator fun <T : Any> get(property: StructProperty.Nullable<EB, O, CTX, T>): T? {
@@ -46,7 +46,7 @@ internal class PropertyValuesInstance<EB, O, CTX> : PropertyValues<EB, O, CTX> {
             else
                 null
         } else
-            throw NoSuchElementException("Property by path '${property.path}' is missing in the map.")
+            throw NoSuchElementException("Property by paths '${property.paths}' is missing in the map.")
     }
 
     operator fun set(property: StructProperty.NonNullable<EB, O, CTX, *>, value: Any) {

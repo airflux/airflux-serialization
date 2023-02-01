@@ -21,10 +21,10 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 
 public sealed class StructProperty<EB, O, CTX> {
-    public abstract val path: PropertyPaths
+    public abstract val paths: PropertyPaths
 
     public class NonNullable<EB, O, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
+        override val paths: PropertyPaths,
         public val reader: Reader<EB, O, CTX, T>
     ) : StructProperty<EB, O, CTX>() {
 
@@ -32,7 +32,7 @@ public sealed class StructProperty<EB, O, CTX> {
     }
 
     public class Nullable<EB, O, CTX, T : Any> private constructor(
-        override val path: PropertyPaths,
+        override val paths: PropertyPaths,
         public val reader: Reader<EB, O, CTX, T?>
     ) : StructProperty<EB, O, CTX>() {
 
