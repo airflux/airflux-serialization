@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
@@ -130,7 +130,7 @@ internal class ReaderResultTest : FreeSpec() {
             "constructor(JsLocation, JsError)" {
                 val failure = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                failure.causes shouldContainAll listOf(
+                failure.causes shouldContainExactly listOf(
                     ReaderResult.Failure.Cause(
                         location = LOCATION,
                         errors = ReaderResult.Errors(JsonErrors.PathMissing)
@@ -143,7 +143,12 @@ internal class ReaderResultTest : FreeSpec() {
 
                 val failure = ReaderResult.Failure(location = LOCATION, errors = errors)
 
-                failure.causes shouldContainAll listOf(ReaderResult.Failure.Cause(location = LOCATION, errors = errors))
+                failure.causes shouldContainExactly listOf(
+                    ReaderResult.Failure.Cause(
+                        location = LOCATION,
+                        errors = errors
+                    )
+                )
             }
 
             "calling plus function should return " {
@@ -161,7 +166,7 @@ internal class ReaderResultTest : FreeSpec() {
 
                 val failure = firstFailure + secondFailure
 
-                failure.causes shouldContainAll listOf(
+                failure.causes shouldContainExactly listOf(
                     ReaderResult.Failure.Cause(
                         location = LOCATION,
                         errors = ReaderResult.Errors(JsonErrors.PathMissing)
@@ -270,7 +275,7 @@ internal class ReaderResultTest : FreeSpec() {
                 )
 
                 cause.location shouldBe LOCATION
-                cause.errors.items shouldContainAll listOf(JsonErrors.PathMissing)
+                cause.errors.items shouldContainExactly listOf(JsonErrors.PathMissing)
             }
         }
 
@@ -290,7 +295,7 @@ internal class ReaderResultTest : FreeSpec() {
 
             val failure = failures.merge()
 
-            failure.causes shouldContainAll listOf(
+            failure.causes shouldContainExactly listOf(
                 ReaderResult.Failure.Cause(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
                 ReaderResult.Failure.Cause(
                     location = LOCATION,
