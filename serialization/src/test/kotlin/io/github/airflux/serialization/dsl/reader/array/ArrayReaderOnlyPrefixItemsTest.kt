@@ -18,6 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.common.DummyArrayValidatorBuilder.Companion.minItems
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.shouldBeFailure
 import io.github.airflux.serialization.common.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
@@ -33,7 +34,6 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
 import io.github.airflux.serialization.dsl.reader.array.item.specification.prefixItems
-import io.github.airflux.serialization.std.reader.stringReader
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
@@ -48,7 +48,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
 
-        private val StringReader = stringReader<EB, OPTS, Unit>()
+        private val StringReader = dummyStringReader<EB, OPTS, Unit>()
     }
 
     init {
