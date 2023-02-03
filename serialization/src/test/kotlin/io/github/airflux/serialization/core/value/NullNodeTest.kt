@@ -16,13 +16,17 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.common.ObjectContract
-import kotlin.test.Test
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsString
+import io.kotest.core.spec.style.FreeSpec
 
-internal class NullNodeTest {
+internal class NullNodeTest : FreeSpec() {
 
-    @Test
-    fun `Testing the toString function of the NullNode class`() {
-        ObjectContract.checkToString(NullNode, "null")
+    init {
+        "The NullNode type" - {
+
+            "then the toString() method should return the expected string" {
+                NullNode shouldBeEqualsString "null"
+            }
+        }
     }
 }
