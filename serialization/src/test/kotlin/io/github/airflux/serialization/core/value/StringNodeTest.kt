@@ -16,22 +16,39 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.common.ObjectContract
-import kotlin.test.Test
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsString
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
-internal class StringNodeTest {
+internal class StringNodeTest : FreeSpec() {
 
-    @Test
-    fun `Testing the toString function of the StringNode class`() {
-        ObjectContract.checkToString(StringNode("user"), "\"user\"")
+    companion object {
+        private const val TEXT = "text"
     }
 
-    @Test
-    fun `Testing the equals contract of the StringNode class`() {
-        ObjectContract.checkEqualsContract(
-            StringNode("user"),
-            StringNode("user"),
-            StringNode("title")
-        )
+    init {
+        "The StringNode type" - {
+
+            "when created" - {
+                val value = StringNode(TEXT)
+
+                "then the inner value should be true" {
+                    value.get shouldBe TEXT
+                }
+
+                "then the toString() method should return the expected string" {
+                    value shouldBeEqualsString "\"$TEXT\""
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    StringNode(TEXT).shouldBeEqualsContract(
+                        y = StringNode(TEXT),
+                        z = StringNode(TEXT),
+                        other = StringNode("")
+                    )
+                }
+            }
+        }
     }
 }
