@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsString
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.nulls.shouldBeNull
@@ -29,7 +30,6 @@ internal class NumericNodeTest : FreeSpec() {
         "The NumericNode#Integer type" - {
 
             "when the object creating from Byte type" - {
-
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Byte.MIN_VALUE, Byte.MAX_VALUE)
@@ -39,7 +39,6 @@ internal class NumericNodeTest : FreeSpec() {
             }
 
             "when the object creating from Short type" - {
-
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Short.MIN_VALUE, Short.MAX_VALUE)
@@ -49,7 +48,6 @@ internal class NumericNodeTest : FreeSpec() {
             }
 
             "when the object creating from Int type" - {
-
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Int.MIN_VALUE, Int.MAX_VALUE)
@@ -59,7 +57,6 @@ internal class NumericNodeTest : FreeSpec() {
             }
 
             "when the object creating from Long type" - {
-
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Long.MIN_VALUE, Long.MAX_VALUE)
@@ -69,7 +66,6 @@ internal class NumericNodeTest : FreeSpec() {
             }
 
             "when the object creating from a valid string representing a numeric value" - {
-
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Long.MIN_VALUE.toString(), "-1", "1", Long.MAX_VALUE.toString())
@@ -79,7 +75,6 @@ internal class NumericNodeTest : FreeSpec() {
             }
 
             "when an object creating from an invalid string" - {
-
                 withData(
                     nameFn = { "with value '$it' should return the null value" },
                     listOf(".0", "+.0", "-.0", "1.5", "-1.5", "1.50", "-1.50")
@@ -96,16 +91,15 @@ internal class NumericNodeTest : FreeSpec() {
                 )
             }
 
-            "test the toString function" {
+            "then the toString() method should return the expected string" {
                 val value = Byte.MIN_VALUE.toString()
-                NumericNode.Integer.valueOrNullOf(value).toString() shouldBe value
+                NumericNode.Integer.valueOrNullOf(value)!! shouldBeEqualsString value
             }
         }
 
         "The NumericNode#Number type" - {
 
             "when an object creating from a valid string representing a numeric value" - {
-
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf("-10", "-10.5", "10", "10.5")
@@ -131,9 +125,9 @@ internal class NumericNodeTest : FreeSpec() {
                 )
             }
 
-            "test the toString function" {
+            "then the toString() method should return the expected string" {
                 val value = Byte.MIN_VALUE.toString()
-                NumericNode.Number.valueOrNullOf(value).toString() shouldBe value
+                NumericNode.Number.valueOrNullOf(value)!! shouldBeEqualsString value
             }
         }
     }
