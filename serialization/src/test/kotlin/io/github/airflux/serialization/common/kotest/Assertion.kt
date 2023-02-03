@@ -20,6 +20,10 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
 
+internal infix fun <T : Any> T.shouldBeEqualsString(expected: String) {
+    this.toString() shouldBe expected
+}
+
 internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) =
     this.shouldBeEqualsContract(y, z, listOf(other))
 

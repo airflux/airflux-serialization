@@ -16,98 +16,108 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.common.ObjectContract
-import io.github.airflux.serialization.common.TestData.FIRST_PHONE_VALUE
-import io.github.airflux.serialization.common.TestData.SECOND_PHONE_VALUE
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsString
 import io.github.airflux.serialization.core.path.PropertyPath
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.datatest.withData
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
-internal class ArrayNodeTest {
+internal class ArrayNodeTest : FreeSpec() {
 
     companion object {
-        private val EMPTY_ARRAY = ArrayNode<StringNode>()
+        private const val FIRST_PHONE_VALUE: String = "123"
+        private const val SECOND_PHONE_VALUE: String = "456"
+
         private val FIRST_ITEM = StringNode(FIRST_PHONE_VALUE)
         private val SECOND_ITEM = StringNode(SECOND_PHONE_VALUE)
-        private val NOT_EMPTY_ARRAY = ArrayNode(FIRST_ITEM, SECOND_ITEM)
     }
 
-    @Test
-    fun isEmpty() {
-        assertTrue(EMPTY_ARRAY.isEmpty())
-    }
+    init {
+        "The ArrayNode type" - {
 
-    @Test
-    fun isNotEmpty() {
-        assertFalse(NOT_EMPTY_ARRAY.isEmpty())
-    }
+            "when created without elements" - {
+                val array = ArrayNode<StringNode>()
 
-    @Test
-    fun sizeEmptyArray() {
-        assertEquals(0, EMPTY_ARRAY.size)
-    }
+                "should be empty" {
+                    array.isEmpty() shouldBe true
+                }
 
-    @Test
-    fun sizeNotEmptyArray() {
-        assertEquals(2, NOT_EMPTY_ARRAY.size)
-    }
+                "should have size 0" {
+                    array.size shouldBe 0
+                }
 
-    @Test
-    fun getByIntFromEmptyArray() {
-        assertNull(EMPTY_ARRAY[0])
-    }
+                "should not have elements" {
+                    array.shouldBeEmpty()
+                }
 
-    @Test
-    fun getByIntFromNotEmptyArray() {
-        val item = NOT_EMPTY_ARRAY[0]
+                "then the method of getting the value of the element by index should return null" {
+                    array[0] shouldBe null
+                }
 
-        assertNotNull(item)
-        item as StringNode
-        assertEquals(FIRST_PHONE_VALUE, item.get)
-    }
+                "then the method of getting the value of the element by path element should return null" {
+                    array[PropertyPath.Element.Idx(0)] shouldBe null
+                }
 
-    @Test
-    fun getByIdxFromEmptyArray() {
-        assertNull(EMPTY_ARRAY[PropertyPath.Element.Idx(0)])
-    }
+                "then the toString() method should return the expected string" {
+                    array shouldBeEqualsString "[]"
+                }
+            }
 
-    @Test
-    fun getByIdxFromNotEmptyArray() {
-        val item = NOT_EMPTY_ARRAY[PropertyPath.Element.Idx(0)]
+            "when created with some elements" - {
+                val array = ArrayNode(FIRST_ITEM, SECOND_ITEM)
 
-        assertNotNull(item)
-        item as StringNode
-        assertEquals(FIRST_PHONE_VALUE, item.get)
-    }
+                "should be non-empty" {
+                    array.isEmpty() shouldBe false
+                }
 
-    @Test
-    fun iterable() {
-        assertContains(NOT_EMPTY_ARRAY, FIRST_ITEM)
-        assertContains(NOT_EMPTY_ARRAY, SECOND_ITEM)
-    }
+                "should have size 2" {
+                    array.size shouldBe 2
+                }
 
-    @Test
-    fun `Testing the toString function of the ArrayNode class`() {
-        ObjectContract.checkToString(
-            ArrayNode(
-                StringNode(FIRST_PHONE_VALUE),
-                StringNode(SECOND_PHONE_VALUE),
-            ),
-            """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE"]"""
-        )
-    }
+                "should have elements in the order they were added" {
+                    array shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                }
 
-    @Test
-    fun `Testing the equals contract of the StringNode class`() {
-        ObjectContract.checkEqualsContract(
-            ArrayNode(StringNode(FIRST_PHONE_VALUE)),
-            ArrayNode(StringNode(FIRST_PHONE_VALUE)),
-            ArrayNode(StringNode(SECOND_PHONE_VALUE)),
-        )
+                "then the method of getting the value of the element by index should return a specific value" - {
+                    withData(
+                        listOf(
+                            Pair(0, FIRST_ITEM),
+                            Pair(1, SECOND_ITEM)
+                        )
+                    ) { (index, value) ->
+                        array[index] shouldBe value
+                    }
+                }
+
+                "then the method of getting the value of the element by path element should return a specific value" - {
+                    withData(
+                        listOf(
+                            Pair(PropertyPath.Element.Idx(0), FIRST_ITEM),
+                            Pair(PropertyPath.Element.Idx(1), SECOND_ITEM)
+                        )
+                    ) { (index, value) ->
+                        array[index] shouldBe value
+                    }
+                }
+
+                "then the toString() method should return the expected string" {
+                    array shouldBeEqualsString """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE"]"""
+                }
+            }
+
+            "should comply with equals() and hashCode() contract" {
+                ArrayNode(FIRST_ITEM).shouldBeEqualsContract(
+                    y = ArrayNode(FIRST_ITEM),
+                    z = ArrayNode(FIRST_ITEM),
+                    others = listOf(
+                        ArrayNode(),
+                        ArrayNode(FIRST_ITEM, SECOND_ITEM)
+                    )
+                )
+            }
+        }
     }
 }
