@@ -16,21 +16,55 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.common.ObjectContract
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsString
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
-internal class BooleanNodeTest {
+internal class BooleanNodeTest : FreeSpec() {
 
-    @Test
-    fun `Testing the toString function of the BooleanNode class`() {
-        ObjectContract.checkToString(BooleanNode.valueOf(true), "true")
-        ObjectContract.checkToString(BooleanNode.valueOf(false), "false")
-    }
+    init {
+        "The BooleanNode type" - {
 
-    @Test
-    fun `Testing inner state of the BooleanNode class`() {
-        assertEquals(true, BooleanNode.valueOf(true).get)
-        assertEquals(false, BooleanNode.valueOf(false).get)
+            "when created with the true value" - {
+                val value = BooleanNode.valueOf(true)
+
+                "then the inner value should be true" {
+                    value.get shouldBe true
+                }
+
+                "then the toString() method should return the expected string" {
+                    value shouldBeEqualsString "true"
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    BooleanNode.valueOf(true).shouldBeEqualsContract(
+                        y = BooleanNode.valueOf(true),
+                        z = BooleanNode.valueOf(true),
+                        other = BooleanNode.valueOf(false)
+                    )
+                }
+            }
+
+            "when created with the false value" - {
+                val value = BooleanNode.valueOf(false)
+
+                "then the inner value should be false" {
+                    value.get shouldBe false
+                }
+
+                "then the toString() method should return the expected string" {
+                    value shouldBeEqualsString "false"
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    BooleanNode.valueOf(false).shouldBeEqualsContract(
+                        y = BooleanNode.valueOf(false),
+                        z = BooleanNode.valueOf(false),
+                        other = BooleanNode.valueOf(true)
+                    )
+                }
+            }
+        }
     }
 }
