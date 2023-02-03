@@ -16,123 +16,133 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.common.ObjectContract
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.common.kotest.shouldBeEqualsString
 import io.github.airflux.serialization.core.path.PropertyPath
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.datatest.withData
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 
-internal class StructNodeTest {
+internal class StructNodeTest : FreeSpec() {
 
     companion object {
-        private const val USER_NAME_VALUE = "user"
-        private val USER_NAME = StringNode(USER_NAME_VALUE)
+        private const val USER_PROPERTY_NAME = "name"
+        private const val USER_VALUE = "user"
+        private val USER_PROPERTY_VALUE = StringNode(USER_VALUE)
 
+        private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
         private const val IS_ACTIVE_VALUE = true
-        private val IS_ACTIVE = BooleanNode.valueOf(IS_ACTIVE_VALUE)
-
-        private val EMPTY_STRUCT = StructNode()
-        private val NOT_EMPTY_STRUCT = StructNode(
-            "name" to USER_NAME,
-            "isActive" to IS_ACTIVE
-        )
+        private val IS_ACTIVE_PROPERTY_VALUE = BooleanNode.valueOf(IS_ACTIVE_VALUE)
     }
 
-    @Test
-    fun isEmpty() {
-        assertTrue(EMPTY_STRUCT.isEmpty())
-    }
+    init {
+        "The ArrayNode type" - {
 
-    @Test
-    fun isNotEmpty() {
-        assertFalse(NOT_EMPTY_STRUCT.isEmpty())
-    }
+            "when created without properties" - {
+                val struct = StructNode()
 
-    @Test
-    fun sizeEmptyStruct() {
-        assertEquals(0, EMPTY_STRUCT.count)
-    }
+                "should be empty" {
+                    struct.isEmpty() shouldBe true
+                }
 
-    @Test
-    fun sizeNotEmptyStruct() {
-        assertEquals(2, NOT_EMPTY_STRUCT.count)
-    }
+                "should have count 0" {
+                    struct.count shouldBe 0
+                }
 
-    @Test
-    fun getByNameFromEmptyStruct() {
+                "should not have elements" {
+                    struct.shouldBeEmpty()
+                }
 
-        val value = EMPTY_STRUCT["name"]
+                "then the method of getting the value of the element by key should return null" {
+                    struct[USER_PROPERTY_NAME] shouldBe null
+                }
 
-        assertNull(value)
-    }
+                "then the method of getting the value of the element by path element should return null" {
+                    struct[PropertyPath.Element.Key(USER_PROPERTY_NAME)] shouldBe null
+                }
 
-    @Test
-    fun getByNameFromNotEmptyStruct() {
+                "then the toString() method should return the expected string" {
+                    struct shouldBeEqualsString "{}"
+                }
 
-        val value = NOT_EMPTY_STRUCT["name"]
+                "should comply with equals() and hashCode() contract" {
+                    struct.shouldBeEqualsContract(
+                        y = StructNode(),
+                        z = StructNode(),
+                        other = StructNode(USER_PROPERTY_NAME to USER_PROPERTY_VALUE)
+                    )
+                }
+            }
 
-        assertNotNull(value)
-        value as StringNode
-        assertEquals(USER_NAME_VALUE, value.get)
-    }
+            "when created with properties" - {
+                val struct = StructNode(
+                    USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                    IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
+                )
 
-    @Test
-    fun getByKeyFromEmptyStruct() {
-        val key = PropertyPath.Element.Key("name")
+                "should be non-empty" {
+                    struct.isEmpty() shouldBe false
+                }
 
-        val value = EMPTY_STRUCT[key]
+                "should have count 2" {
+                    struct.count shouldBe 2
+                }
 
-        assertNull(value)
-    }
+                "should have elements in the order they were added" {
+                    struct.map { it.key to it.value } shouldContainExactly listOf(
+                        USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                        IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
+                    )
+                }
 
-    @Test
-    fun getByKeyFromNotEmptyStruct() {
-        val key = PropertyPath.Element.Key("name")
+                "then the method of getting the value of the element by key should return a specific value" - {
+                    withData(
+                        listOf(
+                            USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                            IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
+                        )
+                    ) { (key, value) ->
+                        struct[key] shouldBe value
+                    }
+                }
 
-        val value = NOT_EMPTY_STRUCT[key]
+                "then the method of getting the value of the element by path element should return a specific value" - {
+                    withData(
+                        listOf(
+                            PropertyPath.Element.Key(USER_PROPERTY_NAME) to USER_PROPERTY_VALUE,
+                            PropertyPath.Element.Key(IS_ACTIVE_PROPERTY_NAME) to IS_ACTIVE_PROPERTY_VALUE
+                        )
+                    ) { (key, value) ->
+                        struct[key] shouldBe value
+                    }
+                }
 
-        assertNotNull(value)
-        value as StringNode
-        assertEquals(USER_NAME_VALUE, value.get)
-    }
+                "then the toString() method should return the expected string" {
+                    struct.shouldBeEqualsString(
+                        """{"$USER_PROPERTY_NAME": "$USER_VALUE", "$IS_ACTIVE_PROPERTY_NAME": $IS_ACTIVE_VALUE}"""
+                    )
+                }
 
-    @Test
-    fun iterable() {
-
-        val items = NOT_EMPTY_STRUCT.map { (key, value) -> key to value }
-
-        assertContains(items, "name" to USER_NAME)
-        assertContains(items, "isActive" to IS_ACTIVE)
-    }
-
-    @Test
-    fun `Testing the toString function of the StructNode class`() {
-        val userName = "user"
-        val isActive = true
-
-        ObjectContract.checkToString(
-            StructNode(
-                "name" to StringNode(userName),
-                "isActive" to BooleanNode.valueOf(isActive)
-            ),
-            """{"name": "$userName", "isActive": $isActive}"""
-        )
-    }
-
-    @Test
-    fun `Testing the equals contract of the StructNode class`() {
-        val firstUserName = "user-1"
-        val secondUserName = "user-2"
-        val isActive = true
-
-        ObjectContract.checkEqualsContract(
-            StructNode("name" to StringNode(firstUserName)),
-            StructNode("name" to StringNode(secondUserName)),
-            StructNode("isActive" to BooleanNode.valueOf(isActive)),
-        )
+                "should comply with equals() and hashCode() contract" {
+                    struct.shouldBeEqualsContract(
+                        y = StructNode(
+                            USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                            IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
+                        ),
+                        z = StructNode(
+                            USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                            IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
+                        ),
+                        others = listOf(
+                            StructNode(),
+                            StructNode(USER_PROPERTY_NAME to USER_PROPERTY_VALUE),
+                            StructNode(IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE)
+                        )
+                    )
+                }
+            }
+        }
     }
 }
