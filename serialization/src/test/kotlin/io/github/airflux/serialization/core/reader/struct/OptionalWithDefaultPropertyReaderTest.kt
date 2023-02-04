@@ -18,8 +18,8 @@ package io.github.airflux.serialization.core.reader.struct
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyStringReader
-import io.github.airflux.serialization.common.shouldBeFailure
-import io.github.airflux.serialization.common.shouldBeSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.reader.Reader

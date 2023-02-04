@@ -21,8 +21,8 @@ import io.github.airflux.serialization.common.dummyBooleanReader
 import io.github.airflux.serialization.common.dummyIntReader
 import io.github.airflux.serialization.common.dummyLongReader
 import io.github.airflux.serialization.common.dummyStringReader
-import io.github.airflux.serialization.common.shouldBeFailure
-import io.github.airflux.serialization.common.shouldBeSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption

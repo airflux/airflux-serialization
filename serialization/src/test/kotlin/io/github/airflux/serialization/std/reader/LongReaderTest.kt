@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.assertAsFailure
-import io.github.airflux.serialization.common.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.assertAsFailure
+import io.github.airflux.serialization.common.kotest.assertAsSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.common
+package io.github.airflux.serialization.common.kotest
 
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.matchers.collections.shouldContainExactly
