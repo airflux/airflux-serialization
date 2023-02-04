@@ -141,7 +141,7 @@ internal class ReaderTest : FreeSpec() {
                         "then both errors should be returned" {
                             val result = reader.read(ENV, CONTEXT, LOCATION, NullNode)
 
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append("id"),
                                     error = JsonErrors.PathMissing

@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -45,7 +45,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the number value" {
                     val json: ValueNode = NumericNode.Integer.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
-                    result.assertAsSuccess(value = BigDecimal(Int.MAX_VALUE))
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
 
@@ -54,7 +54,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the number value" {
                     val json: ValueNode = NumericNode.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
-                    result.assertAsSuccess(value = BigDecimal(Int.MAX_VALUE))
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
             "when called with a receiver of not the NumericNode#Number type" - {
@@ -62,13 +62,11 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
-                    result.assertAsFailure(
-                        ReaderResult.Failure.Cause(
-                            location = LOCATION,
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(NumericNode.Number.nameOfType),
-                                actual = BooleanNode.nameOfType
-                            )
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(NumericNode.Number.nameOfType),
+                            actual = BooleanNode.nameOfType
                         )
                     )
                 }

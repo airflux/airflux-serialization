@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -44,19 +44,17 @@ internal class StringReaderTest : FreeSpec() {
             "should return the string value" {
                 val source: ValueNode = StringNode(TEXT)
                 val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsSuccess(value = TEXT)
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = TEXT)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = BooleanNode.valueOf(true)
                 val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsFailure(
-                    ReaderResult.Failure.Cause(
-                        location = Location.empty,
-                        error = JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
-                        )
+                result shouldBeFailure ReaderResult.Failure(
+                    location = Location.empty,
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(StringNode.nameOfType),
+                        actual = BooleanNode.nameOfType
                     )
                 )
             }

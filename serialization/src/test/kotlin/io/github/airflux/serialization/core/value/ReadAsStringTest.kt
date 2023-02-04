@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -40,7 +40,7 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the string value" {
                     val json: ValueNode = StringNode("abc")
                     val result = json.readAsString(ENV, LOCATION)
-                    result.assertAsSuccess(value = "abc")
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = "abc")
                 }
             }
 
@@ -49,13 +49,11 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsString(ENV, LOCATION)
-                    result.assertAsFailure(
-                        ReaderResult.Failure.Cause(
-                            location = LOCATION,
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = BooleanNode.nameOfType
-                            )
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(StringNode.nameOfType),
+                            actual = BooleanNode.nameOfType
                         )
                     )
                 }

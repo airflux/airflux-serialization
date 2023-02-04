@@ -102,7 +102,10 @@ internal class StructReaderTest : FreeSpec() {
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
+                            )
                         }
                     }
 
@@ -127,7 +130,10 @@ internal class StructReaderTest : FreeSpec() {
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess DTO(id = ID_PROPERTY_VALUE, name = null)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = DTO(id = ID_PROPERTY_VALUE, name = null)
+                            )
                         }
                     }
 
@@ -244,7 +250,10 @@ internal class StructReaderTest : FreeSpec() {
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
+                            )
                         }
                     }
 
@@ -269,7 +278,10 @@ internal class StructReaderTest : FreeSpec() {
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess DTO(id = ID_PROPERTY_VALUE, name = null)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = DTO(id = ID_PROPERTY_VALUE, name = null)
+                            )
                         }
                     }
 
@@ -317,7 +329,7 @@ internal class StructReaderTest : FreeSpec() {
 
                         "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
@@ -361,7 +373,7 @@ internal class StructReaderTest : FreeSpec() {
 
                         "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
                                     error = JsonErrors.Validation.Struct.AdditionalProperties

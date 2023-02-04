@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -44,25 +44,23 @@ internal class BooleanReaderTest : FreeSpec() {
             "should return value the true" {
                 val source: ValueNode = BooleanNode.valueOf(true)
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsSuccess(value = true)
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = true)
             }
 
             "should return value the false" {
                 val source: ValueNode = BooleanNode.valueOf(false)
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsSuccess(value = false)
+                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = false)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsFailure(
-                    ReaderResult.Failure.Cause(
-                        location = Location.empty,
-                        error = JsonErrors.InvalidType(
-                            expected = listOf(BooleanNode.nameOfType),
-                            actual = StringNode.nameOfType
-                        )
+                result shouldBeFailure ReaderResult.Failure(
+                    location = Location.empty,
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(BooleanNode.nameOfType),
+                        actual = StringNode.nameOfType
                     )
                 )
             }

@@ -328,7 +328,7 @@ internal class ReaderResultTest : FreeSpec() {
                     "then should return the value" {
                         val result = withCatching(env, LOCATION, block)
 
-                        result shouldBeSuccess ORIGINAL_VALUE
+                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
                     }
                 }
             }

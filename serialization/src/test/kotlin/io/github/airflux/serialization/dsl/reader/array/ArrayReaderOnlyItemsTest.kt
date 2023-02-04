@@ -86,7 +86,10 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = listOf(FIRST_ITEM, SECOND_ITEM)
+                            )
                         }
                     }
 
@@ -144,7 +147,10 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = listOf(FIRST_ITEM, SECOND_ITEM)
+                            )
                         }
                     }
 
@@ -168,7 +174,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
 
                         "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION,
                                     error = JsonErrors.Validation.Arrays.MinItems(

@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -56,20 +56,18 @@ internal class LongReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source: ValueNode = NumericNode.Integer.valueOf(value)
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
-                    result.assertAsSuccess(value = value)
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
                 val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsFailure(
-                    ReaderResult.Failure.Cause(
-                        location = Location.empty,
-                        error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.Integer.nameOfType),
-                            actual = StringNode.nameOfType
-                        )
+                result shouldBeFailure ReaderResult.Failure(
+                    location = Location.empty,
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(NumericNode.Integer.nameOfType),
+                        actual = StringNode.nameOfType
                     )
                 )
             }
@@ -92,11 +90,9 @@ internal class LongReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
-                    result.assertAsFailure(
-                        ReaderResult.Failure.Cause(
-                            location = Location.empty,
-                            error = JsonErrors.ValueCast(value = value, type = Long::class)
-                        )
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = Location.empty,
+                        error = JsonErrors.ValueCast(value = value, type = Long::class)
                     )
                 }
             }

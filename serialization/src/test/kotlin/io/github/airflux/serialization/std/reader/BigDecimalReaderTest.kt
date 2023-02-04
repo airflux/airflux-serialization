@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -49,20 +49,18 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 ) { value ->
                     val source: ValueNode = NumericNode.Number.valueOrNullOf(value)!!
                     val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
-                    result.assertAsSuccess(value = BigDecimal(value))
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
                 val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
-                result.assertAsFailure(
-                    ReaderResult.Failure.Cause(
-                        location = Location.empty,
-                        error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.Number.nameOfType),
-                            actual = StringNode.nameOfType
-                        )
+                result shouldBeFailure ReaderResult.Failure(
+                    location = Location.empty,
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(NumericNode.Number.nameOfType),
+                        actual = StringNode.nameOfType
                     )
                 )
             }

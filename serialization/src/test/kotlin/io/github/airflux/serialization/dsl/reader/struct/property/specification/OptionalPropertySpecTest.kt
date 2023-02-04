@@ -287,7 +287,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned all read errors" {
-                        result shouldBeFailure listOf(
+                        result.shouldBeFailure(
                             ReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(

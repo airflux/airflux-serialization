@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -46,7 +46,7 @@ internal class ReadAsStructTest : FreeSpec() {
                 "should return the DTO" {
                     val json: ValueNode = StructNode("name" to StringNode(USER_NAME))
                     val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
-                    result.assertAsSuccess(value = DTO(name = USER_NAME))
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = DTO(name = USER_NAME))
                 }
             }
             "when called with a receiver of not the StructNode type" - {
@@ -54,13 +54,11 @@ internal class ReadAsStructTest : FreeSpec() {
                 "should return the invalid type' error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
-                    result.assertAsFailure(
-                        ReaderResult.Failure.Cause(
-                            location = LOCATION,
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(StructNode.nameOfType),
-                                actual = BooleanNode.nameOfType
-                            )
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(StructNode.nameOfType),
+                            actual = BooleanNode.nameOfType
                         )
                     )
                 }

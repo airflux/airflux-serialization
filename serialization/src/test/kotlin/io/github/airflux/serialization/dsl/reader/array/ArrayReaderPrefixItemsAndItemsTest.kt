@@ -89,7 +89,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess listOf(FIRST_ITEM)
+                            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = listOf(FIRST_ITEM))
                         }
                     }
 
@@ -99,7 +99,10 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = listOf(FIRST_ITEM, SECOND_ITEM)
+                            )
                         }
                     }
 
@@ -114,7 +117,10 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all items read" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                                result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM, true)
+                                result shouldBeSuccess ReaderResult.Success(
+                                    location = LOCATION,
+                                    value = listOf(FIRST_ITEM, SECOND_ITEM, true)
+                                )
                             }
                         }
 
@@ -163,7 +169,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess listOf(FIRST_ITEM)
+                            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = listOf(FIRST_ITEM))
                         }
                     }
 
@@ -173,7 +179,10 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM)
+                            result shouldBeSuccess ReaderResult.Success(
+                                location = LOCATION,
+                                value = listOf(FIRST_ITEM, SECOND_ITEM)
+                            )
                         }
                     }
 
@@ -188,7 +197,10 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all items read" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                                result shouldBeSuccess listOf(FIRST_ITEM, SECOND_ITEM, true)
+                                result shouldBeSuccess ReaderResult.Success(
+                                    location = LOCATION,
+                                    value = listOf(FIRST_ITEM, SECOND_ITEM, true)
+                                )
                             }
                         }
 
@@ -202,7 +214,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                                result shouldBeFailure listOf(
+                                result.shouldBeFailure(
                                     ReaderResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.InvalidType(

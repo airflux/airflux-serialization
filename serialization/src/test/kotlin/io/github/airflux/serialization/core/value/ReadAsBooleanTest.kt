@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.kotest.assertAsFailure
-import io.github.airflux.serialization.common.kotest.assertAsSuccess
+import io.github.airflux.serialization.common.kotest.shouldBeFailure
+import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -40,7 +40,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
                 "should return the boolean value" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsBoolean(ENV, LOCATION)
-                    result.assertAsSuccess(value = true)
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = true)
                 }
             }
             "when called with a receiver of not the BooleanNode type" - {
@@ -48,13 +48,11 @@ internal class ReadAsBooleanTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json = StringNode("abc")
                     val result = json.readAsBoolean(ENV, LOCATION)
-                    result.assertAsFailure(
-                        ReaderResult.Failure.Cause(
-                            location = LOCATION,
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(BooleanNode.nameOfType),
-                                actual = StringNode.nameOfType
-                            )
+                    result shouldBeFailure ReaderResult.Failure(
+                        location = LOCATION,
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(BooleanNode.nameOfType),
+                            actual = StringNode.nameOfType
                         )
                     )
                 }

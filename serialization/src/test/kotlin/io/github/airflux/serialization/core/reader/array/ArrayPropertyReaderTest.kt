@@ -148,7 +148,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = StringReader
                             )
 
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
@@ -241,7 +241,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeFailure listOf(
+                                result.shouldBeFailure(
                                     ReaderResult.Failure.Cause(
                                         location = LOCATION.append(1),
                                         error = JsonErrors.AdditionalItems
@@ -372,7 +372,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 errorIfAdditionalItems = true
                             )
 
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
@@ -485,7 +485,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                                 items = IntReader
                             )
 
-                            result shouldBeFailure listOf(
+                            result.shouldBeFailure(
                                 ReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
@@ -552,7 +552,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
                 val result = receiver + parameter
 
-                result shouldBeFailure listOf(
+                result.shouldBeFailure(
                     ReaderResult.Failure.Cause(
                         location = LOCATION.append(0),
                         error = JsonErrors.InvalidType(
