@@ -70,11 +70,6 @@ object Configuration {
 
         object Test {
 
-            object JUnit {
-                const val Jupiter = "5.8.2"
-                const val Platform = "1.8.2"
-            }
-
             const val Kotest = "5.5.4"
 
             object PiTest {

@@ -29,15 +29,6 @@ dependencies {
     implementation(kotlin("reflect"))
 
     /* Test */
-    testImplementation(kotlin("test-junit5"))
-
-    /* Junit */
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${Versions.Test.JUnit.Jupiter}")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:${Versions.Test.JUnit.Jupiter}")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:${Versions.Test.JUnit.Jupiter}")
-    testImplementation("org.junit.platform:junit-platform-engine:${Versions.Test.JUnit.Platform}")
-    testImplementation("org.junit.platform:junit-platform-launcher:${Versions.Test.JUnit.Platform}")
-    testImplementation("org.junit.platform:junit-platform-launcher:${Versions.Test.JUnit.Platform}")
 
     /* Kotest */
     testImplementation("io.kotest:kotest-runner-junit5:${Versions.Test.Kotest}")
