@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.array.item.specification
 
+import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.dummyIntReader
 import io.github.airflux.serialization.common.dummyStringReader
@@ -31,8 +32,6 @@ import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
-import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
-import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayNullableItemSpecTest : FreeSpec() {
@@ -46,6 +45,9 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         private val LOCATION = Location.empty
         private val StringReader = dummyStringReader<EB, Unit, Unit>()
         private val IntReader = dummyIntReader<EB, Unit, Unit>()
+
+        private val IsNotEmptyStringValidator =
+            DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }
     }
 
     init {
@@ -104,7 +106,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
             "when the validator was added to the spec" - {
                 val spec = nullable(reader = StringReader)
                 val specWithValidator =
-                    spec.validation(StdStringValidator.isNotEmpty<EB, Unit, Unit>().applyIfNotNull())
+                    spec.validation(IsNotEmptyStringValidator.applyIfNotNull())
 
                 "when the reader has successfully read" - {
 
@@ -205,12 +207,9 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         }
     }
 
-    internal class EB : InvalidTypeErrorBuilder,
-                        IsNotEmptyStringValidator.ErrorBuilder {
+    internal class EB : InvalidTypeErrorBuilder {
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
-
-        override fun isNotEmptyStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsEmpty
     }
 }
