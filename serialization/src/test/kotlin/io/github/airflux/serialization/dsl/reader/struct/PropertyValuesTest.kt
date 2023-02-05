@@ -16,8 +16,9 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
@@ -38,7 +39,7 @@ internal class PropertyValuesTest : FreeSpec() {
         private const val UNKNOWN_PROPERTY_NAME = "name"
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "dd7c5dab-0f8b-4436-a8e8-72b841c90acc"
-        private val StringReader = dummyStringReader<EB, Unit, Unit>()
+        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
     }
 
     init {

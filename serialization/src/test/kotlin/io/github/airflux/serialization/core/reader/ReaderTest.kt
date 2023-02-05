@@ -18,7 +18,6 @@ package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
@@ -48,7 +47,7 @@ internal class ReaderTest : FreeSpec() {
         "The Reader type" - {
 
             "Reader#map" - {
-                val reader: Reader<EB, Unit, Unit, String> = dummyStringReader()
+                val reader: Reader<EB, Unit, Unit, String> = DummyReader.string()
 
                 "should return new reader" {
                     val source = StringNode(VALUE)
@@ -62,7 +61,7 @@ internal class ReaderTest : FreeSpec() {
             "Reader#flatMapResult" - {
 
                 "when the original reader returns a successful result" - {
-                    val reader: Reader<EB, Unit, Unit, String> = dummyStringReader()
+                    val reader: Reader<EB, Unit, Unit, String> = DummyReader.string()
 
                     "then the new reader should return the transformed value" {
                         val source = StringNode(VALUE)

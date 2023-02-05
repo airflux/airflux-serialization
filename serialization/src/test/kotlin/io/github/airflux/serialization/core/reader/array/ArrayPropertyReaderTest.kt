@@ -16,14 +16,12 @@
 
 package io.github.airflux.serialization.core.reader.array
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyBooleanReader
-import io.github.airflux.serialization.common.dummyIntReader
-import io.github.airflux.serialization.common.dummyLongReader
-import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
@@ -51,10 +49,10 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
 
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
-        private val IntReader = dummyIntReader<EB, OPTS, Unit>()
-        private val LongReader = dummyLongReader<EB, OPTS, Unit>()
-        private val StringReader = dummyStringReader<EB, OPTS, Unit>()
-        private val BooleanReader = dummyBooleanReader<EB, OPTS, Unit>()
+        private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
+        private val LongReader: Reader<EB, OPTS, Unit, Long> = DummyReader.long()
+        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()
     }
 
     init {

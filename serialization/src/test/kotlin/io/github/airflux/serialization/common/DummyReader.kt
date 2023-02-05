@@ -34,72 +34,75 @@ internal class DummyReader<EB, O, CTX, T>(
 
     override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T> =
         result(env, context, location, source)
+
+    internal companion object {
+
+        internal fun <EB, O, CTX> boolean(): Reader<EB, O, CTX, Boolean>
+            where EB : InvalidTypeErrorBuilder =
+            DummyReader(
+                result = { env, _, location, source ->
+                    if (source is BooleanNode)
+                        ReaderResult.Success(location = location, value = source.get)
+                    else
+                        ReaderResult.Failure(
+                            location = location,
+                            error = env.errorBuilders.invalidTypeError(
+                                expected = listOf(BooleanNode.nameOfType),
+                                actual = source.nameOfType
+                            )
+                        )
+                }
+            )
+
+        internal fun <EB, O, CTX> string(): Reader<EB, O, CTX, String>
+            where EB : InvalidTypeErrorBuilder =
+            DummyReader(
+                result = { env, _, location, source ->
+                    if (source is StringNode)
+                        ReaderResult.Success(location = location, value = source.get)
+                    else
+                        ReaderResult.Failure(
+                            location = location,
+                            error = env.errorBuilders.invalidTypeError(
+                                expected = listOf(StringNode.nameOfType),
+                                actual = source.nameOfType
+                            )
+                        )
+                }
+            )
+
+        internal fun <EB, O, CTX> int(): Reader<EB, O, CTX, Int>
+            where EB : InvalidTypeErrorBuilder =
+            DummyReader(
+                result = { env, _, location, source ->
+                    if (source is NumericNode.Integer)
+                        ReaderResult.Success(location = location, value = source.get.toInt())
+                    else
+                        ReaderResult.Failure(
+                            location = location,
+                            error = env.errorBuilders.invalidTypeError(
+                                expected = listOf(NumericNode.Integer.nameOfType),
+                                actual = source.nameOfType
+                            )
+                        )
+                }
+            )
+
+        internal fun <EB, O, CTX> long(): Reader<EB, O, CTX, Long>
+            where EB : InvalidTypeErrorBuilder =
+            DummyReader(
+                result = { env, _, location, source ->
+                    if (source is NumericNode)
+                        ReaderResult.Success(location = location, value = source.get.toLong())
+                    else
+                        ReaderResult.Failure(
+                            location = location,
+                            error = env.errorBuilders.invalidTypeError(
+                                expected = listOf(NumericNode.Integer.nameOfType, NumericNode.Number.nameOfType),
+                                actual = source.nameOfType
+                            )
+                        )
+                }
+            )
+    }
 }
-
-internal fun <EB, O, CTX> dummyBooleanReader(): Reader<EB, O, CTX, Boolean>
-    where EB : InvalidTypeErrorBuilder =
-    DummyReader(
-        result = { env, _, location, source ->
-            if (source is BooleanNode)
-                ReaderResult.Success(location = location, value = source.get)
-            else
-                ReaderResult.Failure(
-                    location = location,
-                    error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(BooleanNode.nameOfType),
-                        actual = source.nameOfType
-                    )
-                )
-        }
-    )
-
-internal fun <EB, O, CTX> dummyStringReader(): Reader<EB, O, CTX, String>
-    where EB : InvalidTypeErrorBuilder =
-    DummyReader(
-        result = { env, _, location, source ->
-            if (source is StringNode)
-                ReaderResult.Success(location = location, value = source.get)
-            else
-                ReaderResult.Failure(
-                    location = location,
-                    error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(StringNode.nameOfType),
-                        actual = source.nameOfType
-                    )
-                )
-        }
-    )
-
-internal fun <EB, O, CTX> dummyIntReader(): Reader<EB, O, CTX, Int>
-    where EB : InvalidTypeErrorBuilder =
-    DummyReader(
-        result = { env, _, location, source ->
-            if (source is NumericNode.Integer)
-                ReaderResult.Success(location = location, value = source.get.toInt())
-            else
-                ReaderResult.Failure(
-                    location = location,
-                    error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(NumericNode.Integer.nameOfType),
-                        actual = source.nameOfType
-                    )
-                )
-        }
-    )
-
-internal fun <EB, O, CTX> dummyLongReader(): Reader<EB, O, CTX, Long>
-    where EB : InvalidTypeErrorBuilder =
-    DummyReader(
-        result = { env, _, location, source ->
-            if (source is NumericNode)
-                ReaderResult.Success(location = location, value = source.get.toLong())
-            else
-                ReaderResult.Failure(
-                    location = location,
-                    error = env.errorBuilders.invalidTypeError(
-                        expected = listOf(NumericNode.Integer.nameOfType, NumericNode.Number.nameOfType),
-                        actual = source.nameOfType
-                    )
-                )
-        }
-    )

@@ -16,9 +16,9 @@
 
 package io.github.airflux.serialization.dsl.reader.array.item.specification
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyIntReader
-import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.kotest.core.spec.style.FreeSpec
@@ -27,8 +27,8 @@ import io.kotest.matchers.collections.shouldContainExactly
 internal class ArrayPrefixItemsSpecTest : FreeSpec() {
 
     companion object {
-        private val StringReader = dummyStringReader<EB, Unit, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit, Unit>()
+        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
     }
 
     init {

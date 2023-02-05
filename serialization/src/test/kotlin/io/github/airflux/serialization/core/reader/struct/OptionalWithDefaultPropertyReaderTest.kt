@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
@@ -41,7 +41,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
-        private val READER: Reader<EB, Unit, Unit, String> = dummyStringReader()
+        private val READER: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> ID_PROPERTY_DEFAULT_VALUE }
     }
 

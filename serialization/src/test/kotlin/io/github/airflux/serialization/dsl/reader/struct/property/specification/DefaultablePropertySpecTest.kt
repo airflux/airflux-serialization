@@ -16,14 +16,14 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyIntReader
-import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.path.PropertyPaths
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -53,8 +53,8 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
-        private val StringReader = dummyStringReader<EB, Unit, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit, Unit>()
+        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
         private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
     }
 

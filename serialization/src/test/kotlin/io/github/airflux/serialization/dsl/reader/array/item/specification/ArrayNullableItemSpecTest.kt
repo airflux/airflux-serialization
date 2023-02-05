@@ -16,10 +16,9 @@
 
 package io.github.airflux.serialization.dsl.reader.array.item.specification
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyIntReader
-import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
@@ -43,8 +42,8 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
-        private val StringReader = dummyStringReader<EB, Unit, Unit>()
-        private val IntReader = dummyIntReader<EB, Unit, Unit>()
+        private val StringReader = DummyReader.string<EB, Unit, Unit>()
+        private val IntReader = DummyReader.int<EB, Unit, Unit>()
 
         private val IsNotEmptyStringValidator =
             DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }

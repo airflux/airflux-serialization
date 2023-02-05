@@ -16,8 +16,9 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyStringReader
+import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -33,7 +34,7 @@ internal class StructPropertyTest : FreeSpec() {
     companion object {
         private const val DEFAULT_VALUE = "none"
         private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
-        private val StringReader = dummyStringReader<EB, Unit, Unit>()
+        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
     }
 
     init {

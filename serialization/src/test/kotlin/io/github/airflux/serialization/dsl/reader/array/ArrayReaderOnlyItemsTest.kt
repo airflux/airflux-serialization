@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.common.DummyArrayValidatorBuilder.Companion.minItems
+import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.JsonErrors
-import io.github.airflux.serialization.common.dummyStringReader
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
@@ -45,7 +45,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private val LOCATION = Location.empty
         private const val MIN_ITEMS = 2
 
-        private val StringReader = dummyStringReader<EB, OPTS, Unit>()
+        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
     }
 
     init {
