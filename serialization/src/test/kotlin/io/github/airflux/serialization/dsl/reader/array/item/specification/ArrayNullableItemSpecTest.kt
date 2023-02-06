@@ -19,6 +19,7 @@ package io.github.airflux.serialization.dsl.reader.array.item.specification
 import io.github.airflux.serialization.common.DummyReader
 import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
+import io.github.airflux.serialization.common.forNullableType
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
@@ -30,7 +31,6 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayNullableItemSpecTest : FreeSpec() {
@@ -47,6 +47,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
 
         private val IsNotEmptyStringValidator =
             DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }
+                .forNullableType()
     }
 
     init {
@@ -105,7 +106,7 @@ internal class ArrayNullableItemSpecTest : FreeSpec() {
             "when the validator was added to the spec" - {
                 val spec = nullable(reader = StringReader)
                 val specWithValidator =
-                    spec.validation(IsNotEmptyStringValidator.applyIfNotNull())
+                    spec.validation(IsNotEmptyStringValidator)
 
                 "when the reader has successfully read" - {
 

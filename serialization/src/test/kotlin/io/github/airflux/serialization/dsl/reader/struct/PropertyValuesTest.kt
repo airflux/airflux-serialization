@@ -27,7 +27,6 @@ import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
-import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -253,14 +252,11 @@ internal class PropertyValuesTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder,
-                        PathMissingErrorBuilder,
-                        IsNotEmptyStringValidator.ErrorBuilder {
+                        PathMissingErrorBuilder {
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
-
-        override fun isNotEmptyStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsEmpty
     }
 }

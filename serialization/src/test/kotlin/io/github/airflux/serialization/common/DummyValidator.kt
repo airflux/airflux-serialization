@@ -41,3 +41,8 @@ internal class DummyValidator<EB, O, CTX, T>(
             }
     }
 }
+
+internal fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.forNullableType(): Validator<EB, O, CTX, T?> =
+    Validator { env, context, location, value ->
+        if (value != null) validate(env, context, location, value) else null
+    }

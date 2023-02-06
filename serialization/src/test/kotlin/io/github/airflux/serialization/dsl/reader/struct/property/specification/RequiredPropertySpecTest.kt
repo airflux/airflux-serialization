@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
 import io.github.airflux.serialization.common.DummyReader
+import io.github.airflux.serialization.common.DummyValidator
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.common.kotest.shouldBeSuccess
@@ -28,14 +29,12 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.std.validator.condition.applyIfNotNull
-import io.github.airflux.serialization.std.validator.string.IsNotEmptyStringValidator
-import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -53,6 +52,9 @@ internal class RequiredPropertySpecTest : FreeSpec() {
         private val LOCATION = Location.empty
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
+
+        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String> =
+            DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
     init {
@@ -163,7 +165,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
             "when the validator was added to the spec" - {
                 val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
                 val specWithValidator =
-                    spec.validation(StdStringValidator.isNotEmpty<EB, Unit, Unit>().applyIfNotNull())
+                    spec.validation(IsNotEmptyStringValidator)
 
                 "when the reader has successfully read" - {
 
@@ -269,14 +271,11 @@ internal class RequiredPropertySpecTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-                        InvalidTypeErrorBuilder,
-                        IsNotEmptyStringValidator.ErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
-
-        override fun isNotEmptyStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsEmpty
     }
 }
