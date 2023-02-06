@@ -25,7 +25,6 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -318,10 +317,11 @@ internal class ReaderResultTest : FreeSpec() {
                     val env = ReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
-                        exceptionsHandler = exceptionsHandler {
-                            exception<IllegalStateException> { _, _, _ ->
+                        exceptionsHandler = { _, _, exception ->
+                            if (exception is IllegalStateException)
                                 JsonErrors.PathMissing
-                            }
+                            else
+                                throw exception
                         }
                     )
 
@@ -340,10 +340,11 @@ internal class ReaderResultTest : FreeSpec() {
                     val env = ReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
-                        exceptionsHandler = exceptionsHandler {
-                            exception<IllegalStateException> { _, _, _ ->
+                        exceptionsHandler = { _, _, exception ->
+                            if (exception is IllegalStateException)
                                 JsonErrors.PathMissing
-                            }
+                            else
+                                throw exception
                         }
                     )
 
