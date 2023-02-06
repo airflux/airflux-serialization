@@ -37,8 +37,8 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOp
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
 import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
+import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
 import java.math.BigDecimal
 
 fun main() {
