@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.env.exception
+package io.github.airflux.serialization.dsl.reader.env.exception
 
 import io.github.airflux.serialization.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.assertThrows
 
-internal class ExceptionsHandlerTest : FreeSpec() {
+internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(Unit, Unit)
