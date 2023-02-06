@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.validator.std
+package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -22,7 +22,6 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
-import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesStructValidator
 
 internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructValidatorBuilder<EB, O, CTX>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,

@@ -18,10 +18,6 @@ package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.struct.validator.std.AdditionalPropertiesStructValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.struct.validator.std.IsNotEmptyStructValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.struct.validator.std.MaxPropertiesStructValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.struct.validator.std.MinPropertiesStructValidatorBuilder
 
 public object StdStructValidator {
     public fun <EB, O, CTX> additionalProperties(): StructValidatorBuilder<EB, O, CTX>

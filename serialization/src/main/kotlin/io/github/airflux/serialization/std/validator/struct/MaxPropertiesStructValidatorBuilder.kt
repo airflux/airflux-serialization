@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.validator.std
+package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
-import io.github.airflux.serialization.std.validator.struct.MaxPropertiesStructValidator
 
 internal class MaxPropertiesStructValidatorBuilder<EB, O, CTX>(
     private val value: Int
