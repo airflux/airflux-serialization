@@ -6,7 +6,6 @@ Added the repository
 
 ```kotlin
 repositories {
-    ...
     maven {
         url = uri("https://jitpack.io")
     }
@@ -17,7 +16,9 @@ Added the serialization library
 
 ```kotlin
 dependencies {
-    implementation("com.github.airflux.airflux:airflux-serialization:version")
+    implementation("com.github.airflux.airflux:airflux-serialization-core:version")
+    implementation("com.github.airflux.airflux:airflux-serialization-dsl:version")
+    implementation("com.github.airflux.airflux:airflux-serialization-std:version")
 }
 ```
 
@@ -49,29 +50,43 @@ Added the repository
 Added the serialization library
 
 ```xml
-<dependency>
-    <groupId>com.github.airflux.airflux</groupId>
-    <artifactId>airflux-serialization</artifactId>
-    <version>version</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.github.airflux.airflux</groupId>
+        <artifactId>airflux-serialization-core</artifactId>
+        <version>version</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.airflux.airflux</groupId>
+        <artifactId>airflux-serialization-dsl</artifactId>
+        <version>version</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.airflux.airflux</groupId>
+        <artifactId>airflux-serialization-std</artifactId>
+        <version>version</version>
+    </dependency>
+</dependencies>
 ```
 
 Added the parser for JSON
 
 ```xml
-<dependency>
-    <groupId>com.github.airflux.airflux</groupId>
-    <artifactId>airflux-jackson-parser</artifactId>
-    <version>version</version>
-</dependency>
-<dependency>
-    <groupId>com.github.airflux.airflux</groupId>
-    <artifactId>jackson-core</artifactId>
-    <version>2.13.3</version>
-</dependency>
-<dependency>
-    <groupId>com.github.airflux.airflux</groupId>
-    <artifactId>jackson-module-kotlin</artifactId>
-    <version>2.13.3</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.github.airflux.airflux</groupId>
+        <artifactId>airflux-jackson-parser</artifactId>
+        <version>version</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.airflux.airflux</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>2.13.3</version>
+    </dependency>
+    <dependency>
+        <groupId>com.github.airflux.airflux</groupId>
+        <artifactId>jackson-module-kotlin</artifactId>
+        <version>2.13.3</version>
+    </dependency>
+</dependencies>
 ```

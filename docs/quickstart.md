@@ -43,6 +43,7 @@ val JSON = """
 val parsedUser = JSON.deserialization(
     mapper = mapper,
     env = readerEnv,
+    context = readerCtx,
     reader = UserReader
 ).orThrow { IllegalStateException() }
 ```
@@ -54,7 +55,7 @@ Define the environment to deserialization of some domain type using the reader
 ```kotlin
 val readerEnv = ReaderEnv(
     errorBuilders = ReaderErrorBuilders,
-    context = ReaderCtx(failFast = true)
+    options = ReaderOptions(failFast = true)
 )
 ```
 
@@ -135,10 +136,22 @@ sealed class JsonErrors : ReaderResult.Error {
 }
 ```
 
+- Define the options for the reading environment
+
+```kotlin
+class ReaderOptions(override val failFast: Boolean) : FailFastOption
+```
+
+#### Define the context for reading
+
+```kotlin
+val readerCtx = ReaderCtx("123")
+```
+
 - Define the context for the reading environment
 
 ```kotlin
-class ReaderCtx(override val failFast: Boolean) : FailFastOption
+class ReaderCtx(val id: String)
 ```
 
 #### Define readers for domain types
@@ -147,32 +160,44 @@ class ReaderCtx(override val failFast: Boolean) : FailFastOption
 
 ```kotlin
 // Primitive type readers
-val IntReader = intReader<ReaderErrorBuilders, ReaderCtx>()
-val StringReader = stringReader<ReaderErrorBuilders, ReaderCtx>()
+val IntReader = intReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
+val StringReader = stringReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
 
 // The generic reader for the id property
-val PositiveNumberReader: Reader<ReaderErrorBuilders, ReaderCtx, Int> =
+val PositiveNumberReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Int> =
     IntReader.validation(StdNumberValidator.minimum(0))
 
 // The generic reader for the username property
-val NonEmptyStringReader: Reader<ReaderErrorBuilders, ReaderCtx, String> =
+val NonEmptyStringReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
     StringReader.validation(isNotBlank)
 
 // The reader for the phone number property
-val PhoneNumberReader: Reader<ReaderErrorBuilders, ReaderCtx, String> =
+val PhoneNumberReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
     NonEmptyStringReader.validation(StdStringValidator.pattern("\\d*".toRegex()))
+```
+
+- Define the validators
+```kotlin
+//String validators
+val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
+
+//Object validators
+val additionalProperties = StdStructValidator.additionalProperties<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
+
+//Array validators
+val isNotEmptyArray = StdArrayValidator.isNotEmpty<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
 ```
 
 - Define the reader for the Phone type
 
 ```kotlin
-val PhoneReader: Reader<ReaderErrorBuilders, ReaderCtx, Phone> = structReader {
+val PhoneReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phone> = structReader {
     validation(additionalProperties)
 
     val title = property(required(name = "title", reader = NonEmptyStringReader))
     val number = property(required(name = "number", reader = PhoneNumberReader))
 
-    returns { _, location ->
+    returns { _, _, location ->
         Phone(title = +title, number = +number).success(location)
     }
 }
@@ -181,7 +206,7 @@ val PhoneReader: Reader<ReaderErrorBuilders, ReaderCtx, Phone> = structReader {
 - Define the reader for the Phones type
 
 ```kotlin
-val PhonesReader: Reader<ReaderErrorBuilders, ReaderCtx, Phones> = arrayReader {
+val PhonesReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phones> = arrayReader {
     validation(isNotEmptyArray)
     returns(items = nonNullable(PhoneReader))
 }.map { phones -> Phones(phones) }
@@ -190,13 +215,13 @@ val PhonesReader: Reader<ReaderErrorBuilders, ReaderCtx, Phones> = arrayReader {
 - Define the reader for the User type
 
 ```kotlin
-val UserReader: Reader<ReaderErrorBuilders, ReaderCtx, User> = structReader {
+val UserReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, User> = structReader {
 
     val id = property(required(name = "id", reader = PositiveNumberReader))
     val name = property(required(name = "name", reader = NonEmptyStringReader))
-    val phones = property(optional(name = "phones", reader = PhonesReader, default = { Phones() }))
+    val phones = property(optional(name = "phones", reader = PhonesReader, default = { _, _ -> Phones() }))
 
-    returns { _, location ->
+    returns { _, _, location ->
         User(id = +id, name = +name, phones = +phones).success(location)
     }
 }
@@ -208,29 +233,42 @@ val UserReader: Reader<ReaderErrorBuilders, ReaderCtx, User> = structReader {
 
 ```kotlin
 val user = User(id = 42, name = "user", phones = Phones(listOf(Phone(title = "mobil", number = "123456789"))))
-val json = user.serialization(mapper = mapper, env = writerEnv, writer = UserWriter)
+val json = user.serialization(mapper = mapper, env = writerEnv, context = WriterCtx, writer = UserWriter)
 ```
 
 #### Define the environment to serialization of some domain type using the writer
 
 ```kotlin
 val writerEnv =
-    WriterEnv(context = WriterCtx(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+    WriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
 ```
 
-- Define the context for the writing environment
+- Define the options for the writing environment
 
 ```kotlin
-class WriterCtx(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
+class WriterOptions(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
     WriterActionBuilderIfResultIsEmptyOption
+```
+
+#### Define the context to serialization of some domain type using the writer
+
+```kotlin
+object WriterCtx
 ```
 
 #### Define the writers for some domain types
 
+- Define the generic writers
+
+```kotlin
+val StringWriter = stringWriter<WriterOptions, WriterCtx>()
+val IntWriter = intWriter<WriterOptions, WriterCtx>()
+```
+
 - Define the writer for the Phone type
 
 ```kotlin
-val PhoneWriter: Writer<WriterCtx, Phone> = structWriter {
+val PhoneWriter: Writer<WriterOptions, WriterCtx, Phone> = structWriter {
     property(nonNullable(name = "title", from = Phone::title, writer = StringWriter))
     property(nonNullable(name = "number", from = Phone::number, writer = StringWriter))
 }
@@ -239,7 +277,7 @@ val PhoneWriter: Writer<WriterCtx, Phone> = structWriter {
 - Define the writer for the Phones type
 
 ```kotlin
-val PhonesWriter: Writer<WriterCtx, Iterable<Phone>> = arrayWriter {
+val PhonesWriter: Writer<WriterOptions, WriterCtx, Iterable<Phone>> = arrayWriter {
     items(nullable(PhoneWriter))
 }
 ```
@@ -247,7 +285,7 @@ val PhonesWriter: Writer<WriterCtx, Iterable<Phone>> = arrayWriter {
 - Define the writer for the User type
 
 ```kotlin
-val UserWriter: Writer<WriterCtx, User> = structWriter {
+val UserWriter: Writer<WriterOptions, WriterCtx, User> = structWriter {
     property(nonNullable(name = "id", from = User::id, writer = IntWriter))
     property(nonNullable(name = "name", from = User::name, writer = StringWriter))
     property(nonNullable(name = "phones", from = User::phones, writer = PhonesWriter))
