@@ -42,7 +42,10 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                     val mergedErrors = errors + ReaderResult.Errors(SECOND_ERROR)
 
                     "then the new value should have all elements" {
-                        mergedErrors.items shouldContainExactly listOf(FIRST_ERROR, SECOND_ERROR)
+                        mergedErrors.items shouldContainExactly listOf(
+                            FIRST_ERROR,
+                            SECOND_ERROR
+                        )
                     }
                 }
             }
@@ -51,7 +54,14 @@ internal class ReaderResultErrorsTest : FreeSpec() {
                 ReaderResult.Errors(FIRST_ERROR).shouldBeEqualsContract(
                     y = ReaderResult.Errors(FIRST_ERROR),
                     z = ReaderResult.Errors(FIRST_ERROR),
-                    other = ReaderResult.Errors(SECOND_ERROR)
+                    others = listOf(
+                        ReaderResult.Errors(FIRST_ERROR).plus(
+                            ReaderResult.Errors(
+                                SECOND_ERROR
+                            )
+                        ),
+                        ReaderResult.Errors(SECOND_ERROR)
+                    )
                 )
             }
         }

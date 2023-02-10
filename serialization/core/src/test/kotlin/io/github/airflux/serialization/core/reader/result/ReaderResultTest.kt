@@ -16,12 +16,14 @@
 
 package io.github.airflux.serialization.core.reader.result
 
+import io.github.airflux.serialization.core.common.DummyValidator
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -36,279 +38,355 @@ internal class ReaderResultTest : FreeSpec() {
     companion object {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
+
+        private val ENV = ReaderEnv(EB(), Unit)
+        private val CONTEXT = Unit
         private val LOCATION = Location.empty
     }
 
     init {
 
-        "A ReaderResult#Success type" - {
-            val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+        "The extension function ReaderResult#fold" - {
 
-            "calling fold function should return an original value" {
-                val result = original.fold(
-                    ifFailure = { ELSE_VALUE },
-                    ifSuccess = { it.value }
-                )
+            "when result is success" - {
+                val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
-                result shouldBe ORIGINAL_VALUE
-            }
+                "then should return a value" {
+                    val result = original.fold(ifFailure = { ELSE_VALUE }, ifSuccess = { it.value })
 
-            "calling map function should return a result of applying the [transform] function to the value" {
-                val result = original.map { it.toInt() }
-
-                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
-            }
-
-            "calling flatMap function should return a result of applying the [transform] function to the value" {
-                val result = original.flatMap { location, value ->
-                    ReaderResult.Success(
-                        location = location,
-                        value = value.toInt()
-                    )
-                }
-
-                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
-            }
-
-            "calling recovery function should return an original" {
-                val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
-
-                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
-            }
-
-            "calling getOrNull function should return a value" {
-                val result = original.getOrNull()
-
-                result shouldBe ORIGINAL_VALUE
-            }
-
-            "calling getOrElse function should return a value" {
-                val result = original.getOrElse { ELSE_VALUE }
-
-                result shouldBe ORIGINAL_VALUE
-            }
-
-            "calling getOrHandle function should return a value" {
-                val result = original.getOrHandle { ELSE_VALUE }
-
-                result shouldBe ORIGINAL_VALUE
-            }
-
-            "calling orElse function should return a value" {
-                val elseResult = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
-
-                val result = original.orElse { elseResult }
-
-                result shouldBe original
-            }
-
-            "calling orThrow function should return a value" {
-                val result = original.orThrow { throw IllegalStateException() }
-
-                result shouldBe ORIGINAL_VALUE
-            }
-
-            "should comply with equals() and hashCode() contract" {
-                original.shouldBeEqualsContract(
-                    y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    other = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
-                )
-                original.shouldBeEqualsContract(
-                    y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    other = ReaderResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
-                )
-            }
-        }
-
-        "A ReaderResult#Failure type" - {
-            val original: ReaderResult<String> =
-                ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
-
-            "constructor(JsLocation, JsError)" {
-                val failure = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
-
-                failure.causes shouldContainExactly listOf(
-                    ReaderResult.Failure.Cause(
-                        location = LOCATION,
-                        errors = ReaderResult.Errors(JsonErrors.PathMissing)
-                    )
-                )
-            }
-
-            "constructor(JsLocation, ReaderResult#Errors)" {
-                val errors = ReaderResult.Errors(JsonErrors.PathMissing)
-
-                val failure = ReaderResult.Failure(location = LOCATION, errors = errors)
-
-                failure.causes shouldContainExactly listOf(
-                    ReaderResult.Failure.Cause(
-                        location = LOCATION,
-                        errors = errors
-                    )
-                )
-            }
-
-            "calling plus function should return " {
-                val firstFailure =
-                    ReaderResult.Failure(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing))
-                val secondFailure = ReaderResult.Failure(
-                    location = LOCATION,
-                    errors = ReaderResult.Errors(
-                        JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
-                        )
-                    )
-                )
-
-                val failure = firstFailure + secondFailure
-
-                failure.causes shouldContainExactly listOf(
-                    ReaderResult.Failure.Cause(
-                        location = LOCATION,
-                        errors = ReaderResult.Errors(JsonErrors.PathMissing)
-                    ),
-                    ReaderResult.Failure.Cause(
-                        location = LOCATION,
-                        errors = ReaderResult.Errors(
-                            JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = BooleanNode.nameOfType
-                            )
-                        )
-                    )
-                )
-            }
-
-            "calling fold function should return an alternative value" {
-                val result = original.fold(
-                    ifFailure = { ELSE_VALUE },
-                    ifSuccess = { it.value }
-                )
-
-                result shouldBe ELSE_VALUE
-            }
-
-            "calling map function should return an original do not apply the [transform] function to the value" {
-                val result = original.map { it.toInt() }
-
-                result shouldBe original
-            }
-
-            "calling flatMap function should return an original do not apply the [transform] function to the value" {
-                val result = original.flatMap { location, value ->
-                    ReaderResult.Success(location = location, value = value.toInt())
-                }
-
-                result shouldBe original
-            }
-
-            "calling recovery function should return the result of invoking the recovery function" {
-                val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
-
-                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
-            }
-
-            "calling getOrNull function should return the null value" {
-                val result = original.getOrNull()
-
-                result.shouldBeNull()
-            }
-
-            "calling getOrElse function should return a defaultValue" {
-                val result = original.getOrElse { ELSE_VALUE }
-
-                result shouldBe ELSE_VALUE
-            }
-
-            "calling getOrHandle function should return a value from a handler" {
-                val result = original.getOrHandle { ELSE_VALUE }
-
-                result shouldBe ELSE_VALUE
-            }
-
-            "calling orElse function should return the result of calling the [defaultValue] function" {
-                val elseResult = ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
-
-                val result = original.orElse { elseResult }
-
-                result shouldBe elseResult
-            }
-
-            "calling orThrow function should return an exception" {
-                shouldThrow<IllegalStateException> {
-                    original.orThrow { throw IllegalStateException() }
+                    result shouldBe ORIGINAL_VALUE
                 }
             }
 
-            "should comply with equals() and hashCode() contract" {
-                original.shouldBeEqualsContract(
-                    y = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    other = ReaderResult.Failure(location = LOCATION, error = JsonErrors.AdditionalItems)
-                )
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                original.shouldBeEqualsContract(
-                    y = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    other = ReaderResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
-                )
+                "then should return the null value" {
+                    val result = original.fold(ifFailure = { ELSE_VALUE }, ifSuccess = { it.value })
+
+                    result shouldBe ELSE_VALUE
+                }
             }
         }
 
-        "A ReaderResult#Failure#Cause type" - {
+        "The extension function ReaderResult#map" - {
 
-            "constructor(JsLocation, JsError)" {
-                val cause = ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+            "when result is success" - {
+                val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
-                cause.location shouldBe LOCATION
-                cause.errors shouldBe ReaderResult.Errors(JsonErrors.PathMissing)
+                "then should return a result of applying the [transform] function to the value" {
+                    val result = original.map { it.toInt() }
+
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                }
             }
 
-            "constructor(Location, ReaderResult#Errors)" {
-                val cause = ReaderResult.Failure.Cause(
-                    location = LOCATION,
-                    errors = ReaderResult.Errors(JsonErrors.PathMissing)
-                )
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                cause.location shouldBe LOCATION
-                cause.errors.items shouldContainExactly listOf(JsonErrors.PathMissing)
+                "then should return an original do not apply the [transform] function to a value" {
+                    val result = original.map { it.toInt() }
+
+                    result shouldBe original
+                }
             }
         }
 
-        "ReaderResult#merge function" {
-            val failures = listOf(
-                ReaderResult.Failure(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
-                ReaderResult.Failure(
+        "The extension function ReaderResult#flatMap" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return a result of applying the [transform] function to the value" {
+                    val result = original.flatMap { location, value ->
+                        ReaderResult.Success(location = location, value = value.toInt())
+                    }
+
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return an original do not apply the [transform] function to a value" {
+                    val result = original.flatMap { location, value ->
+                        ReaderResult.Success(location = location, value = value.toInt())
+                    }
+
+                    result shouldBe original
+                }
+            }
+        }
+
+        "The extension function ReaderResult#recovery" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return an original value" {
+                    val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
+
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return the result of invoking the recovery function" {
+                    val result = original.recovery { ReaderResult.Success(location = LOCATION, value = ELSE_VALUE) }
+
+                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
+                }
+            }
+        }
+
+        "The extension function ReaderResult#getOrNull" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return a value" {
+                    val result = original.getOrNull()
+
+                    result shouldBe ORIGINAL_VALUE
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return the null value" {
+                    val result = original.getOrNull()
+
+                    result.shouldBeNull()
+                }
+            }
+        }
+
+        "The extension function ReaderResult#getOrElse" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return a value" {
+                    val result = original.getOrElse { ELSE_VALUE }
+
+                    result shouldBe ORIGINAL_VALUE
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return the defaultValue value" {
+                    val result = original.getOrElse { ELSE_VALUE }
+
+                    result shouldBe ELSE_VALUE
+                }
+            }
+        }
+
+        "The extension function ReaderResult#getOrHandle" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return a value" {
+                    val result = original.getOrHandle { ELSE_VALUE }
+
+                    result shouldBe ORIGINAL_VALUE
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return a value from a handler" {
+                    val result = original.getOrHandle { ELSE_VALUE }
+
+                    result shouldBe ELSE_VALUE
+                }
+            }
+        }
+
+        "The extension function ReaderResult#orElse" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return a value" {
+                    val elseResult: ReaderResult.Success<String> =
+                        ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
+
+                    val result = original.orElse { elseResult }
+
+                    result shouldBe original
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return the defaultValue value" {
+                    val elseResult: ReaderResult.Success<String> =
+                        ReaderResult.Success(location = LOCATION, value = ELSE_VALUE)
+
+                    val result = original.orElse { elseResult }
+
+                    result shouldBe elseResult
+                }
+            }
+        }
+
+        "The extension function ReaderResult#orThrow" - {
+
+            "when result is success" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                "then should return a value" {
+                    val result = original.orThrow { throw IllegalStateException() }
+
+                    result shouldBe ORIGINAL_VALUE
+                }
+            }
+
+            "when result is failure" - {
+                val original: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then should return an exception" {
+                    shouldThrow<IllegalStateException> {
+                        original.orThrow { throw IllegalStateException() }
+                    }
+                }
+            }
+        }
+
+        "The extension function ReaderResult#filter" - {
+            val isNotBlank = ReaderPredicate<EB, Unit, Unit, String> { _, _, _, value -> value.isNotBlank() }
+
+            "when result is success" - {
+
+                "when the value satisfies the predicate" - {
+                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "  ")
+
+                    "then filter should return null" {
+                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
+                        filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                    }
+                }
+
+                "when the value does not satisfy the predicate and is not the null" - {
+                    val result: ReaderResult<String> =
+                        ReaderResult.Success(location = LOCATION, value = "user")
+
+                    "then filter should return the original value" {
+                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
+                        filtered shouldBe result
+                    }
+                }
+
+                "when the value does not satisfy the predicate and is the null" - {
+                    val result: ReaderResult<String?> = ReaderResult.Success(location = LOCATION, value = null)
+
+                    "then filter should return the original value" {
+                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
+                        filtered shouldBe result
+                    }
+                }
+            }
+
+            "when result is failure" - {
+                val result: ReaderResult<String> = ReaderResult.Failure(
                     location = LOCATION,
-                    errors = ReaderResult.Errors(
-                        JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
-                        )
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(StringNode.nameOfType),
+                        actual = BooleanNode.nameOfType
                     )
                 )
+
+                "then filter should return the original value" {
+                    val filtered = result.filter(ENV, CONTEXT, isNotBlank)
+                    filtered shouldBe result
+                }
+            }
+        }
+
+        "The extension function ReaderResult#validation" - {
+            val isNotEmpty = DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }
+
+            "when result is success" - {
+
+                "when the value does not contain a valid value" - {
+                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "")
+
+                    "then validator should return an error" {
+                        val validated = result.validation(
+                            ENV,
+                            CONTEXT, isNotEmpty
+                        )
+
+                        validated shouldBe ReaderResult.Failure(
+                            location = LOCATION,
+                            error = JsonErrors.Validation.Strings.IsEmpty
+                        )
+                    }
+                }
+
+                "when the value contains a valid value" - {
+                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "user")
+
+                    "then validator should return the original value" {
+                        val validated = result.validation(
+                            ENV,
+                            CONTEXT, isNotEmpty
+                        )
+                        validated shouldBe result
+                    }
+                }
+            }
+
+            "when result is failure" - {
+                val result: ReaderResult<String> =
+                    ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+
+                "then validator should return the original value" {
+                    val validated = result.validation(ENV, CONTEXT, isNotEmpty)
+                    validated shouldBe result
+                }
+            }
+        }
+
+        "The extension function T#success" {
+            val result = ORIGINAL_VALUE.success(LOCATION)
+
+            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+        }
+
+        "The extension function E#failure" {
+            val result = JsonErrors.PathMissing.failure(LOCATION)
+
+            result shouldBeFailure ReaderResult.Failure(
+                location = LOCATION,
+                errors = ReaderResult.Errors(JsonErrors.PathMissing)
             )
-
-            val failure = failures.merge()
-
-            failure.causes shouldContainExactly listOf(
-                ReaderResult.Failure.Cause(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
-                ReaderResult.Failure.Cause(
-                    location = LOCATION,
-                    errors = ReaderResult.Errors(
-                        JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
-                        )
-                    )
-                )
-            )
         }
 
-        "ReaderResult#withCatching" - {
+        "The extension function ReaderResult#withCatching" - {
 
             "when no exception is thrown in the block" - {
                 val block: () -> ReaderResult<String> = { ORIGINAL_VALUE.success(LOCATION) }
@@ -370,19 +448,39 @@ internal class ReaderResultTest : FreeSpec() {
             }
         }
 
-        "asSuccess(JsLocation) extension function" {
-            val result = ORIGINAL_VALUE.success(LOCATION)
+        "The extension function Collection<ReaderResult#Failure>#merge" {
+            val failures = listOf(
+                ReaderResult.Failure(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
+                ReaderResult.Failure(
+                    location = LOCATION,
+                    errors = ReaderResult.Errors(
+                        JsonErrors.InvalidType(
+                            expected = listOf(StringNode.nameOfType),
+                            actual = BooleanNode.nameOfType
+                        )
+                    )
+                )
+            )
 
-            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
-        }
+            val failure = failures.merge()
 
-        "asFailure(JsLocation) extension function" {
-            val result = JsonErrors.PathMissing.failure(LOCATION)
-
-            result shouldBeFailure ReaderResult.Failure(
-                location = LOCATION,
-                errors = ReaderResult.Errors(JsonErrors.PathMissing)
+            failure.causes shouldContainExactly listOf(
+                ReaderResult.Failure.Cause(location = LOCATION, errors = ReaderResult.Errors(JsonErrors.PathMissing)),
+                ReaderResult.Failure.Cause(
+                    location = LOCATION,
+                    errors = ReaderResult.Errors(
+                        JsonErrors.InvalidType(
+                            expected = listOf(StringNode.nameOfType),
+                            actual = BooleanNode.nameOfType
+                        )
+                    )
+                )
             )
         }
+    }
+
+    internal class EB : InvalidTypeErrorBuilder {
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+            JsonErrors.InvalidType(expected, actual)
     }
 }

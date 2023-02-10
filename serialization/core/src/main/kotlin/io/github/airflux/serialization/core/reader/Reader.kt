@@ -23,6 +23,7 @@ import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator

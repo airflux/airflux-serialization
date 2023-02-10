@@ -29,4 +29,15 @@ internal class DummyValidator<EB, O, CTX, T>(
 
     override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure? =
         result(env, context, location, value)
+
+    internal companion object {
+
+        internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReaderResult.Error): Validator<EB, O, CTX, String> =
+            DummyValidator { _, _, location, value ->
+                if (value.isNotEmpty())
+                    null
+                else
+                    ReaderResult.Failure(location = location, error = error())
+            }
+    }
 }

@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
+@file:Suppress("TooManyFunctions")
+
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.validator.Validator
 
 public sealed class ReaderResult<out T> {
 
     public companion object;
-
-    public infix fun <R> map(transform: (T) -> R): ReaderResult<R> =
-        flatMap { location, value -> transform(value).success(location) }
-
-    public fun <R> flatMap(transform: (Location, T) -> ReaderResult<R>): ReaderResult<R> = fold(
-        ifFailure = ::identity,
-        ifSuccess = { transform(it.location, it.value) }
-    )
 
     public data class Success<T>(val location: Location, val value: T) : ReaderResult<T>()
 
@@ -67,13 +63,19 @@ public sealed class ReaderResult<out T> {
     @JvmInline
     public value class Errors private constructor(public val items: List<Error>) {
 
-        public operator fun plus(other: Errors): Errors = Errors(items + other.items)
+        public constructor(error: Error) : this(listOf(error))
 
-        public companion object {
-            public operator fun invoke(error: Error): Errors = Errors(listOf(error))
-        }
+        public operator fun plus(other: Errors): Errors = Errors(items + other.items)
     }
 }
+
+public infix fun <T, R> ReaderResult<T>.map(transform: (T) -> R): ReaderResult<R> =
+    flatMap { location, value -> transform(value).success(location) }
+
+public infix fun <T, R> ReaderResult<T>.flatMap(transform: (Location, T) -> ReaderResult<R>): ReaderResult<R> = fold(
+    ifFailure = ::identity,
+    ifSuccess = { transform(it.location, it.value) }
+)
 
 public inline fun <T, R> ReaderResult<T>.fold(
     ifFailure: (ReaderResult.Failure) -> R,
@@ -113,6 +115,33 @@ public infix fun <T> ReaderResult<T>.orElse(defaultValue: () -> ReaderResult<T>)
 public infix fun <T> ReaderResult<T>.orThrow(exceptionBuilder: (ReaderResult.Failure) -> Throwable): T = fold(
     ifFailure = { throw exceptionBuilder(it) },
     ifSuccess = { it.value }
+)
+
+public fun <EB, O, CTX, T> ReaderResult<T?>.filter(
+    env: ReaderEnv<EB, O>,
+    context: CTX,
+    predicate: ReaderPredicate<EB, O, CTX, T>
+): ReaderResult<T?> = fold(
+    ifFailure = ::identity,
+    ifSuccess = { result ->
+        if (result.value == null)
+            result
+        else {
+            if (predicate.test(env, context, result.location, result.value))
+                result
+            else
+                ReaderResult.Success(location = result.location, value = null)
+        }
+    }
+)
+
+public fun <EB, O, CTX, T> ReaderResult<T>.validation(
+    env: ReaderEnv<EB, O>,
+    context: CTX,
+    validator: Validator<EB, O, CTX, T>
+): ReaderResult<T> = fold(
+    ifFailure = ::identity,
+    ifSuccess = { result -> validator.validate(env, context, result.location, result.value) ?: result }
 )
 
 public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Success(location = location, value = this)
