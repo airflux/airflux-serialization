@@ -62,12 +62,6 @@ object Configuration {
             const val Tool = "1.22.0"
         }
 
-        object JaCoCo {
-            const val Tool = "0.8.8"
-        }
-
-        const val IntellijEngine = "1.0.668"
-
         object Test {
 
             const val Kotest = "5.5.5"
