@@ -26,6 +26,6 @@ public fun interface ArrayValidator<EB, O, CTX> {
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        source: ArrayNode<*>
+        source: ArrayNode
     ): ReaderResult.Failure?
 }

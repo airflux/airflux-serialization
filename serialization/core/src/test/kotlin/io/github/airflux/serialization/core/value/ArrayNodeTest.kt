@@ -39,7 +39,7 @@ internal class ArrayNodeTest : FreeSpec() {
         "The ArrayNode type" - {
 
             "when created without elements" - {
-                val array = ArrayNode<StringNode>()
+                val array = ArrayNode()
 
                 "should be empty" {
                     array.isEmpty() shouldBe true

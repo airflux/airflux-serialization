@@ -69,7 +69,7 @@ public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
 
 public class ArrayReader<EB, O, CTX, T> private constructor(
     private val validators: List<ArrayValidator<EB, O, CTX>>,
-    private val readerResultBuilder: (ReaderEnv<EB, O>, CTX, Location, ArrayNode<*>) -> ReaderResult<List<T>>
+    private val readerResultBuilder: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReaderResult<List<T>>
 ) : Reader<EB, O, CTX, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
@@ -81,7 +81,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         location: Location,
         source: ValueNode
     ): ReaderResult<List<T>> =
-        if (source is ArrayNode<*>)
+        if (source is ArrayNode)
             read(env, context, location, source)
         else
             ReaderResult.Failure(
@@ -93,7 +93,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        source: ArrayNode<*>
+        source: ArrayNode
     ): ReaderResult<List<T>> {
         val failFast = env.options.failFast
         val failures = mutableListOf<ReaderResult.Failure>()
@@ -183,7 +183,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         }
 
         private fun build(
-            block: (ReaderEnv<EB, O>, CTX, Location, ArrayNode<*>) -> ReaderResult<List<T>>
+            block: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReaderResult<List<T>>
         ): Reader<EB, O, CTX, List<T>> {
             val validators = validatorBuilders.map { builder -> builder.build() }
                 .takeIf { it.isNotEmpty() }

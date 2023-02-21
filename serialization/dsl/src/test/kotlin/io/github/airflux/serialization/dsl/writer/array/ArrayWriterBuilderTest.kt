@@ -20,7 +20,6 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.common.DummyWriter
@@ -101,7 +100,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
                         "then should return a value of the ArrayNode type without items" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe ArrayNode<ValueNode>()
+                            result shouldBe ArrayNode()
                         }
                     }
 
@@ -218,7 +217,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
                         "then should return a value of the ArrayNode type without items" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe ArrayNode<ValueNode>()
+                            result shouldBe ArrayNode()
                         }
                     }
 
@@ -255,7 +254,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
                         "then should return a value of the ArrayNode type without items" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe ArrayNode<ValueNode>()
+                            result shouldBe ArrayNode()
                         }
                     }
 

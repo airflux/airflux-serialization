@@ -58,7 +58,7 @@ public class ArrayWriter<O, CTX, T> private constructor(
             ArrayNode(result)
         else
             when (env.options.writerActionIfResultIsEmpty) {
-                RETURN_EMPTY_VALUE -> ArrayNode<Nothing>()
+                RETURN_EMPTY_VALUE -> ArrayNode()
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> NullNode
             }

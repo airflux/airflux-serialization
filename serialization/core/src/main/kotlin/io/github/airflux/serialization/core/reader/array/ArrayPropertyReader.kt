@@ -36,7 +36,7 @@ public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    source: ArrayNode<*>,
+    source: ArrayNode,
     prefixItems: List<Reader<EB, O, CTX, T>>,
     errorIfAdditionalItems: Boolean
 ): ReaderResult<List<T>>
@@ -59,7 +59,7 @@ public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    source: ArrayNode<*>,
+    source: ArrayNode,
     items: Reader<EB, O, CTX, T>
 ): ReaderResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
@@ -82,7 +82,7 @@ public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    source: ArrayNode<*>,
+    source: ArrayNode,
     prefixItems: List<Reader<EB, O, CTX, T>>,
     items: Reader<EB, O, CTX, T>
 ): ReaderResult<List<T>>
@@ -97,7 +97,7 @@ public fun <EB, O, CTX, T> readArray(
         errorIfAdditionalItems = false
     )
 
-internal fun <EB, O, CTX, T> ArrayNode<*>.read(
+internal fun <EB, O, CTX, T> ArrayNode.read(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,

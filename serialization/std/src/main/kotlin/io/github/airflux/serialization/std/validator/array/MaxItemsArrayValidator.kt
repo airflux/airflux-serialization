@@ -31,7 +31,7 @@ public class MaxItemsArrayValidator<EB, O, CTX> internal constructor(
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        source: ArrayNode<*>
+        source: ArrayNode
     ): ReaderResult.Failure? =
         if (source.size > expected)
             ReaderResult.Failure(location, env.errorBuilders.maxItemsArrayError(expected, source.size))

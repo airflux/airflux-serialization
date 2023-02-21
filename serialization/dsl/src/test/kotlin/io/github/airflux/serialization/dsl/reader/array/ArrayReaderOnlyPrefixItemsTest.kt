@@ -26,7 +26,6 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.common.DummyArrayValidatorBuilder.Companion.minItems
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -136,7 +135,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array" - {
-                            val source = ArrayNode<StringNode>()
+                            val source = ArrayNode()
 
                             "then the reader should return it error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -151,7 +150,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array and reading items" - {
-                            val source = ArrayNode<ValueNode>(BooleanNode.valueOf(true))
+                            val source = ArrayNode(BooleanNode.valueOf(true))
 
                             "then the reader should return validation error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -227,7 +226,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array" - {
-                            val source = ArrayNode<StringNode>()
+                            val source = ArrayNode()
 
                             "then the reader should return it error" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -242,7 +241,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array and reading items" - {
-                            val source = ArrayNode<ValueNode>(BooleanNode.valueOf(true))
+                            val source = ArrayNode(BooleanNode.valueOf(true))
 
                             "then the reader should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)

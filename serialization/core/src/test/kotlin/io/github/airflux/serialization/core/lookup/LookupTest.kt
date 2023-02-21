@@ -115,7 +115,7 @@ internal class LookupTest : FreeSpec() {
                     //Source is empty array
                     TestCaseData.WithIndex(
                         description = "2",
-                        source = ArrayNode<StringNode>(),
+                        source = ArrayNode(),
                         index = IDX,
                         result = LookupResult.Undefined.PathMissing(LOCATION.append(IDX))
                     ),
@@ -216,19 +216,19 @@ internal class LookupTest : FreeSpec() {
                     //Source is empty array
                     TestCaseData.WithPath(
                         description = "4.1",
-                        source = ArrayNode<StringNode>(),
+                        source = ArrayNode(),
                         path = PropertyPath(IDX),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(IDX))
                     ),
                     TestCaseData.WithPath(
                         description = "4.2",
-                        source = ArrayNode<StringNode>(),
+                        source = ArrayNode(),
                         path = PropertyPath(IDX).append(ID),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(IDX).append(ID))
                     ),
                     TestCaseData.WithPath(
                         description = "4.3",
-                        source = ArrayNode<StringNode>(),
+                        source = ArrayNode(),
                         path = PropertyPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
@@ -238,7 +238,7 @@ internal class LookupTest : FreeSpec() {
                     ),
                     TestCaseData.WithPath(
                         description = "4.4",
-                        source = StructNode(PHONES to ArrayNode<StringNode>()),
+                        source = StructNode(PHONES to ArrayNode()),
                         path = PropertyPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(PHONES).append(IDX))
                     ),
@@ -464,7 +464,7 @@ internal class LookupTest : FreeSpec() {
                     "when the source is empty" - {
                         val searchIndex = IDX
                         val defined =
-                            LookupResult.Defined(location = LOCATION.append(PHONES), value = ArrayNode<StringNode>())
+                            LookupResult.Defined(location = LOCATION.append(PHONES), value = ArrayNode())
 
                         "then should return the value as an instance of the Undefined#PathMissing type" {
                             val lookup = defined.apply(searchIndex)

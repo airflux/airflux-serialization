@@ -48,7 +48,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 is StringNode -> gen.writeString(value.get)
                 is BooleanNode -> gen.writeBoolean(value.get)
                 is NumericNode -> gen.writeNumber(value.get)
-                is ArrayNode<*> -> {
+                is ArrayNode -> {
                     gen.writeStartArray()
                     value.forEach { element ->
                         serialize(element, gen, provider)
@@ -107,7 +107,8 @@ public object AirFluxJsonModule : SimpleModule() {
                 }
 
                 JsonToken.VALUE_NUMBER_FLOAT -> {
-                    maybeValue = NumericNode.Number.valueOrNullOf(jp.text) ?: throw ParsingException("Invalid number value.")
+                    maybeValue =
+                        NumericNode.Number.valueOrNullOf(jp.text) ?: throw ParsingException("Invalid number value.")
                     nextContext = parserContext
                 }
 

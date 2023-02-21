@@ -42,7 +42,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
             val validator: ArrayValidator<EB, Unit, Unit> = StdArrayValidator.isNotEmpty<EB, Unit, Unit>().build()
 
             "when an array is empty" - {
-                val source: ArrayNode<StringNode> = ArrayNode()
+                val source = ArrayNode()
 
                 "then the validator should return an error" {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -56,7 +56,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
             }
 
             "when an array is not empty" - {
-                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
+                val source = ArrayNode(StringNode("A"), StringNode("B"))
 
                 "then the validator should do not return any errors" {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)

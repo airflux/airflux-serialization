@@ -33,7 +33,7 @@ internal class ReadAsArrayTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = Location.empty.append("user")
         private const val USER_NAME = "user"
-        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: ArrayNode<*> ->
+        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: ArrayNode ->
             val result = source.map { (it as StringNode).get }
             ReaderResult.Success(location = location, value = result)
         }

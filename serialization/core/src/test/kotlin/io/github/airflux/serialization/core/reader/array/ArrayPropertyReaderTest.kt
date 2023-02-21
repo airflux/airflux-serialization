@@ -60,7 +60,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
         "The readArray function for the items-only reader" - {
 
             "when parameter 'source' is empty" - {
-                val source = ArrayNode<StringNode>()
+                val source = ArrayNode()
 
                 "then reader should return result" - {
                     withData(
@@ -171,7 +171,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
         "The readArray function for the prefix-items-only readers" - {
 
             "when parameter 'source' is empty" - {
-                val source = ArrayNode<StringNode>()
+                val source = ArrayNode()
 
                 "then reader should return result" - {
                     withData(
@@ -395,7 +395,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
         "The readArray function for the prefix-items and items readers" - {
 
             "when parameter 'source' is empty" - {
-                val source = ArrayNode<StringNode>()
+                val source = ArrayNode()
 
                 "then reader should return result" - {
                     withData(

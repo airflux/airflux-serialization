@@ -97,10 +97,10 @@ public inline fun <EB, O, CTX, T> ValueNode.readAsArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, ArrayNode<*>) -> ReaderResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReaderResult<T>
 ): ReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is ArrayNode<*>)
+    if (this is ArrayNode)
         reader(env, context, location, this)
     else
         ReaderResult.Failure(
@@ -113,7 +113,7 @@ internal fun ValueNode.getOrNull(path: PropertyPath): ValueNode? {
         if (path != null)
             when (val element = path.head) {
                 is PropertyPath.Element.Key -> if (this is StructNode) this[element]?.getOrNull(path.tail) else null
-                is PropertyPath.Element.Idx -> if (this is ArrayNode<*>) this[element]?.getOrNull(path.tail) else null
+                is PropertyPath.Element.Idx -> if (this is ArrayNode) this[element]?.getOrNull(path.tail) else null
             }
         else
             this

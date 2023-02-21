@@ -44,7 +44,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                 StdArrayValidator.minItems<EB, Unit, Unit>(MIN_ITEMS).build()
 
             "when a collection is empty" - {
-                val source: ArrayNode<StringNode> = ArrayNode()
+                val source = ArrayNode()
 
                 "the validator should return an error" {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -58,7 +58,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the collection contains a number of elements less than the minimum" - {
-                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"))
+                val source = ArrayNode(StringNode("A"))
 
                 "then the validator should return an error" {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -72,7 +72,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the collection contains a number of elements equal to the minimum" - {
-                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"))
+                val source = ArrayNode(StringNode("A"), StringNode("B"))
 
                 "then the validator should do not return any errors" {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -81,7 +81,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the collection contains a number of elements more than the minimum" - {
-                val source: ArrayNode<StringNode> = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
+                val source = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
                 "then the validator should do not return any errors" {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)

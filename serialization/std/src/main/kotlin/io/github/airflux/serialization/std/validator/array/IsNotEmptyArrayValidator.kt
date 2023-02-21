@@ -29,7 +29,7 @@ public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : Array
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        source: ArrayNode<*>
+        source: ArrayNode
     ): ReaderResult.Failure? =
         if (source.isEmpty())
             ReaderResult.Failure(location, env.errorBuilders.isNotEmptyArrayError())

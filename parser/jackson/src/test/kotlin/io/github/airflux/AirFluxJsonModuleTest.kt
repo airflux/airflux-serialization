@@ -99,7 +99,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                 "the value as the ArrayNode type" {
                     val json = """["123"]""".deserialization()
 
-                    val root = json.shouldBeInstanceOf<ArrayNode<StringNode>>()
+                    val root = json.shouldBeInstanceOf<ArrayNode>()
 
                     root.size shouldBe 1
                     root[0] shouldBe StringNode("123")

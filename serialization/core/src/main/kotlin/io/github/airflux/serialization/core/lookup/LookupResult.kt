@@ -66,7 +66,7 @@ public fun ValueNode.lookup(location: Location, key: Element.Key): LookupResult 
         )
 
 public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult =
-    if (this is ArrayNode<*>)
+    if (this is ArrayNode)
         this[idx]
             ?.let { LookupResult.Defined(location = location.append(idx), value = it) }
             ?: LookupResult.Undefined.PathMissing(location = location.append(idx))
@@ -92,7 +92,7 @@ public fun ValueNode.lookup(location: Location, path: PropertyPath): LookupResul
                         breakpoint = location
                     )
 
-                is Element.Idx -> if (source is ArrayNode<*>) {
+                is Element.Idx -> if (source is ArrayNode) {
                     val value = source[element]
                         ?: return LookupResult.Undefined.PathMissing(location = location.append(path))
                     lookup(location.append(element), path.tail, value)

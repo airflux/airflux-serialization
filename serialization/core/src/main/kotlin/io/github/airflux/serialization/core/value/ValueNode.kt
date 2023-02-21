@@ -97,7 +97,7 @@ public sealed class NumericNode private constructor(public val get: String) : Va
     }
 }
 
-public class ArrayNode<out T : ValueNode>(private val items: List<T> = emptyList()) : ValueNode(), Iterable<T> {
+public class ArrayNode(private val items: List<ValueNode> = emptyList()) : ValueNode(), Iterable<ValueNode> {
 
     override val nameOfType: String = ArrayNode.nameOfType
 
@@ -110,19 +110,19 @@ public class ArrayNode<out T : ValueNode>(private val items: List<T> = emptyList
 
     public fun isEmpty(): Boolean = items.isEmpty()
 
-    override fun iterator(): Iterator<T> = items.iterator()
+    override fun iterator(): Iterator<ValueNode> = items.iterator()
 
     override fun toString(): String = items.joinToString(prefix = "[", postfix = "]")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is ArrayNode<*> && this.items == other.items)
+        this === other || (other is ArrayNode && this.items == other.items)
 
     override fun hashCode(): Int = items.hashCode()
 
     public companion object {
         public const val nameOfType: String = "array"
 
-        public operator fun <T : ValueNode> invoke(vararg elements: T): ArrayNode<T> = ArrayNode(elements.toList())
+        public operator fun invoke(vararg elements: ValueNode): ArrayNode = ArrayNode(elements.toList())
     }
 }
 
