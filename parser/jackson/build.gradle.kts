@@ -17,7 +17,7 @@ plugins {
 
 dependencies {
     /* Kotlin */
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
 
     implementation(project(":airflux-serialization-core"))
 

@@ -28,7 +28,7 @@ dependencies {
     implementation(project(":airflux-serialization-dsl"))
 
     /* Kotlin */
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
     /* Test */

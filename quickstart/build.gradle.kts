@@ -22,7 +22,7 @@ dependencies {
     implementation(project(":airflux-jackson-parser"))
 
     /* Kotlin */
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
 
     /* Jackson */
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
