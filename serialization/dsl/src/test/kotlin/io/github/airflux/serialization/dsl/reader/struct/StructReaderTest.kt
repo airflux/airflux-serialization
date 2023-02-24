@@ -95,7 +95,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when the source contains all properties" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                         )
 
@@ -124,7 +124,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when the source does not contain optional properties" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -156,7 +156,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when the source contains the optional property of an invalid type" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                         )
 
@@ -192,7 +192,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when an error occur of validation the structure" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -243,7 +243,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when the source contains all properties" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                         )
 
@@ -272,7 +272,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when the source does not contain optional property" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -304,7 +304,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when the source contains the optional property of an invalid type" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
                         )
 
@@ -349,7 +349,7 @@ internal class StructReaderTest : FreeSpec() {
 
                     "when an error occur of validation the structure" - {
                         val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -405,7 +405,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 val source = StructNode(
-                    ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                    ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                     NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
                 )
 

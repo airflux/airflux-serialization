@@ -34,7 +34,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Byte.MIN_VALUE, Byte.MAX_VALUE)
                 ) { value ->
-                    NumericNode.Integer.valueOf(value).get.toByte() shouldBe value
+                    NumericNode.valueOf(value).get.toByte() shouldBe value
                 }
             }
 
@@ -43,7 +43,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Short.MIN_VALUE, Short.MAX_VALUE)
                 ) { value ->
-                    NumericNode.Integer.valueOf(value).get.toShort() shouldBe value
+                    NumericNode.valueOf(value).get.toShort() shouldBe value
                 }
             }
 
@@ -52,7 +52,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Int.MIN_VALUE, Int.MAX_VALUE)
                 ) { value ->
-                    NumericNode.Integer.valueOf(value).get.toInt() shouldBe value
+                    NumericNode.valueOf(value).get.toInt() shouldBe value
                 }
             }
 
@@ -61,7 +61,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Long.MIN_VALUE, Long.MAX_VALUE)
                 ) { value ->
-                    NumericNode.Integer.valueOf(value).get.toLong() shouldBe value
+                    NumericNode.valueOf(value).get.toLong() shouldBe value
                 }
             }
 
@@ -84,10 +84,10 @@ internal class NumericNodeTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                NumericNode.Integer.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
-                    y = NumericNode.Integer.valueOf(Byte.MIN_VALUE),
-                    z = NumericNode.Integer.valueOf(Byte.MIN_VALUE),
-                    other = NumericNode.Integer.valueOf(Byte.MAX_VALUE)
+                NumericNode.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
+                    y = NumericNode.valueOf(Byte.MIN_VALUE),
+                    z = NumericNode.valueOf(Byte.MIN_VALUE),
+                    other = NumericNode.valueOf(Byte.MAX_VALUE)
                 )
             }
 

@@ -24,4 +24,4 @@ import io.github.airflux.serialization.core.writer.Writer
  * Writer for primitive [Byte] type.
  */
 public fun <O, CTX> byteWriter(): Writer<O, CTX, Byte> =
-    Writer { _, _, _, value -> NumericNode.Integer.valueOf(value) }
+    Writer { _, _, _, value -> NumericNode.valueOf(value) }

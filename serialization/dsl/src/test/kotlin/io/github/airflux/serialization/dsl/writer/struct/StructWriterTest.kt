@@ -65,7 +65,7 @@ internal class StructWriterTest : FreeSpec() {
 
                     "then should return a struct with all properties" {
                         result shouldBe StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                         )
                     }
@@ -78,7 +78,7 @@ internal class StructWriterTest : FreeSpec() {
 
                     "then should return a struct with only non-nullable properties" {
                         result shouldBe StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
                         )
                     }
                 }
@@ -109,7 +109,7 @@ internal class StructWriterTest : FreeSpec() {
 
                     "then should return a struct with all properties" {
                         result shouldBe StructNode(
-                            ID_PROPERTY_NAME to NumericNode.Integer.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
                         )
                     }

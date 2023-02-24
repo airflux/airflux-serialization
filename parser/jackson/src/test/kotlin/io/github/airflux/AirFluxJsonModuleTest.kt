@@ -132,7 +132,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     }
 
                     "with property as a number value" {
-                        val json = StructNode("id" to NumericNode.Integer.valueOf(123))
+                        val json = StructNode("id" to NumericNode.valueOf(123))
                         val value = json.serialization()
                         value shouldBe """{"id":123}"""
                     }

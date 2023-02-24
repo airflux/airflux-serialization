@@ -128,7 +128,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 StringNode(FIRST_ITEM),
                                 StringNode(SECOND_ITEM),
                                 StringNode(THIRD_ITEM),
-                                NumericNode.Integer.valueOf(10)
+                                NumericNode.valueOf(10)
                             )
 
                             "then should return an error" {
@@ -208,7 +208,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 StringNode(FIRST_ITEM),
                                 StringNode(SECOND_ITEM),
                                 StringNode(THIRD_ITEM),
-                                NumericNode.Integer.valueOf(10)
+                                NumericNode.valueOf(10)
                             )
 
                             "then should return all errors" {

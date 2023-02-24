@@ -109,7 +109,7 @@ internal class ArrayPropertyReaderTest : FreeSpec() {
                 }
 
                 "when read was some errors" - {
-                    val source = ArrayNode(NumericNode.Integer.valueOf(10), BooleanNode.True)
+                    val source = ArrayNode(NumericNode.valueOf(10), BooleanNode.True)
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue =

@@ -29,7 +29,7 @@ internal class DummyWriter<O, CTX, T : Any>(val result: (T) -> ValueNode?) : Wri
 
     companion object {
         internal fun <O, CTX> intWriter(): Writer<O, CTX, Int> =
-            DummyWriter(result = { source -> NumericNode.Integer.valueOf(source) })
+            DummyWriter(result = { source -> NumericNode.valueOf(source) })
 
         internal fun <O, CTX> stringWriter(): Writer<O, CTX, String> =
             DummyWriter(result = { source -> StringNode(source) })

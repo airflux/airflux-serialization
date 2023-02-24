@@ -60,19 +60,14 @@ public class StringNode(public val get: String) : ValueNode() {
     }
 }
 
-public fun NumericNode.Integer.Companion.valueOf(value: Byte): NumericNode.Integer = valueOrNullOf(value.toString())!!
-public fun NumericNode.Integer.Companion.valueOf(value: Short): NumericNode.Integer = valueOrNullOf(value.toString())!!
-public fun NumericNode.Integer.Companion.valueOf(value: Int): NumericNode.Integer = valueOrNullOf(value.toString())!!
-public fun NumericNode.Integer.Companion.valueOf(value: Long): NumericNode.Integer = valueOrNullOf(value.toString())!!
-
 public sealed class NumericNode private constructor(public val get: String) : ValueNode() {
-
-    override fun toString(): String = get
 
     override fun equals(other: Any?): Boolean =
         this === other || (other is NumericNode && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
+
+    override fun toString(): String = get
 
     public class Integer private constructor(value: String) : NumericNode(value) {
         override val nameOfType: String = Integer.nameOfType
@@ -85,7 +80,7 @@ public sealed class NumericNode private constructor(public val get: String) : Va
         }
     }
 
-    public class Number(value: String) : NumericNode(value) {
+    public class Number private constructor(value: String) : NumericNode(value) {
         override val nameOfType: String = Number.nameOfType
 
         public companion object {
@@ -95,7 +90,21 @@ public sealed class NumericNode private constructor(public val get: String) : Va
             public fun valueOrNullOf(value: String): Number? = if (value.matches(pattern)) Number(value) else null
         }
     }
+
+    public companion object
 }
+
+public fun NumericNode.Companion.valueOf(value: Byte): NumericNode =
+    NumericNode.Integer.valueOrNullOf(value.toString())!!
+
+public fun NumericNode.Companion.valueOf(value: Short): NumericNode =
+    NumericNode.Integer.valueOrNullOf(value.toString())!!
+
+public fun NumericNode.Companion.valueOf(value: Int): NumericNode =
+    NumericNode.Integer.valueOrNullOf(value.toString())!!
+
+public fun NumericNode.Companion.valueOf(value: Long): NumericNode =
+    NumericNode.Integer.valueOrNullOf(value.toString())!!
 
 public class ArrayNode(private val items: List<ValueNode> = emptyList()) : ValueNode(), Iterable<ValueNode> {
 

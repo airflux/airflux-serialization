@@ -54,7 +54,7 @@ internal class LongReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Long.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: ValueNode = NumericNode.Integer.valueOf(value)
+                    val source: ValueNode = NumericNode.valueOf(value)
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = value)
                 }

@@ -53,7 +53,7 @@ internal class ShortReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Short.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: ValueNode = NumericNode.Integer.valueOf(value)
+                    val source: ValueNode = NumericNode.valueOf(value)
                     val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = value)
                 }

@@ -43,7 +43,7 @@ internal class ReadAsNumberTest : FreeSpec() {
             "when called with a receiver of the NumericNode#Integer type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumericNode.Integer.valueOf(Int.MAX_VALUE)
+                    val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }

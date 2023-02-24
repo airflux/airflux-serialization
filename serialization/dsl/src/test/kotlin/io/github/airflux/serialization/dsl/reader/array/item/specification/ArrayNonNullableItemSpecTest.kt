@@ -65,7 +65,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = NumericNode.Integer.valueOf(10)
+                        val source = NumericNode.valueOf(10)
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -110,7 +110,7 @@ internal class ArrayNonNullableItemSpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = NumericNode.Integer.valueOf(10)
+                        val source = NumericNode.valueOf(10)
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 

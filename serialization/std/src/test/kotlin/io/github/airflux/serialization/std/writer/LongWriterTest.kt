@@ -40,7 +40,7 @@ internal class LongWriterTest : FreeSpec() {
 
             "should return the NumericNode value" {
                 val result = writer.write(ENV, CONTEXT, LOCATION, value)
-                result shouldBe NumericNode.Integer.valueOf(value)
+                result shouldBe NumericNode.valueOf(value)
             }
         }
     }

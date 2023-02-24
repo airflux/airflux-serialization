@@ -111,7 +111,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOf(10))
+                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
@@ -174,7 +174,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOf(10))
+                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
@@ -222,7 +222,7 @@ internal class DefaultablePropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOf(10))
+                        val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 

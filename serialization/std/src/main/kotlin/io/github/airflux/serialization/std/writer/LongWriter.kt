@@ -24,4 +24,4 @@ import io.github.airflux.serialization.core.writer.Writer
  * Writer for primitive [Long] type.
  */
 public fun <O, CTX> longWriter(): Writer<O, CTX, Long> =
-    Writer { _, _, _, value -> NumericNode.Integer.valueOf(value) }
+    Writer { _, _, _, value -> NumericNode.valueOf(value) }
