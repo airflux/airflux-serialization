@@ -145,7 +145,13 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
 
         public fun build(items: ArrayItemSpec<EB, O, CTX, T>): Reader<EB, O, CTX, List<T>> =
             build { env, context, location, source ->
-                readArray(env = env, context = context, location = location, source = source, items = items.reader)
+                readArray(
+                    env = env,
+                    context = context,
+                    location = location,
+                    source = source,
+                    itemsReader = items.reader
+                )
             }
 
         public fun build(
@@ -159,7 +165,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
                     context = context,
                     location = location,
                     source = source,
-                    prefixItems = prefixItemReaders,
+                    prefixItemReaders = prefixItemReaders,
                     errorIfAdditionalItems = !items
                 )
             }
@@ -176,8 +182,8 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
                     context = context,
                     location = location,
                     source = source,
-                    prefixItems = prefixItemReaders,
-                    items = items.reader
+                    prefixItemReaders = prefixItemReaders,
+                    itemsReader = items.reader
                 )
             }
         }
