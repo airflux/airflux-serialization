@@ -23,6 +23,7 @@ import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.ifNullValue
 import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
@@ -91,3 +92,10 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.validation(
         this@validation.read(env, context, location, source)
             .validation(env, context, validator)
     }
+
+public infix fun <EB, O, CTX, T : Any> Reader<EB, O, CTX, T?>.ifNullValue(
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+): Reader<EB, O, CTX, T> = Reader { env, context, location, source ->
+    this@ifNullValue.read(env, context, location, source)
+        .ifNullValue { defaultValue(env, context, it) }
+}

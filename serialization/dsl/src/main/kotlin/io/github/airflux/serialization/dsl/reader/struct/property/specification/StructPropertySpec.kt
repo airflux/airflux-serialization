@@ -16,8 +16,11 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.ifNullValue
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.filter
@@ -78,3 +81,8 @@ public infix fun <EB, O, CTX, T : Any> StructPropertySpec.Nullable<EB, O, CTX, T
     alt: StructPropertySpec.Nullable<EB, O, CTX, T>
 ): StructPropertySpec.Nullable<EB, O, CTX, T> =
     StructPropertySpec.Nullable(paths = paths.append(alt.paths), reader = reader or alt.reader)
+
+public infix fun <EB, O, CTX, T : Any> StructPropertySpec.Nullable<EB, O, CTX, T>.ifNullValue(
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+): StructPropertySpec.NonNullable<EB, O, CTX, T> =
+    StructPropertySpec.NonNullable(paths = paths, reader = reader.ifNullValue(defaultValue))
