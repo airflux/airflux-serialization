@@ -294,10 +294,6 @@ public final class io/github/airflux/serialization/core/reader/result/ReaderResu
 	public static final fun withCatching (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Lio/github/airflux/serialization/core/location/Location;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
-public final class io/github/airflux/serialization/core/reader/struct/DefaultablePropertyReaderKt {
-	public static final fun readWithDefault (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
-}
-
 public final class io/github/airflux/serialization/core/reader/struct/OptionalPropertyReaderKt {
 	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }

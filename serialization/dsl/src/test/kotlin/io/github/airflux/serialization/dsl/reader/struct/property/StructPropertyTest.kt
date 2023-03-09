@@ -23,7 +23,6 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.defaultable
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.kotest.core.spec.style.FreeSpec
@@ -57,19 +56,6 @@ internal class StructPropertyTest : FreeSpec() {
             "when created an instance of the requiredIf property" - {
                 val spec = required(name = "id", reader = StringReader, predicate = { _, _, _ -> true })
                 val property = StructProperty.Nullable(spec)
-
-                "then the paths should equal the paths from the spec" {
-                    property.paths shouldBe spec.paths
-                }
-
-                "then the reader should equal the reader from the spec" {
-                    property.reader shouldBe spec.reader
-                }
-            }
-
-            "when created an instance of the defaultable property" - {
-                val spec = defaultable(name = "id", reader = StringReader, default = DEFAULT)
-                val property = StructProperty.NonNullable(spec)
 
                 "then the paths should equal the paths from the spec" {
                     property.paths shouldBe spec.paths
