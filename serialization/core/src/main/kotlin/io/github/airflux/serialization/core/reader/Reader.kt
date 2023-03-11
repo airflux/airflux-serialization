@@ -93,9 +93,9 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.validation(
             .validation(env, context, validator)
     }
 
-public infix fun <EB, O, CTX, T : Any> Reader<EB, O, CTX, T?>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
-): Reader<EB, O, CTX, T> = Reader { env, context, location, source ->
+public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T & Any
+): Reader<EB, O, CTX, T & Any> = Reader { env, context, location, source ->
     this@ifNullValue.read(env, context, location, source)
         .ifNullValue { defaultValue(env, context, it) }
 }

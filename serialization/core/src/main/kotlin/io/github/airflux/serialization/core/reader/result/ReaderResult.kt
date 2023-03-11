@@ -144,12 +144,12 @@ public fun <EB, O, CTX, T> ReaderResult<T>.validation(
     ifSuccess = { result -> validator.validate(env, context, result.location, result.value) ?: result }
 )
 
-public inline fun <T : Any> ReaderResult<T?>.ifNullValue(defaultValue: (Location) -> T): ReaderResult<T> = fold(
+public inline fun <T> ReaderResult<T>.ifNullValue(defaultValue: (Location) -> T & Any): ReaderResult<T & Any> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
         if (result.value != null)
             @Suppress("UNCHECKED_CAST")
-            result as ReaderResult.Success<T>
+            result as ReaderResult.Success<T & Any>
         else
             defaultValue(result.location).success(result.location)
     }
