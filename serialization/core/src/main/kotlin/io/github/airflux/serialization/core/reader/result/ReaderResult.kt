@@ -117,10 +117,10 @@ public infix fun <T> ReaderResult<T>.orThrow(exceptionBuilder: (ReaderResult.Fai
     ifSuccess = { it.value }
 )
 
-public fun <EB, O, CTX, T> ReaderResult<T?>.filter(
+public fun <EB, O, CTX, T> ReaderResult<T>.filter(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    predicate: ReaderPredicate<EB, O, CTX, T>
+    predicate: ReaderPredicate<EB, O, CTX, T & Any>
 ): ReaderResult<T?> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->

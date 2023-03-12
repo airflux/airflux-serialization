@@ -23,6 +23,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.core.value.BooleanNode
@@ -31,11 +32,13 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.DummyReader
+import io.github.airflux.serialization.dsl.common.DummyReaderPredicate
 import io.github.airflux.serialization.dsl.common.DummyValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.common.forNullableType
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
+import io.kotest.assertions.failure
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -48,6 +51,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val DEFAULT_ID_VALUE = "default value"
         private const val ID_VALUE_AS_INT = "10"
+        private const val CODE_PROPERTY_VALUE = "code"
 
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
@@ -209,30 +213,56 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
             "when the filter was added to the spec" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                val specWithValidator = spec.filter { _, _, _, value -> value.isNotEmpty() }
 
                 "when the reader has successfully read" - {
 
-                    "then a value should be returned if the result was not filtered" {
+                    "when the value in the result is not null" - {
                         val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
 
-                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
+                        "when the value satisfy the predicate" - {
+                            val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
 
-                        result shouldBeSuccess ReaderResult.Success(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = ID_VALUE_AS_UUID
-                        )
+                            "then filter should return the original value" {
+                                val result = spec.filter(predicate)
+                                    .reader.read(ENV, CONTEXT, LOCATION, source)
+
+                                result shouldBeSuccess ReaderResult.Success(
+                                    location = LOCATION.append(ID_PROPERTY_NAME),
+                                    value = ID_VALUE_AS_UUID
+                                )
+                            }
+                        }
+
+                        "when the value does not satisfy the predicate" - {
+                            val predicate: ReaderPredicate<EB, Unit, Unit, String> =
+                                DummyReaderPredicate(result = false)
+
+                            "then filter should return the null value" {
+                                val result = spec.filter(predicate)
+                                    .reader.read(ENV, CONTEXT, LOCATION, source)
+
+                                result shouldBeSuccess ReaderResult.Success(
+                                    location = LOCATION.append(ID_PROPERTY_NAME),
+                                    value = null
+                                )
+                            }
+                        }
                     }
 
-                    "then the null value should be returned if the result was filtered" {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(""))
+                    "when the value in the result is null" - {
+                        val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
+                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                            throw failure("Predicate not called.")
+                        }
 
-                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
-
-                        result shouldBeSuccess ReaderResult.Success(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = null
-                        )
+                        "then the filter should not be applying" {
+                            val filtered = spec.filter(predicate)
+                                .reader.read(ENV, CONTEXT, LOCATION, source)
+                            filtered shouldBe ReaderResult.Success(
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                value = null
+                            )
+                        }
                     }
                 }
 
@@ -240,8 +270,11 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                     "then should be returned a read error" {
                         val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
-
-                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                            throw failure("Predicate not called.")
+                        }
+                        val result = spec.filter(predicate)
+                            .reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure ReaderResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),

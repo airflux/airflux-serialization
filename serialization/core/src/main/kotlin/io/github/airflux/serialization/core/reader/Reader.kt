@@ -77,8 +77,8 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(alt: Reader<EB, O, CTX
             }
     }
 
-public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T?>.filter(
-    predicate: ReaderPredicate<EB, O, CTX, T>
+public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.filter(
+    predicate: ReaderPredicate<EB, O, CTX, T & Any>
 ): Reader<EB, O, CTX, T?> =
     Reader { env, context, location, source ->
         this@filter.read(env, context, location, source)

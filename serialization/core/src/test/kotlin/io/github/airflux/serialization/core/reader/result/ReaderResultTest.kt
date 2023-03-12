@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.result
 
+import io.github.airflux.serialization.core.common.DummyReaderPredicate
 import io.github.airflux.serialization.core.common.DummyValidator
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
@@ -27,6 +28,7 @@ import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
+import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -280,34 +282,42 @@ internal class ReaderResultTest : FreeSpec() {
         }
 
         "The extension function ReaderResult#filter" - {
-            val isNotBlank = ReaderPredicate<EB, Unit, Unit, String> { _, _, _, value -> value.isNotBlank() }
 
             "when result is success" - {
 
-                "when the value satisfies the predicate" - {
-                    val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "  ")
+                "when the value in the result is not null" - {
 
-                    "then filter should return null" {
-                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
-                        filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                    "when the value satisfies the predicate" - {
+                        val result: ReaderResult<String> =
+                            ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+
+                        "then filter should return the original value" {
+                            val filtered = result.filter(ENV, CONTEXT, predicate)
+                            filtered shouldBeSameInstanceAs result
+                        }
+                    }
+
+                    "when the value does not satisfy the predicate" - {
+                        val result: ReaderResult<String> =
+                            ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+
+                        "then filter should return null" {
+                            val filtered = result.filter(ENV, CONTEXT, predicate)
+                            filtered shouldBe ReaderResult.Success(location = LOCATION, value = null)
+                        }
                     }
                 }
 
-                "when the value does not satisfy the predicate and is not the null" - {
-                    val result: ReaderResult<String> =
-                        ReaderResult.Success(location = LOCATION, value = "user")
-
-                    "then filter should return the original value" {
-                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
-                        filtered shouldBe result
-                    }
-                }
-
-                "when the value does not satisfy the predicate and is the null" - {
+                "when the value in the result is null" - {
                     val result: ReaderResult<String?> = ReaderResult.Success(location = LOCATION, value = null)
+                    val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        throw failure("Predicate not called.")
+                    }
 
-                    "then filter should return the original value" {
-                        val filtered = result.filter(ENV, CONTEXT, isNotBlank)
+                    "then the filter should not be applying" {
+                        val filtered = result.filter(ENV, CONTEXT, predicate)
                         filtered shouldBe result
                     }
                 }
@@ -321,9 +331,12 @@ internal class ReaderResultTest : FreeSpec() {
                         actual = BooleanNode.nameOfType
                     )
                 )
+                val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    throw failure("Predicate not called.")
+                }
 
-                "then filter should return the original value" {
-                    val filtered = result.filter(ENV, CONTEXT, isNotBlank)
+                "then the filter should not be applying" {
+                    val filtered = result.filter(ENV, CONTEXT, predicate)
                     filtered shouldBe result
                 }
             }
