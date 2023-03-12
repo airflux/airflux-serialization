@@ -36,18 +36,18 @@ public fun interface Reader<EB, O, CTX, out T> {
      * Convert the [ValueNode] into a T
      */
     public fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T>
-
-    /**
-     * Create a new [Reader] which maps the value produced by this [Reader].
-     *
-     * @param[R] The type of the value produced by the new [Reader].
-     * @param transform the function applied on the result of the current instance,
-     * if successful
-     * @return A new [Reader] with the updated behavior.
-     */
-    public infix fun <R> map(transform: (T) -> R): Reader<EB, O, CTX, R> =
-        Reader { env, context, location, source -> read(env, context, location, source).map(transform) }
 }
+
+/**
+ * Create a new [Reader] which maps the value produced by this [Reader].
+ *
+ * @param[R] The type of the value produced by the new [Reader].
+ * @param transform the function applied on the result of the current instance,
+ * if successful
+ * @return A new [Reader] with the updated behavior.
+ */
+public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.map(transform: (T) -> R): Reader<EB, O, CTX, R> =
+    Reader { env, context, location, source -> read(env, context, location, source).map(transform) }
 
 public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
     transform: (ReaderEnv<EB, O>, CTX, Location, T) -> ReaderResult<R>
