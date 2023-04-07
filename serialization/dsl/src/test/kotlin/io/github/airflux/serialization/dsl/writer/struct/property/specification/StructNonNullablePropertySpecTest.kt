@@ -24,6 +24,7 @@ import io.github.airflux.serialization.dsl.common.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
@@ -34,61 +35,80 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
+
+        private val WRITER: Writer<Unit, Unit, String> = DummyWriter.stringWriter()
     }
 
     init {
 
-        "The StructPropertySpec#NonNullable type" - {
+        "The StructPropertySpec type" - {
 
             "when created the instance of a spec of the non-nullable property" - {
-                val from: (String) -> String = { it }
-                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
-                val spec = nonNullable(name = PROPERTY_NAME, from = from, writer = writer)
 
-                "then the property name should equal the passed property name" {
-                    spec.name shouldBe PROPERTY_NAME
-                }
+                "when using an expression the from without context" - {
+                    val extractor: (DTO) -> String = { it.id }
+                    val spec = nonNullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
-                "then the value extractor should equals the passed the value extractor" {
-                    spec.from shouldBe from
-                }
+                    "then the property name should equal the passed property name" {
+                        spec.name shouldBe PROPERTY_NAME
+                    }
 
-                "then the initialized writer should return a property value" {
-                    val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
-                    result shouldBe StringNode(PROPERTY_VALUE)
-                }
-            }
+                    "then the value extractor should equals the passed the value extractor" {
+                        val from = spec.from
+                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutContext<Unit, DTO, String>>()
+                        from.extractor shouldBe extractor
+                    }
 
-            "when the filter was added to the spec" - {
-                val from: (String) -> String = { it }
-                val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
-                val spec = nonNullable(name = PROPERTY_NAME, from = from, writer = writer)
-                val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
-
-                "then the property name should equal the passed property name" {
-                    spec.name shouldBe PROPERTY_NAME
-                }
-
-                "then the value extractor should equals the passed the value extractor" {
-                    spec.from shouldBe from
-                }
-
-                "when passing a value that satisfies the predicate for filtering" - {
-                    val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
-
-                    "then a non-null property value should be returned" {
+                    "then the initialized writer should return a property value" {
+                        val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
                         result shouldBe StringNode(PROPERTY_VALUE)
                     }
                 }
 
-                "when passing a value that does not satisfy the filter predicate" - {
-                    val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, "")
+                "when using an expression the from with context" - {
+                    val extractor: (DTO, Unit) -> String = { value, _ -> value.id }
+                    val spec = nonNullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
-                    "then the null value should be returned" {
-                        result.shouldBeNull()
+                    "then the property name should equal the passed property name" {
+                        spec.name shouldBe PROPERTY_NAME
+                    }
+
+                    "then the value extractor should equals the passed the value extractor" {
+                        val from =
+                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithContext<Unit, DTO, String>>()
+                        from.extractor shouldBe extractor
+                    }
+
+                    "then the initialized writer should return a property value" {
+                        val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
+                        result shouldBe StringNode(PROPERTY_VALUE)
+                    }
+                }
+
+                "when some filter was added to the spec" - {
+                    val spec: StructPropertySpec<Unit, Unit, DTO, String> =
+                        nonNullable(name = PROPERTY_NAME, from = { -> id }, writer = WRITER)
+                    val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
+
+                    "when passing a value that satisfies the predicate for filtering" - {
+                        val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
+
+                        "then a non-null property value should be returned" {
+                            result shouldBe StringNode(PROPERTY_VALUE)
+                        }
+                    }
+
+                    "when passing a value that does not satisfy the filter predicate" - {
+                        val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, "")
+
+                        "then the null value should be returned" {
+                            result.shouldBeNull()
+                        }
                     }
                 }
             }
         }
     }
+
+    internal class DTO(val id: String)
 }

@@ -23,15 +23,15 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class MinLengthStringValidator<EB, O, CTX> internal constructor(
     private val expected: Int
-) : Validator<EB, O, CTX, String>
+) : Validator<EB, O, CTX, String?>
     where EB : MinLengthStringValidator.ErrorBuilder {
 
     override fun validate(
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        value: String
-    ): ReaderResult.Failure? =
+        value: String?
+    ): ReaderResult.Failure? = value?.let {
         if (value.length >= expected)
             null
         else
@@ -39,6 +39,7 @@ public class MinLengthStringValidator<EB, O, CTX> internal constructor(
                 location = location,
                 error = env.errorBuilders.minLengthStringError(expected, value.length)
             )
+    }
 
     public interface ErrorBuilder {
         public fun minLengthStringError(expected: Int, actual: Int): ReaderResult.Error

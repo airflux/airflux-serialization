@@ -32,8 +32,6 @@ import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
-import io.github.airflux.serialization.dsl.reader.array.item.specification.prefixItems
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
@@ -56,13 +54,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
             "when a reader was created for prefixItems and items" - {
                 val reader: Reader<EB, OPTS, Unit, List<Any>> = arrayReader {
-                    returns(
-                        prefixItems = prefixItems(
-                            nonNullable(StringReader),
-                            nonNullable(StringReader)
-                        ),
-                        items = nonNullable(BooleanReader)
-                    )
+                    returns(prefixItems = listOf(StringReader, StringReader), items = BooleanReader)
                 }
 
                 "when fail-fast is true" - {

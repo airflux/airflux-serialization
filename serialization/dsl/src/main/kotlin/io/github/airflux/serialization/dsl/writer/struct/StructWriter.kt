@@ -22,19 +22,21 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
+import io.github.airflux.serialization.dsl.writer.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
-public fun <O, CTX, T : Any> structWriter(block: StructWriter.Builder<O, CTX, T>.() -> Unit): Writer<O, CTX, T>
+public fun <O, CTX, T> structWriter(block: StructWriter.Builder<O, CTX, T>.() -> Unit): Writer<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption =
     StructWriter.Builder<O, CTX, T>().apply(block).build()
 
-public class StructWriter<O, CTX, T : Any> private constructor(
-    private val properties: List<StructProperty<O, CTX, T>>
+public class StructWriter<O, CTX, T> private constructor(
+    private val properties: StructProperties<O, CTX, T>
 ) : Writer<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
@@ -57,24 +59,15 @@ public class StructWriter<O, CTX, T : Any> private constructor(
             }
     }
 
-    @io.github.airflux.serialization.dsl.AirfluxMarker
-    public class Builder<O, CTX, T : Any>
+    @AirfluxMarker
+    public class Builder<O, CTX, T> internal constructor()
         where O : WriterActionBuilderIfResultIsEmptyOption {
 
-        private val properties = mutableListOf<StructProperty<O, CTX, T>>()
+        private val properties = mutableListOf<StructProperty<O, CTX, T, *>>()
 
-        public fun <P : Any> property(
-            spec: StructPropertySpec.NonNullable<O, CTX, T, P>
-        ): StructProperty.NonNullable<O, CTX, T, P> =
-            StructProperty.NonNullable(spec)
-                .also { properties.add(it) }
+        public fun <P> property(spec: StructPropertySpec<O, CTX, T, P>): StructProperty<O, CTX, T, P> =
+            StructProperty(spec).also { properties.add(it) }
 
-        public fun <P : Any> property(
-            spec: StructPropertySpec.Nullable<O, CTX, T, P>
-        ): StructProperty.Nullable<O, CTX, T, P> =
-            StructProperty.Nullable(spec)
-                .also { properties.add(it) }
-
-        public fun build(): Writer<O, CTX, T> = StructWriter(properties)
+        internal fun build(): Writer<O, CTX, T> = StructWriter(properties)
     }
 }

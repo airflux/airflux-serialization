@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.array.item.specification
+package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.reader.Reader
-
-public sealed class ArrayItemSpec<EB, O, CTX, out T> {
-
-    public abstract val reader: Reader<EB, O, CTX, T>
-
-    public class NonNullable<EB, O, CTX, out T> internal constructor(override val reader: Reader<EB, O, CTX, T>) :
-        ArrayItemSpec<EB, O, CTX, T>()
-
-    public class Nullable<EB, O, CTX, out T> internal constructor(override val reader: Reader<EB, O, CTX, T?>) :
-        ArrayItemSpec<EB, O, CTX, T?>()
-}
+public typealias StructProperties<O, CTX, T> = List<StructProperty<O, CTX, T, *>>

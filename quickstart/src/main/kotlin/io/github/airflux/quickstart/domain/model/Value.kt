@@ -18,4 +18,10 @@ package io.github.airflux.quickstart.domain.model
 
 import java.math.BigDecimal
 
-data class Value(val amount: BigDecimal, val currency: String)
+@JvmInline
+value class Currency(val get: String)
+
+@JvmInline
+value class Amount(val get: BigDecimal)
+
+data class Value(val amount: Amount, val currency: Currency)

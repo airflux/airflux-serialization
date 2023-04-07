@@ -30,17 +30,15 @@ internal class DummyValidator<EB, O, CTX, T> private constructor(
 
     internal companion object {
 
-        internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReaderResult.Error): Validator<EB, O, CTX, String> =
+        internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReaderResult.Error): Validator<EB, O, CTX, String?> =
             DummyValidator { _, _, location, value ->
-                if (value.isNotEmpty())
+                if (value != null) {
+                    if (value.isNotEmpty())
+                        null
+                    else
+                        ReaderResult.Failure(location = location, error = error())
+                } else
                     null
-                else
-                    ReaderResult.Failure(location = location, error = error())
             }
     }
 }
-
-internal fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.forNullableType(): Validator<EB, O, CTX, T?> =
-    Validator { env, context, location, value ->
-        if (value != null) validate(env, context, location, value) else null
-    }

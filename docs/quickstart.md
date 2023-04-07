@@ -208,7 +208,7 @@ val PhoneReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phone> = 
 ```kotlin
 val PhonesReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phones> = arrayReader {
     validation(isNotEmptyArray)
-    returns(items = nonNullable(PhoneReader))
+    returns(items = PhoneReader)
 }.map { phones -> Phones(phones) }
 ```
 
@@ -270,16 +270,14 @@ val IntWriter = intWriter<WriterOptions, WriterCtx>()
 ```kotlin
 val PhoneWriter: Writer<WriterOptions, WriterCtx, Phone> = structWriter {
     property(nonNullable(name = "title", from = Phone::title, writer = StringWriter))
-    property(nonNullable(name = "number", from = Phone::number, writer = StringWriter))
+    property(nonNullable(name = "number", from = { -> number }, writer = StringWriter))
 }
 ```
 
 - Define the writer for the Phones type
 
 ```kotlin
-val PhonesWriter: Writer<WriterOptions, WriterCtx, Iterable<Phone>> = arrayWriter {
-    items(nullable(PhoneWriter))
-}
+val PhonesWriter: Writer<WriterOptions, WriterCtx, Iterable<Phone>> = arrayWriter(PhoneWriter)
 ```
 
 - Define the writer for the User type
@@ -287,7 +285,7 @@ val PhonesWriter: Writer<WriterOptions, WriterCtx, Iterable<Phone>> = arrayWrite
 ```kotlin
 val UserWriter: Writer<WriterOptions, WriterCtx, User> = structWriter {
     property(nonNullable(name = "id", from = User::id, writer = IntWriter))
-    property(nonNullable(name = "name", from = User::name, writer = StringWriter))
-    property(nonNullable(name = "phones", from = User::phones, writer = PhonesWriter))
+    property(nonNullable(name = "name", from = { -> name }, writer = StringWriter))
+    property(nonNullable(name = "phones", from = { -> phones }, writer = PhonesWriter))
 }
 ```

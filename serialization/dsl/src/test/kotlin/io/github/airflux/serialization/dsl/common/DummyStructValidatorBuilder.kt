@@ -28,7 +28,8 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(
     result: ReaderResult.Failure?
 ) : StructValidatorBuilder<EB, O, CTX> {
 
-    val validator = Validator<EB, O, CTX>(result)
+    private val validator = Validator<EB, O, CTX>(result)
+
     override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> = validator
 
     internal class Validator<EB, O, CTX>(val result: ReaderResult.Failure?) : StructValidator<EB, O, CTX> {

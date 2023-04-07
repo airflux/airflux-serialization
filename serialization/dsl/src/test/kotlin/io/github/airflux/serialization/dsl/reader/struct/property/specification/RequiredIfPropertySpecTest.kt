@@ -36,7 +36,6 @@ import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.DummyReaderPredicate
 import io.github.airflux.serialization.dsl.common.DummyValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.common.forNullableType
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
 import io.kotest.assertions.failure
@@ -59,13 +58,12 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
 
         private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
-            DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }
-                .forNullableType()
+            DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
     init {
 
-        "The StructPropertySpec#RequiredIf type" - {
+        "The RequiredIfPropertySpec type" - {
 
             "when the predicate returns the true value" - {
                 val readerPredicate = { _: ReaderEnv<EB, Unit>, _: Unit, _: Location -> true }

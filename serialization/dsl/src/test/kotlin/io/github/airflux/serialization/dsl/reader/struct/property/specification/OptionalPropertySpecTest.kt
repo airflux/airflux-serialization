@@ -36,7 +36,6 @@ import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.DummyReaderPredicate
 import io.github.airflux.serialization.dsl.common.DummyValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.common.forNullableType
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
 import io.kotest.assertions.failure
@@ -57,17 +56,16 @@ internal class OptionalPropertySpecTest : FreeSpec() {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
-        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
-        private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
+        private val StringReader: Reader<EB, Unit, Unit, String?> = DummyReader.string()
+        private val IntReader: Reader<EB, Unit, Unit, Int?> = DummyReader.int()
 
         private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
-            DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }
-                .forNullableType()
+            DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
     init {
 
-        "The StructPropertySpec#Nullable type" - {
+        "The OptionalPropertySpec type" - {
 
             "when creating the instance by a property name" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
@@ -166,8 +164,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
             "when the validator was added to the spec" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                val specWithValidator =
-                    spec.validation(IsNotEmptyStringValidator)
+                val specWithValidator = spec.validation(IsNotEmptyStringValidator)
 
                 "when the reader has successfully read" - {
 

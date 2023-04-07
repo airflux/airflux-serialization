@@ -31,7 +31,6 @@ import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayReaderOnlyItemsTest : FreeSpec() {
@@ -59,7 +58,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                             error = { expected, actual -> JsonErrors.Validation.Arrays.MinItems(expected, actual) }
                         )
                     )
-                    returns(items = nonNullable(StringReader))
+                    returns(items = StringReader)
                 }
 
                 "when fail-fast is true" - {

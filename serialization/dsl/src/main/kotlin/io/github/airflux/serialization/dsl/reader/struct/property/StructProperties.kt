@@ -16,4 +16,4 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
-public typealias StructProperties<EB, O, CTX> = List<StructProperty<EB, O, CTX>>
+public typealias StructProperties<EB, O, CTX> = List<StructProperty<EB, O, CTX, *>>

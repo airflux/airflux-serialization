@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.property
 
 internal class PropertyValuesInstance<EB, O, CTX> : PropertyValues<EB, O, CTX> {
-    private val values: MutableMap<StructProperty<EB, O, CTX>, Value> = mutableMapOf()
+    private val values: MutableMap<StructProperty<EB, O, CTX, *>, Value> = mutableMapOf()
 
     override val isEmpty: Boolean
         get() = !isNotEmpty
@@ -28,40 +28,31 @@ internal class PropertyValuesInstance<EB, O, CTX> : PropertyValues<EB, O, CTX> {
     override val size: Int
         get() = values.count { r -> r.value is Value.Some }
 
-    override operator fun <T : Any> get(property: StructProperty.NonNullable<EB, O, CTX, T>): T {
-        val value = values[property]
-        return if (value != null)
-            @Suppress("UNCHECKED_CAST")
-            (value as Value.Some).get as T
-        else
-            throw NoSuchElementException("Property by paths '${property.paths}' is missing in the map.")
-    }
-
-    override operator fun <T : Any> get(property: StructProperty.Nullable<EB, O, CTX, T>): T? {
-        val value = values[property]
+    override operator fun <T> get(property: StructProperty<EB, O, CTX, T>): T {
+        val value: Value? = values[property]
         return if (value != null) {
             @Suppress("UNCHECKED_CAST")
-            if (value is Value.Some)
-                value.get as T
-            else
-                null
+            value.orNull as T
         } else
             throw NoSuchElementException("Property by paths '${property.paths}' is missing in the map.")
     }
 
-    operator fun set(property: StructProperty.NonNullable<EB, O, CTX, *>, value: Any) {
-        values[property] = Value.Some(value)
-    }
-
-    operator fun set(property: StructProperty.Nullable<EB, O, CTX, *>, value: Any?) {
+    operator fun set(property: StructProperty<EB, O, CTX, *>, value: Any?) {
         if (value != null)
             values[property] = Value.Some(value)
         else
             values[property] = Value.None
     }
 
-    internal sealed class Value {
-        data class Some(val get: Any) : Value()
-        object None : Value()
+    internal sealed interface Value {
+        val orNull: Any?
+
+        class Some(value: Any) : Value {
+            override val orNull: Any = value
+        }
+
+        object None : Value {
+            override val orNull: Any? = null
+        }
     }
 }

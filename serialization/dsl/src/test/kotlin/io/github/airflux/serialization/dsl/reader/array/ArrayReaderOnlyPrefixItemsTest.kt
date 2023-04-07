@@ -31,8 +31,6 @@ import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.dsl.reader.array.item.specification.nonNullable
-import io.github.airflux.serialization.dsl.reader.array.item.specification.prefixItems
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
@@ -64,14 +62,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                                 error = { expected, actual -> JsonErrors.Validation.Arrays.MinItems(expected, actual) }
                             )
                         )
-                        returns(
-                            prefixItems = prefixItems(
-                                nonNullable(StringReader),
-                                nonNullable(StringReader),
-                                nonNullable(StringReader)
-                            ),
-                            items = true
-                        )
+                        returns(prefixItems = listOf(StringReader, StringReader, StringReader), items = true)
                     }
 
                     "when fail-fast is true" - {
@@ -268,13 +259,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                 "when the additional items do cause an error" - {
                     val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
-                        returns(
-                            prefixItems = prefixItems(
-                                nonNullable(StringReader),
-                                nonNullable(StringReader)
-                            ),
-                            items = false
-                        )
+                        returns(prefixItems = listOf(StringReader, StringReader), items = false)
                     }
 
                     "when fail-fast is true" - {

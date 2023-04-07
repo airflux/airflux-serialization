@@ -23,22 +23,20 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCt
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.optional
 import io.github.airflux.serialization.dsl.writer.array.arrayWriter
-import io.github.airflux.serialization.dsl.writer.array.item.specification.nullable
-import io.github.airflux.serialization.dsl.writer.array.items
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
-val LotStatus = Writer<WriterOptions, WriterCtx, LotStatus> { _, _, _, value ->
+val LotStatusWriter = Writer<WriterOptions, WriterCtx, LotStatus> { _, _, _, value ->
     StringNode(value.name)
 }
 
 val LotWriter: Writer<WriterOptions, WriterCtx, Lot> = structWriter {
     property(nonNullable(name = "id", from = Lot::id, StringWriter))
-    property(nonNullable(name = "status", from = Lot::status, writer = LotStatus))
-    property(nonNullable(name = "value", from = Lot::value, writer = ValueWriter))
+    property(nonNullable(name = "status", from = { -> status }, writer = LotStatusWriter))
+    property(nullable(name = "value", from = { -> value }, writer = ValueWriter.optional()))
 }
 
-val LotsWriter: Writer<WriterOptions, WriterCtx, Iterable<Lot>> = arrayWriter {
-    items(nullable(LotWriter))
-}
+val LotsWriter = arrayWriter(items = LotWriter)

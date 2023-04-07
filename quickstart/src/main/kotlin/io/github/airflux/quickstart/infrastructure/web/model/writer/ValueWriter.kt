@@ -17,8 +17,8 @@
 package io.github.airflux.quickstart.infrastructure.web.model.writer
 
 import io.github.airflux.quickstart.domain.model.Value
-import io.github.airflux.quickstart.infrastructure.web.model.writer.base.BigDecimalWriter
-import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringWriter
+import io.github.airflux.quickstart.infrastructure.web.model.writer.base.AmountWriter
+import io.github.airflux.quickstart.infrastructure.web.model.writer.base.CurrencyWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.Writer
@@ -26,6 +26,6 @@ import io.github.airflux.serialization.dsl.writer.struct.property.specification.
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val ValueWriter: Writer<WriterOptions, WriterCtx, Value> = structWriter {
-    property(nonNullable(name = "amount", from = Value::amount, writer = BigDecimalWriter))
-    property(nonNullable(name = "currency", from = Value::currency, writer = StringWriter))
+    property(nonNullable(name = "amount", from = { -> amount }, writer = AmountWriter))
+    property(nonNullable(name = "currency", from = { -> currency }, writer = CurrencyWriter))
 }

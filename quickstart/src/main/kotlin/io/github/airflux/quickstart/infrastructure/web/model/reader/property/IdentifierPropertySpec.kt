@@ -25,6 +25,6 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.validation
 
-val identifierPropertySpec: StructPropertySpec.NonNullable<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
+val identifierPropertySpec: StructPropertySpec<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
     required(name = "id", reader = StringReader)
         .validation(isNotBlank)

@@ -21,19 +21,20 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.validator.Validator
 
-public class IsNotBlankStringValidator<EB, O, CTX> internal constructor() : Validator<EB, O, CTX, String>
+public class IsNotBlankStringValidator<EB, O, CTX> internal constructor() : Validator<EB, O, CTX, String?>
     where EB : IsNotBlankStringValidator.ErrorBuilder {
 
     override fun validate(
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        value: String
-    ): ReaderResult.Failure? =
-        if (value.isNotBlank())
+        value: String?
+    ): ReaderResult.Failure? = value?.let {
+        if (it.isNotBlank())
             null
         else
             ReaderResult.Failure(location = location, error = env.errorBuilders.isNotBlankStringError())
+    }
 
     public interface ErrorBuilder {
         public fun isNotBlankStringError(): ReaderResult.Error

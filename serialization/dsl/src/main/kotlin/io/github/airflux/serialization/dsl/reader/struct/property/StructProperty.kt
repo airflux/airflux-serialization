@@ -16,26 +16,20 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
+import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 
-public sealed class StructProperty<EB, O, CTX> {
-    public abstract val paths: PropertyPaths
+public class StructProperty<EB, O, CTX, T> private constructor(
+    public val paths: PropertyPaths,
+    private val reader: Reader<EB, O, CTX, T>
+) {
+    public constructor(spec: StructPropertySpec<EB, O, CTX, T>) : this(spec.paths, spec.reader)
 
-    public class NonNullable<EB, O, CTX, T : Any> private constructor(
-        override val paths: PropertyPaths,
-        public val reader: Reader<EB, O, CTX, T>
-    ) : StructProperty<EB, O, CTX>() {
-
-        public constructor(spec: StructPropertySpec.NonNullable<EB, O, CTX, T>) : this(spec.paths, spec.reader)
-    }
-
-    public class Nullable<EB, O, CTX, T : Any> private constructor(
-        override val paths: PropertyPaths,
-        public val reader: Reader<EB, O, CTX, T?>
-    ) : StructProperty<EB, O, CTX>() {
-
-        public constructor(spec: StructPropertySpec.Nullable<EB, O, CTX, T>) : this(spec.paths, spec.reader)
-    }
+    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T> =
+        reader.read(env, context, location, source)
 }

@@ -23,22 +23,23 @@ import io.github.airflux.serialization.core.reader.validator.Validator
 
 public class MaxLengthStringValidator<EB, O, CTX> internal constructor(
     private val expected: Int
-) : Validator<EB, O, CTX, String>
+) : Validator<EB, O, CTX, String?>
     where EB : MaxLengthStringValidator.ErrorBuilder {
 
     override fun validate(
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: Location,
-        value: String
-    ): ReaderResult.Failure? =
-        if (value.length <= expected)
+        value: String?
+    ): ReaderResult.Failure? = value?.let {
+        if (it.length <= expected)
             null
         else
             ReaderResult.Failure(
                 location = location,
                 error = env.errorBuilders.maxLengthStringError(expected, value.length)
             )
+    }
 
     public interface ErrorBuilder {
         public fun maxLengthStringError(expected: Int, actual: Int): ReaderResult.Error

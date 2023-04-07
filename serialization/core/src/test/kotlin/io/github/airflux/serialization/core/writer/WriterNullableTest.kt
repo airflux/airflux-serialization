@@ -18,15 +18,17 @@ package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.common.DummyWriter
 import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class NonNullableValueWriterTest : FreeSpec() {
+internal class WriterNullableTest : FreeSpec() {
 
     companion object {
+        private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
+
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
@@ -34,22 +36,29 @@ internal class NonNullableValueWriterTest : FreeSpec() {
 
     init {
 
-        "The writeNonNullable function" - {
-            val writer: Writer<Unit, Unit, String> = DummyWriter { StringNode(it) }
+        "The extension-function the nullable" - {
 
-            "when a value is not null" - {
-                val value = "value"
+            "when an original reader returns a result as a success" - {
+                val writer = DummyWriter.string<Unit, Unit>().nullable()
 
-                "should return the StringNode value" {
-                    val result: ValueNode? =
-                        writeNonNullable(
-                            env = ENV,
-                            context = CONTEXT,
-                            location = LOCATION,
-                            using = writer,
-                            value = value
-                        )
-                    result shouldBe StringNode(value)
+                "when the value is not null" - {
+                    val source: String = ID_PROPERTY_VALUE
+
+                    "then should return the written value" {
+                        val result = writer.write(ENV, CONTEXT, LOCATION, source)
+
+                        result shouldBe StringNode(ID_PROPERTY_VALUE)
+                    }
+                }
+
+                "when the value is null" - {
+                    val source: String? = null
+
+                    "then should return the NullNode" {
+                        val result = writer.write(ENV, CONTEXT, LOCATION, source)
+
+                        result shouldBe NullNode
+                    }
                 }
             }
         }

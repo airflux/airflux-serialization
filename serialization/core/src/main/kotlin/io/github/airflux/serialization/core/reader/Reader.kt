@@ -28,6 +28,7 @@ import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
 
 public fun interface Reader<EB, O, CTX, out T> {
@@ -47,13 +48,16 @@ public fun interface Reader<EB, O, CTX, out T> {
  * @return A new [Reader] with the updated behavior.
  */
 public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.map(transform: (T) -> R): Reader<EB, O, CTX, R> =
-    Reader { env, context, location, source -> read(env, context, location, source).map(transform) }
+    Reader { env, context, location, source ->
+        this@map.read(env, context, location, source)
+            .map(transform)
+    }
 
 public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
     transform: (ReaderEnv<EB, O>, CTX, Location, T) -> ReaderResult<R>
 ): Reader<EB, O, CTX, R> =
     Reader { env, context, location, source ->
-        read(env, context, location, source)
+        this@flatMapResult.read(env, context, location, source)
             .fold(
                 ifFailure = ::identity,
                 ifSuccess = { transform(env, context, location, it.value) }
@@ -70,7 +74,7 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
  */
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(alt: Reader<EB, O, CTX, T>): Reader<EB, O, CTX, T> =
     Reader { env, context, location, source ->
-        read(env, context, location, source)
+        this@or.read(env, context, location, source)
             .recovery { failure ->
                 alt.read(env, context, location, source)
                     .recovery { alternative -> failure + alternative }
@@ -98,4 +102,13 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
 ): Reader<EB, O, CTX, T & Any> = Reader { env, context, location, source ->
     this@ifNullValue.read(env, context, location, source)
         .ifNullValue { defaultValue(env, context, it) }
+}
+
+public fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.nullable(): Reader<EB, O, CTX, T?> {
+    return Reader { env, context, location, source ->
+        if (source is NullNode)
+            ReaderResult.Success(location = location, value = null)
+        else
+            this@nullable.read(env, context, location, source)
+    }
 }

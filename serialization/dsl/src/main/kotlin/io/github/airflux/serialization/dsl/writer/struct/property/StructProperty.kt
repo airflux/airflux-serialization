@@ -20,39 +20,38 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.core.writer.writeNonNullable
-import io.github.airflux.serialization.core.writer.writeNullable
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
-public sealed class StructProperty<O, CTX, T : Any> {
-    public abstract val name: String
-    public abstract fun write(env: WriterEnv<O>, context: CTX, location: Location, value: T): ValueNode?
+public class StructProperty<O, CTX, T, P> private constructor(
+    public val name: String,
+    private val writer: Writer<O, CTX, T>
+) {
 
-    public class NonNullable<O, CTX, T : Any, P : Any> private constructor(
-        override val name: String,
-        private val from: (T) -> P,
-        private val writer: Writer<O, CTX, P>
-    ) : StructProperty<O, CTX, T>() {
+    internal constructor(spec: StructPropertySpec<O, CTX, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
-        internal constructor(spec: StructPropertySpec.NonNullable<O, CTX, T, P>) : this(
-            spec.name,
-            spec.from,
-            spec.writer
-        )
+    public fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? =
+        writer.write(env, context, location, source)
 
-        override fun write(env: WriterEnv<O>, context: CTX, location: Location, value: T): ValueNode? =
-            writeNonNullable(env = env, context = context, location = location, using = writer, value = from(value))
-    }
+    internal companion object {
 
-    public class Nullable<O, CTX, T : Any, P : Any> private constructor(
-        override val name: String,
-        private val from: (T) -> P?,
-        private val writer: Writer<O, CTX, P>
-    ) : StructProperty<O, CTX, T>() {
+        private fun <O, CTX, T, P> createWriter(spec: StructPropertySpec<O, CTX, T, P>): Writer<O, CTX, T> {
+            val writer = spec.writer
 
-        internal constructor(spec: StructPropertySpec.Nullable<O, CTX, T, P>) : this(spec.name, spec.from, spec.writer)
+            return when (spec.from) {
+                is StructPropertySpec.Extractor.WithoutContext -> {
+                    val extractor = spec.from.extractor
+                    Writer { env, context, location, source ->
+                        writer.write(env, context, location, source.extractor())
+                    }
+                }
 
-        override fun write(env: WriterEnv<O>, context: CTX, location: Location, value: T): ValueNode? =
-            writeNullable(env = env, context = context, location = location, using = writer, value = from(value))
+                is StructPropertySpec.Extractor.WithContext -> {
+                    val extractor = spec.from.extractor
+                    Writer { env, context, location, source ->
+                        writer.write(env, context, location, source.extractor(context))
+                    }
+                }
+            }
+        }
     }
 }

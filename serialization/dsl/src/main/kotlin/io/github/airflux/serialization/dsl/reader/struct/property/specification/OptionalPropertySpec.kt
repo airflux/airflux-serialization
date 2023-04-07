@@ -23,19 +23,16 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readOptional
 
-public fun <EB, O, CTX, T : Any> optional(
-    name: String,
-    reader: Reader<EB, O, CTX, T>
-): StructPropertySpec.Nullable<EB, O, CTX, T>
+public fun <EB, O, CTX, T> optional(name: String, reader: Reader<EB, O, CTX, T>): StructPropertySpec<EB, O, CTX, T?>
     where EB : InvalidTypeErrorBuilder =
     optional(PropertyPath(name), reader)
 
-public fun <EB, O, CTX, T : Any> optional(
+public fun <EB, O, CTX, T> optional(
     path: PropertyPath,
     reader: Reader<EB, O, CTX, T>
-): StructPropertySpec.Nullable<EB, O, CTX, T>
+): StructPropertySpec<EB, O, CTX, T?>
     where EB : InvalidTypeErrorBuilder =
-    StructPropertySpec.Nullable(
+    StructPropertySpec(
         paths = PropertyPaths(path),
         reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)

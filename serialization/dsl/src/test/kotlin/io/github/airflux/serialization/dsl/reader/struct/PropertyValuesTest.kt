@@ -61,7 +61,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for non-nullable property" - {
-                    val property = StructProperty.NonNullable(required(PROPERTY_NAME, StringReader))
+                    val property = StructProperty(required(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -77,7 +77,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
+                    val property = StructProperty(optional(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -96,7 +96,7 @@ internal class PropertyValuesTest : FreeSpec() {
             "when the added value is not null" - {
 
                 "for non-nullable property" - {
-                    val property = StructProperty.NonNullable(required(PROPERTY_NAME, StringReader))
+                    val property = StructProperty(required(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance<EB, Unit, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -129,7 +129,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty.NonNullable(required(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty(required(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -146,7 +146,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
+                    val property = StructProperty(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance<EB, Unit, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -179,7 +179,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty.Nullable(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -199,7 +199,7 @@ internal class PropertyValuesTest : FreeSpec() {
             "when the added value is null" - {
 
                 "for nullable property" - {
-                    val property = StructProperty.Nullable(optional(PROPERTY_NAME, StringReader))
+                    val property = StructProperty(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance<EB, Unit, Unit>().apply {
                         this[property] = null
                     }
@@ -232,7 +232,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty.Nullable(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = StructProperty(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }

@@ -19,7 +19,6 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -37,7 +36,17 @@ internal class IsNotEmptyValidatorTest : FreeSpec() {
     init {
 
         "The string validator IsNotEmpty" - {
-            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.isNotEmpty()
+            val validator = StdStringValidator.isNotEmpty<EB, Unit, Unit>()
+
+            "when the value is null" - {
+                val str: String? = null
+
+                "then the validator should not be applying" {
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
+
+                    failure.shouldBeNull()
+                }
+            }
 
             "when a string is empty" - {
                 val str = ""

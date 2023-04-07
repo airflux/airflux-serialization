@@ -22,33 +22,17 @@ import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
-import io.github.airflux.serialization.dsl.writer.array.item.ArrayItemWriter
-import io.github.airflux.serialization.dsl.writer.array.item.specification.ArrayItemSpec
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 
-public fun <O, CTX, T> arrayWriter(
-    block: ArrayWriter.Builder<O, CTX>.() -> Writer<O, CTX, Iterable<T>>
-): Writer<O, CTX, Iterable<T>>
-    where O : WriterActionBuilderIfResultIsEmptyOption {
-    val builder = ArrayWriter.Builder<O, CTX>()
-    return block(builder)
-}
+public fun <O, CTX, T> arrayWriter(items: Writer<O, CTX, T>): Writer<O, CTX, Iterable<T>>
+    where O : WriterActionBuilderIfResultIsEmptyOption =
+    ArrayWriter(items)
 
-public fun <O, CTX, T : Any> ArrayWriter.Builder<O, CTX>.items(
-    spec: ArrayItemSpec.NonNullable<O, CTX, T>
-): Writer<O, CTX, Iterable<T>>
-    where O : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
-
-public fun <O, CTX, T> ArrayWriter.Builder<O, CTX>.items(
-    spec: ArrayItemSpec.Nullable<O, CTX, T>
-): Writer<O, CTX, Iterable<T>>
-    where O : WriterActionBuilderIfResultIsEmptyOption = this.build(spec)
-
-public class ArrayWriter<O, CTX, T> private constructor(
-    private val itemsWriter: ArrayItemWriter<O, CTX, T>
+public class ArrayWriter<O, CTX, T> internal constructor(
+    private val itemsWriter: Writer<O, CTX, T>
 ) : Writer<O, CTX, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
@@ -62,16 +46,5 @@ public class ArrayWriter<O, CTX, T> private constructor(
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> NullNode
             }
-    }
-
-    @io.github.airflux.serialization.dsl.AirfluxMarker
-    public class Builder<O, CTX>
-        where O : WriterActionBuilderIfResultIsEmptyOption {
-
-        public fun <T : Any> build(spec: ArrayItemSpec.NonNullable<O, CTX, T>): Writer<O, CTX, Iterable<T>> =
-            ArrayWriter(ArrayItemWriter.NonNullable(spec))
-
-        public fun <T> build(spec: ArrayItemSpec.Nullable<O, CTX, T>): Writer<O, CTX, Iterable<T>> =
-            ArrayWriter(ArrayItemWriter.Nullable(spec))
     }
 }

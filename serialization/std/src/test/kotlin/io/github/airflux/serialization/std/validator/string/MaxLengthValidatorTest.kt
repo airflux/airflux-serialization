@@ -19,7 +19,6 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -38,7 +37,17 @@ internal class MaxLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MaxLength" - {
-            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.maxLength(MAX_VALUE)
+            val validator = StdStringValidator.maxLength<EB, Unit, Unit>(MAX_VALUE)
+
+            "when the value is null" - {
+                val str: String? = null
+
+                "then the validator should not be applying" {
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
+
+                    failure.shouldBeNull()
+                }
+            }
 
             "when a string is empty" - {
                 val str = ""

@@ -24,5 +24,5 @@ import io.github.airflux.serialization.dsl.writer.struct.property.specification.
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val ResponseWriter: Writer<WriterOptions, WriterCtx, Response> = structWriter {
-    property(nonNullable(name = "tender", from = Response::tender, writer = TenderWriter))
+    property(nonNullable(name = "tender", from = { -> tender }, writer = TenderWriter))
 }

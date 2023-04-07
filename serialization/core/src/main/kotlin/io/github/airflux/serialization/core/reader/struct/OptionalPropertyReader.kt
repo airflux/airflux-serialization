@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.result.ReaderResult
  * - If a node is found ([lookup] is [LookupResult.Defined]) then applies [reader]
  * - If a node is not found ([lookup] is [LookupResult.Undefined]) then returns 'null'
  */
-public fun <EB, O, CTX, T : Any> readOptional(
+public fun <EB, O, CTX, T> readOptional(
     env: ReaderEnv<EB, O>,
     context: CTX,
     lookup: LookupResult,

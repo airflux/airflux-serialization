@@ -16,6 +16,8 @@
 
 package io.github.airflux.quickstart.infrastructure.web.model.reader
 
+import io.github.airflux.quickstart.domain.model.Amount
+import io.github.airflux.quickstart.domain.model.Currency
 import io.github.airflux.quickstart.domain.model.Value
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
@@ -35,6 +37,6 @@ val ValueReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Value> = 
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
     returns { _, _, location ->
-        Value(amount = +amount, currency = +currency).success(location)
+        Value(amount = Amount(+amount), currency = Currency(+currency)).success(location)
     }
 }

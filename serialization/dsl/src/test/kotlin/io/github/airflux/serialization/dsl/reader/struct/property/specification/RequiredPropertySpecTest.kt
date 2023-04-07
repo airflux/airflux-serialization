@@ -54,13 +54,13 @@ internal class RequiredPropertySpecTest : FreeSpec() {
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
 
-        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String> =
+        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
     init {
 
-        "The StructPropertySpec#Required type" - {
+        "The RequiredPropertySpec type" - {
 
             "when creating the instance by a property name" - {
                 val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)

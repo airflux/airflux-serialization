@@ -19,7 +19,6 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -38,9 +37,19 @@ internal class PatternValidatorTest : FreeSpec() {
     init {
 
         "The string validator Pattern" - {
-            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.pattern(PATTERN)
+            val validator = StdStringValidator.pattern<EB, Unit, Unit>(PATTERN)
 
-            "when a string is empty" - {
+            "when the value is null" - {
+                val str: String? = null
+
+                "then the validator should not be applying" {
+                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
+
+                    failure.shouldBeNull()
+                }
+            }
+
+            "when the value is empty" - {
                 val str = ""
 
                 "then the validator should return an error" {
@@ -54,7 +63,7 @@ internal class PatternValidatorTest : FreeSpec() {
                 }
             }
 
-            "when a string is blank" - {
+            "when the value is blank" - {
                 val str = " "
 
                 "then the validator should return an error" {
@@ -68,7 +77,7 @@ internal class PatternValidatorTest : FreeSpec() {
                 }
             }
 
-            "when a string is not blank" - {
+            "when the value is not blank" - {
 
                 "when the string is not matching to the pattern" - {
                     val str = "a"

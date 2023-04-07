@@ -56,13 +56,13 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
 
-        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String> =
+        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
     init {
 
-        "The StructPropertySpec#OptionalWithDefault type" - {
+        "The OptionalWithDefaultPropertySpec type" - {
 
             "when creating the instance by a property name" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
