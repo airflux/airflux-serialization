@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
 
 public object StdStringValidator {
     public fun <EB, O, CTX> isNotEmpty(): Validator<EB, O, CTX, String?>

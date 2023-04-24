@@ -24,6 +24,8 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
@@ -33,9 +35,8 @@ import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidat
 import io.github.airflux.serialization.std.common.DummyReader
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
@@ -46,6 +47,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_VALUE = "property-name"
         private const val NAME_PROPERTY_NAME = "title"
         private const val NAME_PROPERTY_VALUE = "property-title"
+
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val CONTEXT = Unit
         private val LOCATION = Location.empty
@@ -67,8 +69,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
-                        errors.shouldBeNull()
+                        val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
+                        result shouldBe valid()
                     }
                 }
 
@@ -76,8 +78,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
-                        errors.shouldBeNull()
+                        val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
+                        result shouldBe valid()
                     }
                 }
             }
@@ -89,8 +91,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
-                        errors.shouldBeNull()
+                        val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
+                        result shouldBe valid()
                     }
                 }
 
@@ -98,8 +100,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should do not return any errors" {
-                        val errors = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
-                        errors.shouldBeNull()
+                        val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
+                        result shouldBe valid()
                     }
                 }
             }
@@ -115,10 +117,10 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should return first error" {
-                        val failure = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
+                        val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
+                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        failure.reason shouldBe ReaderResult.Failure(
                             location = LOCATION.append(TITLE_PROPERTY_VALUE),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
                         )
@@ -129,10 +131,10 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should return all errors" {
-                        val failure = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
+                        val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe listOf(
+                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        failure.reason shouldBe listOf(
                             ReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties

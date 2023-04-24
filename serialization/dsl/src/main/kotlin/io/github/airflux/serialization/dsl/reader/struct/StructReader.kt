@@ -24,6 +24,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -72,10 +73,10 @@ public class StructReader<EB, O, CTX, T> private constructor(
         val failures = mutableListOf<ReaderResult.Failure>()
 
         validators.forEach { validator ->
-            val failure = validator.validate(env, context, location, properties, source)
-            if (failure != null) {
-                if (failFast) return failure else failures.add(failure)
-            }
+            validator.validate(env, context, location, properties, source)
+                .ifInvalid { failure ->
+                    if (failFast) return failure else failures.add(failure)
+                }
         }
 
         val propertyValues: PropertyValues<EB, O, CTX> = PropertyValuesInstance<EB, O, CTX>()

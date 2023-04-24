@@ -19,15 +19,16 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class MinPropertiesStructValidatorTest : FreeSpec() {
 
@@ -55,9 +56,10 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 val source = StructNode()
 
                 "then the validator should return an error" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
-                    errors.shouldNotBeNull()
-                    errors shouldBe ReaderResult.Failure(
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
+
+                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Struct.MinProperties(expected = MIN_PROPERTIES, actual = 0)
                     )
@@ -68,9 +70,10 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
-                    failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
+
+                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Struct.MinProperties(expected = MIN_PROPERTIES, actual = 1)
                     )
@@ -84,8 +87,8 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
-                    errors.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
+                    result shouldBe valid()
                 }
             }
 
@@ -97,8 +100,8 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
-                    errors.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
+                    result shouldBe valid()
                 }
             }
         }

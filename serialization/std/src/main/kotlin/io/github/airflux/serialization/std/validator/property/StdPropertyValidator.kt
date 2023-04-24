@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.property
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
 
 public object StdPropertyValidator {
 

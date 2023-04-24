@@ -19,6 +19,9 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
@@ -33,11 +36,11 @@ public class MaxPropertiesStructValidator<EB, O, CTX> internal constructor(priva
         location: Location,
         properties: StructProperties<EB, O, CTX>,
         source: StructNode
-    ): ReaderResult.Failure? =
+    ): Validated =
         if (source.count > value)
-            ReaderResult.Failure(location, env.errorBuilders.maxPropertiesStructError(value, source.count))
+            invalid(location, env.errorBuilders.maxPropertiesStructError(value, source.count))
         else
-            null
+            valid()
 
     public interface ErrorBuilder {
         public fun maxPropertiesStructError(expected: Int, actual: Int): ReaderResult.Error

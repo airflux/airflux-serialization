@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.ifNullValue
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validation
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
 
 public class StructPropertySpec<EB, O, CTX, out T>(
     public val paths: PropertyPaths,

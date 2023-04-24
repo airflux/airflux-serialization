@@ -19,20 +19,24 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 
 public class PatternStringValidator<EB, O, CTX, T : String?> internal constructor(
     private val pattern: Regex
 ) : Validator<EB, O, CTX, T>
     where EB : PatternStringValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure? =
-        value?.let {
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated =
+        if (value != null) {
             if (pattern.matches(value))
-                null
+                valid()
             else
-                ReaderResult.Failure(location = location, error = env.errorBuilders.patternStringError(value, pattern))
-        }
+                invalid(location = location, error = env.errorBuilders.patternStringError(value, pattern))
+        } else
+            valid()
 
     public interface ErrorBuilder {
         public fun patternStringError(value: String, pattern: Regex): ReaderResult.Error

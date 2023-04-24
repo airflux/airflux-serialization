@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.result.ifNullValue
 import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
 

@@ -27,7 +27,9 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.struct.readRequired
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
@@ -57,7 +59,7 @@ internal class ReaderValidatorTest : FreeSpec() {
                 val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                 "when validation is a success" - {
-                    val validator: Validator<EB, Unit, Unit, String> = DummyValidator(result = null)
+                    val validator: Validator<EB, Unit, Unit, String> = DummyValidator(result = valid())
 
                     "then should return the original result" {
                         val validated = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
@@ -70,7 +72,7 @@ internal class ReaderValidatorTest : FreeSpec() {
 
                 "when validation is a failure" - {
                     val validator: Validator<EB, Unit, Unit, String> = DummyValidator(
-                        result = ReaderResult.Failure(
+                        result = invalid(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -92,10 +94,7 @@ internal class ReaderValidatorTest : FreeSpec() {
 
                 "then validation does not execute and the original result should be returned" {
                     val validator: Validator<EB, Unit, Unit, String> = DummyValidator { _, _, location, _ ->
-                        ReaderResult.Failure(
-                            location = location,
-                            error = JsonErrors.Validation.Strings.IsEmpty
-                        )
+                        invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                     }
 
                     val validated = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)

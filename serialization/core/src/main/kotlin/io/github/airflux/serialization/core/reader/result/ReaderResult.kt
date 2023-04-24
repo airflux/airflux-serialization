@@ -22,7 +22,8 @@ import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.fold
 
 public sealed class ReaderResult<out T> {
 
@@ -141,7 +142,13 @@ public fun <EB, O, CTX, T> ReaderResult<T>.validation(
     validator: Validator<EB, O, CTX, T>
 ): ReaderResult<T> = fold(
     ifFailure = ::identity,
-    ifSuccess = { result -> validator.validate(env, context, result.location, result.value) ?: result }
+    ifSuccess = { result ->
+        validator.validate(env, context, result.location, result.value)
+            .fold(
+                ifInvalid = { it },
+                ifValid = { result }
+            )
+    }
 )
 
 public inline fun <T> ReaderResult<T>.ifNullValue(defaultValue: (Location) -> T & Any): ReaderResult<T & Any> = fold(
@@ -172,8 +179,6 @@ public inline fun <EB, O, T> withCatching(
     try {
         block()
     } catch (expected: Throwable) {
-        env.exceptionsHandler
-            ?.handle(env, location, expected)
-            ?.failure(location)
-            ?: throw expected
+        val handler = env.exceptionsHandler ?: throw expected
+        handler.handle(env, location, expected).failure(location)
     }

@@ -64,7 +64,7 @@ object Configuration {
 
         object Test {
 
-            const val Kotest = "5.5.5"
+            const val Kotest = "5.6.1"
 
             object PiTest {
                 const val JUnit5 = "0.15"

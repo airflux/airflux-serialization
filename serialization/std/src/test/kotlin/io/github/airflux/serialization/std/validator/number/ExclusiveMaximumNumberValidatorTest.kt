@@ -19,12 +19,13 @@ package io.github.airflux.serialization.std.validator.number
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
 
@@ -44,8 +45,8 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 val value = VALUE - 1
 
                 "then the validator should return the null value" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, value)
-                    errors.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, value)
+                    result shouldBe valid()
                 }
             }
 
@@ -53,10 +54,10 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 val value = VALUE
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, CONTEXT, LOCATION, value)
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, value)
 
-                    failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(
+                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
                     )
@@ -67,10 +68,10 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 val value = VALUE + 1
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, CONTEXT, LOCATION, value)
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, value)
 
-                    failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(
+                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
                     )

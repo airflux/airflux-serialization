@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.validator
+package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
 
 public fun interface Validator<EB, O, CTX, in T> {
-    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure?
+    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated
 }
 
 /*
@@ -31,16 +30,16 @@ public fun interface Validator<EB, O, CTX, in T> {
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(
-    alt: Validator<EB, O, CTX, T>
-): Validator<EB, O, CTX, T> {
+public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(alt: Validator<EB, O, CTX, T>): Validator<EB, O, CTX, T> {
     val self = this
     return Validator { env, context, location, value ->
-        self.validate(env, context, location, value)
-            ?.let { error ->
-                alt.validate(env, context, location, value)
-                    ?.let { error + it }
+        when (val left = self.validate(env, context, location, value)) {
+            is Validated.Valid -> left
+            is Validated.Invalid -> when (val right = alt.validate(env, context, location, value)) {
+                is Validated.Valid -> right
+                is Validated.Invalid -> Validated.Invalid(left.reason + right.reason)
             }
+        }
     }
 }
 
@@ -51,12 +50,12 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.and(
-    alt: Validator<EB, O, CTX, T>
-): Validator<EB, O, CTX, T> {
+public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.and(alt: Validator<EB, O, CTX, T>): Validator<EB, O, CTX, T> {
     val self = this
     return Validator { env, context, location, value ->
-        val result = self.validate(env, context, location, value)
-        result ?: alt.validate(env, context, location, value)
+        return@Validator when (val result = self.validate(env, context, location, value)) {
+            is Validated.Valid -> alt.validate(env, context, location, value)
+            is Validated.Invalid -> result
+        }
     }
 }

@@ -19,7 +19,10 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 
 public class MinLengthStringValidator<EB, O, CTX> internal constructor(
     private val expected: Int
@@ -31,15 +34,13 @@ public class MinLengthStringValidator<EB, O, CTX> internal constructor(
         context: CTX,
         location: Location,
         value: String?
-    ): ReaderResult.Failure? = value?.let {
+    ): Validated = if (value != null) {
         if (value.length >= expected)
-            null
+            valid()
         else
-            ReaderResult.Failure(
-                location = location,
-                error = env.errorBuilders.minLengthStringError(expected, value.length)
-            )
-    }
+            invalid(location = location, error = env.errorBuilders.minLengthStringError(expected, value.length))
+    } else
+        valid()
 
     public interface ErrorBuilder {
         public fun minLengthStringError(expected: Int, actual: Int): ReaderResult.Error

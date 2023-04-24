@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.number
 
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validator
 
 public object StdNumberValidator {
 

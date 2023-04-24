@@ -19,11 +19,12 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class MinLengthValidatorTest : FreeSpec() {
 
@@ -43,9 +44,8 @@ internal class MinLengthValidatorTest : FreeSpec() {
                 val str: String? = null
 
                 "then the validator should not be applying" {
-                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
-
-                    failure.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, str)
+                    result shouldBe valid()
                 }
             }
 
@@ -53,10 +53,10 @@ internal class MinLengthValidatorTest : FreeSpec() {
                 val str = ""
 
                 "then the validator should return an error" {
-                    val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                    failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(
+                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Strings.MinLength(
                             expected = MIN_VALUE,
@@ -72,10 +72,10 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = " "
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
+                        val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
+                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        failure.reason shouldBe ReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.MinLength(
                                 expected = MIN_VALUE,
@@ -89,8 +89,8 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "  "
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        errors.shouldBeNull()
+                        val result = validator.validate(ENV, CONTEXT, LOCATION, str)
+                        result shouldBe valid()
                     }
                 }
 
@@ -98,8 +98,8 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "   "
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        errors.shouldBeNull()
+                        val result = validator.validate(ENV, CONTEXT, LOCATION, str)
+                        result shouldBe valid()
                     }
                 }
             }
@@ -110,10 +110,10 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "a"
 
                     "then the validator should return an error" {
-                        val failure = validator.validate(ENV, CONTEXT, LOCATION, str)
+                        val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(
+                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        failure.reason shouldBe ReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.MinLength(
                                 expected = MIN_VALUE,
@@ -127,8 +127,8 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "ab"
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        errors.shouldBeNull()
+                        val result = validator.validate(ENV, CONTEXT, LOCATION, str)
+                        result shouldBe valid()
                     }
                 }
 
@@ -136,8 +136,8 @@ internal class MinLengthValidatorTest : FreeSpec() {
                     val str = "abc"
 
                     "then the validator should return the null value" {
-                        val errors = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        errors.shouldBeNull()
+                        val result = validator.validate(ENV, CONTEXT, LOCATION, str)
+                        result shouldBe valid()
                     }
                 }
             }

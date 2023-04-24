@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.validator
+package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class ValidatorTest : FreeSpec() {
 
@@ -35,47 +34,47 @@ internal class ValidatorTest : FreeSpec() {
 
     init {
 
-        "A Validator type" - {
+        "The Validator type" - {
 
             "testing the or composite operator" - {
 
                 "if the left validator returns success then the right validator doesn't execute" {
-                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> null }
+                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                     val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
-                        ReaderResult.Failure(location, ValidationErrors.PathMissing)
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
                     val composeValidator = leftValidator or rightValidator
-                    val errors = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
+                    val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                    errors.shouldBeNull()
+                    result shouldBe valid()
                 }
 
                 "if the left validator returns an error" - {
                     val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
-                        ReaderResult.Failure(location, ValidationErrors.PathMissing)
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
                     "and the right validator returns success then returning the first error" {
-                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> null }
+                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                         val composeValidator = leftValidator or rightValidator
-                        val errors = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
+                        val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        errors.shouldBeNull()
+                        result shouldBe valid()
                     }
 
                     "and the right validator returns an error then returning both errors" {
                         val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
-                            ReaderResult.Failure(location, ValidationErrors.InvalidType)
+                            invalid(location, ValidationErrors.InvalidType)
                         }
 
                         val composeValidator = leftValidator or rightValidator
-                        val failure = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
+                        val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe listOf(
+                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        failure.reason shouldBe listOf(
                             ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing),
                             ReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
                         ).merge()
@@ -87,42 +86,42 @@ internal class ValidatorTest : FreeSpec() {
 
                 "if the left validator returns an error then the right validator doesn't execute" {
                     val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
-                        ReaderResult.Failure(location, ValidationErrors.PathMissing)
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
                     val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
-                        ReaderResult.Failure(location, ValidationErrors.InvalidType)
+                        invalid(location, ValidationErrors.InvalidType)
                     }
 
                     val composeValidator = leftValidator and rightValidator
-                    val failure = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
+                    val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                    failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    failure.reason shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
-                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> null }
+                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                     "and the second validator returns success, then success is returned" {
-                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> null }
+                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                         val composeValidator = leftValidator and rightValidator
-                        val errors = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
+                        val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        errors.shouldBeNull()
+                        result shouldBe valid()
                     }
 
                     "and the right validator returns an error, then an error is returned" {
                         val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
-                            ReaderResult.Failure(location, ValidationErrors.PathMissing)
+                            invalid(location, ValidationErrors.PathMissing)
                         }
 
                         val composeValidator = leftValidator and rightValidator
-                        val failure = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
+                        val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        failure.shouldNotBeNull()
-                        failure shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        failure.reason shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
                     }
                 }
             }

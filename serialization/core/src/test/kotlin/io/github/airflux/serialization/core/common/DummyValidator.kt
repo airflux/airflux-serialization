@@ -19,15 +19,18 @@ package io.github.airflux.serialization.core.common
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 
 internal class DummyValidator<EB, O, CTX, T>(
-    val result: (ReaderEnv<EB, O>, CTX, Location, T) -> ReaderResult.Failure?
+    val result: (ReaderEnv<EB, O>, CTX, Location, T) -> Validated
 ) : Validator<EB, O, CTX, T> {
 
-    constructor(result: ReaderResult.Failure?) : this({ _, _, _, _ -> result })
+    constructor(result: Validated) : this({ _, _, _, _ -> result })
 
-    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ReaderResult.Failure? =
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated =
         result(env, context, location, value)
 
     internal companion object {
@@ -35,9 +38,9 @@ internal class DummyValidator<EB, O, CTX, T>(
         internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReaderResult.Error): Validator<EB, O, CTX, String> =
             DummyValidator { _, _, location, value ->
                 if (value.isNotEmpty())
-                    null
+                    valid()
                 else
-                    ReaderResult.Failure(location = location, error = error())
+                    invalid(location = location, error = error())
             }
     }
 }

@@ -119,11 +119,11 @@ public final class io/github/airflux/serialization/dsl/reader/struct/property/sp
 	public static final fun filter (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;Lio/github/airflux/serialization/core/reader/predicate/ReaderPredicate;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;
 	public static final fun ifNullValue (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;
 	public static final fun or (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;
-	public static final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;Lio/github/airflux/serialization/core/reader/validator/Validator;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;
+	public static final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;Lio/github/airflux/serialization/core/reader/validation/Validator;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/Validated;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder {

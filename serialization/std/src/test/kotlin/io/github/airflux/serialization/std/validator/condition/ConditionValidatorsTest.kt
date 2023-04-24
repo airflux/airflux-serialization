@@ -19,13 +19,14 @@ package io.github.airflux.serialization.std.validator.condition
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.DummyValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class ConditionValidatorsTest : FreeSpec() {
 
@@ -43,19 +44,18 @@ internal class ConditionValidatorsTest : FreeSpec() {
             val validator = IsNotEmptyStringValidator.applyIfNotNull()
 
             "should return the result of applying the validator to the value if it is not the null value" {
-                val failure = validator.validate(ENV, CONTEXT, LOCATION, "")
+                val result = validator.validate(ENV, CONTEXT, LOCATION, "")
 
-                failure.shouldNotBeNull()
-                failure shouldBe ReaderResult.Failure(
+                val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                failure.reason shouldBe ReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.Validation.Strings.IsEmpty
                 )
             }
 
             "should return the null value if the value is the null value" {
-                val errors = validator.validate(ENV, CONTEXT, LOCATION, null)
-
-                errors.shouldBeNull()
+                val result = validator.validate(ENV, CONTEXT, LOCATION, null)
+                result shouldBe valid()
             }
         }
 
@@ -64,10 +64,10 @@ internal class ConditionValidatorsTest : FreeSpec() {
             "should return the result of applying the validator to the value if the predicate returns true" {
                 val validator = IsNotEmptyStringValidator.applyIf { _, _, _, _ -> true }
 
-                val failure = validator.validate(ENV, CONTEXT, LOCATION, "")
+                val result = validator.validate(ENV, CONTEXT, LOCATION, "")
 
-                failure.shouldNotBeNull()
-                failure shouldBe ReaderResult.Failure(
+                val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                failure.reason shouldBe ReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.Validation.Strings.IsEmpty
                 )
@@ -76,9 +76,8 @@ internal class ConditionValidatorsTest : FreeSpec() {
             "should return the null value if the predicate returns false" {
                 val validator = IsNotEmptyStringValidator.applyIf { _, _, _, _ -> false }
 
-                val errors = validator.validate(ENV, CONTEXT, LOCATION, "")
-
-                errors.shouldBeNull()
+                val result = validator.validate(ENV, CONTEXT, LOCATION, "")
+                result shouldBe valid()
             }
         }
     }

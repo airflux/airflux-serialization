@@ -19,7 +19,10 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 
 public class IsAStringValidator<EB, O, CTX> internal constructor(
     private val predicate: (String) -> Boolean
@@ -31,11 +34,11 @@ public class IsAStringValidator<EB, O, CTX> internal constructor(
         context: CTX,
         location: Location,
         value: String
-    ): ReaderResult.Failure? =
+    ): Validated =
         if (predicate(value))
-            null
+            valid()
         else
-            ReaderResult.Failure(location = location, error = env.errorBuilders.isAStringError(value))
+            invalid(location = location, error = env.errorBuilders.isAStringError(value))
 
     public interface ErrorBuilder {
         public fun isAStringError(value: String): ReaderResult.Error

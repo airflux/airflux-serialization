@@ -19,7 +19,10 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validator.Validator
+import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 
 public class IsNotEmptyStringValidator<EB, O, CTX> internal constructor() : Validator<EB, O, CTX, String?>
     where EB : IsNotEmptyStringValidator.ErrorBuilder {
@@ -29,12 +32,13 @@ public class IsNotEmptyStringValidator<EB, O, CTX> internal constructor() : Vali
         context: CTX,
         location: Location,
         value: String?
-    ): ReaderResult.Failure? = value?.let {
-        if (it.isNotEmpty())
-            null
+    ): Validated = if (value != null) {
+        if (value.isNotEmpty())
+            valid()
         else
-            ReaderResult.Failure(location = location, error = env.errorBuilders.isNotEmptyStringError())
-    }
+            invalid(location = location, error = env.errorBuilders.isNotEmptyStringError())
+    } else
+        valid()
 
     public interface ErrorBuilder {
         public fun isNotEmptyStringError(): ReaderResult.Error
