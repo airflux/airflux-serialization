@@ -50,8 +50,7 @@ internal class ReaderNullValueTest : FreeSpec() {
     }
 
     init {
-
-        "The extension-function the ifNullValue" - {
+        "The extension-function Reader#ifNullValue" - {
             val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
                 val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
                 readOptional(env, context, lookup, stringReader)
@@ -105,7 +104,7 @@ internal class ReaderNullValueTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-                        InvalidTypeErrorBuilder {
+        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
 

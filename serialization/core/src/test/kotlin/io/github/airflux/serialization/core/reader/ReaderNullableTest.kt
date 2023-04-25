@@ -48,8 +48,7 @@ internal class ReaderNullableTest : FreeSpec() {
     }
 
     init {
-
-        "The extension-function the toNullableType" - {
+        "The extension-function Reader#toNullableType" - {
             val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
                 val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
                 readOptional(env, context, lookup, stringReader)
@@ -103,7 +102,7 @@ internal class ReaderNullableTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-                        InvalidTypeErrorBuilder {
+        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
 

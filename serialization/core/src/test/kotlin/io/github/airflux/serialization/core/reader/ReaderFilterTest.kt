@@ -51,7 +51,7 @@ internal class ReaderFilterTest : FreeSpec() {
     }
 
     init {
-        "The extension-function the filter" - {
+        "The extension-function Reader#filter" - {
 
             "when an original reader returns a result as a success" - {
 
@@ -124,9 +124,9 @@ internal class ReaderFilterTest : FreeSpec() {
                 }
 
                 "then the filter should not be applying" {
-                    val validated = requiredReader.filter(predicate)
+                    val filtered = requiredReader.filter(predicate)
                         .read(ENV, CONTEXT, LOCATION, source)
-                    validated shouldBe ReaderResult.Failure(
+                    filtered shouldBe ReaderResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
                     )
