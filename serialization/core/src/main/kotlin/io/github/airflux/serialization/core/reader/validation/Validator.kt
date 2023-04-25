@@ -53,7 +53,7 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(alt: Validator<EB, 
 public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.and(alt: Validator<EB, O, CTX, T>): Validator<EB, O, CTX, T> {
     val self = this
     return Validator { env, context, location, value ->
-        return@Validator when (val result = self.validate(env, context, location, value)) {
+        when (val result = self.validate(env, context, location, value)) {
             is Validated.Valid -> alt.validate(env, context, location, value)
             is Validated.Invalid -> result
         }
