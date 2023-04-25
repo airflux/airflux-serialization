@@ -35,7 +35,7 @@ import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ReaderValidatorTest : FreeSpec() {
+internal class ReaderValidationTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -49,7 +49,7 @@ internal class ReaderValidatorTest : FreeSpec() {
     }
 
     init {
-        "The extension-function the validation" - {
+        "The extension function Reader#validation" - {
             val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
                 val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
                 readRequired(env, context, lookup, stringReader)
@@ -62,8 +62,8 @@ internal class ReaderValidatorTest : FreeSpec() {
                     val validator: Validator<EB, Unit, Unit, String> = DummyValidator(result = valid())
 
                     "then should return the original result" {
-                        val validated = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
-                        validated shouldBe ReaderResult.Success(
+                        val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
+                        result shouldBe ReaderResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
                         )
@@ -79,9 +79,9 @@ internal class ReaderValidatorTest : FreeSpec() {
                     )
 
                     "then should return the result of a validation" {
-                        val validated = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
+                        val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
 
-                        validated shouldBe ReaderResult.Failure(
+                        result shouldBe ReaderResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -97,8 +97,8 @@ internal class ReaderValidatorTest : FreeSpec() {
                         invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                     }
 
-                    val validated = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
-                    validated shouldBe ReaderResult.Failure(
+                    val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
+                    result shouldBe ReaderResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.Validation.Strings.IsEmpty
                     )

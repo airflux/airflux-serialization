@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.common
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StructNode
@@ -27,20 +27,20 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
 
-internal class DummyStructValidatorBuilder<EB, O, CTX>(result: Validated) : StructValidatorBuilder<EB, O, CTX> {
+internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult) : StructValidatorBuilder<EB, O, CTX> {
 
     private val validator = Validator<EB, O, CTX>(result)
 
     override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> = validator
 
-    internal class Validator<EB, O, CTX>(val result: Validated) : StructValidator<EB, O, CTX> {
+    internal class Validator<EB, O, CTX>(val result: ValidationResult) : StructValidator<EB, O, CTX> {
         override fun validate(
             env: ReaderEnv<EB, O>,
             context: CTX,
             location: Location,
             properties: StructProperties<EB, O, CTX>,
             source: StructNode
-        ): Validated = result
+        ): ValidationResult = result
     }
 
     companion object {

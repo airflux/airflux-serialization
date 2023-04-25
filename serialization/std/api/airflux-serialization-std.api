@@ -63,8 +63,8 @@ public final class io/github/airflux/serialization/std/validator/condition/Condi
 }
 
 public final class io/github/airflux/serialization/std/validator/number/ExclusiveMaximumNumberValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/number/ExclusiveMaximumNumberValidator$ErrorBuilder {
@@ -72,8 +72,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/nu
 }
 
 public final class io/github/airflux/serialization/std/validator/number/ExclusiveMinimumNumberValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/number/ExclusiveMinimumNumberValidator$ErrorBuilder {
@@ -81,8 +81,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/nu
 }
 
 public final class io/github/airflux/serialization/std/validator/number/MaximumNumberValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/number/MaximumNumberValidator$ErrorBuilder {
@@ -90,8 +90,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/nu
 }
 
 public final class io/github/airflux/serialization/std/validator/number/MinimumNumberValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Number;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/number/MinimumNumberValidator$ErrorBuilder {
@@ -107,7 +107,7 @@ public final class io/github/airflux/serialization/std/validator/number/StdNumbe
 }
 
 public final class io/github/airflux/serialization/std/validator/property/ForbiddenPropertyValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/property/ForbiddenPropertyValidator$ErrorBuilder {
@@ -115,7 +115,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/pr
 }
 
 public final class io/github/airflux/serialization/std/validator/property/MandatoryPropertyValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/property/MandatoryPropertyValidator$ErrorBuilder {
@@ -129,8 +129,8 @@ public final class io/github/airflux/serialization/std/validator/property/StdPro
 }
 
 public final class io/github/airflux/serialization/std/validator/string/IsAStringValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/string/IsAStringValidator$ErrorBuilder {
@@ -138,8 +138,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/string/IsNotBlankStringValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/string/IsNotBlankStringValidator$ErrorBuilder {
@@ -147,8 +147,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/string/IsNotEmptyStringValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/string/IsNotEmptyStringValidator$ErrorBuilder {
@@ -156,8 +156,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/string/MaxLengthStringValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/string/MaxLengthStringValidator$ErrorBuilder {
@@ -165,8 +165,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/string/MinLengthStringValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/string/MinLengthStringValidator$ErrorBuilder {
@@ -174,8 +174,8 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/string/PatternStringValidator : io/github/airflux/serialization/core/reader/validation/Validator {
-	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public synthetic fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/string/PatternStringValidator$ErrorBuilder {
@@ -193,7 +193,7 @@ public final class io/github/airflux/serialization/std/validator/string/StdStrin
 }
 
 public final class io/github/airflux/serialization/std/validator/struct/AdditionalPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/struct/AdditionalPropertiesStructValidator$ErrorBuilder {
@@ -201,7 +201,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/struct/IsNotEmptyStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/struct/IsNotEmptyStructValidator$ErrorBuilder {
@@ -209,7 +209,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/struct/MaxPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/struct/MaxPropertiesStructValidator$ErrorBuilder {
@@ -217,7 +217,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 }
 
 public final class io/github/airflux/serialization/std/validator/struct/MinPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/std/validator/struct/MinPropertiesStructValidator$ErrorBuilder {

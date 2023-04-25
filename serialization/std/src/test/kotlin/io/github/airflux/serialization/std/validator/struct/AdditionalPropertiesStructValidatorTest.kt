@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReaderResult
 import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -119,7 +119,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return first error" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe ReaderResult.Failure(
                             location = LOCATION.append(TITLE_PROPERTY_VALUE),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
@@ -133,7 +133,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe listOf(
                             ReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),

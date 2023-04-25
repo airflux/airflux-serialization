@@ -123,7 +123,7 @@ public final class io/github/airflux/serialization/dsl/reader/struct/property/sp
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/util/List;Lio/github/airflux/serialization/core/value/StructNode;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder {

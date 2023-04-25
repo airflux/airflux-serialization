@@ -73,7 +73,7 @@ internal class ValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe listOf(
                             ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing),
                             ReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
@@ -96,7 +96,7 @@ internal class ValidatorTest : FreeSpec() {
                     val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                     failure.reason shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
@@ -120,7 +120,7 @@ internal class ValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
                     }
                 }

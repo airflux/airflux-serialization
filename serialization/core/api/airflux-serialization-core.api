@@ -307,28 +307,28 @@ public final class io/github/airflux/serialization/core/reader/struct/RequiredPr
 	public static final fun readRequired (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/lookup/LookupResult;Lio/github/airflux/serialization/core/reader/Reader;)Lio/github/airflux/serialization/core/reader/result/ReaderResult;
 }
 
-public abstract class io/github/airflux/serialization/core/reader/validation/Validated {
+public abstract class io/github/airflux/serialization/core/reader/validation/ValidationResult {
 }
 
-public final class io/github/airflux/serialization/core/reader/validation/Validated$Invalid : io/github/airflux/serialization/core/reader/validation/Validated {
+public final class io/github/airflux/serialization/core/reader/validation/ValidationResult$Invalid : io/github/airflux/serialization/core/reader/validation/ValidationResult {
 	public fun <init> (Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;)V
 	public final fun getReason ()Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;
 }
 
-public final class io/github/airflux/serialization/core/reader/validation/Validated$Valid : io/github/airflux/serialization/core/reader/validation/Validated {
-	public static final field INSTANCE Lio/github/airflux/serialization/core/reader/validation/Validated$Valid;
+public final class io/github/airflux/serialization/core/reader/validation/ValidationResult$Valid : io/github/airflux/serialization/core/reader/validation/ValidationResult {
+	public static final field INSTANCE Lio/github/airflux/serialization/core/reader/validation/ValidationResult$Valid;
 }
 
-public final class io/github/airflux/serialization/core/reader/validation/ValidatedKt {
-	public static final fun fold (Lio/github/airflux/serialization/core/reader/validation/Validated;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
-	public static final fun ifInvalid (Lio/github/airflux/serialization/core/reader/validation/Validated;Lkotlin/jvm/functions/Function1;)V
-	public static final fun invalid (Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public static final fun toInvalid (Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;)Lio/github/airflux/serialization/core/reader/validation/Validated;
-	public static final fun valid ()Lio/github/airflux/serialization/core/reader/validation/Validated;
+public final class io/github/airflux/serialization/core/reader/validation/ValidationResultKt {
+	public static final fun fold (Lio/github/airflux/serialization/core/reader/validation/ValidationResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public static final fun ifInvalid (Lio/github/airflux/serialization/core/reader/validation/ValidationResult;Lkotlin/jvm/functions/Function1;)V
+	public static final fun invalid (Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/reader/result/ReaderResult$Error;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public static final fun toInvalid (Lio/github/airflux/serialization/core/reader/result/ReaderResult$Failure;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public static final fun valid ()Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/validation/Validator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/Validated;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/validation/ValidatorKt {

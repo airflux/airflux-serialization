@@ -19,16 +19,16 @@ package io.github.airflux.serialization.std.common
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
 internal class DummyValidator<EB, O, CTX, T> private constructor(
-    val result: (ReaderEnv<EB, O>, CTX, Location, T) -> Validated
+    val result: (ReaderEnv<EB, O>, CTX, Location, T) -> ValidationResult
 ) : Validator<EB, O, CTX, T> {
 
-    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated =
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ValidationResult =
         result(env, context, location, value)
 
     internal companion object {

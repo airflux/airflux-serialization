@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 
 public fun interface Validator<EB, O, CTX, in T> {
-    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated
+    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ValidationResult
 }
 
 /*
@@ -34,10 +34,10 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.or(alt: Validator<EB, 
     val self = this
     return Validator { env, context, location, value ->
         when (val left = self.validate(env, context, location, value)) {
-            is Validated.Valid -> left
-            is Validated.Invalid -> when (val right = alt.validate(env, context, location, value)) {
-                is Validated.Valid -> right
-                is Validated.Invalid -> Validated.Invalid(left.reason + right.reason)
+            is ValidationResult.Valid -> left
+            is ValidationResult.Invalid -> when (val right = alt.validate(env, context, location, value)) {
+                is ValidationResult.Valid -> right
+                is ValidationResult.Invalid -> ValidationResult.Invalid(left.reason + right.reason)
             }
         }
     }
@@ -54,8 +54,8 @@ public infix fun <EB, O, CTX, T> Validator<EB, O, CTX, T>.and(alt: Validator<EB,
     val self = this
     return Validator { env, context, location, value ->
         when (val result = self.validate(env, context, location, value)) {
-            is Validated.Valid -> alt.validate(env, context, location, value)
-            is Validated.Invalid -> result
+            is ValidationResult.Valid -> alt.validate(env, context, location, value)
+            is ValidationResult.Invalid -> result
         }
     }
 }

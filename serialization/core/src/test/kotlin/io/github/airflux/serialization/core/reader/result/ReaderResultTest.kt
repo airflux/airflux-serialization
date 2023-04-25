@@ -351,12 +351,9 @@ internal class ReaderResultTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "")
 
                     "then validator should return an error" {
-                        val validated = result.validation(
-                            ENV,
-                            CONTEXT, isNotEmpty
-                        )
+                        val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
 
-                        validated shouldBe ReaderResult.Failure(
+                        validationResult shouldBe ReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -367,11 +364,8 @@ internal class ReaderResultTest : FreeSpec() {
                     val result: ReaderResult<String> = ReaderResult.Success(location = LOCATION, value = "user")
 
                     "then validator should return the original value" {
-                        val validated = result.validation(
-                            ENV,
-                            CONTEXT, isNotEmpty
-                        )
-                        validated shouldBe result
+                        val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
+                        validationResult shouldBe result
                     }
                 }
             }
@@ -381,8 +375,8 @@ internal class ReaderResultTest : FreeSpec() {
                     ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
-                    val validated = result.validation(ENV, CONTEXT, isNotEmpty)
-                    validated shouldBe result
+                    val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
+                    validationResult shouldBe result
                 }
             }
         }

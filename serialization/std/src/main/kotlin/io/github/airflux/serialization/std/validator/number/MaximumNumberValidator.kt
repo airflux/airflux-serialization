@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.number
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -31,7 +31,7 @@ public class MaximumNumberValidator<EB, O, CTX, T> internal constructor(
           T : Number,
           T : Comparable<T> {
 
-    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated =
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ValidationResult =
         if (value <= expected)
             valid()
         else

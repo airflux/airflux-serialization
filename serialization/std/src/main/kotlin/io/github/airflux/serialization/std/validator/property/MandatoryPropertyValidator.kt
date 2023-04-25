@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -29,7 +29,7 @@ public class MandatoryPropertyValidator<EB, O, CTX, T> internal constructor(
 ) : Validator<EB, O, CTX, T>
     where EB : MandatoryPropertyValidator.ErrorBuilder {
 
-    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Validated =
+    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ValidationResult =
         if (predicate(env, context, location)) {
             if (value != null)
                 valid()

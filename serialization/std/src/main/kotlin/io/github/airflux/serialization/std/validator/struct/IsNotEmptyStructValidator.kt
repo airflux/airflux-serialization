@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StructNode
@@ -35,7 +35,7 @@ public class IsNotEmptyStructValidator<EB, O, CTX> internal constructor() : Stru
         location: Location,
         properties: StructProperties<EB, O, CTX>,
         source: StructNode
-    ): Validated =
+    ): ValidationResult =
         if (source.isEmpty())
             invalid(location = location, error = env.errorBuilders.isNotEmptyStructError())
         else

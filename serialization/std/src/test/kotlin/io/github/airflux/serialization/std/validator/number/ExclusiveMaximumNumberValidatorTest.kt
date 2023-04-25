@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.number
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -56,7 +56,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, value)
 
-                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                     failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)
@@ -70,7 +70,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, value)
 
-                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                     failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Numbers.Lt(expected = VALUE, actual = value)

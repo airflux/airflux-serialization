@@ -21,10 +21,10 @@ import io.github.airflux.serialization.core.location.Location
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ValidatedTest : FreeSpec() {
+internal class ValidationResultTest : FreeSpec() {
 
     init {
-        "The Validated type" - {
+        "The ValidationResult type" - {
 
             "when value is valid" - {
                 val value = valid()

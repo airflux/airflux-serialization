@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
@@ -56,7 +56,7 @@ internal class PatternValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                     failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Strings.Pattern(value = str, regex = PATTERN)
@@ -70,7 +70,7 @@ internal class PatternValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                    val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                     failure.reason shouldBe ReaderResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Strings.Pattern(value = str, regex = PATTERN)
@@ -86,7 +86,7 @@ internal class PatternValidatorTest : FreeSpec() {
                     "then the validator should return an error" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                        val failure = result.shouldBeInstanceOf<Validated.Invalid>()
+                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe ReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.Pattern(value = str, regex = PATTERN)

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.validation.Validated
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -34,7 +34,7 @@ public class IsAStringValidator<EB, O, CTX> internal constructor(
         context: CTX,
         location: Location,
         value: String
-    ): Validated =
+    ): ValidationResult =
         if (predicate(value))
             valid()
         else
