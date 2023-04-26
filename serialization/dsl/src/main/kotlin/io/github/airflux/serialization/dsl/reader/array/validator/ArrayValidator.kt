@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array.validator
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 
 public fun interface ArrayValidator<EB, O, CTX> {
@@ -27,5 +27,5 @@ public fun interface ArrayValidator<EB, O, CTX> {
         context: CTX,
         location: Location,
         source: ArrayNode
-    ): ReaderResult.Failure?
+    ): ReadingResult.Failure?
 }

@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.kotest.core.spec.style.FreeSpec
 import java.math.BigDecimal
 
@@ -33,7 +33,7 @@ internal class ReadAsNumberTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = Location.empty.append("user")
         private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, text: String ->
-            ReaderResult.Success(location = location, value = BigDecimal(text))
+            ReadingResult.Success(location = location, value = BigDecimal(text))
         }
     }
 
@@ -45,7 +45,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the number value" {
                     val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
 
@@ -54,7 +54,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the number value" {
                     val json: ValueNode = NumericNode.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
             "when called with a receiver of not the NumericNode#Number type" - {
@@ -62,7 +62,7 @@ internal class ReadAsNumberTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
-                    result shouldBeFailure ReaderResult.Failure(
+                    result shouldBeFailure ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(NumericNode.Number.nameOfType),
@@ -75,7 +75,7 @@ internal class ReadAsNumberTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

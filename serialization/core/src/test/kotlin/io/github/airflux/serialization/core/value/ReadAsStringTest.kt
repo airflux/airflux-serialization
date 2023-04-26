@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsStringTest : FreeSpec() {
@@ -40,7 +40,7 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the string value" {
                     val json: ValueNode = StringNode("abc")
                     val result = json.readAsString(ENV, LOCATION)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = "abc")
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = "abc")
                 }
             }
 
@@ -49,7 +49,7 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsString(ENV, LOCATION)
-                    result shouldBeFailure ReaderResult.Failure(
+                    result shouldBeFailure ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(StringNode.nameOfType),
@@ -62,7 +62,7 @@ internal class ReadAsStringTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

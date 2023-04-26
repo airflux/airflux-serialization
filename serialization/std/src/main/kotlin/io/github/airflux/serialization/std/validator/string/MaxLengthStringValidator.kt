@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -46,6 +46,6 @@ public class MaxLengthStringValidator<EB, O, CTX> internal constructor(
         valid()
 
     public interface ErrorBuilder {
-        public fun maxLengthStringError(expected: Int, actual: Int): ReaderResult.Error
+        public fun maxLengthStringError(expected: Int, actual: Int): ReadingResult.Error
     }
 }

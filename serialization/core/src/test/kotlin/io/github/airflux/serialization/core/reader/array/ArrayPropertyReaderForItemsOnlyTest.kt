@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
@@ -57,7 +57,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then reader should return result" {
-                        val result: ReaderResult<List<String>> = readArray(
+                        val result: ReadingResult<List<String>> = readArray(
                             env = envWithFailFastIsTrue,
                             context = CONTEXT,
                             location = LOCATION,
@@ -65,7 +65,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             itemsReader = StringReader
                         )
 
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
 
@@ -73,7 +73,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then reader should return result" {
-                        val result: ReaderResult<List<String>> = readArray(
+                        val result: ReadingResult<List<String>> = readArray(
                             env = envWithFailFastIsFalse,
                             context = CONTEXT,
                             location = LOCATION,
@@ -81,7 +81,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             itemsReader = StringReader
                         )
 
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -95,7 +95,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return result" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -103,7 +103,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                             )
@@ -114,7 +114,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return result" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -122,7 +122,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                             )
@@ -138,7 +138,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             ReaderEnv(errorBuilders = EB(), options = OPTS(failFast = true))
 
                         "then the validator should return first error" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -146,7 +146,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeFailure ReaderResult.Failure(
+                            result shouldBeFailure ReadingResult.Failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
@@ -160,7 +160,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then the validator should return all errors" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -169,14 +169,14 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             )
 
                             result.shouldBeFailure(
-                                ReaderResult.Failure.Cause(
+                                ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(StringNode.nameOfType),
                                         actual = NumericNode.Integer.nameOfType
                                     )
                                 ),
-                                ReaderResult.Failure.Cause(
+                                ReadingResult.Failure.Cause(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(StringNode.nameOfType),
@@ -194,10 +194,10 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         ValueCastErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)
 
-        override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =
+        override fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error =
             JsonErrors.ValueCast(value, target)
     }
 

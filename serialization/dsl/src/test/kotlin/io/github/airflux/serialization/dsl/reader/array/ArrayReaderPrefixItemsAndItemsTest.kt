@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
@@ -65,7 +65,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeFailure ReaderResult.Failure(
+                            result shouldBeFailure ReadingResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(ArrayNode.nameOfType),
@@ -80,7 +80,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = listOf(FIRST_ITEM))
+                            result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = listOf(FIRST_ITEM))
                         }
                     }
 
@@ -90,7 +90,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_ITEM, SECOND_ITEM)
                             )
@@ -108,7 +108,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all items read" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                                result shouldBeSuccess ReaderResult.Success(
+                                result shouldBeSuccess ReadingResult.Success(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM, true)
                                 )
@@ -125,7 +125,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return an error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
-                                result shouldBeFailure ReaderResult.Failure(
+                                result shouldBeFailure ReadingResult.Failure(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(BooleanNode.nameOfType),
@@ -145,7 +145,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeFailure ReaderResult.Failure(
+                            result shouldBeFailure ReadingResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(ArrayNode.nameOfType),
@@ -160,7 +160,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = listOf(FIRST_ITEM))
+                            result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = listOf(FIRST_ITEM))
                         }
                     }
 
@@ -170,7 +170,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_ITEM, SECOND_ITEM)
                             )
@@ -188,7 +188,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                             "then should return all items read" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
-                                result shouldBeSuccess ReaderResult.Success(
+                                result shouldBeSuccess ReadingResult.Success(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM, true)
                                 )
@@ -206,14 +206,14 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                             "then should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                                 result.shouldBeFailure(
-                                    ReaderResult.Failure.Cause(
+                                    ReadingResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(BooleanNode.nameOfType),
                                             actual = StringNode.nameOfType
                                         )
                                     ),
-                                    ReaderResult.Failure.Cause(
+                                    ReadingResult.Failure.Cause(
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(BooleanNode.nameOfType),
@@ -231,9 +231,9 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
     internal class EB : AdditionalItemsErrorBuilder,
                         InvalidTypeErrorBuilder {
-        override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
+        override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 

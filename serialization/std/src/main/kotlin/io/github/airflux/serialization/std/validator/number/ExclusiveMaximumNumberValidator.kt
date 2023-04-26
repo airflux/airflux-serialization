@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.number
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -38,6 +38,6 @@ public class ExclusiveMaximumNumberValidator<EB, O, CTX, T> internal constructor
             invalid(location = location, error = env.errorBuilders.exclusiveMaximumNumberError(expected, value))
 
     public interface ErrorBuilder {
-        public fun exclusiveMaximumNumberError(expected: Number, actual: Number): ReaderResult.Error
+        public fun exclusiveMaximumNumberError(expected: Number, actual: Number): ReadingResult.Error
     }
 }

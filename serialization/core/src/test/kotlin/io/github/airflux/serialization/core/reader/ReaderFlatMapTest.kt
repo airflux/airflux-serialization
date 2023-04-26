@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
@@ -52,12 +52,12 @@ internal class ReaderFlatMapTest : FreeSpec() {
                         }
                     val result = transformedReader.read(ENV, CONTEXT, LOCATION, source)
 
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = VALUE.toInt())
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = VALUE.toInt())
                 }
             }
 
             "when the original reader returns an error" - {
-                val failure = ReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val failure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 val reader: Reader<EB, Unit, Unit, String> = DummyReader(result = failure)
 
                 "then the new reader should return it error" {
@@ -75,8 +75,8 @@ internal class ReaderFlatMapTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

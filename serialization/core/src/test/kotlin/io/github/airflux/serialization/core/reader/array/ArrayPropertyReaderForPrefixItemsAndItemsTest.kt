@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -57,7 +57,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then reader should return result" {
-                        val result: ReaderResult<List<String>> = readArray(
+                        val result: ReadingResult<List<String>> = readArray(
                             env = envWithFailFastIsTrue,
                             context = CONTEXT,
                             location = LOCATION,
@@ -66,7 +66,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             itemsReader = StringReader
                         )
 
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
 
@@ -74,7 +74,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then reader should return result" {
-                        val result: ReaderResult<List<String>> = readArray(
+                        val result: ReadingResult<List<String>> = readArray(
                             env = envWithFailFastIsFalse,
                             context = CONTEXT,
                             location = LOCATION,
@@ -83,7 +83,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             itemsReader = StringReader
                         )
 
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -110,7 +110,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -130,7 +130,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -144,7 +144,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                         val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return first error" {
-                            val result: ReaderResult<List<Int>> = readArray(
+                            val result: ReadingResult<List<Int>> = readArray(
                                 env = envWithFailFastIsTrue,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -153,7 +153,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                                 itemsReader = IntReader
                             )
 
-                            result shouldBeFailure ReaderResult.Failure(
+                            result shouldBeFailure ReadingResult.Failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(NumericNode.Integer.nameOfType),
@@ -177,14 +177,14 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             )
 
                             result.shouldBeFailure(
-                                ReaderResult.Failure.Cause(
+                                ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(NumericNode.Integer.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 ),
-                                ReaderResult.Failure.Cause(
+                                ReadingResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(NumericNode.Integer.nameOfType),
@@ -202,10 +202,10 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         ValueCastErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)
 
-        override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =
+        override fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error =
             JsonErrors.ValueCast(value, target)
     }
 

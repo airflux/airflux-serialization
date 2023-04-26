@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.core.reader.error
 
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 
 /**
  * The builder of an error that occurs when an element is missing by the specified path.
  */
 public interface PathMissingErrorBuilder {
-    public fun pathMissingError(): ReaderResult.Error
+    public fun pathMissingError(): ReadingResult.Error
 }

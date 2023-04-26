@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
@@ -32,13 +32,13 @@ public class MaxItemsArrayValidator<EB, O, CTX> internal constructor(
         context: CTX,
         location: Location,
         source: ArrayNode
-    ): ReaderResult.Failure? =
+    ): ReadingResult.Failure? =
         if (source.size > expected)
-            ReaderResult.Failure(location, env.errorBuilders.maxItemsArrayError(expected, source.size))
+            ReadingResult.Failure(location, env.errorBuilders.maxItemsArrayError(expected, source.size))
         else
             null
 
     public interface ErrorBuilder {
-        public fun maxItemsArrayError(expected: Int, actual: Int): ReaderResult.Error
+        public fun maxItemsArrayError(expected: Int, actual: Int): ReadingResult.Error
     }
 }

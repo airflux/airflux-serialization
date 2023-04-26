@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsBooleanTest : FreeSpec() {
@@ -40,7 +40,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
                 "should return the boolean value" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsBoolean(ENV, LOCATION)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = true)
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = true)
                 }
             }
             "when called with a receiver of not the BooleanNode type" - {
@@ -48,7 +48,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json = StringNode("abc")
                     val result = json.readAsBoolean(ENV, LOCATION)
-                    result shouldBeFailure ReaderResult.Failure(
+                    result shouldBeFailure ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(BooleanNode.nameOfType),
@@ -61,7 +61,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

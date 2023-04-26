@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -58,7 +58,7 @@ internal class StructPropertyTest : FreeSpec() {
             "then the method read should return the value" {
                 val source = StringNode(PROPERTY_VALUE)
                 val result = property.read(ENV, CONTEXT, LOCATION, source)
-                result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = PROPERTY_VALUE)
+                result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = PROPERTY_VALUE)
             }
         }
     }
@@ -66,9 +66,9 @@ internal class StructPropertyTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
     }
 }

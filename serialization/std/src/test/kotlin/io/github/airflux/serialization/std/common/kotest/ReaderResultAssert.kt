@@ -16,16 +16,16 @@
 
 package io.github.airflux.serialization.std.common.kotest
 
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal infix fun <T> ReaderResult<T?>.shouldBeSuccess(value: ReaderResult.Success<T?>) {
-    val result = this.shouldBeInstanceOf<ReaderResult.Success<T>>()
+internal infix fun <T> ReadingResult<T?>.shouldBeSuccess(value: ReadingResult.Success<T?>) {
+    val result = this.shouldBeInstanceOf<ReadingResult.Success<T>>()
     result shouldBe value
 }
 
-internal infix fun ReaderResult<*>.shouldBeFailure(expected: ReaderResult.Failure) {
-    val failure = this.shouldBeInstanceOf<ReaderResult.Failure>()
+internal infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult.Failure) {
+    val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
     failure shouldBe expected
 }

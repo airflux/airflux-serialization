@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class ReaderResultErrorsTest : FreeSpec() {
+internal class ReadingResultErrorsTest : FreeSpec() {
 
     companion object {
         private val FIRST_ERROR = JsonErrors.PathMissing
@@ -29,17 +29,17 @@ internal class ReaderResultErrorsTest : FreeSpec() {
     }
 
     init {
-        "The Errors type" - {
+        "The ReadingResult#Errors type" - {
 
             "when the value of the Errors type is created with only one item" - {
-                val errors = ReaderResult.Errors(FIRST_ERROR)
+                val errors = ReadingResult.Errors(FIRST_ERROR)
 
                 "then the value should have only the passed element" {
                     errors.items shouldContainExactly listOf(FIRST_ERROR)
                 }
 
                 "when to the value appended other errors" - {
-                    val mergedErrors = errors + ReaderResult.Errors(SECOND_ERROR)
+                    val mergedErrors = errors + ReadingResult.Errors(SECOND_ERROR)
 
                     "then the new value should have all elements" {
                         mergedErrors.items shouldContainExactly listOf(
@@ -51,16 +51,16 @@ internal class ReaderResultErrorsTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                ReaderResult.Errors(FIRST_ERROR).shouldBeEqualsContract(
-                    y = ReaderResult.Errors(FIRST_ERROR),
-                    z = ReaderResult.Errors(FIRST_ERROR),
+                ReadingResult.Errors(FIRST_ERROR).shouldBeEqualsContract(
+                    y = ReadingResult.Errors(FIRST_ERROR),
+                    z = ReadingResult.Errors(FIRST_ERROR),
                     others = listOf(
-                        ReaderResult.Errors(FIRST_ERROR).plus(
-                            ReaderResult.Errors(
+                        ReadingResult.Errors(FIRST_ERROR).plus(
+                            ReadingResult.Errors(
                                 SECOND_ERROR
                             )
                         ),
-                        ReaderResult.Errors(SECOND_ERROR)
+                        ReadingResult.Errors(SECOND_ERROR)
                     )
                 )
             }

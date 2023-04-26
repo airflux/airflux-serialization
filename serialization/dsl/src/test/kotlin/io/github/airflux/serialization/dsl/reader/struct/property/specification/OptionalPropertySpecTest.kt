@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.map
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
@@ -79,7 +79,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_VALUE_AS_UUID
                         )
@@ -91,7 +91,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then the null value should be returned" {
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = null
                         )
@@ -103,7 +103,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
-                        result shouldBeFailure ReaderResult.Failure(
+                        result shouldBeFailure ReadingResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(StringNode.nameOfType),
@@ -127,7 +127,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_VALUE_AS_UUID
                         )
@@ -139,7 +139,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then the null value should be returned" {
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = null
                         )
@@ -151,7 +151,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
-                        result shouldBeFailure ReaderResult.Failure(
+                        result shouldBeFailure ReadingResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(StringNode.nameOfType),
@@ -173,7 +173,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_VALUE_AS_UUID
                         )
@@ -184,7 +184,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeFailure ReaderResult.Failure(
+                        result shouldBeFailure ReadingResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -198,7 +198,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeFailure ReaderResult.Failure(
+                        result shouldBeFailure ReadingResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(StringNode.nameOfType),
@@ -224,7 +224,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                                 val result = spec.filter(predicate)
                                     .reader.read(ENV, CONTEXT, LOCATION, source)
 
-                                result shouldBeSuccess ReaderResult.Success(
+                                result shouldBeSuccess ReadingResult.Success(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_VALUE_AS_UUID
                                 )
@@ -239,7 +239,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                                 val result = spec.filter(predicate)
                                     .reader.read(ENV, CONTEXT, LOCATION, source)
 
-                                result shouldBeSuccess ReaderResult.Success(
+                                result shouldBeSuccess ReadingResult.Success(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = null
                                 )
@@ -256,7 +256,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         "then the filter should not be applying" {
                             val filtered = spec.filter(predicate)
                                 .reader.read(ENV, CONTEXT, LOCATION, source)
-                            filtered shouldBe ReaderResult.Success(
+                            filtered shouldBe ReadingResult.Success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = null
                             )
@@ -274,7 +274,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         val result = spec.filter(predicate)
                             .reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeFailure ReaderResult.Failure(
+                        result shouldBeFailure ReadingResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(StringNode.nameOfType),
@@ -299,7 +299,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_VALUE_AS_UUID
                         )
@@ -311,7 +311,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_VALUE_AS_INT
                         )
@@ -324,14 +324,14 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                     "then should be returned all read errors" {
                         result.shouldBeFailure(
-                            ReaderResult.Failure.Cause(
+                            ReadingResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
                                     actual = BooleanNode.nameOfType
                                 )
                             ),
-                            ReaderResult.Failure.Cause(
+                            ReadingResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(NumericNode.Integer.nameOfType),
@@ -354,7 +354,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_VALUE_AS_UUID
                         )
@@ -365,7 +365,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = DEFAULT_ID_VALUE
                         )
@@ -379,7 +379,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeFailure ReaderResult.Failure(
+                        result shouldBeFailure ReadingResult.Failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(StringNode.nameOfType),
@@ -395,9 +395,9 @@ internal class OptionalPropertySpecTest : FreeSpec() {
     internal class EB : PathMissingErrorBuilder,
                         InvalidTypeErrorBuilder {
 
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

@@ -18,11 +18,11 @@ package io.github.airflux.serialization.core.reader.env.exception
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 
 /**
  * Handler **uncaught** exceptions.
  */
 public fun interface ExceptionsHandler<EB, O> {
-    public fun handle(env: ReaderEnv<EB, O>, location: Location, exception: Throwable): ReaderResult.Error
+    public fun handle(env: ReaderEnv<EB, O>, location: Location, exception: Throwable): ReadingResult.Error
 }

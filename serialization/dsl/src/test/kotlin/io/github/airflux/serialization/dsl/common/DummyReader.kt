@@ -20,19 +20,19 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
 internal class DummyReader<EB, O, CTX, T>(
-    val result: (ReaderEnv<EB, O>, context: CTX, Location, ValueNode) -> ReaderResult<T>
+    val result: (ReaderEnv<EB, O>, context: CTX, Location, ValueNode) -> ReadingResult<T>
 ) : Reader<EB, O, CTX, T> {
 
-    constructor(result: ReaderResult<T>) : this({ _, _, _, _ -> result })
+    constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T> =
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {
@@ -42,9 +42,9 @@ internal class DummyReader<EB, O, CTX, T>(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is BooleanNode)
-                        ReaderResult.Success(location = location, value = source.get)
+                        ReadingResult.Success(location = location, value = source.get)
                     else
-                        ReaderResult.Failure(
+                        ReadingResult.Failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(BooleanNode.nameOfType),
@@ -59,9 +59,9 @@ internal class DummyReader<EB, O, CTX, T>(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is StringNode)
-                        ReaderResult.Success(location = location, value = source.get)
+                        ReadingResult.Success(location = location, value = source.get)
                     else
-                        ReaderResult.Failure(
+                        ReadingResult.Failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(StringNode.nameOfType),
@@ -76,9 +76,9 @@ internal class DummyReader<EB, O, CTX, T>(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is NumericNode.Integer)
-                        ReaderResult.Success(location = location, value = source.get.toInt())
+                        ReadingResult.Success(location = location, value = source.get.toInt())
                     else
-                        ReaderResult.Failure(
+                        ReadingResult.Failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(NumericNode.Integer.nameOfType),

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
@@ -54,7 +54,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(
+                    failure.reason shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Struct.IsEmpty
                     )
@@ -73,7 +73,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
     }
 
     internal class EB : IsNotEmptyStructValidator.ErrorBuilder {
-        override fun isNotEmptyStructError(): ReaderResult.Error =
+        override fun isNotEmptyStructError(): ReadingResult.Error =
             JsonErrors.Validation.Struct.IsEmpty
     }
 }

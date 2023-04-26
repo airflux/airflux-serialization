@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.value.StringNode
@@ -70,7 +70,7 @@ internal class ReaderFilterTest : FreeSpec() {
                             val filtered = requiredReader.filter(predicate)
                                 .read(ENV, CONTEXT, LOCATION, source)
 
-                            filtered shouldBe ReaderResult.Success(
+                            filtered shouldBe ReadingResult.Success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE
                             )
@@ -84,7 +84,7 @@ internal class ReaderFilterTest : FreeSpec() {
                             val filtered = requiredReader.filter(predicate)
                                 .read(ENV, CONTEXT, LOCATION, source)
 
-                            filtered shouldBe ReaderResult.Success(
+                            filtered shouldBe ReadingResult.Success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = null
                             )
@@ -105,7 +105,7 @@ internal class ReaderFilterTest : FreeSpec() {
                     "then the filter should not be applying" {
                         val filtered = optionalReader.filter(predicate)
                             .read(ENV, CONTEXT, LOCATION, source)
-                        filtered shouldBe ReaderResult.Success(
+                        filtered shouldBe ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = null
                         )
@@ -126,7 +126,7 @@ internal class ReaderFilterTest : FreeSpec() {
                 "then the filter should not be applying" {
                     val filtered = requiredReader.filter(predicate)
                         .read(ENV, CONTEXT, LOCATION, source)
-                    filtered shouldBe ReaderResult.Failure(
+                    filtered shouldBe ReadingResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
                     )
@@ -138,9 +138,9 @@ internal class ReaderFilterTest : FreeSpec() {
     internal class EB : PathMissingErrorBuilder,
                         InvalidTypeErrorBuilder {
 
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.env.exception
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -79,7 +79,7 @@ internal class ExceptionHandlersContainerTest : FreeSpec() {
     }
 
     private inline fun <EB, O, reified E : Throwable> exceptionHandlerSpec(
-        noinline handler: (ReaderEnv<EB, O>, Location, E) -> ReaderResult.Error
+        noinline handler: (ReaderEnv<EB, O>, Location, E) -> ReadingResult.Error
     ): ExceptionHandlerSpec<EB, O> =
         ExceptionHandlerSpec(E::class, handler)
 }

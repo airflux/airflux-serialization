@@ -22,8 +22,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
@@ -120,7 +120,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReaderResult.Failure(
+                        failure.reason shouldBe ReadingResult.Failure(
                             location = LOCATION.append(TITLE_PROPERTY_VALUE),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
                         )
@@ -135,11 +135,11 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe listOf(
-                            ReaderResult.Failure(
+                            ReadingResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             ),
-                            ReaderResult.Failure(
+                            ReadingResult.Failure(
                                 location = LOCATION.append(NAME_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
@@ -154,13 +154,13 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                         PathMissingErrorBuilder,
                         AdditionalPropertiesStructValidator.ErrorBuilder {
 
-        override fun additionalPropertiesStructError(): ReaderResult.Error =
+        override fun additionalPropertiesStructError(): ReadingResult.Error =
             JsonErrors.Validation.Struct.AdditionalProperties
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
     }
 
     internal class OPTS(override val failFast: Boolean) : FailFastOption

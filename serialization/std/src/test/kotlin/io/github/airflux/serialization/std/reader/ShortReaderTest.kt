@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -55,14 +55,14 @@ internal class ShortReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source: ValueNode = NumericNode.valueOf(value)
                     val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = value)
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
                 val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
-                result shouldBeFailure ReaderResult.Failure(
+                result shouldBeFailure ReadingResult.Failure(
                     location = Location.empty,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Integer.nameOfType),
@@ -89,7 +89,7 @@ internal class ShortReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
-                    result shouldBeFailure ReaderResult.Failure(
+                    result shouldBeFailure ReadingResult.Failure(
                         location = Location.empty,
                         error = JsonErrors.ValueCast(value = value, type = Short::class)
                     )
@@ -103,10 +103,10 @@ internal class ShortReaderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         ValueCastErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =
+        override fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error =
             JsonErrors.ValueCast(value, target)
     }
 }

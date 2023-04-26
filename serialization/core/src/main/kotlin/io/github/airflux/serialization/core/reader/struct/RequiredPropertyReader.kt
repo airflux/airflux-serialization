@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 
 /**
  * Reads required property.
@@ -35,7 +35,7 @@ public fun <EB, O, CTX, T> readRequired(
     context: CTX,
     lookup: LookupResult,
     using: Reader<EB, O, CTX, T>
-): ReaderResult<T>
+): ReadingResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     when (lookup) {
@@ -43,9 +43,9 @@ public fun <EB, O, CTX, T> readRequired(
 
         is LookupResult.Undefined -> when (lookup) {
             is LookupResult.Undefined.PathMissing ->
-                ReaderResult.Failure(location = lookup.location, error = env.errorBuilders.pathMissingError())
+                ReadingResult.Failure(location = lookup.location, error = env.errorBuilders.pathMissingError())
 
-            is LookupResult.Undefined.InvalidType -> ReaderResult.Failure(
+            is LookupResult.Undefined.InvalidType -> ReadingResult.Failure(
                 location = lookup.breakpoint,
                 error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
             )

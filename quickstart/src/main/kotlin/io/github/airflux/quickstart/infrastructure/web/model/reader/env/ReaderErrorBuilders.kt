@@ -20,7 +20,7 @@ import io.github.airflux.quickstart.infrastructure.web.error.JsonErrors
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.std.validator.array.IsNotEmptyArrayValidator
 import io.github.airflux.serialization.std.validator.number.ExclusiveMinimumNumberValidator
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
@@ -35,22 +35,22 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              ExclusiveMinimumNumberValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
-    override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+    override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
 
-    override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+    override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 
-    override fun isNotBlankStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsBlank
+    override fun isNotBlankStringError(): ReadingResult.Error = JsonErrors.Validation.Strings.IsBlank
 
-    override fun isNotEmptyStructError(): ReaderResult.Error = JsonErrors.Validation.Struct.IsEmpty
+    override fun isNotEmptyStructError(): ReadingResult.Error = JsonErrors.Validation.Struct.IsEmpty
 
-    override fun additionalPropertiesStructError(): ReaderResult.Error =
+    override fun additionalPropertiesStructError(): ReadingResult.Error =
         JsonErrors.Validation.Struct.AdditionalProperties
 
-    override fun exclusiveMinimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
+    override fun exclusiveMinimumNumberError(expected: Number, actual: Number): ReadingResult.Error =
         JsonErrors.Validation.Numbers.Gt(expected = expected, actual = actual)
 
-    override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
+    override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
 
-    override fun isNotEmptyArrayError(): ReaderResult.Error = JsonErrors.Validation.Arrays.IsEmpty
+    override fun isNotEmptyArrayError(): ReadingResult.Error = JsonErrors.Validation.Arrays.IsEmpty
 }

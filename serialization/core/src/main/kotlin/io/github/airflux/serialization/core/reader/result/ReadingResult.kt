@@ -25,13 +25,13 @@ import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.fold
 
-public sealed class ReaderResult<out T> {
+public sealed class ReadingResult<out T> {
 
     public companion object;
 
-    public data class Success<T>(val location: Location, val value: T) : ReaderResult<T>()
+    public data class Success<T>(val location: Location, val value: T) : ReadingResult<T>()
 
-    public class Failure private constructor(public val causes: List<Cause>) : ReaderResult<Nothing>() {
+    public class Failure private constructor(public val causes: List<Cause>) : ReadingResult<Nothing>() {
 
         public constructor(location: Location, error: Error) : this(listOf(Cause(location, error)))
 
@@ -70,59 +70,59 @@ public sealed class ReaderResult<out T> {
     }
 }
 
-public infix fun <T, R> ReaderResult<T>.map(transform: (T) -> R): ReaderResult<R> =
+public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
     flatMap { location, value -> transform(value).success(location) }
 
-public infix fun <T, R> ReaderResult<T>.flatMap(transform: (Location, T) -> ReaderResult<R>): ReaderResult<R> = fold(
+public infix fun <T, R> ReadingResult<T>.flatMap(transform: (Location, T) -> ReadingResult<R>): ReadingResult<R> = fold(
     ifFailure = ::identity,
     ifSuccess = { transform(it.location, it.value) }
 )
 
-public inline fun <T, R> ReaderResult<T>.fold(
-    ifFailure: (ReaderResult.Failure) -> R,
-    ifSuccess: (ReaderResult.Success<T>) -> R
+public inline fun <T, R> ReadingResult<T>.fold(
+    ifFailure: (ReadingResult.Failure) -> R,
+    ifSuccess: (ReadingResult.Success<T>) -> R
 ): R = when (this) {
-    is ReaderResult.Success -> ifSuccess(this)
-    is ReaderResult.Failure -> ifFailure(this)
+    is ReadingResult.Success -> ifSuccess(this)
+    is ReadingResult.Failure -> ifFailure(this)
 }
 
-public inline infix fun <T> ReaderResult<T>.recovery(
-    function: (ReaderResult.Failure) -> ReaderResult<T>
-): ReaderResult<T> = fold(
+public inline infix fun <T> ReadingResult<T>.recovery(
+    function: (ReadingResult.Failure) -> ReadingResult<T>
+): ReadingResult<T> = fold(
     ifFailure = { function(it) },
     ifSuccess = ::identity
 )
 
-public fun <T> ReaderResult<T>.getOrNull(): T? = fold(
+public fun <T> ReadingResult<T>.getOrNull(): T? = fold(
     ifFailure = { null },
     ifSuccess = { it.value }
 )
 
-public infix fun <T> ReaderResult<T>.getOrElse(defaultValue: () -> T): T = fold(
+public infix fun <T> ReadingResult<T>.getOrElse(defaultValue: () -> T): T = fold(
     ifFailure = { defaultValue() },
     ifSuccess = { it.value }
 )
 
-public infix fun <T> ReaderResult<T>.getOrHandle(handler: (ReaderResult.Failure) -> T): T = fold(
+public infix fun <T> ReadingResult<T>.getOrHandle(handler: (ReadingResult.Failure) -> T): T = fold(
     ifFailure = { handler(it) },
     ifSuccess = { it.value }
 )
 
-public infix fun <T> ReaderResult<T>.orElse(defaultValue: () -> ReaderResult<T>): ReaderResult<T> = fold(
+public infix fun <T> ReadingResult<T>.orElse(defaultValue: () -> ReadingResult<T>): ReadingResult<T> = fold(
     ifFailure = { defaultValue() },
     ifSuccess = ::identity
 )
 
-public infix fun <T> ReaderResult<T>.orThrow(exceptionBuilder: (ReaderResult.Failure) -> Throwable): T = fold(
+public infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.Failure) -> Throwable): T = fold(
     ifFailure = { throw exceptionBuilder(it) },
     ifSuccess = { it.value }
 )
 
-public fun <EB, O, CTX, T> ReaderResult<T>.filter(
+public fun <EB, O, CTX, T> ReadingResult<T>.filter(
     env: ReaderEnv<EB, O>,
     context: CTX,
     predicate: ReaderPredicate<EB, O, CTX, T & Any>
-): ReaderResult<T?> = fold(
+): ReadingResult<T?> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
         if (result.value == null)
@@ -131,16 +131,16 @@ public fun <EB, O, CTX, T> ReaderResult<T>.filter(
             if (predicate.test(env, context, result.location, result.value))
                 result
             else
-                ReaderResult.Success(location = result.location, value = null)
+                ReadingResult.Success(location = result.location, value = null)
         }
     }
 )
 
-public fun <EB, O, CTX, T> ReaderResult<T>.validation(
+public fun <EB, O, CTX, T> ReadingResult<T>.validation(
     env: ReaderEnv<EB, O>,
     context: CTX,
     validator: Validator<EB, O, CTX, T>
-): ReaderResult<T> = fold(
+): ReadingResult<T> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
         validator.validate(env, context, result.location, result.value)
@@ -151,20 +151,20 @@ public fun <EB, O, CTX, T> ReaderResult<T>.validation(
     }
 )
 
-public inline fun <T> ReaderResult<T>.ifNullValue(defaultValue: (Location) -> T & Any): ReaderResult<T & Any> = fold(
+public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: (Location) -> T & Any): ReadingResult<T & Any> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
         if (result.value != null)
             @Suppress("UNCHECKED_CAST")
-            result as ReaderResult.Success<T & Any>
+            result as ReadingResult.Success<T & Any>
         else
             defaultValue(result.location).success(result.location)
     }
 )
 
-public fun <T> T.success(location: Location): ReaderResult<T> = ReaderResult.Success(location = location, value = this)
-public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<Nothing> =
-    ReaderResult.Failure(location, this)
+public fun <T> T.success(location: Location): ReadingResult<T> = ReadingResult.Success(location = location, value = this)
+public fun <E : ReadingResult.Error> E.failure(location: Location): ReadingResult<Nothing> =
+    ReadingResult.Failure(location, this)
 
 /**
  * Calls the specified function [block] and returns its result if invocation was successful,
@@ -174,8 +174,8 @@ public fun <E : ReaderResult.Error> E.failure(location: Location): ReaderResult<
 public inline fun <EB, O, T> withCatching(
     env: ReaderEnv<EB, O>,
     location: Location,
-    block: () -> ReaderResult<T>
-): ReaderResult<T> =
+    block: () -> ReadingResult<T>
+): ReadingResult<T> =
     try {
         block()
     } catch (expected: Throwable) {

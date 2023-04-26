@@ -18,24 +18,24 @@ package io.github.airflux.serialization.dsl.reader.env.exception
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import kotlin.reflect.KClass
 
 internal class ExceptionHandlerSpec<EB, O> private constructor(
     val exception: KClass<*>,
-    val handler: (ReaderEnv<EB, O>, Location, Throwable) -> ReaderResult.Error
+    val handler: (ReaderEnv<EB, O>, Location, Throwable) -> ReadingResult.Error
 ) {
 
     companion object {
 
         operator fun <EB, O, E : Throwable> invoke(
             exception: KClass<E>,
-            handler: (ReaderEnv<EB, O>, Location, E) -> ReaderResult.Error
+            handler: (ReaderEnv<EB, O>, Location, E) -> ReadingResult.Error
         ): ExceptionHandlerSpec<EB, O> =
             @Suppress("UNCHECKED_CAST")
             ExceptionHandlerSpec(
                 exception = exception,
-                handler = handler as (ReaderEnv<EB, O>, Location, Throwable) -> ReaderResult.Error
+                handler = handler as (ReaderEnv<EB, O>, Location, Throwable) -> ReadingResult.Error
             )
     }
 }

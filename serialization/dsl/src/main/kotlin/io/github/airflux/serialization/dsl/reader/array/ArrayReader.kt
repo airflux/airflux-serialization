@@ -23,8 +23,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -67,7 +67,7 @@ public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
 
 public class ArrayReader<EB, O, CTX, T> private constructor(
     private val validators: List<ArrayValidator<EB, O, CTX>>,
-    private val readerResultBuilder: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReaderResult<List<T>>
+    private val resultBuilder: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReadingResult<List<T>>
 ) : Reader<EB, O, CTX, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
@@ -78,11 +78,11 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         context: CTX,
         location: Location,
         source: ValueNode
-    ): ReaderResult<List<T>> =
+    ): ReadingResult<List<T>> =
         if (source is ArrayNode)
             read(env, context, location, source)
         else
-            ReaderResult.Failure(
+            ReadingResult.Failure(
                 location = location,
                 error = env.errorBuilders.invalidTypeError(listOf(ArrayNode.nameOfType), source.nameOfType)
             )
@@ -92,9 +92,9 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         context: CTX,
         location: Location,
         source: ArrayNode
-    ): ReaderResult<List<T>> {
+    ): ReadingResult<List<T>> {
         val failFast = env.options.failFast
-        val failures = mutableListOf<ReaderResult.Failure>()
+        val failures = mutableListOf<ReadingResult.Failure>()
 
         validators.forEach { validator ->
             val failure = validator.validate(env, context, location, source)
@@ -104,7 +104,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
             }
         }
 
-        return readerResultBuilder(env, context, location, source)
+        return resultBuilder(env, context, location, source)
             .fold(
                 ifFailure = { failure ->
                     if (failFast) return failure
@@ -180,7 +180,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
             }
 
         private fun build(
-            block: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReaderResult<List<T>>
+            block: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReadingResult<List<T>>
         ): Reader<EB, O, CTX, List<T>> {
             val validators = validatorBuilders.map { builder -> builder.build() }
                 .takeIf { it.isNotEmpty() }

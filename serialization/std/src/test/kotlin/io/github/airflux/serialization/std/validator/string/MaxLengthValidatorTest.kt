@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -85,7 +85,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReaderResult.Failure(
+                        failure.reason shouldBe ReadingResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.MaxLength(
                                 expected = MAX_VALUE,
@@ -123,7 +123,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReaderResult.Failure(
+                        failure.reason shouldBe ReadingResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.MaxLength(
                                 expected = MAX_VALUE,
@@ -137,7 +137,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
     }
 
     internal class EB : MaxLengthStringValidator.ErrorBuilder {
-        override fun maxLengthStringError(expected: Int, actual: Int): ReaderResult.Error =
+        override fun maxLengthStringError(expected: Int, actual: Int): ReadingResult.Error =
             JsonErrors.Validation.Strings.MaxLength(expected = expected, actual = actual)
     }
 }

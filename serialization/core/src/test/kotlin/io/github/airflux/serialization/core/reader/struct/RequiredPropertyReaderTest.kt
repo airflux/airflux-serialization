@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
@@ -54,9 +54,9 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the result of applying the reader" {
-                    val result: ReaderResult<String?> =
+                    val result: ReadingResult<String?> =
                         readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeSuccess ReaderResult.Success(
+                    result shouldBeSuccess ReadingResult.Success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
                     )
@@ -68,9 +68,9 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                     LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the missing path error" {
-                    val result: ReaderResult<String?> =
+                    val result: ReadingResult<String?> =
                         readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeFailure ReaderResult.Failure(
+                    result shouldBeFailure ReadingResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
                     )
@@ -85,9 +85,9 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: ReaderResult<String?> =
+                    val result: ReadingResult<String?> =
                         readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeFailure ReaderResult.Failure(
+                    result shouldBeFailure ReadingResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
                             expected = listOf(StructNode.nameOfType),
@@ -100,8 +100,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -39,6 +39,6 @@ public class PatternStringValidator<EB, O, CTX, T : String?> internal constructo
             valid()
 
     public interface ErrorBuilder {
-        public fun patternStringError(value: String, pattern: Regex): ReaderResult.Error
+        public fun patternStringError(value: String, pattern: Regex): ReadingResult.Error
     }
 }

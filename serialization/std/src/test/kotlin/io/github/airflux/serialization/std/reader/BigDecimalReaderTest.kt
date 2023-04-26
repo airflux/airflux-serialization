@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.reader
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -49,7 +49,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 ) { value ->
                     val source: ValueNode = NumericNode.Number.valueOrNullOf(value)!!
                     val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
-                    result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = BigDecimal(value))
+                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = BigDecimal(value))
                 }
             }
 
@@ -59,7 +59,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     ENV,
                     CONTEXT,
                     LOCATION, source)
-                result shouldBeFailure ReaderResult.Failure(
+                result shouldBeFailure ReadingResult.Failure(
                     location = Location.empty,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Number.nameOfType),
@@ -71,7 +71,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

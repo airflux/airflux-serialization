@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.core.reader.error
 
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import kotlin.reflect.KClass
 
 /**
  * The builder of an error that occurs when an element cannot be converted to the specified type.
  */
 public interface ValueCastErrorBuilder {
-    public fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error
+    public fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error
 }

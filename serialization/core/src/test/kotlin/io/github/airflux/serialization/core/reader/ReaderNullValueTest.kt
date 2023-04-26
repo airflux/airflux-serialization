@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -62,9 +62,9 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                     "then should return the original value" {
-                        val result: ReaderResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: ReadingResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
                         )
@@ -75,9 +75,9 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
 
                     "then should return the default value" {
-                        val result: ReaderResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: ReadingResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReaderResult.Success(
+                        result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ALTERNATIVE_VALUE
                         )
@@ -89,9 +89,9 @@ internal class ReaderNullValueTest : FreeSpec() {
                 val source = StructNode(ID_PROPERTY_NAME to BooleanNode.True)
 
                 "then should return the original value" {
-                    val result: ReaderResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result: ReadingResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
 
-                    result shouldBe ReaderResult.Failure(
+                    result shouldBe ReadingResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
                             expected = listOf(StringNode.nameOfType),
@@ -106,9 +106,9 @@ internal class ReaderNullValueTest : FreeSpec() {
     internal class EB : PathMissingErrorBuilder,
         InvalidTypeErrorBuilder {
 
-        override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

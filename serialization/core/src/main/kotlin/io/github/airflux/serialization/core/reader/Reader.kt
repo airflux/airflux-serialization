@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.ifNullValue
@@ -36,7 +36,7 @@ public fun interface Reader<EB, O, CTX, out T> {
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T>
+    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReadingResult<T>
 }
 
 /**
@@ -54,7 +54,7 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.map(transform: (T) -> 
     }
 
 public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
-    transform: (ReaderEnv<EB, O>, CTX, Location, T) -> ReaderResult<R>
+    transform: (ReaderEnv<EB, O>, CTX, Location, T) -> ReadingResult<R>
 ): Reader<EB, O, CTX, R> =
     Reader { env, context, location, source ->
         this@flatMapResult.read(env, context, location, source)
@@ -66,10 +66,10 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
 
 /**
  * Creates a new [Reader], based on this one, which first executes this
- * [Reader] logic then, if this [Reader] resulted in a [ReaderResult.Error], runs
+ * [Reader] logic then, if this [Reader] resulted in a [ReadingResult.Error], runs
  * the other [Reader] on the [ValueNode].
  *
- * @param alt the [Reader] to run if this one gets a [ReaderResult.Error]
+ * @param alt the [Reader] to run if this one gets a [ReadingResult.Error]
  * @return A new [Reader] with the updated behavior.
  */
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.or(alt: Reader<EB, O, CTX, T>): Reader<EB, O, CTX, T> =
@@ -107,7 +107,7 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
 public fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.nullable(): Reader<EB, O, CTX, T?> {
     return Reader { env, context, location, source ->
         if (source is NullNode)
-            ReaderResult.Success(location = location, value = null)
+            ReadingResult.Success(location = location, value = null)
         else
             this@nullable.read(env, context, location, source)
     }

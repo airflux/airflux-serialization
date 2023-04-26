@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
 
@@ -36,11 +36,11 @@ public fun <EB, O, CTX, T> readArray(
     location: Location,
     source: ArrayNode,
     itemsReader: Reader<EB, O, CTX, T>
-): ReaderResult<List<T>>
+): ReadingResult<List<T>>
     where O : FailFastOption {
     val failFast = env.options.failFast
-    val initial: ReaderResult<MutableList<T>> =
-        ReaderResult.Success(location = location, value = ArrayList(source.size))
+    val initial: ReadingResult<MutableList<T>> =
+        ReadingResult.Success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         itemsReader.read(env, context, currentLocation, elem)
@@ -65,7 +65,7 @@ public fun <EB, O, CTX, T> readArray(
     source: ArrayNode,
     prefixItemReaders: List<Reader<EB, O, CTX, T>>,
     errorIfAdditionalItems: Boolean
-): ReaderResult<List<T>>
+): ReadingResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
           O : FailFastOption {
 
@@ -73,8 +73,8 @@ public fun <EB, O, CTX, T> readArray(
         prefixItems.getOrNull(idx)
 
     val failFast = env.options.failFast
-    val initial: ReaderResult<MutableList<T>> =
-        ReaderResult.Success(location = location, value = ArrayList(source.size))
+    val initial: ReadingResult<MutableList<T>> =
+        ReadingResult.Success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         val reader = getReader(idx, prefixItemReaders)
@@ -85,7 +85,7 @@ public fun <EB, O, CTX, T> readArray(
                     ifSuccess = { success -> acc + success }
                 )
         } else if (errorIfAdditionalItems) {
-            val failure = ReaderResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
+            val failure = ReadingResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
             if (failFast) return failure else acc + failure
         } else
             acc
@@ -105,7 +105,7 @@ public fun <EB, O, CTX, T> readArray(
     source: ArrayNode,
     prefixItemReaders: List<Reader<EB, O, CTX, T>>,
     itemsReader: Reader<EB, O, CTX, T>
-): ReaderResult<List<T>>
+): ReadingResult<List<T>>
     where O : FailFastOption {
 
     fun <EB, O, CTX, T> getReader(
@@ -116,8 +116,8 @@ public fun <EB, O, CTX, T> readArray(
         if (idx < prefixItemReaders.size) prefixItemReaders[idx] else itemsReader
 
     val failFast = env.options.failFast
-    val initial: ReaderResult<MutableList<T>> =
-        ReaderResult.Success(location = location, value = ArrayList(source.size))
+    val initial: ReadingResult<MutableList<T>> =
+        ReadingResult.Success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItemReaders, itemsReader)
@@ -129,17 +129,17 @@ public fun <EB, O, CTX, T> readArray(
     }
 }
 
-internal operator fun <T> ReaderResult<MutableList<T>>.plus(
-    result: ReaderResult.Success<T>
-): ReaderResult<MutableList<T>> =
+internal operator fun <T> ReadingResult<MutableList<T>>.plus(
+    result: ReadingResult.Success<T>
+): ReadingResult<MutableList<T>> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { success -> success.apply { value += result.value } }
     )
 
-internal operator fun <T> ReaderResult<MutableList<T>>.plus(
-    result: ReaderResult.Failure
-): ReaderResult<MutableList<T>> =
+internal operator fun <T> ReadingResult<MutableList<T>>.plus(
+    result: ReadingResult.Failure
+): ReadingResult<MutableList<T>> =
     fold(
         ifFailure = { failure -> failure + result },
         ifSuccess = { result }

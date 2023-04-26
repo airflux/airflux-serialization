@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.property
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -50,7 +50,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, value)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReaderResult.Failure(
+                        failure.reason shouldBe ReadingResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.PathMissing
                         )
@@ -92,6 +92,6 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
     }
 
     internal class EB : MandatoryPropertyValidator.ErrorBuilder {
-        override fun mandatoryPropertyError(): ReaderResult.Error = JsonErrors.PathMissing
+        override fun mandatoryPropertyError(): ReadingResult.Error = JsonErrors.PathMissing
     }
 }

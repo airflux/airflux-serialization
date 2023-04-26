@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.common
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -46,7 +46,7 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult)
     companion object {
         internal fun <EB, O, CTX> additionalProperties(
             nameProperties: Set<String>,
-            error: ReaderResult.Error
+            error: ReadingResult.Error
         ): StructValidatorBuilder<EB, O, CTX> =
             object : StructValidatorBuilder<EB, O, CTX> {
                 override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> =

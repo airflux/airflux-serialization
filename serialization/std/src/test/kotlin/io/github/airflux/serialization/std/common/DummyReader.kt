@@ -20,15 +20,15 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
 internal class DummyReader<EB, O, CTX, T> private constructor(
-    val result: (ReaderEnv<EB, O>, context: CTX, Location, ValueNode) -> ReaderResult<T>
+    val result: (ReaderEnv<EB, O>, context: CTX, Location, ValueNode) -> ReadingResult<T>
 ) : Reader<EB, O, CTX, T> {
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReaderResult<T> =
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {
@@ -38,9 +38,9 @@ internal class DummyReader<EB, O, CTX, T> private constructor(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is StringNode)
-                        ReaderResult.Success(location = location, value = source.get)
+                        ReadingResult.Success(location = location, value = source.get)
                     else
-                        ReaderResult.Failure(
+                        ReadingResult.Failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(StringNode.nameOfType),

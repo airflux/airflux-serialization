@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.number
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -48,7 +48,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, value)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(
+                    failure.reason shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Numbers.Min(expected = MIN_VALUE, actual = value)
                     )
@@ -76,7 +76,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
     }
 
     internal class EB : MinimumNumberValidator.ErrorBuilder {
-        override fun minimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
+        override fun minimumNumberError(expected: Number, actual: Number): ReadingResult.Error =
             JsonErrors.Validation.Numbers.Min(expected = expected, actual = actual)
     }
 }

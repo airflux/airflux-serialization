@@ -18,8 +18,8 @@ package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
-import io.github.airflux.serialization.core.reader.result.ReaderResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -75,8 +75,8 @@ internal class ValidatorTest : FreeSpec() {
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
                         failure.reason shouldBe listOf(
-                            ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing),
-                            ReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
+                            ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing),
+                            ReadingResult.Failure(LOCATION, ValidationErrors.InvalidType)
                         ).merge()
                     }
                 }
@@ -97,7 +97,7 @@ internal class ValidatorTest : FreeSpec() {
                     val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                    failure.reason shouldBe ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
@@ -121,14 +121,14 @@ internal class ValidatorTest : FreeSpec() {
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReaderResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                        failure.reason shouldBe ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing)
                     }
                 }
             }
         }
     }
 
-    private sealed class ValidationErrors : ReaderResult.Error {
+    private sealed class ValidationErrors : ReadingResult.Error {
         object PathMissing : ValidationErrors()
         object InvalidType : ValidationErrors()
     }

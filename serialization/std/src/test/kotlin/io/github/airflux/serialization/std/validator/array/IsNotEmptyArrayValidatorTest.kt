@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
@@ -48,7 +48,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
                     val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
 
                     failure.shouldNotBeNull()
-                    failure shouldBe ReaderResult.Failure(
+                    failure shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Arrays.IsEmpty
                     )
@@ -67,6 +67,6 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
     }
 
     internal class EB : IsNotEmptyArrayValidator.ErrorBuilder {
-        override fun isNotEmptyArrayError(): ReaderResult.Error = JsonErrors.Validation.Arrays.IsEmpty
+        override fun isNotEmptyArrayError(): ReadingResult.Error = JsonErrors.Validation.Arrays.IsEmpty
     }
 }

@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ReaderResultSuccessTest : FreeSpec() {
+internal class ReadingResultSuccessTest : FreeSpec() {
 
     companion object {
         private const val ORIGINAL_VALUE = "10"
@@ -32,22 +32,22 @@ internal class ReaderResultSuccessTest : FreeSpec() {
 
     init {
 
-        "A ReaderResult#Success type" - {
+        "A ReadingResult#Success type" - {
 
             "constructor(Location, T)" {
-                val result = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val result = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 result.location shouldBe LOCATION
                 result.value shouldBe ORIGINAL_VALUE
             }
 
             "should comply with equals() and hashCode() contract" {
-                ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE).shouldBeEqualsContract(
-                    y = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    z = ReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE).shouldBeEqualsContract(
+                    y = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
                     others = listOf(
-                        ReaderResult.Success(location = LOCATION, value = ELSE_VALUE),
-                        ReaderResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
+                        ReadingResult.Success(location = LOCATION, value = ELSE_VALUE),
+                        ReadingResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
                     )
                 )
             }

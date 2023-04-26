@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.condition
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -47,7 +47,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
                 val result = validator.validate(ENV, CONTEXT, LOCATION, "")
 
                 val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                failure.reason shouldBe ReaderResult.Failure(
+                failure.reason shouldBe ReadingResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.Validation.Strings.IsEmpty
                 )
@@ -67,7 +67,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
                 val result = validator.validate(ENV, CONTEXT, LOCATION, "")
 
                 val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                failure.reason shouldBe ReaderResult.Failure(
+                failure.reason shouldBe ReadingResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.Validation.Strings.IsEmpty
                 )

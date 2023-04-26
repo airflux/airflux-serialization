@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
@@ -60,7 +60,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "then reader should return result" {
-                        val result: ReaderResult<List<String>> = readArray(
+                        val result: ReadingResult<List<String>> = readArray(
                             env = envWithFailFastIsTrue,
                             context = CONTEXT,
                             location = LOCATION,
@@ -69,7 +69,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
 
@@ -77,7 +77,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "then reader should return result" {
-                        val result: ReaderResult<List<String>> = readArray(
+                        val result: ReadingResult<List<String>> = readArray(
                             env = envWithFailFastIsFalse,
                             context = CONTEXT,
                             location = LOCATION,
@@ -86,7 +86,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBeSuccess ReaderResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -108,7 +108,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                             "then reader should return first error" {
-                                val result: ReaderResult<List<String>> = readArray(
+                                val result: ReadingResult<List<String>> = readArray(
                                     env = envWithFailFastIsTrue,
                                     context = CONTEXT,
                                     location = LOCATION,
@@ -117,7 +117,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeFailure ReaderResult.Failure(
+                                result shouldBeFailure ReadingResult.Failure(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.AdditionalItems
                                 )
@@ -128,7 +128,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                             "then reader should return all errors" {
-                                val result: ReaderResult<List<String>> = readArray(
+                                val result: ReadingResult<List<String>> = readArray(
                                     env = envWithFailFastIsFalse,
                                     context = CONTEXT,
                                     location = LOCATION,
@@ -138,11 +138,11 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 )
 
                                 result.shouldBeFailure(
-                                    ReaderResult.Failure.Cause(
+                                    ReadingResult.Failure.Cause(
                                         location = LOCATION.append(1),
                                         error = JsonErrors.AdditionalItems
                                     ),
-                                    ReaderResult.Failure.Cause(
+                                    ReadingResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.AdditionalItems
                                     )
@@ -158,7 +158,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                             "then reader should return result" {
-                                val result: ReaderResult<List<String>> = readArray(
+                                val result: ReadingResult<List<String>> = readArray(
                                     env = envWithFailFastIsTrue,
                                     context = CONTEXT,
                                     location = LOCATION,
@@ -167,7 +167,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeSuccess ReaderResult.Success(
+                                result shouldBeSuccess ReadingResult.Success(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -178,7 +178,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                             "then reader should return result" {
-                                val result: ReaderResult<List<String>> = readArray(
+                                val result: ReadingResult<List<String>> = readArray(
                                     env = envWithFailFastIsFalse,
                                     context = CONTEXT,
                                     location = LOCATION,
@@ -187,7 +187,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeSuccess ReaderResult.Success(
+                                result shouldBeSuccess ReadingResult.Success(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -204,7 +204,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return result" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -213,7 +213,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -224,7 +224,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return result" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -233,7 +233,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -249,7 +249,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return result" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -258,7 +258,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -269,7 +269,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return result" {
-                            val result: ReaderResult<List<String>> = readArray(
+                            val result: ReadingResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
                                 context = CONTEXT,
                                 location = LOCATION,
@@ -278,7 +278,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReaderResult.Success(
+                            result shouldBeSuccess ReadingResult.Success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -302,7 +302,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeFailure ReaderResult.Failure(
+                            result shouldBeFailure ReadingResult.Failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(NumericNode.Integer.nameOfType),
@@ -326,14 +326,14 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             )
 
                             result.shouldBeFailure(
-                                ReaderResult.Failure.Cause(
+                                ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(NumericNode.Integer.nameOfType),
                                         actual = StringNode.nameOfType
                                     )
                                 ),
-                                ReaderResult.Failure.Cause(
+                                ReadingResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(BooleanNode.nameOfType),
@@ -351,12 +351,12 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
     internal class EB : AdditionalItemsErrorBuilder,
                         InvalidTypeErrorBuilder,
                         ValueCastErrorBuilder {
-        override fun additionalItemsError(): ReaderResult.Error = JsonErrors.AdditionalItems
+        override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)
 
-        override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =
+        override fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error =
             JsonErrors.ValueCast(value, target)
     }
 

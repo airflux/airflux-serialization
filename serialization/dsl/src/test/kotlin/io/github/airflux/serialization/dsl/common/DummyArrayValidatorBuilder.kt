@@ -18,37 +18,37 @@ package io.github.airflux.serialization.dsl.common
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 
 internal class DummyArrayValidatorBuilder<EB, O, CTX>(
-    result: ReaderResult.Failure?
+    result: ReadingResult.Failure?
 ) : ArrayValidatorBuilder<EB, O, CTX> {
 
-    val validator = Validator<EB, O, CTX>(result)
+    private val validator = Validator<EB, O, CTX>(result)
     override fun build(): ArrayValidator<EB, O, CTX> = validator
 
-    internal class Validator<EB, O, CTX>(val result: ReaderResult.Failure?) : ArrayValidator<EB, O, CTX> {
+    internal class Validator<EB, O, CTX>(val result: ReadingResult.Failure?) : ArrayValidator<EB, O, CTX> {
         override fun validate(
             env: ReaderEnv<EB, O>,
             context: CTX,
             location: Location,
             source: ArrayNode
-        ): ReaderResult.Failure? = result
+        ): ReadingResult.Failure? = result
     }
 
     companion object {
         internal fun <EB, O, CTX> minItems(
             expected: Int,
-            error: (expected: Int, actual: Int) -> ReaderResult.Error
+            error: (expected: Int, actual: Int) -> ReadingResult.Error
         ): ArrayValidatorBuilder<EB, O, CTX> =
             object : ArrayValidatorBuilder<EB, O, CTX> {
                 override fun build(): ArrayValidator<EB, O, CTX> =
                     ArrayValidator { _, _, location, source ->
                         if (source.size < expected)
-                            return@ArrayValidator ReaderResult.Failure(
+                            return@ArrayValidator ReadingResult.Failure(
                                 location = location,
                                 error = error(expected, source.size)
                             )

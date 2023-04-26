@@ -16,9 +16,9 @@
 
 package io.github.airflux.quickstart.infrastructure.web.error
 
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 
-sealed class JsonErrors : ReaderResult.Error {
+sealed class JsonErrors : ReadingResult.Error {
 
     object PathMissing : JsonErrors()
 

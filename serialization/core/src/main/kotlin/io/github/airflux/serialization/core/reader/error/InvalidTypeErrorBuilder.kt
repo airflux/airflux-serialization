@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.core.reader.error
 
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 
 /**
  * The builder of an error that occurs when an element is an invalid type by the specified path.
  */
 public interface InvalidTypeErrorBuilder {
-    public fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error
+    public fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error
 }

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
@@ -92,7 +92,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(
+                    failure.reason shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Struct.MaxProperties(expected = MAX_PROPERTIES, actual = 3)
                     )
@@ -102,7 +102,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
     }
 
     internal class EB : MaxPropertiesStructValidator.ErrorBuilder {
-        override fun maxPropertiesStructError(expected: Int, actual: Int): ReaderResult.Error =
+        override fun maxPropertiesStructError(expected: Int, actual: Int): ReadingResult.Error =
             JsonErrors.Validation.Struct.MaxProperties(expected = expected, actual = actual)
     }
 }

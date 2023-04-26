@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -49,7 +49,7 @@ internal class IsAValidatorTest : FreeSpec() {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(
+                    failure.reason shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Strings.IsA(value = str)
                     )
@@ -63,7 +63,7 @@ internal class IsAValidatorTest : FreeSpec() {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(
+                    failure.reason shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Strings.IsA(value = str)
                     )
@@ -77,7 +77,7 @@ internal class IsAValidatorTest : FreeSpec() {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReaderResult.Failure(
+                    failure.reason shouldBe ReadingResult.Failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Strings.IsA(value = str)
                     )
@@ -96,7 +96,7 @@ internal class IsAValidatorTest : FreeSpec() {
     }
 
     internal class EB : IsAStringValidator.ErrorBuilder {
-        override fun isAStringError(value: String): ReaderResult.Error =
+        override fun isAStringError(value: String): ReadingResult.Error =
             JsonErrors.Validation.Strings.IsA(value)
     }
 }

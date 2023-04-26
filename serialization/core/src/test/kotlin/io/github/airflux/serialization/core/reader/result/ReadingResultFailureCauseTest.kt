@@ -23,26 +23,26 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class ReaderResultFailureCauseTest : FreeSpec() {
+internal class ReadingResultFailureCauseTest : FreeSpec() {
 
     companion object {
         private val LOCATION = Location.empty
     }
 
     init {
-        "A ReaderResult#Failure#Cause type" - {
+        "A ReadingResult#Failure#Cause type" - {
 
             "constructor(Location, Error)" {
-                val cause = ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                val cause = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
-                cause.errors shouldBe ReaderResult.Errors(JsonErrors.PathMissing)
+                cause.errors shouldBe ReadingResult.Errors(JsonErrors.PathMissing)
             }
 
-            "constructor(Location, ReaderResult#Errors)" {
-                val cause = ReaderResult.Failure.Cause(
+            "constructor(Location, ReadingResult#Errors)" {
+                val cause = ReadingResult.Failure.Cause(
                     location = LOCATION,
-                    errors = ReaderResult.Errors(JsonErrors.PathMissing)
+                    errors = ReadingResult.Errors(JsonErrors.PathMissing)
                 )
 
                 cause.location shouldBe LOCATION
@@ -50,12 +50,12 @@ internal class ReaderResultFailureCauseTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
-                    y = ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
+                    y = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
                     others = listOf(
-                        ReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
-                        ReaderResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
+                        ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
+                        ReadingResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                     )
                 )
             }

@@ -20,24 +20,24 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 
-public fun <EB, O> ValueNode.readAsBoolean(env: ReaderEnv<EB, O>, location: Location): ReaderResult<Boolean>
+public fun <EB, O> ValueNode.readAsBoolean(env: ReaderEnv<EB, O>, location: Location): ReadingResult<Boolean>
     where EB : InvalidTypeErrorBuilder =
     if (this is BooleanNode)
-        ReaderResult.Success(location = location, value = this.get)
+        ReadingResult.Success(location = location, value = this.get)
     else
-        ReaderResult.Failure(
+        ReadingResult.Failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(listOf(BooleanNode.nameOfType), this.nameOfType)
         )
 
-public fun <EB, O> ValueNode.readAsString(env: ReaderEnv<EB, O>, location: Location): ReaderResult<String>
+public fun <EB, O> ValueNode.readAsString(env: ReaderEnv<EB, O>, location: Location): ReadingResult<String>
     where EB : InvalidTypeErrorBuilder =
     if (this is StringNode)
-        ReaderResult.Success(location = location, value = this.get)
+        ReadingResult.Success(location = location, value = this.get)
     else
-        ReaderResult.Failure(
+        ReadingResult.Failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(listOf(StringNode.nameOfType), this.nameOfType)
         )
@@ -46,13 +46,13 @@ public fun <EB, O, CTX, T : Number> ValueNode.readAsInteger(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, String) -> ReaderResult<T>
-): ReaderResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, Location, String) -> ReadingResult<T>
+): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is NumericNode.Integer)
         reader(env, context, location, this.get)
     else
-        ReaderResult.Failure(
+        ReadingResult.Failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(
                 expected = listOf(NumericNode.Integer.nameOfType),
@@ -64,13 +64,13 @@ public fun <EB, O, CTX, T : Number> ValueNode.readAsNumber(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, String) -> ReaderResult<T>
-): ReaderResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, Location, String) -> ReadingResult<T>
+): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is NumericNode)
         reader(env, context, location, this.get)
     else
-        ReaderResult.Failure(
+        ReadingResult.Failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(
                 expected = listOf(NumericNode.Number.nameOfType),
@@ -82,13 +82,13 @@ public inline fun <EB, O, CTX, T> ValueNode.readAsStruct(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, StructNode) -> ReaderResult<T>
-): ReaderResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, Location, StructNode) -> ReadingResult<T>
+): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is StructNode)
         reader(env, context, location, this)
     else
-        ReaderResult.Failure(
+        ReadingResult.Failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(listOf(StructNode.nameOfType), this.nameOfType)
         )
@@ -97,13 +97,13 @@ public inline fun <EB, O, CTX, T> ValueNode.readAsArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReaderResult<T>
-): ReaderResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReadingResult<T>
+): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is ArrayNode)
         reader(env, context, location, this)
     else
-        ReaderResult.Failure(
+        ReadingResult.Failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(listOf(ArrayNode.nameOfType), this.nameOfType)
         )

@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.common
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReaderResult
+import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -35,7 +35,7 @@ internal class DummyValidator<EB, O, CTX, T>(
 
     internal companion object {
 
-        internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReaderResult.Error): Validator<EB, O, CTX, String> =
+        internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReadingResult.Error): Validator<EB, O, CTX, String> =
             DummyValidator { _, _, location, value ->
                 if (value.isNotEmpty())
                     valid()
