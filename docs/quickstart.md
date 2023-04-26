@@ -198,7 +198,7 @@ val PhoneReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phone> = 
     val number = property(required(name = "number", reader = PhoneNumberReader))
 
     returns { _, _, location ->
-        Phone(title = +title, number = +number).success(location)
+        Phone(title = +title, number = +number).toSuccess(location)
     }
 }
 ```
@@ -222,7 +222,7 @@ val UserReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, User> = st
     val phones = property(optional(name = "phones", reader = PhonesReader, default = { _, _ -> Phones() }))
 
     returns { _, _, location ->
-        User(id = +id, name = +name, phones = +phones).success(location)
+        User(id = +id, name = +name, phones = +phones).toSuccess(location)
     }
 }
 ```
