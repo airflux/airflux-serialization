@@ -428,8 +428,8 @@ internal class ReadingResultTest : FreeSpec() {
             result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
-        "The extension function E#failure" {
-            val result = JsonErrors.PathMissing.failure(LOCATION)
+        "The extension function E#toFailure" {
+            val result = JsonErrors.PathMissing.toFailure(LOCATION)
 
             result shouldBeFailure ReadingResult.Failure(
                 location = LOCATION,

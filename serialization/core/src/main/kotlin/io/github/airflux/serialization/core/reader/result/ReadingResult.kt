@@ -159,7 +159,7 @@ public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): Readi
 public fun <T> T.toSuccess(location: Location): ReadingResult<T> =
     ReadingResult.Success(location = location, value = this)
 
-public fun <E : ReadingResult.Error> E.failure(location: Location): ReadingResult<Nothing> =
+public fun <E : ReadingResult.Error> E.toFailure(location: Location): ReadingResult<Nothing> =
     ReadingResult.Failure(location, this)
 
 /**
@@ -176,5 +176,5 @@ public inline fun <EB, O, T> withCatching(
         block()
     } catch (expected: Throwable) {
         val handler = env.exceptionsHandler ?: throw expected
-        handler.handle(env, location, expected).failure(location)
+        handler.handle(env, location, expected).toFailure(location)
     }
