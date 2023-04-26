@@ -28,7 +28,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.Co
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.additionalProperties
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.isNotBlank
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
@@ -45,6 +45,6 @@ val LotReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Lot> = stru
     val value = property(required(name = "value", reader = ValueReader))
 
     returns { _, _, location ->
-        Lot(id = +id, status = +status, value = +value).success(location)
+        Lot(id = +id, status = +status, value = +value).toSuccess(location)
     }
 }

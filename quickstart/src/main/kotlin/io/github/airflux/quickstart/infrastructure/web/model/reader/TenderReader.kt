@@ -23,7 +23,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOp
 import io.github.airflux.quickstart.infrastructure.web.model.reader.property.identifierPropertySpec
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonStructReaderValidators
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
@@ -38,6 +38,6 @@ val TenderReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Tender> 
     val lots = property(required(name = "lots", reader = LotsReader))
 
     returns { _, _, location ->
-        Tender(+id, +title, +value, +lots).success(location)
+        Tender(+id, +title, +value, +lots).toSuccess(location)
     }
 }

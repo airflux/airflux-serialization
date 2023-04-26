@@ -422,8 +422,8 @@ internal class ReadingResultTest : FreeSpec() {
             }
         }
 
-        "The extension function T#success" {
-            val result = ORIGINAL_VALUE.success(LOCATION)
+        "The extension function T#toSuccess" {
+            val result = ORIGINAL_VALUE.toSuccess(LOCATION)
 
             result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
@@ -440,7 +440,7 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#withCatching" - {
 
             "when no exception is thrown in the block" - {
-                val block: () -> ReadingResult<String> = { ORIGINAL_VALUE.success(LOCATION) }
+                val block: () -> ReadingResult<String> = { ORIGINAL_VALUE.toSuccess(LOCATION) }
 
                 "when the context contains the exceptions handler" - {
                     val env = ReaderEnv(

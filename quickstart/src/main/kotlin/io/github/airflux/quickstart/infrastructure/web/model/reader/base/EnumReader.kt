@@ -20,12 +20,12 @@ import io.github.airflux.quickstart.infrastructure.web.error.JsonErrors
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.flatMapResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.result.toSuccess
 
 inline fun <EB, O, CTX, reified T : Enum<T>> Reader<EB, O, CTX, String>.asEnum(): Reader<EB, O, CTX, T> =
     flatMapResult { _, _, location, value ->
         try {
-            enumValueOf<T>(value.uppercase()).success(location)
+            enumValueOf<T>(value.uppercase()).toSuccess(location)
         } catch (ignored: Exception) {
             val allowable = enumValues<T>()
             ReadingResult.Failure(

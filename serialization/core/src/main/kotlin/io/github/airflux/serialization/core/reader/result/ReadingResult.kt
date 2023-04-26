@@ -71,7 +71,7 @@ public sealed class ReadingResult<out T> {
 }
 
 public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
-    flatMap { location, value -> transform(value).success(location) }
+    flatMap { location, value -> transform(value).toSuccess(location) }
 
 public infix fun <T, R> ReadingResult<T>.flatMap(transform: (Location, T) -> ReadingResult<R>): ReadingResult<R> = fold(
     ifFailure = ::identity,
@@ -153,10 +153,10 @@ public fun <EB, O, CTX, T> ReadingResult<T>.validation(
 
 public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): ReadingResult<T> = fold(
     ifFailure = ::identity,
-    ifSuccess = { result -> if (result.value != null) result else defaultValue().success(result.location) }
+    ifSuccess = { result -> if (result.value != null) result else defaultValue().toSuccess(result.location) }
 )
 
-public fun <T> T.success(location: Location): ReadingResult<T> =
+public fun <T> T.toSuccess(location: Location): ReadingResult<T> =
     ReadingResult.Success(location = location, value = this)
 
 public fun <E : ReadingResult.Error> E.failure(location: Location): ReadingResult<Nothing> =

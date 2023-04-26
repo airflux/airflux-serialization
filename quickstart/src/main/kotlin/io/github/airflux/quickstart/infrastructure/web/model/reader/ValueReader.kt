@@ -25,7 +25,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOp
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonStructReaderValidators
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.additionalProperties
 import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
@@ -37,6 +37,6 @@ val ValueReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Value> = 
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
     returns { _, _, location ->
-        Value(amount = Amount(+amount), currency = Currency(+currency)).success(location)
+        Value(amount = Amount(+amount), currency = Currency(+currency)).toSuccess(location)
     }
 }

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.readAsInteger
 
 /**
@@ -32,7 +32,7 @@ public fun <EB, O, CTX> byteReader(): Reader<EB, O, CTX, Byte>
     Reader { env, context, location, source ->
         source.readAsInteger(env, context, location) { e, _, l, value ->
             try {
-                value.toByte().success(l)
+                value.toByte().toSuccess(l)
             } catch (expected: NumberFormatException) {
                 e.errorBuilders.valueCastError(value, Byte::class).failure(location = l)
             }
