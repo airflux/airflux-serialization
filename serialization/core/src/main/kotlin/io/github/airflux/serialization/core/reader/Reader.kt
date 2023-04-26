@@ -98,10 +98,10 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.validation(
     }
 
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T & Any
-): Reader<EB, O, CTX, T & Any> = Reader { env, context, location, source ->
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+): Reader<EB, O, CTX, T> = Reader { env, context, location, source ->
     this@ifNullValue.read(env, context, location, source)
-        .ifNullValue { defaultValue(env, context, it) }
+        .ifNullValue { defaultValue(env, context, location) }
 }
 
 public fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.nullable(): Reader<EB, O, CTX, T?> {

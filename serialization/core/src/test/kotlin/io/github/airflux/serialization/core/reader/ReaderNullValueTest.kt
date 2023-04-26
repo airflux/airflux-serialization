@@ -62,7 +62,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
 
                     "then should return the original value" {
-                        val result: ReadingResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -75,7 +75,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
 
                     "then should return the default value" {
-                        val result: ReadingResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess ReadingResult.Success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -89,7 +89,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 val source = StructNode(ID_PROPERTY_NAME to BooleanNode.True)
 
                 "then should return the original value" {
-                    val result: ReadingResult<String> = reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
 
                     result shouldBe ReadingResult.Failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),

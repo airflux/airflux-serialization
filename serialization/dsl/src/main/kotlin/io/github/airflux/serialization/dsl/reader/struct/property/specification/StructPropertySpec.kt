@@ -48,6 +48,6 @@ public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.filter(
     StructPropertySpec(paths = paths, reader = reader.filter(predicate))
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T & Any
-): StructPropertySpec<EB, O, CTX, T & Any> =
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+): StructPropertySpec<EB, O, CTX, T> =
     StructPropertySpec(paths = paths, reader = reader.ifNullValue(defaultValue))

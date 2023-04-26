@@ -386,10 +386,11 @@ internal class ReadingResultTest : FreeSpec() {
             "when result is success" - {
 
                 "when the value is not null" - {
-                    val result: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val result: ReadingResult<String> =
+                        ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then the method should return the original value" {
-                        val alternative: ReadingResult<String> = result.ifNullValue { _ -> ALTERNATIVE_VALUE }
+                        val alternative: ReadingResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
 
                         alternative shouldBeSameInstanceAs result
                     }
@@ -399,9 +400,12 @@ internal class ReadingResultTest : FreeSpec() {
                     val result: ReadingResult<String?> = ReadingResult.Success(location = LOCATION, value = null)
 
                     "then the method should return the default value" {
-                        val alternative: ReadingResult<String> = result.ifNullValue { _ -> ALTERNATIVE_VALUE }
+                        val alternative: ReadingResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
 
-                        alternative shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                        alternative shouldBeSuccess ReadingResult.Success(
+                            location = LOCATION,
+                            value = ALTERNATIVE_VALUE
+                        )
                     }
                 }
             }
@@ -411,7 +415,7 @@ internal class ReadingResultTest : FreeSpec() {
                     ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then the method should return the original value" {
-                    val alternative: ReadingResult<String> = result.ifNullValue { _ -> ALTERNATIVE_VALUE }
+                    val alternative: ReadingResult<String> = result.ifNullValue { ALTERNATIVE_VALUE }
 
                     alternative shouldBeSameInstanceAs result
                 }

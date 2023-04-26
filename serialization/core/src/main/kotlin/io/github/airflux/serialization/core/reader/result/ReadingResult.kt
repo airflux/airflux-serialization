@@ -151,18 +151,14 @@ public fun <EB, O, CTX, T> ReadingResult<T>.validation(
     }
 )
 
-public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: (Location) -> T & Any): ReadingResult<T & Any> = fold(
+public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): ReadingResult<T> = fold(
     ifFailure = ::identity,
-    ifSuccess = { result ->
-        if (result.value != null)
-            @Suppress("UNCHECKED_CAST")
-            result as ReadingResult.Success<T & Any>
-        else
-            defaultValue(result.location).success(result.location)
-    }
+    ifSuccess = { result -> if (result.value != null) result else defaultValue().success(result.location) }
 )
 
-public fun <T> T.success(location: Location): ReadingResult<T> = ReadingResult.Success(location = location, value = this)
+public fun <T> T.success(location: Location): ReadingResult<T> =
+    ReadingResult.Success(location = location, value = this)
+
 public fun <E : ReadingResult.Error> E.failure(location: Location): ReadingResult<Nothing> =
     ReadingResult.Failure(location, this)
 
