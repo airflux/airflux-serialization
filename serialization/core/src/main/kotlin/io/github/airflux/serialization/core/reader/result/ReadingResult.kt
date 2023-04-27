@@ -156,11 +156,16 @@ public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): Readi
     ifSuccess = { result -> if (result.value != null) result else defaultValue().toSuccess(result.location) }
 )
 
-public fun <T> T.toSuccess(location: Location): ReadingResult<T> =
-    ReadingResult.Success(location = location, value = this)
+public fun <T> success(location: Location, value: T): ReadingResult<T> =
+    ReadingResult.Success(location = location, value = value)
+
+public fun <E : ReadingResult.Error> failure(location: Location, error: E): ReadingResult<Nothing> =
+    ReadingResult.Failure(location = location, error = error)
+
+public fun <T> T.toSuccess(location: Location): ReadingResult<T> = success(location = location, value = this)
 
 public fun <E : ReadingResult.Error> E.toFailure(location: Location): ReadingResult<Nothing> =
-    ReadingResult.Failure(location, this)
+    failure(location = location, error = this)
 
 /**
  * Calls the specified function [block] and returns its result if invocation was successful,
