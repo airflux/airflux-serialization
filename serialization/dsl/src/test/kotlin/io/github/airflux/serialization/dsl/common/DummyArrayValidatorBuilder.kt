@@ -19,24 +19,25 @@ package io.github.airflux.serialization.dsl.common
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 
-internal class DummyArrayValidatorBuilder<EB, O, CTX>(
-    result: ReadingResult.Failure?
-) : ArrayValidatorBuilder<EB, O, CTX> {
+internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) : ArrayValidatorBuilder<EB, O, CTX> {
 
     private val validator = Validator<EB, O, CTX>(result)
     override fun build(): ArrayValidator<EB, O, CTX> = validator
 
-    internal class Validator<EB, O, CTX>(val result: ReadingResult.Failure?) : ArrayValidator<EB, O, CTX> {
+    internal class Validator<EB, O, CTX>(val result: ValidationResult) : ArrayValidator<EB, O, CTX> {
         override fun validate(
             env: ReaderEnv<EB, O>,
             context: CTX,
             location: Location,
             source: ArrayNode
-        ): ReadingResult.Failure? = result
+        ): ValidationResult = result
     }
 
     companion object {
@@ -48,12 +49,9 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(
                 override fun build(): ArrayValidator<EB, O, CTX> =
                     ArrayValidator { _, _, location, source ->
                         if (source.size < expected)
-                            return@ArrayValidator ReadingResult.Failure(
-                                location = location,
-                                error = error(expected, source.size)
-                            )
+                            return@ArrayValidator invalid(location = location, error = error(expected, source.size))
                         else
-                            null
+                            valid()
                     }
             }
     }

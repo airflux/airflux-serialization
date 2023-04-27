@@ -43,7 +43,7 @@ public final class io/github/airflux/serialization/dsl/reader/array/ArrayReaderK
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/validator/ArrayValidator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ArrayNode;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/ReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/value/ArrayNode;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/validator/ArrayValidatorBuilder {

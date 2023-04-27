@@ -27,6 +27,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -98,11 +99,10 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         val failures = mutableListOf<ReadingResult.Failure>()
 
         validators.forEach { validator ->
-            val failure = validator.validate(env, context, location, source)
-            if (failure != null) {
-                if (failFast) return failure
-                failures.add(failure)
-            }
+            validator.validate(env, context, location, source)
+                .ifInvalid { failure ->
+                    if (failFast) return failure else failures.add(failure)
+                }
         }
 
         return resultBuilder(env, context, location, source)

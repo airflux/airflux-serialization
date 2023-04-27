@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
@@ -48,8 +48,8 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = ArrayNode()
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, source)
-                    errors.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    result.shouldBeInstanceOf<ValidationResult.Valid>()
                 }
             }
 
@@ -57,8 +57,8 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = ArrayNode(StringNode("A"))
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, source)
-                    errors.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    result.shouldBeInstanceOf<ValidationResult.Valid>()
                 }
             }
 
@@ -66,8 +66,8 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = ArrayNode(StringNode("A"), StringNode("B"))
 
                 "then the validator should do not return any errors" {
-                    val errors = validator.validate(ENV, CONTEXT, LOCATION, source)
-                    errors.shouldBeNull()
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    result.shouldBeInstanceOf<ValidationResult.Valid>()
                 }
             }
 
@@ -75,10 +75,10 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
 
                 "the validator should return an error" {
-                    val failure = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
 
-                    failure.shouldNotBeNull()
-                    failure shouldBe failure(
+                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
+                    failure.reason shouldBe failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Arrays.MaxItems(expected = MAX_ITEMS, actual = source.size)
                     )

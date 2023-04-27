@@ -19,6 +19,9 @@ package io.github.airflux.serialization.std.validator.array
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
@@ -32,11 +35,11 @@ public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
         context: CTX,
         location: Location,
         source: ArrayNode
-    ): ReadingResult.Failure? =
+    ): ValidationResult =
         if (source.size < expected)
-            ReadingResult.Failure(location, env.errorBuilders.minItemsArrayError(expected, source.size))
+            invalid(location, env.errorBuilders.minItemsArrayError(expected, source.size))
         else
-            null
+            valid()
 
     public interface ErrorBuilder {
         public fun minItemsArrayError(expected: Int, actual: Int): ReadingResult.Error

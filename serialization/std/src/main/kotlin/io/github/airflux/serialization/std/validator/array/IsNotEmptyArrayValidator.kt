@@ -19,6 +19,9 @@ package io.github.airflux.serialization.std.validator.array
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
@@ -30,11 +33,11 @@ public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : Array
         context: CTX,
         location: Location,
         source: ArrayNode
-    ): ReadingResult.Failure? =
+    ): ValidationResult =
         if (source.isEmpty())
-            ReadingResult.Failure(location, env.errorBuilders.isNotEmptyArrayError())
+            invalid(location, env.errorBuilders.isNotEmptyArrayError())
         else
-            null
+            valid()
 
     public interface ErrorBuilder {
         public fun isNotEmptyArrayError(): ReadingResult.Error
