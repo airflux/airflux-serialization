@@ -26,7 +26,7 @@ import io.kotest.matchers.shouldBe
 internal class ReadingResultFailureCauseTest : FreeSpec() {
 
     companion object {
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

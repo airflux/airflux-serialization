@@ -39,7 +39,7 @@ internal class ReaderOrTest : FreeSpec() {
         private const val RIGHT_VALUE = "false"
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

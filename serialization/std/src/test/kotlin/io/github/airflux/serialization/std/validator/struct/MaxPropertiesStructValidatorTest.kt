@@ -41,7 +41,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
         private const val MAX_PROPERTIES = 2
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val PROPERTIES: StructProperties<EB, Unit, Unit> = emptyList()
     }
 

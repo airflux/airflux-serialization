@@ -41,7 +41,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
 
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val READER: Reader<EB, Unit, Unit, String> = DummyReader.string()
     }
 

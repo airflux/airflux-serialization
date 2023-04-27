@@ -44,7 +44,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         private const val THIRD_ITEM = "third"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
 
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()

@@ -23,6 +23,6 @@ import io.github.airflux.serialization.core.path.PropertyPath
 import io.github.airflux.serialization.core.value.ValueNode
 
 public operator fun ValueNode.div(key: String): LookupResult =
-    this.lookup(Location.empty, PropertyPath.Element.Key(key))
+    this.lookup(Location, PropertyPath.Element.Key(key))
 
-public operator fun ValueNode.div(idx: Int): LookupResult = this.lookup(Location.empty, PropertyPath.Element.Idx(idx))
+public operator fun ValueNode.div(idx: Int): LookupResult = this.lookup(Location, PropertyPath.Element.Idx(idx))

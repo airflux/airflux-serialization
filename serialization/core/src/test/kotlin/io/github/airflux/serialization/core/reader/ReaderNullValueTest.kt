@@ -46,7 +46,7 @@ internal class ReaderNullValueTest : FreeSpec() {
 
         private val ENV: ReaderEnv<EB, Unit> = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
 
         private val stringReader = DummyReader.string<EB, Unit, Unit>()
     }

@@ -39,7 +39,7 @@ internal class ShortReaderTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val ShortReader = shortReader<EB, Unit, Unit>()
     }
 
@@ -65,7 +65,7 @@ internal class ShortReaderTest : FreeSpec() {
                 val source: ValueNode = StringNode("abc")
                 val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location.empty,
+                    location = Location,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Integer.nameOfType),
                         actual = StringNode.nameOfType
@@ -92,7 +92,7 @@ internal class ShortReaderTest : FreeSpec() {
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeFailure failure(
-                        location = Location.empty,
+                        location = Location,
                         error = JsonErrors.ValueCast(value = value, type = Short::class)
                     )
                 }

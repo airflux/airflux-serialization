@@ -44,7 +44,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
         private const val SECOND_PHONE_VALUE = "456"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
     }
 

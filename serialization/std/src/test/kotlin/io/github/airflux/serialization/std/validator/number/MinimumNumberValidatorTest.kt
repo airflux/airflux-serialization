@@ -31,7 +31,7 @@ internal class MinimumNumberValidatorTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private const val MIN_VALUE: Int = 2
     }
 

@@ -53,7 +53,7 @@ internal class StructReaderTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_VALUE = true
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
     }

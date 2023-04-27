@@ -53,7 +53,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()

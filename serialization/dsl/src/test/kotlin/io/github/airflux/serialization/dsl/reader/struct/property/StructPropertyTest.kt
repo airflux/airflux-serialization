@@ -41,7 +41,7 @@ internal class StructPropertyTest : FreeSpec() {
 
         private val ENV = ReaderEnv(errorBuilders = EB(), options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
 
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
     }

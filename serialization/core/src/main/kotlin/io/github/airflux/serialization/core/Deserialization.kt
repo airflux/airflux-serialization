@@ -27,4 +27,4 @@ public fun <EB, O, CTX, T : Any> ValueNode.deserialization(
     context: CTX,
     reader: Reader<EB, O, CTX, T>
 ): ReadingResult<T> =
-    reader.read(env, context, Location.empty, this)
+    reader.read(env, context, Location, this)

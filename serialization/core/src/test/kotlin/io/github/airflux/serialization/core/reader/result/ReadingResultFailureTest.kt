@@ -27,7 +27,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 internal class ReadingResultFailureTest : FreeSpec() {
 
     companion object {
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

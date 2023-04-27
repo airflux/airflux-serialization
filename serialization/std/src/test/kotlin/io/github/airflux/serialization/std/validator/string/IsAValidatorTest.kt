@@ -31,7 +31,7 @@ internal class IsAValidatorTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val PATTERN: Regex = "\\d+".toRegex()
         private val IS_DIGITAL: (String) -> Boolean = { value: String -> PATTERN.matches(value) }
     }

@@ -30,7 +30,7 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
 
         private const val MIN_VALUE = 10
         private const val MAX_VALUE = 20

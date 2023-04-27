@@ -11,7 +11,7 @@ public final class io/github/airflux/serialization/core/common/IdentityKt {
 }
 
 public abstract class io/github/airflux/serialization/core/location/Location {
-	public static final field Companion Lio/github/airflux/serialization/core/location/Location$Companion;
+	public static final field Empty Lio/github/airflux/serialization/core/location/Location$Empty;
 	public final fun append (I)Lio/github/airflux/serialization/core/location/Location;
 	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/location/Location;
 	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/location/Location;
@@ -21,8 +21,9 @@ public abstract class io/github/airflux/serialization/core/location/Location {
 	public abstract fun isEmpty ()Z
 }
 
-public final class io/github/airflux/serialization/core/location/Location$Companion {
-	public final fun getEmpty ()Lio/github/airflux/serialization/core/location/Location;
+public final class io/github/airflux/serialization/core/location/Location$Empty : io/github/airflux/serialization/core/location/Location {
+	public fun isEmpty ()Z
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract class io/github/airflux/serialization/core/lookup/LookupResult {

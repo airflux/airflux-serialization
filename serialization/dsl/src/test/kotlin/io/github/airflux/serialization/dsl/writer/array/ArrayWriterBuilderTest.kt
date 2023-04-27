@@ -41,7 +41,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val SECOND_ITEM = "item-2"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
 
         private val StringWriter = DummyWriter.stringWriter<OPTS, Unit>()
     }

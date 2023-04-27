@@ -46,7 +46,7 @@ internal class ValidationResultTest : FreeSpec() {
             }
 
             "when value is invalid" - {
-                val value = invalid(location = Location.empty, error = JsonErrors.PathMissing)
+                val value = invalid(location = Location, error = JsonErrors.PathMissing)
 
                 "then the fold method should execute the ifInvalid code block" {
                     var result = 0

@@ -31,7 +31,7 @@ internal class ReadAsBooleanTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
-        private val LOCATION = Location.empty.append("user")
+        private val LOCATION = Location.append("user")
     }
 
     init {

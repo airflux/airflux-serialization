@@ -31,6 +31,6 @@ public fun <EB, O, CTX, T : Any> String.deserialization(
     context: CTX,
     reader: Reader<EB, O, CTX, T>
 ): ReadingResult<T> =
-    withCatching(env, Location.empty) {
+    withCatching(env, Location) {
         mapper.readValue(this, ValueNode::class.java).deserialization(env, context, reader)
     }

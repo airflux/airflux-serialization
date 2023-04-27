@@ -28,7 +28,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
     companion object {
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private const val TEXT_VALUE = "10.50"
         private const val TEXT_VALUE_WITHOUT_TRAILING_ZEROS = "10.5"
     }

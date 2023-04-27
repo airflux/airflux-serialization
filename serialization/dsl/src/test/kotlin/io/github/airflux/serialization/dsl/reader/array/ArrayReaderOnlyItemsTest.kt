@@ -42,7 +42,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private const val SECOND_ITEM = "second"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private const val MIN_ITEMS = 2
 
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()

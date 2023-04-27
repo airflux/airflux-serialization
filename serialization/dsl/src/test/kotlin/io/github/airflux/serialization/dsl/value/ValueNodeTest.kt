@@ -36,7 +36,7 @@ internal class ValueNodeTest : FreeSpec() {
 
         private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
 
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

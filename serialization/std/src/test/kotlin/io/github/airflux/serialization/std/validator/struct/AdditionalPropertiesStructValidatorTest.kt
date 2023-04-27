@@ -49,7 +49,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val idProperty: StructProperty<EB, OPTS, Unit, String> =
             StructProperty(required(ID_PROPERTY_NAME, StringReader))
         private val PROPERTIES: StructProperties<EB, OPTS, Unit> = listOf(idProperty)

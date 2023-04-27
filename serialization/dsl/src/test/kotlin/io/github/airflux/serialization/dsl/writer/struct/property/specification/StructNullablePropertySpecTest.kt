@@ -35,7 +35,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
 
         private val WRITER: Writer<Unit, Unit, String?> = DummyWriter.stringWriter<Unit, Unit>().nullable()
     }

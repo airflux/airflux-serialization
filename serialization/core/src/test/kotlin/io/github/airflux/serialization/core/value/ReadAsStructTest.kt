@@ -32,7 +32,7 @@ internal class ReadAsStructTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty.append("user")
+        private val LOCATION = Location.append("user")
         private const val USER_NAME = "user"
         private val reader = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: StructNode ->
             val name = source["name"] as StringNode

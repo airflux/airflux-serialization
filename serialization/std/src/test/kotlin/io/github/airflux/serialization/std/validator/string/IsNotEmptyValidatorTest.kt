@@ -30,7 +30,7 @@ internal class IsNotEmptyValidatorTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

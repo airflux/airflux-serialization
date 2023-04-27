@@ -36,7 +36,7 @@ internal class LocationTest : FreeSpec() {
         "The Location type" - {
 
             "when empty" - {
-                val location = Location.empty
+                val location = Location
 
                 "should be empty" {
                     location.isEmpty shouldBe true
@@ -86,7 +86,7 @@ internal class LocationTest : FreeSpec() {
             }
 
             "when non-empty" - {
-                val location = Location.empty.append(USER).append(IDX).append(PHONE)
+                val location = Location.append(USER).append(IDX).append(PHONE)
 
                 "should be non-empty" {
                     location.isEmpty shouldBe false
@@ -149,15 +149,15 @@ internal class LocationTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                Location.empty.append(USER).append(PHONE).shouldBeEqualsContract(
-                    y = Location.empty.append(USER).append(PHONE),
-                    z = Location.empty.append(USER).append(PHONE),
+                Location.append(USER).append(PHONE).shouldBeEqualsContract(
+                    y = Location.append(USER).append(PHONE),
+                    z = Location.append(USER).append(PHONE),
                     others = listOf(
-                        Location.empty,
-                        Location.empty.append(USER),
-                        Location.empty.append(PHONE),
-                        Location.empty.append(USER).append(IDX),
-                        Location.empty.append(USER).append(PHONE).append(IDX)
+                        Location,
+                        Location.append(USER),
+                        Location.append(PHONE),
+                        Location.append(USER).append(IDX),
+                        Location.append(USER).append(PHONE).append(IDX)
                     )
                 )
             }

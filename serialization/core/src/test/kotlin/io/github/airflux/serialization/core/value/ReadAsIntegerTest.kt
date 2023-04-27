@@ -32,7 +32,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty.append("user")
+        private val LOCATION = Location.append("user")
         private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, text: String ->
             success(location = location, value = text.toInt())
         }

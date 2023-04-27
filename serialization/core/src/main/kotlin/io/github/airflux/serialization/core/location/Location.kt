@@ -47,11 +47,6 @@ public sealed class Location {
         return foldRight(initial, this, operation)
     }
 
-    private object Empty : Location() {
-        override val isEmpty: Boolean = true
-        override fun toString(): String = "#"
-    }
-
     private class Element(val begin: Location, val value: PropertyPath.Element) : Location() {
 
         override val isEmpty: Boolean = false
@@ -76,7 +71,8 @@ public sealed class Location {
         }
     }
 
-    public companion object {
-        public val empty: Location = Empty
+    public companion object Empty : Location() {
+        override val isEmpty: Boolean = true
+        override fun toString(): String = "#"
     }
 }

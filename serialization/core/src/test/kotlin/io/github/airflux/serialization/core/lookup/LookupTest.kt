@@ -39,7 +39,7 @@ internal class LookupTest : FreeSpec() {
         private const val IDX = 0
         private const val UNKNOWN_IDX = 1
 
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

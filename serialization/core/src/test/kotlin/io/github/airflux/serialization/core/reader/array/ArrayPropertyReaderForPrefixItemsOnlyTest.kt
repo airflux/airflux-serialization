@@ -45,7 +45,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
         private const val THIRD_PHONE_VALUE = "789"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()

@@ -28,5 +28,5 @@ public fun <O, CTX, T : Any> T.serialization(
     context: CTX,
     writer: Writer<O, CTX, T>
 ): String? =
-    this.serialization(env, context, Location.empty, writer)
+    this.serialization(env, context, Location, writer)
         ?.let { mapper.writeValueAsString(it) }

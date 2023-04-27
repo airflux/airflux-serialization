@@ -37,7 +37,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val BigDecimalReader = bigDecimalReader<EB, Unit, Unit>()
     }
 
@@ -59,7 +59,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 val source: ValueNode = StringNode("abc")
                 val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location.empty,
+                    location = Location,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Number.nameOfType),
                         actual = StringNode.nameOfType

@@ -31,7 +31,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(Unit, Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val IsNotEmptyStringValidator: Validator<Unit, Unit, Unit, String> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }

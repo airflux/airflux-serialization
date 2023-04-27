@@ -31,7 +31,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private const val VALUE: Int = 2
     }
 

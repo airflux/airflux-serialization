@@ -40,7 +40,7 @@ internal class LongReaderTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val LongReader = longReader<EB, Unit, Unit>()
     }
 
@@ -66,7 +66,7 @@ internal class LongReaderTest : FreeSpec() {
                 val source: ValueNode = StringNode("abc")
                 val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location.empty,
+                    location = Location,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Integer.nameOfType),
                         actual = StringNode.nameOfType
@@ -93,7 +93,7 @@ internal class LongReaderTest : FreeSpec() {
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeFailure failure(
-                        location = Location.empty,
+                        location = Location,
                         error = JsonErrors.ValueCast(value = value, type = Long::class)
                     )
                 }

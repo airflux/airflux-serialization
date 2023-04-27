@@ -35,7 +35,7 @@ internal class StringReaderTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val StringReader = stringReader<EB, Unit, Unit>()
         private const val TEXT = "abc"
     }
@@ -53,7 +53,7 @@ internal class StringReaderTest : FreeSpec() {
                 val source: ValueNode = BooleanNode.valueOf(true)
                 val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location.empty,
+                    location = Location,
                     error = JsonErrors.InvalidType(
                         expected = listOf(StringNode.nameOfType),
                         actual = BooleanNode.nameOfType

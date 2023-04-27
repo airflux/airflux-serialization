@@ -30,7 +30,7 @@ internal class ValidatorTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(Unit, Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
     }
 
     init {

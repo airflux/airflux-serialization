@@ -43,7 +43,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
         private const val THIRD_PHONE_VALUE = "789"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location.empty
+        private val LOCATION = Location
         private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
     }
