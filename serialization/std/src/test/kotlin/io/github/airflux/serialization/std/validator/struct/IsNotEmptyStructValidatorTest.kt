@@ -20,16 +20,14 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
-import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.std.common.JsonErrors
+import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
+import io.github.airflux.serialization.std.common.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class IsNotEmptyStructValidatorTest : FreeSpec() {
 
@@ -54,8 +52,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
 
-                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe failure(
+                    result shouldBeInvalid failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Struct.IsEmpty
                     )
@@ -67,7 +64,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
-                    result shouldBe valid()
+                    result.shouldBeValid()
                 }
             }
         }

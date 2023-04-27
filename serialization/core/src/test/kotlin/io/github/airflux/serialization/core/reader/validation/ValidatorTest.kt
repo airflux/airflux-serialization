@@ -16,14 +16,14 @@
 
 package io.github.airflux.serialization.core.reader.validation
 
+import io.github.airflux.serialization.core.common.kotest.shouldBeInvalid
+import io.github.airflux.serialization.core.common.kotest.shouldBeValid
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class ValidatorTest : FreeSpec() {
 
@@ -49,7 +49,7 @@ internal class ValidatorTest : FreeSpec() {
                     val composeValidator = leftValidator or rightValidator
                     val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                    result shouldBe valid()
+                    result.shouldBeValid()
                 }
 
                 "if the left validator returns an error" - {
@@ -63,7 +63,7 @@ internal class ValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
 
                     "and the right validator returns an error then returning both errors" {
@@ -74,8 +74,7 @@ internal class ValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe listOf(
+                        result shouldBeInvalid listOf(
                             ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing),
                             ReadingResult.Failure(LOCATION, ValidationErrors.InvalidType)
                         ).merge()
@@ -97,8 +96,7 @@ internal class ValidatorTest : FreeSpec() {
                     val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe failure(LOCATION, ValidationErrors.PathMissing)
+                    result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
@@ -110,7 +108,7 @@ internal class ValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
 
                     "and the right validator returns an error, then an error is returned" {
@@ -121,8 +119,7 @@ internal class ValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                            failure.reason shouldBe failure(LOCATION, ValidationErrors.PathMissing)
+                        result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
                     }
                 }
             }

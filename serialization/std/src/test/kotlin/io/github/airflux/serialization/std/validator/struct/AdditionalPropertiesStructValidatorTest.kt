@@ -25,8 +25,6 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
-import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
@@ -35,9 +33,9 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.std.common.DummyReader
 import io.github.airflux.serialization.std.common.JsonErrors
+import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
+import io.github.airflux.serialization.std.common.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
@@ -71,7 +69,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
 
@@ -80,7 +78,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
             }
@@ -93,7 +91,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
 
@@ -102,7 +100,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
             }
@@ -120,8 +118,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return first error" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe failure(
+                        result shouldBeInvalid failure(
                             location = LOCATION.append(TITLE_PROPERTY_VALUE),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
                         )
@@ -134,8 +131,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe listOf(
+                        result shouldBeInvalid listOf(
                             ReadingResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties

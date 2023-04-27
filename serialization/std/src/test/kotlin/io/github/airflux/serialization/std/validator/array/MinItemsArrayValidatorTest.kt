@@ -20,14 +20,13 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
+import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
+import io.github.airflux.serialization.std.common.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class MinItemsArrayValidatorTest : FreeSpec() {
 
@@ -50,8 +49,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                 "the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
 
-                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe failure(
+                    result shouldBeInvalid failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Arrays.MinItems(expected = MIN_ITEMS, actual = source.size)
                     )
@@ -64,8 +62,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
 
-                    val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe failure(
+                    result shouldBeInvalid failure(
                         location = LOCATION,
                         error = JsonErrors.Validation.Arrays.MinItems(expected = MIN_ITEMS, actual = source.size)
                     )
@@ -77,7 +74,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
-                    result.shouldBeInstanceOf<ValidationResult.Valid>()
+                    result.shouldBeValid()
                 }
             }
 
@@ -86,7 +83,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
-                    result.shouldBeInstanceOf<ValidationResult.Valid>()
+                    result.shouldBeValid()
                 }
             }
         }

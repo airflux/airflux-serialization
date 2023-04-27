@@ -20,12 +20,10 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
-import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.std.common.JsonErrors
+import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
+import io.github.airflux.serialization.std.common.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 
 internal class MaxLengthValidatorTest : FreeSpec() {
 
@@ -46,7 +44,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
                 "then the validator should not be applying" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
-                    result shouldBe valid()
+                    result.shouldBeValid()
                 }
             }
 
@@ -55,7 +53,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
                 "then the validator should return the null value" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, str)
-                    result shouldBe valid()
+                    result.shouldBeValid()
                 }
             }
 
@@ -66,7 +64,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
                     "then the validator should return the null value" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
 
@@ -75,7 +73,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
                     "then the validator should return the null value" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
 
@@ -85,8 +83,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                     "then the validator should return an error" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe failure(
+                        result shouldBeInvalid failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.MaxLength(
                                 expected = MAX_VALUE,
@@ -104,7 +101,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
                     "then the validator should return the null value" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
 
@@ -113,7 +110,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
                     "then the validator should return the null value" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
-                        result shouldBe valid()
+                        result.shouldBeValid()
                     }
                 }
 
@@ -123,8 +120,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
                     "then the validator should return an error" {
                         val result = validator.validate(ENV, CONTEXT, LOCATION, str)
 
-                        val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe failure(
+                        result shouldBeInvalid failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.MaxLength(
                                 expected = MAX_VALUE,
