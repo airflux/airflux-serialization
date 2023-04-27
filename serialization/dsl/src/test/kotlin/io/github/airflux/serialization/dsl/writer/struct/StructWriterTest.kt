@@ -180,64 +180,6 @@ internal class StructWriterTest : FreeSpec() {
                             result shouldBe NullNode
                         }
                     }
-
-                    /*"when the source contains all properties" - {
-                        val source = NullableDTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
-                        val result = writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-
-                        "then should return a struct with all properties" {
-                            result shouldBe StructNode(
-                                ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                                NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
-                            )
-                        }
-                    }
-
-                    "when the source does not contain any properties" - {
-                        val source = NullableDTO(id = null)
-
-                        "when the action of the writer was set to return empty value" - {
-                            val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
-
-                            "then return a struct with all properties with NullNode values" {
-                                val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                                result shouldBe StructNode(
-                                    ID_PROPERTY_NAME to NullNode,
-                                    NAME_PROPERTY_NAME to NullNode
-                                )
-                            }
-                        }
-
-                        "when the action of the writer was set to return nothing" - {
-                            val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
-
-                            "then return a struct with all properties with NullNode values" {
-                                val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-
-                                result shouldBe StructNode(
-                                    ID_PROPERTY_NAME to NullNode,
-                                    NAME_PROPERTY_NAME to NullNode
-                                )
-                            }
-                        }
-
-                        "when the action of the writer was set to return null value" - {
-                            val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
-
-                            "then return a struct with all properties with NullNode values" {
-                                val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-
-                                result shouldBe StructNode(
-                                    ID_PROPERTY_NAME to NullNode,
-                                    NAME_PROPERTY_NAME to NullNode
-                                )
-                            }
-                        }
-                    }*/
                 }
             }
         }
