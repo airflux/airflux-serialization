@@ -20,6 +20,7 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.failure
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -97,7 +98,7 @@ internal class ValidatorTest : FreeSpec() {
                     val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
                     val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                    failure.reason shouldBe ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                    failure.reason shouldBe failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
@@ -121,7 +122,7 @@ internal class ValidatorTest : FreeSpec() {
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing)
+                            failure.reason shouldBe failure(LOCATION, ValidationErrors.PathMissing)
                     }
                 }
             }

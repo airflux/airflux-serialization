@@ -23,6 +23,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsStringTest : FreeSpec() {
@@ -40,7 +42,7 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the string value" {
                     val json: ValueNode = StringNode("abc")
                     val result = json.readAsString(ENV, LOCATION)
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = "abc")
+                    result shouldBeSuccess success(location = LOCATION, value = "abc")
                 }
             }
 
@@ -49,7 +51,7 @@ internal class ReadAsStringTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsString(ENV, LOCATION)
-                    result shouldBeFailure ReadingResult.Failure(
+                    result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(StringNode.nameOfType),

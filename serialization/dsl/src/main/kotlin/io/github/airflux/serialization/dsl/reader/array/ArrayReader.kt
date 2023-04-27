@@ -25,6 +25,7 @@ import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBui
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -82,7 +83,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
         if (source is ArrayNode)
             read(env, context, location, source)
         else
-            ReadingResult.Failure(
+            failure(
                 location = location,
                 error = env.errorBuilders.invalidTypeError(listOf(ArrayNode.nameOfType), source.nameOfType)
             )

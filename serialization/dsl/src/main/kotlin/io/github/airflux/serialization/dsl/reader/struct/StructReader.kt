@@ -23,6 +23,7 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.StructNode
@@ -63,7 +64,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
         if (source is StructNode)
             read(env, context, location, source)
         else
-            ReadingResult.Failure(
+            failure(
                 location = location,
                 error = env.errorBuilders.invalidTypeError(listOf(StructNode.nameOfType), source.nameOfType)
             )

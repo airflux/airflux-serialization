@@ -28,6 +28,8 @@ import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBui
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
@@ -69,7 +71,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess success(location = LOCATION, value = emptyList())
                     }
                 }
 
@@ -86,7 +88,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -117,7 +119,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeFailure ReadingResult.Failure(
+                                result shouldBeFailure failure(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.AdditionalItems
                                 )
@@ -167,7 +169,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeSuccess ReadingResult.Success(
+                                result shouldBeSuccess success(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -187,7 +189,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeSuccess ReadingResult.Success(
+                                result shouldBeSuccess success(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -213,7 +215,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReadingResult.Success(
+                            result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -233,7 +235,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReadingResult.Success(
+                            result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -258,7 +260,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReadingResult.Success(
+                            result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -278,7 +280,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess ReadingResult.Success(
+                            result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -302,7 +304,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeFailure ReadingResult.Failure(
+                            result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(NumericNode.Integer.nameOfType),
@@ -349,8 +351,8 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
     }
 
     internal class EB : AdditionalItemsErrorBuilder,
-                        InvalidTypeErrorBuilder,
-                        ValueCastErrorBuilder {
+        InvalidTypeErrorBuilder,
+        ValueCastErrorBuilder {
         override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =

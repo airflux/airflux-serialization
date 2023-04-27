@@ -21,12 +21,12 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal infix fun <T> ReadingResult<T?>.shouldBeSuccess(value: ReadingResult.Success<T?>) {
+internal infix fun <T> ReadingResult<T?>.shouldBeSuccess(value: ReadingResult<T?>) {
     val result = this.shouldBeInstanceOf<ReadingResult.Success<T>>()
     result shouldBe value
 }
 
-internal infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult.Failure) {
+internal infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult<*>) {
     val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
     failure shouldBe expected
 }

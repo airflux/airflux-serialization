@@ -21,6 +21,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -56,14 +58,14 @@ internal class LongReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source: ValueNode = NumericNode.valueOf(value)
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = value)
+                    result shouldBeSuccess success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
                 val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
-                result shouldBeFailure ReadingResult.Failure(
+                result shouldBeFailure failure(
                     location = Location.empty,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Integer.nameOfType),
@@ -90,7 +92,7 @@ internal class LongReaderTest : FreeSpec() {
                 ) { (_, value) ->
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
-                    result shouldBeFailure ReadingResult.Failure(
+                    result shouldBeFailure failure(
                         location = Location.empty,
                         error = JsonErrors.ValueCast(value = value, type = Long::class)
                     )
@@ -103,7 +105,7 @@ internal class LongReaderTest : FreeSpec() {
     private fun getMoreValue(): String = (Long.MAX_VALUE.toBigInteger() + BigInteger.ONE).toString()
 
     internal class EB : InvalidTypeErrorBuilder,
-                        ValueCastErrorBuilder {
+        ValueCastErrorBuilder {
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 

@@ -24,6 +24,7 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
 
 /**
@@ -39,8 +40,7 @@ public fun <EB, O, CTX, T> readArray(
 ): ReadingResult<List<T>>
     where O : FailFastOption {
     val failFast = env.options.failFast
-    val initial: ReadingResult<MutableList<T>> =
-        ReadingResult.Success(location = location, value = ArrayList(source.size))
+    val initial: ReadingResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         itemsReader.read(env, context, currentLocation, elem)
@@ -73,8 +73,7 @@ public fun <EB, O, CTX, T> readArray(
         prefixItems.getOrNull(idx)
 
     val failFast = env.options.failFast
-    val initial: ReadingResult<MutableList<T>> =
-        ReadingResult.Success(location = location, value = ArrayList(source.size))
+    val initial: ReadingResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         val reader = getReader(idx, prefixItemReaders)
@@ -116,8 +115,7 @@ public fun <EB, O, CTX, T> readArray(
         if (idx < prefixItemReaders.size) prefixItemReaders[idx] else itemsReader
 
     val failFast = env.options.failFast
-    val initial: ReadingResult<MutableList<T>> =
-        ReadingResult.Success(location = location, value = ArrayList(source.size))
+    val initial: ReadingResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItemReaders, itemsReader)

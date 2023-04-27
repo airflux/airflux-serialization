@@ -27,6 +27,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
@@ -57,7 +59,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 "then should return the result of applying the reader" {
                     val result: ReadingResult<String?> =
                         readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeSuccess ReadingResult.Success(
+                    result shouldBeSuccess success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
                     )
@@ -71,10 +73,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 "then should return the null value" {
                     val result: ReadingResult<String?> =
                         readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeSuccess ReadingResult.Success(
-                        location = LOCATION.append(ID_PROPERTY_NAME),
-                        value = null
-                    )
+                    result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                 }
             }
 
@@ -88,7 +87,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 "then should return the invalid type error" {
                     val result: ReadingResult<String?> =
                         readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeFailure ReadingResult.Failure(
+                    result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
                             expected = listOf(StructNode.nameOfType),

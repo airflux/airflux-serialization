@@ -23,6 +23,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsIntegerTest : FreeSpec() {
@@ -32,7 +34,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = Location.empty.append("user")
         private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, text: String ->
-            ReadingResult.Success(location = location, value = text.toInt())
+            success(location = location, value = text.toInt())
         }
     }
 
@@ -44,7 +46,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
                 "should return the number value" {
                     val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
                     val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = Int.MAX_VALUE)
+                    result shouldBeSuccess success(location = LOCATION, value = Int.MAX_VALUE)
                 }
             }
             "when called with a receiver of not the NumericNode#Integer type" - {
@@ -52,7 +54,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
-                    result shouldBeFailure ReadingResult.Failure(
+                    result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(NumericNode.Integer.nameOfType),

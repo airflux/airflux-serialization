@@ -27,6 +27,8 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
@@ -65,7 +67,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             itemsReader = StringReader
                         )
 
-                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess success(location = LOCATION, value = emptyList())
                     }
                 }
 
@@ -81,7 +83,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             itemsReader = StringReader
                         )
 
-                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = emptyList())
+                        result shouldBeSuccess success(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -103,7 +105,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeSuccess ReadingResult.Success(
+                            result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                             )
@@ -122,7 +124,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeSuccess ReadingResult.Success(
+                            result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE)
                             )
@@ -146,7 +148,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 itemsReader = StringReader
                             )
 
-                            result shouldBeFailure ReadingResult.Failure(
+                            result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(StringNode.nameOfType),
@@ -192,7 +194,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder,
-                        ValueCastErrorBuilder {
+        ValueCastErrorBuilder {
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)

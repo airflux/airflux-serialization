@@ -21,6 +21,8 @@ import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -42,9 +44,9 @@ internal class DummyReader<EB, O, CTX, T>(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is BooleanNode)
-                        ReadingResult.Success(location = location, value = source.get)
+                        success(location = location, value = source.get)
                     else
-                        ReadingResult.Failure(
+                        failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(BooleanNode.nameOfType),
@@ -59,9 +61,9 @@ internal class DummyReader<EB, O, CTX, T>(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is StringNode)
-                        ReadingResult.Success(location = location, value = source.get)
+                        success(location = location, value = source.get)
                     else
-                        ReadingResult.Failure(
+                        failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(StringNode.nameOfType),
@@ -76,9 +78,9 @@ internal class DummyReader<EB, O, CTX, T>(
             DummyReader(
                 result = { env, _, location, source ->
                     if (source is NumericNode.Integer)
-                        ReadingResult.Success(location = location, value = source.get.toInt())
+                        success(location = location, value = source.get.toInt())
                     else
-                        ReadingResult.Failure(
+                        failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
                                 expected = listOf(NumericNode.Integer.nameOfType),

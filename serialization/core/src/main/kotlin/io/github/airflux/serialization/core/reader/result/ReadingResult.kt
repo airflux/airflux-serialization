@@ -131,7 +131,7 @@ public fun <EB, O, CTX, T> ReadingResult<T>.filter(
             if (predicate.test(env, context, result.location, result.value))
                 result
             else
-                ReadingResult.Success(location = result.location, value = null)
+                success(location = result.location, value = null)
         }
     }
 )

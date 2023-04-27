@@ -28,7 +28,6 @@ import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
-import io.kotest.assertions.failure
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -52,7 +51,7 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#fold" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
                     val result = original.fold(ifFailure = { ALTERNATIVE_VALUE }, ifSuccess = { it.value })
@@ -63,7 +62,7 @@ internal class ReadingResultTest : FreeSpec() {
 
             "when result is failure" - {
                 val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return the null value" {
                     val result = original.fold(ifFailure = { ALTERNATIVE_VALUE }, ifSuccess = { it.value })
@@ -76,18 +75,17 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#map" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a result of applying the [transform] function to the value" {
                     val result = original.map { it.toInt() }
 
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                    result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
                 }
             }
 
             "when result is failure" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return an original do not apply the [transform] function to a value" {
                     val result = original.map { it.toInt() }
@@ -100,24 +98,23 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#flatMap" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a result of applying the [transform] function to the value" {
                     val result = original.flatMap { location, value ->
-                        ReadingResult.Success(location = location, value = value.toInt())
+                        success(location = location, value = value.toInt())
                     }
 
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                    result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
                 }
             }
 
             "when result is failure" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return an original do not apply the [transform] function to a value" {
                     val result = original.flatMap { location, value ->
-                        ReadingResult.Success(location = location, value = value.toInt())
+                        success(location = location, value = value.toInt())
                     }
 
                     result shouldBe original
@@ -128,25 +125,25 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#recovery" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return an original value" {
                     val result =
-                        original.recovery { ReadingResult.Success(location = LOCATION, value = ALTERNATIVE_VALUE) }
+                        original.recovery { success(location = LOCATION, value = ALTERNATIVE_VALUE) }
 
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                    result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE)
                 }
             }
 
             "when result is failure" - {
                 val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return the result of invoking the recovery function" {
                     val result =
-                        original.recovery { ReadingResult.Success(location = LOCATION, value = ALTERNATIVE_VALUE) }
+                        original.recovery { success(location = LOCATION, value = ALTERNATIVE_VALUE) }
 
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                    result shouldBeSuccess success(location = LOCATION, value = ALTERNATIVE_VALUE)
                 }
             }
         }
@@ -154,7 +151,7 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#getOrNull" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
                     val result = original.getOrNull()
@@ -164,8 +161,7 @@ internal class ReadingResultTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return the null value" {
                     val result = original.getOrNull()
@@ -178,8 +174,7 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#getOrElse" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
                     val result = original.getOrElse { ALTERNATIVE_VALUE }
@@ -189,8 +184,7 @@ internal class ReadingResultTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return the defaultValue value" {
                     val result = original.getOrElse { ALTERNATIVE_VALUE }
@@ -203,8 +197,7 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#getOrHandle" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
                     val result = original.getOrHandle { ALTERNATIVE_VALUE }
@@ -215,7 +208,7 @@ internal class ReadingResultTest : FreeSpec() {
 
             "when result is failure" - {
                 val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return a value from a handler" {
                     val result = original.getOrHandle { ALTERNATIVE_VALUE }
@@ -228,12 +221,10 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#orElse" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
-                    val elseResult: ReadingResult.Success<String> =
-                        ReadingResult.Success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                    val elseResult: ReadingResult<String> = success(location = LOCATION, value = ALTERNATIVE_VALUE)
 
                     val result = original.orElse { elseResult }
 
@@ -242,12 +233,10 @@ internal class ReadingResultTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return the defaultValue value" {
-                    val elseResult: ReadingResult.Success<String> =
-                        ReadingResult.Success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                    val elseResult: ReadingResult<String> = success(location = LOCATION, value = ALTERNATIVE_VALUE)
 
                     val result = original.orElse { elseResult }
 
@@ -259,8 +248,7 @@ internal class ReadingResultTest : FreeSpec() {
         "The extension function ReadingResult#orThrow" - {
 
             "when result is success" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
                     val result = original.orThrow { throw IllegalStateException() }
@@ -270,8 +258,7 @@ internal class ReadingResultTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val original: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return an exception" {
                     shouldThrow<IllegalStateException> {
@@ -288,8 +275,7 @@ internal class ReadingResultTest : FreeSpec() {
                 "when the value in the result is not null" - {
 
                     "when the value satisfies the predicate" - {
-                        val result: ReadingResult<String> =
-                            ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                        val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
                         val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
 
                         "then filter should return the original value" {
@@ -299,21 +285,20 @@ internal class ReadingResultTest : FreeSpec() {
                     }
 
                     "when the value does not satisfy the predicate" - {
-                        val result: ReadingResult<String> =
-                            ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                        val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
                         val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
 
                         "then filter should return null" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
-                            filtered shouldBe ReadingResult.Success(location = LOCATION, value = null)
+                            filtered shouldBe success(location = LOCATION, value = null)
                         }
                     }
                 }
 
                 "when the value in the result is null" - {
-                    val result: ReadingResult<String?> = ReadingResult.Success(location = LOCATION, value = null)
+                    val result: ReadingResult<String?> = success(location = LOCATION, value = null)
                     val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
-                        throw failure("Predicate not called.")
+                        throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
                     "then the filter should not be applying" {
@@ -324,7 +309,7 @@ internal class ReadingResultTest : FreeSpec() {
             }
 
             "when result is failure" - {
-                val result: ReadingResult<String> = ReadingResult.Failure(
+                val result: ReadingResult<String> = failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
                         expected = listOf(StringNode.nameOfType),
@@ -332,7 +317,7 @@ internal class ReadingResultTest : FreeSpec() {
                     )
                 )
                 val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
-                    throw failure("Predicate not called.")
+                    throw io.kotest.assertions.failure("Predicate not called.")
                 }
 
                 "then the filter should not be applying" {
@@ -348,12 +333,12 @@ internal class ReadingResultTest : FreeSpec() {
             "when result is success" - {
 
                 "when the value does not contain a valid value" - {
-                    val result: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = "")
+                    val result: ReadingResult<String> = success(location = LOCATION, value = "")
 
                     "then validator should return an error" {
                         val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
 
-                        validationResult shouldBe ReadingResult.Failure(
+                        validationResult shouldBe failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -361,7 +346,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when the value contains a valid value" - {
-                    val result: ReadingResult<String> = ReadingResult.Success(location = LOCATION, value = "user")
+                    val result: ReadingResult<String> = success(location = LOCATION, value = "user")
 
                     "then validator should return the original value" {
                         val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
@@ -372,7 +357,7 @@ internal class ReadingResultTest : FreeSpec() {
 
             "when result is failure" - {
                 val result: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then validator should return the original value" {
                     val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
@@ -386,8 +371,7 @@ internal class ReadingResultTest : FreeSpec() {
             "when result is success" - {
 
                 "when the value is not null" - {
-                    val result: ReadingResult<String> =
-                        ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then the method should return the original value" {
                         val alternative: ReadingResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
@@ -397,22 +381,19 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when the value is null" - {
-                    val result: ReadingResult<String?> = ReadingResult.Success(location = LOCATION, value = null)
+                    val result: ReadingResult<String?> = success(location = LOCATION, value = null)
 
                     "then the method should return the default value" {
                         val alternative: ReadingResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
 
-                        alternative shouldBeSuccess ReadingResult.Success(
-                            location = LOCATION,
-                            value = ALTERNATIVE_VALUE
-                        )
+                        alternative shouldBeSuccess success(location = LOCATION, value = ALTERNATIVE_VALUE)
                     }
                 }
             }
 
             "when result is failure" - {
                 val result: ReadingResult<String> =
-                    ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then the method should return the original value" {
                     val alternative: ReadingResult<String> = result.ifNullValue { ALTERNATIVE_VALUE }
@@ -457,7 +438,7 @@ internal class ReadingResultTest : FreeSpec() {
                     "then should return the value" {
                         val result = withCatching(env, LOCATION, block)
 
-                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                        result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE)
                     }
                 }
             }
@@ -480,7 +461,7 @@ internal class ReadingResultTest : FreeSpec() {
                     "then should return an error value" {
                         val result = withCatching(env, LOCATION, block)
 
-                        result shouldBeFailure ReadingResult.Failure(
+                        result shouldBeFailure failure(
                             location = LOCATION,
                             error = JsonErrors.PathMissing
                         )

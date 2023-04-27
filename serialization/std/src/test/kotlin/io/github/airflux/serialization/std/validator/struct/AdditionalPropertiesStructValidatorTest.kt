@@ -24,6 +24,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.StringNode
@@ -120,7 +121,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
 
                         val failure = result.shouldBeInstanceOf<ValidationResult.Invalid>()
-                        failure.reason shouldBe ReadingResult.Failure(
+                        failure.reason shouldBe failure(
                             location = LOCATION.append(TITLE_PROPERTY_VALUE),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
                         )
@@ -151,8 +152,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder,
-                        PathMissingErrorBuilder,
-                        AdditionalPropertiesStructValidator.ErrorBuilder {
+        PathMissingErrorBuilder,
+        AdditionalPropertiesStructValidator.ErrorBuilder {
 
         override fun additionalPropertiesStructError(): ReadingResult.Error =
             JsonErrors.Validation.Struct.AdditionalProperties

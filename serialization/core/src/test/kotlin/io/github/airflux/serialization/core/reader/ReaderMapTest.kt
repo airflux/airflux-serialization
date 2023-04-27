@@ -24,6 +24,7 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.kotest.core.spec.style.FreeSpec
 
@@ -43,9 +44,9 @@ internal class ReaderMapTest : FreeSpec() {
             "should return new reader" {
                 val source = StringNode(VALUE)
                 val transformedReader = reader.map { value -> value.toInt() }
-                val result = transformedReader.read(ENV, CONTEXT, LOCATION, source)
+                val result: ReadingResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
 
-                result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = VALUE.toInt())
+                result shouldBeSuccess success(location = LOCATION, value = VALUE.toInt())
             }
         }
     }

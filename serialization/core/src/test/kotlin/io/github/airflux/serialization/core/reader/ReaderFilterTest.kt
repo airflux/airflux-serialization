@@ -27,11 +27,12 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
-import io.kotest.assertions.failure
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -70,7 +71,7 @@ internal class ReaderFilterTest : FreeSpec() {
                             val filtered = requiredReader.filter(predicate)
                                 .read(ENV, CONTEXT, LOCATION, source)
 
-                            filtered shouldBe ReadingResult.Success(
+                            filtered shouldBe success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE
                             )
@@ -84,10 +85,7 @@ internal class ReaderFilterTest : FreeSpec() {
                             val filtered = requiredReader.filter(predicate)
                                 .read(ENV, CONTEXT, LOCATION, source)
 
-                            filtered shouldBe ReadingResult.Success(
-                                location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = null
-                            )
+                            filtered shouldBe success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                         }
                     }
                 }
@@ -99,16 +97,13 @@ internal class ReaderFilterTest : FreeSpec() {
                     }
                     val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
                     val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
-                        throw failure("Predicate not called.")
+                        throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
                     "then the filter should not be applying" {
                         val filtered = optionalReader.filter(predicate)
                             .read(ENV, CONTEXT, LOCATION, source)
-                        filtered shouldBe ReadingResult.Success(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = null
-                        )
+                        filtered shouldBe success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                     }
                 }
             }
@@ -120,13 +115,13 @@ internal class ReaderFilterTest : FreeSpec() {
                 }
                 val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
                 val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
-                    throw failure("Predicate not called.")
+                    throw io.kotest.assertions.failure("Predicate not called.")
                 }
 
                 "then the filter should not be applying" {
                     val filtered = requiredReader.filter(predicate)
                         .read(ENV, CONTEXT, LOCATION, source)
-                    filtered shouldBe ReadingResult.Failure(
+                    filtered shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
                     )
@@ -136,7 +131,7 @@ internal class ReaderFilterTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-                        InvalidTypeErrorBuilder {
+        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

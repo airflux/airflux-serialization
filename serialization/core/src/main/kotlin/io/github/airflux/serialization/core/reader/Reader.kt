@@ -26,6 +26,7 @@ import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.ifNullValue
 import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.value.NullNode
@@ -107,7 +108,7 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
 public fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.nullable(): Reader<EB, O, CTX, T?> {
     return Reader { env, context, location, source ->
         if (source is NullNode)
-            ReadingResult.Success(location = location, value = null)
+            success(location = location, value = null)
         else
             this@nullable.read(env, context, location, source)
     }

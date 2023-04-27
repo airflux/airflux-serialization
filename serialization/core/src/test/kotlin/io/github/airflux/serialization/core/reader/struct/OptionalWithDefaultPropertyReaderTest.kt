@@ -27,6 +27,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.kotest.core.spec.style.FreeSpec
@@ -64,7 +66,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                         defaultValue = DEFAULT
                     )
 
-                    result shouldBeSuccess ReadingResult.Success(
+                    result shouldBeSuccess success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
                     )
@@ -84,7 +86,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                         defaultValue = DEFAULT
                     )
 
-                    result shouldBeSuccess ReadingResult.Success(
+                    result shouldBeSuccess success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_DEFAULT_VALUE
                     )
@@ -106,7 +108,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                         using = READER,
                         defaultValue = DEFAULT
                     )
-                    result shouldBeFailure ReadingResult.Failure(
+                    result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
                             expected = listOf(StructNode.nameOfType),

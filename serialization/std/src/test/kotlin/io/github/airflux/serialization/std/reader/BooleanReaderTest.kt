@@ -20,6 +20,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -44,19 +46,19 @@ internal class BooleanReaderTest : FreeSpec() {
             "should return value the true" {
                 val source: ValueNode = BooleanNode.valueOf(true)
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
-                result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = true)
+                result shouldBeSuccess success(location = LOCATION, value = true)
             }
 
             "should return value the false" {
                 val source: ValueNode = BooleanNode.valueOf(false)
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
-                result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = false)
+                result shouldBeSuccess success(location = LOCATION, value = false)
             }
 
             "should return the invalid type error" {
                 val source: ValueNode = StringNode("abc")
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
-                result shouldBeFailure ReadingResult.Failure(
+                result shouldBeFailure failure(
                     location = Location.empty,
                     error = JsonErrors.InvalidType(
                         expected = listOf(BooleanNode.nameOfType),

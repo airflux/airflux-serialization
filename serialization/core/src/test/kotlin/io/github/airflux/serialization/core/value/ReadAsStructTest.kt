@@ -23,6 +23,8 @@ import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReadAsStructTest : FreeSpec() {
@@ -34,7 +36,7 @@ internal class ReadAsStructTest : FreeSpec() {
         private const val USER_NAME = "user"
         private val reader = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: StructNode ->
             val name = source["name"] as StringNode
-            ReadingResult.Success(location = location, value = DTO(name = name.get))
+            success(location = location, value = DTO(name = name.get))
         }
     }
 
@@ -46,7 +48,7 @@ internal class ReadAsStructTest : FreeSpec() {
                 "should return the DTO" {
                     val json: ValueNode = StructNode("name" to StringNode(USER_NAME))
                     val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = DTO(name = USER_NAME))
+                    result shouldBeSuccess success(location = LOCATION, value = DTO(name = USER_NAME))
                 }
             }
             "when called with a receiver of not the StructNode type" - {
@@ -54,7 +56,7 @@ internal class ReadAsStructTest : FreeSpec() {
                 "should return the invalid type' error" {
                     val json: ValueNode = BooleanNode.valueOf(true)
                     val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
-                    result shouldBeFailure ReadingResult.Failure(
+                    result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(StructNode.nameOfType),

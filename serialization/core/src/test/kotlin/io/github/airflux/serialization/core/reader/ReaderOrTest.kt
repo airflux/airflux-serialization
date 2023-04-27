@@ -25,6 +25,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
@@ -45,38 +47,38 @@ internal class ReaderOrTest : FreeSpec() {
 
             "when left reader returns an value" - {
                 val leftReader: Reader<EB, Unit, Unit, String> =
-                    DummyReader(ReadingResult.Success(location = LOCATION, value = LEFT_VALUE))
+                    DummyReader(success(location = LOCATION, value = LEFT_VALUE))
                 val rightReader: Reader<EB, Unit, Unit, String> =
-                    DummyReader(ReadingResult.Success(location = LOCATION, value = RIGHT_VALUE))
+                    DummyReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                 val reader = leftReader or rightReader
 
                 "then the right reader doesn't execute" {
                     val result = reader.read(ENV, CONTEXT, LOCATION, NullNode)
-                    result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = LEFT_VALUE)
+                    result shouldBeSuccess success(location = LOCATION, value = LEFT_VALUE)
                 }
             }
 
             "when left reader returns an error" - {
                 val leftReader: Reader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
-                    ReadingResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
+                    failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                 }
 
                 "when the right reader returns an value" - {
                     val rightReader: Reader<EB, Unit, Unit, String> =
-                        DummyReader(ReadingResult.Success(location = LOCATION, value = RIGHT_VALUE))
+                        DummyReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                     val reader = leftReader or rightReader
 
                     "then the result of the right reader should be returned" {
                         val result = reader.read(ENV, CONTEXT, LOCATION, NullNode)
-                        result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = RIGHT_VALUE)
+                        result shouldBeSuccess success(location = LOCATION, value = RIGHT_VALUE)
                     }
                 }
 
                 "when the right reader returns an error" - {
                     val rightReader: Reader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
-                        ReadingResult.Failure(
+                        failure(
                             location = LOCATION.append("identifier"),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(StringNode.nameOfType),

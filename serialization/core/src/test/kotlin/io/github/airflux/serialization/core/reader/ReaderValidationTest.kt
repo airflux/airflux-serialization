@@ -26,6 +26,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -63,7 +65,7 @@ internal class ReaderValidationTest : FreeSpec() {
 
                     "then should return the original result" {
                         val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
-                        result shouldBe ReadingResult.Success(
+                        result shouldBe success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
                         )
@@ -81,7 +83,7 @@ internal class ReaderValidationTest : FreeSpec() {
                     "then should return the result of a validation" {
                         val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBe ReadingResult.Failure(
+                        result shouldBe failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.Validation.Strings.IsEmpty
                         )
@@ -98,7 +100,7 @@ internal class ReaderValidationTest : FreeSpec() {
                     }
 
                     val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
-                    result shouldBe ReadingResult.Failure(
+                    result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.Validation.Strings.IsEmpty
                     )
@@ -108,7 +110,7 @@ internal class ReaderValidationTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-                        InvalidTypeErrorBuilder {
+        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

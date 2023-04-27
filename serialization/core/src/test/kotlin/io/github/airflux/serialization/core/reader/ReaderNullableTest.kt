@@ -26,6 +26,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.value.BooleanNode
 import io.github.airflux.serialization.core.value.NullNode
@@ -62,7 +64,7 @@ internal class ReaderNullableTest : FreeSpec() {
                     "then should return the read value" {
                         val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReadingResult.Success(
+                        result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
                         )
@@ -75,10 +77,7 @@ internal class ReaderNullableTest : FreeSpec() {
                     "then should return the null value" {
                         val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBeSuccess ReadingResult.Success(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = null
-                        )
+                        result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                     }
                 }
             }
@@ -89,7 +88,7 @@ internal class ReaderNullableTest : FreeSpec() {
                 "then should return the original value" {
                     val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
 
-                    result shouldBe ReadingResult.Failure(
+                    result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
                             expected = listOf(StringNode.nameOfType),
