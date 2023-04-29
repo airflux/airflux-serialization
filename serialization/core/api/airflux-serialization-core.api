@@ -10,18 +10,18 @@ public final class io/github/airflux/serialization/core/common/IdentityKt {
 	public static final fun identity (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public abstract class io/github/airflux/serialization/core/location/Location {
-	public static final field Empty Lio/github/airflux/serialization/core/location/Location$Empty;
-	public final fun append (I)Lio/github/airflux/serialization/core/location/Location;
-	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/location/Location;
-	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/location/Location;
-	public final fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/location/Location;
-	public final fun foldLeft (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
-	public final fun foldRight (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+public abstract interface class io/github/airflux/serialization/core/location/Location {
+	public static final field Root Lio/github/airflux/serialization/core/location/Location$Root;
+	public fun append (I)Lio/github/airflux/serialization/core/location/Location;
+	public fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/location/Location;
+	public fun append (Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/location/Location;
+	public fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/location/Location;
+	public fun foldLeft (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun foldRight (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public abstract fun isEmpty ()Z
 }
 
-public final class io/github/airflux/serialization/core/location/Location$Empty : io/github/airflux/serialization/core/location/Location {
+public final class io/github/airflux/serialization/core/location/Location$Root : io/github/airflux/serialization/core/location/Location {
 	public fun isEmpty ()Z
 	public fun toString ()Ljava/lang/String;
 }

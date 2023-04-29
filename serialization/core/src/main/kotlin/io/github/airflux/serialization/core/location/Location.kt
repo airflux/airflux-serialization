@@ -18,21 +18,22 @@ package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.core.path.PropertyPath
 
-public sealed class Location {
 
-    public abstract val isEmpty: Boolean
+public sealed interface Location {
+
+    public val isEmpty: Boolean
 
     public fun append(key: String): Location = append(PropertyPath.Element.Key(key))
     public fun append(idx: Int): Location = append(PropertyPath.Element.Idx(idx))
-    public fun append(element: PropertyPath.Element): Location = Element(this, element)
+    public fun append(element: PropertyPath.Element): Location = Element(element, this)
     public fun append(path: PropertyPath): Location =
         path.foldLeft(this) { location, element -> location.append(element) }
 
     public fun <R> foldLeft(initial: R, operation: (R, PropertyPath.Element) -> R): R {
         tailrec fun <R> foldLeft(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
             when (location) {
-                is Empty -> initial
-                is Element -> foldLeft(operation(initial, location.value), location.begin, operation)
+                is Root -> initial
+                is Element -> foldLeft(operation(initial, location.head), location.tail, operation)
             }
 
         return foldLeft(initial, this, operation)
@@ -41,13 +42,13 @@ public sealed class Location {
     public fun <R> foldRight(initial: R, operation: (R, PropertyPath.Element) -> R): R {
         fun <R> foldRight(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
             when (location) {
-                is Empty -> initial
-                is Element -> operation(foldRight(initial, location.begin, operation), location.value)
+                is Root -> initial
+                is Element -> operation(foldRight(initial, location.tail, operation), location.head)
             }
         return foldRight(initial, this, operation)
     }
 
-    private class Element(val begin: Location, val value: PropertyPath.Element) : Location() {
+    private class Element(val head: PropertyPath.Element, val tail: Location) : Location {
 
         override val isEmpty: Boolean = false
 
@@ -61,9 +62,9 @@ public sealed class Location {
         override fun equals(other: Any?): Boolean {
             tailrec fun equals(self: Location, other: Location): Boolean = when {
                 self is Element && other is Element ->
-                    if (self.value == other.value) equals(self.begin, other.begin) else false
+                    if (self.head == other.head) equals(self.tail, other.tail) else false
 
-                self is Empty && other is Empty -> true
+                self is Root && other is Root -> true
                 else -> false
             }
 
@@ -71,7 +72,7 @@ public sealed class Location {
         }
     }
 
-    public companion object Empty : Location() {
+    public companion object Root : Location {
         override val isEmpty: Boolean = true
         override fun toString(): String = "#"
     }
