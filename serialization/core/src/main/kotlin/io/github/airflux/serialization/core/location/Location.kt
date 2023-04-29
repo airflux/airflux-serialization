@@ -18,7 +18,6 @@ package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.core.path.PropertyPath
 
-
 public sealed interface Location {
 
     public val isEmpty: Boolean

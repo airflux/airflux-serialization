@@ -45,6 +45,18 @@ internal class PropertyPathTest : FreeSpec() {
                     path.toString() shouldBe "#/$keyUser"
                 }
 
+                "should comply with equals() and hashCode() contract" {
+                    PropertyPath(USER).shouldBeEqualsContract(
+                        y = PropertyPath(USER),
+                        z = PropertyPath(USER),
+                        others = listOf(
+                            PropertyPath(NAME),
+                            PropertyPath(USER).append(IDX_0),
+                            PropertyPath(USER).append(NAME).append(IDX_0)
+                        )
+                    )
+                }
+
                 val keyName = NAME
                 "append named path element '$keyName'" - {
                     val updatedPath = path.append(keyName)
@@ -90,6 +102,18 @@ internal class PropertyPathTest : FreeSpec() {
                     path.toString() shouldBe "#[$firstIdx]"
                 }
 
+                "should comply with equals() and hashCode() contract" {
+                    PropertyPath(IDX_0).shouldBeEqualsContract(
+                        y = PropertyPath(IDX_0),
+                        z = PropertyPath(IDX_0),
+                        others = listOf(
+                            PropertyPath(IDX_1),
+                            PropertyPath(USER).append(IDX_0),
+                            PropertyPath(USER).append(NAME).append(IDX_0)
+                        )
+                    )
+                }
+
                 val keyName = NAME
                 "append named path element '$keyName'" - {
                     val updatedPath = path.append(keyName)
@@ -123,7 +147,7 @@ internal class PropertyPathTest : FreeSpec() {
                 }
             }
 
-            "should comply with equals() and hashCode() contract2" {
+            "should comply with equals() and hashCode() contract" {
                 PropertyPath(USER).append(NAME).shouldBeEqualsContract(
                     y = PropertyPath(USER).append(NAME),
                     z = PropertyPath(USER).append(NAME),

@@ -87,18 +87,18 @@ public final class io/github/airflux/serialization/core/lookup/LookupResultKt {
 	public static final fun lookup (Lio/github/airflux/serialization/core/value/ValueNode;Lio/github/airflux/serialization/core/location/Location;Lio/github/airflux/serialization/core/path/PropertyPath;)Lio/github/airflux/serialization/core/lookup/LookupResult;
 }
 
-public abstract class io/github/airflux/serialization/core/path/PropertyPath {
+public abstract interface class io/github/airflux/serialization/core/path/PropertyPath {
 	public static final field Companion Lio/github/airflux/serialization/core/path/PropertyPath$Companion;
-	public final fun append (I)Lio/github/airflux/serialization/core/path/PropertyPath;
-	public final fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/path/PropertyPath;
-	public final fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun foldLeft (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
-	public final fun foldRight (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun append (I)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public fun append (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public fun append (Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public abstract fun foldLeft (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public abstract fun foldRight (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public abstract fun getHead ()Lio/github/airflux/serialization/core/path/PropertyPath$Element;
 	public abstract fun getTail ()Lio/github/airflux/serialization/core/path/PropertyPath;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+	public static fun invoke (I)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public static fun invoke (Lio/github/airflux/serialization/core/path/PropertyPath$Element;)Lio/github/airflux/serialization/core/path/PropertyPath;
+	public static fun invoke (Ljava/lang/String;)Lio/github/airflux/serialization/core/path/PropertyPath;
 }
 
 public final class io/github/airflux/serialization/core/path/PropertyPath$Companion {
