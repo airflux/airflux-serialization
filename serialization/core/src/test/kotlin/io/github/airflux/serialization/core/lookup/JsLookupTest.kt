@@ -18,10 +18,10 @@ package io.github.airflux.serialization.core.lookup
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
@@ -50,15 +50,15 @@ internal class JsLookupTest : FreeSpec() {
                     //Defined
                     TestCaseData.WithKey(
                         description = "1",
-                        source = StructNode(ID to StringNode(VALUE)),
+                        source = JsStruct(ID to JsString(VALUE)),
                         key = ID,
-                        result = JsLookup.Defined(location = LOCATION.append(ID), value = StringNode(VALUE))
+                        result = JsLookup.Defined(location = LOCATION.append(ID), value = JsString(VALUE))
                     ),
 
                     //Source is empty struct
                     TestCaseData.WithKey(
                         description = "2.1",
-                        source = StructNode(),
+                        source = JsStruct(),
                         key = ID,
                         result = JsLookup.Undefined.PathMissing(LOCATION.append(ID))
                     ),
@@ -66,17 +66,17 @@ internal class JsLookupTest : FreeSpec() {
                     //Find unknown key
                     TestCaseData.WithKey(
                         description = "3.1",
-                        source = StructNode(
-                            USER to StringNode(VALUE)
+                        source = JsStruct(
+                            USER to JsString(VALUE)
                         ),
                         key = ID,
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(ID))
                     ),
                     TestCaseData.WithKey(
                         description = "3.2",
-                        source = StructNode(
-                            USER to StructNode(
-                                ID to StringNode(VALUE)
+                        source = JsStruct(
+                            USER to JsStruct(
+                                ID to JsString(VALUE)
                             )
                         ),
                         key = ID,
@@ -86,12 +86,12 @@ internal class JsLookupTest : FreeSpec() {
                     //Invalid source node (expected a structure)
                     TestCaseData.WithKey(
                         description = "4",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         key = ID,
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     )
                 )
@@ -107,15 +107,15 @@ internal class JsLookupTest : FreeSpec() {
                     //Defined
                     TestCaseData.WithIndex(
                         description = "1",
-                        source = ArrayNode(StringNode(VALUE)),
+                        source = JsArray(JsString(VALUE)),
                         index = IDX,
-                        result = JsLookup.Defined(location = LOCATION.append(IDX), value = StringNode(VALUE))
+                        result = JsLookup.Defined(location = LOCATION.append(IDX), value = JsString(VALUE))
                     ),
 
                     //Source is empty array
                     TestCaseData.WithIndex(
                         description = "2",
-                        source = ArrayNode(),
+                        source = JsArray(),
                         index = IDX,
                         result = JsLookup.Undefined.PathMissing(LOCATION.append(IDX))
                     ),
@@ -123,7 +123,7 @@ internal class JsLookupTest : FreeSpec() {
                     //Find unknown index
                     TestCaseData.WithIndex(
                         description = "3",
-                        source = ArrayNode(StringNode(VALUE)),
+                        source = JsArray(JsString(VALUE)),
                         index = UNKNOWN_IDX,
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(UNKNOWN_IDX))
                     ),
@@ -131,12 +131,12 @@ internal class JsLookupTest : FreeSpec() {
                     //Invalid source node (expected an array)
                     TestCaseData.WithIndex(
                         description = "4",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         index = IDX,
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     )
                 )
@@ -152,45 +152,45 @@ internal class JsLookupTest : FreeSpec() {
                     //Defined level - 0
                     TestCaseData.WithPath(
                         description = "1.1",
-                        source = StructNode(ID to StringNode(VALUE)),
+                        source = JsStruct(ID to JsString(VALUE)),
                         path = JsPath(ID),
-                        result = JsLookup.Defined(location = LOCATION.append(ID), value = StringNode(VALUE))
+                        result = JsLookup.Defined(location = LOCATION.append(ID), value = JsString(VALUE))
                     ),
                     TestCaseData.WithPath(
                         description = "1.2",
-                        source = ArrayNode(StringNode(VALUE)),
+                        source = JsArray(JsString(VALUE)),
                         path = JsPath(IDX),
-                        result = JsLookup.Defined(location = LOCATION.append(IDX), value = StringNode(VALUE))
+                        result = JsLookup.Defined(location = LOCATION.append(IDX), value = JsString(VALUE))
                     ),
 
                     //Defined level - 1
                     TestCaseData.WithPath(
                         description = "2.1",
-                        source = StructNode(
-                            USER to StructNode(
-                                ID to StringNode(VALUE)
+                        source = JsStruct(
+                            USER to JsStruct(
+                                ID to JsString(VALUE)
                             )
                         ),
                         path = JsPath(USER).append(ID),
                         result = JsLookup.Defined(
                             location = LOCATION.append(USER).append(ID),
-                            value = StringNode(VALUE)
+                            value = JsString(VALUE)
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "2.2",
-                        source = StructNode(PHONES to ArrayNode(StringNode(VALUE))),
+                        source = JsStruct(PHONES to JsArray(JsString(VALUE))),
                         path = JsPath(PHONES).append(IDX),
                         result = JsLookup.Defined(
                             location = LOCATION.append(PHONES).append(IDX),
-                            value = StringNode(VALUE)
+                            value = JsString(VALUE)
                         )
                     ),
 
                     //Source is empty struct
                     TestCaseData.WithPath(
                         description = "3.1",
-                        source = StructNode(),
+                        source = JsStruct(),
                         path = JsPath(ID),
                         result = JsLookup.Undefined.PathMissing(
                             location = LOCATION.append(ID)
@@ -198,7 +198,7 @@ internal class JsLookupTest : FreeSpec() {
                     ),
                     TestCaseData.WithPath(
                         description = "3.2",
-                        source = StructNode(),
+                        source = JsStruct(),
                         path = JsPath(USER).append(ID),
                         result = JsLookup.Undefined.PathMissing(
                             location = LOCATION.append(USER).append(ID)
@@ -206,7 +206,7 @@ internal class JsLookupTest : FreeSpec() {
                     ),
                     TestCaseData.WithPath(
                         description = "3.3",
-                        source = StructNode(),
+                        source = JsStruct(),
                         path = JsPath(PHONES).append(IDX),
                         result = JsLookup.Undefined.PathMissing(
                             location = LOCATION.append(PHONES).append(IDX)
@@ -216,29 +216,29 @@ internal class JsLookupTest : FreeSpec() {
                     //Source is empty array
                     TestCaseData.WithPath(
                         description = "4.1",
-                        source = ArrayNode(),
+                        source = JsArray(),
                         path = JsPath(IDX),
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(IDX))
                     ),
                     TestCaseData.WithPath(
                         description = "4.2",
-                        source = ArrayNode(),
+                        source = JsArray(),
                         path = JsPath(IDX).append(ID),
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(IDX).append(ID))
                     ),
                     TestCaseData.WithPath(
                         description = "4.3",
-                        source = ArrayNode(),
+                        source = JsArray(),
                         path = JsPath(PHONES).append(IDX),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(StructNode.nameOfType),
-                            actual = ArrayNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsArray.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "4.4",
-                        source = StructNode(PHONES to ArrayNode()),
+                        source = JsStruct(PHONES to JsArray()),
                         path = JsPath(PHONES).append(IDX),
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(PHONES).append(IDX))
                     ),
@@ -246,123 +246,123 @@ internal class JsLookupTest : FreeSpec() {
                     //Invalid source node (expected a structure), level - 0
                     TestCaseData.WithPath(
                         description = "5.1",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         path = JsPath(ID),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "5.2",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         path = JsPath(USER).append(ID),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "5.3",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         path = JsPath(PHONES).append(IDX),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
 
                     //Invalid source node (expected a structure), level - 1
                     TestCaseData.WithPath(
                         description = "6.1",
-                        source = StructNode(ACCOUNT to StringNode(VALUE)),
+                        source = JsStruct(ACCOUNT to JsString(VALUE)),
                         path = JsPath(ACCOUNT).append(USER),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION.append(ACCOUNT),
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "6.2",
-                        source = StructNode(ACCOUNT to StringNode(VALUE)),
+                        source = JsStruct(ACCOUNT to JsString(VALUE)),
                         path = JsPath(ACCOUNT).append(USER).append(ID),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION.append(ACCOUNT),
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "6.3",
-                        source = StructNode(ACCOUNT to StringNode(VALUE)),
+                        source = JsStruct(ACCOUNT to JsString(VALUE)),
                         path = JsPath(ACCOUNT).append(USER).append(IDX),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION.append(ACCOUNT),
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
 
                     //Invalid source node (expected an array), level - 0
                     TestCaseData.WithPath(
                         description = "7.1",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         path = JsPath(IDX),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "7.2",
-                        source = StringNode(VALUE),
+                        source = JsString(VALUE),
                         path = JsPath(IDX).append(ID),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION,
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
 
                     //Invalid source node (expected an array), level - 1
                     TestCaseData.WithPath(
                         description = "8.1",
-                        source = StructNode(PHONES to StringNode(VALUE)),
+                        source = JsStruct(PHONES to JsString(VALUE)),
                         path = JsPath(PHONES).append(IDX),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION.append(PHONES),
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
                     TestCaseData.WithPath(
                         description = "8.2",
-                        source = StructNode(PHONES to StringNode(VALUE)),
+                        source = JsStruct(PHONES to JsString(VALUE)),
                         path = JsPath(PHONES).append(IDX).append(ID),
                         result = JsLookup.Undefined.InvalidType(
                             breakpoint = LOCATION.append(PHONES),
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     ),
 
                     //Find unknown key
                     TestCaseData.WithPath(
                         description = "9.1",
-                        source = StructNode(ID to StringNode(VALUE)),
+                        source = JsStruct(ID to JsString(VALUE)),
                         path = JsPath(USER),
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(USER))
                     ),
                     TestCaseData.WithPath(
                         description = "9.2",
-                        source = StructNode(
-                            USER to StructNode(
-                                ID to StringNode(VALUE)
+                        source = JsStruct(
+                            USER to JsStruct(
+                                ID to JsString(VALUE)
                             )
                         ),
                         path = JsPath(ACCOUNT).append(USER),
@@ -372,13 +372,13 @@ internal class JsLookupTest : FreeSpec() {
                     //Find unknown index
                     TestCaseData.WithPath(
                         description = "10.1",
-                        source = ArrayNode(StringNode(VALUE)),
+                        source = JsArray(JsString(VALUE)),
                         path = JsPath(UNKNOWN_IDX),
                         result = JsLookup.Undefined.PathMissing(location = LOCATION.append(UNKNOWN_IDX))
                     ),
                     TestCaseData.WithPath(
                         description = "10.2",
-                        source = StructNode(PHONES to ArrayNode(StringNode(VALUE))),
+                        source = JsStruct(PHONES to JsArray(JsString(VALUE))),
                         path = JsPath(PHONES).append(UNKNOWN_IDX),
                         result = JsLookup.Undefined.PathMissing(
                             location = LOCATION.append(PHONES).append(UNKNOWN_IDX)
@@ -396,10 +396,10 @@ internal class JsLookupTest : FreeSpec() {
             "when lookup by a key element" - {
                 val searchKey = ID
 
-                "when the source is the StructNode type" - {
+                "when the source is the JsStruct type" - {
 
                     "when the value is empty" - {
-                        val defined = JsLookup.Defined(location = LOCATION.append(USER), value = StructNode())
+                        val defined = JsLookup.Defined(location = LOCATION.append(USER), value = JsStruct())
 
                         "then should return the value as an instance of the Undefined#PathMissing type" {
                             val lookup = defined.apply(searchKey)
@@ -414,14 +414,14 @@ internal class JsLookupTest : FreeSpec() {
                         "when the source contains the finding key" - {
                             val defined = JsLookup.Defined(
                                 location = LOCATION.append(USER),
-                                value = StructNode(ID to StringNode(VALUE))
+                                value = JsStruct(ID to JsString(VALUE))
                             )
 
                             "then should return the value as an instance of the Defined type" {
                                 val lookup = defined.apply(searchKey)
                                 lookup shouldBe JsLookup.Defined(
                                     location = LOCATION.append(USER).append(searchKey),
-                                    value = StringNode(VALUE)
+                                    value = JsString(VALUE)
                                 )
                             }
                         }
@@ -429,7 +429,7 @@ internal class JsLookupTest : FreeSpec() {
                         "when the source does not contain the finding key" - {
                             val defined = JsLookup.Defined(
                                 location = LOCATION.append(USER),
-                                value = StructNode(PHONES to StringNode(VALUE))
+                                value = JsStruct(PHONES to JsString(VALUE))
                             )
 
                             "then should return the value as an instance of the Undefined#PathMissing type" {
@@ -442,15 +442,15 @@ internal class JsLookupTest : FreeSpec() {
                     }
                 }
 
-                "when the source is not the StructNode type" - {
+                "when the source is not the JsStruct type" - {
 
-                    val defined = JsLookup.Defined(location = LOCATION.append(USER), value = StringNode(VALUE))
+                    val defined = JsLookup.Defined(location = LOCATION.append(USER), value = JsString(VALUE))
 
                     "then should return the value as an instance of the Undefined#InvalidType type" {
                         val lookup = defined.apply(searchKey)
                         lookup shouldBe JsLookup.Undefined.InvalidType(
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType,
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType,
                             breakpoint = LOCATION.append(USER)
                         )
                     }
@@ -459,12 +459,12 @@ internal class JsLookupTest : FreeSpec() {
 
             "when lookup by an index element" - {
 
-                "when the source is the ArrayNode type" - {
+                "when the source is the JsArray type" - {
 
                     "when the source is empty" - {
                         val searchIndex = IDX
                         val defined =
-                            JsLookup.Defined(location = LOCATION.append(PHONES), value = ArrayNode())
+                            JsLookup.Defined(location = LOCATION.append(PHONES), value = JsArray())
 
                         "then should return the value as an instance of the Undefined#PathMissing type" {
                             val lookup = defined.apply(searchIndex)
@@ -477,7 +477,7 @@ internal class JsLookupTest : FreeSpec() {
                     "when the source is not empty" - {
                         val defined = JsLookup.Defined(
                             location = LOCATION.append(PHONES),
-                            value = ArrayNode(StringNode(VALUE))
+                            value = JsArray(JsString(VALUE))
                         )
 
                         "when the source contains the finding index" - {
@@ -487,7 +487,7 @@ internal class JsLookupTest : FreeSpec() {
                                 val lookup = defined.apply(searchIndex)
                                 lookup shouldBe JsLookup.Defined(
                                     location = LOCATION.append(PHONES).append(searchIndex),
-                                    value = StringNode(VALUE)
+                                    value = JsString(VALUE)
                                 )
                             }
                         }
@@ -505,15 +505,15 @@ internal class JsLookupTest : FreeSpec() {
                     }
                 }
 
-                "when the source is not the ArrayNode type" - {
+                "when the source is not the JsArray type" - {
                     val searchIndex = IDX
-                    val defined = JsLookup.Defined(location = LOCATION.append(USER), value = StringNode(VALUE))
+                    val defined = JsLookup.Defined(location = LOCATION.append(USER), value = JsString(VALUE))
 
                     "then should return the value as an instance of the Undefined#InvalidType type" {
                         val lookup = defined.apply(searchIndex)
                         lookup shouldBe JsLookup.Undefined.InvalidType(
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StringNode.nameOfType,
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsString.nameOfType,
                             breakpoint = LOCATION.append(USER)
                         )
                     }
@@ -523,8 +523,8 @@ internal class JsLookupTest : FreeSpec() {
 
         "The JsLookup#Undefined#InvalidType" - {
             val undefined = JsLookup.Undefined.InvalidType(
-                expected = listOf(ArrayNode.nameOfType),
-                actual = StringNode.nameOfType,
+                expected = listOf(JsArray.nameOfType),
+                actual = JsString.nameOfType,
                 breakpoint = LOCATION.append(USER)
             )
 
@@ -578,7 +578,7 @@ internal class JsLookupTest : FreeSpec() {
 
         internal class WithKey(
             val description: String,
-            val source: ValueNode,
+            val source: JsValue,
             key: String,
             val result: JsLookup
         ) : WithDataTestName {
@@ -588,7 +588,7 @@ internal class JsLookupTest : FreeSpec() {
 
         internal class WithIndex(
             val description: String,
-            val source: ValueNode,
+            val source: JsValue,
             index: Int,
             val result: JsLookup
         ) : WithDataTestName {
@@ -598,7 +598,7 @@ internal class JsLookupTest : FreeSpec() {
 
         internal class WithPath(
             val description: String,
-            val source: ValueNode,
+            val source: JsValue,
             val path: JsPath,
             val result: JsLookup
         ) : TestCaseData(), WithDataTestName {

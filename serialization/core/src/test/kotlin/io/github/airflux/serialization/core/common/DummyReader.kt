@@ -23,18 +23,18 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 
 internal class DummyReader<EB, O, CTX, T>(
-    val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, ValueNode) -> ReadingResult<T>
+    val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
 ) : Reader<EB, O, CTX, T> {
 
     constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: ValueNode): ReadingResult<T> =
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {
@@ -43,13 +43,13 @@ internal class DummyReader<EB, O, CTX, T>(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
-                    if (source is BooleanNode)
+                    if (source is JsBoolean)
                         success(location = location, value = source.get)
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(BooleanNode.nameOfType),
+                                expected = listOf(JsBoolean.nameOfType),
                                 actual = source.nameOfType
                             )
                         )
@@ -60,13 +60,13 @@ internal class DummyReader<EB, O, CTX, T>(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
-                    if (source is StringNode)
+                    if (source is JsString)
                         success(location = location, value = source.get)
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(StringNode.nameOfType),
+                                expected = listOf(JsString.nameOfType),
                                 actual = source.nameOfType
                             )
                         )
@@ -77,13 +77,13 @@ internal class DummyReader<EB, O, CTX, T>(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
-                    if (source is NumericNode.Integer)
+                    if (source is JsNumeric.Integer)
                         success(location = location, value = source.get.toInt())
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(NumericNode.Integer.nameOfType),
+                                expected = listOf(JsNumeric.Integer.nameOfType),
                                 actual = source.nameOfType
                             )
                         )
@@ -94,13 +94,13 @@ internal class DummyReader<EB, O, CTX, T>(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
-                    if (source is NumericNode)
+                    if (source is JsNumeric)
                         success(location = location, value = source.get.toLong())
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(NumericNode.Integer.nameOfType, NumericNode.Number.nameOfType),
+                                expected = listOf(JsNumeric.Integer.nameOfType, JsNumeric.Number.nameOfType),
                                 actual = source.nameOfType
                             )
                         )

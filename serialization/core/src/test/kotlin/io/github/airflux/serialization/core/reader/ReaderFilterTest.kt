@@ -31,8 +31,8 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.struct.readRequired
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -62,7 +62,7 @@ internal class ReaderFilterTest : FreeSpec() {
                         readRequired(env, context, lookup, stringReader)
                     }
 
-                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "when the value satisfies the predicate" - {
                         val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
@@ -95,7 +95,7 @@ internal class ReaderFilterTest : FreeSpec() {
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                         readOptional(env, context, lookup, stringReader)
                     }
-                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                     val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
@@ -113,7 +113,7 @@ internal class ReaderFilterTest : FreeSpec() {
                     val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                     readRequired(env, context, lookup, stringReader)
                 }
-                val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
+                val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                 val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }

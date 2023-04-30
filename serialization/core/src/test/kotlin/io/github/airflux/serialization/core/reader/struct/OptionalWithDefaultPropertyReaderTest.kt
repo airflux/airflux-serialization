@@ -29,8 +29,8 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.kotest.core.spec.style.FreeSpec
 
 internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
@@ -54,7 +54,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
             "when the element is defined" - {
                 val lookup: JsLookup = JsLookup.Defined(
                     location = LOCATION.append(ID_PROPERTY_NAME),
-                    value = StringNode(ID_PROPERTY_VALUE)
+                    value = JsString(ID_PROPERTY_VALUE)
                 )
 
                 "then should return the result of applying the reader" {
@@ -95,8 +95,8 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
 
             "when the element is invalid type" - {
                 val lookup: JsLookup = JsLookup.Undefined.InvalidType(
-                    expected = listOf(StructNode.nameOfType),
-                    actual = StringNode.nameOfType,
+                    expected = listOf(JsStruct.nameOfType),
+                    actual = JsString.nameOfType,
                     breakpoint = LOCATION.append(ID_PROPERTY_NAME)
                 )
 
@@ -111,8 +111,8 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     )
                 }

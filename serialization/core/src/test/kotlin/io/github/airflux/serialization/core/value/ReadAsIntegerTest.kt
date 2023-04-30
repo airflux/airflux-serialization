@@ -41,24 +41,24 @@ internal class ReadAsIntegerTest : FreeSpec() {
     init {
         "The readAsInteger function" - {
 
-            "when called with a receiver of the NumericNode#Integer type" - {
+            "when called with a receiver of the JsNumeric#Integer type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
+                    val json: JsValue = JsNumeric.valueOf(Int.MAX_VALUE)
                     val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = Int.MAX_VALUE)
                 }
             }
-            "when called with a receiver of not the NumericNode#Integer type" - {
+            "when called with a receiver of not the JsNumeric#Integer type" - {
 
                 "should return the invalid type error" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.Integer.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsNumeric.Integer.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

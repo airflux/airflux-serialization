@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.writer.struct.property
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.common.DummyWriter
@@ -58,7 +58,7 @@ internal class StructPropertyTest : FreeSpec() {
 
                     "then the method write should return the value" {
                         val result = property.write(ENV, CONTEXT, LOCATION, DTO(id = PROPERTY_VALUE))
-                        result shouldBe StringNode(PROPERTY_VALUE)
+                        result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
             }
@@ -79,7 +79,7 @@ internal class StructPropertyTest : FreeSpec() {
 
                     "then the method write should return the value" {
                         val result = property.write(ENV, CONTEXT, LOCATION, DTO(id = PROPERTY_VALUE))
-                        result shouldBe StringNode(PROPERTY_VALUE)
+                        result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
             }

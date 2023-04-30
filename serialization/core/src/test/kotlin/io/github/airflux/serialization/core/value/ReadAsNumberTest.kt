@@ -42,33 +42,33 @@ internal class ReadAsNumberTest : FreeSpec() {
     init {
         "The readAsNumber function" - {
 
-            "when called with a receiver of the NumericNode#Integer type" - {
+            "when called with a receiver of the JsNumeric#Integer type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
+                    val json: JsValue = JsNumeric.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
 
-            "when called with a receiver of the NumericNode#Number type" - {
+            "when called with a receiver of the JsNumeric#Number type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumericNode.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
+                    val json: JsValue = JsNumeric.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
-            "when called with a receiver of not the NumericNode#Number type" - {
+            "when called with a receiver of not the JsNumeric#Number type" - {
 
                 "should return the invalid type error" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.Number.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsNumeric.Number.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

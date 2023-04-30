@@ -25,8 +25,8 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
@@ -62,7 +62,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 StdStructValidator.additionalProperties<EB, OPTS, Unit>().build(PROPERTIES)
 
             "when the struct is empty" - {
-                val source = StructNode()
+                val source = JsStruct()
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
@@ -84,7 +84,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
             }
 
             "when the struct does not contains additional properties" - {
-                val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
@@ -106,10 +106,10 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
             }
 
             "when the struct contains additional properties" - {
-                val source = StructNode(
-                    ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
-                    TITLE_PROPERTY_VALUE to StringNode(TITLE_PROPERTY_NAME),
-                    NAME_PROPERTY_VALUE to StringNode(NAME_PROPERTY_NAME)
+                val source = JsStruct(
+                    ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
+                    TITLE_PROPERTY_VALUE to JsString(TITLE_PROPERTY_NAME),
+                    NAME_PROPERTY_VALUE to JsString(NAME_PROPERTY_NAME)
                 )
 
                 "when fail-fast is true" - {

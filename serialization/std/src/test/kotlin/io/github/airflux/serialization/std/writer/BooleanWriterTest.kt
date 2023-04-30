@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
@@ -39,18 +39,18 @@ internal class BooleanWriterTest : FreeSpec() {
             "when the value contains the true value" - {
                 val value = true
 
-                "then writer should return the BooleanNode.True value" {
+                "then writer should return the JsBoolean.True value" {
                     val result = writer.write(ENV, CONTEXT, LOCATION, value)
-                    result shouldBe BooleanNode.True
+                    result shouldBe JsBoolean.True
                 }
             }
 
             "when the value contains the false value" - {
                 val value = false
 
-                "then writer should return the BooleanNode.False value" {
+                "then writer should return the JsBoolean.False value" {
                     val result = writer.write(ENV, CONTEXT, LOCATION, value)
-                    result shouldBe BooleanNode.False
+                    result shouldBe JsBoolean.False
                 }
             }
         }

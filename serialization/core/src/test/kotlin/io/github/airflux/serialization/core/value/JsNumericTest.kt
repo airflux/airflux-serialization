@@ -23,18 +23,18 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class NumericNodeTest : FreeSpec() {
+internal class JsNumericTest : FreeSpec() {
 
     init {
 
-        "The NumericNode#Integer type" - {
+        "The JsNumeric#Integer type" - {
 
             "when the object creating from Byte type" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Byte.MIN_VALUE, Byte.MAX_VALUE)
                 ) { value ->
-                    NumericNode.valueOf(value).get.toByte() shouldBe value
+                    JsNumeric.valueOf(value).get.toByte() shouldBe value
                 }
             }
 
@@ -43,7 +43,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Short.MIN_VALUE, Short.MAX_VALUE)
                 ) { value ->
-                    NumericNode.valueOf(value).get.toShort() shouldBe value
+                    JsNumeric.valueOf(value).get.toShort() shouldBe value
                 }
             }
 
@@ -52,7 +52,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Int.MIN_VALUE, Int.MAX_VALUE)
                 ) { value ->
-                    NumericNode.valueOf(value).get.toInt() shouldBe value
+                    JsNumeric.valueOf(value).get.toInt() shouldBe value
                 }
             }
 
@@ -61,7 +61,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Long.MIN_VALUE, Long.MAX_VALUE)
                 ) { value ->
-                    NumericNode.valueOf(value).get.toLong() shouldBe value
+                    JsNumeric.valueOf(value).get.toLong() shouldBe value
                 }
             }
 
@@ -70,7 +70,7 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Long.MIN_VALUE.toString(), "-1", "1", Long.MAX_VALUE.toString())
                 ) { value ->
-                    NumericNode.Integer.valueOrNullOf(value)?.get shouldBe value
+                    JsNumeric.Integer.valueOrNullOf(value)?.get shouldBe value
                 }
             }
 
@@ -79,32 +79,32 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "with value '$it' should return the null value" },
                     listOf(".0", "+.0", "-.0", "1.5", "-1.5", "1.50", "-1.50")
                 ) { value ->
-                    NumericNode.Integer.valueOrNullOf(value).shouldBeNull()
+                    JsNumeric.Integer.valueOrNullOf(value).shouldBeNull()
                 }
             }
 
             "should comply with equals() and hashCode() contract" {
-                NumericNode.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
-                    y = NumericNode.valueOf(Byte.MIN_VALUE),
-                    z = NumericNode.valueOf(Byte.MIN_VALUE),
-                    other = NumericNode.valueOf(Byte.MAX_VALUE)
+                JsNumeric.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
+                    y = JsNumeric.valueOf(Byte.MIN_VALUE),
+                    z = JsNumeric.valueOf(Byte.MIN_VALUE),
+                    other = JsNumeric.valueOf(Byte.MAX_VALUE)
                 )
             }
 
             "then the toString() method should return the expected string" {
                 val value = Byte.MIN_VALUE.toString()
-                NumericNode.Integer.valueOrNullOf(value)!! shouldBeEqualsString value
+                JsNumeric.Integer.valueOrNullOf(value)!! shouldBeEqualsString value
             }
         }
 
-        "The NumericNode#Number type" - {
+        "The JsNumeric#Number type" - {
 
             "when an object creating from a valid string representing a numeric value" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf("-10", "-10.5", "10", "10.5")
                 ) { value ->
-                    NumericNode.Number.valueOrNullOf(value)?.get shouldBe value
+                    JsNumeric.Number.valueOrNullOf(value)?.get shouldBe value
                 }
             }
 
@@ -113,21 +113,21 @@ internal class NumericNodeTest : FreeSpec() {
                     nameFn = { "with value '$it' should return the null value" },
                     listOf("false")
                 ) { value ->
-                    NumericNode.Number.valueOrNullOf(value)?.get.shouldBeNull()
+                    JsNumeric.Number.valueOrNullOf(value)?.get.shouldBeNull()
                 }
             }
 
             "should comply with equals() and hashCode() contract" {
-                NumericNode.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!.shouldBeEqualsContract(
-                    y = NumericNode.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
-                    z = NumericNode.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
-                    other = NumericNode.Number.valueOrNullOf(Byte.MAX_VALUE.toString())!!
+                JsNumeric.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!.shouldBeEqualsContract(
+                    y = JsNumeric.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
+                    z = JsNumeric.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
+                    other = JsNumeric.Number.valueOrNullOf(Byte.MAX_VALUE.toString())!!
                 )
             }
 
             "then the toString() method should return the expected string" {
                 val value = Byte.MIN_VALUE.toString()
-                NumericNode.Number.valueOrNullOf(value)!! shouldBeEqualsString value
+                JsNumeric.Number.valueOrNullOf(value)!! shouldBeEqualsString value
             }
         }
     }

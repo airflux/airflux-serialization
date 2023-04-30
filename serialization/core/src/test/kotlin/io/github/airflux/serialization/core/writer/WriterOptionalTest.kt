@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -47,14 +47,14 @@ internal class WriterOptionalTest : FreeSpec() {
                     "then should return the written value" {
                         val result = writer.write(ENV, CONTEXT, LOCATION, source)
 
-                        result shouldBe StringNode(ID_PROPERTY_VALUE)
+                        result shouldBe JsString(ID_PROPERTY_VALUE)
                     }
                 }
 
                 "when the value is null" - {
                     val source: String? = null
 
-                    "then should return the NullNode" {
+                    "then should return the JsNull" {
                         val result = writer.write(ENV, CONTEXT, LOCATION, source)
 
                         result.shouldBeNull()

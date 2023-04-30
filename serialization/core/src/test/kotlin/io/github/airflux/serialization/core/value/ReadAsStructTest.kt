@@ -34,8 +34,8 @@ internal class ReadAsStructTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val reader = { _: ReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: StructNode ->
-            val name = source["name"] as StringNode
+        private val reader = { _: ReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsStruct ->
+            val name = source["name"] as JsString
             success(location = location, value = DTO(name = name.get))
         }
     }
@@ -43,24 +43,24 @@ internal class ReadAsStructTest : FreeSpec() {
     init {
         "The 'readAsStruct' function" - {
 
-            "when called with a receiver of the StructNode type" - {
+            "when called with a receiver of the JsStruct type" - {
 
                 "should return the DTO" {
-                    val json: ValueNode = StructNode("name" to StringNode(USER_NAME))
+                    val json: JsValue = JsStruct("name" to JsString(USER_NAME))
                     val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
                     result shouldBeSuccess success(location = LOCATION, value = DTO(name = USER_NAME))
                 }
             }
-            "when called with a receiver of not the StructNode type" - {
+            "when called with a receiver of not the JsStruct type" - {
 
                 "should return the invalid type' error" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(StructNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
@@ -26,5 +26,5 @@ public fun <O, CTX, T : Any> T.serialization(
     context: CTX,
     location: JsLocation,
     writer: Writer<O, CTX, T>
-): ValueNode? =
+): JsValue? =
     writer.write(env, context, location, this)

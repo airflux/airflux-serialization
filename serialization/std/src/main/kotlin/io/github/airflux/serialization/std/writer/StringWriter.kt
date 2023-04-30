@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.Writer
 
 /**
  * Writer for primitive [String] type.
  */
 public fun <O, CTX> stringWriter(): Writer<O, CTX, String> =
-    Writer { _, _, _, value -> StringNode(value) }
+    Writer { _, _, _, value -> JsString(value) }

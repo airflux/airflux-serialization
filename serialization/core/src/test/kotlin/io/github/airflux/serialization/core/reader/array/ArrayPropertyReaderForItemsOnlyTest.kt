@@ -29,10 +29,10 @@ import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.valueOf
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.reflect.KClass
@@ -53,7 +53,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
         "The readArray function for the items-only reader" - {
 
             "when parameter 'source' is empty" - {
-                val source = ArrayNode()
+                val source = JsArray()
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
@@ -91,7 +91,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
             "when parameter 'source' is not empty" - {
 
                 "when read was no errors" - {
-                    val source = ArrayNode(StringNode(FIRST_PHONE_VALUE), StringNode(SECOND_PHONE_VALUE))
+                    val source = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
@@ -133,7 +133,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                 }
 
                 "when read was some errors" - {
-                    val source = ArrayNode(NumericNode.valueOf(10), BooleanNode.True)
+                    val source = JsArray(JsNumeric.valueOf(10), JsBoolean.True)
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue =
@@ -151,8 +151,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = NumericNode.Integer.nameOfType
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsNumeric.Integer.nameOfType
                                 )
                             )
                         }
@@ -174,15 +174,15 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(StringNode.nameOfType),
-                                        actual = NumericNode.Integer.nameOfType
+                                        expected = listOf(JsString.nameOfType),
+                                        actual = JsNumeric.Integer.nameOfType
                                     )
                                 ),
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(StringNode.nameOfType),
-                                        actual = BooleanNode.nameOfType
+                                        expected = listOf(JsString.nameOfType),
+                                        actual = JsBoolean.nameOfType
                                     )
                                 )
                             )

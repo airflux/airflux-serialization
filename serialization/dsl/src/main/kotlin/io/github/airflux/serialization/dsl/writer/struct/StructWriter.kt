@@ -17,9 +17,9 @@
 package io.github.airflux.serialization.dsl.writer.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -40,8 +40,8 @@ public class StructWriter<O, CTX, T> private constructor(
 ) : Writer<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): ValueNode? {
-        val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
+    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? {
+        val items: Map<String, JsValue> = mutableMapOf<String, JsValue>()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
@@ -50,12 +50,12 @@ public class StructWriter<O, CTX, T> private constructor(
                 }
             }
         return if (items.isNotEmpty())
-            StructNode(items)
+            JsStruct(items)
         else
             when (env.options.writerActionIfResultIsEmpty) {
-                RETURN_EMPTY_VALUE -> StructNode()
+                RETURN_EMPTY_VALUE -> JsStruct()
                 RETURN_NOTHING -> null
-                RETURN_NULL_VALUE -> NullNode
+                RETURN_NULL_VALUE -> JsNull
             }
     }
 

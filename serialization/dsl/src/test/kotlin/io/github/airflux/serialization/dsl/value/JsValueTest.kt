@@ -18,14 +18,14 @@ package io.github.airflux.serialization.dsl.value
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ValueNodeTest : FreeSpec() {
+internal class JsValueTest : FreeSpec() {
 
     companion object {
         private const val KEY_NAME = "id"
@@ -41,21 +41,21 @@ internal class ValueNodeTest : FreeSpec() {
 
     init {
 
-        "The ValueNode#div" - {
+        "The JsValue#div" - {
 
             "when lookup by a key element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
+                    val json: JsValue = JsStruct(KEY_NAME to JsString(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / KEY_NAME
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), StringNode(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
+                    val json: JsValue = JsStruct(KEY_NAME to JsString(VALUE))
 
                     "then should return the value as an instance of type Undefined#PathMissing" {
                         val lookup = json / UNKNOWN_KEY_NAME
@@ -64,13 +64,13 @@ internal class ValueNodeTest : FreeSpec() {
                 }
 
                 "when the value is invalid element type" - {
-                    val json: ValueNode = ArrayNode(StringNode(VALUE))
+                    val json: JsValue = JsArray(JsString(VALUE))
 
                     "then should return the value as an instance of type Undefined#InvalidType" {
                         val lookup = json / KEY_NAME
                         lookup shouldBe JsLookup.Undefined.InvalidType(
-                            expected = listOf(StructNode.nameOfType),
-                            actual = ArrayNode.nameOfType,
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsArray.nameOfType,
                             breakpoint = LOCATION
                         )
                     }
@@ -80,16 +80,16 @@ internal class ValueNodeTest : FreeSpec() {
             "when lookup by an index element of the path" - {
 
                 "when the value contains the finding key" - {
-                    val json: ValueNode = ArrayNode(StringNode(VALUE))
+                    val json: JsValue = JsArray(JsString(VALUE))
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / IDX
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), StringNode(VALUE))
+                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
                     }
                 }
 
                 "when the value does not contain the finding key" - {
-                    val json: ValueNode = ArrayNode(StringNode(VALUE))
+                    val json: JsValue = JsArray(JsString(VALUE))
 
                     "then should return the value as an instance of type Undefined#PathMissing" {
                         val lookup = json / UNKNOWN_IDX
@@ -98,13 +98,13 @@ internal class ValueNodeTest : FreeSpec() {
                 }
 
                 "when the value is invalid element type" - {
-                    val json: ValueNode = StructNode(KEY_NAME to StringNode(VALUE))
+                    val json: JsValue = JsStruct(KEY_NAME to JsString(VALUE))
 
                     "then should return the value as an instance of type Undefined#InvalidType" {
                         val lookup = json / IDX
                         lookup shouldBe JsLookup.Undefined.InvalidType(
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = StructNode.nameOfType,
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsStruct.nameOfType,
                             breakpoint = LOCATION
                         )
                     }

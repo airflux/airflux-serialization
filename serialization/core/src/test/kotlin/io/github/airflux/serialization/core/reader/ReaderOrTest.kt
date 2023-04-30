@@ -27,9 +27,9 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReaderOrTest : FreeSpec() {
@@ -54,7 +54,7 @@ internal class ReaderOrTest : FreeSpec() {
                 val reader = leftReader or rightReader
 
                 "then the right reader doesn't execute" {
-                    val result = reader.read(ENV, CONTEXT, LOCATION, NullNode)
+                    val result = reader.read(ENV, CONTEXT, LOCATION, JsNull)
                     result shouldBeSuccess success(location = LOCATION, value = LEFT_VALUE)
                 }
             }
@@ -71,7 +71,7 @@ internal class ReaderOrTest : FreeSpec() {
                     val reader = leftReader or rightReader
 
                     "then the result of the right reader should be returned" {
-                        val result = reader.read(ENV, CONTEXT, LOCATION, NullNode)
+                        val result = reader.read(ENV, CONTEXT, LOCATION, JsNull)
                         result shouldBeSuccess success(location = LOCATION, value = RIGHT_VALUE)
                     }
                 }
@@ -81,15 +81,15 @@ internal class ReaderOrTest : FreeSpec() {
                         failure(
                             location = LOCATION.append("identifier"),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = NumericNode.Integer.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsNumeric.Integer.nameOfType
                             )
                         )
                     }
                     val reader = leftReader or rightReader
 
                     "then both errors should be returned" {
-                        val result = reader.read(ENV, CONTEXT, LOCATION, NullNode)
+                        val result = reader.read(ENV, CONTEXT, LOCATION, JsNull)
 
                         result.shouldBeFailure(
                             ReadingResult.Failure.Cause(
@@ -99,8 +99,8 @@ internal class ReaderOrTest : FreeSpec() {
                             ReadingResult.Failure.Cause(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = NumericNode.Integer.nameOfType
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsNumeric.Integer.nameOfType
                                 )
                             )
                         )

@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
-import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
 public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
@@ -34,7 +34,7 @@ public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
-        source: ArrayNode
+        source: JsArray
     ): ValidationResult =
         if (source.size < expected)
             invalid(location, env.errorBuilders.minItemsArrayError(expected, source.size))

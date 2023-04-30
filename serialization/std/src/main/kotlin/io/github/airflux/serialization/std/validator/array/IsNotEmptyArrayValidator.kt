@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
-import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 
 public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : ArrayValidator<EB, O, CTX>
@@ -32,7 +32,7 @@ public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : Array
         env: ReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
-        source: ArrayNode
+        source: JsArray
     ): ValidationResult =
         if (source.isEmpty())
             invalid(location, env.errorBuilders.isNotEmptyArrayError())

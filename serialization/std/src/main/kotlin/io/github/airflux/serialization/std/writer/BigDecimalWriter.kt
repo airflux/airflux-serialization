@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.NumericNode
+import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.writer.Writer
 import java.math.BigDecimal
 
@@ -29,5 +29,5 @@ public fun <O, CTX> bigDecimalWriter(stripTrailingZeros: Boolean): Writer<O, CTX
             value.stripTrailingZeros().toPlainString()
         else
             value.toPlainString()
-        NumericNode.Number.valueOrNullOf(text)!!
+        JsNumeric.Number.valueOrNullOf(text)!!
     }

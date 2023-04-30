@@ -19,9 +19,9 @@ package io.github.airflux.serialization.core.lookup
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPath.Element
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.StructNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 
 public sealed class JsLookup {
 
@@ -30,7 +30,7 @@ public sealed class JsLookup {
     public abstract fun apply(key: Element.Key): JsLookup
     public abstract fun apply(idx: Element.Idx): JsLookup
 
-    public data class Defined(val location: JsLocation, val value: ValueNode) : JsLookup() {
+    public data class Defined(val location: JsLocation, val value: JsValue) : JsLookup() {
         override fun apply(key: Element.Key): JsLookup = value.lookup(location, key)
         override fun apply(idx: Element.Idx): JsLookup = value.lookup(location, idx)
     }
@@ -53,52 +53,52 @@ public sealed class JsLookup {
     }
 }
 
-public fun ValueNode.lookup(location: JsLocation, key: Element.Key): JsLookup =
-    if (this is StructNode)
+public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookup =
+    if (this is JsStruct)
         this[key]
             ?.let { JsLookup.Defined(location = location.append(key), value = it) }
             ?: JsLookup.Undefined.PathMissing(location = location.append(key))
     else
         JsLookup.Undefined.InvalidType(
-            expected = listOf(StructNode.nameOfType),
+            expected = listOf(JsStruct.nameOfType),
             actual = this.nameOfType,
             breakpoint = location
         )
 
-public fun ValueNode.lookup(location: JsLocation, idx: Element.Idx): JsLookup =
-    if (this is ArrayNode)
+public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookup =
+    if (this is JsArray)
         this[idx]
             ?.let { JsLookup.Defined(location = location.append(idx), value = it) }
             ?: JsLookup.Undefined.PathMissing(location = location.append(idx))
     else
         JsLookup.Undefined.InvalidType(
-            expected = listOf(ArrayNode.nameOfType),
+            expected = listOf(JsArray.nameOfType),
             actual = this.nameOfType,
             breakpoint = location
         )
 
-public fun ValueNode.lookup(location: JsLocation, path: JsPath): JsLookup {
-    tailrec fun lookup(location: JsLocation, path: JsPath?, source: ValueNode): JsLookup {
+public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookup {
+    tailrec fun lookup(location: JsLocation, path: JsPath?, source: JsValue): JsLookup {
         return if (path != null) {
             when (val element = path.head) {
-                is Element.Key -> if (source is StructNode) {
+                is Element.Key -> if (source is JsStruct) {
                     val value = source[element]
                         ?: return JsLookup.Undefined.PathMissing(location = location.append(path))
                     lookup(location.append(element), path.tail, value)
                 } else
                     JsLookup.Undefined.InvalidType(
-                        expected = listOf(StructNode.nameOfType),
+                        expected = listOf(JsStruct.nameOfType),
                         actual = source.nameOfType,
                         breakpoint = location
                     )
 
-                is Element.Idx -> if (source is ArrayNode) {
+                is Element.Idx -> if (source is JsArray) {
                     val value = source[element]
                         ?: return JsLookup.Undefined.PathMissing(location = location.append(path))
                     lookup(location.append(element), path.tail, value)
                 } else
                     JsLookup.Undefined.InvalidType(
-                        expected = listOf(ArrayNode.nameOfType),
+                        expected = listOf(JsArray.nameOfType),
                         actual = source.nameOfType,
                         breakpoint = location
                     )

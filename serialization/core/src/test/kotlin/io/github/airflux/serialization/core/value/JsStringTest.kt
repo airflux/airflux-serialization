@@ -21,17 +21,17 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsString
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class StringNodeTest : FreeSpec() {
+internal class JsStringTest : FreeSpec() {
 
     companion object {
         private const val TEXT = "text"
     }
 
     init {
-        "The StringNode type" - {
+        "The JsString type" - {
 
             "when created" - {
-                val value = StringNode(TEXT)
+                val value = JsString(TEXT)
 
                 "then the inner value should be true" {
                     value.get shouldBe TEXT
@@ -42,10 +42,10 @@ internal class StringNodeTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    StringNode(TEXT).shouldBeEqualsContract(
-                        y = StringNode(TEXT),
-                        z = StringNode(TEXT),
-                        other = StringNode("")
+                    JsString(TEXT).shouldBeEqualsContract(
+                        y = JsString(TEXT),
+                        z = JsString(TEXT),
+                        other = JsString("")
                     )
                 }
             }

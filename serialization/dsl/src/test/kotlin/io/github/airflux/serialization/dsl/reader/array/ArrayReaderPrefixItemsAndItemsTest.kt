@@ -25,10 +25,10 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -63,22 +63,22 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "when source is not the array type" - {
-                        val source = StringNode("")
+                        val source = JsString("")
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ArrayNode.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsArray.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the number of items is less than the number of elements in prefixItems" - {
-                        val source = ArrayNode(StringNode(FIRST_ITEM))
+                        val source = JsArray(JsString(FIRST_ITEM))
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -88,7 +88,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                     "when the number of items is equal to the number of elements in prefixItems" - {
                         val source =
-                            ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                            JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -102,10 +102,10 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                     "when the number of items is more than the number of elements in prefixItems" - {
 
                         "when additional items are of valid type" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                BooleanNode.valueOf(true)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsBoolean.valueOf(true)
                             )
 
                             "then should return all items read" {
@@ -118,11 +118,11 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                         }
 
                         "when additional items are of invalid type" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                StringNode(THIRD_ITEM),
-                                NumericNode.valueOf(10)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsString(THIRD_ITEM),
+                                JsNumeric.valueOf(10)
                             )
 
                             "then should return an error" {
@@ -130,8 +130,8 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 result shouldBeFailure failure(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(BooleanNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsBoolean.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             }
@@ -143,22 +143,22 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "when source is not the array type" - {
-                        val source = StringNode("")
+                        val source = JsString("")
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ArrayNode.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsArray.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the number of items is less than the number of elements in prefixItems" - {
-                        val source = ArrayNode(StringNode(FIRST_ITEM))
+                        val source = JsArray(JsString(FIRST_ITEM))
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -168,7 +168,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
                     "when the number of items is equal to the number of elements in prefixItems" - {
                         val source =
-                            ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                            JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                         "then should return all elements read" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -182,10 +182,10 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                     "when the number of items is more than the number of elements in prefixItems" - {
 
                         "when additional items are of valid type" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                BooleanNode.valueOf(true)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsBoolean.valueOf(true)
                             )
 
                             "then should return all items read" {
@@ -198,11 +198,11 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                         }
 
                         "when additional items are of invalid type" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                StringNode(THIRD_ITEM),
-                                NumericNode.valueOf(10)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsString(THIRD_ITEM),
+                                JsNumeric.valueOf(10)
                             )
 
                             "then should return all errors" {
@@ -211,15 +211,15 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                     ReadingResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.InvalidType(
-                                            expected = listOf(BooleanNode.nameOfType),
-                                            actual = StringNode.nameOfType
+                                            expected = listOf(JsBoolean.nameOfType),
+                                            actual = JsString.nameOfType
                                         )
                                     ),
                                     ReadingResult.Failure.Cause(
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
-                                            expected = listOf(BooleanNode.nameOfType),
-                                            actual = NumericNode.Integer.nameOfType
+                                            expected = listOf(JsBoolean.nameOfType),
+                                            actual = JsNumeric.Integer.nameOfType
                                         )
                                     )
                                 )

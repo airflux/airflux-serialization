@@ -21,13 +21,13 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsString
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class BooleanNodeTest : FreeSpec() {
+internal class JsBooleanTest : FreeSpec() {
 
     init {
-        "The BooleanNode type" - {
+        "The JsBoolean type" - {
 
             "when created with the true value" - {
-                val value = BooleanNode.valueOf(true)
+                val value = JsBoolean.valueOf(true)
 
                 "then the inner value should be true" {
                     value.get shouldBe true
@@ -38,16 +38,16 @@ internal class BooleanNodeTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    BooleanNode.valueOf(true).shouldBeEqualsContract(
-                        y = BooleanNode.valueOf(true),
-                        z = BooleanNode.valueOf(true),
-                        other = BooleanNode.valueOf(false)
+                    JsBoolean.valueOf(true).shouldBeEqualsContract(
+                        y = JsBoolean.valueOf(true),
+                        z = JsBoolean.valueOf(true),
+                        other = JsBoolean.valueOf(false)
                     )
                 }
             }
 
             "when created with the false value" - {
-                val value = BooleanNode.valueOf(false)
+                val value = JsBoolean.valueOf(false)
 
                 "then the inner value should be false" {
                     value.get shouldBe false
@@ -58,10 +58,10 @@ internal class BooleanNodeTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    BooleanNode.valueOf(false).shouldBeEqualsContract(
-                        y = BooleanNode.valueOf(false),
-                        z = BooleanNode.valueOf(false),
-                        other = BooleanNode.valueOf(true)
+                    JsBoolean.valueOf(false).shouldBeEqualsContract(
+                        y = JsBoolean.valueOf(false),
+                        z = JsBoolean.valueOf(false),
+                        other = JsBoolean.valueOf(true)
                     )
                 }
             }

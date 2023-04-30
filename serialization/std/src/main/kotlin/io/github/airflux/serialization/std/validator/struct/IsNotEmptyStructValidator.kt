@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 
@@ -34,7 +34,7 @@ public class IsNotEmptyStructValidator<EB, O, CTX> internal constructor() : Stru
         context: CTX,
         location: JsLocation,
         properties: StructProperties<EB, O, CTX>,
-        source: StructNode
+        source: JsStruct
     ): ValidationResult =
         if (source.isEmpty())
             invalid(location = location, error = env.errorBuilders.isNotEmptyStructError())

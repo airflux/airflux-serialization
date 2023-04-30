@@ -29,9 +29,9 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readOptional
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -61,7 +61,7 @@ internal class ReaderNullValueTest : FreeSpec() {
             "when an original reader returns a result as a success" - {
 
                 "when the value is not null" - {
-                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then should return the original value" {
                         val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
@@ -74,7 +74,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 }
 
                 "when the value is null" - {
-                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
 
                     "then should return the default value" {
                         val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
@@ -88,7 +88,7 @@ internal class ReaderNullValueTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a failure" - {
-                val source = StructNode(ID_PROPERTY_NAME to BooleanNode.True)
+                val source = JsStruct(ID_PROPERTY_NAME to JsBoolean.True)
 
                 "then should return the original value" {
                     val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
@@ -96,8 +96,8 @@ internal class ReaderNullValueTest : FreeSpec() {
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

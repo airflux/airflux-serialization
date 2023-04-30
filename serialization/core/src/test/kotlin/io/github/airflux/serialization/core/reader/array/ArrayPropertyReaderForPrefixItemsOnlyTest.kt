@@ -30,10 +30,10 @@ import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.reflect.KClass
 
@@ -56,7 +56,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
         "The readArray function for the prefix-items-only readers" - {
 
             "when parameter 'source' is empty" - {
-                val source = ArrayNode()
+                val source = JsArray()
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
@@ -94,10 +94,10 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
             }
 
             "when parameter 'source' is not empty" - {
-                val source = ArrayNode(
-                    StringNode(FIRST_PHONE_VALUE),
-                    StringNode(SECOND_PHONE_VALUE),
-                    StringNode(THIRD_PHONE_VALUE)
+                val source = JsArray(
+                    JsString(FIRST_PHONE_VALUE),
+                    JsString(SECOND_PHONE_VALUE),
+                    JsString(THIRD_PHONE_VALUE)
                 )
 
                 "when the number of items is more than the number of readers" - {
@@ -307,8 +307,8 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.Integer.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsNumeric.Integer.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
@@ -331,15 +331,15 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumericNode.Integer.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsNumeric.Integer.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 ),
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(BooleanNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsBoolean.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             )

@@ -26,8 +26,8 @@ import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -312,8 +312,8 @@ internal class ReadingResultTest : FreeSpec() {
                 val result: ReadingResult<String> = failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(StringNode.nameOfType),
-                        actual = BooleanNode.nameOfType
+                        expected = listOf(JsString.nameOfType),
+                        actual = JsBoolean.nameOfType
                     )
                 )
                 val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
@@ -487,8 +487,8 @@ internal class ReadingResultTest : FreeSpec() {
                     location = LOCATION,
                     errors = ReadingResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 )
@@ -502,8 +502,8 @@ internal class ReadingResultTest : FreeSpec() {
                     location = LOCATION,
                     errors = ReadingResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 )

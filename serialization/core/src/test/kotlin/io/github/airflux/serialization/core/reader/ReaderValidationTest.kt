@@ -32,8 +32,8 @@ import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -58,7 +58,7 @@ internal class ReaderValidationTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a success" - {
-                val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "when validation is a success" - {
                     val validator: Validator<EB, Unit, Unit, String> = DummyValidator(result = valid())
@@ -92,7 +92,7 @@ internal class ReaderValidationTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a failure" - {
-                val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "then validation does not execute and the original result should be returned" {
                     val validator: Validator<EB, Unit, Unit, String> = DummyValidator { _, _, location, _ ->

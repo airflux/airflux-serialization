@@ -25,21 +25,21 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class ArrayNodeTest : FreeSpec() {
+internal class JsArrayTest : FreeSpec() {
 
     companion object {
         private const val FIRST_PHONE_VALUE: String = "123"
         private const val SECOND_PHONE_VALUE: String = "456"
 
-        private val FIRST_ITEM = StringNode(FIRST_PHONE_VALUE)
-        private val SECOND_ITEM = StringNode(SECOND_PHONE_VALUE)
+        private val FIRST_ITEM = JsString(FIRST_PHONE_VALUE)
+        private val SECOND_ITEM = JsString(SECOND_PHONE_VALUE)
     }
 
     init {
-        "The ArrayNode type" - {
+        "The JsArray type" - {
 
             "when created without elements" - {
-                val array = ArrayNode()
+                val array = JsArray()
 
                 "should be empty" {
                     array.isEmpty() shouldBe true
@@ -67,7 +67,7 @@ internal class ArrayNodeTest : FreeSpec() {
             }
 
             "when created with some elements" - {
-                val array = ArrayNode(FIRST_ITEM, SECOND_ITEM)
+                val array = JsArray(FIRST_ITEM, SECOND_ITEM)
 
                 "should be non-empty" {
                     array.isEmpty() shouldBe false
@@ -109,12 +109,12 @@ internal class ArrayNodeTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                ArrayNode(FIRST_ITEM).shouldBeEqualsContract(
-                    y = ArrayNode(FIRST_ITEM),
-                    z = ArrayNode(FIRST_ITEM),
+                JsArray(FIRST_ITEM).shouldBeEqualsContract(
+                    y = JsArray(FIRST_ITEM),
+                    z = JsArray(FIRST_ITEM),
                     others = listOf(
-                        ArrayNode(),
-                        ArrayNode(FIRST_ITEM, SECOND_ITEM)
+                        JsArray(),
+                        JsArray(FIRST_ITEM, SECOND_ITEM)
                     )
                 )
             }

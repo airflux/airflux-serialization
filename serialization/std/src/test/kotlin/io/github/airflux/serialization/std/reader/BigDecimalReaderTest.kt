@@ -22,9 +22,9 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.std.common.kotest.shouldBeSuccess
@@ -49,20 +49,20 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 withData(
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
-                    val source: ValueNode = NumericNode.Number.valueOrNullOf(value)!!
+                    val source: JsValue = JsNumeric.Number.valueOrNullOf(value)!!
                     val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
-                val source: ValueNode = StringNode("abc")
+                val source: JsValue = JsString("abc")
                 val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(NumericNode.Number.nameOfType),
-                        actual = StringNode.nameOfType
+                        expected = listOf(JsNumeric.Number.nameOfType),
+                        actual = JsString.nameOfType
                     )
                 )
             }

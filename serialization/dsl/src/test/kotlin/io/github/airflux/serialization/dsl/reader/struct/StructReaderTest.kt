@@ -26,10 +26,10 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.toSuccess
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.DummyStructValidatorBuilder
@@ -81,24 +81,24 @@ internal class StructReaderTest : FreeSpec() {
                     val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
 
                     "when the source is not the struct type" - {
-                        val source = StringNode("")
+                        val source = JsString("")
 
                         "then the reader should return an error" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StructNode.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsStruct.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the source contains all properties" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -111,8 +111,8 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when the source does not contain required properties" - {
-                        val source = StructNode(
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
+                        val source = JsStruct(
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 
                         "then should return an error" {
@@ -125,8 +125,8 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when the source does not contain optional properties" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -139,9 +139,9 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when the source contains the required property of an invalid type" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to StringNode(""),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsString(""),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
 
                         "then the reader should return an error" {
@@ -149,17 +149,17 @@ internal class StructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.Integer.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsNumeric.Integer.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the source contains the optional property of an invalid type" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to JsBoolean.valueOf(true),
                         )
 
                         "then the reader should return an error" {
@@ -167,17 +167,17 @@ internal class StructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(NAME_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = BooleanNode.nameOfType
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsBoolean.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the source contains all properties of an invalid type" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to StringNode(""),
-                            NAME_PROPERTY_NAME to BooleanNode.valueOf(true)
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsString(""),
+                            NAME_PROPERTY_NAME to JsBoolean.valueOf(true)
                         )
 
                         "then the reader should return first error" {
@@ -185,18 +185,18 @@ internal class StructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.Integer.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsNumeric.Integer.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when an error occur of validation the structure" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
-                            IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
+                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
 
                         "then the reader should return it error" {
@@ -209,10 +209,10 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when errors occur of validation the structure and reading properties" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to StringNode(""),
-                            NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
-                            IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsString(""),
+                            NAME_PROPERTY_NAME to JsBoolean.valueOf(true),
+                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
 
                         "then the reader should return first error" {
@@ -229,24 +229,24 @@ internal class StructReaderTest : FreeSpec() {
                     val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
 
                     "when the source is not the struct type" - {
-                        val source = StringNode("")
+                        val source = JsString("")
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StructNode.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsStruct.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the source contains all properties" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -259,8 +259,8 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when the source does not contain required property" - {
-                        val source = StructNode(
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
 
                         "then should return an error" {
@@ -273,8 +273,8 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when the source does not contain optional property" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
 
                         "then should return successful value" {
@@ -287,9 +287,9 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when the source contains the required property of an invalid type" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to StringNode(""),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsString(""),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
 
                         "then the reader should return an error" {
@@ -297,17 +297,17 @@ internal class StructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.Integer.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsNumeric.Integer.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the source contains the optional property of an invalid type" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to JsBoolean.valueOf(true),
                         )
 
                         "then the reader should return an error" {
@@ -315,17 +315,17 @@ internal class StructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(NAME_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = BooleanNode.nameOfType
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsBoolean.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when the source contains all properties of an invalid type" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to StringNode(""),
-                            NAME_PROPERTY_NAME to BooleanNode.valueOf(true)
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsString(""),
+                            NAME_PROPERTY_NAME to JsBoolean.valueOf(true)
                         )
 
                         "then the reader should return all errors" {
@@ -334,15 +334,15 @@ internal class StructReaderTest : FreeSpec() {
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumericNode.Integer.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsNumeric.Integer.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 ),
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(NAME_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(StringNode.nameOfType),
-                                        actual = BooleanNode.nameOfType
+                                        expected = listOf(JsString.nameOfType),
+                                        actual = JsBoolean.nameOfType
                                     )
                                 )
                             )
@@ -350,10 +350,10 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when an error occur of validation the structure" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                            NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
-                            IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
+                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
 
                         "then the reader should return it error" {
@@ -366,10 +366,10 @@ internal class StructReaderTest : FreeSpec() {
                     }
 
                     "when errors occur of validation the structure and reading properties" - {
-                        val source = StructNode(
-                            ID_PROPERTY_NAME to StringNode(""),
-                            NAME_PROPERTY_NAME to BooleanNode.valueOf(true),
-                            IS_ACTIVE_PROPERTY_NAME to BooleanNode.valueOf(IS_ACTIVE_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            ID_PROPERTY_NAME to JsString(""),
+                            NAME_PROPERTY_NAME to JsBoolean.valueOf(true),
+                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
 
                         "then the reader should return all errors" {
@@ -382,15 +382,15 @@ internal class StructReaderTest : FreeSpec() {
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumericNode.Integer.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsNumeric.Integer.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 ),
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(NAME_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(StringNode.nameOfType),
-                                        actual = BooleanNode.nameOfType
+                                        expected = listOf(JsString.nameOfType),
+                                        actual = JsBoolean.nameOfType
                                     )
                                 )
                             )
@@ -406,9 +406,9 @@ internal class StructReaderTest : FreeSpec() {
                     }
                 }
 
-                val source = StructNode(
-                    ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE),
-                    NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
+                val source = JsStruct(
+                    ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                    NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                 )
 
                 "when fail-fast is true" - {

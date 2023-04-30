@@ -22,9 +22,9 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.std.common.kotest.shouldBeSuccess
@@ -44,25 +44,25 @@ internal class BooleanReaderTest : FreeSpec() {
         "The boolean type reader" - {
 
             "should return value the true" {
-                val source: ValueNode = BooleanNode.valueOf(true)
+                val source: JsValue = JsBoolean.valueOf(true)
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = true)
             }
 
             "should return value the false" {
-                val source: ValueNode = BooleanNode.valueOf(false)
+                val source: JsValue = JsBoolean.valueOf(false)
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = false)
             }
 
             "should return the invalid type error" {
-                val source: ValueNode = StringNode("abc")
+                val source: JsValue = JsString("abc")
                 val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(BooleanNode.nameOfType),
-                        actual = StringNode.nameOfType
+                        expected = listOf(JsBoolean.nameOfType),
+                        actual = JsString.nameOfType
                     )
                 )
             }

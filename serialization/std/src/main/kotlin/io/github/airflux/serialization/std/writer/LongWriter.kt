@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.NumericNode
+import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.Writer
 
@@ -24,4 +24,4 @@ import io.github.airflux.serialization.core.writer.Writer
  * Writer for primitive [Long] type.
  */
 public fun <O, CTX> longWriter(): Writer<O, CTX, Long> =
-    Writer { _, _, _, value -> NumericNode.valueOf(value) }
+    Writer { _, _, _, value -> JsNumeric.valueOf(value) }

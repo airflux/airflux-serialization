@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
@@ -37,9 +37,9 @@ internal class StringWriterTest : FreeSpec() {
             val writer: Writer<Unit, Unit, String> = stringWriter()
             val value = "value"
 
-            "should return the StringNode value" {
+            "should return the JsString value" {
                 val result = writer.write(ENV, CONTEXT, LOCATION, value)
-                result shouldBe StringNode(value)
+                result shouldBe JsString(value)
             }
         }
     }

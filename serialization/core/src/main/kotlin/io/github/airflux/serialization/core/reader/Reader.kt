@@ -29,15 +29,15 @@ import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.validation
 import io.github.airflux.serialization.core.reader.validation.Validator
-import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsValue
 
 public fun interface Reader<EB, O, CTX, out T> {
 
     /**
-     * Convert the [ValueNode] into a T
+     * Convert the [JsValue] into a T
      */
-    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: ValueNode): ReadingResult<T>
+    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T>
 }
 
 /**
@@ -68,7 +68,7 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
 /**
  * Creates a new [Reader], based on this one, which first executes this
  * [Reader] logic then, if this [Reader] resulted in a [ReadingResult.Error], runs
- * the other [Reader] on the [ValueNode].
+ * the other [Reader] on the [JsValue].
  *
  * @param alt the [Reader] to run if this one gets a [ReadingResult.Error]
  * @return A new [Reader] with the updated behavior.
@@ -107,7 +107,7 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
 
 public fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.nullable(): Reader<EB, O, CTX, T?> {
     return Reader { env, context, location, source ->
-        if (source is NullNode)
+        if (source is JsNull)
             success(location = location, value = null)
         else
             this@nullable.read(env, context, location, source)

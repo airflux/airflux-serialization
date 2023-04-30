@@ -25,23 +25,23 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class StructNodeTest : FreeSpec() {
+internal class JsStructTest : FreeSpec() {
 
     companion object {
         private const val USER_PROPERTY_NAME = "name"
         private const val USER_VALUE = "user"
-        private val USER_PROPERTY_VALUE = StringNode(USER_VALUE)
+        private val USER_PROPERTY_VALUE = JsString(USER_VALUE)
 
         private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
         private const val IS_ACTIVE_VALUE = true
-        private val IS_ACTIVE_PROPERTY_VALUE = BooleanNode.valueOf(IS_ACTIVE_VALUE)
+        private val IS_ACTIVE_PROPERTY_VALUE = JsBoolean.valueOf(IS_ACTIVE_VALUE)
     }
 
     init {
-        "The ArrayNode type" - {
+        "The JsStruct type" - {
 
             "when created without properties" - {
-                val struct = StructNode()
+                val struct = JsStruct()
 
                 "should be empty" {
                     struct.isEmpty() shouldBe true
@@ -69,15 +69,15 @@ internal class StructNodeTest : FreeSpec() {
 
                 "should comply with equals() and hashCode() contract" {
                     struct.shouldBeEqualsContract(
-                        y = StructNode(),
-                        z = StructNode(),
-                        other = StructNode(USER_PROPERTY_NAME to USER_PROPERTY_VALUE)
+                        y = JsStruct(),
+                        z = JsStruct(),
+                        other = JsStruct(USER_PROPERTY_NAME to USER_PROPERTY_VALUE)
                     )
                 }
             }
 
             "when created with properties" - {
-                val struct = StructNode(
+                val struct = JsStruct(
                     USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
                     IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
                 )
@@ -127,18 +127,18 @@ internal class StructNodeTest : FreeSpec() {
 
                 "should comply with equals() and hashCode() contract" {
                     struct.shouldBeEqualsContract(
-                        y = StructNode(
+                        y = JsStruct(
                             USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
                             IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
                         ),
-                        z = StructNode(
+                        z = JsStruct(
                             USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
                             IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
                         ),
                         others = listOf(
-                            StructNode(),
-                            StructNode(USER_PROPERTY_NAME to USER_PROPERTY_VALUE),
-                            StructNode(IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE)
+                            JsStruct(),
+                            JsStruct(USER_PROPERTY_NAME to USER_PROPERTY_VALUE),
+                            JsStruct(IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE)
                         )
                     )
                 }

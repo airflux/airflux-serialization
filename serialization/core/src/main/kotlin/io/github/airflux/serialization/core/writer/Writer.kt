@@ -17,13 +17,13 @@
 package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
 public fun interface Writer<O, CTX, in T> {
-    public fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): ValueNode?
+    public fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue?
 }
 
 public fun <O, CTX, T, R> Writer<O, CTX, T>.contramap(transform: (R) -> T): Writer<O, CTX, R> =
@@ -33,7 +33,7 @@ public fun <O, CTX, T, R> Writer<O, CTX, T>.contramap(transform: (R) -> T): Writ
 
 public fun <O, CTX, T : Any> Writer<O, CTX, T>.nullable(): Writer<O, CTX, T?> =
     Writer { env, context, location, source ->
-        if (source != null) this@nullable.write(env, context, location, source) else NullNode
+        if (source != null) this@nullable.write(env, context, location, source) else JsNull
     }
 
 public fun <O, CTX, T : Any> Writer<O, CTX, T>.optional(): Writer<O, CTX, T?> =

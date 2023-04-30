@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.NumericNode
+import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
@@ -38,9 +38,9 @@ internal class LongWriterTest : FreeSpec() {
             val writer: Writer<Unit, Unit, Long> = longWriter()
             val value: Long = Long.MAX_VALUE
 
-            "should return the NumericNode value" {
+            "should return the JsNumeric value" {
                 val result = writer.write(ENV, CONTEXT, LOCATION, value)
-                result shouldBe NumericNode.valueOf(value)
+                result shouldBe JsNumeric.valueOf(value)
             }
         }
     }

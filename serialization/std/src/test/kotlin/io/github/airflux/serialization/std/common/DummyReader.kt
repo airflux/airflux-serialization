@@ -23,14 +23,14 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 
 internal class DummyReader<EB, O, CTX, T> private constructor(
-    val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, ValueNode) -> ReadingResult<T>
+    val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
 ) : Reader<EB, O, CTX, T> {
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: ValueNode): ReadingResult<T> =
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {
@@ -39,13 +39,13 @@ internal class DummyReader<EB, O, CTX, T> private constructor(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
-                    if (source is StringNode)
+                    if (source is JsString)
                         success(location = location, value = source.get)
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(StringNode.nameOfType),
+                                expected = listOf(JsString.nameOfType),
                                 actual = source.nameOfType
                             )
                         )

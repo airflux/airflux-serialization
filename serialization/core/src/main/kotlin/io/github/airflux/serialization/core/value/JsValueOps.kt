@@ -24,98 +24,98 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 
-public fun <EB, O> ValueNode.readAsBoolean(env: ReaderEnv<EB, O>, location: JsLocation): ReadingResult<Boolean>
+public fun <EB, O> JsValue.readAsBoolean(env: ReaderEnv<EB, O>, location: JsLocation): ReadingResult<Boolean>
     where EB : InvalidTypeErrorBuilder =
-    if (this is BooleanNode)
+    if (this is JsBoolean)
         success(location = location, value = this.get)
     else
         failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(BooleanNode.nameOfType), this.nameOfType)
+            error = env.errorBuilders.invalidTypeError(listOf(JsBoolean.nameOfType), this.nameOfType)
         )
 
-public fun <EB, O> ValueNode.readAsString(env: ReaderEnv<EB, O>, location: JsLocation): ReadingResult<String>
+public fun <EB, O> JsValue.readAsString(env: ReaderEnv<EB, O>, location: JsLocation): ReadingResult<String>
     where EB : InvalidTypeErrorBuilder =
-    if (this is StringNode)
+    if (this is JsString)
         success(location = location, value = this.get)
     else
         failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(StringNode.nameOfType), this.nameOfType)
+            error = env.errorBuilders.invalidTypeError(listOf(JsString.nameOfType), this.nameOfType)
         )
 
-public fun <EB, O, CTX, T : Number> ValueNode.readAsInteger(
+public fun <EB, O, CTX, T : Number> JsValue.readAsInteger(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
     reader: (ReaderEnv<EB, O>, CTX, JsLocation, String) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is NumericNode.Integer)
+    if (this is JsNumeric.Integer)
         reader(env, context, location, this.get)
     else
         failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(
-                expected = listOf(NumericNode.Integer.nameOfType),
+                expected = listOf(JsNumeric.Integer.nameOfType),
                 actual = this.nameOfType
             )
         )
 
-public fun <EB, O, CTX, T : Number> ValueNode.readAsNumber(
+public fun <EB, O, CTX, T : Number> JsValue.readAsNumber(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
     reader: (ReaderEnv<EB, O>, CTX, JsLocation, String) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is NumericNode)
+    if (this is JsNumeric)
         reader(env, context, location, this.get)
     else
         failure(
             location = location,
             error = env.errorBuilders.invalidTypeError(
-                expected = listOf(NumericNode.Number.nameOfType),
+                expected = listOf(JsNumeric.Number.nameOfType),
                 actual = this.nameOfType
             )
         )
 
-public inline fun <EB, O, CTX, T> ValueNode.readAsStruct(
+public inline fun <EB, O, CTX, T> JsValue.readAsStruct(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
-    reader: (ReaderEnv<EB, O>, CTX, JsLocation, StructNode) -> ReadingResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, JsLocation, JsStruct) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is StructNode)
+    if (this is JsStruct)
         reader(env, context, location, this)
     else
         failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(StructNode.nameOfType), this.nameOfType)
+            error = env.errorBuilders.invalidTypeError(listOf(JsStruct.nameOfType), this.nameOfType)
         )
 
-public inline fun <EB, O, CTX, T> ValueNode.readAsArray(
+public inline fun <EB, O, CTX, T> JsValue.readAsArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
-    reader: (ReaderEnv<EB, O>, CTX, JsLocation, ArrayNode) -> ReadingResult<T>
+    reader: (ReaderEnv<EB, O>, CTX, JsLocation, JsArray) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
-    if (this is ArrayNode)
+    if (this is JsArray)
         reader(env, context, location, this)
     else
         failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(ArrayNode.nameOfType), this.nameOfType)
+            error = env.errorBuilders.invalidTypeError(listOf(JsArray.nameOfType), this.nameOfType)
         )
 
-internal fun ValueNode.getOrNull(path: JsPath): ValueNode? {
-    tailrec fun ValueNode.getOrNull(path: JsPath?): ValueNode? =
+internal fun JsValue.getOrNull(path: JsPath): JsValue? {
+    tailrec fun JsValue.getOrNull(path: JsPath?): JsValue? =
         if (path != null)
             when (val element = path.head) {
-                is JsPath.Element.Key -> if (this is StructNode) this[element]?.getOrNull(path.tail) else null
-                is JsPath.Element.Idx -> if (this is ArrayNode) this[element]?.getOrNull(path.tail) else null
+                is JsPath.Element.Key -> if (this is JsStruct) this[element]?.getOrNull(path.tail) else null
+                is JsPath.Element.Idx -> if (this is JsArray) this[element]?.getOrNull(path.tail) else null
             }
         else
             this
@@ -123,4 +123,4 @@ internal fun ValueNode.getOrNull(path: JsPath): ValueNode? {
     return this.getOrNull(path)
 }
 
-internal operator fun StructNode.contains(path: JsPath): Boolean = this.getOrNull(path) != null
+internal operator fun JsStruct.contains(path: JsPath): Boolean = this.getOrNull(path) != null

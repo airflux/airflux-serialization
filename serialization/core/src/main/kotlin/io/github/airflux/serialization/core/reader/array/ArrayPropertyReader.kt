@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBui
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.JsArray
 
 /**
  * Read a node which represent as array.
@@ -35,7 +35,7 @@ public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
-    source: ArrayNode,
+    source: JsArray,
     itemsReader: Reader<EB, O, CTX, T>
 ): ReadingResult<List<T>>
     where O : FailFastOption {
@@ -62,7 +62,7 @@ public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
-    source: ArrayNode,
+    source: JsArray,
     prefixItemReaders: List<Reader<EB, O, CTX, T>>,
     errorIfAdditionalItems: Boolean
 ): ReadingResult<List<T>>
@@ -101,7 +101,7 @@ public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
-    source: ArrayNode,
+    source: JsArray,
     prefixItemReaders: List<Reader<EB, O, CTX, T>>,
     itemsReader: Reader<EB, O, CTX, T>
 ): ReadingResult<List<T>>

@@ -19,13 +19,13 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsString
 import io.kotest.core.spec.style.FreeSpec
 
-internal class NullNodeTest : FreeSpec() {
+internal class JsNullTest : FreeSpec() {
 
     init {
-        "The NullNode type" - {
+        "The JsNull type" - {
 
             "then the toString() method should return the expected string" {
-                NullNode shouldBeEqualsString "null"
+                JsNull shouldBeEqualsString "null"
             }
         }
     }

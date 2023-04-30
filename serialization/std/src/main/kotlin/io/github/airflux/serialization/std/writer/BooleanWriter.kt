@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.BooleanNode
+import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.writer.Writer
 
 /**
  * Writer for primitive [Boolean] type.
  */
 public fun <O, CTX> booleanWriter(): Writer<O, CTX, Boolean> =
-    Writer { _, _, _, value -> if (value) BooleanNode.True else BooleanNode.False }
+    Writer { _, _, _, value -> if (value) JsBoolean.True else JsBoolean.False }
