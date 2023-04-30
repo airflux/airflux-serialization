@@ -16,20 +16,20 @@
 
 package io.github.airflux.serialization.core.location
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 
 public sealed interface Location {
 
     public val isEmpty: Boolean
 
-    public fun append(key: String): Location = append(PropertyPath.Element.Key(key))
-    public fun append(idx: Int): Location = append(PropertyPath.Element.Idx(idx))
-    public fun append(element: PropertyPath.Element): Location = Element(element, this)
-    public fun append(path: PropertyPath): Location =
+    public fun append(key: String): Location = append(JsPath.Element.Key(key))
+    public fun append(idx: Int): Location = append(JsPath.Element.Idx(idx))
+    public fun append(element: JsPath.Element): Location = Element(element, this)
+    public fun append(path: JsPath): Location =
         path.foldLeft(this) { location, element -> location.append(element) }
 
-    public fun <R> foldLeft(initial: R, operation: (R, PropertyPath.Element) -> R): R {
-        tailrec fun <R> foldLeft(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
+    public fun <R> foldLeft(initial: R, operation: (R, JsPath.Element) -> R): R {
+        tailrec fun <R> foldLeft(initial: R, location: Location, operation: (R, JsPath.Element) -> R): R =
             when (location) {
                 is Root -> initial
                 is Element -> foldLeft(operation(initial, location.head), location.tail, operation)
@@ -38,8 +38,8 @@ public sealed interface Location {
         return foldLeft(initial, this, operation)
     }
 
-    public fun <R> foldRight(initial: R, operation: (R, PropertyPath.Element) -> R): R {
-        fun <R> foldRight(initial: R, location: Location, operation: (R, PropertyPath.Element) -> R): R =
+    public fun <R> foldRight(initial: R, operation: (R, JsPath.Element) -> R): R {
+        fun <R> foldRight(initial: R, location: Location, operation: (R, JsPath.Element) -> R): R =
             when (location) {
                 is Root -> initial
                 is Element -> operation(foldRight(initial, location.tail, operation), location.head)
@@ -47,7 +47,7 @@ public sealed interface Location {
         return foldRight(initial, this, operation)
     }
 
-    private class Element(val head: PropertyPath.Element, val tail: Location) : Location {
+    private class Element(val head: JsPath.Element, val tail: Location) : Location {
 
         override val isEmpty: Boolean = false
 

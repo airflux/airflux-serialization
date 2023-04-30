@@ -19,10 +19,10 @@ package io.github.airflux.serialization.dsl.value
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.LookupResult
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.value.ValueNode
 
 public operator fun ValueNode.div(key: String): LookupResult =
-    this.lookup(Location, PropertyPath.Element.Key(key))
+    this.lookup(Location, JsPath.Element.Key(key))
 
-public operator fun ValueNode.div(idx: Int): LookupResult = this.lookup(Location, PropertyPath.Element.Idx(idx))
+public operator fun ValueNode.div(idx: Int): LookupResult = this.lookup(Location, JsPath.Element.Idx(idx))

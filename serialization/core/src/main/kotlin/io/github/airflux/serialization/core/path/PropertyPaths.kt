@@ -17,12 +17,12 @@
 package io.github.airflux.serialization.core.path
 
 @JvmInline
-public value class PropertyPaths private constructor(public val items: List<PropertyPath>) {
+public value class PropertyPaths private constructor(public val items: List<JsPath>) {
 
-    public constructor(path: PropertyPath) : this(listOf(path))
-    public constructor(path: PropertyPath, alt: PropertyPath) : this(listOf(path, alt))
+    public constructor(path: JsPath) : this(listOf(path))
+    public constructor(path: JsPath, alt: JsPath) : this(listOf(path, alt))
 
-    public fun append(path: PropertyPath): PropertyPaths = if (path in items) this else PropertyPaths(items + path)
+    public fun append(path: JsPath): PropertyPaths = if (path in items) this else PropertyPaths(items + path)
 
     public fun append(paths: PropertyPaths): PropertyPaths {
         val appendablePaths = paths.items.filter { path -> path !in items }

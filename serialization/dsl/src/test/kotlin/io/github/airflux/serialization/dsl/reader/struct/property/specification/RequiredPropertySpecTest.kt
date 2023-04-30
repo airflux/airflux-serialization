@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -68,7 +68,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)
 
                 "then the paths parameter must contain only the passed name" {
-                    spec.paths shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
+                    spec.paths shouldBe PropertyPaths(JsPath(ID_PROPERTY_NAME))
                 }
 
                 "when the reader has read a property named id" - {
@@ -115,7 +115,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
             }
 
             "when creating the instance by a property path" - {
-                val path = PropertyPath(ID_PROPERTY_NAME)
+                val path = JsPath(ID_PROPERTY_NAME)
                 val spec = required(path = path, reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
@@ -218,7 +218,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
-                    specWithAlternative.paths shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
+                    specWithAlternative.paths shouldBe PropertyPaths(JsPath(ID_PROPERTY_NAME))
                 }
 
                 "when the main reader has successfully read" - {

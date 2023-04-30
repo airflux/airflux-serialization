@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.common.DummyValidator
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -53,7 +53,7 @@ internal class ReaderValidationTest : FreeSpec() {
     init {
         "The extension function Reader#validation" - {
             val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
-                val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
+                val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                 readRequired(env, context, lookup, stringReader)
             }
 

@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.dsl.path
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 
-public infix operator fun PropertyPath.Companion.div(key: String): PropertyPath = PropertyPath(key)
-public infix operator fun PropertyPath.Companion.div(idx: Int): PropertyPath = PropertyPath(idx)
+public infix operator fun JsPath.Companion.div(key: String): JsPath = JsPath(key)
+public infix operator fun JsPath.Companion.div(idx: Int): JsPath = JsPath(idx)
 
-public infix operator fun PropertyPath.div(key: String): PropertyPath = append(key)
-public infix operator fun PropertyPath.div(idx: Int): PropertyPath = append(idx)
+public infix operator fun JsPath.div(key: String): JsPath = append(key)
+public infix operator fun JsPath.div(idx: Int): JsPath = append(idx)

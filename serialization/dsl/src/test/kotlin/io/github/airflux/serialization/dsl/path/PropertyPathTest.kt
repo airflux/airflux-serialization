@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.path
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
@@ -24,50 +24,50 @@ internal class PropertyPathTest : FreeSpec() {
 
     init {
 
-        "The PropertyPath type" - {
+        "The JsPath type" - {
 
-            "PropertyPath#Companion#div(String) function" - {
-                val path = PropertyPath / "user"
+            "JsPath#Companion#div(String) function" - {
+                val path = JsPath / "user"
 
                 "should have elements in the order they were passed" {
-                    path shouldContainExactly listOf(PropertyPath.Element.Key("user"))
+                    path shouldContainExactly listOf(JsPath.Element.Key("user"))
                 }
             }
 
-            "PropertyPath#Companion#div(Int) function" - {
-                val path = PropertyPath / 0
+            "JsPath#Companion#div(Int) function" - {
+                val path = JsPath / 0
 
                 "should have elements in the order they were passed" {
-                    path shouldContainExactly listOf(PropertyPath.Element.Idx(0))
+                    path shouldContainExactly listOf(JsPath.Element.Idx(0))
                 }
             }
 
-            "PropertyPath#div(String) function" - {
-                val path = PropertyPath / "user" / "name"
+            "JsPath#div(String) function" - {
+                val path = JsPath / "user" / "name"
 
                 "should have elements in the order they were passed" {
                     path shouldContainExactly listOf(
-                        PropertyPath.Element.Key("user"),
-                        PropertyPath.Element.Key("name")
+                        JsPath.Element.Key("user"),
+                        JsPath.Element.Key("name")
                     )
                 }
             }
 
-            "PropertyPath#div(Int) function" - {
-                val path = PropertyPath / "phones" / 0
+            "JsPath#div(Int) function" - {
+                val path = JsPath / "phones" / 0
 
                 "should have elements in the order they were passed" {
                     path shouldContainExactly listOf(
-                        PropertyPath.Element.Key("phones"),
-                        PropertyPath.Element.Idx(0)
+                        JsPath.Element.Key("phones"),
+                        JsPath.Element.Idx(0)
                     )
                 }
             }
         }
     }
 
-    private infix fun PropertyPath.shouldContainExactly(expected: Collection<PropertyPath.Element>) {
-        fun PropertyPath.toList(): List<PropertyPath.Element> =
+    private infix fun JsPath.shouldContainExactly(expected: Collection<JsPath.Element>) {
+        fun JsPath.toList(): List<JsPath.Element> =
             foldLeft(mutableListOf()) { acc, elem -> acc.apply { add(elem) } }
         this.toList() shouldContainExactly expected
     }

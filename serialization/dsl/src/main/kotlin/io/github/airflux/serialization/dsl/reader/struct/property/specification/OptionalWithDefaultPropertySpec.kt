@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.PropertyPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -30,10 +30,10 @@ public fun <EB, O, CTX, T> optional(
     default: (ReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
-    optional(PropertyPath(name), reader, default)
+    optional(JsPath(name), reader, default)
 
 public fun <EB, O, CTX, T> optional(
-    path: PropertyPath,
+    path: JsPath,
     reader: Reader<EB, O, CTX, T>,
     default: (ReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec<EB, O, CTX, T>

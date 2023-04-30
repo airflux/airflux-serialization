@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsString
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -60,7 +60,7 @@ internal class StructNodeTest : FreeSpec() {
                 }
 
                 "then the method of getting the value of the element by path element should return null" {
-                    struct[PropertyPath.Element.Key(USER_PROPERTY_NAME)] shouldBe null
+                    struct[JsPath.Element.Key(USER_PROPERTY_NAME)] shouldBe null
                 }
 
                 "then the toString() method should return the expected string" {
@@ -111,8 +111,8 @@ internal class StructNodeTest : FreeSpec() {
                 "then the method of getting the value of the element by path element should return a specific value" - {
                     withData(
                         listOf(
-                            PropertyPath.Element.Key(USER_PROPERTY_NAME) to USER_PROPERTY_VALUE,
-                            PropertyPath.Element.Key(IS_ACTIVE_PROPERTY_NAME) to IS_ACTIVE_PROPERTY_VALUE
+                            JsPath.Element.Key(USER_PROPERTY_NAME) to USER_PROPERTY_VALUE,
+                            JsPath.Element.Key(IS_ACTIVE_PROPERTY_NAME) to IS_ACTIVE_PROPERTY_VALUE
                         )
                     ) { (key, value) ->
                         struct[key] shouldBe value

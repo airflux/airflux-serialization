@@ -26,10 +26,10 @@ internal class PropertyPathsTest : FreeSpec() {
 
     companion object {
         private const val FIRST_PROPERTY_NAME = "first"
-        private val FIRST_PATH = PropertyPath(FIRST_PROPERTY_NAME)
+        private val FIRST_PATH = JsPath(FIRST_PROPERTY_NAME)
 
         private const val SECOND_PROPERTY_NAME = "second"
-        private val SECOND_PATH = PropertyPath(SECOND_PROPERTY_NAME)
+        private val SECOND_PATH = JsPath(SECOND_PROPERTY_NAME)
     }
 
     init {

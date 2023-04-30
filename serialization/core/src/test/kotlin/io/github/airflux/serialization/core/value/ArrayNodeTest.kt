@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsString
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -58,7 +58,7 @@ internal class ArrayNodeTest : FreeSpec() {
                 }
 
                 "then the method of getting the value of the element by path element should return null" {
-                    array[PropertyPath.Element.Idx(0)] shouldBe null
+                    array[JsPath.Element.Idx(0)] shouldBe null
                 }
 
                 "then the toString() method should return the expected string" {
@@ -95,8 +95,8 @@ internal class ArrayNodeTest : FreeSpec() {
                 "then the method of getting the value of the element by path element should return a specific value" - {
                     withData(
                         listOf(
-                            Pair(PropertyPath.Element.Idx(0), FIRST_ITEM),
-                            Pair(PropertyPath.Element.Idx(1), SECOND_ITEM)
+                            Pair(JsPath.Element.Idx(0), FIRST_ITEM),
+                            Pair(JsPath.Element.Idx(1), SECOND_ITEM)
                         )
                     ) { (index, value) ->
                         array[index] shouldBe value

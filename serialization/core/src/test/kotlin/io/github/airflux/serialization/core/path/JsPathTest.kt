@@ -21,7 +21,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class PropertyPathTest : FreeSpec() {
+internal class JsPathTest : FreeSpec() {
 
     companion object {
         private const val USER = "user"
@@ -31,14 +31,14 @@ internal class PropertyPathTest : FreeSpec() {
     }
 
     init {
-        "A PropertyPath type" - {
+        "A JsPath type" - {
             val keyUser = USER
 
             "create from named path element '$keyUser'" - {
-                val path = PropertyPath(keyUser)
+                val path = JsPath(keyUser)
 
-                "should have element of type PropertyPath#Element#Key with value '$keyUser'" {
-                    path shouldContainExactly listOf(PropertyPath.Element.Key(keyUser))
+                "should have element of type JsPath#Element#Key with value '$keyUser'" {
+                    path shouldContainExactly listOf(JsPath.Element.Key(keyUser))
                 }
 
                 "method 'toString() should return '#/$keyUser'" {
@@ -46,13 +46,13 @@ internal class PropertyPathTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    PropertyPath(USER).shouldBeEqualsContract(
-                        y = PropertyPath(USER),
-                        z = PropertyPath(USER),
+                    JsPath(USER).shouldBeEqualsContract(
+                        y = JsPath(USER),
+                        z = JsPath(USER),
                         others = listOf(
-                            PropertyPath(NAME),
-                            PropertyPath(USER).append(IDX_0),
-                            PropertyPath(USER).append(NAME).append(IDX_0)
+                            JsPath(NAME),
+                            JsPath(USER).append(IDX_0),
+                            JsPath(USER).append(NAME).append(IDX_0)
                         )
                     )
                 }
@@ -63,8 +63,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath shouldContainExactly listOf(
-                            PropertyPath.Element.Key(keyUser),
-                            PropertyPath.Element.Key(keyName)
+                            JsPath.Element.Key(keyUser),
+                            JsPath.Element.Key(keyName)
                         )
                     }
 
@@ -79,8 +79,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath shouldContainExactly listOf(
-                            PropertyPath.Element.Key(keyUser),
-                            PropertyPath.Element.Idx(idx)
+                            JsPath.Element.Key(keyUser),
+                            JsPath.Element.Idx(idx)
                         )
                     }
 
@@ -92,10 +92,10 @@ internal class PropertyPathTest : FreeSpec() {
 
             val firstIdx = IDX_0
             "create from index path element '$firstIdx'" - {
-                val path = PropertyPath(firstIdx)
+                val path = JsPath(firstIdx)
 
-                "should have element of type PropertyPath#Element#Idx with value '$firstIdx'" {
-                    path shouldContainExactly listOf(PropertyPath.Element.Idx(firstIdx))
+                "should have element of type JsPath#Element#Idx with value '$firstIdx'" {
+                    path shouldContainExactly listOf(JsPath.Element.Idx(firstIdx))
                 }
 
                 "method 'toString() should return '#[$firstIdx]'" {
@@ -103,13 +103,13 @@ internal class PropertyPathTest : FreeSpec() {
                 }
 
                 "should comply with equals() and hashCode() contract" {
-                    PropertyPath(IDX_0).shouldBeEqualsContract(
-                        y = PropertyPath(IDX_0),
-                        z = PropertyPath(IDX_0),
+                    JsPath(IDX_0).shouldBeEqualsContract(
+                        y = JsPath(IDX_0),
+                        z = JsPath(IDX_0),
                         others = listOf(
-                            PropertyPath(IDX_1),
-                            PropertyPath(USER).append(IDX_0),
-                            PropertyPath(USER).append(NAME).append(IDX_0)
+                            JsPath(IDX_1),
+                            JsPath(USER).append(IDX_0),
+                            JsPath(USER).append(NAME).append(IDX_0)
                         )
                     )
                 }
@@ -120,8 +120,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath shouldContainExactly listOf(
-                            PropertyPath.Element.Idx(firstIdx),
-                            PropertyPath.Element.Key(keyName)
+                            JsPath.Element.Idx(firstIdx),
+                            JsPath.Element.Key(keyName)
                         )
                     }
 
@@ -136,8 +136,8 @@ internal class PropertyPathTest : FreeSpec() {
 
                     "should have elements in the order they were added" {
                         updatedPath shouldContainExactly listOf(
-                            PropertyPath.Element.Idx(firstIdx),
-                            PropertyPath.Element.Idx(secondIdx)
+                            JsPath.Element.Idx(firstIdx),
+                            JsPath.Element.Idx(secondIdx)
                         )
                     }
 
@@ -148,22 +148,22 @@ internal class PropertyPathTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                PropertyPath(USER).append(NAME).shouldBeEqualsContract(
-                    y = PropertyPath(USER).append(NAME),
-                    z = PropertyPath(USER).append(NAME),
+                JsPath(USER).append(NAME).shouldBeEqualsContract(
+                    y = JsPath(USER).append(NAME),
+                    z = JsPath(USER).append(NAME),
                     others = listOf(
-                        PropertyPath(NAME),
-                        PropertyPath(USER),
-                        PropertyPath(USER).append(IDX_0),
-                        PropertyPath(USER).append(NAME).append(IDX_0)
+                        JsPath(NAME),
+                        JsPath(USER),
+                        JsPath(USER).append(IDX_0),
+                        JsPath(USER).append(NAME).append(IDX_0)
                     )
                 )
             }
         }
     }
 
-    private infix fun PropertyPath.shouldContainExactly(expected: Collection<PropertyPath.Element>) {
-        fun PropertyPath.toList(): List<PropertyPath.Element> =
+    private infix fun JsPath.shouldContainExactly(expected: Collection<JsPath.Element>) {
+        fun JsPath.toList(): List<JsPath.Element> =
             foldLeft(mutableListOf()) { acc, elem -> acc.apply { add(elem) } }
         this.toList() shouldContainExactly expected
     }

@@ -16,15 +16,15 @@
 
 package io.github.airflux.serialization.core.path
 
-public sealed interface PropertyPath {
+public sealed interface JsPath {
 
     public val head: Element
-    public val tail: PropertyPath?
+    public val tail: JsPath?
 
-    public fun append(key: String): PropertyPath = append(Element.Key(key))
-    public fun append(idx: Int): PropertyPath = append(Element.Idx(idx))
-    public fun append(element: Element): PropertyPath =
-        foldRight(PropertyPath(element)) { acc, item -> Multiple(item, acc) }
+    public fun append(key: String): JsPath = append(Element.Key(key))
+    public fun append(idx: Int): JsPath = append(Element.Idx(idx))
+    public fun append(element: Element): JsPath =
+        foldRight(JsPath(element)) { acc, item -> Multiple(item, acc) }
 
     public fun <R> foldLeft(initial: R, operation: (R, Element) -> R): R
     public fun <R> foldRight(initial: R, operation: (R, Element) -> R): R
@@ -40,9 +40,9 @@ public sealed interface PropertyPath {
         }
     }
 
-    private class Single(override val head: Element) : PropertyPath {
+    private class Single(override val head: Element) : JsPath {
 
-        override val tail: PropertyPath?
+        override val tail: JsPath?
             get() = null
 
         override fun <R> foldLeft(initial: R, operation: (R, Element) -> R): R = operation(initial, head)
@@ -56,17 +56,17 @@ public sealed interface PropertyPath {
         override fun equals(other: Any?): Boolean = this === other || (other is Single && this.head == other.head)
     }
 
-    private class Multiple(override val head: Element, override val tail: PropertyPath?) : PropertyPath {
+    private class Multiple(override val head: Element, override val tail: JsPath?) : JsPath {
 
         override fun <R> foldLeft(initial: R, operation: (R, Element) -> R): R {
-            tailrec fun <R> foldLeft(initial: R, path: PropertyPath?, operation: (R, Element) -> R): R =
+            tailrec fun <R> foldLeft(initial: R, path: JsPath?, operation: (R, Element) -> R): R =
                 if (path == null) initial else foldLeft(operation(initial, path.head), path.tail, operation)
 
             return foldLeft(initial, this, operation)
         }
 
         override fun <R> foldRight(initial: R, operation: (R, Element) -> R): R {
-            fun <R> foldRight(initial: R, path: PropertyPath?, operation: (R, Element) -> R): R =
+            fun <R> foldRight(initial: R, path: JsPath?, operation: (R, Element) -> R): R =
                 if (path == null) initial else operation(foldRight(initial, path.tail, operation), path.head)
 
             return foldRight(initial, this, operation)
@@ -80,7 +80,7 @@ public sealed interface PropertyPath {
         override fun hashCode(): Int = foldLeft(7) { acc, item -> acc * 31 + item.hashCode() }
 
         override fun equals(other: Any?): Boolean {
-            tailrec fun equals(self: PropertyPath?, other: PropertyPath?): Boolean =
+            tailrec fun equals(self: JsPath?, other: JsPath?): Boolean =
                 when {
                     self != null && other != null ->
                         if (self.head == other.head) equals(self.tail, other.tail) else false
@@ -95,12 +95,12 @@ public sealed interface PropertyPath {
     public companion object {
 
         @JvmStatic
-        public operator fun invoke(key: String): PropertyPath = Single(Element.Key(key))
+        public operator fun invoke(key: String): JsPath = Single(Element.Key(key))
 
         @JvmStatic
-        public operator fun invoke(idx: Int): PropertyPath = Single(Element.Idx(idx))
+        public operator fun invoke(idx: Int): JsPath = Single(Element.Idx(idx))
 
         @JvmStatic
-        public operator fun invoke(element: Element): PropertyPath = Single(element)
+        public operator fun invoke(element: Element): JsPath = Single(element)
     }
 }

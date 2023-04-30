@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.lookup
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -153,13 +153,13 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "1.1",
                         source = StructNode(ID to StringNode(VALUE)),
-                        path = PropertyPath(ID),
+                        path = JsPath(ID),
                         result = LookupResult.Defined(location = LOCATION.append(ID), value = StringNode(VALUE))
                     ),
                     TestCaseData.WithPath(
                         description = "1.2",
                         source = ArrayNode(StringNode(VALUE)),
-                        path = PropertyPath(IDX),
+                        path = JsPath(IDX),
                         result = LookupResult.Defined(location = LOCATION.append(IDX), value = StringNode(VALUE))
                     ),
 
@@ -171,7 +171,7 @@ internal class LookupTest : FreeSpec() {
                                 ID to StringNode(VALUE)
                             )
                         ),
-                        path = PropertyPath(USER).append(ID),
+                        path = JsPath(USER).append(ID),
                         result = LookupResult.Defined(
                             location = LOCATION.append(USER).append(ID),
                             value = StringNode(VALUE)
@@ -180,7 +180,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "2.2",
                         source = StructNode(PHONES to ArrayNode(StringNode(VALUE))),
-                        path = PropertyPath(PHONES).append(IDX),
+                        path = JsPath(PHONES).append(IDX),
                         result = LookupResult.Defined(
                             location = LOCATION.append(PHONES).append(IDX),
                             value = StringNode(VALUE)
@@ -191,7 +191,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "3.1",
                         source = StructNode(),
-                        path = PropertyPath(ID),
+                        path = JsPath(ID),
                         result = LookupResult.Undefined.PathMissing(
                             location = LOCATION.append(ID)
                         )
@@ -199,7 +199,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "3.2",
                         source = StructNode(),
-                        path = PropertyPath(USER).append(ID),
+                        path = JsPath(USER).append(ID),
                         result = LookupResult.Undefined.PathMissing(
                             location = LOCATION.append(USER).append(ID)
                         )
@@ -207,7 +207,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "3.3",
                         source = StructNode(),
-                        path = PropertyPath(PHONES).append(IDX),
+                        path = JsPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.PathMissing(
                             location = LOCATION.append(PHONES).append(IDX)
                         )
@@ -217,19 +217,19 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "4.1",
                         source = ArrayNode(),
-                        path = PropertyPath(IDX),
+                        path = JsPath(IDX),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(IDX))
                     ),
                     TestCaseData.WithPath(
                         description = "4.2",
                         source = ArrayNode(),
-                        path = PropertyPath(IDX).append(ID),
+                        path = JsPath(IDX).append(ID),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(IDX).append(ID))
                     ),
                     TestCaseData.WithPath(
                         description = "4.3",
                         source = ArrayNode(),
-                        path = PropertyPath(PHONES).append(IDX),
+                        path = JsPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
@@ -239,7 +239,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "4.4",
                         source = StructNode(PHONES to ArrayNode()),
-                        path = PropertyPath(PHONES).append(IDX),
+                        path = JsPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(PHONES).append(IDX))
                     ),
 
@@ -247,7 +247,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "5.1",
                         source = StringNode(VALUE),
-                        path = PropertyPath(ID),
+                        path = JsPath(ID),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
@@ -257,7 +257,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "5.2",
                         source = StringNode(VALUE),
-                        path = PropertyPath(USER).append(ID),
+                        path = JsPath(USER).append(ID),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
@@ -267,7 +267,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "5.3",
                         source = StringNode(VALUE),
-                        path = PropertyPath(PHONES).append(IDX),
+                        path = JsPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
                             expected = listOf(StructNode.nameOfType),
@@ -279,7 +279,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "6.1",
                         source = StructNode(ACCOUNT to StringNode(VALUE)),
-                        path = PropertyPath(ACCOUNT).append(USER),
+                        path = JsPath(ACCOUNT).append(USER),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION.append(ACCOUNT),
                             expected = listOf(StructNode.nameOfType),
@@ -289,7 +289,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "6.2",
                         source = StructNode(ACCOUNT to StringNode(VALUE)),
-                        path = PropertyPath(ACCOUNT).append(USER).append(ID),
+                        path = JsPath(ACCOUNT).append(USER).append(ID),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION.append(ACCOUNT),
                             expected = listOf(StructNode.nameOfType),
@@ -299,7 +299,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "6.3",
                         source = StructNode(ACCOUNT to StringNode(VALUE)),
-                        path = PropertyPath(ACCOUNT).append(USER).append(IDX),
+                        path = JsPath(ACCOUNT).append(USER).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION.append(ACCOUNT),
                             expected = listOf(StructNode.nameOfType),
@@ -311,7 +311,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "7.1",
                         source = StringNode(VALUE),
-                        path = PropertyPath(IDX),
+                        path = JsPath(IDX),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
                             expected = listOf(ArrayNode.nameOfType),
@@ -321,7 +321,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "7.2",
                         source = StringNode(VALUE),
-                        path = PropertyPath(IDX).append(ID),
+                        path = JsPath(IDX).append(ID),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION,
                             expected = listOf(ArrayNode.nameOfType),
@@ -333,7 +333,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "8.1",
                         source = StructNode(PHONES to StringNode(VALUE)),
-                        path = PropertyPath(PHONES).append(IDX),
+                        path = JsPath(PHONES).append(IDX),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION.append(PHONES),
                             expected = listOf(ArrayNode.nameOfType),
@@ -343,7 +343,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "8.2",
                         source = StructNode(PHONES to StringNode(VALUE)),
-                        path = PropertyPath(PHONES).append(IDX).append(ID),
+                        path = JsPath(PHONES).append(IDX).append(ID),
                         result = LookupResult.Undefined.InvalidType(
                             breakpoint = LOCATION.append(PHONES),
                             expected = listOf(ArrayNode.nameOfType),
@@ -355,7 +355,7 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "9.1",
                         source = StructNode(ID to StringNode(VALUE)),
-                        path = PropertyPath(USER),
+                        path = JsPath(USER),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(USER))
                     ),
                     TestCaseData.WithPath(
@@ -365,7 +365,7 @@ internal class LookupTest : FreeSpec() {
                                 ID to StringNode(VALUE)
                             )
                         ),
-                        path = PropertyPath(ACCOUNT).append(USER),
+                        path = JsPath(ACCOUNT).append(USER),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(ACCOUNT).append(USER))
                     ),
 
@@ -373,13 +373,13 @@ internal class LookupTest : FreeSpec() {
                     TestCaseData.WithPath(
                         description = "10.1",
                         source = ArrayNode(StringNode(VALUE)),
-                        path = PropertyPath(UNKNOWN_IDX),
+                        path = JsPath(UNKNOWN_IDX),
                         result = LookupResult.Undefined.PathMissing(location = LOCATION.append(UNKNOWN_IDX))
                     ),
                     TestCaseData.WithPath(
                         description = "10.2",
                         source = StructNode(PHONES to ArrayNode(StringNode(VALUE))),
-                        path = PropertyPath(PHONES).append(UNKNOWN_IDX),
+                        path = JsPath(PHONES).append(UNKNOWN_IDX),
                         result = LookupResult.Undefined.PathMissing(
                             location = LOCATION.append(PHONES).append(UNKNOWN_IDX)
                         )
@@ -582,7 +582,7 @@ internal class LookupTest : FreeSpec() {
             key: String,
             val result: LookupResult
         ) : WithDataTestName {
-            val key: PropertyPath.Element.Key = PropertyPath.Element.Key(key)
+            val key: JsPath.Element.Key = JsPath.Element.Key(key)
             override fun dataTestName(): String = "$description. source: $source, key: $key, result: $result"
         }
 
@@ -592,14 +592,14 @@ internal class LookupTest : FreeSpec() {
             index: Int,
             val result: LookupResult
         ) : WithDataTestName {
-            val index: PropertyPath.Element.Idx = PropertyPath.Element.Idx(index)
+            val index: JsPath.Element.Idx = JsPath.Element.Idx(index)
             override fun dataTestName(): String = "$description. source: $source, index: $index, result: $result"
         }
 
         internal class WithPath(
             val description: String,
             val source: ValueNode,
-            val path: PropertyPath,
+            val path: JsPath,
             val result: LookupResult
         ) : TestCaseData(), WithDataTestName {
             override fun dataTestName(): String = "$description. source: $source, path: $path, result: $result"

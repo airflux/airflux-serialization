@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 
 public sealed class ValueNode {
     public abstract val nameOfType: String
@@ -110,7 +110,7 @@ public class ArrayNode(private val items: List<ValueNode> = emptyList()) : Value
 
     override val nameOfType: String = ArrayNode.nameOfType
 
-    public operator fun get(idx: PropertyPath.Element.Idx): ValueNode? = get(idx.get)
+    public operator fun get(idx: JsPath.Element.Idx): ValueNode? = get(idx.get)
 
     public operator fun get(idx: Int): ValueNode? = items.getOrNull(idx)
 
@@ -142,7 +142,7 @@ public class StructNode(
 
     override val nameOfType: String = StructNode.nameOfType
 
-    public operator fun get(key: PropertyPath.Element.Key): ValueNode? = get(key.get)
+    public operator fun get(key: JsPath.Element.Key): ValueNode? = get(key.get)
 
     public operator fun get(key: String): ValueNode? = properties[key]
 

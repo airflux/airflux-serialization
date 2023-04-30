@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.nulls.shouldBeNull
@@ -47,9 +47,9 @@ internal class GetOrNullTest : FreeSpec() {
                 withData(
                     nameFn = { "${it.first}" },
                     listOf(
-                        Pair(PropertyPath("user").append("name"), StringNode(USER_NAME_VALUE)),
+                        Pair(JsPath("user").append("name"), StringNode(USER_NAME_VALUE)),
                         Pair(
-                            PropertyPath("user").append("phones").append(0).append("value"),
+                            JsPath("user").append("phones").append(0).append("value"),
                             StringNode(PHONE_NUMBER_VALUE)
                         ),
                     )
@@ -63,12 +63,12 @@ internal class GetOrNullTest : FreeSpec() {
                 withData(
                     nameFn = { "$it" },
                     listOf(
-                        PropertyPath("id"),
-                        PropertyPath("user").append("id"),
-                        PropertyPath("user").append(0),
-                        PropertyPath("user").append("phones").append("title"),
-                        PropertyPath("user").append("phones").append(1),
-                        PropertyPath("user").append("phones").append(0).append("title"),
+                        JsPath("id"),
+                        JsPath("user").append("id"),
+                        JsPath("user").append(0),
+                        JsPath("user").append("phones").append("title"),
+                        JsPath("user").append("phones").append(1),
+                        JsPath("user").append("phones").append(0).append("title"),
                     )
                 ) { path ->
                     val result = SOURCE.getOrNull(path)
