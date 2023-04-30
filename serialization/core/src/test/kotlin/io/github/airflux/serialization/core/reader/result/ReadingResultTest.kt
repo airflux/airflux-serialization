@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
@@ -276,7 +276,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                     "when the value satisfies the predicate" - {
                         val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
 
                         "then filter should return the original value" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
@@ -286,7 +286,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                     "when the value does not satisfy the predicate" - {
                         val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
 
                         "then filter should return null" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
@@ -297,7 +297,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                 "when the value in the result is null" - {
                     val result: ReadingResult<String?> = success(location = LOCATION, value = null)
-                    val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
@@ -316,7 +316,7 @@ internal class ReadingResultTest : FreeSpec() {
                         actual = JsBoolean.nameOfType
                     )
                 )
-                val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }
 

@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.filter
 import io.github.airflux.serialization.core.reader.ifNullValue
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 
@@ -43,7 +43,7 @@ public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.or(
     StructPropertySpec(paths = paths.append(alt.paths), reader = reader or alt.reader)
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.filter(
-    predicate: ReaderPredicate<EB, O, CTX, T & Any>
+    predicate: JsPredicate<EB, O, CTX, T & Any>
 ): StructPropertySpec<EB, O, CTX, T?> =
     StructPropertySpec(paths = paths, reader = reader.filter(predicate))
 

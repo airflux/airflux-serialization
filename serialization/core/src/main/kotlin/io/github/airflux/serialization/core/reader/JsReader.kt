@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
@@ -83,7 +83,7 @@ public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.or(alt: JsReader<EB, O,
     }
 
 public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.filter(
-    predicate: ReaderPredicate<EB, O, CTX, T & Any>
+    predicate: JsPredicate<EB, O, CTX, T & Any>
 ): JsReader<EB, O, CTX, T?> =
     JsReader { env, context, location, source ->
         this@filter.read(env, context, location, source)

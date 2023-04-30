@@ -18,11 +18,11 @@ package io.github.airflux.serialization.core.common
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 
 internal class DummyReaderPredicate<EB, O, CTX, T : Any>(
     val block: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T) -> Boolean
-) : ReaderPredicate<EB, O, CTX, T> {
+) : JsPredicate<EB, O, CTX, T> {
 
     constructor(result: Boolean) : this({ _, _, _, _ -> result })
 

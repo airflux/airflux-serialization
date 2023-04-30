@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.map
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
@@ -213,7 +213,8 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
 
                         "when the value satisfy the predicate" - {
-                            val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                            val predicate: JsPredicate<EB, Unit, Unit, String> =
+                                DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
                                 val result = spec.filter(predicate)
@@ -227,7 +228,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         }
 
                         "when the value does not satisfy the predicate" - {
-                            val predicate: ReaderPredicate<EB, Unit, Unit, String> =
+                            val predicate: JsPredicate<EB, Unit, Unit, String> =
                                 DummyReaderPredicate(result = false)
 
                             "then filter should return the null value" {
@@ -244,7 +245,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                     "when the value in the result is null" - {
                         val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
 
@@ -260,7 +261,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                     "then should be returned a read error" {
                         val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
                         val result = spec.filter(predicate)

@@ -38,8 +38,8 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
 
     init {
         "The 'AND' combinator" - {
-            val leftFilter = ReaderPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value > MIN_VALUE }
-            val rightFilter = ReaderPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value < MAX_VALUE }
+            val leftFilter = JsPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value > MIN_VALUE }
+            val rightFilter = JsPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value < MAX_VALUE }
             val composedFilter = leftFilter and rightFilter
             withData(
                 nameFn = { it.first },
@@ -58,8 +58,8 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
         }
 
         "The 'OR' combinator" - {
-            val leftFilter = ReaderPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value < MIN_VALUE }
-            val rightFilter = ReaderPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value > MAX_VALUE }
+            val leftFilter = JsPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value < MIN_VALUE }
+            val rightFilter = JsPredicate<EB, Unit, Unit, Int> { _, _, _, value -> value > MAX_VALUE }
             val composedFilter = leftFilter or rightFilter
             withData(
                 nameFn = { it.first },

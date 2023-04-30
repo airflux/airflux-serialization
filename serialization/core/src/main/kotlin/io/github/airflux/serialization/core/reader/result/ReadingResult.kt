@@ -21,7 +21,7 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.fold
 
@@ -73,10 +73,11 @@ public sealed class ReadingResult<out T> {
 public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
     flatMap { location, value -> transform(value).toSuccess(location) }
 
-public infix fun <T, R> ReadingResult<T>.flatMap(transform: (JsLocation, T) -> ReadingResult<R>): ReadingResult<R> = fold(
-    ifFailure = ::identity,
-    ifSuccess = { transform(it.location, it.value) }
-)
+public infix fun <T, R> ReadingResult<T>.flatMap(transform: (JsLocation, T) -> ReadingResult<R>): ReadingResult<R> =
+    fold(
+        ifFailure = ::identity,
+        ifSuccess = { transform(it.location, it.value) }
+    )
 
 public inline fun <T, R> ReadingResult<T>.fold(
     ifFailure: (ReadingResult.Failure) -> R,
@@ -121,7 +122,7 @@ public infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.F
 public fun <EB, O, CTX, T> ReadingResult<T>.filter(
     env: JsReaderEnv<EB, O>,
     context: CTX,
-    predicate: ReaderPredicate<EB, O, CTX, T & Any>
+    predicate: JsPredicate<EB, O, CTX, T & Any>
 ): ReadingResult<T?> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
