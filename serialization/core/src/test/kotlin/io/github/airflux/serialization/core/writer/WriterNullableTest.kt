@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -29,7 +29,7 @@ internal class WriterNullableTest : FreeSpec() {
     companion object {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
     }

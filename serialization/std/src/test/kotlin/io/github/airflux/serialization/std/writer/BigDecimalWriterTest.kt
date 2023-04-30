@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
@@ -26,7 +26,7 @@ import java.math.BigDecimal
 internal class BigDecimalWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private const val TEXT_VALUE = "10.50"

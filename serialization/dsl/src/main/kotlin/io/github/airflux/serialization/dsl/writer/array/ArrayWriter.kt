@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
@@ -36,7 +36,7 @@ public class ArrayWriter<O, CTX, T> internal constructor(
 ) : JsWriter<O, CTX, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: Iterable<T>): JsValue? {
+    override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: Iterable<T>): JsValue? {
         val result = source.mapNotNull { item -> itemsWriter.write(env, context, location, item) }
         return if (result.isNotEmpty())
             JsArray(result)

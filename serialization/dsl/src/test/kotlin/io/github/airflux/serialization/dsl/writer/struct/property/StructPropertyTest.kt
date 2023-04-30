@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.struct.property
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.common.DummyWriter
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 import io.kotest.core.spec.style.FreeSpec
@@ -31,7 +31,7 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 

@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
@@ -40,7 +40,7 @@ public class StructWriter<O, CTX, T> private constructor(
 ) : JsWriter<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? {
+    override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? {
         val items: Map<String, JsValue> = mutableMapOf<String, JsValue>()
             .apply {
                 properties.forEach { property ->

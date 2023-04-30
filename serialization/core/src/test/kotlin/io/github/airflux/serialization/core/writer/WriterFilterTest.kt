@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.writer
 import io.github.airflux.serialization.core.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.assertions.failure
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -30,7 +30,7 @@ internal class WriterFilterTest : FreeSpec() {
     companion object {
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
     }

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.writer.struct.property.specification
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.common.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -32,7 +32,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
 
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 

@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.core.writer.env
 
-public data class WriterEnv<O>(
+public data class JsWriterEnv<O>(
     public val options: O
 )

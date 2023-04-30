@@ -38,7 +38,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCt
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
 import java.math.BigDecimal
@@ -70,7 +70,7 @@ fun main() {
     val response = Response(tender = tender)
 
     val writerEnv =
-        WriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+        JsWriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
     val writerCtx = WriterCtx()
     val output = response.serialization(mapper, writerEnv, writerCtx, ResponseWriter)
     println(output)

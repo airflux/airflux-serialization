@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class ShortWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
     }
