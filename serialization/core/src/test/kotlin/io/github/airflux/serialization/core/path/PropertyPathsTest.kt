@@ -34,10 +34,10 @@ internal class PropertyPathsTest : FreeSpec() {
 
     init {
 
-        "The PropertyPaths type" - {
+        "The JsPaths type" - {
 
-            "when the value of the PropertyPaths type is created with only one item" - {
-                val paths = PropertyPaths(FIRST_PATH)
+            "when the value of the JsPaths type is created with only one item" - {
+                val paths = JsPaths(FIRST_PATH)
 
                 "then the value should have only the passed element" {
                     paths.items shouldContainExactly listOf(FIRST_PATH)
@@ -48,8 +48,8 @@ internal class PropertyPathsTest : FreeSpec() {
                 }
             }
 
-            "when the value of the PropertyPaths type is created with two items" - {
-                val paths = PropertyPaths(FIRST_PATH, SECOND_PATH)
+            "when the value of the JsPaths type is created with two items" - {
+                val paths = JsPaths(FIRST_PATH, SECOND_PATH)
 
                 "then the value should have only the passed elements" {
                     paths.items shouldContainExactly listOf(FIRST_PATH, SECOND_PATH)
@@ -60,8 +60,8 @@ internal class PropertyPathsTest : FreeSpec() {
                 }
             }
 
-            "when some path is added to the value of the PropertyPaths type" - {
-                val paths = PropertyPaths(FIRST_PATH)
+            "when some path is added to the value of the JsPaths type" - {
+                val paths = JsPaths(FIRST_PATH)
 
                 "when another path is unique" - {
                     val mergedPaths = paths.append(SECOND_PATH)
@@ -80,11 +80,11 @@ internal class PropertyPathsTest : FreeSpec() {
                 }
             }
 
-            "when some paths are added to the value of the PropertyPaths type" - {
-                val paths = PropertyPaths(FIRST_PATH)
+            "when some paths are added to the value of the JsPaths type" - {
+                val paths = JsPaths(FIRST_PATH)
 
                 "when added paths are unique" - {
-                    val mergedPaths = paths.append(PropertyPaths(SECOND_PATH))
+                    val mergedPaths = paths.append(JsPaths(SECOND_PATH))
 
                     "then the new value should have all elements" {
                         mergedPaths.items shouldContainExactly listOf(FIRST_PATH, SECOND_PATH)
@@ -92,7 +92,7 @@ internal class PropertyPathsTest : FreeSpec() {
                 }
 
                 "when added paths are not unique" - {
-                    val mergedPaths = paths.append(PropertyPaths(FIRST_PATH))
+                    val mergedPaths = paths.append(JsPaths(FIRST_PATH))
 
                     "then the same instance should be returned" {
                         mergedPaths.items shouldBeSameInstanceAs paths.items
@@ -101,12 +101,12 @@ internal class PropertyPathsTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                PropertyPaths(FIRST_PATH).shouldBeEqualsContract(
-                    y = PropertyPaths(FIRST_PATH),
-                    z = PropertyPaths(FIRST_PATH),
+                JsPaths(FIRST_PATH).shouldBeEqualsContract(
+                    y = JsPaths(FIRST_PATH),
+                    z = JsPaths(FIRST_PATH),
                     others = listOf(
-                        PropertyPaths(SECOND_PATH),
-                        PropertyPaths(FIRST_PATH).append(SECOND_PATH)
+                        JsPaths(SECOND_PATH),
+                        JsPaths(FIRST_PATH).append(SECOND_PATH)
                     )
                 )
             }

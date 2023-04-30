@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.struct.property
 
 import io.github.airflux.serialization.core.location.Location
 import io.github.airflux.serialization.core.path.JsPath
-import io.github.airflux.serialization.core.path.PropertyPaths
+import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -49,7 +49,7 @@ internal class StructPropertyTest : FreeSpec() {
     init {
 
         "The StructProperty type" - {
-            val spec = StructPropertySpec(paths = PropertyPaths(JsPath(PROPERTY_NAME)), reader = StringReader)
+            val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = StringReader)
             val property = StructProperty(spec)
 
             "then the paths should equal the paths from the spec" {

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.property
 
 import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PropertyPaths
+import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 
 public class StructProperty<EB, O, CTX, T> private constructor(
-    public val paths: PropertyPaths,
+    public val paths: JsPaths,
     private val reader: Reader<EB, O, CTX, T>
 ) {
     public constructor(spec: StructPropertySpec<EB, O, CTX, T>) : this(spec.paths, spec.reader)
