@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.condition
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.std.common.DummyValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
@@ -32,7 +32,7 @@ internal class ConditionValidatorsTest : FreeSpec() {
         private val ENV = JsReaderEnv(Unit, Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
-        private val IsNotEmptyStringValidator: Validator<Unit, Unit, Unit, String> =
+        private val IsNotEmptyStringValidator: JsValidator<Unit, Unit, Unit, String> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 

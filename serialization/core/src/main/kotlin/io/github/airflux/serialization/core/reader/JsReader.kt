@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
 
@@ -91,7 +91,7 @@ public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.filter(
     }
 
 public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.validation(
-    validator: Validator<EB, O, CTX, T>
+    validator: JsValidator<EB, O, CTX, T>
 ): JsReader<EB, O, CTX, T> =
     JsReader { env, context, location, source ->
         this@validation.read(env, context, location, source)

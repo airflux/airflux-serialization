@@ -27,7 +27,7 @@ import io.github.airflux.serialization.core.reader.map
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
@@ -58,7 +58,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: JsReader<EB, Unit, Unit, Int> = DummyReader.int()
 
-        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
+        private val IsNotEmptyStringValidator: JsValidator<EB, Unit, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 

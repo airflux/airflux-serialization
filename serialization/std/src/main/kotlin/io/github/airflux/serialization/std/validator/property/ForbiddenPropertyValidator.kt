@@ -19,14 +19,14 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
-import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
 public class ForbiddenPropertyValidator<EB, O, CTX, T> internal constructor(
     private val predicate: (env: JsReaderEnv<EB, O>, CTX, location: JsLocation) -> Boolean
-) : Validator<EB, O, CTX, T>
+) : JsValidator<EB, O, CTX, T>
     where EB : ForbiddenPropertyValidator.ErrorBuilder {
 
     override fun validate(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): ValidationResult =

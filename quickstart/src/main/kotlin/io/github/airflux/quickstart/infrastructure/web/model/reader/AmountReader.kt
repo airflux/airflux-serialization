@@ -22,11 +22,11 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderEr
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.validation
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.std.validator.number.StdNumberValidator
 import java.math.BigDecimal
 
-private val amountMoreZero: Validator<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal> =
+private val amountMoreZero: JsValidator<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal> =
     StdNumberValidator.exclusiveMinimum<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal>(BigDecimal.ZERO)
 
 val AmountReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, BigDecimal> =

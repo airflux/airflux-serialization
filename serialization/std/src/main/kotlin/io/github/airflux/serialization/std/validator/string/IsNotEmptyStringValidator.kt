@@ -19,12 +19,12 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
-import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
-public class IsNotEmptyStringValidator<EB, O, CTX> internal constructor() : Validator<EB, O, CTX, String?>
+public class IsNotEmptyStringValidator<EB, O, CTX> internal constructor() : JsValidator<EB, O, CTX, String?>
     where EB : IsNotEmptyStringValidator.ErrorBuilder {
 
     override fun validate(

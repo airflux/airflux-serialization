@@ -29,7 +29,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readRequired
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsString
@@ -61,7 +61,7 @@ internal class ReaderValidationTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "when validation is a success" - {
-                    val validator: Validator<EB, Unit, Unit, String> = DummyValidator(result = valid())
+                    val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator(result = valid())
 
                     "then should return the original result" {
                         val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
@@ -73,7 +73,7 @@ internal class ReaderValidationTest : FreeSpec() {
                 }
 
                 "when validation is a failure" - {
-                    val validator: Validator<EB, Unit, Unit, String> = DummyValidator(
+                    val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator(
                         result = invalid(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.Validation.Strings.IsEmpty
@@ -95,7 +95,7 @@ internal class ReaderValidationTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "then validation does not execute and the original result should be returned" {
-                    val validator: Validator<EB, Unit, Unit, String> = DummyValidator { _, _, location, _ ->
+                    val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator { _, _, location, _ ->
                         invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                     }
 

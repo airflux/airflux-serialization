@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.fold
 
 public sealed class ReadingResult<out T> {
@@ -139,7 +139,7 @@ public fun <EB, O, CTX, T> ReadingResult<T>.filter(
 public fun <EB, O, CTX, T> ReadingResult<T>.validation(
     env: JsReaderEnv<EB, O>,
     context: CTX,
-    validator: Validator<EB, O, CTX, T>
+    validator: JsValidator<EB, O, CTX, T>
 ): ReadingResult<T> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->

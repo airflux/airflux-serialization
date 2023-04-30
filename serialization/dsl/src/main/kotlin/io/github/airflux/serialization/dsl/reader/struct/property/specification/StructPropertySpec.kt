@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.ifNullValue
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validation
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 
 public class StructPropertySpec<EB, O, CTX, out T>(
     public val paths: JsPaths,
@@ -33,7 +33,7 @@ public class StructPropertySpec<EB, O, CTX, out T>(
 )
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.validation(
-    validator: Validator<EB, O, CTX, T>
+    validator: JsValidator<EB, O, CTX, T>
 ): StructPropertySpec<EB, O, CTX, T> =
     StructPropertySpec(paths = paths, reader = reader.validation(validator))
 

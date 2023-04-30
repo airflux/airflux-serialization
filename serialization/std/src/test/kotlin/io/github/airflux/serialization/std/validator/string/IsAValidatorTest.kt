@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
 import io.github.airflux.serialization.std.common.kotest.shouldBeValid
@@ -39,7 +39,7 @@ internal class IsAValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: Validator<EB, Unit, Unit, String> = StdStringValidator.isA(IS_DIGITAL)
+            val validator: JsValidator<EB, Unit, Unit, String> = StdStringValidator.isA(IS_DIGITAL)
 
             "when a string is empty" - {
                 val str = ""

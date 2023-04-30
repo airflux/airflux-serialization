@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.
 import io.github.airflux.serialization.core.reader.result.failure
 import io.kotest.core.spec.style.FreeSpec
 
-internal class ValidatorTest : FreeSpec() {
+internal class JsValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(Unit, Unit)
@@ -35,14 +35,14 @@ internal class ValidatorTest : FreeSpec() {
 
     init {
 
-        "The Validator type" - {
+        "The JsValidator type" - {
 
             "testing the or composite operator" - {
 
                 "if the left validator returns success then the right validator doesn't execute" {
-                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
+                    val leftValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
-                    val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
+                    val rightValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
                         invalid(location, ValidationErrors.PathMissing)
                     }
 
@@ -53,12 +53,12 @@ internal class ValidatorTest : FreeSpec() {
                 }
 
                 "if the left validator returns an error" - {
-                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
+                    val leftValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
                         invalid(location, ValidationErrors.PathMissing)
                     }
 
                     "and the right validator returns success then returning the first error" {
-                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
+                        val rightValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
@@ -67,7 +67,7 @@ internal class ValidatorTest : FreeSpec() {
                     }
 
                     "and the right validator returns an error then returning both errors" {
-                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
+                        val rightValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
                             invalid(location, ValidationErrors.InvalidType)
                         }
 
@@ -85,11 +85,11 @@ internal class ValidatorTest : FreeSpec() {
             "testing the and composite operator" - {
 
                 "if the left validator returns an error then the right validator doesn't execute" {
-                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
+                    val leftValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
                         invalid(location, ValidationErrors.PathMissing)
                     }
 
-                    val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
+                    val rightValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
                         invalid(location, ValidationErrors.InvalidType)
                     }
 
@@ -100,10 +100,10 @@ internal class ValidatorTest : FreeSpec() {
                 }
 
                 "if the left validator returns a success" - {
-                    val leftValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
+                    val leftValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                     "and the second validator returns success, then success is returned" {
-                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
+                        val rightValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, _, _ -> valid() }
 
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
@@ -112,7 +112,7 @@ internal class ValidatorTest : FreeSpec() {
                     }
 
                     "and the right validator returns an error, then an error is returned" {
-                        val rightValidator = Validator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
+                        val rightValidator = JsValidator<Unit, Unit, Unit, Unit> { _, _, location, _ ->
                             invalid(location, ValidationErrors.PathMissing)
                         }
 
