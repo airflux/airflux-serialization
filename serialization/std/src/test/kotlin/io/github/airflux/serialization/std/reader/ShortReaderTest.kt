@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
@@ -39,7 +39,7 @@ internal class ShortReaderTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val ShortReader = shortReader<EB, Unit, Unit>()
     }
 
@@ -65,7 +65,7 @@ internal class ShortReaderTest : FreeSpec() {
                 val source: ValueNode = StringNode("abc")
                 val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location,
+                    location = JsLocation,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Integer.nameOfType),
                         actual = StringNode.nameOfType
@@ -92,7 +92,7 @@ internal class ShortReaderTest : FreeSpec() {
                     val source = NumericNode.Integer.valueOrNullOf(value)!!
                     val result = ShortReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeFailure failure(
-                        location = Location,
+                        location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Short::class)
                     )
                 }

@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.env.exception
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
@@ -27,7 +27,7 @@ internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
         private val ENV = ReaderEnv(Unit, Unit)
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {

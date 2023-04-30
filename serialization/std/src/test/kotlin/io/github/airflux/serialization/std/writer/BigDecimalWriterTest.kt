@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
@@ -28,7 +28,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
     companion object {
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private const val TEXT_VALUE = "10.50"
         private const val TEXT_VALUE_WITHOUT_TRAILING_ZEROS = "10.5"
     }

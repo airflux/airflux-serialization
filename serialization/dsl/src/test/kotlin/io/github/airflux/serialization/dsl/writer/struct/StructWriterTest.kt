@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -44,7 +44,7 @@ internal class StructWriterTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = 42
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {

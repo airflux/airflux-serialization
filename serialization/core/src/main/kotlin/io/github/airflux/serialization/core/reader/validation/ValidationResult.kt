@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.reader.validation
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 
 public sealed class ValidationResult {
@@ -36,7 +36,7 @@ public inline fun ValidationResult.ifInvalid(handler: (ReadingResult.Failure) ->
 
 public fun valid(): ValidationResult = ValidationResult.Valid
 
-public fun invalid(location: Location, error: ReadingResult.Error): ValidationResult =
+public fun invalid(location: JsLocation, error: ReadingResult.Error): ValidationResult =
     ReadingResult.Failure(location, error).toInvalid()
 
 public fun ReadingResult.Failure.toInvalid(): ValidationResult = ValidationResult.Invalid(this)

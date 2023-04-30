@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.array
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -36,7 +36,7 @@ public class ArrayWriter<O, CTX, T> internal constructor(
 ) : Writer<O, CTX, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<O>, context: CTX, location: Location, source: Iterable<T>): ValueNode? {
+    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: Iterable<T>): ValueNode? {
         val result = source.mapNotNull { item -> itemsWriter.write(env, context, location, item) }
         return if (result.isNotEmpty())
             ArrayNode(result)

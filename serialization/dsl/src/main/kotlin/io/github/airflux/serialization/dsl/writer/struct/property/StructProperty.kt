@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
@@ -29,7 +29,7 @@ public class StructProperty<O, CTX, T, P> private constructor(
 
     internal constructor(spec: StructPropertySpec<O, CTX, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
-    public fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? =
+    public fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): ValueNode? =
         writer.write(env, context, location, source)
 
     internal companion object {

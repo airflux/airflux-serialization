@@ -16,16 +16,16 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 
 internal class DummyReaderPredicate<EB, O, CTX, T : Any>(
-    val block: (env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T) -> Boolean
+    val block: (env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T) -> Boolean
 ) : ReaderPredicate<EB, O, CTX, T> {
 
     constructor(result: Boolean) : this({ _, _, _, _ -> result })
 
-    override fun test(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Boolean =
+    override fun test(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): Boolean =
         block(env, context, location, value)
 }

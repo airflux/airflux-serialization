@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
@@ -54,7 +54,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
 
@@ -67,7 +67,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
         "The RequiredIfPropertySpec type" - {
 
             "when the predicate returns the true value" - {
-                val readerPredicate = { _: ReaderEnv<EB, Unit>, _: Unit, _: Location -> true }
+                val readerPredicate = { _: ReaderEnv<EB, Unit>, _: Unit, _: JsLocation -> true }
 
                 "when creating the instance by a property name" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = readerPredicate)
@@ -334,7 +334,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val readerPredicate = { _: ReaderEnv<EB, Unit>, _: Unit, _: Location -> false }
+                val readerPredicate = { _: ReaderEnv<EB, Unit>, _: Unit, _: JsLocation -> false }
 
                 "when creating the instance by a property name" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = readerPredicate)

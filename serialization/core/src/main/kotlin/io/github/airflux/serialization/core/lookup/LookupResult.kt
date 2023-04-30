@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.lookup
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPath.Element
 import io.github.airflux.serialization.core.value.ArrayNode
@@ -30,14 +30,14 @@ public sealed class LookupResult {
     public abstract fun apply(key: Element.Key): LookupResult
     public abstract fun apply(idx: Element.Idx): LookupResult
 
-    public data class Defined(val location: Location, val value: ValueNode) : LookupResult() {
+    public data class Defined(val location: JsLocation, val value: ValueNode) : LookupResult() {
         override fun apply(key: Element.Key): LookupResult = value.lookup(location, key)
         override fun apply(idx: Element.Idx): LookupResult = value.lookup(location, idx)
     }
 
     public sealed class Undefined : LookupResult() {
 
-        public data class PathMissing(val location: Location) : Undefined() {
+        public data class PathMissing(val location: JsLocation) : Undefined() {
             override fun apply(key: Element.Key): LookupResult = PathMissing(location = this.location.append(key))
             override fun apply(idx: Element.Idx): LookupResult = PathMissing(location = this.location.append(idx))
         }
@@ -45,7 +45,7 @@ public sealed class LookupResult {
         public data class InvalidType(
             public val expected: Iterable<String>,
             public val actual: String,
-            val breakpoint: Location
+            val breakpoint: JsLocation
         ) : Undefined() {
             override fun apply(key: Element.Key): LookupResult = this
             override fun apply(idx: Element.Idx): LookupResult = this
@@ -53,7 +53,7 @@ public sealed class LookupResult {
     }
 }
 
-public fun ValueNode.lookup(location: Location, key: Element.Key): LookupResult =
+public fun ValueNode.lookup(location: JsLocation, key: Element.Key): LookupResult =
     if (this is StructNode)
         this[key]
             ?.let { LookupResult.Defined(location = location.append(key), value = it) }
@@ -65,7 +65,7 @@ public fun ValueNode.lookup(location: Location, key: Element.Key): LookupResult 
             breakpoint = location
         )
 
-public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult =
+public fun ValueNode.lookup(location: JsLocation, idx: Element.Idx): LookupResult =
     if (this is ArrayNode)
         this[idx]
             ?.let { LookupResult.Defined(location = location.append(idx), value = it) }
@@ -77,8 +77,8 @@ public fun ValueNode.lookup(location: Location, idx: Element.Idx): LookupResult 
             breakpoint = location
         )
 
-public fun ValueNode.lookup(location: Location, path: JsPath): LookupResult {
-    tailrec fun lookup(location: Location, path: JsPath?, source: ValueNode): LookupResult {
+public fun ValueNode.lookup(location: JsLocation, path: JsPath): LookupResult {
+    tailrec fun lookup(location: JsLocation, path: JsPath?, source: ValueNode): LookupResult {
         return if (path != null) {
             when (val element = path.head) {
                 is Element.Key -> if (source is StructNode) {

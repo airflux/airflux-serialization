@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -29,12 +29,12 @@ import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
 
 internal class DummyReader<EB, O, CTX, T>(
-    val result: (ReaderEnv<EB, O>, context: CTX, Location, ValueNode) -> ReadingResult<T>
+    val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, ValueNode) -> ReadingResult<T>
 ) : Reader<EB, O, CTX, T> {
 
     constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReadingResult<T> =
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: ValueNode): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -37,7 +37,7 @@ public fun interface Reader<EB, O, CTX, out T> {
     /**
      * Convert the [ValueNode] into a T
      */
-    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReadingResult<T>
+    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: ValueNode): ReadingResult<T>
 }
 
 /**
@@ -55,7 +55,7 @@ public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.map(transform: (T) -> 
     }
 
 public infix fun <EB, O, CTX, T, R> Reader<EB, O, CTX, T>.flatMapResult(
-    transform: (ReaderEnv<EB, O>, CTX, Location, T) -> ReadingResult<R>
+    transform: (ReaderEnv<EB, O>, CTX, JsLocation, T) -> ReadingResult<R>
 ): Reader<EB, O, CTX, R> =
     Reader { env, context, location, source ->
         this@flatMapResult.read(env, context, location, source)
@@ -99,7 +99,7 @@ public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.validation(
     }
 
 public infix fun <EB, O, CTX, T> Reader<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
 ): Reader<EB, O, CTX, T> = Reader { env, context, location, source ->
     this@ifNullValue.read(env, context, location, source)
         .ifNullValue { defaultValue(env, context, location) }

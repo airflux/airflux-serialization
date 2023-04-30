@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -42,7 +42,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private const val SECOND_ITEM = "second"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private const val MIN_ITEMS = 2
 
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()

@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.reader.struct.readRequired
 public fun <EB, O, CTX, T> required(
     name: String,
     reader: Reader<EB, O, CTX, T>,
-    predicate: (ReaderEnv<EB, O>, CTX, Location) -> Boolean
+    predicate: (ReaderEnv<EB, O>, CTX, JsLocation) -> Boolean
 ): StructPropertySpec<EB, O, CTX, T?>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
@@ -39,7 +39,7 @@ public fun <EB, O, CTX, T> required(
 public fun <EB, O, CTX, T> required(
     path: JsPath,
     reader: Reader<EB, O, CTX, T>,
-    predicate: (ReaderEnv<EB, O>, CTX, Location) -> Boolean
+    predicate: (ReaderEnv<EB, O>, CTX, JsLocation) -> Boolean
 ): StructPropertySpec<EB, O, CTX, T?>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =

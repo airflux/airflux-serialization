@@ -22,7 +22,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-internal class LocationTest : FreeSpec() {
+internal class JsLocationTest : FreeSpec() {
 
     companion object {
         private const val USER = "users"
@@ -33,10 +33,10 @@ internal class LocationTest : FreeSpec() {
     }
 
     init {
-        "The Location type" - {
+        "The JsLocation type" - {
 
             "when empty" - {
-                val location = Location
+                val location = JsLocation
 
                 "should be empty" {
                     location.isEmpty shouldBe true
@@ -86,7 +86,7 @@ internal class LocationTest : FreeSpec() {
             }
 
             "when non-empty" - {
-                val location = Location.append(USER).append(IDX).append(PHONE)
+                val location = JsLocation.append(USER).append(IDX).append(PHONE)
 
                 "should be non-empty" {
                     location.isEmpty shouldBe false
@@ -149,21 +149,21 @@ internal class LocationTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                Location.append(USER).append(PHONE).shouldBeEqualsContract(
-                    y = Location.append(USER).append(PHONE),
-                    z = Location.append(USER).append(PHONE),
+                JsLocation.append(USER).append(PHONE).shouldBeEqualsContract(
+                    y = JsLocation.append(USER).append(PHONE),
+                    z = JsLocation.append(USER).append(PHONE),
                     others = listOf(
-                        Location,
-                        Location.append(USER),
-                        Location.append(PHONE),
-                        Location.append(USER).append(IDX),
-                        Location.append(USER).append(PHONE).append(IDX)
+                        JsLocation,
+                        JsLocation.append(USER),
+                        JsLocation.append(PHONE),
+                        JsLocation.append(USER).append(IDX),
+                        JsLocation.append(USER).append(PHONE).append(IDX)
                     )
                 )
             }
         }
     }
 
-    private fun Location.toRightList(): List<JsPath.Element> =
+    private fun JsLocation.toRightList(): List<JsPath.Element> =
         foldRight(mutableListOf()) { acc, elem -> acc.apply { add(elem) } }
 }

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.DummyReaderPredicate
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -46,7 +46,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
         private val ENV: ReaderEnv<EB, Unit> = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
         private val stringReader = DummyReader.string<EB, Unit, Unit>()
     }

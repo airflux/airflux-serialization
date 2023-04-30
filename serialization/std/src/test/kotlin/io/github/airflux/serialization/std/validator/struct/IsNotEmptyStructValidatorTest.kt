@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -36,7 +36,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "property-id"
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val PROPERTIES: StructProperties<EB, Unit, Unit> = emptyList()
     }
 

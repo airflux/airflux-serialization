@@ -18,18 +18,18 @@ package io.github.airflux.serialization.core.location
 
 import io.github.airflux.serialization.core.path.JsPath
 
-public sealed interface Location {
+public sealed interface JsLocation {
 
     public val isEmpty: Boolean
 
-    public fun append(key: String): Location = append(JsPath.Element.Key(key))
-    public fun append(idx: Int): Location = append(JsPath.Element.Idx(idx))
-    public fun append(element: JsPath.Element): Location = Element(element, this)
-    public fun append(path: JsPath): Location =
+    public fun append(key: String): JsLocation = append(JsPath.Element.Key(key))
+    public fun append(idx: Int): JsLocation = append(JsPath.Element.Idx(idx))
+    public fun append(element: JsPath.Element): JsLocation = Element(element, this)
+    public fun append(path: JsPath): JsLocation =
         path.foldLeft(this) { location, element -> location.append(element) }
 
     public fun <R> foldLeft(initial: R, operation: (R, JsPath.Element) -> R): R {
-        tailrec fun <R> foldLeft(initial: R, location: Location, operation: (R, JsPath.Element) -> R): R =
+        tailrec fun <R> foldLeft(initial: R, location: JsLocation, operation: (R, JsPath.Element) -> R): R =
             when (location) {
                 is Root -> initial
                 is Element -> foldLeft(operation(initial, location.head), location.tail, operation)
@@ -39,7 +39,7 @@ public sealed interface Location {
     }
 
     public fun <R> foldRight(initial: R, operation: (R, JsPath.Element) -> R): R {
-        fun <R> foldRight(initial: R, location: Location, operation: (R, JsPath.Element) -> R): R =
+        fun <R> foldRight(initial: R, location: JsLocation, operation: (R, JsPath.Element) -> R): R =
             when (location) {
                 is Root -> initial
                 is Element -> operation(foldRight(initial, location.tail, operation), location.head)
@@ -47,7 +47,7 @@ public sealed interface Location {
         return foldRight(initial, this, operation)
     }
 
-    private class Element(val head: JsPath.Element, val tail: Location) : Location {
+    private class Element(val head: JsPath.Element, val tail: JsLocation) : JsLocation {
 
         override val isEmpty: Boolean = false
 
@@ -59,7 +59,7 @@ public sealed interface Location {
         override fun hashCode(): Int = foldLeft(7) { v, p -> v * 31 + p.hashCode() }
 
         override fun equals(other: Any?): Boolean {
-            tailrec fun equals(self: Location, other: Location): Boolean = when {
+            tailrec fun equals(self: JsLocation, other: JsLocation): Boolean = when {
                 self is Element && other is Element ->
                     if (self.head == other.head) equals(self.tail, other.tail) else false
 
@@ -67,11 +67,11 @@ public sealed interface Location {
                 else -> false
             }
 
-            return this === other || (other is Location && equals(this, other))
+            return this === other || (other is JsLocation && equals(this, other))
         }
     }
 
-    public companion object Root : Location {
+    public companion object Root : JsLocation {
         override val isEmpty: Boolean = true
         override fun toString(): String = "#"
     }

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -45,7 +45,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
         private const val THIRD_PHONE_VALUE = "789"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()

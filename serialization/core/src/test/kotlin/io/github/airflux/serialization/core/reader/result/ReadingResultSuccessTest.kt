@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -27,14 +27,14 @@ internal class ReadingResultSuccessTest : FreeSpec() {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
 
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
 
         "A ReadingResult#Success type" - {
 
-            "constructor(Location, T)" {
+            "constructor(JsLocation, T)" {
                 val result = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 result.location shouldBe LOCATION

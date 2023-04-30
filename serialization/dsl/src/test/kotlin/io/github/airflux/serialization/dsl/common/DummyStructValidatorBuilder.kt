@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
@@ -37,7 +37,7 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult)
         override fun validate(
             env: ReaderEnv<EB, O>,
             context: CTX,
-            location: Location,
+            location: JsLocation,
             properties: StructProperties<EB, O, CTX>,
             source: StructNode
         ): ValidationResult = result

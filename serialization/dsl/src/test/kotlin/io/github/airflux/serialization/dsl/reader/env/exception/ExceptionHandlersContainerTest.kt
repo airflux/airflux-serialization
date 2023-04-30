@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.env.exception
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -28,10 +28,10 @@ internal class ExceptionHandlersContainerTest : FreeSpec() {
 
     companion object {
         private val specificExceptionHandler =
-            { _: ReaderEnv<Unit, Unit>, _: Location, _: IllegalArgumentException -> JsonErrors.PathMissing }
+            { _: ReaderEnv<Unit, Unit>, _: JsLocation, _: IllegalArgumentException -> JsonErrors.PathMissing }
 
         private val genericExceptionHandler =
-            { _: ReaderEnv<Unit, Unit>, _: Location, _: Exception -> JsonErrors.PathMissing }
+            { _: ReaderEnv<Unit, Unit>, _: JsLocation, _: Exception -> JsonErrors.PathMissing }
     }
 
     init {
@@ -79,7 +79,7 @@ internal class ExceptionHandlersContainerTest : FreeSpec() {
     }
 
     private inline fun <EB, O, reified E : Throwable> exceptionHandlerSpec(
-        noinline handler: (ReaderEnv<EB, O>, Location, E) -> ReadingResult.Error
+        noinline handler: (ReaderEnv<EB, O>, JsLocation, E) -> ReadingResult.Error
     ): ExceptionHandlerSpec<EB, O> =
         ExceptionHandlerSpec(E::class, handler)
 }

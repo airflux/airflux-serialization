@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.property
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.validation.Validator
 
@@ -27,7 +27,7 @@ public object StdPropertyValidator {
      * if a value is present (not equal to null), then an error, otherwise a success.
      */
     public fun <EB, O, CTX, T> forbidden(
-        predicate: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> Boolean
+        predicate: (env: ReaderEnv<EB, O>, context: CTX, location: JsLocation) -> Boolean
     ): Validator<EB, O, CTX, T>
         where EB : ForbiddenPropertyValidator.ErrorBuilder = ForbiddenPropertyValidator(predicate)
 
@@ -36,7 +36,7 @@ public object StdPropertyValidator {
      * if a value is missing (equal to null), then an error, otherwise a success.
      */
     public fun <EB, O, CTX, T> mandatory(
-        predicate: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> Boolean
+        predicate: (env: ReaderEnv<EB, O>, context: CTX, location: JsLocation) -> Boolean
     ): Validator<EB, O, CTX, T>
         where EB : MandatoryPropertyValidator.ErrorBuilder = MandatoryPropertyValidator(predicate)
 }

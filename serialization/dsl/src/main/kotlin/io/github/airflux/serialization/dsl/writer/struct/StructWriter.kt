@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.StructNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -40,7 +40,7 @@ public class StructWriter<O, CTX, T> private constructor(
 ) : Writer<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? {
+    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): ValueNode? {
         val items: Map<String, ValueNode> = mutableMapOf<String, ValueNode>()
             .apply {
                 properties.forEach { property ->

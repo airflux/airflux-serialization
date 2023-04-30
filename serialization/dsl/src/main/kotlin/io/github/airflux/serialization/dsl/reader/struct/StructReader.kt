@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -47,7 +47,7 @@ public fun <EB, O, CTX, T> structReader(
 }
 
 public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
-    block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, Location) -> ReadingResult<T>
+    block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
 ): Reader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = this.build(block)
@@ -55,12 +55,12 @@ public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
 public class StructReader<EB, O, CTX, T> private constructor(
     private val validators: StructValidators<EB, O, CTX>,
     private val properties: StructProperties<EB, O, CTX>,
-    private val resultBuilder: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, Location) -> ReadingResult<T>
+    private val resultBuilder: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
 ) : Reader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: ValueNode): ReadingResult<T> =
+    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: ValueNode): ReadingResult<T> =
         if (source is StructNode)
             read(env, context, location, source)
         else
@@ -69,7 +69,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
                 error = env.errorBuilders.invalidTypeError(listOf(StructNode.nameOfType), source.nameOfType)
             )
 
-    private fun read(env: ReaderEnv<EB, O>, context: CTX, location: Location, source: StructNode): ReadingResult<T> {
+    private fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: StructNode): ReadingResult<T> {
         val failFast = env.options.failFast
         val failures = mutableListOf<ReadingResult.Failure>()
 
@@ -130,7 +130,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
             StructProperty(spec).also { properties.add(it) }
 
         internal fun build(
-            block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, Location) -> ReadingResult<T>
+            block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
         ): Reader<EB, O, CTX, T> {
             val validators: StructValidators<EB, O, CTX> =
                 validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }

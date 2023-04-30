@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -53,7 +53,7 @@ internal class StructReaderTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_VALUE = true
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
     }

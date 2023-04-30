@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -27,4 +27,4 @@ public fun <EB, O, CTX, T : Any> ValueNode.deserialization(
     context: CTX,
     reader: Reader<EB, O, CTX, T>
 ): ReadingResult<T> =
-    reader.read(env, context, Location, this)
+    reader.read(env, context, JsLocation, this)

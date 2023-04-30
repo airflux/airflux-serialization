@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.array
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -34,7 +34,7 @@ import io.github.airflux.serialization.core.value.ArrayNode
 public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
+    location: JsLocation,
     source: ArrayNode,
     itemsReader: Reader<EB, O, CTX, T>
 ): ReadingResult<List<T>>
@@ -61,7 +61,7 @@ public fun <EB, O, CTX, T> readArray(
 public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
+    location: JsLocation,
     source: ArrayNode,
     prefixItemReaders: List<Reader<EB, O, CTX, T>>,
     errorIfAdditionalItems: Boolean
@@ -100,7 +100,7 @@ public fun <EB, O, CTX, T> readArray(
 public fun <EB, O, CTX, T> readArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
+    location: JsLocation,
     source: ArrayNode,
     prefixItemReaders: List<Reader<EB, O, CTX, T>>,
     itemsReader: Reader<EB, O, CTX, T>

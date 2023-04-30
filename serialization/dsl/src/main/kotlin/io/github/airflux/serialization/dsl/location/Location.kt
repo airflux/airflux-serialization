@@ -16,9 +16,9 @@
 
 package io.github.airflux.serialization.dsl.location
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 
-public operator fun Location.div(key: String): Location = append(JsPath.Element.Key(key))
-public operator fun Location.div(idx: Int): Location = append(JsPath.Element.Idx(idx))
-public operator fun Location.div(element: JsPath.Element): Location = append(element)
+public operator fun JsLocation.div(key: String): JsLocation = append(JsPath.Element.Key(key))
+public operator fun JsLocation.div(idx: Int): JsLocation = append(JsPath.Element.Idx(idx))
+public operator fun JsLocation.div(element: JsPath.Element): JsLocation = append(element)

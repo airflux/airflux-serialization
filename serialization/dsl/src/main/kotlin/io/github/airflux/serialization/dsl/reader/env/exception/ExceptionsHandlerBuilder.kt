@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.env.exception
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -40,12 +40,12 @@ public class ExceptionsHandlerBuilder<EB, O> {
     private val handlerSpecs: MutableList<ExceptionHandlerSpec<EB, O>> = mutableListOf()
 
     public inline fun <reified E : Throwable> exception(
-        noinline handler: (ReaderEnv<EB, O>, Location, E) -> ReadingResult.Error
+        noinline handler: (ReaderEnv<EB, O>, JsLocation, E) -> ReadingResult.Error
     ): Unit = exception(E::class, handler)
 
     public fun <E : Throwable> exception(
         exception: KClass<E>,
-        handler: (ReaderEnv<EB, O>, Location, E) -> ReadingResult.Error
+        handler: (ReaderEnv<EB, O>, JsLocation, E) -> ReadingResult.Error
     ) {
         handlerSpecs.add(ExceptionHandlerSpec(exception = exception, handler = handler))
     }

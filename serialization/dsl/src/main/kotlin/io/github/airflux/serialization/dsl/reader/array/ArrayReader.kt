@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.array.readArray
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -69,7 +69,7 @@ public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
 
 public class ArrayReader<EB, O, CTX, T> private constructor(
     private val validators: List<ArrayValidator<EB, O, CTX>>,
-    private val resultBuilder: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReadingResult<List<T>>
+    private val resultBuilder: (ReaderEnv<EB, O>, CTX, JsLocation, ArrayNode) -> ReadingResult<List<T>>
 ) : Reader<EB, O, CTX, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
@@ -78,7 +78,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
     override fun read(
         env: ReaderEnv<EB, O>,
         context: CTX,
-        location: Location,
+        location: JsLocation,
         source: ValueNode
     ): ReadingResult<List<T>> =
         if (source is ArrayNode)
@@ -92,7 +92,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
     private fun read(
         env: ReaderEnv<EB, O>,
         context: CTX,
-        location: Location,
+        location: JsLocation,
         source: ArrayNode
     ): ReadingResult<List<T>> {
         val failFast = env.options.failFast
@@ -181,7 +181,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
             }
 
         private fun build(
-            block: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReadingResult<List<T>>
+            block: (ReaderEnv<EB, O>, CTX, JsLocation, ArrayNode) -> ReadingResult<List<T>>
         ): Reader<EB, O, CTX, List<T>> {
             val validators = validatorBuilders.map { builder -> builder.build() }
                 .takeIf { it.isNotEmpty() }

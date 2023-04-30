@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -44,7 +44,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         private const val THIRD_ITEM = "third"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
         private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
         private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()

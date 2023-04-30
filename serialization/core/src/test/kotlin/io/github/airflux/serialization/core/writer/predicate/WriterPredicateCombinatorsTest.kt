@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.writer.predicate
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
@@ -27,7 +27,7 @@ internal class WriterPredicateCombinatorsTest : FreeSpec() {
     companion object {
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
         private const val MIN_VALUE = 10
         private const val MAX_VALUE = 20

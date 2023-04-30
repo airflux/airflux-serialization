@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NumericNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.ValueNode
@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
 internal class DummyWriter<O, CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<O, CTX, T> {
-    override fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? = result(source)
+    override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): ValueNode? = result(source)
 
     companion object {
         internal fun <O, CTX> intWriter(): Writer<O, CTX, Int> =

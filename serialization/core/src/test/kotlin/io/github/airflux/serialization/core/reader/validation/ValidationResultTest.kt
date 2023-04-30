@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -46,7 +46,7 @@ internal class ValidationResultTest : FreeSpec() {
             }
 
             "when value is invalid" - {
-                val value = invalid(location = Location, error = JsonErrors.PathMissing)
+                val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
 
                 "then the fold method should execute the ifInvalid code block" {
                     var result = 0

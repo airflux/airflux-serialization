@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -37,7 +37,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     companion object {
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val BigDecimalReader = bigDecimalReader<EB, Unit, Unit>()
     }
 
@@ -59,7 +59,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 val source: ValueNode = StringNode("abc")
                 val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location,
+                    location = JsLocation,
                     error = JsonErrors.InvalidType(
                         expected = listOf(NumericNode.Number.nameOfType),
                         actual = StringNode.nameOfType

@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.core.reader.predicate
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 
 public fun interface ReaderPredicate<EB, O, CTX, T : Any> {
-    public fun test(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): Boolean
+    public fun test(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): Boolean
 }
 
 public infix fun <EB, O, CTX, T : Any> ReaderPredicate<EB, O, CTX, T>.or(

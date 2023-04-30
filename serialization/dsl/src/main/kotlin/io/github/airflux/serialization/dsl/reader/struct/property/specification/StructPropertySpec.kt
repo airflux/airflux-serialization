@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
@@ -48,6 +48,6 @@ public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.filter(
     StructPropertySpec(paths = paths, reader = reader.filter(predicate))
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
 ): StructPropertySpec<EB, O, CTX, T> =
     StructPropertySpec(paths = paths, reader = reader.ifNullValue(defaultValue))

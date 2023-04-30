@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.Writer
 import io.github.airflux.serialization.core.writer.env.WriterEnv
@@ -33,7 +33,7 @@ internal class StructPropertyTest : FreeSpec() {
 
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
         private val WRITER: Writer<Unit, Unit, String> = DummyWriter.stringWriter()
     }

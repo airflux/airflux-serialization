@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.common.DummyWriter
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
@@ -31,7 +31,7 @@ internal class WriterOptionalTest : FreeSpec() {
 
         private val ENV = WriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {

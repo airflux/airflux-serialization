@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.core.reader.validation
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 
 public fun interface Validator<EB, O, CTX, in T> {
-    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ValidationResult
+    public fun validate(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): ValidationResult
 }
 
 /*

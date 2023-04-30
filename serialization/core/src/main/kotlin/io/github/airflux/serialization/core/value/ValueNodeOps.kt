@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 
-public fun <EB, O> ValueNode.readAsBoolean(env: ReaderEnv<EB, O>, location: Location): ReadingResult<Boolean>
+public fun <EB, O> ValueNode.readAsBoolean(env: ReaderEnv<EB, O>, location: JsLocation): ReadingResult<Boolean>
     where EB : InvalidTypeErrorBuilder =
     if (this is BooleanNode)
         success(location = location, value = this.get)
@@ -34,7 +34,7 @@ public fun <EB, O> ValueNode.readAsBoolean(env: ReaderEnv<EB, O>, location: Loca
             error = env.errorBuilders.invalidTypeError(listOf(BooleanNode.nameOfType), this.nameOfType)
         )
 
-public fun <EB, O> ValueNode.readAsString(env: ReaderEnv<EB, O>, location: Location): ReadingResult<String>
+public fun <EB, O> ValueNode.readAsString(env: ReaderEnv<EB, O>, location: JsLocation): ReadingResult<String>
     where EB : InvalidTypeErrorBuilder =
     if (this is StringNode)
         success(location = location, value = this.get)
@@ -47,8 +47,8 @@ public fun <EB, O> ValueNode.readAsString(env: ReaderEnv<EB, O>, location: Locat
 public fun <EB, O, CTX, T : Number> ValueNode.readAsInteger(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, String) -> ReadingResult<T>
+    location: JsLocation,
+    reader: (ReaderEnv<EB, O>, CTX, JsLocation, String) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is NumericNode.Integer)
@@ -65,8 +65,8 @@ public fun <EB, O, CTX, T : Number> ValueNode.readAsInteger(
 public fun <EB, O, CTX, T : Number> ValueNode.readAsNumber(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, String) -> ReadingResult<T>
+    location: JsLocation,
+    reader: (ReaderEnv<EB, O>, CTX, JsLocation, String) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is NumericNode)
@@ -83,8 +83,8 @@ public fun <EB, O, CTX, T : Number> ValueNode.readAsNumber(
 public inline fun <EB, O, CTX, T> ValueNode.readAsStruct(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, StructNode) -> ReadingResult<T>
+    location: JsLocation,
+    reader: (ReaderEnv<EB, O>, CTX, JsLocation, StructNode) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is StructNode)
@@ -98,8 +98,8 @@ public inline fun <EB, O, CTX, T> ValueNode.readAsStruct(
 public inline fun <EB, O, CTX, T> ValueNode.readAsArray(
     env: ReaderEnv<EB, O>,
     context: CTX,
-    location: Location,
-    reader: (ReaderEnv<EB, O>, CTX, Location, ArrayNode) -> ReadingResult<T>
+    location: JsLocation,
+    reader: (ReaderEnv<EB, O>, CTX, JsLocation, ArrayNode) -> ReadingResult<T>
 ): ReadingResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is ArrayNode)

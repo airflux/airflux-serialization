@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.Reader
@@ -52,7 +52,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
         private val ENV = ReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
 

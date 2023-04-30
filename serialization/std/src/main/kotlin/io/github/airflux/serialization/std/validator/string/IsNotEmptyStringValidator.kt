@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
@@ -30,7 +30,7 @@ public class IsNotEmptyStringValidator<EB, O, CTX> internal constructor() : Vali
     override fun validate(
         env: ReaderEnv<EB, O>,
         context: CTX,
-        location: Location,
+        location: JsLocation,
         value: String?
     ): ValidationResult = if (value != null) {
         if (value.isNotEmpty())

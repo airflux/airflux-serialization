@@ -16,14 +16,14 @@
 
 package io.github.airflux.serialization.core.writer
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.NullNode
 import io.github.airflux.serialization.core.value.ValueNode
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
 public fun interface Writer<O, CTX, in T> {
-    public fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode?
+    public fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): ValueNode?
 }
 
 public fun <O, CTX, T, R> Writer<O, CTX, T>.contramap(transform: (R) -> T): Writer<O, CTX, R> =

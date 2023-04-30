@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.core.writer.predicate
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
 public fun interface WriterPredicate<O, CTX, T> {
-    public fun test(env: WriterEnv<O>, context: CTX, location: Location, value: T): Boolean
+    public fun test(env: WriterEnv<O>, context: CTX, location: JsLocation, value: T): Boolean
 }
 
 public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.or(
