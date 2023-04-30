@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.lookup
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.LookupResult
+import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.value.ArrayNode
 import io.github.airflux.serialization.core.value.StringNode
 import io.github.airflux.serialization.core.value.StructNode
@@ -25,7 +25,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
-internal class LookupOpsTest : FreeSpec() {
+internal class JsLookupTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -41,18 +41,18 @@ internal class LookupOpsTest : FreeSpec() {
 
     init {
 
-        "The LookupResult#div extension-function" - {
+        "The JsLookup#div extension-function" - {
 
             "when lookup by a key element of the path" - {
 
                 "when the receiver is of type Defined" - {
-                    val defined = LookupResult.Defined(LOCATION, StructNode(ID_PROPERTY_NAME to StringNode(VALUE)))
+                    val defined = JsLookup.Defined(LOCATION, StructNode(ID_PROPERTY_NAME to StringNode(VALUE)))
 
                     "when the value contains the finding key" - {
 
                         "then should return the value as an instance of type Defined" {
                             val lookup = defined / ID_PROPERTY_NAME
-                            lookup shouldBe LookupResult.Defined(LOCATION.append(ID_PROPERTY_NAME), StringNode(VALUE))
+                            lookup shouldBe JsLookup.Defined(LOCATION.append(ID_PROPERTY_NAME), StringNode(VALUE))
                         }
                     }
 
@@ -60,7 +60,7 @@ internal class LookupOpsTest : FreeSpec() {
 
                         "then should return the value as an instance of type Undefined#PathMissing" {
                             val lookup = defined / UNKNOWN_PROPERTY_NAME
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(UNKNOWN_PROPERTY_NAME))
+                            lookup shouldBe JsLookup.Undefined.PathMissing(LOCATION.append(UNKNOWN_PROPERTY_NAME))
                         }
                     }
 
@@ -68,7 +68,7 @@ internal class LookupOpsTest : FreeSpec() {
 
                         "then should return the value as an instance of type Undefined#InvalidType" {
                             val lookup = defined / ARRAY_INDEX
-                            lookup shouldBe LookupResult.Undefined.InvalidType(
+                            lookup shouldBe JsLookup.Undefined.InvalidType(
                                 expected = listOf(ArrayNode.nameOfType),
                                 actual = StructNode.nameOfType,
                                 breakpoint = LOCATION
@@ -78,16 +78,16 @@ internal class LookupOpsTest : FreeSpec() {
                 }
 
                 "when the receiver is of type Undefined#PathMissing" - {
-                    val undefined = LookupResult.Undefined.PathMissing(location = LOCATION)
+                    val undefined = JsLookup.Undefined.PathMissing(location = LOCATION)
 
                     "then should return the new instance of Undefined#PathMissing type" {
                         val lookup = undefined / ID_PROPERTY_NAME
-                        lookup shouldBe LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
+                        lookup shouldBe JsLookup.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
                     }
                 }
 
                 "when the receiver is of type Undefined#InvalidType" - {
-                    val undefined = LookupResult.Undefined.InvalidType(
+                    val undefined = JsLookup.Undefined.InvalidType(
                         expected = listOf(StructNode.nameOfType),
                         actual = StringNode.nameOfType,
                         breakpoint = LOCATION
@@ -103,13 +103,13 @@ internal class LookupOpsTest : FreeSpec() {
             "when lookup by an index element of the path" - {
 
                 "when the receiver is of type Defined" - {
-                    val defined = LookupResult.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
+                    val defined = JsLookup.Defined(LOCATION, ArrayNode(StringNode(VALUE)))
 
                     "when the value contains the finding index" - {
 
                         "then should return the value as an instance of type Defined" {
                             val lookup = defined / ARRAY_INDEX
-                            lookup shouldBe LookupResult.Defined(LOCATION.append(ARRAY_INDEX), StringNode(VALUE))
+                            lookup shouldBe JsLookup.Defined(LOCATION.append(ARRAY_INDEX), StringNode(VALUE))
                         }
                     }
 
@@ -117,7 +117,7 @@ internal class LookupOpsTest : FreeSpec() {
 
                         "then should return the value as an instance of type Undefined#PathMissing" {
                             val lookup = defined / UNKNOWN_ARRAY_INDEX
-                            lookup shouldBe LookupResult.Undefined.PathMissing(LOCATION.append(UNKNOWN_ARRAY_INDEX))
+                            lookup shouldBe JsLookup.Undefined.PathMissing(LOCATION.append(UNKNOWN_ARRAY_INDEX))
                         }
                     }
 
@@ -125,7 +125,7 @@ internal class LookupOpsTest : FreeSpec() {
 
                         "then should return the value as an instance of type Undefined#InvalidType" {
                             val lookup = defined / ID_PROPERTY_NAME
-                            lookup shouldBe LookupResult.Undefined.InvalidType(
+                            lookup shouldBe JsLookup.Undefined.InvalidType(
                                 expected = listOf(StructNode.nameOfType),
                                 actual = ArrayNode.nameOfType,
                                 breakpoint = LOCATION
@@ -135,16 +135,16 @@ internal class LookupOpsTest : FreeSpec() {
                 }
 
                 "when the receiver is of type Undefined#PathMissing" - {
-                    val undefined = LookupResult.Undefined.PathMissing(location = LOCATION)
+                    val undefined = JsLookup.Undefined.PathMissing(location = LOCATION)
 
                     "then should return the new instance of Undefined#PathMissing type" {
                         val lookup = undefined / ARRAY_INDEX
-                        lookup shouldBe LookupResult.Undefined.PathMissing(location = LOCATION.append(ARRAY_INDEX))
+                        lookup shouldBe JsLookup.Undefined.PathMissing(location = LOCATION.append(ARRAY_INDEX))
                     }
                 }
 
                 "when the receiver is of type Undefined#InvalidType" - {
-                    val undefined = LookupResult.Undefined.InvalidType(
+                    val undefined = JsLookup.Undefined.InvalidType(
                         expected = listOf(ArrayNode.nameOfType),
                         actual = StructNode.nameOfType,
                         breakpoint = LOCATION

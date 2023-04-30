@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.LookupResult
+import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.Reader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -50,7 +50,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
         "The readRequired function" - {
 
             "when the element is defined" - {
-                val lookup: LookupResult = LookupResult.Defined(
+                val lookup: JsLookup = JsLookup.Defined(
                     location = LOCATION.append(ID_PROPERTY_NAME),
                     value = StringNode(ID_PROPERTY_VALUE)
                 )
@@ -66,8 +66,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is missing" - {
-                val lookup: LookupResult =
-                    LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
+                val lookup: JsLookup =
+                    JsLookup.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the missing path error" {
                     val result: ReadingResult<String?> =
@@ -80,7 +80,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is invalid type" - {
-                val lookup: LookupResult = LookupResult.Undefined.InvalidType(
+                val lookup: JsLookup = JsLookup.Undefined.InvalidType(
                     expected = listOf(StructNode.nameOfType),
                     actual = StringNode.nameOfType,
                     breakpoint = LOCATION.append(ID_PROPERTY_NAME)

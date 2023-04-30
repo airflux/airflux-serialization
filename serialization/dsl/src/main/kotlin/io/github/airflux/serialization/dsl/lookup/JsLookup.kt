@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.lookup
 
-import io.github.airflux.serialization.core.lookup.LookupResult
+import io.github.airflux.serialization.core.lookup.JsLookup
 
-public operator fun LookupResult.div(key: String): LookupResult = apply(key)
-public operator fun LookupResult.div(idx: Int): LookupResult = apply(idx)
+public operator fun JsLookup.div(key: String): JsLookup = apply(key)
+public operator fun JsLookup.div(idx: Int): JsLookup = apply(idx)
