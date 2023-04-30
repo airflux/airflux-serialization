@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.filter
-import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
+import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
 public fun <O, CTX, T : Any, P : Any> nonNullable(
     name: String,
@@ -70,6 +70,6 @@ public class StructPropertySpec<O, CTX, T, P> internal constructor(
 }
 
 public fun <O, CTX, T, P> StructPropertySpec<O, CTX, T, P>.filter(
-    predicate: WriterPredicate<O, CTX, P & Any>
+    predicate: JsPredicate<O, CTX, P & Any>
 ): StructPropertySpec<O, CTX, T, P> =
     StructPropertySpec(name = this.name, from = this.from, writer = writer.filter(predicate))

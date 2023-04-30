@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
+import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
 public fun interface JsWriter<O, CTX, in T> {
     public fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue?
@@ -41,7 +41,7 @@ public fun <O, CTX, T : Any> JsWriter<O, CTX, T>.optional(): JsWriter<O, CTX, T?
         if (source != null) this@optional.write(env, context, location, source) else null
     }
 
-public fun <O, CTX, T> JsWriter<O, CTX, T>.filter(predicate: WriterPredicate<O, CTX, T & Any>): JsWriter<O, CTX, T?> =
+public fun <O, CTX, T> JsWriter<O, CTX, T>.filter(predicate: JsPredicate<O, CTX, T & Any>): JsWriter<O, CTX, T?> =
     JsWriter { env, context, location, source ->
         if (source != null && predicate.test(env, context, location, source))
             this@filter.write(env, context, location, source)

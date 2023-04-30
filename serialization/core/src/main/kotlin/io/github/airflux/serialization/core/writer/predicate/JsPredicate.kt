@@ -19,25 +19,25 @@ package io.github.airflux.serialization.core.writer.predicate
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 
-public fun interface WriterPredicate<O, CTX, T> {
+public fun interface JsPredicate<O, CTX, T> {
     public fun test(env: JsWriterEnv<O>, context: CTX, location: JsLocation, value: T): Boolean
 }
 
-public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.or(
-    alt: WriterPredicate<O, CTX, T>
-): WriterPredicate<O, CTX, T> {
+public infix fun <O, CTX, T> JsPredicate<O, CTX, T>.or(
+    alt: JsPredicate<O, CTX, T>
+): JsPredicate<O, CTX, T> {
     val self = this
-    return WriterPredicate { env, context, location, value ->
+    return JsPredicate { env, context, location, value ->
         val result = self.test(env, context, location, value)
         if (result) true else alt.test(env, context, location, value)
     }
 }
 
-public infix fun <O, CTX, T> WriterPredicate<O, CTX, T>.and(
-    alt: WriterPredicate<O, CTX, T>
-): WriterPredicate<O, CTX, T> {
+public infix fun <O, CTX, T> JsPredicate<O, CTX, T>.and(
+    alt: JsPredicate<O, CTX, T>
+): JsPredicate<O, CTX, T> {
     val self = this
-    return WriterPredicate { env, context, location, value ->
+    return JsPredicate { env, context, location, value ->
         val result = self.test(env, context, location, value)
         if (result) alt.test(env, context, location, value) else false
     }
