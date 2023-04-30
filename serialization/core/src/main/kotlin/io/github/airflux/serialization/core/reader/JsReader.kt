@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.filter
@@ -37,7 +37,7 @@ public fun interface JsReader<EB, O, CTX, out T> {
     /**
      * Convert the [JsValue] into a T
      */
-    public fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T>
+    public fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T>
 }
 
 /**
@@ -55,7 +55,7 @@ public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.map(transform: (T) -
     }
 
 public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.flatMapResult(
-    transform: (ReaderEnv<EB, O>, CTX, JsLocation, T) -> ReadingResult<R>
+    transform: (JsReaderEnv<EB, O>, CTX, JsLocation, T) -> ReadingResult<R>
 ): JsReader<EB, O, CTX, R> =
     JsReader { env, context, location, source ->
         this@flatMapResult.read(env, context, location, source)
@@ -99,7 +99,7 @@ public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.validation(
     }
 
 public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
+    defaultValue: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
 ): JsReader<EB, O, CTX, T> = JsReader { env, context, location, source ->
     this@ifNullValue.read(env, context, location, source)
         .ifNullValue { defaultValue(env, context, location) }

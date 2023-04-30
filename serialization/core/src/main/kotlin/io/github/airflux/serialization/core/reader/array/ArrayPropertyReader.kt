@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.array
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -32,7 +32,7 @@ import io.github.airflux.serialization.core.value.JsArray
  * @param itemsReader the reader for items of an array
  */
 public fun <EB, O, CTX, T> readArray(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
     source: JsArray,
@@ -59,7 +59,7 @@ public fun <EB, O, CTX, T> readArray(
  */
 @Suppress("LongParameterList")
 public fun <EB, O, CTX, T> readArray(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
     source: JsArray,
@@ -98,7 +98,7 @@ public fun <EB, O, CTX, T> readArray(
  */
 @Suppress("LongParameterList")
 public fun <EB, O, CTX, T> readArray(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
     location: JsLocation,
     source: JsArray,

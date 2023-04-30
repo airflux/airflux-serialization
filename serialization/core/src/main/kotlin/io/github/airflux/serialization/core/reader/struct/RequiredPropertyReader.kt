@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.struct
 
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -32,7 +32,7 @@ import io.github.airflux.serialization.core.reader.result.failure
  *   that was build using [PathMissingErrorBuilder]
  */
 public fun <EB, O, CTX, T> readRequired(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
     lookup: JsLookup,
     using: JsReader<EB, O, CTX, T>

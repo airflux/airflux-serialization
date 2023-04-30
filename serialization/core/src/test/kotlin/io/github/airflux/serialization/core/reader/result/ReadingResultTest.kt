@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
@@ -41,7 +41,7 @@ internal class ReadingResultTest : FreeSpec() {
         private const val ORIGINAL_VALUE = "10"
         private const val ALTERNATIVE_VALUE = "20"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
     }
@@ -424,7 +424,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val block: () -> ReadingResult<String> = { ORIGINAL_VALUE.toSuccess(LOCATION) }
 
                 "when the context contains the exceptions handler" - {
-                    val env = ReaderEnv(
+                    val env = JsReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
                         exceptionsHandler = { _, _, exception ->
@@ -447,7 +447,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val block: () -> ReadingResult<String> = { throw IllegalStateException() }
 
                 "when the context contains the exceptions handler" - {
-                    val env = ReaderEnv(
+                    val env = JsReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
                         exceptionsHandler = { _, _, exception ->
@@ -469,7 +469,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when the context does not contain the exceptions handler" - {
-                    val env = ReaderEnv(Unit, Unit)
+                    val env = JsReaderEnv(Unit, Unit)
 
                     "then should re-throwing the exception" {
                         shouldThrow<IllegalStateException> {

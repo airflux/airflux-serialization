@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -31,11 +31,11 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsArrayTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsArray ->
+        private val READER = { _: JsReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsArray ->
             success(location = location, value = source.map { (it as JsString).get })
         }
     }

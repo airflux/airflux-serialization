@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -30,11 +30,11 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsStructTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val reader = { _: ReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsStruct ->
+        private val reader = { _: JsReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsStruct ->
             val name = source["name"] as JsString
             success(location = location, value = DTO(name = name.get))
         }

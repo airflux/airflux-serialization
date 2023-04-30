@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -44,7 +44,7 @@ internal class ReaderNullValueTest : FreeSpec() {
         private const val CODE_PROPERTY_VALUE = "code"
         private const val ALTERNATIVE_VALUE = "42"
 
-        private val ENV: ReaderEnv<EB, Unit> = ReaderEnv(EB(), Unit)
+        private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.array
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.array.readArray
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -69,14 +69,14 @@ public fun <EB, O, CTX, T> ArrayReader.Builder<EB, O, CTX, T>.returns(
 
 public class ArrayReader<EB, O, CTX, T> private constructor(
     private val validators: List<ArrayValidator<EB, O, CTX>>,
-    private val resultBuilder: (ReaderEnv<EB, O>, CTX, JsLocation, JsArray) -> ReadingResult<List<T>>
+    private val resultBuilder: (JsReaderEnv<EB, O>, CTX, JsLocation, JsArray) -> ReadingResult<List<T>>
 ) : JsReader<EB, O, CTX, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
     override fun read(
-        env: ReaderEnv<EB, O>,
+        env: JsReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
         source: JsValue
@@ -90,7 +90,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
             )
 
     private fun read(
-        env: ReaderEnv<EB, O>,
+        env: JsReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
         source: JsArray
@@ -181,7 +181,7 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
             }
 
         private fun build(
-            block: (ReaderEnv<EB, O>, CTX, JsLocation, JsArray) -> ReadingResult<List<T>>
+            block: (JsReaderEnv<EB, O>, CTX, JsLocation, JsArray) -> ReadingResult<List<T>>
         ): JsReader<EB, O, CTX, List<T>> {
             val validators = validatorBuilders.map { builder -> builder.build() }
                 .takeIf { it.isNotEmpty() }

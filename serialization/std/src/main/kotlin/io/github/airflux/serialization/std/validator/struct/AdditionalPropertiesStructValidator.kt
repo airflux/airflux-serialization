@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
@@ -35,7 +35,7 @@ public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructo
           O : FailFastOption {
 
     override fun validate(
-        env: ReaderEnv<EB, O>,
+        env: JsReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
         properties: StructProperties<EB, O, CTX>,

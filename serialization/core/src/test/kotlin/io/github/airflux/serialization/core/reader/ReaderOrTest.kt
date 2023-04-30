@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -37,7 +37,7 @@ internal class ReaderOrTest : FreeSpec() {
     companion object {
         private const val LEFT_VALUE = "true"
         private const val RIGHT_VALUE = "false"
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
     }

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -29,7 +29,7 @@ public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : Array
     where EB : IsNotEmptyArrayValidator.ErrorBuilder {
 
     override fun validate(
-        env: ReaderEnv<EB, O>,
+        env: JsReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
         source: JsArray

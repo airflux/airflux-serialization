@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readOptional
 
 public fun <EB, O, CTX, T> optional(
     name: String,
     reader: JsReader<EB, O, CTX, T>,
-    default: (ReaderEnv<EB, O>, CTX) -> T
+    default: (JsReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
     optional(JsPath(name), reader, default)
@@ -35,7 +35,7 @@ public fun <EB, O, CTX, T> optional(
 public fun <EB, O, CTX, T> optional(
     path: JsPath,
     reader: JsReader<EB, O, CTX, T>,
-    default: (ReaderEnv<EB, O>, CTX) -> T
+    default: (JsReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
     StructPropertySpec(

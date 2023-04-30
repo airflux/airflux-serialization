@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -65,7 +65,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 val source = JsStruct()
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
@@ -74,7 +74,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
@@ -87,7 +87,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
@@ -96,7 +96,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
@@ -113,7 +113,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "then the validator should return first error" {
                         val result = validator.validate(envWithFailFastIsTrue, CONTEXT, LOCATION, PROPERTIES, source)
@@ -126,7 +126,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsString
@@ -39,7 +39,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MAX_PROPERTIES = 2
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private val PROPERTIES: StructProperties<EB, Unit, Unit> = emptyList()

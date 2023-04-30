@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -39,7 +39,7 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
-        private val ENV = ReaderEnv(errorBuilders = EB(), options = Unit)
+        private val ENV = JsReaderEnv(errorBuilders = EB(), options = Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 

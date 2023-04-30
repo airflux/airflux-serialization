@@ -20,7 +20,7 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
 import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.fold
@@ -119,7 +119,7 @@ public infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.F
 )
 
 public fun <EB, O, CTX, T> ReadingResult<T>.filter(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
     predicate: ReaderPredicate<EB, O, CTX, T & Any>
 ): ReadingResult<T?> = fold(
@@ -137,7 +137,7 @@ public fun <EB, O, CTX, T> ReadingResult<T>.filter(
 )
 
 public fun <EB, O, CTX, T> ReadingResult<T>.validation(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
     validator: Validator<EB, O, CTX, T>
 ): ReadingResult<T> = fold(
@@ -173,7 +173,7 @@ public fun <E : ReadingResult.Error> E.toFailure(location: JsLocation): ReadingR
  * and using the [io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler] from env to handle it.
  */
 public inline fun <EB, O, T> withCatching(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     location: JsLocation,
     block: () -> ReadingResult<T>
 ): ReadingResult<T> =

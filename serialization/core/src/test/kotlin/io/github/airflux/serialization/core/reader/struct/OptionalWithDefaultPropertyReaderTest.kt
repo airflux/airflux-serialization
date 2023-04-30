@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -40,11 +40,11 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "6028b4e5-bb91-4018-97a8-732eb7084cb8"
         private const val ID_PROPERTY_DEFAULT_VALUE = "7815943d-5c55-4fe6-92f8-0be816caed78"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private val READER: JsReader<EB, Unit, Unit, String> = DummyReader.string()
-        private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> ID_PROPERTY_DEFAULT_VALUE }
+        private val DEFAULT = { _: JsReaderEnv<EB, Unit>, _: Unit -> ID_PROPERTY_DEFAULT_VALUE }
     }
 
     init {

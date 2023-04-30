@@ -17,13 +17,13 @@
 package io.github.airflux.serialization.dsl.reader.array.validator
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.value.JsArray
 
 public fun interface ArrayValidator<EB, O, CTX> {
     public fun validate(
-        env: ReaderEnv<EB, O>,
+        env: JsReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
         source: JsArray

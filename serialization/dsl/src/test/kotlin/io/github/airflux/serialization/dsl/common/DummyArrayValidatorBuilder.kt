@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.common
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -33,7 +33,7 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) 
 
     internal class Validator<EB, O, CTX>(val result: ValidationResult) : ArrayValidator<EB, O, CTX> {
         override fun validate(
-            env: ReaderEnv<EB, O>,
+            env: JsReaderEnv<EB, O>,
             context: CTX,
             location: JsLocation,
             source: JsArray

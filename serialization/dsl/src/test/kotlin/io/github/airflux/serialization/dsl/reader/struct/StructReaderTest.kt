@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -78,7 +78,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "when the source is not the struct type" - {
                         val source = JsString("")
@@ -226,7 +226,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "when the source is not the struct type" - {
                         val source = JsString("")
@@ -412,7 +412,7 @@ internal class StructReaderTest : FreeSpec() {
                 )
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "then it exception should be thrown out from the reader" {
                         shouldThrow<IllegalStateException> {
@@ -422,7 +422,7 @@ internal class StructReaderTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "then it exception should be thrown out from the reader" {
                         shouldThrow<IllegalStateException> {

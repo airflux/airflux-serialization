@@ -17,11 +17,11 @@
 package io.github.airflux.serialization.dsl.reader.env.exception
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.dsl.common.instanceOf
 
 internal class ExceptionHandlersContainer<EB, O>(private val items: List<ExceptionHandlerSpec<EB, O>>) {
-    operator fun get(exception: Throwable): ((ReaderEnv<EB, O>, JsLocation, Throwable) -> ReadingResult.Error)? =
+    operator fun get(exception: Throwable): ((JsReaderEnv<EB, O>, JsLocation, Throwable) -> ReadingResult.Error)? =
         items.find { exception.instanceOf(it.exception) }?.handler
 }

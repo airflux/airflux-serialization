@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.validator.string
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.Validator
@@ -30,7 +30,7 @@ public class MinLengthStringValidator<EB, O, CTX> internal constructor(
     where EB : MinLengthStringValidator.ErrorBuilder {
 
     override fun validate(
-        env: ReaderEnv<EB, O>,
+        env: JsReaderEnv<EB, O>,
         context: CTX,
         location: JsLocation,
         value: String?

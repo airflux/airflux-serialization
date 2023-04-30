@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.map
@@ -51,10 +51,10 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_INT = "10"
         private const val DEFAULT_VALUE = "none"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
-        private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
+        private val DEFAULT = { _: JsReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
         private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: JsReader<EB, Unit, Unit, Int> = DummyReader.int()
 

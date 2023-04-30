@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -38,7 +38,7 @@ import kotlin.reflect.KClass
 internal class LongReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private val LongReader = longReader<EB, Unit, Unit>()

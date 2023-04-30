@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.common
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -29,12 +29,12 @@ import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 
 internal class DummyReader<EB, O, CTX, T>(
-    val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
+    val result: (JsReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
 ) : JsReader<EB, O, CTX, T> {
 
     constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
+    override fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {

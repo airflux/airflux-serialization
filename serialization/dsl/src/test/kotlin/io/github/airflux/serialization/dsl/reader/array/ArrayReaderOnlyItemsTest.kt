@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -64,7 +64,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "when source is not the array type" - {
                         val source = JsString("")
@@ -125,7 +125,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "when source is not the array type" - {
                         val source = JsString("")

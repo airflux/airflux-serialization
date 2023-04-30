@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandl
  * @param options the options of reading.
  * @param exceptionsHandler handler **uncaught** exceptions.
  */
-public class ReaderEnv<EB, O>(
+public class JsReaderEnv<EB, O>(
     public val errorBuilders: EB,
     public val options: O,
     public val exceptionsHandler: ExceptionsHandler<EB, O>? = null
