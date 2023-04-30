@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -47,7 +47,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private const val NAME_PROPERTY_NAME = "title"
         private const val NAME_PROPERTY_VALUE = "property-title"
 
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private val idProperty: StructProperty<EB, OPTS, Unit, String> =

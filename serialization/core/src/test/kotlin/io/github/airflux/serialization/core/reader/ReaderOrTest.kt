@@ -43,12 +43,12 @@ internal class ReaderOrTest : FreeSpec() {
     }
 
     init {
-        "The extension-function Reader#or" - {
+        "The extension-function JsReader#or" - {
 
             "when left reader returns an value" - {
-                val leftReader: Reader<EB, Unit, Unit, String> =
+                val leftReader: JsReader<EB, Unit, Unit, String> =
                     DummyReader(success(location = LOCATION, value = LEFT_VALUE))
-                val rightReader: Reader<EB, Unit, Unit, String> =
+                val rightReader: JsReader<EB, Unit, Unit, String> =
                     DummyReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                 val reader = leftReader or rightReader
@@ -60,12 +60,12 @@ internal class ReaderOrTest : FreeSpec() {
             }
 
             "when left reader returns an error" - {
-                val leftReader: Reader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
+                val leftReader: JsReader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
                     failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                 }
 
                 "when the right reader returns an value" - {
-                    val rightReader: Reader<EB, Unit, Unit, String> =
+                    val rightReader: JsReader<EB, Unit, Unit, String> =
                         DummyReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                     val reader = leftReader or rightReader
@@ -77,7 +77,7 @@ internal class ReaderOrTest : FreeSpec() {
                 }
 
                 "when the right reader returns an error" - {
-                    val rightReader: Reader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
+                    val rightReader: JsReader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
                         failure(
                             location = LOCATION.append("identifier"),
                             error = JsonErrors.InvalidType(

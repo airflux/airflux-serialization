@@ -16,15 +16,15 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.value.readAsBoolean
 
 /**
  * Reader for primitive [Boolean] type.
  */
-public fun <EB, O, CTX> booleanReader(): Reader<EB, O, CTX, Boolean>
+public fun <EB, O, CTX> booleanReader(): JsReader<EB, O, CTX, Boolean>
     where EB : InvalidTypeErrorBuilder =
-    Reader { env, _, location, source ->
+    JsReader { env, _, location, source ->
         source.readAsBoolean(env, location)
     }

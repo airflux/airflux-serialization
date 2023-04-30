@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.common
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.JsValue
 
 internal class DummyReader<EB, O, CTX, T>(
     val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
-) : Reader<EB, O, CTX, T> {
+) : JsReader<EB, O, CTX, T> {
 
     constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
@@ -39,7 +39,7 @@ internal class DummyReader<EB, O, CTX, T>(
 
     internal companion object {
 
-        internal fun <EB, O, CTX> boolean(): Reader<EB, O, CTX, Boolean>
+        internal fun <EB, O, CTX> boolean(): JsReader<EB, O, CTX, Boolean>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
@@ -56,7 +56,7 @@ internal class DummyReader<EB, O, CTX, T>(
                 }
             )
 
-        internal fun <EB, O, CTX> string(): Reader<EB, O, CTX, String>
+        internal fun <EB, O, CTX> string(): JsReader<EB, O, CTX, String>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
@@ -73,7 +73,7 @@ internal class DummyReader<EB, O, CTX, T>(
                 }
             )
 
-        internal fun <EB, O, CTX> int(): Reader<EB, O, CTX, Int>
+        internal fun <EB, O, CTX> int(): JsReader<EB, O, CTX, Int>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
@@ -90,7 +90,7 @@ internal class DummyReader<EB, O, CTX, T>(
                 }
             )
 
-        internal fun <EB, O, CTX> long(): Reader<EB, O, CTX, Long>
+        internal fun <EB, O, CTX> long(): JsReader<EB, O, CTX, Long>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->

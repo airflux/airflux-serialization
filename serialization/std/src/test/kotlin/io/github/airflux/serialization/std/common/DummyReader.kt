@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.std.common
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -28,14 +28,14 @@ import io.github.airflux.serialization.core.value.JsValue
 
 internal class DummyReader<EB, O, CTX, T> private constructor(
     val result: (ReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
-) : Reader<EB, O, CTX, T> {
+) : JsReader<EB, O, CTX, T> {
 
     override fun read(env: ReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
         result(env, context, location, source)
 
     internal companion object {
 
-        internal fun <EB, O, CTX> string(): Reader<EB, O, CTX, String>
+        internal fun <EB, O, CTX> string(): JsReader<EB, O, CTX, String>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->

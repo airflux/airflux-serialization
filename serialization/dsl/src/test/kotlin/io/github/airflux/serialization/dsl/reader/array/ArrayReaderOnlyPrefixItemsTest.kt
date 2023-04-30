@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
@@ -47,7 +47,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
         private val LOCATION = JsLocation
         private const val MIN_ITEMS = 2
 
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
     }
 
     init {
@@ -57,7 +57,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
             "when a reader was created for prefixItems" - {
 
                 "when the additional items do not cause an error" - {
-                    val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
+                    val reader: JsReader<EB, OPTS, Unit, List<String>> = arrayReader {
                         validation(
                             minItems(
                                 expected = MIN_ITEMS,
@@ -260,7 +260,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                 }
 
                 "when the additional items do cause an error" - {
-                    val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
+                    val reader: JsReader<EB, OPTS, Unit, List<String>> = arrayReader {
                         returns(prefixItems = listOf(StringReader, StringReader), items = false)
                     }
 

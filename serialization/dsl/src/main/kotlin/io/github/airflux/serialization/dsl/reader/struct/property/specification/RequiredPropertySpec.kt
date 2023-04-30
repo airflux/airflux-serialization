@@ -19,19 +19,19 @@ package io.github.airflux.serialization.dsl.reader.struct.property.specification
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readRequired
 
-public fun <EB, O, CTX, T> required(name: String, reader: Reader<EB, O, CTX, T>): StructPropertySpec<EB, O, CTX, T>
+public fun <EB, O, CTX, T> required(name: String, reader: JsReader<EB, O, CTX, T>): StructPropertySpec<EB, O, CTX, T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     required(JsPath(name), reader)
 
 public fun <EB, O, CTX, T> required(
     path: JsPath,
-    reader: Reader<EB, O, CTX, T>
+    reader: JsReader<EB, O, CTX, T>
 ): StructPropertySpec<EB, O, CTX, T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =

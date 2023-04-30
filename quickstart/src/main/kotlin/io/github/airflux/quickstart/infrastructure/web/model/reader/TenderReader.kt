@@ -22,14 +22,14 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderEr
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.property.identifierPropertySpec
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonStructReaderValidators
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
 
-val TenderReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Tender> = structReader {
+val TenderReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Tender> = structReader {
     validation(CommonStructReaderValidators)
 
     val id = property(identifierPropertySpec)

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -38,8 +38,8 @@ import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidat
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidators
 
 public fun <EB, O, CTX, T> structReader(
-    block: StructReader.Builder<EB, O, CTX, T>.() -> Reader<EB, O, CTX, T>
-): Reader<EB, O, CTX, T>
+    block: StructReader.Builder<EB, O, CTX, T>.() -> JsReader<EB, O, CTX, T>
+): JsReader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
     val builder = StructReader.Builder<EB, O, CTX, T>()
@@ -48,7 +48,7 @@ public fun <EB, O, CTX, T> structReader(
 
 public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
     block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
-): Reader<EB, O, CTX, T>
+): JsReader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = this.build(block)
 
@@ -56,7 +56,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
     private val validators: StructValidators<EB, O, CTX>,
     private val properties: StructProperties<EB, O, CTX>,
     private val resultBuilder: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
-) : Reader<EB, O, CTX, T>
+) : JsReader<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
@@ -131,7 +131,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
 
         internal fun build(
             block: PropertyValues<EB, O, CTX>.(ReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
-        ): Reader<EB, O, CTX, T> {
+        ): JsReader<EB, O, CTX, T> {
             val validators: StructValidators<EB, O, CTX> =
                 validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }
                     .takeIf { it.isNotEmpty() }

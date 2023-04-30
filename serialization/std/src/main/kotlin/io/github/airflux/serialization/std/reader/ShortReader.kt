@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.toFailure
@@ -26,10 +26,10 @@ import io.github.airflux.serialization.core.value.readAsInteger
 /**
  * Reader for primitive [Short] type.
  */
-public fun <EB, O, CTX> shortReader(): Reader<EB, O, CTX, Short>
+public fun <EB, O, CTX> shortReader(): JsReader<EB, O, CTX, Short>
     where EB : InvalidTypeErrorBuilder,
           EB : ValueCastErrorBuilder =
-    Reader { env, context, location, source ->
+    JsReader { env, context, location, source ->
         source.readAsInteger(env, context, location) { e, _, l, value ->
             try {
                 value.toShort().toSuccess(l)

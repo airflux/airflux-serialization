@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.struct.property.specification
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -55,8 +55,8 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private val DEFAULT = { _: ReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
-        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
-        private val IntReader: Reader<EB, Unit, Unit, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, Unit, Unit, Int> = DummyReader.int()
 
         private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }

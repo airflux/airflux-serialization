@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
@@ -46,8 +46,8 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
-        private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val BooleanReader: JsReader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()
     }
 
     init {
@@ -55,7 +55,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         "The ArrayReader type" - {
 
             "when a reader was created for prefixItems and items" - {
-                val reader: Reader<EB, OPTS, Unit, List<Any>> = arrayReader {
+                val reader: JsReader<EB, OPTS, Unit, List<Any>> = arrayReader {
                     returns(prefixItems = listOf(StringReader, StringReader), items = BooleanReader)
                 }
 

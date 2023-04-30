@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.struct.property
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -43,7 +43,7 @@ internal class StructPropertyTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 
-        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
     }
 
     init {

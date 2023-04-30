@@ -52,7 +52,7 @@ internal class ReaderFilterTest : FreeSpec() {
     }
 
     init {
-        "The extension-function Reader#filter" - {
+        "The extension-function JsReader#filter" - {
 
             "when an original reader returns a result as a success" - {
 

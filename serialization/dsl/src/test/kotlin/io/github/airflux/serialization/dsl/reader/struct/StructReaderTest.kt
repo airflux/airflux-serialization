@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -54,8 +54,8 @@ internal class StructReaderTest : FreeSpec() {
 
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
-        private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, OPTS, Unit, Int> = DummyReader.int()
     }
 
     init {
@@ -67,7 +67,7 @@ internal class StructReaderTest : FreeSpec() {
                     nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )
-                val reader: Reader<EB, OPTS, Unit, DTO> = structReader {
+                val reader: JsReader<EB, OPTS, Unit, DTO> = structReader {
                     validation(validator)
 
                     val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
@@ -400,7 +400,7 @@ internal class StructReaderTest : FreeSpec() {
             }
 
             "when was created reader and the result builder throw some exception" - {
-                val reader: Reader<EB, OPTS, Unit, DTO> = structReader {
+                val reader: JsReader<EB, OPTS, Unit, DTO> = structReader {
                     returns { _, _, _ ->
                         throw IllegalStateException()
                     }

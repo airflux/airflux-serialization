@@ -38,8 +38,8 @@ internal class ReaderMapTest : FreeSpec() {
     }
 
     init {
-        "The extension-function Reader#map" - {
-            val reader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        "The extension-function JsReader#map" - {
+            val reader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
 
             "should return new reader" {
                 val source = JsString(VALUE)

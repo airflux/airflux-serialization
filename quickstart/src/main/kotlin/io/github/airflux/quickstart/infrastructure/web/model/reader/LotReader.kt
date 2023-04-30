@@ -27,17 +27,17 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.property.ide
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonStructReaderValidators
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.additionalProperties
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.isNotBlank
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
 
-val LotStatusReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, LotStatus> =
+val LotStatusReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, LotStatus> =
     StringReader.validation(isNotBlank).asEnum()
 
-val LotReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Lot> = structReader {
+val LotReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Lot> = structReader {
     validation(CommonStructReaderValidators + additionalProperties)
 
     val id = property(identifierPropertySpec)

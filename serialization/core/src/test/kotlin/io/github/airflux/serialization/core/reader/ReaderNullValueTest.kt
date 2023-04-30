@@ -52,7 +52,7 @@ internal class ReaderNullValueTest : FreeSpec() {
     }
 
     init {
-        "The extension-function Reader#ifNullValue" - {
+        "The extension-function JsReader#ifNullValue" - {
             val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
                 val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                 readOptional(env, context, lookup, stringReader)

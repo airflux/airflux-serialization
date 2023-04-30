@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.array
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.ReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
@@ -36,7 +36,7 @@ public fun <EB, O, CTX, T> readArray(
     context: CTX,
     location: JsLocation,
     source: JsArray,
-    itemsReader: Reader<EB, O, CTX, T>
+    itemsReader: JsReader<EB, O, CTX, T>
 ): ReadingResult<List<T>>
     where O : FailFastOption {
     val failFast = env.options.failFast
@@ -63,13 +63,13 @@ public fun <EB, O, CTX, T> readArray(
     context: CTX,
     location: JsLocation,
     source: JsArray,
-    prefixItemReaders: List<Reader<EB, O, CTX, T>>,
+    prefixItemReaders: List<JsReader<EB, O, CTX, T>>,
     errorIfAdditionalItems: Boolean
 ): ReadingResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
           O : FailFastOption {
 
-    fun <EB, O, CTX, T> getReader(idx: Int, prefixItems: List<Reader<EB, O, CTX, T>>): Reader<EB, O, CTX, T>? =
+    fun <EB, O, CTX, T> getReader(idx: Int, prefixItems: List<JsReader<EB, O, CTX, T>>): JsReader<EB, O, CTX, T>? =
         prefixItems.getOrNull(idx)
 
     val failFast = env.options.failFast
@@ -102,16 +102,16 @@ public fun <EB, O, CTX, T> readArray(
     context: CTX,
     location: JsLocation,
     source: JsArray,
-    prefixItemReaders: List<Reader<EB, O, CTX, T>>,
-    itemsReader: Reader<EB, O, CTX, T>
+    prefixItemReaders: List<JsReader<EB, O, CTX, T>>,
+    itemsReader: JsReader<EB, O, CTX, T>
 ): ReadingResult<List<T>>
     where O : FailFastOption {
 
     fun <EB, O, CTX, T> getReader(
         idx: Int,
-        prefixItemReaders: List<Reader<EB, O, CTX, T>>,
-        itemsReader: Reader<EB, O, CTX, T>
-    ): Reader<EB, O, CTX, T> =
+        prefixItemReaders: List<JsReader<EB, O, CTX, T>>,
+        itemsReader: JsReader<EB, O, CTX, T>
+    ): JsReader<EB, O, CTX, T> =
         if (idx < prefixItemReaders.size) prefixItemReaders[idx] else itemsReader
 
     val failFast = env.options.failFast
