@@ -18,7 +18,7 @@ package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.dsl.common.DummyWriter
@@ -37,7 +37,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 
-        private val WRITER: Writer<Unit, Unit, String?> = DummyWriter.stringWriter<Unit, Unit>().nullable()
+        private val WRITER: JsWriter<Unit, Unit, String?> = DummyWriter.stringWriter<Unit, Unit>().nullable()
     }
 
     init {

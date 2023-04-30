@@ -20,20 +20,20 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 
-public fun <O, CTX, T> arrayWriter(items: Writer<O, CTX, T>): Writer<O, CTX, Iterable<T>>
+public fun <O, CTX, T> arrayWriter(items: JsWriter<O, CTX, T>): JsWriter<O, CTX, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption =
     ArrayWriter(items)
 
 public class ArrayWriter<O, CTX, T> internal constructor(
-    private val itemsWriter: Writer<O, CTX, T>
-) : Writer<O, CTX, Iterable<T>>
+    private val itemsWriter: JsWriter<O, CTX, T>
+) : JsWriter<O, CTX, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
     override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: Iterable<T>): JsValue? {

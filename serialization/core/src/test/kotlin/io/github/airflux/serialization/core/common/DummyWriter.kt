@@ -19,13 +19,13 @@ package io.github.airflux.serialization.core.common
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 
-internal class DummyWriter<O, CTX, T>(val result: (T) -> JsValue?) : Writer<O, CTX, T> {
+internal class DummyWriter<O, CTX, T>(val result: (T) -> JsValue?) : JsWriter<O, CTX, T> {
     override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? = result(source)
 
     internal companion object {
-        internal fun <O, CTX> string(): Writer<O, CTX, String> = DummyWriter { JsString(it) }
+        internal fun <O, CTX> string(): JsWriter<O, CTX, String> = DummyWriter { JsString(it) }
     }
 }

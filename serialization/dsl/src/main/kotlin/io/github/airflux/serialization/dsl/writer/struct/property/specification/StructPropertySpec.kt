@@ -16,42 +16,42 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
 public fun <O, CTX, T : Any, P : Any> nonNullable(
     name: String,
     from: T.() -> P,
-    writer: Writer<O, CTX, P>
+    writer: JsWriter<O, CTX, P>
 ): StructPropertySpec<O, CTX, T, P> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutContext(from), writer = writer)
 
 public fun <O, CTX, T : Any, P : Any> nonNullable(
     name: String,
     from: T.(CTX) -> P,
-    writer: Writer<O, CTX, P>
+    writer: JsWriter<O, CTX, P>
 ): StructPropertySpec<O, CTX, T, P> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithContext(from), writer = writer)
 
 public fun <O, CTX, T : Any, P : Any> nullable(
     name: String,
     from: T.() -> P?,
-    writer: Writer<O, CTX, P?>
+    writer: JsWriter<O, CTX, P?>
 ): StructPropertySpec<O, CTX, T, P?> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor(from), writer = writer)
 
 public fun <O, CTX, T : Any, P : Any> nullable(
     name: String,
     from: T.(CTX) -> P?,
-    writer: Writer<O, CTX, P?>
+    writer: JsWriter<O, CTX, P?>
 ): StructPropertySpec<O, CTX, T, P?> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor(from), writer = writer)
 
 public class StructPropertySpec<O, CTX, T, P> internal constructor(
     public val name: String,
     public val from: Extractor<CTX, T, P>,
-    public val writer: Writer<O, CTX, P>
+    public val writer: JsWriter<O, CTX, P>
 ) {
 
     public sealed class Extractor<CTX, T, P> {

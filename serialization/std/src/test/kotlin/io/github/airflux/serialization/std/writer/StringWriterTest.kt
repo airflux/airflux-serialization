@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -34,7 +34,7 @@ internal class StringWriterTest : FreeSpec() {
     init {
 
         "The string type writer" - {
-            val writer: Writer<Unit, Unit, String> = stringWriter()
+            val writer: JsWriter<Unit, Unit, String> = stringWriter()
             val value = "value"
 
             "should return the JsString value" {

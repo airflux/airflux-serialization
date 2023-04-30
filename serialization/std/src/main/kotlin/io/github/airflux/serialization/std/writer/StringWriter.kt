@@ -17,10 +17,10 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 
 /**
  * Writer for primitive [String] type.
  */
-public fun <O, CTX> stringWriter(): Writer<O, CTX, String> =
-    Writer { _, _, _, value -> JsString(value) }
+public fun <O, CTX> stringWriter(): JsWriter<O, CTX, String> =
+    JsWriter { _, _, _, value -> JsString(value) }

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.writer
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -35,7 +35,7 @@ internal class IntWriterTest : FreeSpec() {
     init {
 
         "The int type writer" - {
-            val writer: Writer<Unit, Unit, Int> = intWriter()
+            val writer: JsWriter<Unit, Unit, Int> = intWriter()
             val value: Int = Int.MAX_VALUE
 
             "should return the JsNumeric value" {

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
@@ -31,13 +31,13 @@ import io.github.airflux.serialization.dsl.writer.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
-public fun <O, CTX, T> structWriter(block: StructWriter.Builder<O, CTX, T>.() -> Unit): Writer<O, CTX, T>
+public fun <O, CTX, T> structWriter(block: StructWriter.Builder<O, CTX, T>.() -> Unit): JsWriter<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption =
     StructWriter.Builder<O, CTX, T>().apply(block).build()
 
 public class StructWriter<O, CTX, T> private constructor(
     private val properties: StructProperties<O, CTX, T>
-) : Writer<O, CTX, T>
+) : JsWriter<O, CTX, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
     override fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? {
@@ -68,6 +68,6 @@ public class StructWriter<O, CTX, T> private constructor(
         public fun <P> property(spec: StructPropertySpec<O, CTX, T, P>): StructProperty<O, CTX, T, P> =
             StructProperty(spec).also { properties.add(it) }
 
-        internal fun build(): Writer<O, CTX, T> = StructWriter(properties)
+        internal fun build(): JsWriter<O, CTX, T> = StructWriter(properties)
     }
 }

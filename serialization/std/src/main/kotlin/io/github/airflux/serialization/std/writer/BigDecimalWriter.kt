@@ -17,14 +17,14 @@
 package io.github.airflux.serialization.std.writer
 
 import io.github.airflux.serialization.core.value.JsNumeric
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import java.math.BigDecimal
 
 /**
  * Writer for primitive [BigDecimal] type.
  */
-public fun <O, CTX> bigDecimalWriter(stripTrailingZeros: Boolean): Writer<O, CTX, BigDecimal> =
-    Writer { _, _, _, value ->
+public fun <O, CTX> bigDecimalWriter(stripTrailingZeros: Boolean): JsWriter<O, CTX, BigDecimal> =
+    JsWriter { _, _, _, value ->
         val text = if (stripTrailingZeros)
             value.stripTrailingZeros().toPlainString()
         else

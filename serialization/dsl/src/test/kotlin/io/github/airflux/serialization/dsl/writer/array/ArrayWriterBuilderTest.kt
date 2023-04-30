@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
@@ -51,7 +51,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         "The ArrayWriter type" - {
 
             "when items is non-nullable type" - {
-                val writer: Writer<OPTS, Unit, Iterable<String>> = arrayWriter(items = StringWriter)
+                val writer: JsWriter<OPTS, Unit, Iterable<String>> = arrayWriter(items = StringWriter)
 
                 "when the source contains items" - {
                     val source = listOf(FIRST_ITEM, SECOND_ITEM)
@@ -131,7 +131,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
             "when items is nullable type" - {
 
                 "when a writer of items is nullable" - {
-                    val writer: Writer<OPTS, Unit, Iterable<String?>> = arrayWriter(items = StringWriter.nullable())
+                    val writer: JsWriter<OPTS, Unit, Iterable<String?>> = arrayWriter(items = StringWriter.nullable())
 
                     "when the source contains only non-nullable items" - {
                         val source = listOf(FIRST_ITEM, SECOND_ITEM)
@@ -289,7 +289,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
                 }
 
                 "when a writer of items is optional" - {
-                    val writer: Writer<OPTS, Unit, Iterable<String?>> = arrayWriter(items = StringWriter.optional())
+                    val writer: JsWriter<OPTS, Unit, Iterable<String?>> = arrayWriter(items = StringWriter.optional())
 
                     "when the source contains only non-nullable items" - {
                         val source = listOf(FIRST_ITEM, SECOND_ITEM)

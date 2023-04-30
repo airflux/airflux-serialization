@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
@@ -54,7 +54,7 @@ internal class StructWriterTest : FreeSpec() {
             "when a property is non-nullable type" - {
                 val source = ID(id = ID_PROPERTY_VALUE)
 
-                val writer: Writer<OPTS, Unit, ID> = structWriter {
+                val writer: JsWriter<OPTS, Unit, ID> = structWriter {
                     property(nonNullable(name = ID_PROPERTY_NAME, from = { -> id }, writer = DummyWriter.intWriter()))
                 }
 
@@ -99,7 +99,7 @@ internal class StructWriterTest : FreeSpec() {
                 val source = NullableID(get = null)
 
                 "when a writer of property is nullable" - {
-                    val writer: Writer<OPTS, Unit, NullableID> = structWriter {
+                    val writer: JsWriter<OPTS, Unit, NullableID> = structWriter {
                         property(
                             nullable(
                                 name = ID_PROPERTY_NAME,
@@ -141,7 +141,7 @@ internal class StructWriterTest : FreeSpec() {
                 }
 
                 "when a writer of property is optional" - {
-                    val writer: Writer<OPTS, Unit, NullableID> = structWriter {
+                    val writer: JsWriter<OPTS, Unit, NullableID> = structWriter {
                         property(
                             nullable(
                                 name = ID_PROPERTY_NAME,

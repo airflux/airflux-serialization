@@ -22,27 +22,27 @@ import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.env.WriterEnv
 import io.github.airflux.serialization.core.writer.predicate.WriterPredicate
 
-public fun interface Writer<O, CTX, in T> {
+public fun interface JsWriter<O, CTX, in T> {
     public fun write(env: WriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue?
 }
 
-public fun <O, CTX, T, R> Writer<O, CTX, T>.contramap(transform: (R) -> T): Writer<O, CTX, R> =
-    Writer { env, context, location, source ->
+public fun <O, CTX, T, R> JsWriter<O, CTX, T>.contramap(transform: (R) -> T): JsWriter<O, CTX, R> =
+    JsWriter { env, context, location, source ->
         this@contramap.write(env, context, location, transform(source))
     }
 
-public fun <O, CTX, T : Any> Writer<O, CTX, T>.nullable(): Writer<O, CTX, T?> =
-    Writer { env, context, location, source ->
+public fun <O, CTX, T : Any> JsWriter<O, CTX, T>.nullable(): JsWriter<O, CTX, T?> =
+    JsWriter { env, context, location, source ->
         if (source != null) this@nullable.write(env, context, location, source) else JsNull
     }
 
-public fun <O, CTX, T : Any> Writer<O, CTX, T>.optional(): Writer<O, CTX, T?> =
-    Writer { env, context, location, source ->
+public fun <O, CTX, T : Any> JsWriter<O, CTX, T>.optional(): JsWriter<O, CTX, T?> =
+    JsWriter { env, context, location, source ->
         if (source != null) this@optional.write(env, context, location, source) else null
     }
 
-public fun <O, CTX, T> Writer<O, CTX, T>.filter(predicate: WriterPredicate<O, CTX, T & Any>): Writer<O, CTX, T?> =
-    Writer { env, context, location, source ->
+public fun <O, CTX, T> JsWriter<O, CTX, T>.filter(predicate: WriterPredicate<O, CTX, T & Any>): JsWriter<O, CTX, T?> =
+    JsWriter { env, context, location, source ->
         if (source != null && predicate.test(env, context, location, source))
             this@filter.write(env, context, location, source)
         else

@@ -39,7 +39,7 @@ internal class WriterFilterTest : FreeSpec() {
         "The Writer type" - {
 
             "when the filter was added to the writer" - {
-                val writer: Writer<Unit, Unit, String?> = DummyWriter { JsString(it!!) }
+                val writer: JsWriter<Unit, Unit, String?> = DummyWriter { JsString(it!!) }
 
                 "when the value is not null" - {
                     val value = PROPERTY_VALUE
