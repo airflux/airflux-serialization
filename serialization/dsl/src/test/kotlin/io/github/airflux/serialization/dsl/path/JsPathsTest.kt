@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.path.JsPaths
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class PropertyPathsTest : FreeSpec() {
+internal class JsPathsTest : FreeSpec() {
 
     companion object {
         private const val USER = "user"
