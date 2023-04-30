@@ -22,7 +22,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
-internal class PropertyPathsTest : FreeSpec() {
+internal class JsPathsTest : FreeSpec() {
 
     companion object {
         private const val FIRST_PROPERTY_NAME = "first"
