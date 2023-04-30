@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -26,12 +26,12 @@ internal class ContainsTest : FreeSpec() {
     companion object {
         private const val USER_NAME_VALUE = "user"
         private const val PHONE_NUMBER_VALUE = "123456789"
-        val SOURCE: StructNode = StructNode(
-            "user" to StructNode(
-                "name" to StringNode(USER_NAME_VALUE),
-                "phones" to ArrayNode(
-                    StructNode(
-                        "value" to StringNode(PHONE_NUMBER_VALUE)
+        val SOURCE: JsStruct = JsStruct(
+            "user" to JsStruct(
+                "name" to JsString(USER_NAME_VALUE),
+                "phones" to JsArray(
+                    JsStruct(
+                        "value" to JsString(PHONE_NUMBER_VALUE)
                     )
                 )
             )
@@ -40,17 +40,17 @@ internal class ContainsTest : FreeSpec() {
 
     init {
 
-        "StructNode#contains" - {
+        "JsStruct#contains" - {
 
             "should return the true value if an element by the path was found" - {
                 withData(
                     nameFn = { "$it" },
                     listOf(
-                        PropertyPath("user"),
-                        PropertyPath("user").append("name"),
-                        PropertyPath("user").append("phones"),
-                        PropertyPath("user").append("phones").append(0),
-                        PropertyPath("user").append("phones").append(0).append("value"),
+                        JsPath("user"),
+                        JsPath("user").append("name"),
+                        JsPath("user").append("phones"),
+                        JsPath("user").append("phones").append(0),
+                        JsPath("user").append("phones").append(0).append("value"),
                     )
                 ) { path ->
                     val result = path in SOURCE
@@ -62,12 +62,12 @@ internal class ContainsTest : FreeSpec() {
                 withData(
                     nameFn = { "$it" },
                     listOf(
-                        PropertyPath("id"),
-                        PropertyPath("user").append("id"),
-                        PropertyPath("user").append(0),
-                        PropertyPath("user").append("phones").append("title"),
-                        PropertyPath("user").append("phones").append(1),
-                        PropertyPath("user").append("phones").append(0).append("title"),
+                        JsPath("id"),
+                        JsPath("user").append("id"),
+                        JsPath("user").append(0),
+                        JsPath("user").append("phones").append("title"),
+                        JsPath("user").append("phones").append(1),
+                        JsPath("user").append("phones").append(0).append("title"),
                     )
                 ) { path ->
                     val result = path in SOURCE

@@ -19,8 +19,8 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -30,31 +30,31 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsBooleanTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
-        private val LOCATION = Location.append("user")
+        private val ENV = JsReaderEnv(EB(), Unit)
+        private val LOCATION = JsLocation.append("user")
     }
 
     init {
         "The readAsBoolean function" - {
 
-            "when called with a receiver of the BooleanNode type" - {
+            "when called with a receiver of the JsBoolean type" - {
 
                 "should return the boolean value" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsBoolean(ENV, LOCATION)
                     result shouldBeSuccess success(location = LOCATION, value = true)
                 }
             }
-            "when called with a receiver of not the BooleanNode type" - {
+            "when called with a receiver of not the JsBoolean type" - {
 
                 "should return the invalid type error" {
-                    val json = StringNode("abc")
+                    val json = JsString("abc")
                     val result = json.readAsBoolean(ENV, LOCATION)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(BooleanNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsBoolean.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     )
                 }

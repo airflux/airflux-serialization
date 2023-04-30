@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
@@ -31,9 +31,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class MinItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private const val MIN_ITEMS = 2
     }
 
@@ -44,7 +44,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
                 StdArrayValidator.minItems<EB, Unit, Unit>(MIN_ITEMS).build()
 
             "when a collection is empty" - {
-                val source = ArrayNode()
+                val source = JsArray()
 
                 "the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -57,7 +57,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the collection contains a number of elements less than the minimum" - {
-                val source = ArrayNode(StringNode("A"))
+                val source = JsArray(JsString("A"))
 
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -70,7 +70,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the collection contains a number of elements equal to the minimum" - {
-                val source = ArrayNode(StringNode("A"), StringNode("B"))
+                val source = JsArray(JsString("A"), JsString("B"))
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -79,7 +79,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
             }
 
             "when the collection contains a number of elements more than the minimum" - {
-                val source = ArrayNode(StringNode("A"), StringNode("B"), StringNode("C"))
+                val source = JsArray(JsString("A"), JsString("B"), JsString("C"))
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)

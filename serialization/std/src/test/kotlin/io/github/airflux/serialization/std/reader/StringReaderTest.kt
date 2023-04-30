@@ -16,15 +16,15 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.std.common.kotest.shouldBeSuccess
@@ -33,9 +33,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val StringReader = stringReader<EB, Unit, Unit>()
         private const val TEXT = "abc"
     }
@@ -44,19 +44,19 @@ internal class StringReaderTest : FreeSpec() {
         "The string type reader" - {
 
             "should return the string value" {
-                val source: ValueNode = StringNode(TEXT)
+                val source: JsValue = JsString(TEXT)
                 val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = TEXT)
             }
 
             "should return the invalid type error" {
-                val source: ValueNode = BooleanNode.valueOf(true)
+                val source: JsValue = JsBoolean.valueOf(true)
                 val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location,
+                    location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(StringNode.nameOfType),
-                        actual = BooleanNode.nameOfType
+                        expected = listOf(JsString.nameOfType),
+                        actual = JsBoolean.nameOfType
                     )
                 )
             }

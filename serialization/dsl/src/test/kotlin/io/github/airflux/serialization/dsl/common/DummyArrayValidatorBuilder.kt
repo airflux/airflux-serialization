@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
-import io.github.airflux.serialization.core.value.ArrayNode
+import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
 
@@ -33,10 +33,10 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) 
 
     internal class Validator<EB, O, CTX>(val result: ValidationResult) : ArrayValidator<EB, O, CTX> {
         override fun validate(
-            env: ReaderEnv<EB, O>,
+            env: JsReaderEnv<EB, O>,
             context: CTX,
-            location: Location,
-            source: ArrayNode
+            location: JsLocation,
+            source: JsArray
         ): ValidationResult = result
     }
 

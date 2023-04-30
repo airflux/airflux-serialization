@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.common.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -32,11 +32,11 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
 
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
-        private val WRITER: Writer<Unit, Unit, String> = DummyWriter.stringWriter()
+        private val WRITER: JsWriter<Unit, Unit, String> = DummyWriter.stringWriter()
     }
 
     init {
@@ -61,7 +61,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
                     "then the initialized writer should return a property value" {
                         val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
-                        result shouldBe StringNode(PROPERTY_VALUE)
+                        result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
 
@@ -81,7 +81,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
                     "then the initialized writer should return a property value" {
                         val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
-                        result shouldBe StringNode(PROPERTY_VALUE)
+                        result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
 
@@ -94,7 +94,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
                         val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
 
                         "then a non-null property value should be returned" {
-                            result shouldBe StringNode(PROPERTY_VALUE)
+                            result shouldBe JsString(PROPERTY_VALUE)
                         }
                     }
 

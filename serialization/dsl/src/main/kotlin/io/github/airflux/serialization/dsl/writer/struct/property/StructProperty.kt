@@ -16,38 +16,38 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.ValueNode
-import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
 public class StructProperty<O, CTX, T, P> private constructor(
     public val name: String,
-    private val writer: Writer<O, CTX, T>
+    private val writer: JsWriter<O, CTX, T>
 ) {
 
     internal constructor(spec: StructPropertySpec<O, CTX, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
-    public fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? =
+    public fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? =
         writer.write(env, context, location, source)
 
     internal companion object {
 
-        private fun <O, CTX, T, P> createWriter(spec: StructPropertySpec<O, CTX, T, P>): Writer<O, CTX, T> {
+        private fun <O, CTX, T, P> createWriter(spec: StructPropertySpec<O, CTX, T, P>): JsWriter<O, CTX, T> {
             val writer = spec.writer
 
             return when (spec.from) {
                 is StructPropertySpec.Extractor.WithoutContext -> {
                     val extractor = spec.from.extractor
-                    Writer { env, context, location, source ->
+                    JsWriter { env, context, location, source ->
                         writer.write(env, context, location, source.extractor())
                     }
                 }
 
                 is StructPropertySpec.Extractor.WithContext -> {
                     val extractor = spec.from.extractor
-                    Writer { env, context, location, source ->
+                    JsWriter { env, context, location, source ->
                         writer.write(env, context, location, source.extractor(context))
                     }
                 }

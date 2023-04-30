@@ -16,22 +16,22 @@
 
 package io.github.airflux.serialization.std.validator.number
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
-import io.github.airflux.serialization.core.reader.validation.Validator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
 public class ExclusiveMinimumNumberValidator<EB, O, CTX, T> internal constructor(
     private val expected: T
-) : Validator<EB, O, CTX, T>
+) : JsValidator<EB, O, CTX, T>
     where EB : ExclusiveMinimumNumberValidator.ErrorBuilder,
           T : Number,
           T : Comparable<T> {
 
-    override fun validate(env: ReaderEnv<EB, O>, context: CTX, location: Location, value: T): ValidationResult =
+    override fun validate(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): ValidationResult =
         if (value > expected)
             valid()
         else

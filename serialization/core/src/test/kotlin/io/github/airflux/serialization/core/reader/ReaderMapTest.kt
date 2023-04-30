@@ -19,30 +19,30 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReaderMapTest : FreeSpec() {
 
     companion object {
         private const val VALUE = "42"
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
-        "The extension-function Reader#map" - {
-            val reader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        "The extension-function JsReader#map" - {
+            val reader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
 
             "should return new reader" {
-                val source = StringNode(VALUE)
+                val source = JsString(VALUE)
                 val transformedReader = reader.map { value -> value.toInt() }
                 val result: ReadingResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
 

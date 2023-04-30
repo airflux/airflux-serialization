@@ -21,19 +21,19 @@ import io.github.airflux.quickstart.domain.model.LotStatus
 import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.optional
 import io.github.airflux.serialization.dsl.writer.array.arrayWriter
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
-val LotStatusWriter = Writer<WriterOptions, WriterCtx, LotStatus> { _, _, _, value ->
-    StringNode(value.name)
+val LotStatusWriter = JsWriter<WriterOptions, WriterCtx, LotStatus> { _, _, _, value ->
+    JsString(value.name)
 }
 
-val LotWriter: Writer<WriterOptions, WriterCtx, Lot> = structWriter {
+val LotWriter: JsWriter<WriterOptions, WriterCtx, Lot> = structWriter {
     property(nonNullable(name = "id", from = Lot::id, StringWriter))
     property(nonNullable(name = "status", from = { -> status }, writer = LotStatusWriter))
     property(nullable(name = "value", from = { -> value }, writer = ValueWriter.optional()))

@@ -21,11 +21,11 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.base.AmountW
 import io.github.airflux.quickstart.infrastructure.web.model.writer.base.CurrencyWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
-val ValueWriter: Writer<WriterOptions, WriterCtx, Value> = structWriter {
+val ValueWriter: JsWriter<WriterOptions, WriterCtx, Value> = structWriter {
     property(nonNullable(name = "amount", from = { -> amount }, writer = AmountWriter))
     property(nonNullable(name = "currency", from = { -> currency }, writer = CurrencyWriter))
 }

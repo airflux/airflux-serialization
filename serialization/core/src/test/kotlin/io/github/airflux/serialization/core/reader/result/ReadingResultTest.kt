@@ -21,13 +21,13 @@ import io.github.airflux.serialization.core.common.DummyValidator
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -41,9 +41,9 @@ internal class ReadingResultTest : FreeSpec() {
         private const val ORIGINAL_VALUE = "10"
         private const val ALTERNATIVE_VALUE = "20"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
@@ -276,7 +276,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                     "when the value satisfies the predicate" - {
                         val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
 
                         "then filter should return the original value" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
@@ -286,7 +286,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                     "when the value does not satisfy the predicate" - {
                         val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
 
                         "then filter should return null" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
@@ -297,7 +297,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                 "when the value in the result is null" - {
                     val result: ReadingResult<String?> = success(location = LOCATION, value = null)
-                    val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
@@ -312,11 +312,11 @@ internal class ReadingResultTest : FreeSpec() {
                 val result: ReadingResult<String> = failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(StringNode.nameOfType),
-                        actual = BooleanNode.nameOfType
+                        expected = listOf(JsString.nameOfType),
+                        actual = JsBoolean.nameOfType
                     )
                 )
-                val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }
 
@@ -424,7 +424,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val block: () -> ReadingResult<String> = { ORIGINAL_VALUE.toSuccess(LOCATION) }
 
                 "when the context contains the exceptions handler" - {
-                    val env = ReaderEnv(
+                    val env = JsReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
                         exceptionsHandler = { _, _, exception ->
@@ -447,7 +447,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val block: () -> ReadingResult<String> = { throw IllegalStateException() }
 
                 "when the context contains the exceptions handler" - {
-                    val env = ReaderEnv(
+                    val env = JsReaderEnv(
                         errorBuilders = Unit,
                         options = Unit,
                         exceptionsHandler = { _, _, exception ->
@@ -469,7 +469,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when the context does not contain the exceptions handler" - {
-                    val env = ReaderEnv(Unit, Unit)
+                    val env = JsReaderEnv(Unit, Unit)
 
                     "then should re-throwing the exception" {
                         shouldThrow<IllegalStateException> {
@@ -487,8 +487,8 @@ internal class ReadingResultTest : FreeSpec() {
                     location = LOCATION,
                     errors = ReadingResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 )
@@ -502,8 +502,8 @@ internal class ReadingResultTest : FreeSpec() {
                     location = LOCATION,
                     errors = ReadingResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 )

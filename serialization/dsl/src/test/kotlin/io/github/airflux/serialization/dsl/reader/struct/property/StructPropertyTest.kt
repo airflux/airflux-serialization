@@ -16,16 +16,16 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPaths
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
@@ -39,17 +39,17 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
-        private val ENV = ReaderEnv(errorBuilders = EB(), options = Unit)
+        private val ENV = JsReaderEnv(errorBuilders = EB(), options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
-        private val StringReader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
     }
 
     init {
 
         "The StructProperty type" - {
-            val spec = StructPropertySpec(paths = PropertyPaths(PropertyPath(PROPERTY_NAME)), reader = StringReader)
+            val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = StringReader)
             val property = StructProperty(spec)
 
             "then the paths should equal the paths from the spec" {
@@ -57,7 +57,7 @@ internal class StructPropertyTest : FreeSpec() {
             }
 
             "then the method read should return the value" {
-                val source = StringNode(PROPERTY_VALUE)
+                val source = JsString(PROPERTY_VALUE)
                 val result = property.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = PROPERTY_VALUE)
             }

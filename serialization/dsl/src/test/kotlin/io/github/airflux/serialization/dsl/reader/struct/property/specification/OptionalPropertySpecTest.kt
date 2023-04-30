@@ -16,23 +16,23 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPaths
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.map
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.reader.validation.Validator
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.reader.validation.JsValidator
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.DummyReaderPredicate
@@ -54,13 +54,13 @@ internal class OptionalPropertySpecTest : FreeSpec() {
         private const val ID_VALUE_AS_INT = "10"
         private const val CODE_PROPERTY_VALUE = "code"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
-        private val StringReader: Reader<EB, Unit, Unit, String?> = DummyReader.string()
-        private val IntReader: Reader<EB, Unit, Unit, Int?> = DummyReader.int()
+        private val LOCATION = JsLocation
+        private val StringReader: JsReader<EB, Unit, Unit, String?> = DummyReader.string()
+        private val IntReader: JsReader<EB, Unit, Unit, Int?> = DummyReader.int()
 
-        private val IsNotEmptyStringValidator: Validator<EB, Unit, Unit, String?> =
+        private val IsNotEmptyStringValidator: JsValidator<EB, Unit, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
@@ -72,11 +72,11 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
 
                 "then the paths parameter must contain only the passed name" {
-                    spec.paths shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
+                    spec.paths shouldBe JsPaths(JsPath(ID_PROPERTY_NAME))
                 }
 
                 "when the reader has read a property named id" - {
-                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
@@ -88,7 +88,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then the null value should be returned" {
@@ -97,15 +97,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when a read error occurred" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = NumericNode.Integer.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsNumeric.Integer.nameOfType
                             )
                         )
                     }
@@ -113,15 +113,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
             }
 
             "when creating the instance by a property path" - {
-                val path = PropertyPath(ID_PROPERTY_NAME)
+                val path = JsPath(ID_PROPERTY_NAME)
                 val spec = optional(path = path, reader = StringReader)
 
                 "then the paths parameter must contain only the passed path" {
-                    spec.paths shouldBe PropertyPaths(path)
+                    spec.paths shouldBe JsPaths(path)
                 }
 
                 "when the reader has read a property named id" - {
-                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
@@ -133,7 +133,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the property does not founded" - {
-                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then the null value should be returned" {
@@ -142,15 +142,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when an error occurs while reading" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned a read error" {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = NumericNode.Integer.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsNumeric.Integer.nameOfType
                             )
                         )
                     }
@@ -164,7 +164,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
@@ -175,7 +175,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     }
 
                     "then a validation error should be returned if validation is a failure" {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(""))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(""))
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
@@ -189,15 +189,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = NumericNode.Integer.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsNumeric.Integer.nameOfType
                             )
                         )
                     }
@@ -210,10 +210,11 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "when the value in the result is not null" - {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
 
                         "when the value satisfy the predicate" - {
-                            val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                            val predicate: JsPredicate<EB, Unit, Unit, String> =
+                                DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
                                 val result = spec.filter(predicate)
@@ -227,7 +228,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         }
 
                         "when the value does not satisfy the predicate" - {
-                            val predicate: ReaderPredicate<EB, Unit, Unit, String> =
+                            val predicate: JsPredicate<EB, Unit, Unit, String> =
                                 DummyReaderPredicate(result = false)
 
                             "then filter should return the null value" {
@@ -243,8 +244,8 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     }
 
                     "when the value in the result is null" - {
-                        val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
 
@@ -259,8 +260,8 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
                         val result = spec.filter(predicate)
@@ -269,8 +270,8 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = NumericNode.Integer.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsNumeric.Integer.nameOfType
                             )
                         )
                     }
@@ -283,11 +284,11 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 val specWithAlternative = spec or alt
 
                 "then the paths parameter must contain all elements from both spec" {
-                    specWithAlternative.paths shouldBe PropertyPaths(PropertyPath(ID_PROPERTY_NAME))
+                    specWithAlternative.paths shouldBe JsPaths(JsPath(ID_PROPERTY_NAME))
                 }
 
                 "when the main reader has successfully read" - {
-                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
@@ -299,7 +300,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has failure read" - {
-                    val source = StructNode(ID_PROPERTY_NAME to NumericNode.Integer.valueOrNullOf(ID_VALUE_AS_INT)!!)
+                    val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.Integer.valueOrNullOf(ID_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
@@ -311,7 +312,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 }
 
                 "when the alternative reader has failure read" - {
-                    val source = StructNode(ID_PROPERTY_NAME to BooleanNode.True)
+                    val source = JsStruct(ID_PROPERTY_NAME to JsBoolean.True)
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then should be returned all read errors" {
@@ -319,15 +320,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                             ReadingResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(StringNode.nameOfType),
-                                    actual = BooleanNode.nameOfType
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsBoolean.nameOfType
                                 )
                             ),
                             ReadingResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.Integer.nameOfType),
-                                    actual = BooleanNode.nameOfType
+                                    expected = listOf(JsNumeric.Integer.nameOfType),
+                                    actual = JsBoolean.nameOfType
                                 )
                             )
                         )
@@ -342,7 +343,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value is not null" {
-                        val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_VALUE_AS_UUID))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
 
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
@@ -353,7 +354,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     }
 
                     "then a value is null" {
-                        val source = StructNode()
+                        val source = JsStruct()
 
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
@@ -367,15 +368,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when an error occurs while reading" - {
 
                     "then should be returned a read error" {
-                        val source = StructNode(ID_PROPERTY_NAME to NumericNode.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
 
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = NumericNode.Integer.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsNumeric.Integer.nameOfType
                             )
                         )
                     }

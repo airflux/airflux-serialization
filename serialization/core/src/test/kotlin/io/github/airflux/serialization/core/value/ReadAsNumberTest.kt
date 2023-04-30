@@ -19,8 +19,8 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -31,10 +31,10 @@ import java.math.BigDecimal
 internal class ReadAsNumberTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.append("user")
-        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, text: String ->
+        private val LOCATION = JsLocation.append("user")
+        private val READER = { _: JsReaderEnv<EB, Unit>, _: Unit, location: JsLocation, text: String ->
             success(location = location, value = BigDecimal(text))
         }
     }
@@ -42,33 +42,33 @@ internal class ReadAsNumberTest : FreeSpec() {
     init {
         "The readAsNumber function" - {
 
-            "when called with a receiver of the NumericNode#Integer type" - {
+            "when called with a receiver of the JsNumeric#Integer type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumericNode.valueOf(Int.MAX_VALUE)
+                    val json: JsValue = JsNumeric.valueOf(Int.MAX_VALUE)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
 
-            "when called with a receiver of the NumericNode#Number type" - {
+            "when called with a receiver of the JsNumeric#Number type" - {
 
                 "should return the number value" {
-                    val json: ValueNode = NumericNode.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
+                    val json: JsValue = JsNumeric.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
-            "when called with a receiver of not the NumericNode#Number type" - {
+            "when called with a receiver of not the JsNumeric#Number type" - {
 
                 "should return the invalid type error" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(NumericNode.Number.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsNumeric.Number.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

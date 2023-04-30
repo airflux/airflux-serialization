@@ -16,9 +16,9 @@
 
 package io.github.airflux.serialization.core.reader.struct
 
-import io.github.airflux.serialization.core.lookup.LookupResult
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -27,26 +27,26 @@ import io.github.airflux.serialization.core.reader.result.failure
 /**
  * Reads required property.
  *
- * - If a node is found ([lookup] is [LookupResult.Defined]) then applies [reader]
- * - If a node is not found ([lookup] is [LookupResult.Undefined]) then an error is returned
+ * - If a node is found ([lookup] is [JsLookup.Defined]) then applies [reader]
+ * - If a node is not found ([lookup] is [JsLookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
 public fun <EB, O, CTX, T> readRequired(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
-    lookup: LookupResult,
-    using: Reader<EB, O, CTX, T>
+    lookup: JsLookup,
+    using: JsReader<EB, O, CTX, T>
 ): ReadingResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     when (lookup) {
-        is LookupResult.Defined -> using.read(env, context, lookup.location, lookup.value)
+        is JsLookup.Defined -> using.read(env, context, lookup.location, lookup.value)
 
-        is LookupResult.Undefined -> when (lookup) {
-            is LookupResult.Undefined.PathMissing ->
+        is JsLookup.Undefined -> when (lookup) {
+            is JsLookup.Undefined.PathMissing ->
                 failure(location = lookup.location, error = env.errorBuilders.pathMissingError())
 
-            is LookupResult.Undefined.InvalidType -> failure(
+            is JsLookup.Undefined.InvalidType -> failure(
                 location = lookup.breakpoint,
                 error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
             )

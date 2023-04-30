@@ -20,9 +20,9 @@ import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -30,10 +30,10 @@ import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.core.spec.style.FreeSpec
 import kotlin.reflect.KClass
 
@@ -45,10 +45,10 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
         private const val THIRD_PHONE_VALUE = "789"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
-        private val IntReader: Reader<EB, OPTS, Unit, Int> = DummyReader.int()
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
-        private val BooleanReader: Reader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()
+        private val LOCATION = JsLocation
+        private val IntReader: JsReader<EB, OPTS, Unit, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val BooleanReader: JsReader<EB, OPTS, Unit, Boolean> = DummyReader.boolean()
     }
 
     init {
@@ -56,10 +56,10 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
         "The readArray function for the prefix-items-only readers" - {
 
             "when parameter 'source' is empty" - {
-                val source = ArrayNode()
+                val source = JsArray()
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "then reader should return result" {
                         val result: ReadingResult<List<String>> = readArray(
@@ -76,7 +76,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "then reader should return result" {
                         val result: ReadingResult<List<String>> = readArray(
@@ -94,10 +94,10 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
             }
 
             "when parameter 'source' is not empty" - {
-                val source = ArrayNode(
-                    StringNode(FIRST_PHONE_VALUE),
-                    StringNode(SECOND_PHONE_VALUE),
-                    StringNode(THIRD_PHONE_VALUE)
+                val source = JsArray(
+                    JsString(FIRST_PHONE_VALUE),
+                    JsString(SECOND_PHONE_VALUE),
+                    JsString(THIRD_PHONE_VALUE)
                 )
 
                 "when the number of items is more than the number of readers" - {
@@ -107,7 +107,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         val errorIfAdditionalItems = true
 
                         "when fail-fast is true" - {
-                            val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                            val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                             "then reader should return first error" {
                                 val result: ReadingResult<List<String>> = readArray(
@@ -127,7 +127,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         }
 
                         "when fail-fast is false" - {
-                            val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                            val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                             "then reader should return all errors" {
                                 val result: ReadingResult<List<String>> = readArray(
@@ -157,7 +157,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         val errorIfAdditionalItems = false
 
                         "when fail-fast is true" - {
-                            val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                            val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                             "then reader should return result" {
                                 val result: ReadingResult<List<String>> = readArray(
@@ -177,7 +177,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         }
 
                         "when fail-fast is false" - {
-                            val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                            val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                             "then reader should return result" {
                                 val result: ReadingResult<List<String>> = readArray(
@@ -203,7 +203,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     val readers = listOf(StringReader, StringReader, StringReader)
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return result" {
                             val result: ReadingResult<List<String>> = readArray(
@@ -223,7 +223,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return result" {
                             val result: ReadingResult<List<String>> = readArray(
@@ -248,7 +248,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     val readers = listOf(StringReader, StringReader, StringReader, StringReader)
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return result" {
                             val result: ReadingResult<List<String>> = readArray(
@@ -268,7 +268,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return result" {
                             val result: ReadingResult<List<String>> = readArray(
@@ -292,7 +292,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                     val errorIfAdditionalItems = true
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                         "then reader should return first error" {
                             val result = readArray(
@@ -307,15 +307,15 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(NumericNode.Integer.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsNumeric.Integer.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                         "then reader should return all errors" {
                             val result = readArray(
@@ -331,15 +331,15 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(NumericNode.Integer.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsNumeric.Integer.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 ),
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(BooleanNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsBoolean.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             )

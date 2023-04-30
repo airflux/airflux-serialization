@@ -18,16 +18,16 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
 internal class ReadingResultFailureTest : FreeSpec() {
 
     companion object {
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
@@ -62,8 +62,8 @@ internal class ReadingResultFailureTest : FreeSpec() {
                     location = LOCATION,
                     errors = ReadingResult.Errors(
                         JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 )
@@ -79,8 +79,8 @@ internal class ReadingResultFailureTest : FreeSpec() {
                         location = LOCATION,
                         errors = ReadingResult.Errors(
                             JsonErrors.InvalidType(
-                                expected = listOf(StringNode.nameOfType),
-                                actual = BooleanNode.nameOfType
+                                expected = listOf(JsString.nameOfType),
+                                actual = JsBoolean.nameOfType
                             )
                         )
                     )

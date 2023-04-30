@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -26,20 +26,20 @@ import io.kotest.matchers.shouldBe
 internal class ReadingResultFailureCauseTest : FreeSpec() {
 
     companion object {
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
         "A ReadingResult#Failure#Cause type" - {
 
-            "constructor(Location, Error)" {
+            "constructor(JsLocation, Error)" {
                 val cause = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
                 cause.errors shouldBe ReadingResult.Errors(JsonErrors.PathMissing)
             }
 
-            "constructor(Location, ReadingResult#Errors)" {
+            "constructor(JsLocation, ReadingResult#Errors)" {
                 val cause = ReadingResult.Failure.Cause(
                     location = LOCATION,
                     errors = ReadingResult.Errors(JsonErrors.PathMissing)

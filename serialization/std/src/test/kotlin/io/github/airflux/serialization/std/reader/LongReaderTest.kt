@@ -16,16 +16,16 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeFailure
@@ -38,9 +38,9 @@ import kotlin.reflect.KClass
 internal class LongReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val LongReader = longReader<EB, Unit, Unit>()
     }
 
@@ -56,20 +56,20 @@ internal class LongReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Long.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: ValueNode = NumericNode.valueOf(value)
+                    val source: JsValue = JsNumeric.valueOf(value)
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
-                val source: ValueNode = StringNode("abc")
+                val source: JsValue = JsString("abc")
                 val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                 result shouldBeFailure failure(
-                    location = Location,
+                    location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(NumericNode.Integer.nameOfType),
-                        actual = StringNode.nameOfType
+                        expected = listOf(JsNumeric.Integer.nameOfType),
+                        actual = JsString.nameOfType
                     )
                 )
             }
@@ -90,10 +90,10 @@ internal class LongReaderTest : FreeSpec() {
                         ),
                     )
                 ) { (_, value) ->
-                    val source = NumericNode.Integer.valueOrNullOf(value)!!
+                    val source = JsNumeric.Integer.valueOrNullOf(value)!!
                     val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
                     result shouldBeFailure failure(
-                        location = Location,
+                        location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Long::class)
                     )
                 }

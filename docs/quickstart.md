@@ -53,7 +53,7 @@ val parsedUser = JSON.deserialization(
 Define the environment to deserialization of some domain type using the reader
 
 ```kotlin
-val readerEnv = ReaderEnv(
+val readerEnv = JsReaderEnv(
     errorBuilders = ReaderErrorBuilders,
     options = ReaderOptions(failFast = true)
 )
@@ -108,7 +108,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 - Define parsing and validation errors
 
 ```kotlin
-sealed class JsonErrors : ReaderResult.Error {
+sealed class JsonErrors : ReadingResult.Error {
     object PathMissing : JsonErrors()
     data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
@@ -164,15 +164,15 @@ val IntReader = intReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
 val StringReader = stringReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
 
 // The generic reader for the id property
-val PositiveNumberReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Int> =
+val PositiveNumberReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Int> =
     IntReader.validation(StdNumberValidator.minimum(0))
 
 // The generic reader for the username property
-val NonEmptyStringReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
+val NonEmptyStringReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
     StringReader.validation(isNotBlank)
 
 // The reader for the phone number property
-val PhoneNumberReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
+val PhoneNumberReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> =
     NonEmptyStringReader.validation(StdStringValidator.pattern("\\d*".toRegex()))
 ```
 
@@ -191,7 +191,7 @@ val isNotEmptyArray = StdArrayValidator.isNotEmpty<ReaderErrorBuilders, ReaderOp
 - Define the reader for the Phone type
 
 ```kotlin
-val PhoneReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phone> = structReader {
+val PhoneReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phone> = structReader {
     validation(additionalProperties)
 
     val title = property(required(name = "title", reader = NonEmptyStringReader))
@@ -206,7 +206,7 @@ val PhoneReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phone> = 
 - Define the reader for the Phones type
 
 ```kotlin
-val PhonesReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phones> = arrayReader {
+val PhonesReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phones> = arrayReader {
     validation(isNotEmptyArray)
     returns(items = PhoneReader)
 }.map { phones -> Phones(phones) }
@@ -215,7 +215,7 @@ val PhonesReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Phones> 
 - Define the reader for the User type
 
 ```kotlin
-val UserReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, User> = structReader {
+val UserReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, User> = structReader {
 
     val id = property(required(name = "id", reader = PositiveNumberReader))
     val name = property(required(name = "name", reader = NonEmptyStringReader))
@@ -240,7 +240,7 @@ val json = user.serialization(mapper = mapper, env = writerEnv, context = Writer
 
 ```kotlin
 val writerEnv =
-    WriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+    JsWriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
 ```
 
 - Define the options for the writing environment
@@ -268,24 +268,24 @@ val IntWriter = intWriter<WriterOptions, WriterCtx>()
 - Define the writer for the Phone type
 
 ```kotlin
-val PhoneWriter: Writer<WriterOptions, WriterCtx, Phone> = structWriter {
+val PhoneWriter: JsWriter<WriterOptions, WriterCtx, Phone> = structWriter {
     property(nonNullable(name = "title", from = Phone::title, writer = StringWriter))
-    property(nonNullable(name = "number", from = { -> number }, writer = StringWriter))
+    property(nonNullable(name = "number", from = Phone::number, writer = StringWriter))
 }
 ```
 
 - Define the writer for the Phones type
 
 ```kotlin
-val PhonesWriter: Writer<WriterOptions, WriterCtx, Iterable<Phone>> = arrayWriter(PhoneWriter)
+val PhonesWriter: JsWriter<WriterOptions, WriterCtx, Iterable<Phone>> = arrayWriter(PhoneWriter)
 ```
 
 - Define the writer for the User type
 
 ```kotlin
-val UserWriter: Writer<WriterOptions, WriterCtx, User> = structWriter {
+val UserWriter: JsWriter<WriterOptions, WriterCtx, User> = structWriter {
     property(nonNullable(name = "id", from = User::id, writer = IntWriter))
-    property(nonNullable(name = "name", from = { -> name }, writer = StringWriter))
-    property(nonNullable(name = "phones", from = { -> phones }, writer = PhonesWriter))
+    property(nonNullable(name = "name", from = User::name, writer = StringWriter))
+    property(nonNullable(name = "phones", from = User::phones, writer = PhonesWriter))
 }
 ```

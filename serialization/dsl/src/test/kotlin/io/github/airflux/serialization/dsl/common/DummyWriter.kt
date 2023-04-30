@@ -16,22 +16,22 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.ValueNode
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 
-internal class DummyWriter<O, CTX, T : Any>(val result: (T) -> ValueNode?) : Writer<O, CTX, T> {
-    override fun write(env: WriterEnv<O>, context: CTX, location: Location, source: T): ValueNode? = result(source)
+internal class DummyWriter<O, CTX, T : Any>(val result: (T) -> JsValue?) : JsWriter<O, CTX, T> {
+    override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? = result(source)
 
     companion object {
-        internal fun <O, CTX> intWriter(): Writer<O, CTX, Int> =
-            DummyWriter(result = { source -> NumericNode.valueOf(source) })
+        internal fun <O, CTX> intWriter(): JsWriter<O, CTX, Int> =
+            DummyWriter(result = { source -> JsNumeric.valueOf(source) })
 
-        internal fun <O, CTX> stringWriter(): Writer<O, CTX, String> =
-            DummyWriter(result = { source -> StringNode(source) })
+        internal fun <O, CTX> stringWriter(): JsWriter<O, CTX, String> =
+            DummyWriter(result = { source -> JsString(source) })
     }
 }

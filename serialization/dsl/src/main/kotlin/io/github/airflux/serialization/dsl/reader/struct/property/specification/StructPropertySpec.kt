@@ -16,24 +16,24 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.path.PropertyPaths
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.filter
 import io.github.airflux.serialization.core.reader.ifNullValue
 import io.github.airflux.serialization.core.reader.or
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validation
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 
 public class StructPropertySpec<EB, O, CTX, out T>(
-    public val paths: PropertyPaths,
-    public val reader: Reader<EB, O, CTX, T>
+    public val paths: JsPaths,
+    public val reader: JsReader<EB, O, CTX, T>
 )
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.validation(
-    validator: Validator<EB, O, CTX, T>
+    validator: JsValidator<EB, O, CTX, T>
 ): StructPropertySpec<EB, O, CTX, T> =
     StructPropertySpec(paths = paths, reader = reader.validation(validator))
 
@@ -43,11 +43,11 @@ public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.or(
     StructPropertySpec(paths = paths.append(alt.paths), reader = reader or alt.reader)
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.filter(
-    predicate: ReaderPredicate<EB, O, CTX, T & Any>
+    predicate: JsPredicate<EB, O, CTX, T & Any>
 ): StructPropertySpec<EB, O, CTX, T?> =
     StructPropertySpec(paths = paths, reader = reader.filter(predicate))
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: ReaderEnv<EB, O>, context: CTX, location: Location) -> T
+    defaultValue: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
 ): StructPropertySpec<EB, O, CTX, T> =
     StructPropertySpec(paths = paths, reader = reader.ifNullValue(defaultValue))

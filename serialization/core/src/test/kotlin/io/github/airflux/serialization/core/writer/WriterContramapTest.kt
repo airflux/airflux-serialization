@@ -17,9 +17,9 @@
 package io.github.airflux.serialization.core.writer
 
 import io.github.airflux.serialization.core.common.DummyWriter
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -28,9 +28,9 @@ internal class WriterContramapTest : FreeSpec() {
     companion object {
         private const val ID_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
@@ -42,7 +42,7 @@ internal class WriterContramapTest : FreeSpec() {
 
                 val result = writer.write(ENV, CONTEXT, LOCATION, source)
 
-                result shouldBe StringNode(ID_VALUE)
+                result shouldBe JsString(ID_VALUE)
             }
         }
     }

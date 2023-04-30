@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.NullNode
-import io.github.airflux.serialization.core.value.NumericNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsNull
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
 import io.github.airflux.serialization.dsl.common.DummyWriter
@@ -44,7 +44,7 @@ internal class StructWriterTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = 42
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
@@ -54,42 +54,42 @@ internal class StructWriterTest : FreeSpec() {
             "when a property is non-nullable type" - {
                 val source = ID(id = ID_PROPERTY_VALUE)
 
-                val writer: Writer<OPTS, Unit, ID> = structWriter {
+                val writer: JsWriter<OPTS, Unit, ID> = structWriter {
                     property(nonNullable(name = ID_PROPERTY_NAME, from = { -> id }, writer = DummyWriter.intWriter()))
                 }
 
                 "when the action of the writer was set to return empty value" - {
-                    val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                    val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                     "then should return a struct with property" {
                         val result =
                             writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                        result shouldBe StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
+                        result shouldBe JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
                     }
                 }
 
                 "when the action of the writer was set to return nothing" - {
-                    val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                    val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                     "then should return a struct with property" {
                         val result =
                             writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                        result shouldBe StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
+                        result shouldBe JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
                     }
                 }
 
                 "when the action of the writer was set to return null value" - {
-                    val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                    val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
                     "then should return a struct with property" {
                         val result =
                             writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                        result shouldBe StructNode(
-                            ID_PROPERTY_NAME to NumericNode.valueOf(ID_PROPERTY_VALUE)
+                        result shouldBe JsStruct(
+                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
                     }
                 }
@@ -99,7 +99,7 @@ internal class StructWriterTest : FreeSpec() {
                 val source = NullableID(get = null)
 
                 "when a writer of property is nullable" - {
-                    val writer: Writer<OPTS, Unit, NullableID> = structWriter {
+                    val writer: JsWriter<OPTS, Unit, NullableID> = structWriter {
                         property(
                             nullable(
                                 name = ID_PROPERTY_NAME,
@@ -110,38 +110,38 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return empty value" - {
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                         "then should return a struct with property" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe StructNode(ID_PROPERTY_NAME to NullNode)
+                            result shouldBe JsStruct(ID_PROPERTY_NAME to JsNull)
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                         "then should return a struct with property" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe StructNode(ID_PROPERTY_NAME to NullNode)
+                            result shouldBe JsStruct(ID_PROPERTY_NAME to JsNull)
                         }
                     }
 
                     "when the action of the writer was set to return null value" - {
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
                         "then should return a struct with property" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe StructNode(ID_PROPERTY_NAME to NullNode)
+                            result shouldBe JsStruct(ID_PROPERTY_NAME to JsNull)
                         }
                     }
                 }
 
                 "when a writer of property is optional" - {
-                    val writer: Writer<OPTS, Unit, NullableID> = structWriter {
+                    val writer: JsWriter<OPTS, Unit, NullableID> = structWriter {
                         property(
                             nullable(
                                 name = ID_PROPERTY_NAME,
@@ -152,17 +152,17 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return empty value" - {
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
 
                         "then should return an empty struct" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe StructNode()
+                            result shouldBe JsStruct()
                         }
                     }
 
                     "when the action of the writer was set to return nothing" - {
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
 
                         "then should return a null value" {
                             val result =
@@ -172,12 +172,12 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return null value" - {
-                        val env = WriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
 
-                        "then should return a NullNode value" {
+                        "then should return a JsNull value" {
                             val result =
                                 writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
-                            result shouldBe NullNode
+                            result shouldBe JsNull
                         }
                     }
                 }

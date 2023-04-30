@@ -19,23 +19,23 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.fold
 
 public sealed class ReadingResult<out T> {
 
     public companion object;
 
-    public data class Success<T>(val location: Location, val value: T) : ReadingResult<T>()
+    public data class Success<T>(val location: JsLocation, val value: T) : ReadingResult<T>()
 
     public class Failure private constructor(public val causes: List<Cause>) : ReadingResult<Nothing>() {
 
-        public constructor(location: Location, error: Error) : this(listOf(Cause(location, error)))
+        public constructor(location: JsLocation, error: Error) : this(listOf(Cause(location, error)))
 
-        public constructor(location: Location, errors: Errors) : this(listOf(Cause(location, errors)))
+        public constructor(location: JsLocation, errors: Errors) : this(listOf(Cause(location, errors)))
 
         public operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
 
@@ -50,8 +50,8 @@ public sealed class ReadingResult<out T> {
             append(")")
         }
 
-        public data class Cause(val location: Location, val errors: Errors) {
-            public constructor(location: Location, error: Error) : this(location, Errors(error))
+        public data class Cause(val location: JsLocation, val errors: Errors) {
+            public constructor(location: JsLocation, error: Error) : this(location, Errors(error))
         }
 
         public companion object {
@@ -73,10 +73,11 @@ public sealed class ReadingResult<out T> {
 public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
     flatMap { location, value -> transform(value).toSuccess(location) }
 
-public infix fun <T, R> ReadingResult<T>.flatMap(transform: (Location, T) -> ReadingResult<R>): ReadingResult<R> = fold(
-    ifFailure = ::identity,
-    ifSuccess = { transform(it.location, it.value) }
-)
+public infix fun <T, R> ReadingResult<T>.flatMap(transform: (JsLocation, T) -> ReadingResult<R>): ReadingResult<R> =
+    fold(
+        ifFailure = ::identity,
+        ifSuccess = { transform(it.location, it.value) }
+    )
 
 public inline fun <T, R> ReadingResult<T>.fold(
     ifFailure: (ReadingResult.Failure) -> R,
@@ -119,9 +120,9 @@ public infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.F
 )
 
 public fun <EB, O, CTX, T> ReadingResult<T>.filter(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
-    predicate: ReaderPredicate<EB, O, CTX, T & Any>
+    predicate: JsPredicate<EB, O, CTX, T & Any>
 ): ReadingResult<T?> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
@@ -137,9 +138,9 @@ public fun <EB, O, CTX, T> ReadingResult<T>.filter(
 )
 
 public fun <EB, O, CTX, T> ReadingResult<T>.validation(
-    env: ReaderEnv<EB, O>,
+    env: JsReaderEnv<EB, O>,
     context: CTX,
-    validator: Validator<EB, O, CTX, T>
+    validator: JsValidator<EB, O, CTX, T>
 ): ReadingResult<T> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
@@ -156,15 +157,15 @@ public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): Readi
     ifSuccess = { result -> if (result.value != null) result else defaultValue().toSuccess(result.location) }
 )
 
-public fun <T> success(location: Location, value: T): ReadingResult<T> =
+public fun <T> success(location: JsLocation, value: T): ReadingResult<T> =
     ReadingResult.Success(location = location, value = value)
 
-public fun <E : ReadingResult.Error> failure(location: Location, error: E): ReadingResult<Nothing> =
+public fun <E : ReadingResult.Error> failure(location: JsLocation, error: E): ReadingResult<Nothing> =
     ReadingResult.Failure(location = location, error = error)
 
-public fun <T> T.toSuccess(location: Location): ReadingResult<T> = success(location = location, value = this)
+public fun <T> T.toSuccess(location: JsLocation): ReadingResult<T> = success(location = location, value = this)
 
-public fun <E : ReadingResult.Error> E.toFailure(location: Location): ReadingResult<Nothing> =
+public fun <E : ReadingResult.Error> E.toFailure(location: JsLocation): ReadingResult<Nothing> =
     failure(location = location, error = this)
 
 /**
@@ -173,8 +174,8 @@ public fun <E : ReadingResult.Error> E.toFailure(location: Location): ReadingRes
  * and using the [io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler] from env to handle it.
  */
 public inline fun <EB, O, T> withCatching(
-    env: ReaderEnv<EB, O>,
-    location: Location,
+    env: JsReaderEnv<EB, O>,
+    location: JsLocation,
     block: () -> ReadingResult<T>
 ): ReadingResult<T> =
     try {

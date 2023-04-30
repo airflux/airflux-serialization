@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.dsl.reader.env.exception
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -26,8 +26,8 @@ import org.junit.jupiter.api.assertThrows
 internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(Unit, Unit)
-        private val LOCATION = Location
+        private val ENV = JsReaderEnv(Unit, Unit)
+        private val LOCATION = JsLocation
     }
 
     init {

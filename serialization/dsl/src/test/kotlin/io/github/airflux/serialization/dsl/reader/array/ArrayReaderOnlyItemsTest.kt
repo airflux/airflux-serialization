@@ -16,18 +16,18 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.common.DummyArrayValidatorBuilder.Companion.minItems
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -42,10 +42,10 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private const val SECOND_ITEM = "second"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private const val MIN_ITEMS = 2
 
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
     }
 
     init {
@@ -53,7 +53,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         "The ArrayReader type" - {
 
             "when a reader was created for only items" - {
-                val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
+                val reader: JsReader<EB, OPTS, Unit, List<String>> = arrayReader {
                     validation(
                         minItems(
                             expected = MIN_ITEMS,
@@ -64,25 +64,25 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                     "when source is not the array type" - {
-                        val source = StringNode("")
+                        val source = JsString("")
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ArrayNode.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsArray.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when no errors in the reader" - {
-                        val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -94,7 +94,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                     }
 
                     "when error occur of validation the array" - {
-                        val source = ArrayNode()
+                        val source = JsArray()
 
                         "then the reader should return it error" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -109,7 +109,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                     }
 
                     "when error occur of validation the array and reading items" - {
-                        val source = ArrayNode(BooleanNode.valueOf(true))
+                        val source = JsArray(JsBoolean.valueOf(true))
 
                         "then the reader should return validation error" {
                             val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -125,25 +125,25 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                     "when source is not the array type" - {
-                        val source = StringNode("")
+                        val source = JsString("")
 
                         "then the reader should return the invalid type error" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(ArrayNode.nameOfType),
-                                    actual = StringNode.nameOfType
+                                    expected = listOf(JsArray.nameOfType),
+                                    actual = JsString.nameOfType
                                 )
                             )
                         }
                     }
 
                     "when no errors in the reader" - {
-                        val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                        val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                         "then should return successful value" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -155,7 +155,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                     }
 
                     "when error occur of validation the array" - {
-                        val source = ArrayNode()
+                        val source = JsArray()
 
                         "then the reader should return it error" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -170,7 +170,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                     }
 
                     "when error occur of validation the array and reading items" - {
-                        val source = ArrayNode(BooleanNode.valueOf(true))
+                        val source = JsArray(JsBoolean.valueOf(true))
 
                         "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -185,8 +185,8 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                                 ReadingResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(StringNode.nameOfType),
-                                        actual = BooleanNode.nameOfType
+                                        expected = listOf(JsString.nameOfType),
+                                        actual = JsBoolean.nameOfType
                                     )
                                 )
                             )

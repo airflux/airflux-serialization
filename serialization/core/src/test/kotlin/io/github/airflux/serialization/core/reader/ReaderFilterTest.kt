@@ -19,20 +19,20 @@ package io.github.airflux.serialization.core.reader
 import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.DummyReaderPredicate
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.predicate.ReaderPredicate
+import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.reader.struct.readRequired
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -44,28 +44,28 @@ internal class ReaderFilterTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val CODE_PROPERTY_VALUE = "code"
 
-        private val ENV: ReaderEnv<EB, Unit> = ReaderEnv(EB(), Unit)
+        private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
 
         private val stringReader = DummyReader.string<EB, Unit, Unit>()
     }
 
     init {
-        "The extension-function Reader#filter" - {
+        "The extension-function JsReader#filter" - {
 
             "when an original reader returns a result as a success" - {
 
                 "when the value in the result is not null" - {
                     val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
-                        val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
+                        val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                         readRequired(env, context, lookup, stringReader)
                     }
 
-                    val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "when the value satisfies the predicate" - {
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
 
                         "then filter should return the original value" {
                             val filtered = requiredReader.filter(predicate)
@@ -79,7 +79,7 @@ internal class ReaderFilterTest : FreeSpec() {
                     }
 
                     "when the value does not satisfy the predicate" - {
-                        val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
 
                         "then filter should return the null value" {
                             val filtered = requiredReader.filter(predicate)
@@ -92,11 +92,11 @@ internal class ReaderFilterTest : FreeSpec() {
 
                 "when the value in the result is null" - {
                     val optionalReader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
-                        val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
+                        val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                         readOptional(env, context, lookup, stringReader)
                     }
-                    val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
-                    val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
+                    val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
@@ -110,11 +110,11 @@ internal class ReaderFilterTest : FreeSpec() {
 
             "when an original reader returns a result as a failure" - {
                 val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
-                    val lookup = source.lookup(location, PropertyPath(ID_PROPERTY_NAME))
+                    val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                     readRequired(env, context, lookup, stringReader)
                 }
-                val source = StructNode(CODE_PROPERTY_NAME to StringNode(CODE_PROPERTY_VALUE))
-                val predicate: ReaderPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
+                val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }
 

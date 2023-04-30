@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -39,9 +39,9 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MAX_PROPERTIES = 2
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private val PROPERTIES: StructProperties<EB, Unit, Unit> = emptyList()
     }
 
@@ -52,7 +52,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
                 StdStructValidator.maxProperties<EB, Unit, Unit>(MAX_PROPERTIES).build(PROPERTIES)
 
             "when the struct is empty" - {
-                val source = StructNode()
+                val source = JsStruct()
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
@@ -61,7 +61,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
             }
 
             "when the struct contains a number of properties less than the maximum" - {
-                val source = StructNode(ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE))
+                val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, PROPERTIES, source)
                     result.shouldBeValid()
@@ -69,9 +69,9 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
             }
 
             "when the struct contains a number of properties equal to the maximum" - {
-                val source = StructNode(
-                    ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
-                    NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE)
+                val source = JsStruct(
+                    ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
+                    NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                 )
 
                 "then the validator should do not return any errors" {
@@ -81,10 +81,10 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
             }
 
             "when the struct contains a number of properties more than the maximum" - {
-                val source = StructNode(
-                    ID_PROPERTY_NAME to StringNode(ID_PROPERTY_VALUE),
-                    NAME_PROPERTY_NAME to StringNode(NAME_PROPERTY_VALUE),
-                    TITLE_PROPERTY_NAME to StringNode(TITLE_PROPERTY_VALUE)
+                val source = JsStruct(
+                    ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE),
+                    NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
+                    TITLE_PROPERTY_NAME to JsString(TITLE_PROPERTY_VALUE)
                 )
 
                 "then the validator should return an error" {

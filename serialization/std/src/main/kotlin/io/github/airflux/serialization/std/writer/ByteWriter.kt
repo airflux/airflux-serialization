@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.NumericNode
+import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.core.writer.Writer
+import io.github.airflux.serialization.core.writer.JsWriter
 
 /**
  * Writer for primitive [Byte] type.
  */
-public fun <O, CTX> byteWriter(): Writer<O, CTX, Byte> =
-    Writer { _, _, _, value -> NumericNode.valueOf(value) }
+public fun <O, CTX> byteWriter(): JsWriter<O, CTX, Byte> =
+    JsWriter { _, _, _, value -> JsNumeric.valueOf(value) }

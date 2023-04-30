@@ -16,18 +16,18 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.BooleanNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.common.DummyArrayValidatorBuilder.Companion.minItems
 import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -44,10 +44,10 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
         private const val FOUR_ITEM = "four"
 
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private const val MIN_ITEMS = 2
 
-        private val StringReader: Reader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
     }
 
     init {
@@ -57,7 +57,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
             "when a reader was created for prefixItems" - {
 
                 "when the additional items do not cause an error" - {
-                    val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
+                    val reader: JsReader<EB, OPTS, Unit, List<String>> = arrayReader {
                         validation(
                             minItems(
                                 expected = MIN_ITEMS,
@@ -68,25 +68,25 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                         "when source is not the array type" - {
-                            val source = StringNode("")
+                            val source = JsString("")
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                                 result shouldBeFailure failure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ArrayNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsArray.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             }
                         }
 
                         "when the number of items is less than the number of elements in prefixItems" - {
-                            val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                            val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -99,7 +99,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                         "when the number of items is equal to the number of elements in prefixItems" - {
                             val source =
-                                ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM), StringNode(THIRD_ITEM))
+                                JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM), JsString(THIRD_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -111,11 +111,11 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when the number of items is more than the number of elements in prefixItems" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                StringNode(THIRD_ITEM),
-                                StringNode(FOUR_ITEM)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsString(THIRD_ITEM),
+                                JsString(FOUR_ITEM)
                             )
 
                             "then should only return items from prefixItems" {
@@ -128,7 +128,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array" - {
-                            val source = ArrayNode()
+                            val source = JsArray()
 
                             "then the reader should return it error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -143,7 +143,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array and reading items" - {
-                            val source = ArrayNode(BooleanNode.valueOf(true))
+                            val source = JsArray(JsBoolean.valueOf(true))
 
                             "then the reader should return validation error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -159,25 +159,25 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                         "when source is not the array type" - {
-                            val source = StringNode("")
+                            val source = JsString("")
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                                 result shouldBeFailure failure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ArrayNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsArray.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             }
                         }
 
                         "when the number of items is less than the number of elements in prefixItems" - {
-                            val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                            val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -190,7 +190,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                         "when the number of items is equal to the number of elements in prefixItems" - {
                             val source =
-                                ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM), StringNode(THIRD_ITEM))
+                                JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM), JsString(THIRD_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -202,11 +202,11 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when the number of items is more than the number of elements in prefixItems" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                StringNode(THIRD_ITEM),
-                                StringNode(FOUR_ITEM)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsString(THIRD_ITEM),
+                                JsString(FOUR_ITEM)
                             )
 
                             "then should only return items from prefixItems" {
@@ -219,7 +219,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array" - {
-                            val source = ArrayNode()
+                            val source = JsArray()
 
                             "then the reader should return it error" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -234,7 +234,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when error occur of validation the array and reading items" - {
-                            val source = ArrayNode(BooleanNode.valueOf(true))
+                            val source = JsArray(JsBoolean.valueOf(true))
 
                             "then the reader should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -249,8 +249,8 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                                     ReadingResult.Failure.Cause(
                                         location = LOCATION.append(0),
                                         error = JsonErrors.InvalidType(
-                                            expected = listOf(StringNode.nameOfType),
-                                            actual = BooleanNode.nameOfType
+                                            expected = listOf(JsString.nameOfType),
+                                            actual = JsBoolean.nameOfType
                                         )
                                     )
                                 )
@@ -260,30 +260,30 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                 }
 
                 "when the additional items do cause an error" - {
-                    val reader: Reader<EB, OPTS, Unit, List<String>> = arrayReader {
+                    val reader: JsReader<EB, OPTS, Unit, List<String>> = arrayReader {
                         returns(prefixItems = listOf(StringReader, StringReader), items = false)
                     }
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = ReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
 
                         "when source is not the array type" - {
-                            val source = StringNode("")
+                            val source = JsString("")
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
                                 result shouldBeFailure failure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ArrayNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsArray.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             }
                         }
 
                         "when the number of items is less than the number of elements in prefixItems" - {
-                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val source = JsArray(JsString(FIRST_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -295,7 +295,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when the number of items is equal to the number of elements in prefixItems" - {
-                            val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                            val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
@@ -307,11 +307,11 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when the number of items is more than the number of elements in prefixItems" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                StringNode(THIRD_ITEM),
-                                StringNode(FOUR_ITEM)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsString(THIRD_ITEM),
+                                JsString(FOUR_ITEM)
                             )
 
                             "then should return an error" {
@@ -325,25 +325,25 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = ReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
 
                         "when source is not the array type" - {
-                            val source = StringNode("")
+                            val source = JsString("")
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                                 result shouldBeFailure failure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(ArrayNode.nameOfType),
-                                        actual = StringNode.nameOfType
+                                        expected = listOf(JsArray.nameOfType),
+                                        actual = JsString.nameOfType
                                     )
                                 )
                             }
                         }
 
                         "when the number of items is less than the number of elements in prefixItems" - {
-                            val source = ArrayNode(StringNode(FIRST_ITEM))
+                            val source = JsArray(JsString(FIRST_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -355,7 +355,7 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when the number of items is equal to the number of elements in prefixItems" - {
-                            val source = ArrayNode(StringNode(FIRST_ITEM), StringNode(SECOND_ITEM))
+                            val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
@@ -367,11 +367,11 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                         }
 
                         "when the number of items is more than the number of elements in prefixItems" - {
-                            val source = ArrayNode(
-                                StringNode(FIRST_ITEM),
-                                StringNode(SECOND_ITEM),
-                                StringNode(THIRD_ITEM),
-                                StringNode(FOUR_ITEM)
+                            val source = JsArray(
+                                JsString(FIRST_ITEM),
+                                JsString(SECOND_ITEM),
+                                JsString(THIRD_ITEM),
+                                JsString(FOUR_ITEM)
                             )
 
                             "then should return all errors" {

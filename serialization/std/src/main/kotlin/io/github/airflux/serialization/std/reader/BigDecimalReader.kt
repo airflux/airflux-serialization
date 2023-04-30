@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.readAsNumber
@@ -25,9 +25,9 @@ import java.math.BigDecimal
 /**
  * Reader for [BigDecimal] type.
  */
-public fun <EB, O, CTX> bigDecimalReader(): Reader<EB, O, CTX, BigDecimal>
+public fun <EB, O, CTX> bigDecimalReader(): JsReader<EB, O, CTX, BigDecimal>
     where EB : InvalidTypeErrorBuilder =
-    Reader { env, context, location, source ->
+    JsReader { env, context, location, source ->
         source.readAsNumber(env, context, location) { _, _, l, value ->
             BigDecimal(value).toSuccess(l)
         }

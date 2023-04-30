@@ -16,6 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 
-public typealias ArrayPrefixItems<EB, O, CTX, T> = List<Reader<EB, O, CTX, T>>
+public typealias ArrayPrefixItems<EB, O, CTX, T> = List<JsReader<EB, O, CTX, T>>

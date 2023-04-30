@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.location.Location
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPaths
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readOptional
@@ -29,22 +29,22 @@ import io.github.airflux.serialization.core.reader.struct.readRequired
 
 public fun <EB, O, CTX, T> required(
     name: String,
-    reader: Reader<EB, O, CTX, T>,
-    predicate: (ReaderEnv<EB, O>, CTX, Location) -> Boolean
+    reader: JsReader<EB, O, CTX, T>,
+    predicate: (JsReaderEnv<EB, O>, CTX, JsLocation) -> Boolean
 ): StructPropertySpec<EB, O, CTX, T?>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
-    required(PropertyPath(name), reader, predicate)
+    required(JsPath(name), reader, predicate)
 
 public fun <EB, O, CTX, T> required(
-    path: PropertyPath,
-    reader: Reader<EB, O, CTX, T>,
-    predicate: (ReaderEnv<EB, O>, CTX, Location) -> Boolean
+    path: JsPath,
+    reader: JsReader<EB, O, CTX, T>,
+    predicate: (JsReaderEnv<EB, O>, CTX, JsLocation) -> Boolean
 ): StructPropertySpec<EB, O, CTX, T?>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec(
-        paths = PropertyPaths(path),
+        paths = JsPaths(path),
         reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
             if (predicate(env, context, location.append(path)))

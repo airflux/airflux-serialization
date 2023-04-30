@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
-import io.github.airflux.serialization.core.path.PropertyPath
+import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
@@ -34,8 +34,8 @@ internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructVa
 
     private fun StructProperties<EB, O, CTX>.names(): Set<String> {
         fun StructProperty<EB, O, CTX, *>.names(): List<String> = paths.items
-            .filter { path -> path.head is PropertyPath.Element.Key }
-            .map { path -> (path.head as PropertyPath.Element.Key).get }
+            .filter { path -> path.head is JsPath.Element.Key }
+            .map { path -> (path.head as JsPath.Element.Key).get }
 
         return flatMap { property -> property.names() }.toSet()
     }

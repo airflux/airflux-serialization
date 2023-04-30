@@ -16,31 +16,31 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.value.NumericNode
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.core.writer.Writer
-import io.github.airflux.serialization.core.writer.env.WriterEnv
+import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 internal class LongWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = WriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(options = Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
 
         "The long type writer" - {
-            val writer: Writer<Unit, Unit, Long> = longWriter()
+            val writer: JsWriter<Unit, Unit, Long> = longWriter()
             val value: Long = Long.MAX_VALUE
 
-            "should return the NumericNode value" {
+            "should return the JsNumeric value" {
                 val result = writer.write(ENV, CONTEXT, LOCATION, value)
-                result shouldBe NumericNode.valueOf(value)
+                result shouldBe JsNumeric.valueOf(value)
             }
         }
     }

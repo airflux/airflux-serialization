@@ -21,7 +21,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCt
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.isNotBlank
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.validation
 
-val TitleReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> = StringReader.validation(isNotBlank)
+val TitleReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> = StringReader.validation(isNotBlank)

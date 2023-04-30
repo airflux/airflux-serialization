@@ -17,29 +17,29 @@
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
 import io.github.airflux.serialization.core.lookup.lookup
-import io.github.airflux.serialization.core.path.PropertyPath
-import io.github.airflux.serialization.core.path.PropertyPaths
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.struct.readOptional
 
 public fun <EB, O, CTX, T> optional(
     name: String,
-    reader: Reader<EB, O, CTX, T>,
-    default: (ReaderEnv<EB, O>, CTX) -> T
+    reader: JsReader<EB, O, CTX, T>,
+    default: (JsReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
-    optional(PropertyPath(name), reader, default)
+    optional(JsPath(name), reader, default)
 
 public fun <EB, O, CTX, T> optional(
-    path: PropertyPath,
-    reader: Reader<EB, O, CTX, T>,
-    default: (ReaderEnv<EB, O>, CTX) -> T
+    path: JsPath,
+    reader: JsReader<EB, O, CTX, T>,
+    default: (JsReaderEnv<EB, O>, CTX) -> T
 ): StructPropertySpec<EB, O, CTX, T>
     where EB : InvalidTypeErrorBuilder =
     StructPropertySpec(
-        paths = PropertyPaths(path),
+        paths = JsPaths(path),
         reader = { env, context, location, source ->
             val lookup = source.lookup(location, path)
             readOptional(env, context, lookup, reader, default)

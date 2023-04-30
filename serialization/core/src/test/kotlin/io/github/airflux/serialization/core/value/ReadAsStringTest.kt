@@ -19,8 +19,8 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -30,32 +30,32 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsStringTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
-        private val LOCATION = Location.append("user")
+        private val ENV = JsReaderEnv(EB(), Unit)
+        private val LOCATION = JsLocation.append("user")
     }
 
     init {
         "The readAsString function" - {
 
-            "when called with a receiver of the StringNode type" - {
+            "when called with a receiver of the JsString type" - {
 
                 "should return the string value" {
-                    val json: ValueNode = StringNode("abc")
+                    val json: JsValue = JsString("abc")
                     val result = json.readAsString(ENV, LOCATION)
                     result shouldBeSuccess success(location = LOCATION, value = "abc")
                 }
             }
 
-            "when called with a receiver of not the StringNode type" - {
+            "when called with a receiver of not the JsString type" - {
 
                 "should return the invalid type error" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
                     val result = json.readAsString(ENV, LOCATION)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(StringNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

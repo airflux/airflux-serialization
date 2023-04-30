@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.value.ArrayNode
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
@@ -31,9 +31,9 @@ import io.kotest.core.spec.style.FreeSpec
 internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
@@ -42,7 +42,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
             val validator: ArrayValidator<EB, Unit, Unit> = StdArrayValidator.isNotEmpty<EB, Unit, Unit>().build()
 
             "when an array is empty" - {
-                val source = ArrayNode()
+                val source = JsArray()
 
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)
@@ -52,7 +52,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
             }
 
             "when an array is not empty" - {
-                val source = ArrayNode(StringNode("A"), StringNode("B"))
+                val source = JsArray(JsString("A"), JsString("B"))
 
                 "then the validator should do not return any errors" {
                     val result = validator.validate(ENV, CONTEXT, LOCATION, source)

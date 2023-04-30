@@ -20,34 +20,34 @@ import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.toSuccess
-import io.github.airflux.serialization.core.value.StringNode
+import io.github.airflux.serialization.core.value.JsString
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ReaderFlatMapTest : FreeSpec() {
 
     companion object {
         private const val VALUE = "42"
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
     }
 
     init {
-        "The extension-function Reader#flatMapResult" - {
+        "The extension-function JsReader#flatMapResult" - {
 
             "when the original reader returns a successful result" - {
-                val reader: Reader<EB, Unit, Unit, String> = DummyReader.string()
+                val reader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
 
                 "then the new reader should return the transformed value" {
-                    val source = StringNode(VALUE)
+                    val source = JsString(VALUE)
                     val transformedReader =
                         reader.flatMapResult { _, _, location, value ->
                             value.toInt().toSuccess(location)
@@ -60,10 +60,10 @@ internal class ReaderFlatMapTest : FreeSpec() {
 
             "when the original reader returns an error" - {
                 val failure = failure(location = LOCATION, error = JsonErrors.PathMissing)
-                val reader: Reader<EB, Unit, Unit, String> = DummyReader(result = failure)
+                val reader: JsReader<EB, Unit, Unit, String> = DummyReader(result = failure)
 
                 "then the new reader should return it error" {
-                    val source = StringNode(VALUE)
+                    val source = JsString(VALUE)
                     val transformedReader =
                         reader.flatMapResult { _, _, location, value ->
                             value.toInt().toSuccess(location)

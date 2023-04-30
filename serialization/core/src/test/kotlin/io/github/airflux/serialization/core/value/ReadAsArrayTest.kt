@@ -19,8 +19,8 @@ package io.github.airflux.serialization.core.value
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -31,22 +31,22 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ReadAsArrayTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location.append("user")
+        private val LOCATION = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val READER = { _: ReaderEnv<EB, Unit>, _: Unit, location: Location, source: ArrayNode ->
-            success(location = location, value = source.map { (it as StringNode).get })
+        private val READER = { _: JsReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsArray ->
+            success(location = location, value = source.map { (it as JsString).get })
         }
     }
 
     init {
         "The 'readAsArray' function" - {
 
-            "when called with a receiver of the ArrayNode type" - {
+            "when called with a receiver of the JsArray type" - {
 
                 "should return the collection of values" {
-                    val json: ValueNode = ArrayNode(StringNode(USER_NAME))
+                    val json: JsValue = JsArray(JsString(USER_NAME))
 
                     val result = json.readAsArray(ENV, CONTEXT, LOCATION, READER)
 
@@ -54,18 +54,18 @@ internal class ReadAsArrayTest : FreeSpec() {
                 }
             }
 
-            "when called with a receiver of not the ArrayNode type" - {
+            "when called with a receiver of not the JsArray type" - {
 
                 "should return the invalid type error" {
-                    val json: ValueNode = BooleanNode.valueOf(true)
+                    val json: JsValue = JsBoolean.valueOf(true)
 
                     val result = json.readAsArray(ENV, CONTEXT, LOCATION, READER)
 
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(ArrayNode.nameOfType),
-                            actual = BooleanNode.nameOfType
+                            expected = listOf(JsArray.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 }

@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.std.validator.number
 
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.validation.Validator
+import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
 import io.github.airflux.serialization.std.common.kotest.shouldBeValid
@@ -29,16 +29,16 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ExclusiveMinimumNumberValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
+        private val LOCATION = JsLocation
         private const val VALUE: Int = 2
     }
 
     init {
 
         "The numeric validator of the exclusive minimum allowed value" - {
-            val validator: Validator<EB, Unit, Unit, Int> = StdNumberValidator.exclusiveMinimum(VALUE)
+            val validator: JsValidator<EB, Unit, Unit, Int> = StdNumberValidator.exclusiveMinimum(VALUE)
 
             "when a value is less than the allowed value" - {
                 val value = VALUE - 1

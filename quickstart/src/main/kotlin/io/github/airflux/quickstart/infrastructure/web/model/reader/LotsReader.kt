@@ -21,14 +21,14 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCt
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonArrayReaderValidators
-import io.github.airflux.serialization.core.reader.Reader
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.flatMapResult
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.reader.result.withCatching
 import io.github.airflux.serialization.dsl.reader.array.arrayReader
 import io.github.airflux.serialization.dsl.reader.array.returns
 
-val LotsReader: Reader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Lots> = arrayReader {
+val LotsReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Lots> = arrayReader {
     validation(CommonArrayReaderValidators)
     returns(items = LotReader)
 }.flatMapResult { env, _, location, items ->

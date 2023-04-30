@@ -20,17 +20,17 @@ import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.kotest.shouldBeFailure
 import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
-import io.github.airflux.serialization.core.location.Location
-import io.github.airflux.serialization.core.lookup.LookupResult
-import io.github.airflux.serialization.core.reader.Reader
-import io.github.airflux.serialization.core.reader.env.ReaderEnv
+import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.StringNode
-import io.github.airflux.serialization.core.value.StructNode
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
 import io.kotest.core.spec.style.FreeSpec
 
 internal class OptionalPropertyReaderTest : FreeSpec() {
@@ -39,10 +39,10 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "08b513cf-b218-4d89-aa78-3c2b482ff405"
 
-        private val ENV = ReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
-        private val LOCATION = Location
-        private val READER: Reader<EB, Unit, Unit, String> = DummyReader.string()
+        private val LOCATION = JsLocation
+        private val READER: JsReader<EB, Unit, Unit, String> = DummyReader.string()
     }
 
     init {
@@ -50,10 +50,10 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
         "The readOptional function" - {
 
             "when the element is defined" - {
-                val lookup: LookupResult =
-                    LookupResult.Defined(
+                val lookup: JsLookup =
+                    JsLookup.Defined(
                         location = LOCATION.append(ID_PROPERTY_NAME),
-                        value = StringNode(ID_PROPERTY_VALUE)
+                        value = JsString(ID_PROPERTY_VALUE)
                     )
 
                 "then should return the result of applying the reader" {
@@ -67,8 +67,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is missing" - {
-                val lookup: LookupResult =
-                    LookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
+                val lookup: JsLookup =
+                    JsLookup.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the null value" {
                     val result: ReadingResult<String?> =
@@ -78,9 +78,9 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is invalid type" - {
-                val lookup: LookupResult = LookupResult.Undefined.InvalidType(
-                    expected = listOf(StructNode.nameOfType),
-                    actual = StringNode.nameOfType,
+                val lookup: JsLookup = JsLookup.Undefined.InvalidType(
+                    expected = listOf(JsStruct.nameOfType),
+                    actual = JsString.nameOfType,
                     breakpoint = LOCATION.append(ID_PROPERTY_NAME)
                 )
 
@@ -90,8 +90,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(StructNode.nameOfType),
-                            actual = StringNode.nameOfType
+                            expected = listOf(JsStruct.nameOfType),
+                            actual = JsString.nameOfType
                         )
                     )
                 }
