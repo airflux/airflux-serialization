@@ -438,9 +438,7 @@ public final class io/github/airflux/serialization/core/value/JsString$Companion
 public final class io/github/airflux/serialization/core/value/JsStruct : io/github/airflux/serialization/core/value/JsValue, java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsStruct$Companion;
 	public static final field nameOfType Ljava/lang/String;
-	public fun <init> ()V
-	public fun <init> (Ljava/util/Map;)V
-	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun get (Lio/github/airflux/serialization/core/path/JsPath$Element$Key;)Lio/github/airflux/serialization/core/value/JsValue;
 	public final fun get (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsValue;
@@ -452,8 +450,29 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/airflux/serialization/core/value/JsStruct$Builder {
+	public final fun build ()Lio/github/airflux/serialization/core/value/JsStruct;
+	public final fun put (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)V
+	public final fun putAll (Ljava/lang/Iterable;)V
+}
+
 public final class io/github/airflux/serialization/core/value/JsStruct$Companion {
+	public final fun builder ()Lio/github/airflux/serialization/core/value/JsStruct$Builder;
+	public final fun invoke (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsStruct;
 	public final fun invoke ([Lkotlin/Pair;)Lio/github/airflux/serialization/core/value/JsStruct;
+}
+
+public final class io/github/airflux/serialization/core/value/JsStruct$Property {
+	public fun <init> (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/airflux/serialization/core/value/JsValue;
+	public final fun copy (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/value/JsStruct$Property;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/value/JsStruct$Property;Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;ILjava/lang/Object;)Lio/github/airflux/serialization/core/value/JsStruct$Property;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Lio/github/airflux/serialization/core/value/JsValue;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract class io/github/airflux/serialization/core/value/JsValue {

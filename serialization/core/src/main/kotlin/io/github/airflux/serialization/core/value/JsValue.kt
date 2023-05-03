@@ -135,36 +135,79 @@ public class JsArray(private val items: List<JsValue> = emptyList()) : JsValue()
     }
 }
 
-public class JsStruct(
-    private val properties: Map<String, JsValue> = emptyMap()
-) : JsValue(),
-    Iterable<Map.Entry<String, JsValue>> {
+public class JsStruct private constructor(properties: Map<String, JsValue>) : JsValue(),
+                                                                              Iterable<JsStruct.Property> {
+
+    private val _properties: Map<String, JsValue> = properties
 
     override val nameOfType: String = JsStruct.nameOfType
 
     public operator fun get(key: JsPath.Element.Key): JsValue? = get(key.get)
 
-    public operator fun get(key: String): JsValue? = properties[key]
+    public operator fun get(key: String): JsValue? = _properties[key]
 
     public val count: Int
-        get() = properties.size
+        get() = _properties.size
 
-    public fun isEmpty(): Boolean = properties.isEmpty()
+    public fun isEmpty(): Boolean = _properties.isEmpty()
 
-    override fun iterator(): Iterator<Map.Entry<String, JsValue>> = properties.iterator()
+    override fun iterator(): Iterator<Property> = PropertiesIterator(_properties)
 
-    override fun toString(): String = properties.map { (name, value) -> """"$name": $value""" }
+    override fun toString(): String = _properties.map { (name, value) -> """"$name": $value""" }
         .joinToString(prefix = "{", postfix = "}")
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsStruct && this.properties.keys == other.properties.keys)
+        this === other || (other is JsStruct && this._properties.keys == other._properties.keys)
 
-    override fun hashCode(): Int = properties.keys.hashCode()
+    override fun hashCode(): Int = _properties.keys.hashCode()
+
+    public data class Property(val name: String, val value: JsValue)
+
+    private class PropertiesIterator(target: Map<String, JsValue>) : AbstractIterator<Property>() {
+        private val iterator = target.iterator()
+
+        override fun computeNext() {
+            if (iterator.hasNext())
+                setNext(iterator.next()
+                    .let { Property(name = it.key, value = it.value) })
+            else
+                done()
+        }
+    }
+
+    public class Builder internal constructor() {
+        private val properties = mutableMapOf<String, JsValue>()
+
+        public fun put(name: String, value: JsValue) {
+            properties[name] = value
+        }
+
+        public fun putAll(items: Iterable<Pair<String, JsValue>>) {
+            items.forEach { (name, value) ->
+                put(name, value)
+            }
+        }
+
+        public fun build(): JsStruct = if (properties.isNotEmpty())
+            JsStruct(properties)
+        else
+            JsStruct(emptyMap())
+    }
 
     public companion object {
+
         public const val nameOfType: String = "object"
 
         public operator fun invoke(vararg properties: Pair<String, JsValue>): JsStruct =
-            JsStruct(properties.toMap())
+            builder()
+                .apply { putAll(properties.asIterable()) }
+                .build()
+
+        public operator fun invoke(properties: Iterable<Pair<String, JsValue>>): JsStruct =
+            builder()
+                .apply { putAll(properties) }
+                .build()
+
+        public fun builder(): Builder = Builder()
     }
 }

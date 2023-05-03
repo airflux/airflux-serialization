@@ -41,22 +41,24 @@ public class StructWriter<O, CTX, T> private constructor(
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
     override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? {
-        val items: Map<String, JsValue> = mutableMapOf<String, JsValue>()
+        val struct = JsStruct.builder()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
                     property.write(env, context, currentLocation, source)
-                        ?.let { value -> this[property.name] = value }
+                        ?.let { value -> put(name = property.name, value = value) }
                 }
             }
-        return if (items.isNotEmpty())
-            JsStruct(items)
-        else
+            .build()
+
+        return if (struct.isEmpty())
             when (env.options.writerActionIfResultIsEmpty) {
-                RETURN_EMPTY_VALUE -> JsStruct()
+                RETURN_EMPTY_VALUE -> struct
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> JsNull
             }
+        else
+            struct
     }
 
     @AirfluxMarker

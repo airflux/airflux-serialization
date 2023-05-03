@@ -153,7 +153,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 JsonToken.END_OBJECT -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingObject) {
-                        maybeValue = JsStruct(head.values.toMap())
+                        maybeValue = JsStruct(head.values)
                         nextContext = parserContext
                     } else
                         throw ParsingException("We should have been reading an object, something got wrong ($head)")
