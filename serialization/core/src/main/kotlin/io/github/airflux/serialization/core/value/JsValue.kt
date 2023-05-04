@@ -106,7 +106,7 @@ public fun JsNumeric.Companion.valueOf(value: Int): JsNumeric =
 public fun JsNumeric.Companion.valueOf(value: Long): JsNumeric =
     JsNumeric.Integer.valueOrNullOf(value.toString())!!
 
-public class JsArray(private val items: List<JsValue> = emptyList()) : JsValue(), Iterable<JsValue> {
+public class JsArray private constructor(private val items: List<JsValue>) : JsValue(), Iterable<JsValue> {
 
     override val nameOfType: String = JsArray.nameOfType
 
@@ -128,10 +128,38 @@ public class JsArray(private val items: List<JsValue> = emptyList()) : JsValue()
 
     override fun hashCode(): Int = items.hashCode()
 
+    public class Builder internal constructor() {
+        private val items = mutableListOf<JsValue>()
+
+        public fun add(value: JsValue) {
+            items.add(value)
+        }
+
+        public fun addAll(items: Iterable<JsValue>) {
+            this.items.addAll(items)
+        }
+
+        public fun build(): JsArray = if (items.isNotEmpty()) JsArray(items) else EMPTY
+
+        private companion object {
+            private val EMPTY = JsArray(emptyList())
+        }
+    }
+
     public companion object {
         public const val nameOfType: String = "array"
 
-        public operator fun invoke(vararg elements: JsValue): JsArray = JsArray(elements.toList())
+        public operator fun invoke(vararg items: JsValue): JsArray =
+            builder()
+                .apply { addAll(items.asIterable()) }
+                .build()
+
+        public operator fun invoke(items: Iterable<JsValue>): JsArray =
+            builder()
+                .apply { addAll(items) }
+                .build()
+
+        public fun builder(): Builder = Builder()
     }
 }
 

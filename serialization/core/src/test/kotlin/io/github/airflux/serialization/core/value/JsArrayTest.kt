@@ -30,15 +30,19 @@ internal class JsArrayTest : FreeSpec() {
     companion object {
         private const val FIRST_PHONE_VALUE: String = "123"
         private const val SECOND_PHONE_VALUE: String = "456"
+        private const val THIRD_PHONE_VALUE: String = "789"
+        private const val FOUR_PHONE_VALUE: String = "012"
 
         private val FIRST_ITEM = JsString(FIRST_PHONE_VALUE)
         private val SECOND_ITEM = JsString(SECOND_PHONE_VALUE)
+        private val THIRD_ITEM = JsString(THIRD_PHONE_VALUE)
+        private val FOUR_ITEM = JsString(FOUR_PHONE_VALUE)
     }
 
     init {
         "The JsArray type" - {
 
-            "when created without elements" - {
+            "when creating a type value without items" - {
                 val array = JsArray()
 
                 "should be empty" {
@@ -49,24 +53,32 @@ internal class JsArrayTest : FreeSpec() {
                     array.size shouldBe 0
                 }
 
-                "should not have elements" {
+                "should not have items" {
                     array.shouldBeEmpty()
                 }
 
-                "then the method of getting the value of the element by index should return null" {
+                "then the method of getting the value of the item by index should return null" {
                     array[0] shouldBe null
                 }
 
-                "then the method of getting the value of the element by path element should return null" {
+                "then the method of getting the value of the item by path element should return null" {
                     array[JsPath.Element.Idx(0)] shouldBe null
                 }
 
                 "then the toString() method should return the expected string" {
                     array shouldBeEqualsString "[]"
                 }
+
+                "should comply with equals() and hashCode() contract" {
+                    array.shouldBeEqualsContract(
+                        y = JsArray(),
+                        z = JsArray(),
+                        other = JsArray(FIRST_ITEM)
+                    )
+                }
             }
 
-            "when created with some elements" - {
+            "when creating a type value with some items" - {
                 val array = JsArray(FIRST_ITEM, SECOND_ITEM)
 
                 "should be non-empty" {
@@ -77,11 +89,11 @@ internal class JsArrayTest : FreeSpec() {
                     array.size shouldBe 2
                 }
 
-                "should have elements in the order they were added" {
+                "should have items in the order they were added" {
                     array shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
                 }
 
-                "then the method of getting the value of the element by index should return a specific value" - {
+                "then the method of getting the value of the item by index should return a specific value" - {
                     withData(
                         listOf(
                             Pair(0, FIRST_ITEM),
@@ -92,7 +104,7 @@ internal class JsArrayTest : FreeSpec() {
                     }
                 }
 
-                "then the method of getting the value of the element by path element should return a specific value" - {
+                "then the method of getting the value of the item by path element should return a specific value" - {
                     withData(
                         listOf(
                             Pair(JsPath.Element.Idx(0), FIRST_ITEM),
@@ -106,17 +118,135 @@ internal class JsArrayTest : FreeSpec() {
                 "then the toString() method should return the expected string" {
                     array shouldBeEqualsString """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE"]"""
                 }
+
+                "should comply with equals() and hashCode() contract" {
+                    array.shouldBeEqualsContract(
+                        y = JsArray(FIRST_ITEM, SECOND_ITEM),
+                        z = JsArray(FIRST_ITEM, SECOND_ITEM),
+                        others = listOf(
+                            JsArray(),
+                            JsArray(FIRST_ITEM),
+                            JsArray(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM),
+                        )
+                    )
+                }
             }
 
-            "should comply with equals() and hashCode() contract" {
-                JsArray(FIRST_ITEM).shouldBeEqualsContract(
-                    y = JsArray(FIRST_ITEM),
-                    z = JsArray(FIRST_ITEM),
-                    others = listOf(
-                        JsArray(),
-                        JsArray(FIRST_ITEM, SECOND_ITEM)
+            "when creating a type value from a list of items" - {
+                val items = listOf(FIRST_ITEM, SECOND_ITEM)
+                val array = JsArray(items)
+
+                "should be non-empty" {
+                    array.isEmpty() shouldBe false
+                }
+
+                "should have size 2" {
+                    array.size shouldBe 2
+                }
+
+                "should have items in the order they were added" {
+                    array shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM)
+                }
+
+                "then the method of getting the value of the items by index should return a specific value" - {
+                    withData(
+                        listOf(
+                            Pair(0, FIRST_ITEM),
+                            Pair(1, SECOND_ITEM)
+                        )
+                    ) { (index, value) ->
+                        array[index] shouldBe value
+                    }
+                }
+
+                "then the method of getting the value of the items by path element should return a specific value" - {
+                    withData(
+                        listOf(
+                            Pair(JsPath.Element.Idx(0), FIRST_ITEM),
+                            Pair(JsPath.Element.Idx(1), SECOND_ITEM)
+                        )
+                    ) { (index, value) ->
+                        array[index] shouldBe value
+                    }
+                }
+
+                "then the toString() method should return the expected string" {
+                    array shouldBeEqualsString """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE"]"""
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    array.shouldBeEqualsContract(
+                        y = JsArray(FIRST_ITEM, SECOND_ITEM),
+                        z = JsArray(FIRST_ITEM, SECOND_ITEM),
+                        others = listOf(
+                            JsArray(),
+                            JsArray(FIRST_ITEM),
+                            JsArray(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM),
+                        )
                     )
-                )
+                }
+            }
+
+            "when creating a type value using the builder" - {
+                val array = JsArray.builder()
+                    .apply {
+                        add(FIRST_ITEM)
+                        addAll(listOf(SECOND_ITEM, THIRD_ITEM))
+                    }
+                    .build()
+
+                "should be non-empty" {
+                    array.isEmpty() shouldBe false
+                }
+
+                "should have size 2" {
+                    array.size shouldBe 3
+                }
+
+                "should have items in the order they were added" {
+                    array shouldContainExactly listOf(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM)
+                }
+
+                "then the method of getting the value of the items by index should return a specific value" - {
+                    withData(
+                        listOf(
+                            Pair(0, FIRST_ITEM),
+                            Pair(1, SECOND_ITEM),
+                            Pair(2, THIRD_ITEM),
+                        )
+                    ) { (index, value) ->
+                        array[index] shouldBe value
+                    }
+                }
+
+                "then the method of getting the value of the items by path element should return a specific value" - {
+                    withData(
+                        listOf(
+                            Pair(JsPath.Element.Idx(0), FIRST_ITEM),
+                            Pair(JsPath.Element.Idx(1), SECOND_ITEM),
+                            Pair(JsPath.Element.Idx(2), THIRD_ITEM)
+                        )
+                    ) { (index, value) ->
+                        array[index] shouldBe value
+                    }
+                }
+
+                "then the toString() method should return the expected string" {
+                    array shouldBeEqualsString """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE", "$THIRD_PHONE_VALUE"]"""
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    array.shouldBeEqualsContract(
+                        y = JsArray(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM),
+                        z = JsArray(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM),
+                        others = listOf(
+                            JsArray(),
+                            JsArray(FIRST_ITEM),
+                            JsArray(FIRST_ITEM, SECOND_ITEM),
+                            JsArray(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM, FOUR_ITEM),
+                        )
+                    )
+                }
             }
         }
     }

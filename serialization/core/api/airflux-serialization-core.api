@@ -342,9 +342,7 @@ public final class io/github/airflux/serialization/core/reader/validation/Valida
 public final class io/github/airflux/serialization/core/value/JsArray : io/github/airflux/serialization/core/value/JsValue, java/lang/Iterable, kotlin/jvm/internal/markers/KMappedMarker {
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsArray$Companion;
 	public static final field nameOfType Ljava/lang/String;
-	public fun <init> ()V
-	public fun <init> (Ljava/util/List;)V
-	public synthetic fun <init> (Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun get (I)Lio/github/airflux/serialization/core/value/JsValue;
 	public final fun get (Lio/github/airflux/serialization/core/path/JsPath$Element$Idx;)Lio/github/airflux/serialization/core/value/JsValue;
@@ -356,7 +354,15 @@ public final class io/github/airflux/serialization/core/value/JsArray : io/githu
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/airflux/serialization/core/value/JsArray$Builder {
+	public final fun add (Lio/github/airflux/serialization/core/value/JsValue;)V
+	public final fun addAll (Ljava/lang/Iterable;)V
+	public final fun build ()Lio/github/airflux/serialization/core/value/JsArray;
+}
+
 public final class io/github/airflux/serialization/core/value/JsArray$Companion {
+	public final fun builder ()Lio/github/airflux/serialization/core/value/JsArray$Builder;
+	public final fun invoke (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsArray;
 	public final fun invoke ([Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/value/JsArray;
 }
 
