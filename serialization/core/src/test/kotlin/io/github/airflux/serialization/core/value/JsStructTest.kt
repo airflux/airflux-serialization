@@ -35,12 +35,20 @@ internal class JsStructTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
         private const val IS_ACTIVE_VALUE = true
         private val IS_ACTIVE_PROPERTY_VALUE = JsBoolean.valueOf(IS_ACTIVE_VALUE)
+
+        private const val EMAIL_PROPERTY_NAME = "email"
+        private const val EMAIL_VALUE = "user@example.com"
+        private val EMAIL_PROPERTY_VALUE = JsString(EMAIL_VALUE)
+
+        private const val VERIFIED_EMAIL_PROPERTY_NAME = "verified_email"
+        private const val VERIFIED_EMAIL_VALUE = true
+        private val VERIFIED_EMAIL_PROPERTY_VALUE = JsBoolean.valueOf(VERIFIED_EMAIL_VALUE)
     }
 
     init {
         "The JsStruct type" - {
 
-            "when type value creating without properties" - {
+            "when creating a type value without properties" - {
                 val struct = JsStruct()
 
                 "should be empty" {
@@ -76,7 +84,7 @@ internal class JsStructTest : FreeSpec() {
                 }
             }
 
-            "when created with properties" - {
+            "when creating a type value with properties" - {
                 val struct = JsStruct(
                     USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
                     IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
@@ -144,7 +152,7 @@ internal class JsStructTest : FreeSpec() {
                 }
             }
 
-            "when type value creating from a list of properties" - {
+            "when creating a type value from a list of properties" - {
                 val properties = listOf(
                     USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
                     IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
@@ -208,6 +216,94 @@ internal class JsStructTest : FreeSpec() {
                             JsStruct(),
                             JsStruct(USER_PROPERTY_NAME to USER_PROPERTY_VALUE),
                             JsStruct(IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE)
+                        )
+                    )
+                }
+            }
+
+            "when creating a type value using the builder" - {
+                val struct = JsStruct.builder()
+                    .apply {
+                        put(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
+                        putAll(
+                            listOf(
+                                IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE,
+                                EMAIL_PROPERTY_NAME to EMAIL_PROPERTY_VALUE
+                            )
+                        )
+                    }
+                    .build()
+
+                "should be non-empty" {
+                    struct.isEmpty() shouldBe false
+                }
+
+                "should have count 2" {
+                    struct.count shouldBe 3
+                }
+
+                "should have elements in the order they were added" {
+                    struct shouldContainExactly listOf(
+                        JsStruct.Property(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE),
+                        JsStruct.Property(name = IS_ACTIVE_PROPERTY_NAME, value = IS_ACTIVE_PROPERTY_VALUE),
+                        JsStruct.Property(name = EMAIL_PROPERTY_NAME, value = EMAIL_PROPERTY_VALUE)
+                    )
+                }
+
+                "then the method of getting the value of the element by key should return a specific value" - {
+                    withData(
+                        listOf(
+                            USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                            IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE,
+                            EMAIL_PROPERTY_NAME to EMAIL_PROPERTY_VALUE
+                        )
+                    ) { (key, value) ->
+                        struct[key] shouldBe value
+                    }
+                }
+
+                "then the method of getting the value of the element by path element should return a specific value" - {
+                    withData(
+                        listOf(
+                            JsPath.Element.Key(USER_PROPERTY_NAME) to USER_PROPERTY_VALUE,
+                            JsPath.Element.Key(IS_ACTIVE_PROPERTY_NAME) to IS_ACTIVE_PROPERTY_VALUE,
+                            JsPath.Element.Key(EMAIL_PROPERTY_NAME) to EMAIL_PROPERTY_VALUE
+                        )
+                    ) { (key, value) ->
+                        struct[key] shouldBe value
+                    }
+                }
+
+                "then the toString() method should return the expected string" {
+                    struct.shouldBeEqualsString(
+                        """{"$USER_PROPERTY_NAME": "$USER_VALUE",""" +
+                            """ "$IS_ACTIVE_PROPERTY_NAME": $IS_ACTIVE_VALUE,""" +
+                            """ "$EMAIL_PROPERTY_NAME": $EMAIL_PROPERTY_VALUE}"""
+                    )
+                }
+
+                "should comply with equals() and hashCode() contract" {
+                    struct.shouldBeEqualsContract(
+                        y = JsStruct(
+                            USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                            IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE,
+                            EMAIL_PROPERTY_NAME to EMAIL_PROPERTY_VALUE
+                        ),
+                        z = JsStruct(
+                            USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                            IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE,
+                            EMAIL_PROPERTY_NAME to EMAIL_PROPERTY_VALUE
+                        ),
+                        others = listOf(
+                            JsStruct(),
+                            JsStruct(USER_PROPERTY_NAME to USER_PROPERTY_VALUE),
+                            JsStruct(IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE),
+                            JsStruct(
+                                USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                                IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE,
+                                EMAIL_PROPERTY_NAME to EMAIL_PROPERTY_VALUE,
+                                VERIFIED_EMAIL_PROPERTY_NAME to VERIFIED_EMAIL_PROPERTY_VALUE
+                            )
                         )
                     )
                 }
