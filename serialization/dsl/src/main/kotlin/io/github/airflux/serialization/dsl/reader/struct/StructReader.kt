@@ -34,8 +34,8 @@ import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidators
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidators
 
 public fun <EB, O, CTX, T> structReader(
     block: StructReader.Builder<EB, O, CTX, T>.() -> JsReader<EB, O, CTX, T>
@@ -107,14 +107,14 @@ public class StructReader<EB, O, CTX, T> private constructor(
               O : FailFastOption {
 
         private val properties = mutableListOf<StructProperty<EB, O, CTX, *>>()
-        private val validatorBuilders = mutableListOf<StructValidatorBuilder<EB, O, CTX>>()
+        private val validatorBuilders = mutableListOf<StructValidator.Builder<EB, O, CTX>>()
 
         public fun validation(
-            validator: StructValidatorBuilder<EB, O, CTX>,
-            vararg validators: StructValidatorBuilder<EB, O, CTX>
+            validator: StructValidator.Builder<EB, O, CTX>,
+            vararg validators: StructValidator.Builder<EB, O, CTX>
         ) {
             validation(
-                validators = mutableListOf<StructValidatorBuilder<EB, O, CTX>>()
+                validators = mutableListOf<StructValidator.Builder<EB, O, CTX>>()
                     .apply {
                         add(validator)
                         addAll(validators)
@@ -122,7 +122,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
             )
         }
 
-        public fun validation(validators: List<StructValidatorBuilder<EB, O, CTX>>) {
+        public fun validation(validators: List<StructValidator.Builder<EB, O, CTX>>) {
             validatorBuilders.addAll(validators)
         }
 

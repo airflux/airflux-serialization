@@ -17,22 +17,22 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
 public object StdStructValidator {
-    public fun <EB, O, CTX> additionalProperties(): StructValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> additionalProperties(): StructValidator.Builder<EB, O, CTX>
         where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
               O : FailFastOption =
         AdditionalPropertiesStructValidatorBuilder()
 
-    public fun <EB, O, CTX> isNotEmpty(): StructValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> isNotEmpty(): StructValidator.Builder<EB, O, CTX>
         where EB : IsNotEmptyStructValidator.ErrorBuilder = IsNotEmptyStructValidatorBuilder()
 
-    public fun <EB, O, CTX> minProperties(value: Int): StructValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> minProperties(value: Int): StructValidator.Builder<EB, O, CTX>
         where EB : MinPropertiesStructValidator.ErrorBuilder =
         MinPropertiesStructValidatorBuilder(value)
 
-    public fun <EB, O, CTX> maxProperties(value: Int): StructValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> maxProperties(value: Int): StructValidator.Builder<EB, O, CTX>
         where EB : MaxPropertiesStructValidator.ErrorBuilder =
         MaxPropertiesStructValidatorBuilder(value)
 }

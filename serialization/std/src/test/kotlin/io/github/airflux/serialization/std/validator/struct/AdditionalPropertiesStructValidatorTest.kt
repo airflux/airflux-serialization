@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 import io.github.airflux.serialization.std.common.DummyReader
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid

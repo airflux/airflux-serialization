@@ -192,7 +192,7 @@ public final class io/github/airflux/serialization/std/validator/string/StdStrin
 	public final fun pattern (Lkotlin/text/Regex;)Lio/github/airflux/serialization/core/reader/validation/JsValidator;
 }
 
-public final class io/github/airflux/serialization/std/validator/struct/AdditionalPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
+public final class io/github/airflux/serialization/std/validator/struct/AdditionalPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validation/StructValidator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
@@ -200,7 +200,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 	public abstract fun additionalPropertiesStructError ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/struct/IsNotEmptyStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
+public final class io/github/airflux/serialization/std/validator/struct/IsNotEmptyStructValidator : io/github/airflux/serialization/dsl/reader/struct/validation/StructValidator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
@@ -208,7 +208,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 	public abstract fun isNotEmptyStructError ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/struct/MaxPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
+public final class io/github/airflux/serialization/std/validator/struct/MaxPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validation/StructValidator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
@@ -216,7 +216,7 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 	public abstract fun maxPropertiesStructError (II)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 }
 
-public final class io/github/airflux/serialization/std/validator/struct/MinPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
+public final class io/github/airflux/serialization/std/validator/struct/MinPropertiesStructValidator : io/github/airflux/serialization/dsl/reader/struct/validation/StructValidator {
 	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
@@ -226,10 +226,10 @@ public abstract interface class io/github/airflux/serialization/std/validator/st
 
 public final class io/github/airflux/serialization/std/validator/struct/StdStructValidator {
 	public static final field INSTANCE Lio/github/airflux/serialization/std/validator/struct/StdStructValidator;
-	public final fun additionalProperties ()Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder;
-	public final fun isNotEmpty ()Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder;
-	public final fun maxProperties (I)Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder;
-	public final fun minProperties (I)Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder;
+	public final fun additionalProperties ()Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder;
+	public final fun isNotEmpty ()Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder;
+	public final fun maxProperties (I)Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder;
+	public final fun minProperties (I)Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder;
 }
 
 public final class io/github/airflux/serialization/std/writer/BigDecimalWriterKt {

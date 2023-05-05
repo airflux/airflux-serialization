@@ -24,10 +24,9 @@ import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult) : StructValidatorBuilder<EB, O, CTX> {
+internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult) : StructValidator.Builder<EB, O, CTX> {
 
     private val validator = Validator<EB, O, CTX>(result)
 
@@ -47,16 +46,15 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult)
         internal fun <EB, O, CTX> additionalProperties(
             nameProperties: Set<String>,
             error: ReadingResult.Error
-        ): StructValidatorBuilder<EB, O, CTX> =
-            object : StructValidatorBuilder<EB, O, CTX> {
-                override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> =
-                    StructValidator { _, _, location, _, node ->
-                        node.forEach { (name, _) ->
-                            if (name !in nameProperties)
-                                return@StructValidator invalid(location = location.append(name), error = error)
-                        }
-                        valid()
+        ): StructValidator.Builder<EB, O, CTX> =
+            StructValidator.Builder<EB, O, CTX> {
+                StructValidator { _, _, location, _, node ->
+                    node.forEach { (name, _) ->
+                        if (name !in nameProperties)
+                            return@StructValidator invalid(location = location.append(name), error = error)
                     }
+                    valid()
+                }
             }
     }
 }

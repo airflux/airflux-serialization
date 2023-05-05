@@ -66,7 +66,7 @@ public final class io/github/airflux/serialization/dsl/reader/struct/StructReade
 
 public final class io/github/airflux/serialization/dsl/reader/struct/StructReader$Builder {
 	public final fun property (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/dsl/reader/struct/property/StructProperty;
-	public final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder;[Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder;)V
+	public final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder;[Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder;)V
 	public final fun validation (Ljava/util/List;)V
 }
 
@@ -122,12 +122,12 @@ public final class io/github/airflux/serialization/dsl/reader/struct/property/sp
 	public static final fun validation (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;Lio/github/airflux/serialization/core/reader/validation/JsValidator;)Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;
 }
 
-public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validator/StructValidator {
+public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validation/StructValidator {
 	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
-public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validator/StructValidatorBuilder {
-	public abstract fun build (Ljava/util/List;)Lio/github/airflux/serialization/dsl/reader/struct/validator/StructValidator;
+public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validation/StructValidator$Builder {
+	public abstract fun build (Ljava/util/List;)Lio/github/airflux/serialization/dsl/reader/struct/validation/StructValidator;
 }
 
 public final class io/github/airflux/serialization/dsl/value/JsValueKt {

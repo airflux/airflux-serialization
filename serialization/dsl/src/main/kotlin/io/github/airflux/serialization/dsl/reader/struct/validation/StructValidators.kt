@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.validator
+package io.github.airflux.serialization.dsl.reader.struct.validation
 
 public typealias StructValidators<EB, O, CTX> = List<StructValidator<EB, O, CTX>>

@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
 public class MaxPropertiesStructValidator<EB, O, CTX> internal constructor(private val value: Int) :
     StructValidator<EB, O, CTX>

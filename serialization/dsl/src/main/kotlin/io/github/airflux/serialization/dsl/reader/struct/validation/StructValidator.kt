@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.validator
+package io.github.airflux.serialization.dsl.reader.struct.validation
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -31,4 +31,8 @@ public fun interface StructValidator<EB, O, CTX> {
         properties: StructProperties<EB, O, CTX>,
         source: JsStruct
     ): ValidationResult
+
+    public fun interface Builder<EB, O, CTX> {
+        public fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX>
+    }
 }

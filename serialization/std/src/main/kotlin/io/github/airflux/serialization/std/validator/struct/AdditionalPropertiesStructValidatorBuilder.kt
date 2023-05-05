@@ -20,10 +20,9 @@ import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidator
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructValidatorBuilder<EB, O, CTX>
+internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructValidator.Builder<EB, O, CTX>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 

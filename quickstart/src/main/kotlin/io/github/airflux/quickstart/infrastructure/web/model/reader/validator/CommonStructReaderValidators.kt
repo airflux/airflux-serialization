@@ -19,8 +19,8 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.validator
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
-import io.github.airflux.serialization.dsl.reader.struct.validator.StructValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-val CommonStructReaderValidators: List<StructValidatorBuilder<ReaderErrorBuilders, ReaderOptions, ReaderCtx>> = listOf(
+val CommonStructReaderValidators: List<StructValidator.Builder<ReaderErrorBuilders, ReaderOptions, ReaderCtx>> = listOf(
     isNotEmpty
 )
