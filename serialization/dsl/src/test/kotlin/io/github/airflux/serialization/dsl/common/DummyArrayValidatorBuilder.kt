@@ -23,10 +23,9 @@ import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
-import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 
-internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) : ArrayValidatorBuilder<EB, O, CTX> {
+internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) : ArrayValidator.Builder<EB, O, CTX> {
 
     private val validator = Validator<EB, O, CTX>(result)
     override fun build(): ArrayValidator<EB, O, CTX> = validator
@@ -44,15 +43,14 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) 
         internal fun <EB, O, CTX> minItems(
             expected: Int,
             error: (expected: Int, actual: Int) -> ReadingResult.Error
-        ): ArrayValidatorBuilder<EB, O, CTX> =
-            object : ArrayValidatorBuilder<EB, O, CTX> {
-                override fun build(): ArrayValidator<EB, O, CTX> =
-                    ArrayValidator { _, _, location, source ->
-                        if (source.size < expected)
-                            return@ArrayValidator invalid(location = location, error = error(expected, source.size))
-                        else
-                            valid()
-                    }
+        ): ArrayValidator.Builder<EB, O, CTX> =
+            ArrayValidator.Builder {
+                ArrayValidator { _, _, location, source ->
+                    if (source.size < expected)
+                        return@ArrayValidator invalid(location = location, error = error(expected, source.size))
+                    else
+                        valid()
+                }
             }
     }
 }

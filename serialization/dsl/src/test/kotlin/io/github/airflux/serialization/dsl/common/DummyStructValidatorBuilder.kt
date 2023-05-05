@@ -47,7 +47,7 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult)
             nameProperties: Set<String>,
             error: ReadingResult.Error
         ): StructValidator.Builder<EB, O, CTX> =
-            StructValidator.Builder<EB, O, CTX> {
+            StructValidator.Builder {
                 StructValidator { _, _, location, _, node ->
                     node.forEach { (name, _) ->
                         if (name !in nameProperties)

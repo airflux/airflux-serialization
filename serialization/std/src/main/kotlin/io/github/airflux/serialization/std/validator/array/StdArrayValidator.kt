@@ -16,28 +16,28 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 
 public object StdArrayValidator {
 
     /**
      * If the is empty then an error, otherwise a success.
      */
-    public fun <EB, O, CTX> isNotEmpty(): ArrayValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> isNotEmpty(): ArrayValidator.Builder<EB, O, CTX>
         where EB : IsNotEmptyArrayValidator.ErrorBuilder =
         IsNotEmptyArrayValidatorBuilder()
 
     /**
      * If a number of elements in the array are less than an expected [value] then an error, otherwise a success.
      */
-    public fun <EB, O, CTX> minItems(value: Int): ArrayValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> minItems(value: Int): ArrayValidator.Builder<EB, O, CTX>
         where EB : MinItemsArrayValidator.ErrorBuilder =
         MinItemsArrayValidatorBuilder(value)
 
     /**
      * If a number of elements in the array are more than an expected [value] then an error, otherwise a success.
      */
-    public fun <EB, O, CTX> maxItems(value: Int): ArrayValidatorBuilder<EB, O, CTX>
+    public fun <EB, O, CTX> maxItems(value: Int): ArrayValidator.Builder<EB, O, CTX>
         where EB : MaxItemsArrayValidator.ErrorBuilder =
         MaxItemsArrayValidatorBuilder(value)
 }

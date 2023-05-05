@@ -31,8 +31,7 @@ import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
-import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidatorBuilder
+import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 
 public fun <EB, O, CTX, T> arrayReader(
     block: ArrayReader.Builder<EB, O, CTX, T>.() -> JsReader<EB, O, CTX, List<T>>
@@ -124,21 +123,21 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
               EB : InvalidTypeErrorBuilder,
               O : FailFastOption {
 
-        private val validatorBuilders = mutableListOf<ArrayValidatorBuilder<EB, O, CTX>>()
+        private val validatorBuilders = mutableListOf<ArrayValidator.Builder<EB, O, CTX>>()
 
         public fun validation(
-            validator: ArrayValidatorBuilder<EB, O, CTX>,
-            vararg validators: ArrayValidatorBuilder<EB, O, CTX>
+            validator: ArrayValidator.Builder<EB, O, CTX>,
+            vararg validators: ArrayValidator.Builder<EB, O, CTX>
         ) {
             validation(
-                validators = mutableListOf<ArrayValidatorBuilder<EB, O, CTX>>().apply {
+                validators = mutableListOf<ArrayValidator.Builder<EB, O, CTX>>().apply {
                     add(validator)
                     addAll(validators)
                 }
             )
         }
 
-        public fun validation(validators: List<ArrayValidatorBuilder<EB, O, CTX>>) {
+        public fun validation(validators: List<ArrayValidator.Builder<EB, O, CTX>>) {
             validatorBuilders.addAll(validators)
         }
 
@@ -153,7 +152,10 @@ public class ArrayReader<EB, O, CTX, T> private constructor(
                 )
             }
 
-        internal fun build(prefixItems: ArrayPrefixItems<EB, O, CTX, T>, items: Boolean): JsReader<EB, O, CTX, List<T>> =
+        internal fun build(
+            prefixItems: ArrayPrefixItems<EB, O, CTX, T>,
+            items: Boolean
+        ): JsReader<EB, O, CTX, List<T>> =
             build { env, context, location, source ->
                 readArray(
                     env = env,

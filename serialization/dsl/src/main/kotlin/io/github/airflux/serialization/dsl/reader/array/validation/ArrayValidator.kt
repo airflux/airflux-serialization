@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.array.validator
+package io.github.airflux.serialization.dsl.reader.array.validation
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -28,4 +28,8 @@ public fun interface ArrayValidator<EB, O, CTX> {
         location: JsLocation,
         source: JsArray
     ): ValidationResult
+
+    public fun interface Builder<EB, O, CTX> {
+        public fun build(): ArrayValidator<EB, O, CTX>
+    }
 }

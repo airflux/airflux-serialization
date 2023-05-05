@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.dsl.reader.array.validator.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
 import io.github.airflux.serialization.std.common.kotest.shouldBeValid
