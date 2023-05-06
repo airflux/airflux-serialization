@@ -38,7 +38,7 @@ public class PatternStringValidator<EB, O, CTX, T : String?> internal constructo
         } else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun patternStringError(value: String, pattern: Regex): ReadingResult.Error
     }
 }

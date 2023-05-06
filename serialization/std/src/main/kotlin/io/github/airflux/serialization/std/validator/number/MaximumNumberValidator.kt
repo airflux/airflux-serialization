@@ -37,7 +37,7 @@ public class MaximumNumberValidator<EB, O, CTX, T> internal constructor(
         else
             invalid(location = location, error = env.errorBuilders.maximumNumberError(expected, value))
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun maximumNumberError(expected: Number, actual: Number): ReadingResult.Error
     }
 }

@@ -41,7 +41,7 @@ public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
         else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun minItemsArrayError(expected: Int, actual: Int): ReadingResult.Error
     }
 }

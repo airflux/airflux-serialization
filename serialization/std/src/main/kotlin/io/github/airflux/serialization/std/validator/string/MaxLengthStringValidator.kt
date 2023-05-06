@@ -45,7 +45,7 @@ public class MaxLengthStringValidator<EB, O, CTX> internal constructor(
     } else
         valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun maxLengthStringError(expected: Int, actual: Int): ReadingResult.Error
     }
 }

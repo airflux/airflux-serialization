@@ -38,7 +38,7 @@ public class ForbiddenPropertyValidator<EB, O, CTX, T> internal constructor(
         } else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun forbiddenPropertyError(): ReadingResult.Error
     }
 }

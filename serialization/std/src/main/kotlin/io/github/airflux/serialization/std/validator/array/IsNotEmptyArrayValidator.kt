@@ -39,7 +39,7 @@ public class IsNotEmptyArrayValidator<EB, O, CTX> internal constructor() : Array
         else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun isNotEmptyArrayError(): ReadingResult.Error
     }
 }

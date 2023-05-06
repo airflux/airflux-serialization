@@ -41,7 +41,7 @@ public class MaxItemsArrayValidator<EB, O, CTX> internal constructor(
         else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun maxItemsArrayError(expected: Int, actual: Int): ReadingResult.Error
     }
 }

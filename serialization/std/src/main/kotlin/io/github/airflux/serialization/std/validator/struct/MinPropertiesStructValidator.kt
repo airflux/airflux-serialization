@@ -42,7 +42,7 @@ public class MinPropertiesStructValidator<EB, O, CTX> internal constructor(priva
         else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun minPropertiesStructError(expected: Int, actual: Int): ReadingResult.Error
     }
 }

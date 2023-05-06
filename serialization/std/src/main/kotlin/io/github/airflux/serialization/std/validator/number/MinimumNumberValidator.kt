@@ -37,7 +37,7 @@ public class MinimumNumberValidator<EB, O, CTX, T> internal constructor(
         else
             invalid(location = location, error = env.errorBuilders.minimumNumberError(expected, value))
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun minimumNumberError(expected: Number, actual: Number): ReadingResult.Error
     }
 }

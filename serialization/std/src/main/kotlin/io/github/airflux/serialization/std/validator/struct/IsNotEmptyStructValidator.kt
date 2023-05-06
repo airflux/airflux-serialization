@@ -41,7 +41,7 @@ public class IsNotEmptyStructValidator<EB, O, CTX> internal constructor() : Stru
         else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun isNotEmptyStructError(): ReadingResult.Error
     }
 }

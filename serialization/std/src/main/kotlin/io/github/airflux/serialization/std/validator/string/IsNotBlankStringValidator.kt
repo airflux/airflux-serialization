@@ -40,7 +40,7 @@ public class IsNotBlankStringValidator<EB, O, CTX> internal constructor() : JsVa
     } else
         valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun isNotBlankStringError(): ReadingResult.Error
     }
 }

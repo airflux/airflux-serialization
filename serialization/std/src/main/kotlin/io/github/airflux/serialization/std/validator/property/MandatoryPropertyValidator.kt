@@ -38,7 +38,7 @@ public class MandatoryPropertyValidator<EB, O, CTX, T> internal constructor(
         } else
             valid()
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun mandatoryPropertyError(): ReadingResult.Error
     }
 }

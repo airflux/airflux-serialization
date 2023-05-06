@@ -40,7 +40,7 @@ public class IsAStringValidator<EB, O, CTX> internal constructor(
         else
             invalid(location = location, error = env.errorBuilders.isAStringError(value))
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun isAStringError(value: String): ReadingResult.Error
     }
 }

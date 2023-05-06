@@ -55,7 +55,7 @@ public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructo
         return if (failures.isEmpty()) valid() else failures.merge().toInvalid()
     }
 
-    public interface ErrorBuilder {
+    public fun interface ErrorBuilder {
         public fun additionalPropertiesStructError(): ReadingResult.Error
     }
 }
