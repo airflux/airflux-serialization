@@ -28,8 +28,7 @@ public infix fun <O, CTX, T> JsPredicate<O, CTX, T>.or(
 ): JsPredicate<O, CTX, T> {
     val self = this
     return JsPredicate { env, context, location, value ->
-        val result = self.test(env, context, location, value)
-        if (result) true else alt.test(env, context, location, value)
+        self.test(env, context, location, value) || alt.test(env, context, location, value)
     }
 }
 
@@ -38,7 +37,6 @@ public infix fun <O, CTX, T> JsPredicate<O, CTX, T>.and(
 ): JsPredicate<O, CTX, T> {
     val self = this
     return JsPredicate { env, context, location, value ->
-        val result = self.test(env, context, location, value)
-        if (result) alt.test(env, context, location, value) else false
+        self.test(env, context, location, value) && alt.test(env, context, location, value)
     }
 }
