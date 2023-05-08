@@ -18,19 +18,19 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.base
 
 import io.github.airflux.quickstart.infrastructure.web.error.JsonErrors
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.flatMapResult
+import io.github.airflux.serialization.core.reader.bind
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.toSuccess
 
 inline fun <EB, O, CTX, reified T : Enum<T>> JsReader<EB, O, CTX, String>.asEnum(): JsReader<EB, O, CTX, T> =
-    flatMapResult { _, _, result ->
+    bind { _, _, value ->
         try {
-            enumValueOf<T>(result.value.uppercase()).toSuccess(result.location)
+            enumValueOf<T>(value.value.uppercase()).toSuccess(value.location)
         } catch (ignored: Exception) {
             val allowable = enumValues<T>()
             failure(
-                location = result.location,
-                error = JsonErrors.EnumCast(actual = result.value, expected = allowable.joinToString())
+                location = value.location,
+                error = JsonErrors.EnumCast(actual = value.value, expected = allowable.joinToString())
             )
         }
     }

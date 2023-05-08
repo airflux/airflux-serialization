@@ -22,7 +22,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderEr
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonArrayReaderValidators
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.flatMapResult
+import io.github.airflux.serialization.core.reader.bind
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.reader.result.withCatching
 import io.github.airflux.serialization.dsl.reader.array.arrayReader
@@ -31,7 +31,7 @@ import io.github.airflux.serialization.dsl.reader.array.returns
 val LotsReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Lots> = arrayReader {
     validation(CommonArrayReaderValidators)
     returns(items = LotReader)
-}.flatMapResult { env, _, result ->
+}.bind { env, _, result ->
     withCatching(env, result.location) {
         Lots(result.value).toSuccess(result.location)
     }
