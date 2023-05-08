@@ -71,12 +71,12 @@ public sealed class ReadingResult<out T> {
 }
 
 public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
-    flatMap { location, value -> transform(value).toSuccess(location) }
+    flatMap { success -> transform(success.value).toSuccess(success.location) }
 
-public infix fun <T, R> ReadingResult<T>.flatMap(transform: (JsLocation, T) -> ReadingResult<R>): ReadingResult<R> =
+public infix fun <T, R> ReadingResult<T>.flatMap(transform: (ReadingResult.Success<T>) -> ReadingResult<R>): ReadingResult<R> =
     fold(
         ifFailure = ::identity,
-        ifSuccess = { transform(it.location, it.value) }
+        ifSuccess = { transform(it) }
     )
 
 public inline fun <T, R> ReadingResult<T>.fold(
