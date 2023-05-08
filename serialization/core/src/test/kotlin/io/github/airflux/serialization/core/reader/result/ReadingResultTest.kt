@@ -95,13 +95,13 @@ internal class ReadingResultTest : FreeSpec() {
             }
         }
 
-        "The extension function ReadingResult#flatMap" - {
+        "The extension function ReadingResult#bind" - {
 
             "when result is success" - {
                 val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a result of applying the [transform] function to the value" {
-                    val result = original.flatMap { success ->
+                    val result = original.bind { success ->
                         success(location = success.location, value = success.value.toInt())
                     }
 
@@ -113,7 +113,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return an original do not apply the [transform] function to a value" {
-                    val result = original.flatMap { success ->
+                    val result = original.bind { success ->
                         success(location = success.location, value = success.value.toInt())
                     }
 

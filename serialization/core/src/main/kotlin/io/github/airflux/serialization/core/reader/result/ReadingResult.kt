@@ -71,9 +71,9 @@ public sealed class ReadingResult<out T> {
 }
 
 public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
-    flatMap { success -> transform(success.value).toSuccess(success.location) }
+    bind { success -> transform(success.value).toSuccess(success.location) }
 
-public infix fun <T, R> ReadingResult<T>.flatMap(transform: (ReadingResult.Success<T>) -> ReadingResult<R>): ReadingResult<R> =
+public infix fun <T, R> ReadingResult<T>.bind(transform: (ReadingResult.Success<T>) -> ReadingResult<R>): ReadingResult<R> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { transform(it) }
