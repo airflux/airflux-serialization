@@ -49,8 +49,8 @@ internal class ReaderFlatMapTest : FreeSpec() {
                 "then the new reader should return the transformed value" {
                     val source = JsString(VALUE)
                     val transformedReader =
-                        reader.flatMapResult { _, _, location, value ->
-                            value.toInt().toSuccess(location)
+                        reader.flatMapResult { _, _, result ->
+                            result.value.toInt().toSuccess(result.location)
                         }
                     val result: ReadingResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
 
@@ -65,8 +65,8 @@ internal class ReaderFlatMapTest : FreeSpec() {
                 "then the new reader should return it error" {
                     val source = JsString(VALUE)
                     val transformedReader =
-                        reader.flatMapResult { _, _, location, value ->
-                            value.toInt().toSuccess(location)
+                        reader.flatMapResult { _, _, result ->
+                            result.value.toInt().toSuccess(result.location)
                         }
                     val result = transformedReader.read(ENV, CONTEXT, LOCATION, source)
 

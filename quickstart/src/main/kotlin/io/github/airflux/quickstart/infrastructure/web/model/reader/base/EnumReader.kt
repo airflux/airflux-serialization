@@ -23,14 +23,14 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.toSuccess
 
 inline fun <EB, O, CTX, reified T : Enum<T>> JsReader<EB, O, CTX, String>.asEnum(): JsReader<EB, O, CTX, T> =
-    flatMapResult { _, _, location, value ->
+    flatMapResult { _, _, result ->
         try {
-            enumValueOf<T>(value.uppercase()).toSuccess(location)
+            enumValueOf<T>(result.value.uppercase()).toSuccess(result.location)
         } catch (ignored: Exception) {
             val allowable = enumValues<T>()
             failure(
-                location = location,
-                error = JsonErrors.EnumCast(actual = value, expected = allowable.joinToString())
+                location = result.location,
+                error = JsonErrors.EnumCast(actual = result.value, expected = allowable.joinToString())
             )
         }
     }

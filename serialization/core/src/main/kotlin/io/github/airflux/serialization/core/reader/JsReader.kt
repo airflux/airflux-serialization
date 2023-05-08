@@ -55,13 +55,13 @@ public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.map(transform: (T) -
     }
 
 public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.flatMapResult(
-    transform: (JsReaderEnv<EB, O>, CTX, JsLocation, T) -> ReadingResult<R>
+    transform: (JsReaderEnv<EB, O>, CTX, ReadingResult.Success<T>) -> ReadingResult<R>
 ): JsReader<EB, O, CTX, R> =
     JsReader { env, context, location, source ->
         this@flatMapResult.read(env, context, location, source)
             .fold(
                 ifFailure = ::identity,
-                ifSuccess = { transform(env, context, location, it.value) }
+                ifSuccess = { transform(env, context, it) }
             )
     }
 
