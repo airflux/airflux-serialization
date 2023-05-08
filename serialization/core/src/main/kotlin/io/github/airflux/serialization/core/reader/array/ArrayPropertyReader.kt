@@ -127,7 +127,7 @@ public fun <EB, O, CTX, T> readArray(
     }
 }
 
-internal operator fun <T> ReadingResult<MutableList<T>>.plus(
+private operator fun <T> ReadingResult<MutableList<T>>.plus(
     result: ReadingResult.Success<T>
 ): ReadingResult<MutableList<T>> =
     fold(
@@ -135,7 +135,7 @@ internal operator fun <T> ReadingResult<MutableList<T>>.plus(
         ifSuccess = { success -> success.apply { value += result.value } }
     )
 
-internal operator fun <T> ReadingResult<MutableList<T>>.plus(
+private operator fun <T> ReadingResult<MutableList<T>>.plus(
     result: ReadingResult.Failure
 ): ReadingResult<MutableList<T>> =
     fold(
