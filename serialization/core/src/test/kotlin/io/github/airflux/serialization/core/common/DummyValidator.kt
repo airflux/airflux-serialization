@@ -35,6 +35,7 @@ internal class DummyValidator<EB, O, CTX, T>(
 
     internal companion object {
 
+        @JvmStatic
         internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReadingResult.Error): JsValidator<EB, O, CTX, String> =
             DummyValidator { _, _, location, value ->
                 if (value.isNotEmpty())

@@ -39,6 +39,7 @@ internal class DummyReader<EB, O, CTX, T>(
 
     internal companion object {
 
+        @JvmStatic
         internal fun <EB, O, CTX> boolean(): JsReader<EB, O, CTX, Boolean>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
@@ -56,6 +57,7 @@ internal class DummyReader<EB, O, CTX, T>(
                 }
             )
 
+        @JvmStatic
         internal fun <EB, O, CTX> string(): JsReader<EB, O, CTX, String>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
@@ -73,6 +75,7 @@ internal class DummyReader<EB, O, CTX, T>(
                 }
             )
 
+        @JvmStatic
         internal fun <EB, O, CTX> int(): JsReader<EB, O, CTX, Int>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
@@ -90,6 +93,7 @@ internal class DummyReader<EB, O, CTX, T>(
                 }
             )
 
+        @JvmStatic
         internal fun <EB, O, CTX> long(): JsReader<EB, O, CTX, Long>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(

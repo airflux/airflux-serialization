@@ -60,9 +60,12 @@ public class StructPropertySpec<O, CTX, T, P> internal constructor(
         internal class WithContext<CTX, T, P>(val extractor: T.(CTX) -> P) : Extractor<CTX, T, P>()
 
         public companion object {
+
+            @JvmStatic
             public operator fun <CTX, T, P> invoke(extractor: T.() -> P): Extractor<CTX, T, P> =
                 WithoutContext(extractor)
 
+            @JvmStatic
             public operator fun <CTX, T, P> invoke(extractor: T.(CTX) -> P): Extractor<CTX, T, P> =
                 WithContext(extractor)
         }

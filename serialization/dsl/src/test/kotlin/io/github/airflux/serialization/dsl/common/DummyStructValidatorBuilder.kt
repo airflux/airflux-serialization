@@ -43,6 +43,8 @@ internal class DummyStructValidatorBuilder<EB, O, CTX>(result: ValidationResult)
     }
 
     companion object {
+
+        @JvmStatic
         internal fun <EB, O, CTX> additionalProperties(
             nameProperties: Set<String>,
             error: ReadingResult.Error

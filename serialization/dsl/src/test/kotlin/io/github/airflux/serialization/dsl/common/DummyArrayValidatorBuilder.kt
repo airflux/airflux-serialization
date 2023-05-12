@@ -40,6 +40,8 @@ internal class DummyArrayValidatorBuilder<EB, O, CTX>(result: ValidationResult) 
     }
 
     companion object {
+
+        @JvmStatic
         internal fun <EB, O, CTX> minItems(
             expected: Int,
             error: (expected: Int, actual: Int) -> ReadingResult.Error

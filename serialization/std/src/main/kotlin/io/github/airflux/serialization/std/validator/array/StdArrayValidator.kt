@@ -23,6 +23,7 @@ public object StdArrayValidator {
     /**
      * If the is empty then an error, otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX> isNotEmpty(): ArrayValidator.Builder<EB, O, CTX>
         where EB : IsNotEmptyArrayValidator.ErrorBuilder =
         IsNotEmptyArrayValidatorBuilder()
@@ -30,6 +31,7 @@ public object StdArrayValidator {
     /**
      * If a number of elements in the array are less than an expected [value] then an error, otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX> minItems(value: Int): ArrayValidator.Builder<EB, O, CTX>
         where EB : MinItemsArrayValidator.ErrorBuilder =
         MinItemsArrayValidatorBuilder(value)
@@ -37,6 +39,7 @@ public object StdArrayValidator {
     /**
      * If a number of elements in the array are more than an expected [value] then an error, otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX> maxItems(value: Int): ArrayValidator.Builder<EB, O, CTX>
         where EB : MaxItemsArrayValidator.ErrorBuilder =
         MaxItemsArrayValidatorBuilder(value)

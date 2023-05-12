@@ -243,6 +243,7 @@ public final class io/github/airflux/serialization/core/reader/result/ReadingRes
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCauses ()Ljava/util/List;
 	public fun hashCode ()I
+	public static final fun merge (Ljava/util/Collection;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 	public final fun plus (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 	public fun toString ()Ljava/lang/String;
 }
@@ -343,12 +344,15 @@ public final class io/github/airflux/serialization/core/value/JsArray : io/githu
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsArray$Companion;
 	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder ()Lio/github/airflux/serialization/core/value/JsArray$Builder;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun get (I)Lio/github/airflux/serialization/core/value/JsValue;
 	public final fun get (Lio/github/airflux/serialization/core/path/JsPath$Element$Idx;)Lio/github/airflux/serialization/core/value/JsValue;
 	public fun getNameOfType ()Ljava/lang/String;
 	public final fun getSize ()I
 	public fun hashCode ()I
+	public static final fun invoke (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsArray;
+	public static final fun invoke ([Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/value/JsArray;
 	public final fun isEmpty ()Z
 	public fun iterator ()Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;
@@ -373,6 +377,7 @@ public abstract class io/github/airflux/serialization/core/value/JsBoolean : io/
 	public final fun getGet ()Z
 	public fun getNameOfType ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
+	public static final fun valueOf (Z)Lio/github/airflux/serialization/core/value/JsBoolean;
 }
 
 public final class io/github/airflux/serialization/core/value/JsBoolean$Companion {
@@ -410,6 +415,7 @@ public final class io/github/airflux/serialization/core/value/JsNumeric$Integer 
 	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getNameOfType ()Ljava/lang/String;
+	public static final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumeric$Integer;
 }
 
 public final class io/github/airflux/serialization/core/value/JsNumeric$Integer$Companion {
@@ -421,6 +427,7 @@ public final class io/github/airflux/serialization/core/value/JsNumeric$Number :
 	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getNameOfType ()Ljava/lang/String;
+	public static final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumeric$Number;
 }
 
 public final class io/github/airflux/serialization/core/value/JsNumeric$Number$Companion {
@@ -445,6 +452,7 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsStruct$Companion;
 	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final fun builder ()Lio/github/airflux/serialization/core/value/JsStruct$Builder;
 	public final fun contains (Lio/github/airflux/serialization/core/path/JsPath$Element$Key;)Z
 	public final fun contains (Ljava/lang/String;)Z
 	public fun equals (Ljava/lang/Object;)Z
@@ -453,6 +461,8 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 	public final fun getCount ()I
 	public fun getNameOfType ()Ljava/lang/String;
 	public fun hashCode ()I
+	public static final fun invoke (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsStruct;
+	public static final fun invoke ([Lkotlin/Pair;)Lio/github/airflux/serialization/core/value/JsStruct;
 	public final fun isEmpty ()Z
 	public fun iterator ()Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;

@@ -55,6 +55,8 @@ public sealed class ReadingResult<out T> {
         }
 
         public companion object {
+
+            @JvmStatic
             public fun Collection<Failure>.merge(): Failure = Failure(causes = flatMap { failure -> failure.causes })
         }
     }

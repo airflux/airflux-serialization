@@ -26,6 +26,7 @@ public object StdPropertyValidator {
      * Validation of a value if the predicate returns the true value,
      * if a value is present (not equal to null), then an error, otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX, T> forbidden(
         predicate: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> Boolean
     ): JsValidator<EB, O, CTX, T>
@@ -35,6 +36,7 @@ public object StdPropertyValidator {
      * Validation of a value if the predicate returns the true value,
      * if a value is missing (equal to null), then an error, otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX, T> mandatory(
         predicate: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> Boolean
     ): JsValidator<EB, O, CTX, T>

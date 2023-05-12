@@ -19,21 +19,28 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 
 public object StdStringValidator {
+
+    @JvmStatic
     public fun <EB, O, CTX> isNotEmpty(): JsValidator<EB, O, CTX, String?>
         where EB : IsNotEmptyStringValidator.ErrorBuilder = IsNotEmptyStringValidator()
 
+    @JvmStatic
     public fun <EB, O, CTX> isNotBlank(): JsValidator<EB, O, CTX, String?>
         where EB : IsNotBlankStringValidator.ErrorBuilder = IsNotBlankStringValidator()
 
+    @JvmStatic
     public fun <EB, O, CTX> pattern(pattern: Regex): JsValidator<EB, O, CTX, String?>
         where EB : PatternStringValidator.ErrorBuilder = PatternStringValidator(pattern)
 
+    @JvmStatic
     public fun <EB, O, CTX> minLength(value: Int): JsValidator<EB, O, CTX, String?>
         where EB : MinLengthStringValidator.ErrorBuilder = MinLengthStringValidator(value)
 
+    @JvmStatic
     public fun <EB, O, CTX> maxLength(value: Int): JsValidator<EB, O, CTX, String?>
         where EB : MaxLengthStringValidator.ErrorBuilder = MaxLengthStringValidator(value)
 
+    @JvmStatic
     public fun <EB, O, CTX> isA(predicate: (String) -> Boolean): JsValidator<EB, O, CTX, String>
         where EB : IsAStringValidator.ErrorBuilder = IsAStringValidator(predicate)
 }

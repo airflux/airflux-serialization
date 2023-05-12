@@ -38,6 +38,8 @@ public sealed class JsBoolean(public val get: Boolean) : JsValue() {
     override fun toString(): String = get.toString()
 
     public companion object {
+
+        @JvmStatic
         public fun valueOf(value: Boolean): JsBoolean = if (value) True else False
 
         public const val nameOfType: String = "boolean"
@@ -76,6 +78,7 @@ public sealed class JsNumeric private constructor(public val get: String) : JsVa
             public const val nameOfType: String = "integer"
             private val pattern = "^-?(0|[1-9][0-9]*)$".toRegex()
 
+            @JvmStatic
             public fun valueOrNullOf(value: String): Integer? = if (value.matches(pattern)) Integer(value) else null
         }
     }
@@ -87,6 +90,7 @@ public sealed class JsNumeric private constructor(public val get: String) : JsVa
             public const val nameOfType: String = "number"
             private val pattern = "^(-?(0|[1-9][0-9]*))((\\.[0-9]+)?|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
 
+            @JvmStatic
             public fun valueOrNullOf(value: String): Number? = if (value.matches(pattern)) Number(value) else null
         }
     }
@@ -147,16 +151,19 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
     public companion object {
         public const val nameOfType: String = "array"
 
+        @JvmStatic
         public operator fun invoke(vararg items: JsValue): JsArray =
             builder()
                 .apply { addAll(items.asIterable()) }
                 .build()
 
+        @JvmStatic
         public operator fun invoke(items: Iterable<JsValue>): JsArray =
             builder()
                 .apply { addAll(items) }
                 .build()
 
+        @JvmStatic
         public fun builder(): Builder = Builder()
     }
 }
@@ -222,16 +229,19 @@ public class JsStruct private constructor(private val properties: Map<String, Js
 
         public const val nameOfType: String = "object"
 
+        @JvmStatic
         public operator fun invoke(vararg properties: Pair<String, JsValue>): JsStruct =
             builder()
                 .apply { putAll(properties.asIterable()) }
                 .build()
 
+        @JvmStatic
         public operator fun invoke(properties: Iterable<Pair<String, JsValue>>): JsStruct =
             builder()
                 .apply { putAll(properties) }
                 .build()
 
+        @JvmStatic
         public fun builder(): Builder = Builder()
     }
 }

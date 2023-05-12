@@ -34,6 +34,7 @@ public class StructProperty<O, CTX, T, P> private constructor(
 
     internal companion object {
 
+        @JvmStatic
         private fun <O, CTX, T, P> createWriter(spec: StructPropertySpec<O, CTX, T, P>): JsWriter<O, CTX, T> {
             val writer = spec.writer
 

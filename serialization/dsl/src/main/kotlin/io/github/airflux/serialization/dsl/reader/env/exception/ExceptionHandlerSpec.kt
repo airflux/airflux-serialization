@@ -28,6 +28,7 @@ internal class ExceptionHandlerSpec<EB, O> private constructor(
 
     companion object {
 
+        @JvmStatic
         operator fun <EB, O, E : Throwable> invoke(
             exception: KClass<E>,
             handler: (JsReaderEnv<EB, O>, JsLocation, E) -> ReadingResult.Error

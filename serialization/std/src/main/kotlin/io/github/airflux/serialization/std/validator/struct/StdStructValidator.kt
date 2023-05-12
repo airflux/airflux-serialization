@@ -20,18 +20,23 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
 public object StdStructValidator {
+
+    @JvmStatic
     public fun <EB, O, CTX> additionalProperties(): StructValidator.Builder<EB, O, CTX>
         where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
               O : FailFastOption =
         AdditionalPropertiesStructValidatorBuilder()
 
+    @JvmStatic
     public fun <EB, O, CTX> isNotEmpty(): StructValidator.Builder<EB, O, CTX>
         where EB : IsNotEmptyStructValidator.ErrorBuilder = IsNotEmptyStructValidatorBuilder()
 
+    @JvmStatic
     public fun <EB, O, CTX> minProperties(value: Int): StructValidator.Builder<EB, O, CTX>
         where EB : MinPropertiesStructValidator.ErrorBuilder =
         MinPropertiesStructValidatorBuilder(value)
 
+    @JvmStatic
     public fun <EB, O, CTX> maxProperties(value: Int): StructValidator.Builder<EB, O, CTX>
         where EB : MaxPropertiesStructValidator.ErrorBuilder =
         MaxPropertiesStructValidatorBuilder(value)

@@ -182,6 +182,8 @@ public final class io/github/airflux/serialization/dsl/writer/struct/property/sp
 
 public abstract class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor {
 	public static final field Companion Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor$Companion;
+	public static final fun invoke (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor;
+	public static final fun invoke (Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor$Companion {

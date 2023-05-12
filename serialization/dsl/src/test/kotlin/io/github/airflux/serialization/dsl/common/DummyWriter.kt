@@ -28,9 +28,12 @@ internal class DummyWriter<O, CTX, T : Any>(val result: (T) -> JsValue?) : JsWri
     override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? = result(source)
 
     companion object {
+
+        @JvmStatic
         internal fun <O, CTX> intWriter(): JsWriter<O, CTX, Int> =
             DummyWriter(result = { source -> JsNumeric.valueOf(source) })
 
+        @JvmStatic
         internal fun <O, CTX> stringWriter(): JsWriter<O, CTX, String> =
             DummyWriter(result = { source -> JsString(source) })
     }

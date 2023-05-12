@@ -24,6 +24,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is less than an expected [value] then an error,
      * otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX, T> minimum(value: T): JsValidator<EB, O, CTX, T>
         where EB : MinimumNumberValidator.ErrorBuilder,
               T : Number,
@@ -33,6 +34,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is greater than an expected [value] then error,
      * otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX, T> maximum(value: T): JsValidator<EB, O, CTX, T>
         where EB : MaximumNumberValidator.ErrorBuilder,
               T : Number,
@@ -42,6 +44,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is less than or equal to an expected [value] then an error,
      * otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX, T> exclusiveMinimum(value: T): JsValidator<EB, O, CTX, T>
         where EB : ExclusiveMinimumNumberValidator.ErrorBuilder,
               T : Number,
@@ -51,6 +54,7 @@ public object StdNumberValidator {
      * Validation of a value, if a value is greater than or equal to an expected [value] then error,
      * otherwise a success.
      */
+    @JvmStatic
     public fun <EB, O, CTX, T> exclusiveMaximum(value: T): JsValidator<EB, O, CTX, T>
         where EB : ExclusiveMaximumNumberValidator.ErrorBuilder,
               T : Number,
