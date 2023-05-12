@@ -21,6 +21,6 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 /**
  * The builder of an error that occurs when an element is an invalid type by the specified path.
  */
-public interface InvalidTypeErrorBuilder {
+public fun interface InvalidTypeErrorBuilder {
     public fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error
 }
