@@ -167,15 +167,14 @@ public class JsStruct private constructor(private val properties: Map<String, Js
                                                                                           Iterable<JsStruct.Property> {
 
     override val nameOfType: String = JsStruct.nameOfType
-
-    public operator fun get(key: JsPath.Element.Key): JsValue? = get(key.get)
-
-    public operator fun get(key: String): JsValue? = properties[key]
-
     public val count: Int
         get() = properties.size
 
     public fun isEmpty(): Boolean = properties.isEmpty()
+    public operator fun contains(key: JsPath.Element.Key): Boolean = contains(key.get)
+    public operator fun contains(key: String): Boolean = key in properties
+    public operator fun get(key: JsPath.Element.Key): JsValue? = get(key.get)
+    public operator fun get(key: String): JsValue? = properties[key]
 
     override fun iterator(): Iterator<Property> = PropertiesIterator(properties)
 
@@ -211,6 +210,8 @@ public class JsStruct private constructor(private val properties: Map<String, Js
         public fun putAll(items: Iterable<Pair<String, JsValue>>) {
             properties.putAll(items)
         }
+
+        public operator fun contains(name: String): Boolean = name in properties
 
         public fun build(): JsStruct = if (properties.isNotEmpty()) JsStruct(properties) else EMPTY
 

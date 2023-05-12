@@ -445,6 +445,8 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsStruct$Companion;
 	public static final field nameOfType Ljava/lang/String;
 	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun contains (Lio/github/airflux/serialization/core/path/JsPath$Element$Key;)Z
+	public final fun contains (Ljava/lang/String;)Z
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun get (Lio/github/airflux/serialization/core/path/JsPath$Element$Key;)Lio/github/airflux/serialization/core/value/JsValue;
 	public final fun get (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsValue;
@@ -458,6 +460,7 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 
 public final class io/github/airflux/serialization/core/value/JsStruct$Builder {
 	public final fun build ()Lio/github/airflux/serialization/core/value/JsStruct;
+	public final fun contains (Ljava/lang/String;)Z
 	public final fun put (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)V
 	public final fun putAll (Ljava/lang/Iterable;)V
 }
