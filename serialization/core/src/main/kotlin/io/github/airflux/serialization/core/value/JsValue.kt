@@ -110,13 +110,11 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
 
     override val nameOfType: String = JsArray.nameOfType
 
-    public operator fun get(idx: JsPath.Element.Idx): JsValue? = get(idx.get)
-
-    public operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
-
     public val size: Int
         get() = items.size
 
+    public operator fun get(idx: JsPath.Element.Idx): JsValue? = get(idx.get)
+    public operator fun get(idx: Int): JsValue? = items.getOrNull(idx)
     public fun isEmpty(): Boolean = items.isEmpty()
 
     override fun iterator(): Iterator<JsValue> = items.iterator()
