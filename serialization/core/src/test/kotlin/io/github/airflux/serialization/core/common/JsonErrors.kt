@@ -31,39 +31,8 @@ internal sealed class JsonErrors : ReadingResult.Error {
 
     sealed class Validation : JsonErrors() {
 
-//        sealed class Struct : Validation() {
-//            object ForbiddenProperty : Struct()
-//            object AdditionalProperties : Struct()
-//            object IsEmpty : Struct()
-//            data class MinProperties(val expected: Int, val actual: Int) : Struct()
-//            data class MaxProperties(val expected: Int, val actual: Int) : Struct()
-//        }
-
-//        sealed class Arrays : Validation() {
-//            object IsEmpty : Arrays()
-//            data class MinItems(val expected: Int, val actual: Int) : Arrays()
-//            data class MaxItems(val expected: Int, val actual: Int) : Arrays()
-//            data class Unique<T>(val value: T) : Arrays()
-//        }
-
-//        sealed class Numbers : Validation() {
-//            data class Min(val expected: Number, val actual: Number) : Numbers()
-//            data class Max(val expected: Number, val actual: Number) : Numbers()
-//            data class Eq(val expected: Number, val actual: Number) : Numbers()
-//            data class Ne(val expected: Number, val actual: Number) : Numbers()
-//            data class Gt(val expected: Number, val actual: Number) : Numbers()
-//            data class Ge(val expected: Number, val actual: Number) : Numbers()
-//            data class Lt(val expected: Number, val actual: Number) : Numbers()
-//            data class Le(val expected: Number, val actual: Number) : Numbers()
-//        }
-
         sealed class Strings : Validation() {
-//            data class MinLength(val expected: Int, val actual: Int) : Strings()
-//            data class MaxLength(val expected: Int, val actual: Int) : Strings()
-//            data class Pattern(val value: String, val regex: Regex) : Strings()
-//            data class IsA(val value: String) : Strings()
             object IsEmpty : Strings()
-//            object IsBlank : Strings()
         }
     }
 }
