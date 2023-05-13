@@ -44,7 +44,13 @@ internal class JsArrayTest : FreeSpec() {
 
                 "the `add` method" - {
 
-                    "should add passed elements in the order" - {
+                    "should return builder" {
+                        val builder = JsArray.builder()
+                        val result = builder.add(FIRST_ITEM)
+                        result shouldBe builder
+                    }
+
+                    "should add passed elements in the order" {
                         val array = JsArray.builder()
                             .apply {
                                 add(FIRST_ITEM)
@@ -58,7 +64,13 @@ internal class JsArrayTest : FreeSpec() {
 
                 "the `addAll` method" - {
 
-                    "should add all passed elements in the order" - {
+                    "should return builder" {
+                        val builder = JsArray.builder()
+                        val result = builder.addAll(listOf(FIRST_ITEM, SECOND_ITEM))
+                        result shouldBe builder
+                    }
+
+                    "should add all passed elements in the order" {
                         val array = JsArray.builder()
                             .apply {
                                 add(FIRST_ITEM)

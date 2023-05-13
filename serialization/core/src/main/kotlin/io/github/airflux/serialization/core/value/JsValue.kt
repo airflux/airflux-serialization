@@ -133,14 +133,8 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
     public class Builder internal constructor() {
         private val items = mutableListOf<JsValue>()
 
-        public fun add(value: JsValue) {
-            items.add(value)
-        }
-
-        public fun addAll(items: Iterable<JsValue>) {
-            this.items.addAll(items)
-        }
-
+        public fun add(value: JsValue): Builder = apply { this@Builder.items.add(value) }
+        public fun addAll(items: Iterable<JsValue>): Builder = apply { this@Builder.items.addAll(items) }
         public fun build(): JsArray = if (items.isNotEmpty()) JsArray(items) else EMPTY
 
         private companion object {

@@ -359,8 +359,8 @@ public final class io/github/airflux/serialization/core/value/JsArray : io/githu
 }
 
 public final class io/github/airflux/serialization/core/value/JsArray$Builder {
-	public final fun add (Lio/github/airflux/serialization/core/value/JsValue;)V
-	public final fun addAll (Ljava/lang/Iterable;)V
+	public final fun add (Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/value/JsArray$Builder;
+	public final fun addAll (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsArray$Builder;
 	public final fun build ()Lio/github/airflux/serialization/core/value/JsArray;
 }
 
