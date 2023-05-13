@@ -469,10 +469,10 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 }
 
 public final class io/github/airflux/serialization/core/value/JsStruct$Builder {
+	public final fun add (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)V
+	public final fun addAll (Ljava/lang/Iterable;)V
 	public final fun build ()Lio/github/airflux/serialization/core/value/JsStruct;
 	public final fun contains (Ljava/lang/String;)Z
-	public final fun put (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)V
-	public final fun putAll (Ljava/lang/Iterable;)V
 }
 
 public final class io/github/airflux/serialization/core/value/JsStruct$Companion {

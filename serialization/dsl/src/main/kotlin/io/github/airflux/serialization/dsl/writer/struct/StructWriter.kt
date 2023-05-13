@@ -46,7 +46,7 @@ public class StructWriter<O, CTX, T> private constructor(
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
                     property.write(env, context, currentLocation, source)
-                        ?.let { value -> put(name = property.name, value = value) }
+                        ?.let { value -> add(name = property.name, value = value) }
                 }
             }
             .build()

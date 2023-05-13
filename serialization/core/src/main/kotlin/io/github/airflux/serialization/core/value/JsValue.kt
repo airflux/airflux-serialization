@@ -208,11 +208,11 @@ public class JsStruct private constructor(private val properties: Map<String, Js
     public class Builder internal constructor() {
         private val properties = mutableMapOf<String, JsValue>()
 
-        public fun put(name: String, value: JsValue) {
+        public fun add(name: String, value: JsValue) {
             properties[name] = value
         }
 
-        public fun putAll(items: Iterable<Pair<String, JsValue>>) {
+        public fun addAll(items: Iterable<Pair<String, JsValue>>) {
             properties.putAll(items)
         }
 
@@ -232,13 +232,13 @@ public class JsStruct private constructor(private val properties: Map<String, Js
         @JvmStatic
         public operator fun invoke(vararg properties: Pair<String, JsValue>): JsStruct =
             builder()
-                .apply { putAll(properties.asIterable()) }
+                .apply { addAll(properties.asIterable()) }
                 .build()
 
         @JvmStatic
         public operator fun invoke(properties: Iterable<Pair<String, JsValue>>): JsStruct =
             builder()
-                .apply { putAll(properties) }
+                .apply { addAll(properties) }
                 .build()
 
         @JvmStatic

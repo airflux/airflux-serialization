@@ -50,7 +50,7 @@ internal class JsStructTest : FreeSpec() {
 
                 "the `contains` method" - {
                     val builder = JsStruct.builder()
-                        .apply { put(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE) }
+                        .apply { add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE) }
 
                     "should return `true` if the given name is among the properties" - {
                         builder.contains(USER_PROPERTY_NAME) shouldBe true
@@ -61,11 +61,11 @@ internal class JsStructTest : FreeSpec() {
                     }
                 }
 
-                "the `put` method" - {
+                "the `add` method" - {
 
                     "should add the element if it does not exist" - {
                         val struct = JsStruct.builder()
-                            .apply { put(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE) }
+                            .apply { add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE) }
                             .build()
 
                         struct.toList() shouldContainExactlyInAnyOrder listOf(
@@ -76,8 +76,8 @@ internal class JsStructTest : FreeSpec() {
                     "should replace the element if it exists" - {
                         val struct = JsStruct.builder()
                             .apply {
-                                put(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
-                                put(name = USER_PROPERTY_NAME, value = OTHER_USER_PROPERTY_VALUE)
+                                add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
+                                add(name = USER_PROPERTY_NAME, value = OTHER_USER_PROPERTY_VALUE)
                             }
                             .build()
 
@@ -87,12 +87,12 @@ internal class JsStructTest : FreeSpec() {
                     }
                 }
 
-                "the `putAll` method" - {
+                "the `addAll` method" - {
 
                     "should add the element if it does not exist" - {
                         val struct = JsStruct.builder()
                             .apply {
-                                putAll(
+                                addAll(
                                     listOf(
                                         USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
                                         IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
@@ -110,8 +110,8 @@ internal class JsStructTest : FreeSpec() {
                     "should replace the element if it exists" - {
                         val struct = JsStruct.builder()
                             .apply {
-                                put(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
-                                putAll(
+                                add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
+                                addAll(
                                     listOf(
                                         USER_PROPERTY_NAME to OTHER_USER_PROPERTY_VALUE,
                                         IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
@@ -345,8 +345,8 @@ internal class JsStructTest : FreeSpec() {
             "when creating a type value using the builder" - {
                 val struct = JsStruct.builder()
                     .apply {
-                        put(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
-                        putAll(
+                        add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
+                        addAll(
                             listOf(
                                 IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE,
                                 EMAIL_PROPERTY_NAME to EMAIL_PROPERTY_VALUE
