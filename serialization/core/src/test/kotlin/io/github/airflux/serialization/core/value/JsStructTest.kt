@@ -63,7 +63,13 @@ internal class JsStructTest : FreeSpec() {
 
                 "the `add` method" - {
 
-                    "should add the element if it does not exist" - {
+                    "should return builder" {
+                        val builder = JsStruct.builder()
+                        val result = builder.add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
+                        result shouldBe builder
+                    }
+
+                    "should add the element if it does not exist" {
                         val struct = JsStruct.builder()
                             .apply { add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE) }
                             .build()
@@ -73,7 +79,7 @@ internal class JsStructTest : FreeSpec() {
                         )
                     }
 
-                    "should replace the element if it exists" - {
+                    "should replace the element if it exists" {
                         val struct = JsStruct.builder()
                             .apply {
                                 add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)
@@ -89,7 +95,18 @@ internal class JsStructTest : FreeSpec() {
 
                 "the `addAll` method" - {
 
-                    "should add the element if it does not exist" - {
+                    "should return builder" {
+                        val builder = JsStruct.builder()
+                        val result = builder.addAll(
+                            listOf(
+                                USER_PROPERTY_NAME to USER_PROPERTY_VALUE,
+                                IS_ACTIVE_PROPERTY_NAME to IS_ACTIVE_PROPERTY_VALUE
+                            )
+                        )
+                        result shouldBe builder
+                    }
+
+                    "should add the element if it does not exist" {
                         val struct = JsStruct.builder()
                             .apply {
                                 addAll(
@@ -107,7 +124,7 @@ internal class JsStructTest : FreeSpec() {
                         )
                     }
 
-                    "should replace the element if it exists" - {
+                    "should replace the element if it exists" {
                         val struct = JsStruct.builder()
                             .apply {
                                 add(name = USER_PROPERTY_NAME, value = USER_PROPERTY_VALUE)

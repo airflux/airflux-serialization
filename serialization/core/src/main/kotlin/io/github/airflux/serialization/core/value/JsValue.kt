@@ -208,16 +208,9 @@ public class JsStruct private constructor(private val properties: Map<String, Js
     public class Builder internal constructor() {
         private val properties = mutableMapOf<String, JsValue>()
 
-        public fun add(name: String, value: JsValue) {
-            properties[name] = value
-        }
-
-        public fun addAll(items: Iterable<Pair<String, JsValue>>) {
-            properties.putAll(items)
-        }
-
+        public fun add(name: String, value: JsValue): Builder = apply { properties[name] = value }
+        public fun addAll(items: Iterable<Pair<String, JsValue>>): Builder = apply { properties.putAll(items) }
         public operator fun contains(name: String): Boolean = name in properties
-
         public fun build(): JsStruct = if (properties.isNotEmpty()) JsStruct(properties) else EMPTY
 
         private companion object {

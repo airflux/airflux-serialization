@@ -469,8 +469,8 @@ public final class io/github/airflux/serialization/core/value/JsStruct : io/gith
 }
 
 public final class io/github/airflux/serialization/core/value/JsStruct$Builder {
-	public final fun add (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)V
-	public final fun addAll (Ljava/lang/Iterable;)V
+	public final fun add (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/value/JsStruct$Builder;
+	public final fun addAll (Ljava/lang/Iterable;)Lio/github/airflux/serialization/core/value/JsStruct$Builder;
 	public final fun build ()Lio/github/airflux/serialization/core/value/JsStruct;
 	public final fun contains (Ljava/lang/String;)Z
 }
