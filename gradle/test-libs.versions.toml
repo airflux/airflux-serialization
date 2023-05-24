@@ -1,0 +1,12 @@
+[versions]
+kotest = "5.6.1"
+pitest-junit = "0.15"
+
+[libraries]
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+pitest-junit5 = { module = "org.pitest:pitest-junit5-plugin", version.ref = "pitest-junit" }
+
+[bundles]
+kotest = ["kotest-junit5", "kotest-core", "kotest-datatest"]

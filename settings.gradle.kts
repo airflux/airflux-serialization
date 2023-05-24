@@ -17,3 +17,11 @@ project(":airflux-bom").projectDir = file("./bom")
 
 include(":quickstart")
 project(":quickstart").projectDir = file("./quickstart")
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("testLibs") {
+            from(files("gradle/test-libs.versions.toml"))
+        }
+    }
+}

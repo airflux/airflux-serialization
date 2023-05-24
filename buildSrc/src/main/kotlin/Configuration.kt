@@ -53,23 +53,4 @@ object Configuration {
             }
         }
     }
-
-    object Versions {
-
-        const val Jackson = "2.13.3"
-
-        object Detekt {
-            const val Tool = "1.22.0"
-        }
-
-        object Test {
-
-            const val Kotest = "5.6.1"
-
-            object PiTest {
-                const val JUnit5 = "0.15"
-                const val CLI = "1.7.3"
-            }
-        }
-    }
 }

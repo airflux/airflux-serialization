@@ -1,0 +1,12 @@
+public final class io/github/airflux/parser/AirFluxJsonModule : com/fasterxml/jackson/databind/module/SimpleModule {
+	public static final field INSTANCE Lio/github/airflux/parser/AirFluxJsonModule;
+}
+
+public final class io/github/airflux/parser/DeserializationKt {
+	public static final fun deserialization (Ljava/lang/String;Lcom/fasterxml/jackson/databind/ObjectMapper;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+}
+
+public final class io/github/airflux/parser/SerializationKt {
+	public static final fun serialization (Ljava/lang/Object;Lcom/fasterxml/jackson/databind/ObjectMapper;Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/writer/JsWriter;)Ljava/lang/String;
+}
+

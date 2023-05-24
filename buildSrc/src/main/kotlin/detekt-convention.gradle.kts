@@ -5,13 +5,16 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
+val detektVersion = "1.22.0"
+
 dependencies{
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${Configuration.Versions.Detekt.Tool}")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${Configuration.Versions.Detekt.Tool}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detektVersion}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${detektVersion}")
 }
+
 configure<DetektExtension> {
     ignoreFailures = true
-    toolVersion = Configuration.Versions.Detekt.Tool
+    toolVersion = detektVersion
     config = project.files("${project.rootProject.projectDir}/config/detekt/detekt.yml")
     baseline = file("${project.rootProject.projectDir}/config/detekt/baseline.xml")
     parallel = true

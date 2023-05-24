@@ -1,0 +1,10 @@
+[versions]
+jackson = "2.13.3"
+
+
+[libraries]
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+
+[bundles]
+jackson = ["jackson-core", "jackson-kotlin"]
