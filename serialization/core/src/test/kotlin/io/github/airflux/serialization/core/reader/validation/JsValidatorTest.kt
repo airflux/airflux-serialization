@@ -16,13 +16,13 @@
 
 package io.github.airflux.serialization.core.reader.validation
 
-import io.github.airflux.serialization.core.common.kotest.shouldBeInvalid
-import io.github.airflux.serialization.core.common.kotest.shouldBeValid
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.test.kotest.shouldBeInvalid
+import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
 internal class JsValidatorTest : FreeSpec() {

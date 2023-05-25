@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.common.DummyWriter
+import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -36,7 +36,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 
-        private val WRITER: JsWriter<Unit, Unit, String> = DummyWriter.stringWriter()
+        private val WRITER: JsWriter<Unit, Unit, String> = DummyWriter.string()
     }
 
     init {

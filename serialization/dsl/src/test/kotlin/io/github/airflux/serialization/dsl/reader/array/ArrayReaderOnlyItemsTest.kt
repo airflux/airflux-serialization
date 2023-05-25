@@ -29,10 +29,10 @@ import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.common.DummyArrayValidatorBuilder.Companion.minItems
-import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.common.kotest.shouldBeFailure
-import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
+import io.github.airflux.serialization.test.dummy.DummyReader
+import io.github.airflux.serialization.test.kotest.shouldBeFailure
+import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ArrayReaderOnlyItemsTest : FreeSpec() {
@@ -198,7 +198,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
     }
 
     internal class EB : AdditionalItemsErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
         override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =

@@ -14,20 +14,27 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.common
+package io.github.airflux.serialization.test.dummy
 
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 
-internal class DummyWriter<O, CTX, T>(val result: (T) -> JsValue?) : JsWriter<O, CTX, T> {
+public class DummyWriter<O, CTX, T>(public val result: (T) -> JsValue?) : JsWriter<O, CTX, T> {
     override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? = result(source)
 
-    internal companion object {
+    public companion object {
 
         @JvmStatic
-        internal fun <O, CTX> string(): JsWriter<O, CTX, String> = DummyWriter { JsString(it) }
+        public fun <O, CTX> int(): JsWriter<O, CTX, Int> =
+            DummyWriter(result = { source -> JsNumeric.valueOf(source) })
+
+        @JvmStatic
+        public fun <O, CTX> string(): JsWriter<O, CTX, String> =
+            DummyWriter(result = { source -> JsString(source) })
     }
 }

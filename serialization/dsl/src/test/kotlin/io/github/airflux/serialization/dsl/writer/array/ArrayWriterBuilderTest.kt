@@ -24,12 +24,12 @@ import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
-import io.github.airflux.serialization.dsl.common.DummyWriter
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
+import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -43,7 +43,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 
-        private val StringWriter = DummyWriter.stringWriter<OPTS, Unit>()
+        private val StringWriter = DummyWriter.string<OPTS, Unit>()
     }
 
     init {

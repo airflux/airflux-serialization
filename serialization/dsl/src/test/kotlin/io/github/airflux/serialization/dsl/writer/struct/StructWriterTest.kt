@@ -25,7 +25,6 @@ import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
-import io.github.airflux.serialization.dsl.common.DummyWriter
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
@@ -33,6 +32,7 @@ import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResul
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
+import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -55,7 +55,7 @@ internal class StructWriterTest : FreeSpec() {
                 val source = ID(id = ID_PROPERTY_VALUE)
 
                 val writer: JsWriter<OPTS, Unit, ID> = structWriter {
-                    property(nonNullable(name = ID_PROPERTY_NAME, from = { -> id }, writer = DummyWriter.intWriter()))
+                    property(nonNullable(name = ID_PROPERTY_NAME, from = { -> id }, writer = DummyWriter.int()))
                 }
 
                 "when the action of the writer was set to return empty value" - {
@@ -104,7 +104,7 @@ internal class StructWriterTest : FreeSpec() {
                             nullable(
                                 name = ID_PROPERTY_NAME,
                                 from = { -> get },
-                                writer = DummyWriter.intWriter<OPTS, Unit>().nullable()
+                                writer = DummyWriter.int<OPTS, Unit>().nullable()
                             )
                         )
                     }
@@ -146,7 +146,7 @@ internal class StructWriterTest : FreeSpec() {
                             nullable(
                                 name = ID_PROPERTY_NAME,
                                 from = { -> get },
-                                writer = DummyWriter.intWriter<OPTS, Unit>().optional()
+                                writer = DummyWriter.int<OPTS, Unit>().optional()
                             )
                         )
                     }

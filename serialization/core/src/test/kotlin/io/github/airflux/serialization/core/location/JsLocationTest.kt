@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.core.location
 
-import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsContract
 import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe

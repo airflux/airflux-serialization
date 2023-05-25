@@ -24,6 +24,7 @@ koverMerged {
         projects {
             excludes += listOf(
                 "airflux-bom",
+                "airflux-serialization-test-core",
                 "quickstart"
             )
         }

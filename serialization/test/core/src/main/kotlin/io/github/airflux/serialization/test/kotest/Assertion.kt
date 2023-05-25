@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.common.kotest
+package io.github.airflux.serialization.test.kotest
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
 
-internal infix fun <T : Any> T.shouldBeEqualsString(expected: String) {
+public infix fun <T : Any> T.shouldBeEqualsString(expected: String) {
     this.toString() shouldBe expected
 }
 
-internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) =
+public fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, other: T) {
     this.shouldBeEqualsContract(y, z, listOf(other))
+}
 
 @Suppress("ReplaceCallWithBinaryOperator", "EqualsNullCall")
-internal fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, others: Collection<T>) {
+public fun <T : Any> T.shouldBeEqualsContract(y: T, z: T, others: Collection<T>) {
     val x = this
     assertSoftly {
         withClue("reflexive") {

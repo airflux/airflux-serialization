@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.core.writer
 
-import io.github.airflux.serialization.core.common.DummyWriter
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
+import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.assertions.failure
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
@@ -39,7 +39,7 @@ internal class WriterFilterTest : FreeSpec() {
         "The Writer type" - {
 
             "when the filter was added to the writer" - {
-                val writer: JsWriter<Unit, Unit, String?> = DummyWriter { JsString(it!!) }
+                val writer: JsWriter<Unit, Unit, String?> = DummyWriter<Unit, Unit, String?> { JsString(it!!) }
 
                 "when the value is not null" - {
                     val value = PROPERTY_VALUE

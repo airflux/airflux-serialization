@@ -20,10 +20,10 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.validation.JsValidator
-import io.github.airflux.serialization.std.common.DummyValidator
 import io.github.airflux.serialization.std.common.JsonErrors
-import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
-import io.github.airflux.serialization.std.common.kotest.shouldBeValid
+import io.github.airflux.serialization.test.dummy.DummyValidator
+import io.github.airflux.serialization.test.kotest.shouldBeInvalid
+import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
 internal class ConditionValidatorsTest : FreeSpec() {

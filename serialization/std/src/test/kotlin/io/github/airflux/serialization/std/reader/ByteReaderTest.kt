@@ -28,8 +28,8 @@ import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.std.common.JsonErrors
-import io.github.airflux.serialization.std.common.kotest.shouldBeFailure
-import io.github.airflux.serialization.std.common.kotest.shouldBeSuccess
+import io.github.airflux.serialization.test.kotest.shouldBeFailure
+import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import kotlin.reflect.KClass

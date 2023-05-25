@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.core.common.kotest.shouldBeEqualsString
+import io.github.airflux.serialization.test.kotest.shouldBeEqualsString
 import io.kotest.core.spec.style.FreeSpec
 
 internal class JsNullTest : FreeSpec() {

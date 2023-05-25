@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.common
+package io.github.airflux.serialization.test.dummy
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -24,17 +24,19 @@ import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
-internal class DummyValidator<EB, O, CTX, T> private constructor(
-    val result: (JsReaderEnv<EB, O>, CTX, JsLocation, T) -> ValidationResult
+public class DummyValidator<EB, O, CTX, T>(
+    public val result: (JsReaderEnv<EB, O>, CTX, JsLocation, T) -> ValidationResult
 ) : JsValidator<EB, O, CTX, T> {
+
+    public constructor(result: ValidationResult) : this({ _, _, _, _ -> result })
 
     override fun validate(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): ValidationResult =
         result(env, context, location, value)
 
-    internal companion object {
+    public companion object {
 
         @JvmStatic
-        internal fun <EB, O, CTX> isNotEmptyString(error: () -> ReadingResult.Error): JsValidator<EB, O, CTX, String?> =
+        public fun <EB, O, CTX> isNotEmptyString(error: () -> ReadingResult.Error): JsValidator<EB, O, CTX, String?> =
             DummyValidator { _, _, location, value ->
                 if (value != null) {
                     if (value.isNotEmpty())

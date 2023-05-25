@@ -25,8 +25,8 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 import io.github.airflux.serialization.std.common.JsonErrors
-import io.github.airflux.serialization.std.common.kotest.shouldBeInvalid
-import io.github.airflux.serialization.std.common.kotest.shouldBeValid
+import io.github.airflux.serialization.test.kotest.shouldBeInvalid
+import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
 internal class IsNotEmptyStructValidatorTest : FreeSpec() {

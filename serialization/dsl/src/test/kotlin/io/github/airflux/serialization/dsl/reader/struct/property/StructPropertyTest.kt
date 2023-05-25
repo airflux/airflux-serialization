@@ -26,10 +26,10 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.test.dummy.DummyReader
+import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

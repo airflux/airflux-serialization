@@ -20,13 +20,13 @@ import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.dsl.common.DummyReader
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
+import io.github.airflux.serialization.test.dummy.DummyReader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull

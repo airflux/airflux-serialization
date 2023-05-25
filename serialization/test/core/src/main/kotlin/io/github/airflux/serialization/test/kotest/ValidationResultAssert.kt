@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.std.common.kotest
+package io.github.airflux.serialization.test.kotest
 
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal infix fun <T> ReadingResult<T?>.shouldBeSuccess(value: ReadingResult<T?>) {
-    val result = this.shouldBeInstanceOf<ReadingResult.Success<T>>()
-    result shouldBe value
+public fun ValidationResult.shouldBeValid() {
+    this.shouldBeInstanceOf<ValidationResult.Valid>()
 }
 
-internal infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult<*>) {
-    val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
-    failure shouldBe expected
+public infix fun ValidationResult.shouldBeInvalid(expected: ReadingResult<*>) {
+    val actual = this.shouldBeInstanceOf<ValidationResult.Invalid>()
+    actual.reason shouldBe expected
 }

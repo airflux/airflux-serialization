@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.common.kotest
+package io.github.airflux.serialization.test.kotest
 
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal infix fun <T> ReadingResult<T?>.shouldBeSuccess(value: ReadingResult<T?>) {
-    val result = this.shouldBeInstanceOf<ReadingResult.Success<T>>()
-    result shouldBe value
+public infix fun <T> ReadingResult<T?>.shouldBeSuccess(expected: ReadingResult<T?>) {
+    val actualResult = this.shouldBeInstanceOf<ReadingResult.Success<T>>()
+    val expectedResult = expected.shouldBeInstanceOf<ReadingResult.Success<T>>()
+    actualResult shouldBe expectedResult
 }
 
-internal infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult<*>) {
-    val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
-    failure shouldBe expected
+public infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult<*>) {
+    val actualFailure = this.shouldBeInstanceOf<ReadingResult.Failure>()
+    val expectedFailure = expected.shouldBeInstanceOf<ReadingResult.Failure>()
+    actualFailure shouldBe expectedFailure
 }
 
-internal fun ReadingResult<*>.shouldBeFailure(vararg expected: ReadingResult.Failure.Cause) {
+public fun ReadingResult<*>.shouldBeFailure(vararg expected: ReadingResult.Failure.Cause) {
     val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
     failure.causes shouldContainExactly expected.toList()
 }

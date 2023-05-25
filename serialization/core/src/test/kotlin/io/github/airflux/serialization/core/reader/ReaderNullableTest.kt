@@ -16,9 +16,7 @@
 
 package io.github.airflux.serialization.core.reader
 
-import io.github.airflux.serialization.core.common.DummyReader
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.common.kotest.shouldBeSuccess
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -33,6 +31,8 @@ import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.test.dummy.DummyReader
+import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
