@@ -3,7 +3,7 @@ import Configuration.Publishing.mavenSonatypeRepository
 
 plugins {
     id("kotlin-common-convention")
-    `java-library`
+    id("java-convention")
 
     id("publishing-convention")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
@@ -12,9 +12,6 @@ plugins {
 tasks {
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-
         withJavadocJar()
         withSourcesJar()
     }

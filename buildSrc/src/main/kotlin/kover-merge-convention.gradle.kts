@@ -22,7 +22,10 @@ koverMerged {
         }
 
         projects {
-            excludes += listOf("airflux-bom", "quickstart")
+            excludes += listOf(
+                "airflux-bom",
+                "quickstart"
+            )
         }
     }
 
