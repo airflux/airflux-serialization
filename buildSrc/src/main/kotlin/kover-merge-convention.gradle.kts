@@ -15,8 +15,9 @@ koverMerged {
         classes {
             includes += listOf(
                 "io.github.airflux.parser.*",
-                "io.github.airflux.serialization.*",
-                "io.github.airflux.json.dsl"
+                "io.github.airflux.serialization.core.*",
+                "io.github.airflux.serialization.dsl.*",
+                "io.github.airflux.serialization.std.*"
             )
         }
 
