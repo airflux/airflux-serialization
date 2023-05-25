@@ -129,7 +129,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
         public fun <P> property(spec: StructPropertySpec<EB, O, CTX, P>): StructProperty<EB, O, CTX, P> =
             StructProperty(spec).also { properties.add(it) }
 
-        internal fun build(
+        public fun build(
             block: PropertyValues<EB, O, CTX>.(JsReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
         ): JsReader<EB, O, CTX, T> {
             val validators: StructValidators<EB, O, CTX> =
