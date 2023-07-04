@@ -23,6 +23,7 @@ val mavenPublicationName = "mavenBom"
 publishing {
     publications {
         create<MavenPublication>(mavenPublicationName) {
+            artifactId = project.name + Configuration.Artifact.jdk
             from(components["javaPlatform"])
             pom(mavenCentralMetadata)
         }
