@@ -1,6 +1,5 @@
 import info.solidsoft.gradle.pitest.PitestPluginExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import kotlinx.kover.api.KoverTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -28,9 +27,6 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
-        extensions.configure(KoverTaskExtension::class) {
-            includes.addAll("io.github.airflux.*")
-        }
     }
 }
 

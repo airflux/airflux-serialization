@@ -1,41 +1,21 @@
-import kotlinx.kover.api.DefaultIntellijEngine
-
 plugins {
     id("org.jetbrains.kotlinx.kover")
 }
 
-kover {
-    engine.set(DefaultIntellijEngine)
-}
-
-koverMerged {
-    enable()
-
+koverReport {
     filters {
-        classes {
-            includes += listOf(
-                "io.github.airflux.parser.*",
-                "io.github.airflux.serialization.core.*",
-                "io.github.airflux.serialization.dsl.*",
-                "io.github.airflux.serialization.std.*"
-            )
-        }
-
-        projects {
-            excludes += listOf(
-                "airflux-bom",
-                "airflux-serialization-test-core",
-                "quickstart"
-            )
+        includes {
+            classes("io.github.airflux.*")
         }
     }
 
-    val baseDir = "reports/jacoco/test"
-    xmlReport {
-        reportFile.set(layout.buildDirectory.file("$baseDir/jacocoTestReport.xml"))
-    }
-
-    htmlReport {
-        reportDir.set(layout.buildDirectory.dir("$baseDir/html"))
+    defaults {
+        val baseDir = "reports/jacoco/test"
+        xml {
+            setReportFile(layout.buildDirectory.file("$baseDir/jacocoTestReport.xml"))
+        }
+        html {
+            setReportDir(layout.buildDirectory.dir("$baseDir/html"))
+        }
     }
 }

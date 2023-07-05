@@ -15,3 +15,10 @@ allprojects {
     version = "0.0.1-SNAPSHOT"
     group = "io.github.airflux"
 }
+
+dependencies{
+    kover(project(":airflux-jackson-parser"))
+    kover(project(":airflux-serialization-core"))
+    kover(project(":airflux-serialization-dsl"))
+    kover(project(":airflux-serialization-std"))
+}
