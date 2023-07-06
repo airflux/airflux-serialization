@@ -5,7 +5,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
-val detektVersion = "1.22.0"
+val detektVersion = "1.23.0"
 
 dependencies{
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detektVersion}")
