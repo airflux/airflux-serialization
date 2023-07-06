@@ -31,7 +31,7 @@ tasks {
 }
 
 configure<DetektExtension> {
-    source = project.files("src/main/kotlin", "src/test/kotlin")
+    source.setFrom(project.files("src/main/kotlin", "src/test/kotlin"))
 }
 
 configure<PitestPluginExtension> {

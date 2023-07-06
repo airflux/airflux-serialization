@@ -7,7 +7,7 @@ plugins {
 
 val detektVersion = "1.23.0"
 
-dependencies{
+dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${detektVersion}")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:${detektVersion}")
 }
@@ -15,7 +15,7 @@ dependencies{
 configure<DetektExtension> {
     ignoreFailures = true
     toolVersion = detektVersion
-    config = project.files("${project.rootProject.projectDir}/config/detekt/detekt.yml")
+    config.setFrom(project.files("${project.rootProject.projectDir}/config/detekt/detekt.yml"))
     baseline = file("${project.rootProject.projectDir}/config/detekt/baseline.xml")
     parallel = true
     debug = false
