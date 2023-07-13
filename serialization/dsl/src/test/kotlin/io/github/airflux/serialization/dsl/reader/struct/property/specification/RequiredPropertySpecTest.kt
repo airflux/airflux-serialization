@@ -47,12 +47,13 @@ internal class RequiredPropertySpecTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val CODE_PROPERTY_NAME = "code"
 
-        private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
-        private const val ID_VALUE_AS_INT = "10"
+        private const val ID_PROPERTY_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
+        private const val ID_PROPERTY_VALUE_AS_INT = "10"
 
         private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
+
         private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
         private val IntReader: JsReader<EB, Unit, Unit, Int> = DummyReader.int()
 
@@ -71,44 +72,44 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     spec.paths shouldBe JsPaths(JsPath(ID_PROPERTY_NAME))
                 }
 
-                "when the reader has read a property named id" - {
+                "when the property is present" - {
 
-                    "if the property value is not the null type" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
+                    "when a read is success" - {
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        "then the not-null value should be returned" {
+                        "then a value should be returned" {
                             result shouldBeSuccess success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = ID_VALUE_AS_UUID
+                                value = ID_PROPERTY_VALUE_AS_UUID
+                            )
+                        }
+                    }
+
+                    "when a read error occurred" - {
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+
+                        "then should be returned a read error" {
+                            result shouldBeFailure failure(
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsNumeric.Integer.nameOfType
+                                )
                             )
                         }
                     }
                 }
 
-                "when the property does not founded" - {
-                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
+                "when the property is missing" - {
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then an error should be returned" {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.PathMissing
-                        )
-                    }
-                }
-
-                "when a read error occurred" - {
-                    val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
-
-                    "then should be returned a read error" {
-                        result shouldBeFailure failure(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsNumeric.Integer.nameOfType
-                            )
                         )
                     }
                 }
@@ -122,44 +123,44 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     spec.paths shouldBe JsPaths(path)
                 }
 
-                "when the reader has read a property named id" - {
+                "when the property is present" - {
 
-                    "if the property value is not the null type" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
+                    "when a read is success" - {
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
-                        "then the not-null value should be returned" {
+                        "then a value should be returned" {
                             result shouldBeSuccess success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = ID_VALUE_AS_UUID
+                                value = ID_PROPERTY_VALUE_AS_UUID
+                            )
+                        }
+                    }
+
+                    "when a read error occurred" - {
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+
+                        "then should be returned a read error" {
+                            result shouldBeFailure failure(
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                error = JsonErrors.InvalidType(
+                                    expected = listOf(JsString.nameOfType),
+                                    actual = JsNumeric.Integer.nameOfType
+                                )
                             )
                         }
                     }
                 }
 
-                "when the property does not founded" - {
-                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
+                "when the property is missing" - {
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                     val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then an error should be returned" {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.PathMissing
-                        )
-                    }
-                }
-
-                "when an error occurs while reading" - {
-                    val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
-
-                    "then should be returned a read error" {
-                        result shouldBeFailure failure(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsNumeric.Integer.nameOfType
-                            )
                         )
                     }
                 }
@@ -172,13 +173,13 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 "when the reader has successfully read" - {
 
                     "then a value should be returned if validation is a success" {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
                         val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = ID_VALUE_AS_UUID
+                            value = ID_PROPERTY_VALUE_AS_UUID
                         )
                     }
 
@@ -194,7 +195,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     }
                 }
 
-                "when an error occurs while reading" - {
+                "when a read error occurred" - {
 
                     "then should be returned a read error" {
                         val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
@@ -222,25 +223,26 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 }
 
                 "when the main reader has successfully read" - {
-                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned" {
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = ID_VALUE_AS_UUID
+                            value = ID_PROPERTY_VALUE_AS_UUID
                         )
                     }
                 }
 
                 "when the main reader has failure read" - {
-                    val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.Integer.valueOrNullOf(ID_VALUE_AS_INT)!!)
+                    val source =
+                        JsStruct(ID_PROPERTY_NAME to JsNumeric.Integer.valueOrNullOf(ID_PROPERTY_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = ID_VALUE_AS_INT
+                            value = ID_PROPERTY_VALUE_AS_INT
                         )
                     }
                 }
@@ -273,7 +275,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 
