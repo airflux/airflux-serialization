@@ -26,7 +26,6 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString

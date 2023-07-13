@@ -27,8 +27,6 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.validation
-import io.github.airflux.serialization.core.reader.struct.readOptional
-import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.value.JsValue
 

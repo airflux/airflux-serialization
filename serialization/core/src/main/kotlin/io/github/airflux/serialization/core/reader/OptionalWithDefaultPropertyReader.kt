@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.struct
+package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult

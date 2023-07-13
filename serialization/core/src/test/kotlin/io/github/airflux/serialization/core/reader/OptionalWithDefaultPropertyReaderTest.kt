@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.struct
+package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -33,21 +32,23 @@ import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
-internal class RequiredPropertyReaderTest : FreeSpec() {
+internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
-        private const val ID_PROPERTY_VALUE = "a64d62c7-4a57-4282-bce3-3cd52b815204"
+        private const val ID_PROPERTY_VALUE = "6028b4e5-bb91-4018-97a8-732eb7084cb8"
+        private const val ID_PROPERTY_DEFAULT_VALUE = "7815943d-5c55-4fe6-92f8-0be816caed78"
 
         private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
         private val READER: JsReader<EB, Unit, Unit, String> = DummyReader.string()
+        private val DEFAULT = { _: JsReaderEnv<EB, Unit>, _: Unit -> ID_PROPERTY_DEFAULT_VALUE }
     }
 
     init {
 
-        "The readRequired function" - {
+        "The readOptional (with default) function" - {
 
             "when the element is defined" - {
                 val lookup: JsLookup = JsLookup.Defined(
@@ -56,8 +57,14 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the result of applying the reader" {
-                    val result: ReadingResult<String?> =
-                        readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
+                    val result: ReadingResult<String?> = readOptional(
+                        env = ENV,
+                        context = CONTEXT,
+                        lookup = lookup,
+                        using = READER,
+                        defaultValue = DEFAULT
+                    )
+
                     result shouldBeSuccess success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
@@ -69,12 +76,18 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 val lookup: JsLookup =
                     JsLookup.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
-                "then should return the missing path error" {
-                    val result: ReadingResult<String?> =
-                        readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
-                    result shouldBeFailure failure(
+                "then should return the default value" {
+                    val result: ReadingResult<String?> = readOptional(
+                        env = ENV,
+                        context = CONTEXT,
+                        lookup = lookup,
+                        using = READER,
+                        defaultValue = DEFAULT
+                    )
+
+                    result shouldBeSuccess success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
-                        error = JsonErrors.PathMissing
+                        value = ID_PROPERTY_DEFAULT_VALUE
                     )
                 }
             }
@@ -87,8 +100,13 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: ReadingResult<String?> =
-                        readRequired(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
+                    val result: ReadingResult<String?> = readOptional(
+                        env = ENV,
+                        context = CONTEXT,
+                        lookup = lookup,
+                        using = READER,
+                        defaultValue = DEFAULT
+                    )
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(

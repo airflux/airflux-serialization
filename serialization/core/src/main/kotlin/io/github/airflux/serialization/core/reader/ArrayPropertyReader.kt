@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.array
+package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder

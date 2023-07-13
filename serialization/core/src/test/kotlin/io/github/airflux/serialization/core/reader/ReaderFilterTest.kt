@@ -27,8 +27,6 @@ import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.reader.struct.readOptional
-import io.github.airflux.serialization.core.reader.struct.readRequired
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.test.dummy.DummyReader

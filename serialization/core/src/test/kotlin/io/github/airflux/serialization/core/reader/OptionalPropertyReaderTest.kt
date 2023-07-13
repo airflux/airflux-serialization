@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.reader.struct
+package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
-import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -58,7 +57,12 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
 
                 "then should return the result of applying the reader" {
                     val result: ReadingResult<String?> =
-                        readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
+                        readOptional(
+                            env = ENV,
+                            context = CONTEXT,
+                            lookup = lookup,
+                            using = READER
+                        )
                     result shouldBeSuccess success(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
@@ -72,7 +76,12 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
 
                 "then should return the null value" {
                     val result: ReadingResult<String?> =
-                        readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
+                        readOptional(
+                            env = ENV,
+                            context = CONTEXT,
+                            lookup = lookup,
+                            using = READER
+                        )
                     result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                 }
             }
@@ -86,7 +95,12 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
 
                 "then should return the invalid type error" {
                     val result: ReadingResult<String?> =
-                        readOptional(env = ENV, context = CONTEXT, lookup = lookup, using = READER)
+                        readOptional(
+                            env = ENV,
+                            context = CONTEXT,
+                            lookup = lookup,
+                            using = READER
+                        )
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
