@@ -41,7 +41,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build publish koverMergedXmlReport
+      run: ./gradlew build publish koverXmlReport
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
