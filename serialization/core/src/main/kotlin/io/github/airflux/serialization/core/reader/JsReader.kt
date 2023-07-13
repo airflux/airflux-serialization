@@ -23,7 +23,6 @@ import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.reader.result.ifNullValue
 import io.github.airflux.serialization.core.reader.result.map
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.success
@@ -99,10 +98,12 @@ public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.validation(
     }
 
 public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.ifNullValue(
-    defaultValue: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
+    alternativeValue: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
 ): JsReader<EB, O, CTX, T> = JsReader { env, context, location, source ->
-    this@ifNullValue.read(env, context, location, source)
-        .ifNullValue { defaultValue(env, context, location) }
+    if (source is JsNull)
+        success(location = location, value = alternativeValue(env, context, location))
+    else
+        this@ifNullValue.read(env, context, location, source)
 }
 
 public fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.nullable(): JsReader<EB, O, CTX, T?> {

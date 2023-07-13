@@ -50,7 +50,6 @@ internal class OptionalPropertySpecTest : FreeSpec() {
         private const val CODE_PROPERTY_NAME = "code"
 
         private const val ID_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
-        private const val DEFAULT_ID_VALUE = "default value"
         private const val ID_VALUE_AS_INT = "10"
         private const val CODE_PROPERTY_VALUE = "code"
 
@@ -335,58 +334,11 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     }
                 }
             }
-
-            "when a default was added to the spec" - {
-                val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)
-                    .ifNullValue { _, _, _ -> DEFAULT_ID_VALUE }
-
-                "when the reader has successfully read" - {
-
-                    "then a value is not null" {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_VALUE_AS_UUID))
-
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
-
-                        result shouldBeSuccess success(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = ID_VALUE_AS_UUID
-                        )
-                    }
-
-                    "then a value is null" {
-                        val source = JsStruct()
-
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
-
-                        result shouldBeSuccess success(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            value = DEFAULT_ID_VALUE
-                        )
-                    }
-                }
-
-                "when an error occurs while reading" - {
-
-                    "then should be returned a read error" {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
-
-                        result shouldBeFailure failure(
-                            location = LOCATION.append(ID_PROPERTY_NAME),
-                            error = JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsNumeric.Integer.nameOfType
-                            )
-                        )
-                    }
-                }
-            }
         }
     }
 
     internal class EB : PathMissingErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

@@ -28,6 +28,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.struct.readOptional
 import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -49,16 +50,18 @@ internal class ReaderNullValueTest : FreeSpec() {
         private val LOCATION = JsLocation
 
         private val stringReader = DummyReader.string<EB, Unit, Unit>()
+            .ifNullValue { _, _, _ -> ALTERNATIVE_VALUE }
+
+        val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
+            val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
+            readOptional(env, context, lookup, stringReader)
+        }
     }
 
     init {
         "The extension-function JsReader#ifNullValue" - {
-            val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
-                val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                readOptional(env, context, lookup, stringReader)
-            }.ifNullValue { _, _, _ -> ALTERNATIVE_VALUE }
 
-            "when an original reader returns a result as a success" - {
+            "when an attribute is present" - {
 
                 "when the value is not null" - {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
@@ -74,7 +77,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 }
 
                 "when the value is null" - {
-                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsNull)
 
                     "then should return the default value" {
                         val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
@@ -84,6 +87,16 @@ internal class ReaderNullValueTest : FreeSpec() {
                             value = ALTERNATIVE_VALUE
                         )
                     }
+                }
+            }
+
+            "when an attribute is missing" - {
+                val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
+
+                "then should return the default value" {
+                    val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+
+                    result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                 }
             }
 
