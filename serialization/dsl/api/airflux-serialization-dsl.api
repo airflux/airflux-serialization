@@ -111,9 +111,9 @@ public final class io/github/airflux/serialization/dsl/reader/struct/property/sp
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec {
-	public synthetic fun <init> (Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsPathReader;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getPaths-DU0FY7s ()Ljava/util/List;
-	public final fun getReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+	public final fun getReader ()Lio/github/airflux/serialization/core/reader/JsPathReader;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpecKt {

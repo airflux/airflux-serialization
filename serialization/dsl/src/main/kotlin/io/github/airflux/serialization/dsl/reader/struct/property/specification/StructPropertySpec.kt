@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.filter
 import io.github.airflux.serialization.core.reader.or
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.validation.JsValidator
 
 public class StructPropertySpec<EB, O, CTX, out T>(
     public val paths: JsPaths,
-    public val reader: JsReader<EB, O, CTX, T>
+    public val reader: JsPathReader<EB, O, CTX, T>
 )
 
 public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.validation(

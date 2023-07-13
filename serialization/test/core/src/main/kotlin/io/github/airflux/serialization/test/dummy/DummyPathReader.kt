@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.reader.struct.property
+package io.github.airflux.serialization.test.dummy
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 
-public class StructProperty<EB, O, CTX, T> private constructor(
-    public val paths: JsPaths,
-    private val reader: JsPathReader<EB, O, CTX, T>
-) {
-    public constructor(spec: StructPropertySpec<EB, O, CTX, T>) : this(spec.paths, spec.reader)
+public class DummyPathReader<EB, O, CTX, T>(
+    private val reader: (JsReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
+) : JsPathReader<EB, O, CTX, T> {
 
-    public fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
-        reader.read(env, context, location, source)
+    public constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
+
+    override fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
+        reader(env, context, location, source)
 }

@@ -19,6 +19,7 @@ package io.github.airflux.serialization.dsl.reader.struct.property
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -28,6 +29,7 @@ import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.test.dummy.DummyPathReader
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
@@ -43,13 +45,16 @@ internal class StructPropertyTest : FreeSpec() {
         private val CONTEXT = Unit
         private val LOCATION = JsLocation
 
-        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
+        private val stringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
+        private val reader: JsPathReader<EB, Unit, Unit, String> = DummyPathReader { env, context, location, source ->
+            stringReader.read(env, context, location, source)
+        }
     }
 
     init {
 
         "The StructProperty type" - {
-            val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = StringReader)
+            val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = reader)
             val property = StructProperty(spec)
 
             "then the paths should equal the paths from the spec" {

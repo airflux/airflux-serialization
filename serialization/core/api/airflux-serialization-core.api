@@ -149,6 +149,24 @@ public final class io/github/airflux/serialization/core/path/JsPaths {
 	public final synthetic fun unbox-impl ()Ljava/util/List;
 }
 
+public abstract interface class io/github/airflux/serialization/core/reader/JsPathReader {
+	public static final field Companion Lio/github/airflux/serialization/core/reader/JsPathReader$Companion;
+	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+}
+
+public final class io/github/airflux/serialization/core/reader/JsPathReader$Companion {
+	public final fun optional (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+	public final fun optional (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+	public final fun required (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+	public final fun required (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+}
+
+public final class io/github/airflux/serialization/core/reader/JsPathReaderKt {
+	public static final fun filter (Lio/github/airflux/serialization/core/reader/JsPathReader;Lio/github/airflux/serialization/core/reader/predicate/JsPredicate;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+	public static final fun or (Lio/github/airflux/serialization/core/reader/JsPathReader;Lio/github/airflux/serialization/core/reader/JsPathReader;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+	public static final fun validation (Lio/github/airflux/serialization/core/reader/JsPathReader;Lio/github/airflux/serialization/core/reader/validation/JsValidator;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+}
+
 public abstract interface class io/github/airflux/serialization/core/reader/JsReader {
 	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
