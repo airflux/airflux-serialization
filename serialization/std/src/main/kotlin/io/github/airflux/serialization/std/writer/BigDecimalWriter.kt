@@ -23,7 +23,7 @@ import java.math.BigDecimal
 /**
  * Writer for primitive [BigDecimal] type.
  */
-public fun <O, CTX> bigDecimalWriter(stripTrailingZeros: Boolean): JsWriter<O, CTX, BigDecimal> =
+public fun <O> bigDecimalWriter(stripTrailingZeros: Boolean): JsWriter<O, BigDecimal> =
     JsWriter { _, _, _, value ->
         val text = if (stripTrailingZeros)
             value.stripTrailingZeros().toPlainString()

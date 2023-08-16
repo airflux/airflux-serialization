@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.identity
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -31,12 +32,12 @@ import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
 
-public fun interface JsReader<EB, O, CTX, out T> {
+public fun interface JsReader<EB, O, out T> {
 
     /**
      * Convert the [JsValue] into a T
      */
-    public fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T>
+    public fun read(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, source: JsValue): ReadingResult<T>
 }
 
 /**
@@ -47,15 +48,15 @@ public fun interface JsReader<EB, O, CTX, out T> {
  * if successful
  * @return A new [JsReader] with the updated behavior.
  */
-public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.map(transform: (T) -> R): JsReader<EB, O, CTX, R> =
+public infix fun <EB, O, T, R> JsReader<EB, O, T>.map(transform: (T) -> R): JsReader<EB, O, R> =
     JsReader { env, context, location, source ->
         this@map.read(env, context, location, source)
             .map(transform)
     }
 
-public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.bind(
-    transform: (JsReaderEnv<EB, O>, CTX, ReadingResult.Success<T>) -> ReadingResult<R>
-): JsReader<EB, O, CTX, R> =
+public infix fun <EB, O, T, R> JsReader<EB, O, T>.bind(
+    transform: (JsReaderEnv<EB, O>, JsContext, ReadingResult.Success<T>) -> ReadingResult<R>
+): JsReader<EB, O, R> =
     JsReader { env, context, location, source ->
         this@bind.read(env, context, location, source)
             .fold(
@@ -72,7 +73,7 @@ public infix fun <EB, O, CTX, T, R> JsReader<EB, O, CTX, T>.bind(
  * @param alt the [JsReader] to run if this one gets a [ReadingResult.Error]
  * @return A new [JsReader] with the updated behavior.
  */
-public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.or(alt: JsReader<EB, O, CTX, T>): JsReader<EB, O, CTX, T> =
+public infix fun <EB, O, T> JsReader<EB, O, T>.or(alt: JsReader<EB, O, T>): JsReader<EB, O, T> =
     JsReader { env, context, location, source ->
         this@or.read(env, context, location, source)
             .recovery { failure ->
@@ -81,32 +82,32 @@ public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.or(alt: JsReader<EB, O,
             }
     }
 
-public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.filter(
-    predicate: JsPredicate<EB, O, CTX, T & Any>
-): JsReader<EB, O, CTX, T?> =
+public infix fun <EB, O, T> JsReader<EB, O, T>.filter(
+    predicate: JsPredicate<EB, O, T & Any>
+): JsReader<EB, O, T?> =
     JsReader { env, context, location, source ->
         this@filter.read(env, context, location, source)
             .filter(env, context, predicate)
     }
 
-public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.validation(
-    validator: JsValidator<EB, O, CTX, T>
-): JsReader<EB, O, CTX, T> =
+public infix fun <EB, O, T> JsReader<EB, O, T>.validation(
+    validator: JsValidator<EB, O, T>
+): JsReader<EB, O, T> =
     JsReader { env, context, location, source ->
         this@validation.read(env, context, location, source)
             .validation(env, context, validator)
     }
 
-public infix fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.ifNullValue(
-    alternativeValue: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> T
-): JsReader<EB, O, CTX, T> = JsReader { env, context, location, source ->
+public infix fun <EB, O, T> JsReader<EB, O, T>.ifNullValue(
+    alternativeValue: (env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation) -> T
+): JsReader<EB, O, T> = JsReader { env, context, location, source ->
     if (source is JsNull)
         success(location = location, value = alternativeValue(env, context, location))
     else
         this@ifNullValue.read(env, context, location, source)
 }
 
-public fun <EB, O, CTX, T> JsReader<EB, O, CTX, T>.nullable(): JsReader<EB, O, CTX, T?> {
+public fun <EB, O, T> JsReader<EB, O, T>.nullable(): JsReader<EB, O, T?> {
     return JsReader { env, context, location, source ->
         if (source is JsNull)
             success(location = location, value = null)

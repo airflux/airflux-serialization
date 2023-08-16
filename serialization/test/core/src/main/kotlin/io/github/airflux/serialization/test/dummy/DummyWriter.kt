@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.test.dummy
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
@@ -24,17 +25,18 @@ import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 
-public class DummyWriter<O, CTX, T>(public val result: (T) -> JsValue?) : JsWriter<O, CTX, T> {
-    override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? = result(source)
+public class DummyWriter<O, T>(public val result: (T) -> JsValue?) : JsWriter<O, T> {
+    override fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue? =
+        result(source)
 
     public companion object {
 
         @JvmStatic
-        public fun <O, CTX> int(): JsWriter<O, CTX, Int> =
+        public fun <O> int(): JsWriter<O, Int> =
             DummyWriter(result = { source -> JsNumeric.valueOf(source) })
 
         @JvmStatic
-        public fun <O, CTX> string(): JsWriter<O, CTX, String> =
+        public fun <O> string(): JsWriter<O, String> =
             DummyWriter(result = { source -> JsString(source) })
     }
 }

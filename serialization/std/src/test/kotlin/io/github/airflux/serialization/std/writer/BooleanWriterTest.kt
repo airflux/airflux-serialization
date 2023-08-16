@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -27,14 +28,14 @@ internal class BooleanWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
     init {
 
         "The boolean type writer" - {
-            val writer: JsWriter<Unit, Unit, Boolean> = booleanWriter()
+            val writer: JsWriter<Unit, Boolean> = booleanWriter()
 
             "when the value contains the true value" - {
                 val value = true

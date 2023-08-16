@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -34,10 +35,10 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val WRITER: JsWriter<Unit, Unit, String?> = DummyWriter.string<Unit, Unit>().nullable()
+        private val WRITER: JsWriter<Unit, String?> = DummyWriter.string<Unit>().nullable()
     }
 
     init {
@@ -48,7 +49,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                 "when using an extractor expression without context" - {
                     val extractor: (DTO) -> String? = { it.id }
-                    val spec: StructPropertySpec<Unit, Unit, DTO, String?> =
+                    val spec: StructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                     "then the property name should equal the passed property name" {
@@ -57,7 +58,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from = spec.from
-                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutContext<Unit, DTO, String>>()
+                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutContext<DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -68,8 +69,8 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when using an extractor expression with context" - {
-                    val extractor: (DTO, Unit) -> String? = { value, _ -> value.id }
-                    val spec: StructPropertySpec<Unit, Unit, DTO, String?> =
+                    val extractor: (DTO, JsContext) -> String? = { value, _ -> value.id }
+                    val spec: StructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                     "then the property name should equal the passed property name" {
@@ -78,7 +79,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from =
-                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithContext<Unit, DTO, String>>()
+                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithContext<DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -90,7 +91,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                 "when some filter was added to the spec" - {
                     val extractor: (DTO) -> String? = { it.id }
-                    val spec: StructPropertySpec<Unit, Unit, DTO, String?> =
+                    val spec: StructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
                     val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
 

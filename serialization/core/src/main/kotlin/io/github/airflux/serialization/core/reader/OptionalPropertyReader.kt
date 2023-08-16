@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.reader
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -29,11 +30,11 @@ import io.github.airflux.serialization.core.reader.result.success
  * - If a node is found ([lookup] is [JsLookup.Defined]) then applies [reader]
  * - If a node is not found ([lookup] is [JsLookup.Undefined]) then returns 'null'
  */
-public fun <EB, O, CTX, T> readOptional(
+public fun <EB, O, T> readOptional(
     env: JsReaderEnv<EB, O>,
-    context: CTX,
+    context: JsContext,
     lookup: JsLookup,
-    using: JsReader<EB, O, CTX, T>
+    using: JsReader<EB, O, T>
 ): ReadingResult<T?>
     where EB : InvalidTypeErrorBuilder =
     when (lookup) {

@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.value.readAsString
 /**
  * Reader for primitive [String] type.
  */
-public fun <EB, O, CTX> stringReader(): JsReader<EB, O, CTX, String>
+public fun <EB, O> stringReader(): JsReader<EB, O, String>
     where EB : InvalidTypeErrorBuilder =
     JsReader { env, _, location, source ->
         source.readAsString(env, location)

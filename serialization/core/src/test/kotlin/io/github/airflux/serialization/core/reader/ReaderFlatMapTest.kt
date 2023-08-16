@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -36,7 +37,7 @@ internal class ReaderFlatMapTest : FreeSpec() {
     companion object {
         private const val VALUE = "42"
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
@@ -44,7 +45,7 @@ internal class ReaderFlatMapTest : FreeSpec() {
         "The extension-function JsReader#bind" - {
 
             "when the original reader returns a successful result" - {
-                val reader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
+                val reader: JsReader<EB, Unit, String> = DummyReader.string()
 
                 "then the new reader should return the transformed value" {
                     val source = JsString(VALUE)
@@ -60,7 +61,7 @@ internal class ReaderFlatMapTest : FreeSpec() {
 
             "when the original reader returns an error" - {
                 val failure = failure(location = LOCATION, error = JsonErrors.PathMissing)
-                val reader: JsReader<EB, Unit, Unit, String> = DummyReader(result = failure)
+                val reader: JsReader<EB, Unit, String> = DummyReader(result = failure)
 
                 "then the new reader should return it error" {
                     val source = JsString(VALUE)

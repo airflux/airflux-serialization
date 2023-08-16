@@ -18,8 +18,8 @@ package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 
-internal class MaxItemsArrayValidatorBuilder<EB, O, CTX>(private val value: Int) : ArrayValidator.Builder<EB, O, CTX>
+internal class MaxItemsArrayValidatorBuilder<EB, O>(private val value: Int) : ArrayValidator.Builder<EB, O>
     where EB : MaxItemsArrayValidator.ErrorBuilder {
 
-    override fun build(): ArrayValidator<EB, O, CTX> = MaxItemsArrayValidator(value)
+    override fun build(): ArrayValidator<EB, O> = MaxItemsArrayValidator(value)
 }

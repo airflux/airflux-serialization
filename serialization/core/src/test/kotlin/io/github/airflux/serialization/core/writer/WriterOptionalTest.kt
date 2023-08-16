@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
@@ -30,7 +31,7 @@ internal class WriterOptionalTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
@@ -39,7 +40,7 @@ internal class WriterOptionalTest : FreeSpec() {
         "The extension-function the optional" - {
 
             "when an original reader returns a result as a success" - {
-                val writer = DummyWriter.string<Unit, Unit>().optional()
+                val writer = DummyWriter.string<Unit>().optional()
 
                 "when the value is not null" - {
                     val source: String = ID_PROPERTY_VALUE

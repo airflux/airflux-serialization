@@ -16,18 +16,24 @@
 
 package io.github.airflux.serialization.test.dummy
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.JsValue
 
-public class DummyPathReader<EB, O, CTX, T>(
-    private val reader: (JsReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
-) : JsPathReader<EB, O, CTX, T> {
+public class DummyPathReader<EB, O, T>(
+    private val reader: (JsReaderEnv<EB, O>, context: JsContext, JsLocation, JsValue) -> ReadingResult<T>
+) : JsPathReader<EB, O, T> {
 
     public constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
+    override fun read(
+        env: JsReaderEnv<EB, O>,
+        context: JsContext,
+        location: JsLocation,
+        source: JsValue
+    ): ReadingResult<T> =
         reader(env, context, location, source)
 }

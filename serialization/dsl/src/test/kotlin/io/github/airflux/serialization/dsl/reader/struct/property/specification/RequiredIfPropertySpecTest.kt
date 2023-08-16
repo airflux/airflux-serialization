@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -53,13 +54,13 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE_AS_INT = "10"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
-        private val IntReader: JsReader<EB, Unit, Unit, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, Unit, Int> = DummyReader.int()
 
-        private val IsNotEmptyStringValidator: JsValidator<EB, Unit, Unit, String?> =
+        private val IsNotEmptyStringValidator: JsValidator<EB, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 
@@ -68,7 +69,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
         "The RequiredIfPropertySpec type" - {
 
             "when the predicate returns the true value" - {
-                val readerPredicate = { _: JsReaderEnv<EB, Unit>, _: Unit, _: JsLocation -> true }
+                val readerPredicate: (JsReaderEnv<EB, Unit>, JsContext, JsLocation) -> Boolean = { _, _, _ -> true }
 
                 "when creating the instance by a property name" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = readerPredicate)
@@ -225,7 +226,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
                         "when the value satisfy the predicate" - {
-                            val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
                                 val result = spec.filter(predicate)
@@ -239,8 +240,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         }
 
                         "when the value does not satisfy the predicate" - {
-                            val predicate: JsPredicate<EB, Unit, Unit, String> =
-                                DummyReaderPredicate(result = false)
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                             "then filter should return the null value" {
                                 val result = spec.filter(predicate)
@@ -258,10 +258,9 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                         "then should be returned a read error" {
                             val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                            val predicate: JsPredicate<EB, Unit, Unit, String> =
-                                DummyReaderPredicate { _, _, _, _ ->
-                                    throw io.kotest.assertions.failure("Predicate not called.")
-                                }
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                                throw io.kotest.assertions.failure("Predicate not called.")
+                            }
                             val result = spec.filter(predicate)
                                 .reader.read(ENV, CONTEXT, LOCATION, source)
 
@@ -341,7 +340,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val readerPredicate = { _: JsReaderEnv<EB, Unit>, _: Unit, _: JsLocation -> false }
+                val readerPredicate: (JsReaderEnv<EB, Unit>, JsContext, JsLocation) -> Boolean = { _, _, _ -> false }
 
                 "when creating the instance by a property name" - {
                     val spec = required(name = ID_PROPERTY_NAME, reader = StringReader, predicate = readerPredicate)
@@ -498,7 +497,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
                         "when the value satisfy the predicate" - {
-                            val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
                                 val result = spec.filter(predicate)
@@ -512,8 +511,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         }
 
                         "when the value does not satisfy the predicate" - {
-                            val predicate: JsPredicate<EB, Unit, Unit, String> =
-                                DummyReaderPredicate(result = false)
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                             "then filter should return the null value" {
                                 val result = spec.filter(predicate)
@@ -531,10 +529,9 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                         "then should be returned a read error" {
                             val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                            val predicate: JsPredicate<EB, Unit, Unit, String> =
-                                DummyReaderPredicate { _, _, _, _ ->
-                                    throw io.kotest.assertions.failure("Predicate not called.")
-                                }
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                                throw io.kotest.assertions.failure("Predicate not called.")
+                            }
                             val result = spec.filter(predicate)
                                 .reader.read(ENV, CONTEXT, LOCATION, source)
 

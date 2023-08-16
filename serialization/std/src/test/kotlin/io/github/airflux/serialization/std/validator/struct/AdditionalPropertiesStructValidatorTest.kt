@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -47,19 +48,19 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private const val NAME_PROPERTY_NAME = "title"
         private const val NAME_PROPERTY_VALUE = "property-title"
 
-        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
-        private val CONTEXT = Unit
+        private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val idProperty: StructProperty<EB, OPTS, Unit, String> =
+        private val idProperty: StructProperty<EB, OPTS, String> =
             StructProperty(required(ID_PROPERTY_NAME, StringReader))
-        private val PROPERTIES: StructProperties<EB, OPTS, Unit> = listOf(idProperty)
+        private val PROPERTIES: StructProperties<EB, OPTS> = listOf(idProperty)
     }
 
     init {
 
         "The struct validator AdditionalProperties" - {
-            val validator: StructValidator<EB, OPTS, Unit> =
-                StdStructValidator.additionalProperties<EB, OPTS, Unit>().build(PROPERTIES)
+            val validator: StructValidator<EB, OPTS> =
+                StdStructValidator.additionalProperties<EB, OPTS>().build(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = JsStruct()
@@ -148,8 +149,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder,
-        PathMissingErrorBuilder,
-        AdditionalPropertiesStructValidator.ErrorBuilder {
+                        PathMissingErrorBuilder,
+                        AdditionalPropertiesStructValidator.ErrorBuilder {
 
         override fun additionalPropertiesStructError(): ReadingResult.Error =
             JsonErrors.Validation.Struct.AdditionalProperties

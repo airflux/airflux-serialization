@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -29,14 +30,14 @@ internal class IsNotEmptyValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
     init {
 
         "The string validator IsNotEmpty" - {
-            val validator = StdStringValidator.isNotEmpty<EB, Unit, Unit>()
+            val validator = StdStringValidator.isNotEmpty<EB, Unit>()
 
             "when the value is null" - {
                 val str: String? = null

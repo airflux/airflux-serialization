@@ -1,13 +1,46 @@
 public final class io/github/airflux/serialization/core/DeserializationKt {
-	public static final fun deserialization (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun deserialization (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public final class io/github/airflux/serialization/core/SerializationKt {
-	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/value/JsValue;
+	public static final fun serialization (Ljava/lang/Object;Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/value/JsValue;
 }
 
 public final class io/github/airflux/serialization/core/common/IdentityKt {
 	public static final fun identity (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract class io/github/airflux/serialization/core/context/JsAbstractContextElement : io/github/airflux/serialization/core/context/JsContext$Element {
+	public fun <init> (Lio/github/airflux/serialization/core/context/JsContext$Key;)V
+	public fun getKey ()Lio/github/airflux/serialization/core/context/JsContext$Key;
+}
+
+public abstract interface class io/github/airflux/serialization/core/context/JsContext {
+	public static final field Empty Lio/github/airflux/serialization/core/context/JsContext$Empty;
+	public abstract fun contains (Lio/github/airflux/serialization/core/context/JsContext$Key;)Z
+	public abstract fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public abstract fun get (Lio/github/airflux/serialization/core/context/JsContext$Key;)Lio/github/airflux/serialization/core/context/JsContext$Element;
+	public abstract fun isEmpty ()Z
+	public fun isNotEmpty ()Z
+	public fun plus (Lio/github/airflux/serialization/core/context/JsContext$Element;)Lio/github/airflux/serialization/core/context/JsContext;
+}
+
+public abstract interface class io/github/airflux/serialization/core/context/JsContext$Element : io/github/airflux/serialization/core/context/JsContext {
+	public fun contains (Lio/github/airflux/serialization/core/context/JsContext$Key;)Z
+	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun get (Lio/github/airflux/serialization/core/context/JsContext$Key;)Lio/github/airflux/serialization/core/context/JsContext$Element;
+	public abstract fun getKey ()Lio/github/airflux/serialization/core/context/JsContext$Key;
+	public fun isEmpty ()Z
+}
+
+public final class io/github/airflux/serialization/core/context/JsContext$Empty : io/github/airflux/serialization/core/context/JsContext {
+	public fun contains (Lio/github/airflux/serialization/core/context/JsContext$Key;)Z
+	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun get (Lio/github/airflux/serialization/core/context/JsContext$Key;)Lio/github/airflux/serialization/core/context/JsContext$Element;
+	public fun isEmpty ()Z
+}
+
+public abstract interface class io/github/airflux/serialization/core/context/JsContext$Key {
 }
 
 public abstract interface class io/github/airflux/serialization/core/location/JsLocation {
@@ -150,14 +183,14 @@ public final class io/github/airflux/serialization/core/path/JsPaths {
 }
 
 public final class io/github/airflux/serialization/core/reader/ArrayPropertyReaderKt {
-	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Ljava/util/List;Z)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Ljava/util/List;Z)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/JsPathReader {
 	public static final field Companion Lio/github/airflux/serialization/core/reader/JsPathReader$Companion;
-	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/JsPathReader$Companion {
@@ -174,7 +207,7 @@ public final class io/github/airflux/serialization/core/reader/JsPathReaderKt {
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/JsReader {
-	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/JsReaderKt {
@@ -188,15 +221,15 @@ public final class io/github/airflux/serialization/core/reader/JsReaderKt {
 }
 
 public final class io/github/airflux/serialization/core/reader/OptionalPropertyReaderKt {
-	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/lookup/JsLookup;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/lookup/JsLookup;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/OptionalWithDefaultPropertyReaderKt {
-	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/lookup/JsLookup;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/lookup/JsLookup;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/RequiredPropertyReaderKt {
-	public static final fun readRequired (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/lookup/JsLookup;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readRequired (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/lookup/JsLookup;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/env/JsReaderEnv {
@@ -232,7 +265,7 @@ public abstract interface class io/github/airflux/serialization/core/reader/erro
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/predicate/JsPredicate {
-	public abstract fun test (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Z
+	public abstract fun test (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Z
 }
 
 public final class io/github/airflux/serialization/core/reader/predicate/JsPredicateKt {
@@ -312,7 +345,7 @@ public final class io/github/airflux/serialization/core/reader/result/ReadingRes
 public final class io/github/airflux/serialization/core/reader/result/ReadingResultKt {
 	public static final fun bind (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun failure (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun filter (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/predicate/JsPredicate;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun filter (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/predicate/JsPredicate;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun fold (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun getOrElse (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun getOrHandle (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
@@ -325,12 +358,12 @@ public final class io/github/airflux/serialization/core/reader/result/ReadingRes
 	public static final fun success (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun toFailure (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun toSuccess (Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun validation (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/validation/JsValidator;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun validation (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/validation/JsValidator;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun withCatching (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/validation/JsValidator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/validation/JsValidatorKt {
@@ -524,16 +557,16 @@ public final class io/github/airflux/serialization/core/value/JsValueKt {
 }
 
 public final class io/github/airflux/serialization/core/value/JsValueOpsKt {
-	public static final fun readAsArray (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readAsArray (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun readAsBoolean (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun readAsInteger (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun readAsNumber (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readAsInteger (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readAsNumber (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun readAsString (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static final fun readAsStruct (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun readAsStruct (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function4;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/writer/JsWriter {
-	public abstract fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
+	public abstract fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
 }
 
 public final class io/github/airflux/serialization/core/writer/JsWriterKt {
@@ -555,7 +588,7 @@ public final class io/github/airflux/serialization/core/writer/env/JsWriterEnv {
 }
 
 public abstract interface class io/github/airflux/serialization/core/writer/predicate/JsPredicate {
-	public abstract fun test (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Z
+	public abstract fun test (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Z
 }
 
 public final class io/github/airflux/serialization/core/writer/predicate/JsPredicateKt {

@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -30,7 +31,7 @@ internal class IsAValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private val PATTERN: Regex = "\\d+".toRegex()
         private val IS_DIGITAL: (String) -> Boolean = { value: String -> PATTERN.matches(value) }
@@ -39,7 +40,7 @@ internal class IsAValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator: JsValidator<EB, Unit, Unit, String> = StdStringValidator.isA(IS_DIGITAL)
+            val validator: JsValidator<EB, Unit, String> = StdStringValidator.isA(IS_DIGITAL)
 
             "when a string is empty" - {
                 val str = ""

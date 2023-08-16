@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
@@ -31,7 +32,7 @@ internal class WriterFilterTest : FreeSpec() {
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
@@ -39,7 +40,7 @@ internal class WriterFilterTest : FreeSpec() {
         "The Writer type" - {
 
             "when the filter was added to the writer" - {
-                val writer: JsWriter<Unit, Unit, String?> = DummyWriter<Unit, Unit, String?> { JsString(it!!) }
+                val writer: JsWriter<Unit, String?> = DummyWriter { JsString(it!!) }
 
                 "when the value is not null" - {
                     val value = PROPERTY_VALUE

@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -43,10 +44,10 @@ internal class ReaderFilterTest : FreeSpec() {
         private const val CODE_PROPERTY_VALUE = "code"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val stringReader = DummyReader.string<EB, Unit, Unit>()
+        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string()
     }
 
     init {
@@ -55,7 +56,7 @@ internal class ReaderFilterTest : FreeSpec() {
             "when an original reader returns a result as a success" - {
 
                 "when the value in the result is not null" - {
-                    val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
+                    val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                         readRequired(env, context, lookup, stringReader)
                     }
@@ -63,7 +64,7 @@ internal class ReaderFilterTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "when the value satisfies the predicate" - {
-                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                         "then filter should return the original value" {
                             val filtered = requiredReader.filter(predicate)
@@ -77,7 +78,7 @@ internal class ReaderFilterTest : FreeSpec() {
                     }
 
                     "when the value does not satisfy the predicate" - {
-                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                         "then filter should return the null value" {
                             val filtered = requiredReader.filter(predicate)
@@ -89,12 +90,12 @@ internal class ReaderFilterTest : FreeSpec() {
                 }
 
                 "when the value in the result is null" - {
-                    val optionalReader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
+                    val optionalReader: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                         readOptional(env, context, lookup, stringReader)
                     }
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                    val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
@@ -107,12 +108,12 @@ internal class ReaderFilterTest : FreeSpec() {
             }
 
             "when an original reader returns a result as a failure" - {
-                val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
+                val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
                     val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                     readRequired(env, context, lookup, stringReader)
                 }
                 val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }
 
@@ -129,7 +130,7 @@ internal class ReaderFilterTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

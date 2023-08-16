@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.property
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.validation.JsValidator
@@ -27,9 +28,9 @@ public object StdPropertyValidator {
      * if a value is present (not equal to null), then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O, CTX, T> forbidden(
-        predicate: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> Boolean
-    ): JsValidator<EB, O, CTX, T>
+    public fun <EB, O, T> forbidden(
+        predicate: (env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation) -> Boolean
+    ): JsValidator<EB, O, T>
         where EB : ForbiddenPropertyValidator.ErrorBuilder = ForbiddenPropertyValidator(predicate)
 
     /**
@@ -37,8 +38,8 @@ public object StdPropertyValidator {
      * if a value is missing (equal to null), then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O, CTX, T> mandatory(
-        predicate: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation) -> Boolean
-    ): JsValidator<EB, O, CTX, T>
+    public fun <EB, O, T> mandatory(
+        predicate: (env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation) -> Boolean
+    ): JsValidator<EB, O, T>
         where EB : MandatoryPropertyValidator.ErrorBuilder = MandatoryPropertyValidator(predicate)
 }

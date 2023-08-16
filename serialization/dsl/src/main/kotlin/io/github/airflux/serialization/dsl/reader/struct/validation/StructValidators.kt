@@ -16,4 +16,4 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.validation
 
-public typealias StructValidators<EB, O, CTX> = List<StructValidator<EB, O, CTX>>
+public typealias StructValidators<EB, O> = List<StructValidator<EB, O>>

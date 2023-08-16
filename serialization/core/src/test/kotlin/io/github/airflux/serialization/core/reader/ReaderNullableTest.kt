@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -42,15 +43,15 @@ internal class ReaderNullableTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT: JsContext = JsContext
         private val LOCATION = JsLocation
 
-        private val stringReader = DummyReader.string<EB, Unit, Unit>().nullable()
+        private val stringReader: JsReader<EB, Unit, String?> = DummyReader.string<EB, Unit>().nullable()
     }
 
     init {
         "The extension-function JsReader#toNullableType" - {
-            val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
+            val reader: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
                 val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                 readOptional(env, context, lookup, stringReader)
             }
@@ -100,7 +101,7 @@ internal class ReaderNullableTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

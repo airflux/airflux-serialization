@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsNumeric
@@ -43,7 +44,7 @@ internal class StructWriterTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = 42
 
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
@@ -54,7 +55,7 @@ internal class StructWriterTest : FreeSpec() {
             "when a property is non-nullable type" - {
                 val source = ID(id = ID_PROPERTY_VALUE)
 
-                val writer: JsWriter<OPTS, Unit, ID> = structWriter {
+                val writer: JsWriter<OPTS, ID> = structWriter {
                     property(nonNullable(name = ID_PROPERTY_NAME, from = { -> id }, writer = DummyWriter.int()))
                 }
 
@@ -99,12 +100,12 @@ internal class StructWriterTest : FreeSpec() {
                 val source = NullableID(get = null)
 
                 "when a writer of property is nullable" - {
-                    val writer: JsWriter<OPTS, Unit, NullableID> = structWriter {
+                    val writer: JsWriter<OPTS, NullableID> = structWriter {
                         property(
                             nullable(
                                 name = ID_PROPERTY_NAME,
                                 from = { -> get },
-                                writer = DummyWriter.int<OPTS, Unit>().nullable()
+                                writer = DummyWriter.int<OPTS>().nullable()
                             )
                         )
                     }
@@ -141,12 +142,12 @@ internal class StructWriterTest : FreeSpec() {
                 }
 
                 "when a writer of property is optional" - {
-                    val writer: JsWriter<OPTS, Unit, NullableID> = structWriter {
+                    val writer: JsWriter<OPTS, NullableID> = structWriter {
                         property(
                             nullable(
                                 name = ID_PROPERTY_NAME,
                                 from = { -> get },
-                                writer = DummyWriter.int<OPTS, Unit>().optional()
+                                writer = DummyWriter.int<OPTS>().optional()
                             )
                         )
                     }

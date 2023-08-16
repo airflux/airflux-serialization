@@ -16,15 +16,16 @@
 
 package io.github.airflux.serialization.core
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.value.JsValue
 
-public fun <EB, O, CTX, T : Any> JsValue.deserialization(
+public fun <EB, O, T : Any> JsValue.deserialization(
     env: JsReaderEnv<EB, O>,
-    context: CTX,
-    reader: JsReader<EB, O, CTX, T>
+    context: JsContext,
+    reader: JsReader<EB, O, T>
 ): ReadingResult<T> =
     reader.read(env, context, JsLocation, this)

@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -52,14 +53,14 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private const val DEFAULT_VALUE = "none"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val DEFAULT = { _: JsReaderEnv<EB, Unit>, _: Unit -> DEFAULT_VALUE }
+        private val DEFAULT: (JsReaderEnv<EB, Unit>, JsContext) -> String = { _, _ -> DEFAULT_VALUE }
 
-        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
-        private val IntReader: JsReader<EB, Unit, Unit, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, Unit, Int> = DummyReader.int()
 
-        private val IsNotEmptyStringValidator: JsValidator<EB, Unit, Unit, String?> =
+        private val IsNotEmptyStringValidator: JsValidator<EB, Unit, String?> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 

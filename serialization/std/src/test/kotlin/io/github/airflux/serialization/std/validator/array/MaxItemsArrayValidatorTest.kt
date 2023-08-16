@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.array
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -32,7 +33,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val MAX_ITEMS = 2
     }
@@ -40,8 +41,8 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MaxItems" - {
-            val validator: ArrayValidator<EB, Unit, Unit> =
-                StdArrayValidator.maxItems<EB, Unit, Unit>(MAX_ITEMS).build()
+            val validator: ArrayValidator<EB, Unit> =
+                StdArrayValidator.maxItems<EB, Unit>(MAX_ITEMS).build()
 
             "when a collection is empty" - {
                 val source = JsArray()

@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
-public sealed interface PropertyValues<EB, O, CTX> {
+public sealed interface PropertyValues<EB, O> {
 
     public val isEmpty: Boolean
     public val isNotEmpty: Boolean
     public val size: Int
 
-    public infix operator fun <T> get(property: StructProperty<EB, O, CTX, T>): T
-    public operator fun <T> StructProperty<EB, O, CTX, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T> get(property: StructProperty<EB, O, T>): T
+    public operator fun <T> StructProperty<EB, O, T>.unaryPlus(): T = get(this)
 }

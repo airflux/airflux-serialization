@@ -16,15 +16,14 @@
 
 package io.github.airflux.quickstart.infrastructure.web.model.reader.validator
 
-import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.github.airflux.serialization.std.validator.struct.StdStructValidator
 
 //String validators
-val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
+val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderOptions>()
 
 //Struct validators
-val isNotEmpty = StdStructValidator.isNotEmpty<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
-val additionalProperties = StdStructValidator.additionalProperties<ReaderErrorBuilders, ReaderOptions, ReaderCtx>()
+val isNotEmpty = StdStructValidator.isNotEmpty<ReaderErrorBuilders, ReaderOptions>()
+val additionalProperties = StdStructValidator.additionalProperties<ReaderErrorBuilders, ReaderOptions>()

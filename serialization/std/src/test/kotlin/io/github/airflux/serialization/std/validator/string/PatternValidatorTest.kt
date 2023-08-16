@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -29,7 +30,7 @@ internal class PatternValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private val PATTERN: Regex = "\\d+".toRegex()
     }
@@ -37,7 +38,7 @@ internal class PatternValidatorTest : FreeSpec() {
     init {
 
         "The string validator Pattern" - {
-            val validator = StdStringValidator.pattern<EB, Unit, Unit>(PATTERN)
+            val validator = StdStringValidator.pattern<EB, Unit>(PATTERN)
 
             "when the value is null" - {
                 val str: String? = null

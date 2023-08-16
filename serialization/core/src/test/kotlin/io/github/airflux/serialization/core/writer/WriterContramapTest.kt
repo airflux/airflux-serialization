@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
@@ -29,13 +30,13 @@ internal class WriterContramapTest : FreeSpec() {
         private const val ID_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
     init {
         "The Writer type" - {
-            val writer = DummyWriter.string<Unit, Unit>().contramap { value: Id -> value.get }
+            val writer = DummyWriter.string<Unit>().contramap { value: Id -> value.get }
 
             "should return the new writer" {
                 val source = Id(ID_VALUE)

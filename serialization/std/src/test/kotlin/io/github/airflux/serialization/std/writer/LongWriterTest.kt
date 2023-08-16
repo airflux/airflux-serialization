@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
@@ -28,14 +29,14 @@ internal class LongWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
     init {
 
         "The long type writer" - {
-            val writer: JsWriter<Unit, Unit, Long> = longWriter()
+            val writer: JsWriter<Unit, Long> = longWriter()
             val value: Long = Long.MAX_VALUE
 
             "should return the JsNumeric value" {

@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -29,7 +30,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val MAX_VALUE: Int = 2
     }
@@ -37,7 +38,7 @@ internal class MaxLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MaxLength" - {
-            val validator = StdStringValidator.maxLength<EB, Unit, Unit>(MAX_VALUE)
+            val validator = StdStringValidator.maxLength<EB, Unit>(MAX_VALUE)
 
             "when the value is null" - {
                 val str: String? = null

@@ -24,22 +24,22 @@ import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 
-public class StructPropertySpec<EB, O, CTX, out T>(
+public class StructPropertySpec<EB, O, out T>(
     public val paths: JsPaths,
-    public val reader: JsPathReader<EB, O, CTX, T>
+    public val reader: JsPathReader<EB, O, T>
 )
 
-public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.validation(
-    validator: JsValidator<EB, O, CTX, T>
-): StructPropertySpec<EB, O, CTX, T> =
+public infix fun <EB, O, T> StructPropertySpec<EB, O, T>.validation(
+    validator: JsValidator<EB, O, T>
+): StructPropertySpec<EB, O, T> =
     StructPropertySpec(paths = paths, reader = reader.validation(validator))
 
-public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.or(
-    alt: StructPropertySpec<EB, O, CTX, T>
-): StructPropertySpec<EB, O, CTX, T> =
+public infix fun <EB, O, T> StructPropertySpec<EB, O, T>.or(
+    alt: StructPropertySpec<EB, O, T>
+): StructPropertySpec<EB, O, T> =
     StructPropertySpec(paths = paths.append(alt.paths), reader = reader or alt.reader)
 
-public infix fun <EB, O, CTX, T> StructPropertySpec<EB, O, CTX, T>.filter(
-    predicate: JsPredicate<EB, O, CTX, T & Any>
-): StructPropertySpec<EB, O, CTX, T?> =
+public infix fun <EB, O, T> StructPropertySpec<EB, O, T>.filter(
+    predicate: JsPredicate<EB, O, T & Any>
+): StructPropertySpec<EB, O, T?> =
     StructPropertySpec(paths = paths, reader = reader.filter(predicate))

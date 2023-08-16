@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.array
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -25,14 +26,14 @@ import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 
-public class MinItemsArrayValidator<EB, O, CTX> internal constructor(
+public class MinItemsArrayValidator<EB, O> internal constructor(
     private val expected: Int
-) : ArrayValidator<EB, O, CTX>
+) : ArrayValidator<EB, O>
     where EB : MinItemsArrayValidator.ErrorBuilder {
 
     override fun validate(
         env: JsReaderEnv<EB, O>,
-        context: CTX,
+        context: JsContext,
         location: JsLocation,
         source: JsArray
     ): ValidationResult =

@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.writer.predicate
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.kotest.core.spec.style.FreeSpec
@@ -26,7 +27,7 @@ internal class WriterPredicateCombinatorsTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
         private const val MIN_VALUE = 10
@@ -35,8 +36,8 @@ internal class WriterPredicateCombinatorsTest : FreeSpec() {
 
     init {
         "The 'AND' combinator" - {
-            val leftFilter = JsPredicate<Unit, Unit, Int> { _, _, _, value -> value > MIN_VALUE }
-            val rightFilter = JsPredicate<Unit, Unit, Int> { _, _, _, value -> value < MAX_VALUE }
+            val leftFilter = JsPredicate<Unit, Int> { _, _, _, value -> value > MIN_VALUE }
+            val rightFilter = JsPredicate<Unit, Int> { _, _, _, value -> value < MAX_VALUE }
             val composedFilter = leftFilter and rightFilter
             withData(
                 nameFn = { it.first },
@@ -55,8 +56,8 @@ internal class WriterPredicateCombinatorsTest : FreeSpec() {
         }
 
         "The 'OR' combinator" - {
-            val leftFilter = JsPredicate<Unit, Unit, Int> { _, _, _, value -> value < MIN_VALUE }
-            val rightFilter = JsPredicate<Unit, Unit, Int> { _, _, _, value -> value > MAX_VALUE }
+            val leftFilter = JsPredicate<Unit, Int> { _, _, _, value -> value < MIN_VALUE }
+            val rightFilter = JsPredicate<Unit, Int> { _, _, _, value -> value > MAX_VALUE }
             val composedFilter = leftFilter or rightFilter
             withData(
                 nameFn = { it.first },

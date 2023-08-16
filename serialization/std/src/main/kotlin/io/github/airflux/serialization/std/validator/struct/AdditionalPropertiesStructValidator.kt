@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -28,17 +29,17 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-public class AdditionalPropertiesStructValidator<EB, O, CTX> internal constructor(
+public class AdditionalPropertiesStructValidator<EB, O> internal constructor(
     private val names: Set<String>
-) : StructValidator<EB, O, CTX>
+) : StructValidator<EB, O>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 
     override fun validate(
         env: JsReaderEnv<EB, O>,
-        context: CTX,
+        context: JsContext,
         location: JsLocation,
-        properties: StructProperties<EB, O, CTX>,
+        properties: StructProperties<EB, O>,
         source: JsStruct
     ): ValidationResult {
         val failFast = env.options.failFast

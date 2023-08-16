@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.array
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
@@ -27,16 +28,16 @@ import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResul
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 
-public fun <O, CTX, T> arrayWriter(items: JsWriter<O, CTX, T>): JsWriter<O, CTX, Iterable<T>>
+public fun <O, T> arrayWriter(items: JsWriter<O, T>): JsWriter<O, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption =
     ArrayWriter(items)
 
-public class ArrayWriter<O, CTX, T> internal constructor(
-    private val itemsWriter: JsWriter<O, CTX, T>
-) : JsWriter<O, CTX, Iterable<T>>
+public class ArrayWriter<O, T> internal constructor(
+    private val itemsWriter: JsWriter<O, T>
+) : JsWriter<O, Iterable<T>>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: Iterable<T>): JsValue? {
+    override fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: Iterable<T>): JsValue? {
         val result = source.mapNotNull { item -> itemsWriter.write(env, context, location, item) }
         return if (result.isNotEmpty())
             JsArray(result)

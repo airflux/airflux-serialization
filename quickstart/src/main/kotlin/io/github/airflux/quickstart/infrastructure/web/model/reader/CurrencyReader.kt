@@ -17,11 +17,10 @@
 package io.github.airflux.quickstart.infrastructure.web.model.reader
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.base.StringReader
-import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.isNotBlank
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.validation
 
-val CurrencyReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, String> = StringReader.validation(isNotBlank)
+val CurrencyReader: JsReader<ReaderErrorBuilders, ReaderOptions, String> = StringReader.validation(isNotBlank)

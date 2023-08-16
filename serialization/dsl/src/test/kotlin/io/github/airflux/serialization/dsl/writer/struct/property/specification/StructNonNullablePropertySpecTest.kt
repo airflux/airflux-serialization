@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -33,10 +34,10 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val WRITER: JsWriter<Unit, Unit, String> = DummyWriter.string()
+        private val WRITER: JsWriter<Unit, String> = DummyWriter.string()
     }
 
     init {
@@ -55,7 +56,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from = spec.from
-                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutContext<Unit, DTO, String>>()
+                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutContext<DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -66,7 +67,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when using an expression the from with context" - {
-                    val extractor: (DTO, Unit) -> String = { value, _ -> value.id }
+                    val extractor: (DTO, JsContext) -> String = { value, _ -> value.id }
                     val spec = nonNullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                     "then the property name should equal the passed property name" {
@@ -75,7 +76,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from =
-                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithContext<Unit, DTO, String>>()
+                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithContext<DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -86,7 +87,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when some filter was added to the spec" - {
-                    val spec: StructPropertySpec<Unit, Unit, DTO, String> =
+                    val spec: StructPropertySpec<Unit, DTO, String> =
                         nonNullable(name = PROPERTY_NAME, from = { -> id }, writer = WRITER)
                     val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
 

@@ -25,7 +25,7 @@ import java.math.BigDecimal
 /**
  * Reader for [BigDecimal] type.
  */
-public fun <EB, O, CTX> bigDecimalReader(): JsReader<EB, O, CTX, BigDecimal>
+public fun <EB, O> bigDecimalReader(): JsReader<EB, O, BigDecimal>
     where EB : InvalidTypeErrorBuilder =
     JsReader { env, context, location, source ->
         source.readAsNumber(env, context, location) { _, _, l, value ->

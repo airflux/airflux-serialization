@@ -25,7 +25,7 @@ public object StdNumberValidator {
      * otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O, CTX, T> minimum(value: T): JsValidator<EB, O, CTX, T>
+    public fun <EB, O, T> minimum(value: T): JsValidator<EB, O, T>
         where EB : MinimumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = MinimumNumberValidator(value)
@@ -35,7 +35,7 @@ public object StdNumberValidator {
      * otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O, CTX, T> maximum(value: T): JsValidator<EB, O, CTX, T>
+    public fun <EB, O, T> maximum(value: T): JsValidator<EB, O, T>
         where EB : MaximumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = MaximumNumberValidator(value)
@@ -45,7 +45,7 @@ public object StdNumberValidator {
      * otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O, CTX, T> exclusiveMinimum(value: T): JsValidator<EB, O, CTX, T>
+    public fun <EB, O, T> exclusiveMinimum(value: T): JsValidator<EB, O, T>
         where EB : ExclusiveMinimumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = ExclusiveMinimumNumberValidator(value)
@@ -55,7 +55,7 @@ public object StdNumberValidator {
      * otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O, CTX, T> exclusiveMaximum(value: T): JsValidator<EB, O, CTX, T>
+    public fun <EB, O, T> exclusiveMaximum(value: T): JsValidator<EB, O, T>
         where EB : ExclusiveMaximumNumberValidator.ErrorBuilder,
               T : Number,
               T : Comparable<T> = ExclusiveMaximumNumberValidator(value)

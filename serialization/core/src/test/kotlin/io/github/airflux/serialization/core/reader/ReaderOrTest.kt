@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -38,7 +39,7 @@ internal class ReaderOrTest : FreeSpec() {
         private const val LEFT_VALUE = "true"
         private const val RIGHT_VALUE = "false"
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
@@ -46,9 +47,9 @@ internal class ReaderOrTest : FreeSpec() {
         "The extension-function JsReader#or" - {
 
             "when left reader returns an value" - {
-                val leftReader: JsReader<EB, Unit, Unit, String> =
+                val leftReader: JsReader<EB, Unit, String> =
                     DummyReader(success(location = LOCATION, value = LEFT_VALUE))
-                val rightReader: JsReader<EB, Unit, Unit, String> =
+                val rightReader: JsReader<EB, Unit, String> =
                     DummyReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                 val reader = leftReader or rightReader
@@ -60,12 +61,12 @@ internal class ReaderOrTest : FreeSpec() {
             }
 
             "when left reader returns an error" - {
-                val leftReader: JsReader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
+                val leftReader: JsReader<EB, Unit, String> = DummyReader { _, _, _, _ ->
                     failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                 }
 
                 "when the right reader returns an value" - {
-                    val rightReader: JsReader<EB, Unit, Unit, String> =
+                    val rightReader: JsReader<EB, Unit, String> =
                         DummyReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                     val reader = leftReader or rightReader
@@ -77,7 +78,7 @@ internal class ReaderOrTest : FreeSpec() {
                 }
 
                 "when the right reader returns an error" - {
-                    val rightReader: JsReader<EB, Unit, Unit, String> = DummyReader { _, _, _, _ ->
+                    val rightReader: JsReader<EB, Unit, String> = DummyReader { _, _, _, _ ->
                         failure(
                             location = LOCATION.append("identifier"),
                             error = JsonErrors.InvalidType(

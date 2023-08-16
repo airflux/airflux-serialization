@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -40,16 +41,16 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MIN_PROPERTIES = 2
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val PROPERTIES: StructProperties<EB, Unit, Unit> = emptyList()
+        private val PROPERTIES: StructProperties<EB, Unit> = emptyList()
     }
 
     init {
 
         "The struct validator MinProperties" - {
-            val validator: StructValidator<EB, Unit, Unit> =
-                StdStructValidator.minProperties<EB, Unit, Unit>(MIN_PROPERTIES).build(PROPERTIES)
+            val validator: StructValidator<EB, Unit> =
+                StdStructValidator.minProperties<EB, Unit>(MIN_PROPERTIES).build(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = JsStruct()

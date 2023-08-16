@@ -19,6 +19,7 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.identity
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -121,10 +122,10 @@ public infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.F
     ifSuccess = { it.value }
 )
 
-public fun <EB, O, CTX, T> ReadingResult<T>.filter(
+public fun <EB, O, T> ReadingResult<T>.filter(
     env: JsReaderEnv<EB, O>,
-    context: CTX,
-    predicate: JsPredicate<EB, O, CTX, T & Any>
+    context: JsContext,
+    predicate: JsPredicate<EB, O, T & Any>
 ): ReadingResult<T?> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->
@@ -139,10 +140,10 @@ public fun <EB, O, CTX, T> ReadingResult<T>.filter(
     }
 )
 
-public fun <EB, O, CTX, T> ReadingResult<T>.validation(
+public fun <EB, O, T> ReadingResult<T>.validation(
     env: JsReaderEnv<EB, O>,
-    context: CTX,
-    validator: JsValidator<EB, O, CTX, T>
+    context: JsContext,
+    validator: JsValidator<EB, O, T>
 ): ReadingResult<T> = fold(
     ifFailure = ::identity,
     ifSuccess = { result ->

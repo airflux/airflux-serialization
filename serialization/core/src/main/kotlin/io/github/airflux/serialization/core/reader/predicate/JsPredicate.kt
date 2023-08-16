@@ -16,25 +16,26 @@
 
 package io.github.airflux.serialization.core.reader.predicate
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 
-public fun interface JsPredicate<EB, O, CTX, T : Any> {
-    public fun test(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): Boolean
+public fun interface JsPredicate<EB, O, T : Any> {
+    public fun test(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): Boolean
 }
 
-public infix fun <EB, O, CTX, T : Any> JsPredicate<EB, O, CTX, T>.or(
-    alt: JsPredicate<EB, O, CTX, T>
-): JsPredicate<EB, O, CTX, T> {
+public infix fun <EB, O, T : Any> JsPredicate<EB, O, T>.or(
+    alt: JsPredicate<EB, O, T>
+): JsPredicate<EB, O, T> {
     val self = this
     return JsPredicate { env, context, location, value ->
         self.test(env, context, location, value) || alt.test(env, context, location, value)
     }
 }
 
-public infix fun <EB, O, CTX, T : Any> JsPredicate<EB, O, CTX, T>.and(
-    alt: JsPredicate<EB, O, CTX, T>
-): JsPredicate<EB, O, CTX, T> {
+public infix fun <EB, O, T : Any> JsPredicate<EB, O, T>.and(
+    alt: JsPredicate<EB, O, T>
+): JsPredicate<EB, O, T> {
     val self = this
     return JsPredicate { env, context, location, value ->
         self.test(env, context, location, value) && alt.test(env, context, location, value)

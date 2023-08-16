@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -41,10 +42,10 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
         private const val SECOND_PHONE_VALUE = "456"
         private const val THIRD_PHONE_VALUE = "789"
 
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val IntReader: JsReader<EB, OPTS, Unit, Int> = DummyReader.int()
-        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, OPTS, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
     }
 
     init {
@@ -201,7 +202,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder,
-        ValueCastErrorBuilder {
+                        ValueCastErrorBuilder {
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)

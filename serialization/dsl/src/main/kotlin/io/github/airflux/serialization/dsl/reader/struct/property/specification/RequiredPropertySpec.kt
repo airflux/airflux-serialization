@@ -23,15 +23,15 @@ import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 
-public fun <EB, O, CTX, T> required(name: String, reader: JsReader<EB, O, CTX, T>): StructPropertySpec<EB, O, CTX, T>
+public fun <EB, O, T> required(name: String, reader: JsReader<EB, O, T>): StructPropertySpec<EB, O, T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     required(JsPath(name), reader)
 
-public fun <EB, O, CTX, T> required(
+public fun <EB, O, T> required(
     path: JsPath,
-    reader: JsReader<EB, O, CTX, T>
-): StructPropertySpec<EB, O, CTX, T>
+    reader: JsReader<EB, O, T>
+): StructPropertySpec<EB, O, T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec(

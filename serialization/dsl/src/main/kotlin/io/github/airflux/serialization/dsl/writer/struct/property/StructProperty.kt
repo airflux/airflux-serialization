@@ -16,26 +16,27 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
-public class StructProperty<O, CTX, T, P> private constructor(
+public class StructProperty<O, T, P> private constructor(
     public val name: String,
-    private val writer: JsWriter<O, CTX, T>
+    private val writer: JsWriter<O, T>
 ) {
 
-    internal constructor(spec: StructPropertySpec<O, CTX, T, P>) : this(name = spec.name, writer = createWriter(spec))
+    internal constructor(spec: StructPropertySpec<O, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
-    public fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? =
+    public fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue? =
         writer.write(env, context, location, source)
 
     internal companion object {
 
         @JvmStatic
-        private fun <O, CTX, T, P> createWriter(spec: StructPropertySpec<O, CTX, T, P>): JsWriter<O, CTX, T> {
+        private fun <O, T, P> createWriter(spec: StructPropertySpec<O, T, P>): JsWriter<O, T> {
             val writer = spec.writer
 
             return when (spec.from) {

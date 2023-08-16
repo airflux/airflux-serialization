@@ -19,11 +19,11 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-internal class MinPropertiesStructValidatorBuilder<EB, O, CTX>(
+internal class MinPropertiesStructValidatorBuilder<EB, O>(
     private val value: Int
-) : StructValidator.Builder<EB, O, CTX>
+) : StructValidator.Builder<EB, O>
     where EB : MinPropertiesStructValidator.ErrorBuilder {
 
-    override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> =
+    override fun build(properties: StructProperties<EB, O>): StructValidator<EB, O> =
         MinPropertiesStructValidator(value)
 }

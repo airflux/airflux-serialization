@@ -16,16 +16,17 @@
 
 package io.github.airflux.serialization.test.dummy
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 
-public class DummyReaderPredicate<EB, O, CTX, T : Any>(
-    public val block: (env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T) -> Boolean
-) : JsPredicate<EB, O, CTX, T> {
+public class DummyReaderPredicate<EB, O, T : Any>(
+    public val block: (env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T) -> Boolean
+) : JsPredicate<EB, O, T> {
 
     public constructor(result: Boolean) : this({ _, _, _, _ -> result })
 
-    override fun test(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): Boolean =
+    override fun test(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): Boolean =
         block(env, context, location, value)
 }

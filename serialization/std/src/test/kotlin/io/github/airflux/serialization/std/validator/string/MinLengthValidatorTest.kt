@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.string
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -29,7 +30,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val MIN_VALUE: Int = 2
     }
@@ -37,7 +38,7 @@ internal class MinLengthValidatorTest : FreeSpec() {
     init {
 
         "The string validator MinLength" - {
-            val validator = StdStringValidator.minLength<EB, Unit, Unit>(MIN_VALUE)
+            val validator = StdStringValidator.minLength<EB, Unit>(MIN_VALUE)
 
             "when the value is null" - {
                 val str: String? = null

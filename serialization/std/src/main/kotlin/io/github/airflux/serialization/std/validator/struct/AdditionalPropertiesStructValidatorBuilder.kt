@@ -22,17 +22,17 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-internal class AdditionalPropertiesStructValidatorBuilder<EB, O, CTX> : StructValidator.Builder<EB, O, CTX>
+internal class AdditionalPropertiesStructValidatorBuilder<EB, O> : StructValidator.Builder<EB, O>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 
-    override fun build(properties: StructProperties<EB, O, CTX>): StructValidator<EB, O, CTX> {
+    override fun build(properties: StructProperties<EB, O>): StructValidator<EB, O> {
         val names: Set<String> = properties.names()
         return AdditionalPropertiesStructValidator(names)
     }
 
-    private fun StructProperties<EB, O, CTX>.names(): Set<String> {
-        fun StructProperty<EB, O, CTX, *>.names(): List<String> = paths.items
+    private fun StructProperties<EB, O>.names(): Set<String> {
+        fun StructProperty<EB, O, *>.names(): List<String> = paths.items
             .filter { path -> path.head is JsPath.Element.Key }
             .map { path -> (path.head as JsPath.Element.Key).get }
 

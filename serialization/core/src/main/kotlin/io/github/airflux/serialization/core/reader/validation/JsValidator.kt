@@ -16,11 +16,12 @@
 
 package io.github.airflux.serialization.core.reader.validation
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 
-public fun interface JsValidator<EB, O, CTX, in T> {
-    public fun validate(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): ValidationResult
+public fun interface JsValidator<EB, O, in T> {
+    public fun validate(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): ValidationResult
 }
 
 /*
@@ -30,7 +31,7 @@ public fun interface JsValidator<EB, O, CTX, in T> {
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-public infix fun <EB, O, CTX, T> JsValidator<EB, O, CTX, T>.or(alt: JsValidator<EB, O, CTX, T>): JsValidator<EB, O, CTX, T> {
+public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>): JsValidator<EB, O, T> {
     val self = this
     return JsValidator { env, context, location, value ->
         when (val left = self.validate(env, context, location, value)) {
@@ -50,7 +51,7 @@ public infix fun <EB, O, CTX, T> JsValidator<EB, O, CTX, T>.or(alt: JsValidator<
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-public infix fun <EB, O, CTX, T> JsValidator<EB, O, CTX, T>.and(alt: JsValidator<EB, O, CTX, T>): JsValidator<EB, O, CTX, T> {
+public infix fun <EB, O, T> JsValidator<EB, O, T>.and(alt: JsValidator<EB, O, T>): JsValidator<EB, O, T> {
     val self = this
     return JsValidator { env, context, location, value ->
         when (val result = self.validate(env, context, location, value)) {

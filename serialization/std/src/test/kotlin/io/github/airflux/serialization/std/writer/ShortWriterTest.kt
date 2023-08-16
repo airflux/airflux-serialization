@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
@@ -28,14 +29,14 @@ internal class ShortWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
     init {
 
         "The short type writer" - {
-            val writer: JsWriter<Unit, Unit, Short> = shortWriter()
+            val writer: JsWriter<Unit, Short> = shortWriter()
             val value: Short = Short.MAX_VALUE
 
             "should return the JsNumeric value" {

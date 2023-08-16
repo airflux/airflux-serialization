@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.reader
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -38,9 +39,9 @@ internal class ByteReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val ByteReader = byteReader<EB, Unit, Unit>()
+        private val ByteReader = byteReader<EB, Unit>()
     }
 
     init {

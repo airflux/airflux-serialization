@@ -38,7 +38,7 @@ internal class PropertyValuesTest : FreeSpec() {
         private const val UNKNOWN_PROPERTY_NAME = "name"
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "dd7c5dab-0f8b-4436-a8e8-72b841c90acc"
-        private val StringReader: JsReader<EB, Unit, Unit, String> = DummyReader.string()
+        private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
     }
 
     init {
@@ -46,7 +46,7 @@ internal class PropertyValuesTest : FreeSpec() {
         "The PropertyValues type" - {
 
             "when not added any value" - {
-                val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance()
+                val map: PropertyValues<EB, Unit> = PropertyValuesInstance()
 
                 "then the property isEmpty should return true" {
                     map.isEmpty shouldBe true
@@ -97,7 +97,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for non-nullable property" - {
                     val property = StructProperty(required(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance<EB, Unit, Unit>().apply {
+                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -147,7 +147,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable property" - {
                     val property = StructProperty(optional(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance<EB, Unit, Unit>().apply {
+                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
 
@@ -200,7 +200,7 @@ internal class PropertyValuesTest : FreeSpec() {
 
                 "for nullable property" - {
                     val property = StructProperty(optional(PROPERTY_NAME, StringReader))
-                    val map: PropertyValues<EB, Unit, Unit> = PropertyValuesInstance<EB, Unit, Unit>().apply {
+                    val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
 

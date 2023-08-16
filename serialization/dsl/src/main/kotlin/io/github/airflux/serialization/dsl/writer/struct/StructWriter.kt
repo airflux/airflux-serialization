@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsStruct
@@ -31,16 +32,16 @@ import io.github.airflux.serialization.dsl.writer.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
-public fun <O, CTX, T> structWriter(block: StructWriter.Builder<O, CTX, T>.() -> Unit): JsWriter<O, CTX, T>
+public fun <O, T> structWriter(block: StructWriter.Builder<O, T>.() -> Unit): JsWriter<O, T>
     where O : WriterActionBuilderIfResultIsEmptyOption =
-    StructWriter.Builder<O, CTX, T>().apply(block).build()
+    StructWriter.Builder<O, T>().apply(block).build()
 
-public class StructWriter<O, CTX, T> private constructor(
-    private val properties: StructProperties<O, CTX, T>
-) : JsWriter<O, CTX, T>
+public class StructWriter<O, T> private constructor(
+    private val properties: StructProperties<O, T>
+) : JsWriter<O, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: JsWriterEnv<O>, context: CTX, location: JsLocation, source: T): JsValue? {
+    override fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue? {
         val struct = JsStruct.builder()
             .apply {
                 properties.forEach { property ->
@@ -62,14 +63,14 @@ public class StructWriter<O, CTX, T> private constructor(
     }
 
     @AirfluxMarker
-    public class Builder<O, CTX, T> internal constructor()
+    public class Builder<O, T> internal constructor()
         where O : WriterActionBuilderIfResultIsEmptyOption {
 
-        private val properties = mutableListOf<StructProperty<O, CTX, T, *>>()
+        private val properties = mutableListOf<StructProperty<O, T, *>>()
 
-        public fun <P> property(spec: StructPropertySpec<O, CTX, T, P>): StructProperty<O, CTX, T, P> =
+        public fun <P> property(spec: StructPropertySpec<O, T, P>): StructProperty<O, T, P> =
             StructProperty(spec).also { properties.add(it) }
 
-        internal fun build(): JsWriter<O, CTX, T> = StructWriter(properties)
+        internal fun build(): JsWriter<O, T> = StructWriter(properties)
     }
 }

@@ -18,7 +18,6 @@ package io.github.airflux.quickstart.infrastructure.web.model.writer
 
 import io.github.airflux.quickstart.domain.model.Tender
 import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringWriter
-import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.nullable
@@ -26,7 +25,7 @@ import io.github.airflux.serialization.dsl.writer.struct.property.specification.
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
-val TenderWriter: JsWriter<WriterOptions, WriterCtx, Tender> = structWriter {
+val TenderWriter: JsWriter<WriterOptions, Tender> = structWriter {
     property(nonNullable(name = "id", from = { -> id }, writer = StringWriter))
     property(nullable(name = "title", from = { -> title }, writer = StringWriter.nullable()))
     property(nullable(name = "value", from = { -> value }, writer = ValueWriter.nullable()))

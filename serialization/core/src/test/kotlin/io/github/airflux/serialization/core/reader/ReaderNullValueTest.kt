@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -45,13 +46,13 @@ internal class ReaderNullValueTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "42"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val stringReader = DummyReader.string<EB, Unit, Unit>()
+        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string<EB, Unit>()
             .ifNullValue { _, _, _ -> ALTERNATIVE_VALUE }
 
-        val reader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
+        val reader: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
             val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
             readOptional(env, context, lookup, stringReader)
         }
@@ -118,7 +119,7 @@ internal class ReaderNullValueTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

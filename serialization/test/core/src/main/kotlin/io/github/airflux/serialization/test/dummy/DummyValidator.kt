@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.test.dummy
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -24,19 +25,24 @@ import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
-public class DummyValidator<EB, O, CTX, T>(
-    public val result: (JsReaderEnv<EB, O>, CTX, JsLocation, T) -> ValidationResult
-) : JsValidator<EB, O, CTX, T> {
+public class DummyValidator<EB, O, T>(
+    public val result: (JsReaderEnv<EB, O>, JsContext, JsLocation, T) -> ValidationResult
+) : JsValidator<EB, O, T> {
 
     public constructor(result: ValidationResult) : this({ _, _, _, _ -> result })
 
-    override fun validate(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, value: T): ValidationResult =
+    override fun validate(
+        env: JsReaderEnv<EB, O>,
+        context: JsContext,
+        location: JsLocation,
+        value: T
+    ): ValidationResult =
         result(env, context, location, value)
 
     public companion object {
 
         @JvmStatic
-        public fun <EB, O, CTX> isNotEmptyString(error: () -> ReadingResult.Error): JsValidator<EB, O, CTX, String?> =
+        public fun <EB, O> isNotEmptyString(error: () -> ReadingResult.Error): JsValidator<EB, O, String?> =
             DummyValidator { _, _, location, value ->
                 if (value != null) {
                     if (value.isNotEmpty())

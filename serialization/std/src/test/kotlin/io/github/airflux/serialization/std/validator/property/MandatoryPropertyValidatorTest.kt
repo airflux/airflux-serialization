@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.property
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -30,7 +31,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val VALUE: Int = 2
     }
@@ -40,7 +41,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
         "The property value validator the Mandatory" - {
 
             "when the predicate returns the true value" - {
-                val validator: JsValidator<EB, Unit, Unit, Int?> = StdPropertyValidator.mandatory { _, _, _ -> true }
+                val validator: JsValidator<EB, Unit, Int?> = StdPropertyValidator.mandatory { _, _, _ -> true }
 
                 "when a value is missing" - {
                     val value: Int? = null
@@ -63,7 +64,7 @@ internal class MandatoryPropertyValidatorTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val validator: JsValidator<EB, Unit, Unit, Int?> = StdPropertyValidator.mandatory { _, _, _ -> false }
+                val validator: JsValidator<EB, Unit, Int?> = StdPropertyValidator.mandatory { _, _, _ -> false }
 
                 "when a value is missing" - {
                     val value: Int? = null

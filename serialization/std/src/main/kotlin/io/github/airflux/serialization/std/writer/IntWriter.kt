@@ -23,5 +23,5 @@ import io.github.airflux.serialization.core.writer.JsWriter
 /**
  * Writer for primitive [Int] type.
  */
-public fun <O, CTX> intWriter(): JsWriter<O, CTX, Int> =
+public fun <O> intWriter(): JsWriter<O, Int> =
     JsWriter { _, _, _, value -> JsNumeric.valueOf(value) }

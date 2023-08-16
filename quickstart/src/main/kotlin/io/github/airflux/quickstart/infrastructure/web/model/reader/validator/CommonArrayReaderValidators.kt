@@ -16,12 +16,11 @@
 
 package io.github.airflux.quickstart.infrastructure.web.model.reader.validator
 
-import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 import io.github.airflux.serialization.std.validator.array.StdArrayValidator
 
-val CommonArrayReaderValidators: List<ArrayValidator.Builder<ReaderErrorBuilders, ReaderOptions, ReaderCtx>> = listOf(
+val CommonArrayReaderValidators: List<ArrayValidator.Builder<ReaderErrorBuilders, ReaderOptions>> = listOf(
     StdArrayValidator.isNotEmpty()
 )

@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
@@ -27,7 +28,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val TEXT_VALUE = "10.50"
         private const val TEXT_VALUE_WITHOUT_TRAILING_ZEROS = "10.5"
@@ -38,7 +39,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
         "The big decimal type writer" - {
 
             "when the stripTrailingZeros option is true" - {
-                val writer = bigDecimalWriter<Unit, Unit>(stripTrailingZeros = true)
+                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = true)
 
                 "then the writer should return the value without trailing zeros" {
                     val result = writer.write(ENV, CONTEXT, LOCATION, BigDecimal(TEXT_VALUE))
@@ -47,7 +48,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
             }
 
             "when the stripTrailingZeros option is false" - {
-                val writer = bigDecimalWriter<Unit, Unit>(stripTrailingZeros = false)
+                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = false)
 
                 "then the writer should return the original value" {
                     val result = writer.write(ENV, CONTEXT, LOCATION, BigDecimal(TEXT_VALUE))

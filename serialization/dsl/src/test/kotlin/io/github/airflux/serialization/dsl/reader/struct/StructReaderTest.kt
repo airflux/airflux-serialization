@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -52,10 +53,10 @@ internal class StructReaderTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
         private const val IS_ACTIVE_PROPERTY_VALUE = true
 
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val StringReader: JsReader<EB, OPTS, Unit, String> = DummyReader.string()
-        private val IntReader: JsReader<EB, OPTS, Unit, Int> = DummyReader.int()
+        private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, OPTS, Int> = DummyReader.int()
     }
 
     init {
@@ -63,11 +64,11 @@ internal class StructReaderTest : FreeSpec() {
         "The StructReader type" - {
 
             "when was created reader" - {
-                val validator = DummyStructValidatorBuilder.additionalProperties<EB, OPTS, Unit>(
+                val validator = DummyStructValidatorBuilder.additionalProperties<EB, OPTS>(
                     nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )
-                val reader: JsReader<EB, OPTS, Unit, DTO> = structReader {
+                val reader: JsReader<EB, OPTS, DTO> = structReader {
                     validation(validator)
 
                     val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
@@ -400,7 +401,7 @@ internal class StructReaderTest : FreeSpec() {
             }
 
             "when was created reader and the result builder throw some exception" - {
-                val reader: JsReader<EB, OPTS, Unit, DTO> = structReader {
+                val reader: JsReader<EB, OPTS, DTO> = structReader {
                     returns { _, _, _ ->
                         throw IllegalStateException()
                     }
@@ -437,7 +438,7 @@ internal class StructReaderTest : FreeSpec() {
     internal data class DTO(val id: Int, val name: String?)
 
     internal class EB : InvalidTypeErrorBuilder,
-        PathMissingErrorBuilder {
+                        PathMissingErrorBuilder {
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 

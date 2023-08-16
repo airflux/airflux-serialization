@@ -16,63 +16,64 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
-public fun <O, CTX, T : Any, P : Any> nonNullable(
+public fun <O, T : Any, P : Any> nonNullable(
     name: String,
     from: T.() -> P,
-    writer: JsWriter<O, CTX, P>
-): StructPropertySpec<O, CTX, T, P> =
+    writer: JsWriter<O, P>
+): StructPropertySpec<O, T, P> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutContext(from), writer = writer)
 
-public fun <O, CTX, T : Any, P : Any> nonNullable(
+public fun <O, T : Any, P : Any> nonNullable(
     name: String,
-    from: T.(CTX) -> P,
-    writer: JsWriter<O, CTX, P>
-): StructPropertySpec<O, CTX, T, P> =
+    from: T.(JsContext) -> P,
+    writer: JsWriter<O, P>
+): StructPropertySpec<O, T, P> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithContext(from), writer = writer)
 
-public fun <O, CTX, T : Any, P : Any> nullable(
+public fun <O, T : Any, P : Any> nullable(
     name: String,
     from: T.() -> P?,
-    writer: JsWriter<O, CTX, P?>
-): StructPropertySpec<O, CTX, T, P?> =
+    writer: JsWriter<O, P?>
+): StructPropertySpec<O, T, P?> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor(from), writer = writer)
 
-public fun <O, CTX, T : Any, P : Any> nullable(
+public fun <O, T : Any, P : Any> nullable(
     name: String,
-    from: T.(CTX) -> P?,
-    writer: JsWriter<O, CTX, P?>
-): StructPropertySpec<O, CTX, T, P?> =
+    from: T.(JsContext) -> P?,
+    writer: JsWriter<O, P?>
+): StructPropertySpec<O, T, P?> =
     StructPropertySpec(name = name, from = StructPropertySpec.Extractor(from), writer = writer)
 
-public class StructPropertySpec<O, CTX, T, P> internal constructor(
+public class StructPropertySpec<O, T, P> internal constructor(
     public val name: String,
-    public val from: Extractor<CTX, T, P>,
-    public val writer: JsWriter<O, CTX, P>
+    public val from: Extractor<T, P>,
+    public val writer: JsWriter<O, P>
 ) {
 
-    public sealed class Extractor<CTX, T, P> {
+    public sealed class Extractor<T, P> {
 
-        internal class WithoutContext<CTX, T, P>(val extractor: T.() -> P) : Extractor<CTX, T, P>()
-        internal class WithContext<CTX, T, P>(val extractor: T.(CTX) -> P) : Extractor<CTX, T, P>()
+        internal class WithoutContext<T, P>(val extractor: T.() -> P) : Extractor<T, P>()
+        internal class WithContext<T, P>(val extractor: T.(JsContext) -> P) : Extractor<T, P>()
 
         public companion object {
 
             @JvmStatic
-            public operator fun <CTX, T, P> invoke(extractor: T.() -> P): Extractor<CTX, T, P> =
+            public operator fun <T, P> invoke(extractor: T.() -> P): Extractor<T, P> =
                 WithoutContext(extractor)
 
             @JvmStatic
-            public operator fun <CTX, T, P> invoke(extractor: T.(CTX) -> P): Extractor<CTX, T, P> =
+            public operator fun <T, P> invoke(extractor: T.(JsContext) -> P): Extractor<T, P> =
                 WithContext(extractor)
         }
     }
 }
 
-public fun <O, CTX, T, P> StructPropertySpec<O, CTX, T, P>.filter(
-    predicate: JsPredicate<O, CTX, P & Any>
-): StructPropertySpec<O, CTX, T, P> =
+public fun <O, T, P> StructPropertySpec<O, T, P>.filter(
+    predicate: JsPredicate<O, P & Any>
+): StructPropertySpec<O, T, P> =
     StructPropertySpec(name = this.name, from = this.from, writer = writer.filter(predicate))

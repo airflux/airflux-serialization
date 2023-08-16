@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.condition
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.failure
@@ -30,9 +31,9 @@ internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(Unit, Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val IsNotEmptyStringValidator: JsValidator<Unit, Unit, Unit, String> =
+        private val IsNotEmptyStringValidator: JsValidator<Unit, Unit, String> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
     }
 

@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -56,11 +57,11 @@ internal class JsPathReaderTest : FreeSpec() {
         private const val DEFAULT_VALUE = "2a100f64-0cef-4cca-90c0-5148f71c5fca"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val stringReader = DummyReader.string<EB, Unit, Unit>()
-        private val reader: JsPathReader<EB, Unit, Unit, String> = DummyPathReader { env, context, location, source ->
+        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string()
+        private val reader: JsPathReader<EB, Unit, String> = DummyPathReader { env, context, location, source ->
             val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
             readRequired(env, context, lookup, stringReader)
         }
@@ -73,9 +74,9 @@ internal class JsPathReaderTest : FreeSpec() {
             "the `or` function" - {
 
                 "when left reader returns an value" - {
-                    val leftReader: JsPathReader<EB, Unit, Unit, String> =
+                    val leftReader: JsPathReader<EB, Unit, String> =
                         DummyPathReader(success(location = LOCATION, value = LEFT_VALUE))
-                    val rightReader: JsPathReader<EB, Unit, Unit, String> =
+                    val rightReader: JsPathReader<EB, Unit, String> =
                         DummyPathReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                     val reader = leftReader or rightReader
@@ -87,12 +88,12 @@ internal class JsPathReaderTest : FreeSpec() {
                 }
 
                 "when left reader returns an error" - {
-                    val leftReader: JsPathReader<EB, Unit, Unit, String> = DummyPathReader { _, _, _, _ ->
+                    val leftReader: JsPathReader<EB, Unit, String> = DummyPathReader { _, _, _, _ ->
                         failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                     }
 
                     "when the right reader returns an value" - {
-                        val rightReader: JsPathReader<EB, Unit, Unit, String> =
+                        val rightReader: JsPathReader<EB, Unit, String> =
                             DummyPathReader(success(location = LOCATION, value = RIGHT_VALUE))
 
                         val reader = leftReader or rightReader
@@ -104,7 +105,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when the right reader returns an error" - {
-                        val rightReader: JsPathReader<EB, Unit, Unit, String> = DummyPathReader { _, _, _, _ ->
+                        val rightReader: JsPathReader<EB, Unit, String> = DummyPathReader { _, _, _, _ ->
                             failure(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
@@ -142,7 +143,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "when validation is a success" - {
-                        val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator(result = valid())
+                        val validator: JsValidator<EB, Unit, String> = DummyValidator(result = valid())
 
                         "then should return the original result" {
                             val result = reader.validation(validator)
@@ -155,7 +156,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when validation is a failure" - {
-                        val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator(
+                        val validator: JsValidator<EB, Unit, String> = DummyValidator(
                             result = invalid(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.Validation.Strings.IsEmpty
@@ -178,7 +179,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then validation does not execute and the original result should be returned" {
-                        val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator { _, _, location, _ ->
+                        val validator: JsValidator<EB, Unit, String> = DummyValidator { _, _, location, _ ->
                             invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                         }
 
@@ -201,7 +202,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                         "when the value satisfies the predicate" - {
-                            val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
                                 val filtered = reader.filter(predicate)
@@ -215,7 +216,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         }
 
                         "when the value does not satisfy the predicate" - {
-                            val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+                            val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                             "then filter should return the null value" {
                                 val filtered = reader.filter(predicate)
@@ -227,12 +228,13 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when the value in the result is null" - {
-                        val optionalReader = DummyReader<EB, Unit, Unit, String?> { env, context, location, source ->
-                            val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                            readOptional(env, context, lookup, stringReader)
-                        }
+                        val optionalReader: JsReader<EB, Unit, String?> =
+                            DummyReader { env, context, location, source ->
+                                val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
+                                readOptional(env, context, lookup, stringReader)
+                            }
                         val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
 
@@ -245,12 +247,12 @@ internal class JsPathReaderTest : FreeSpec() {
                 }
 
                 "when an original reader returns a result as a failure" - {
-                    val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
+                    val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                         readRequired(env, context, lookup, stringReader)
                     }
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                    val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 

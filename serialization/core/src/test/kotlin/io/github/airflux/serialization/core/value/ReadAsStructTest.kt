@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -31,13 +32,14 @@ internal class ReadAsStructTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val reader = { _: JsReaderEnv<EB, Unit>, _: Unit, location: JsLocation, source: JsStruct ->
-            val name = source["name"] as JsString
-            success(location = location, value = DTO(name = name.get))
-        }
+        private val reader: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, JsStruct) -> ReadingResult<DTO> =
+            { _, _, location, source ->
+                val name = source["name"] as JsString
+                success(location = location, value = DTO(name = name.get))
+            }
     }
 
     init {

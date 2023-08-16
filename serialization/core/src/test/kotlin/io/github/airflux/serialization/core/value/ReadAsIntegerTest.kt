@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -31,11 +32,12 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation.append("user")
-        private val READER = { _: JsReaderEnv<EB, Unit>, _: Unit, location: JsLocation, text: String ->
-            success(location = location, value = text.toInt())
-        }
+        private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, String) -> ReadingResult<Int> =
+            { _, _, location, text ->
+                success(location = location, value = text.toInt())
+            }
     }
 
     init {

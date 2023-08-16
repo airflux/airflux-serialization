@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -43,15 +44,15 @@ internal class ReaderValidationTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val stringReader = DummyReader.string<EB, Unit, Unit>()
+        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string()
     }
 
     init {
         "The extension function JsReader#validation" - {
-            val requiredReader = DummyReader<EB, Unit, Unit, String> { env, context, location, source ->
+            val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
                 val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
                 readRequired(env, context, lookup, stringReader)
             }
@@ -60,7 +61,7 @@ internal class ReaderValidationTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "when validation is a success" - {
-                    val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator(result = valid())
+                    val validator: JsValidator<EB, Unit, String> = DummyValidator(result = valid())
 
                     "then should return the original result" {
                         val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
@@ -72,7 +73,7 @@ internal class ReaderValidationTest : FreeSpec() {
                 }
 
                 "when validation is a failure" - {
-                    val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator(
+                    val validator: JsValidator<EB, Unit, String> = DummyValidator(
                         result = invalid(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.Validation.Strings.IsEmpty
@@ -94,7 +95,7 @@ internal class ReaderValidationTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "then validation does not execute and the original result should be returned" {
-                    val validator: JsValidator<EB, Unit, Unit, String> = DummyValidator { _, _, location, _ ->
+                    val validator: JsValidator<EB, Unit, String> = DummyValidator { _, _, location, _ ->
                         invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                     }
 
@@ -109,7 +110,7 @@ internal class ReaderValidationTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder,
-        InvalidTypeErrorBuilder {
+                        InvalidTypeErrorBuilder {
 
         override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
 

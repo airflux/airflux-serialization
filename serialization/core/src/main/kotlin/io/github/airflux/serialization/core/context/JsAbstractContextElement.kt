@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.quickstart.infrastructure.web.model.writer.env
+package io.github.airflux.serialization.core.context
 
-class WriterCtx
+public abstract class JsAbstractContextElement(public override val key: JsContext.Key<*>) : JsContext.Element

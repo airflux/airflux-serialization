@@ -17,6 +17,7 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -42,7 +43,7 @@ internal class ReadingResultTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "20"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
     }
 
@@ -276,7 +277,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                     "when the value satisfies the predicate" - {
                         val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
-                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = true)
+                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                         "then filter should return the original value" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
@@ -286,7 +287,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                     "when the value does not satisfy the predicate" - {
                         val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
-                        val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate(result = false)
+                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                         "then filter should return null" {
                             val filtered = result.filter(ENV, CONTEXT, predicate)
@@ -297,7 +298,7 @@ internal class ReadingResultTest : FreeSpec() {
 
                 "when the value in the result is null" - {
                     val result: ReadingResult<String?> = success(location = LOCATION, value = null)
-                    val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
@@ -316,7 +317,7 @@ internal class ReadingResultTest : FreeSpec() {
                         actual = JsBoolean.nameOfType
                     )
                 )
-                val predicate: JsPredicate<EB, Unit, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }
 
@@ -328,7 +329,7 @@ internal class ReadingResultTest : FreeSpec() {
         }
 
         "The extension function ReadingResult#validation" - {
-            val isNotEmpty = DummyValidator.isNotEmptyString<EB, Unit, Unit> { JsonErrors.Validation.Strings.IsEmpty }
+            val isNotEmpty = DummyValidator.isNotEmptyString<EB, Unit> { JsonErrors.Validation.Strings.IsEmpty }
 
             "when result is success" - {
 

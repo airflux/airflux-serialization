@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.reader
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -38,9 +39,9 @@ internal class IntReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val IntReader = intReader<EB, Unit, Unit>()
+        private val IntReader = intReader<EB, Unit>()
     }
 
     init {
@@ -104,7 +105,7 @@ internal class IntReaderTest : FreeSpec() {
     private fun getMoreValue(): String = (Int.MAX_VALUE.toLong() + 1).toString()
 
     internal class EB : InvalidTypeErrorBuilder,
-        ValueCastErrorBuilder {
+                        ValueCastErrorBuilder {
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 

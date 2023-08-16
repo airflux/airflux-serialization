@@ -30,11 +30,9 @@ import io.github.airflux.quickstart.domain.model.Value
 import io.github.airflux.quickstart.infrastructure.web.error.JsonErrors
 import io.github.airflux.quickstart.infrastructure.web.model.Response
 import io.github.airflux.quickstart.infrastructure.web.model.reader.RequestReader
-import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.writer.ResponseWriter
-import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterCtx
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
@@ -58,7 +56,7 @@ fun main() {
             }
         )
 
-    JSON.deserialization(mapper = mapper, env = env, context = ReaderCtx(), reader = RequestReader)
+    JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
         .fold(
             ifSuccess = { result -> println(result.value) },
             ifFailure = { result -> println(result.causes) }
@@ -71,8 +69,7 @@ fun main() {
 
     val writerEnv =
         JsWriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
-    val writerCtx = WriterCtx()
-    val output = response.serialization(mapper, writerEnv, writerCtx, ResponseWriter)
+    val output = response.serialization(mapper, writerEnv, writer = ResponseWriter)
     println(output)
 }
 

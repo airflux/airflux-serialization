@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.number
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -30,7 +31,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val VALUE: Int = 2
     }
@@ -38,7 +39,7 @@ internal class ExclusiveMaximumNumberValidatorTest : FreeSpec() {
     init {
 
         "The numeric validator of the exclusive maximum allowed value" - {
-            val validator: JsValidator<EB, Unit, Unit, Int> = StdNumberValidator.exclusiveMaximum(VALUE)
+            val validator: JsValidator<EB, Unit, Int> = StdNumberValidator.exclusiveMaximum(VALUE)
 
             "when a value is less than the allowed value" - {
                 val value = VALUE - 1

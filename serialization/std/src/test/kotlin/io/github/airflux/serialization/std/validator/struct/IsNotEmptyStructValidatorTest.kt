@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -35,16 +36,16 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "property-id"
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
-        private val PROPERTIES: StructProperties<EB, Unit, Unit> = emptyList()
+        private val PROPERTIES: StructProperties<EB, Unit> = emptyList()
     }
 
     init {
 
         "The struct validator IsNotEmpty" - {
-            val validator: StructValidator<EB, Unit, Unit> =
-                StdStructValidator.isNotEmpty<EB, Unit, Unit>().build(PROPERTIES)
+            val validator: StructValidator<EB, Unit> =
+                StdStructValidator.isNotEmpty<EB, Unit>().build(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = JsStruct()

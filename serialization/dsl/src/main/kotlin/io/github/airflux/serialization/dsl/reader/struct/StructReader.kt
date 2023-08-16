@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -37,30 +38,35 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidators
 
-public fun <EB, O, CTX, T> structReader(
-    block: StructReader.Builder<EB, O, CTX, T>.() -> JsReader<EB, O, CTX, T>
-): JsReader<EB, O, CTX, T>
+public fun <EB, O, T> structReader(
+    block: StructReader.Builder<EB, O, T>.() -> JsReader<EB, O, T>
+): JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
-    val builder = StructReader.Builder<EB, O, CTX, T>()
+    val builder = StructReader.Builder<EB, O, T>()
     return block(builder)
 }
 
-public fun <EB, O, CTX, T> StructReader.Builder<EB, O, CTX, T>.returns(
-    block: PropertyValues<EB, O, CTX>.(JsReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
-): JsReader<EB, O, CTX, T>
+public fun <EB, O, T> StructReader.Builder<EB, O, T>.returns(
+    block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsContext, JsLocation) -> ReadingResult<T>
+): JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = this.build(block)
 
-public class StructReader<EB, O, CTX, T> private constructor(
-    private val validators: StructValidators<EB, O, CTX>,
-    private val properties: StructProperties<EB, O, CTX>,
-    private val resultBuilder: PropertyValues<EB, O, CTX>.(JsReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
-) : JsReader<EB, O, CTX, T>
+public class StructReader<EB, O, T> private constructor(
+    private val validators: StructValidators<EB, O>,
+    private val properties: StructProperties<EB, O>,
+    private val resultBuilder: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsContext, JsLocation) -> ReadingResult<T>
+) : JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
-    override fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
+    override fun read(
+        env: JsReaderEnv<EB, O>,
+        context: JsContext,
+        location: JsLocation,
+        source: JsValue
+    ): ReadingResult<T> =
         if (source is JsStruct)
             read(env, context, location, source)
         else
@@ -69,7 +75,12 @@ public class StructReader<EB, O, CTX, T> private constructor(
                 error = env.errorBuilders.invalidTypeError(listOf(JsStruct.nameOfType), source.nameOfType)
             )
 
-    private fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsStruct): ReadingResult<T> {
+    private fun read(
+        env: JsReaderEnv<EB, O>,
+        context: JsContext,
+        location: JsLocation,
+        source: JsStruct
+    ): ReadingResult<T> {
         val failFast = env.options.failFast
         val failures = mutableListOf<ReadingResult.Failure>()
 
@@ -80,7 +91,7 @@ public class StructReader<EB, O, CTX, T> private constructor(
                 }
         }
 
-        val propertyValues: PropertyValues<EB, O, CTX> = PropertyValuesInstance<EB, O, CTX>()
+        val propertyValues: PropertyValues<EB, O> = PropertyValuesInstance<EB, O>()
             .apply {
                 properties.forEach { property ->
                     property.read(env, context, location, source)
@@ -102,19 +113,19 @@ public class StructReader<EB, O, CTX, T> private constructor(
     }
 
     @AirfluxMarker
-    public class Builder<EB, O, CTX, T> internal constructor()
+    public class Builder<EB, O, T> internal constructor()
         where EB : InvalidTypeErrorBuilder,
               O : FailFastOption {
 
-        private val properties = mutableListOf<StructProperty<EB, O, CTX, *>>()
-        private val validatorBuilders = mutableListOf<StructValidator.Builder<EB, O, CTX>>()
+        private val properties = mutableListOf<StructProperty<EB, O, *>>()
+        private val validatorBuilders = mutableListOf<StructValidator.Builder<EB, O>>()
 
         public fun validation(
-            validator: StructValidator.Builder<EB, O, CTX>,
-            vararg validators: StructValidator.Builder<EB, O, CTX>
+            validator: StructValidator.Builder<EB, O>,
+            vararg validators: StructValidator.Builder<EB, O>
         ) {
             validation(
-                validators = mutableListOf<StructValidator.Builder<EB, O, CTX>>()
+                validators = mutableListOf<StructValidator.Builder<EB, O>>()
                     .apply {
                         add(validator)
                         addAll(validators)
@@ -122,17 +133,17 @@ public class StructReader<EB, O, CTX, T> private constructor(
             )
         }
 
-        public fun validation(validators: List<StructValidator.Builder<EB, O, CTX>>) {
+        public fun validation(validators: List<StructValidator.Builder<EB, O>>) {
             validatorBuilders.addAll(validators)
         }
 
-        public fun <P> property(spec: StructPropertySpec<EB, O, CTX, P>): StructProperty<EB, O, CTX, P> =
+        public fun <P> property(spec: StructPropertySpec<EB, O, P>): StructProperty<EB, O, P> =
             StructProperty(spec).also { properties.add(it) }
 
         public fun build(
-            block: PropertyValues<EB, O, CTX>.(JsReaderEnv<EB, O>, CTX, JsLocation) -> ReadingResult<T>
-        ): JsReader<EB, O, CTX, T> {
-            val validators: StructValidators<EB, O, CTX> =
+            block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsContext, JsLocation) -> ReadingResult<T>
+        ): JsReader<EB, O, T> {
+            val validators: StructValidators<EB, O> =
                 validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }
                     .takeIf { it.isNotEmpty() }
                     .orEmpty()

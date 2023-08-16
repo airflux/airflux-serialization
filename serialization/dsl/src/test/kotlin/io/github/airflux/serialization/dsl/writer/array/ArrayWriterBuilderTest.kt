@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.dsl.writer.array
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
@@ -40,10 +41,10 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val FIRST_ITEM = "item-1"
         private const val SECOND_ITEM = "item-2"
 
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
 
-        private val StringWriter = DummyWriter.string<OPTS, Unit>()
+        private val StringWriter = DummyWriter.string<OPTS>()
     }
 
     init {
@@ -51,7 +52,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         "The ArrayWriter type" - {
 
             "when items is non-nullable type" - {
-                val writer: JsWriter<OPTS, Unit, Iterable<String>> = arrayWriter(items = StringWriter)
+                val writer: JsWriter<OPTS, Iterable<String>> = arrayWriter(items = StringWriter)
 
                 "when the source contains items" - {
                     val source = listOf(FIRST_ITEM, SECOND_ITEM)
@@ -131,7 +132,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
             "when items is nullable type" - {
 
                 "when a writer of items is nullable" - {
-                    val writer: JsWriter<OPTS, Unit, Iterable<String?>> = arrayWriter(items = StringWriter.nullable())
+                    val writer: JsWriter<OPTS, Iterable<String?>> = arrayWriter(items = StringWriter.nullable())
 
                     "when the source contains only non-nullable items" - {
                         val source = listOf(FIRST_ITEM, SECOND_ITEM)
@@ -289,7 +290,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
                 }
 
                 "when a writer of items is optional" - {
-                    val writer: JsWriter<OPTS, Unit, Iterable<String?>> = arrayWriter(items = StringWriter.optional())
+                    val writer: JsWriter<OPTS, Iterable<String?>> = arrayWriter(items = StringWriter.optional())
 
                     "when the source contains only non-nullable items" - {
                         val source = listOf(FIRST_ITEM, SECOND_ITEM)

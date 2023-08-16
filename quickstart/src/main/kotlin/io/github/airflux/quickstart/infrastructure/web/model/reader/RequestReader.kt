@@ -17,7 +17,6 @@
 package io.github.airflux.quickstart.infrastructure.web.model.reader
 
 import io.github.airflux.quickstart.infrastructure.web.model.Request
-import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderCtx
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.quickstart.infrastructure.web.model.reader.validator.CommonStructReaderValidators
@@ -27,7 +26,7 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
 
-val RequestReader: JsReader<ReaderErrorBuilders, ReaderOptions, ReaderCtx, Request> = structReader {
+val RequestReader: JsReader<ReaderErrorBuilders, ReaderOptions, Request> = structReader {
     validation(CommonStructReaderValidators)
 
     val tender = property(required(name = "tender", reader = TenderReader))

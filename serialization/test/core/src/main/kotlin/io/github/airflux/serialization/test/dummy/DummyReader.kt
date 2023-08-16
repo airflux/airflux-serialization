@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.test.dummy
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -28,19 +29,24 @@ import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 
-public class DummyReader<EB, O, CTX, T>(
-    public val result: (JsReaderEnv<EB, O>, context: CTX, JsLocation, JsValue) -> ReadingResult<T>
-) : JsReader<EB, O, CTX, T> {
+public class DummyReader<EB, O, T>(
+    public val result: (JsReaderEnv<EB, O>, context: JsContext, JsLocation, JsValue) -> ReadingResult<T>
+) : JsReader<EB, O, T> {
 
     public constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
 
-    override fun read(env: JsReaderEnv<EB, O>, context: CTX, location: JsLocation, source: JsValue): ReadingResult<T> =
+    override fun read(
+        env: JsReaderEnv<EB, O>,
+        context: JsContext,
+        location: JsLocation,
+        source: JsValue
+    ): ReadingResult<T> =
         result(env, context, location, source)
 
     public companion object {
 
         @JvmStatic
-        public fun <EB, O, CTX> boolean(): JsReader<EB, O, CTX, Boolean>
+        public fun <EB, O> boolean(): JsReader<EB, O, Boolean>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
@@ -58,7 +64,7 @@ public class DummyReader<EB, O, CTX, T>(
             )
 
         @JvmStatic
-        public fun <EB, O, CTX> string(): JsReader<EB, O, CTX, String>
+        public fun <EB, O> string(): JsReader<EB, O, String>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->
@@ -76,7 +82,7 @@ public class DummyReader<EB, O, CTX, T>(
             )
 
         @JvmStatic
-        public fun <EB, O, CTX> int(): JsReader<EB, O, CTX, Int>
+        public fun <EB, O> int(): JsReader<EB, O, Int>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, _, location, source ->

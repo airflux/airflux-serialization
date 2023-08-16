@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.value.readAsInteger
 /**
  * Reader for primitive [Byte] type.
  */
-public fun <EB, O, CTX> byteReader(): JsReader<EB, O, CTX, Byte>
+public fun <EB, O> byteReader(): JsReader<EB, O, Byte>
     where EB : InvalidTypeErrorBuilder,
           EB : ValueCastErrorBuilder =
     JsReader { env, context, location, source ->

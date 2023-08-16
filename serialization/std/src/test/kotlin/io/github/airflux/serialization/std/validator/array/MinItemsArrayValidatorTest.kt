@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.array
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -32,7 +33,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = Unit
+        private val CONTEXT = JsContext
         private val LOCATION = JsLocation
         private const val MIN_ITEMS = 2
     }
@@ -40,8 +41,8 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator: ArrayValidator<EB, Unit, Unit> =
-                StdArrayValidator.minItems<EB, Unit, Unit>(MIN_ITEMS).build()
+            val validator: ArrayValidator<EB, Unit> =
+                StdArrayValidator.minItems<EB, Unit>(MIN_ITEMS).build()
 
             "when a collection is empty" - {
                 val source = JsArray()

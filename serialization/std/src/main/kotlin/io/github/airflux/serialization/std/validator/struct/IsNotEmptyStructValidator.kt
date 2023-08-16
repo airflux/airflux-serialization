@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -26,14 +27,14 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-public class IsNotEmptyStructValidator<EB, O, CTX> internal constructor() : StructValidator<EB, O, CTX>
+public class IsNotEmptyStructValidator<EB, O> internal constructor() : StructValidator<EB, O>
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
     override fun validate(
         env: JsReaderEnv<EB, O>,
-        context: CTX,
+        context: JsContext,
         location: JsLocation,
-        properties: StructProperties<EB, O, CTX>,
+        properties: StructProperties<EB, O>,
         source: JsStruct
     ): ValidationResult =
         if (source.isEmpty())

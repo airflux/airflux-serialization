@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.reader
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -30,11 +31,11 @@ import io.github.airflux.serialization.core.reader.result.failure
  * - If a node is not found ([lookup] is [JsLookup.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <EB, O, CTX, T> readRequired(
+public fun <EB, O, T> readRequired(
     env: JsReaderEnv<EB, O>,
-    context: CTX,
+    context: JsContext,
     lookup: JsLookup,
-    using: JsReader<EB, O, CTX, T>
+    using: JsReader<EB, O, T>
 ): ReadingResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
