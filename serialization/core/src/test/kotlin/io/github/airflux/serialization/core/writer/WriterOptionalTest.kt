@@ -31,8 +31,8 @@ internal class WriterOptionalTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

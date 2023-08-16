@@ -39,7 +39,7 @@ internal class JsLookupTest : FreeSpec() {
         private const val IDX = 0
         private const val UNKNOWN_IDX = 1
 
-        private val LOCATION = JsLocation
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

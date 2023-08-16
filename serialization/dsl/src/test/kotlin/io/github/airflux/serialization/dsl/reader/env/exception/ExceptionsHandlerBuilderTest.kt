@@ -27,7 +27,7 @@ internal class ExceptionsHandlerBuilderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(Unit, Unit)
-        private val LOCATION = JsLocation
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

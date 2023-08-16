@@ -41,8 +41,8 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
         private const val TITLE_PROPERTY_VALUE = "property-title"
         private const val MIN_PROPERTIES = 2
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
         private val PROPERTIES: StructProperties<EB, Unit> = emptyList()
     }
 

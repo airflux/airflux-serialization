@@ -44,8 +44,8 @@ internal class StructWriterTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = 42
 
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

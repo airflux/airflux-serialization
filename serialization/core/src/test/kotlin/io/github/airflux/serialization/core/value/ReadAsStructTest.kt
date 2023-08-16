@@ -32,8 +32,8 @@ internal class ReadAsStructTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation.append("user")
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation.append("user")
         private const val USER_NAME = "user"
         private val reader: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, JsStruct) -> ReadingResult<DTO> =
             { _, _, location, source ->

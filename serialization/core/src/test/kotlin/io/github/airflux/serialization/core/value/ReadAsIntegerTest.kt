@@ -32,8 +32,8 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation.append("user")
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation.append("user")
         private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, String) -> ReadingResult<Int> =
             { _, _, location, text ->
                 success(location = location, value = text.toInt())

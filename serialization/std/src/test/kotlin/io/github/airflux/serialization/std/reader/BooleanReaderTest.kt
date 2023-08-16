@@ -18,6 +18,7 @@ package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
@@ -35,9 +36,9 @@ internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
-        private val BooleanReader = booleanReader<EB, Unit>()
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
+        private val BooleanReader: JsReader<EB, Unit, Boolean> = booleanReader()
     }
 
     init {

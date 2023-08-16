@@ -43,19 +43,19 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
         private val ENV = JsReaderEnv(errorBuilders = EB(), options = Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
 
-        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string()
-        private val reader: JsPathReader<EB, Unit, String> = DummyPathReader { env, context, location, source ->
-            stringReader.read(env, context, location, source)
+        private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
+        private val READER: JsPathReader<EB, Unit, String> = DummyPathReader { env, context, location, source ->
+            StringReader.read(env, context, location, source)
         }
     }
 
     init {
 
         "The StructProperty type" - {
-            val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = reader)
+            val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = READER)
             val property = StructProperty(spec)
 
             "then the paths should equal the paths from the spec" {

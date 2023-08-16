@@ -57,13 +57,13 @@ internal class JsPathReaderTest : FreeSpec() {
         private const val DEFAULT_VALUE = "2a100f64-0cef-4cca-90c0-5148f71c5fca"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
 
-        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string()
-        private val reader: JsPathReader<EB, Unit, String> = DummyPathReader { env, context, location, source ->
+        private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
+        private val READER: JsPathReader<EB, Unit, String> = DummyPathReader { env, context, location, source ->
             val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-            readRequired(env, context, lookup, stringReader)
+            readRequired(env, context, lookup, StringReader)
         }
     }
 
@@ -146,7 +146,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val validator: JsValidator<EB, Unit, String> = DummyValidator(result = valid())
 
                         "then should return the original result" {
-                            val result = reader.validation(validator)
+                            val result = READER.validation(validator)
                                 .read(ENV, CONTEXT, LOCATION, source)
                             result shouldBe success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
@@ -164,7 +164,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         )
 
                         "then should return the result of a validation" {
-                            val result = reader.validation(validator)
+                            val result = READER.validation(validator)
                                 .read(ENV, CONTEXT, LOCATION, source)
 
                             result shouldBe failure(
@@ -183,7 +183,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                         }
 
-                        val result = reader.validation(validator)
+                        val result = READER.validation(validator)
                             .read(ENV, CONTEXT, LOCATION, source)
                         result shouldBe failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -205,7 +205,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
-                                val filtered = reader.filter(predicate)
+                                val filtered = READER.filter(predicate)
                                     .read(ENV, CONTEXT, LOCATION, source)
 
                                 filtered shouldBe success(
@@ -219,7 +219,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                             "then filter should return the null value" {
-                                val filtered = reader.filter(predicate)
+                                val filtered = READER.filter(predicate)
                                     .read(ENV, CONTEXT, LOCATION, source)
 
                                 filtered shouldBe success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
@@ -231,7 +231,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val optionalReader: JsReader<EB, Unit, String?> =
                             DummyReader { env, context, location, source ->
                                 val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                                readOptional(env, context, lookup, stringReader)
+                                readOptional(env, context, lookup, StringReader)
                             }
                         val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                         val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
@@ -249,7 +249,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 "when an original reader returns a result as a failure" - {
                     val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                        readRequired(env, context, lookup, stringReader)
+                        readRequired(env, context, lookup, StringReader)
                     }
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                     val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
@@ -271,7 +271,7 @@ internal class JsPathReaderTest : FreeSpec() {
         "The static functions of JsPathReader type" - {
 
             "the `optional` function" - {
-                val reader = JsPathReader.optional(path = JsPath(ID_PROPERTY_NAME), reader = stringReader)
+                val reader = JsPathReader.optional(path = JsPath(ID_PROPERTY_NAME), reader = StringReader)
 
                 "when the property is present" - {
 
@@ -316,7 +316,7 @@ internal class JsPathReaderTest : FreeSpec() {
             "the `optional` function with the generator of default value" - {
                 val reader = JsPathReader.optional(
                     path = JsPath(ID_PROPERTY_NAME),
-                    reader = stringReader,
+                    reader = StringReader,
                     default = { _, _ -> DEFAULT_VALUE })
 
                 "when the property is present" - {
@@ -363,7 +363,7 @@ internal class JsPathReaderTest : FreeSpec() {
             }
 
             "the `required` function" - {
-                val reader = JsPathReader.required(path = JsPath(ID_PROPERTY_NAME), reader = stringReader)
+                val reader = JsPathReader.required(path = JsPath(ID_PROPERTY_NAME), reader = StringReader)
 
                 "when the property is present" - {
 
@@ -413,7 +413,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 "when the predicate returns the true value" - {
                     val reader = JsPathReader.required(
                         path = JsPath(ID_PROPERTY_NAME),
-                        reader = stringReader,
+                        reader = StringReader,
                         predicate = { _, _, _ -> true }
                     )
 
@@ -463,7 +463,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 "when the predicate returns the false value" - {
                     val reader = JsPathReader.required(
                         path = JsPath(ID_PROPERTY_NAME),
-                        reader = stringReader,
+                        reader = StringReader,
                         predicate = { _, _, _ -> false }
                     )
 

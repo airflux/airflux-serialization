@@ -27,7 +27,7 @@ internal class ReadingResultSuccessTest : FreeSpec() {
         private const val ORIGINAL_VALUE = "10"
         private const val ELSE_VALUE = "20"
 
-        private val LOCATION = JsLocation
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

@@ -49,8 +49,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private const val NAME_PROPERTY_VALUE = "property-title"
 
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
         private val idProperty: StructProperty<EB, OPTS, String> =
             StructProperty(required(ID_PROPERTY_NAME, StringReader))
         private val PROPERTIES: StructProperties<EB, OPTS> = listOf(idProperty)

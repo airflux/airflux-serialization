@@ -41,8 +41,8 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_DEFAULT_VALUE = "7815943d-5c55-4fe6-92f8-0be816caed78"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
         private val READER: JsReader<EB, Unit, String> = DummyReader.string()
         private val DEFAULT: (JsReaderEnv<EB, Unit>, JsContext) -> String = { _, _ -> ID_PROPERTY_DEFAULT_VALUE }
     }

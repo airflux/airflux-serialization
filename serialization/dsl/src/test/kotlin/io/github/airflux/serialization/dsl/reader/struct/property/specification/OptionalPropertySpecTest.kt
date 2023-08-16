@@ -55,8 +55,8 @@ internal class OptionalPropertySpecTest : FreeSpec() {
         private const val CODE_PROPERTY_VALUE = "code"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String?> = DummyReader.string()
         private val IntReader: JsReader<EB, Unit, Int?> = DummyReader.int()

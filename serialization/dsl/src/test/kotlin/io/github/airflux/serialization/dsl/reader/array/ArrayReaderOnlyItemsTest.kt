@@ -42,8 +42,8 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private const val FIRST_ITEM = "first"
         private const val SECOND_ITEM = "second"
 
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
         private const val MIN_ITEMS = 2
 
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()

@@ -30,8 +30,8 @@ internal class WriterContramapTest : FreeSpec() {
         private const val ID_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

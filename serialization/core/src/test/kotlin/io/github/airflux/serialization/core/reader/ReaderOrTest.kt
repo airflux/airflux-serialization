@@ -39,8 +39,8 @@ internal class ReaderOrTest : FreeSpec() {
         private const val LEFT_VALUE = "true"
         private const val RIGHT_VALUE = "false"
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

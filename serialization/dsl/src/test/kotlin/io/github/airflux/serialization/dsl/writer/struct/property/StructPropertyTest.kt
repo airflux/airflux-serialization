@@ -33,8 +33,8 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
 
         private val WRITER: JsWriter<Unit, String> = DummyWriter.string()
     }

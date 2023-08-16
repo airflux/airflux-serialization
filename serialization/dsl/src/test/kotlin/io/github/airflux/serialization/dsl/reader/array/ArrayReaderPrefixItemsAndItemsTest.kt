@@ -44,8 +44,8 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         private const val SECOND_ITEM = "second"
         private const val THIRD_ITEM = "third"
 
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
         private val BooleanReader: JsReader<EB, OPTS, Boolean> = DummyReader.boolean()

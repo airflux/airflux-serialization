@@ -29,8 +29,8 @@ internal class IntWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {

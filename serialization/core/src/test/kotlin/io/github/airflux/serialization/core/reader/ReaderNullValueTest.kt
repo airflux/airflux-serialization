@@ -46,15 +46,15 @@ internal class ReaderNullValueTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "42"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
 
-        private val stringReader: JsReader<EB, Unit, String> = DummyReader.string<EB, Unit>()
+        private val StringReader: JsReader<EB, Unit, String> = DummyReader.string<EB, Unit>()
             .ifNullValue { _, _, _ -> ALTERNATIVE_VALUE }
 
-        val reader: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
+        private val READER: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
             val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-            readOptional(env, context, lookup, stringReader)
+            readOptional(env, context, lookup, StringReader)
         }
     }
 
@@ -67,7 +67,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then should return the original value" {
-                        val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: ReadingResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -80,7 +80,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsNull)
 
                     "then should return the default value" {
-                        val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: ReadingResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -94,7 +94,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
 
                 "then should return the default value" {
-                    val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result: ReadingResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
 
                     result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                 }
@@ -104,7 +104,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsBoolean.True)
 
                 "then should return the original value" {
-                    val result: ReadingResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result: ReadingResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
 
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),

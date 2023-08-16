@@ -53,8 +53,8 @@ internal class StructReaderTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
         private const val IS_ACTIVE_PROPERTY_VALUE = true
 
-        private val CONTEXT = JsContext
-        private val LOCATION = JsLocation
+        private val CONTEXT: JsContext = JsContext
+        private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
         private val IntReader: JsReader<EB, OPTS, Int> = DummyReader.int()
     }

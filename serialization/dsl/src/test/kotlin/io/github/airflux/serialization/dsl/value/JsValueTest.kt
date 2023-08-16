@@ -36,7 +36,7 @@ internal class JsValueTest : FreeSpec() {
 
         private const val VALUE = "16945018-22fb-48fd-ab06-0740b90929d6"
 
-        private val LOCATION = JsLocation
+        private val LOCATION: JsLocation = JsLocation
     }
 
     init {
