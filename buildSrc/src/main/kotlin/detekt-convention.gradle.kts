@@ -13,7 +13,7 @@ dependencies {
 }
 
 configure<DetektExtension> {
-    ignoreFailures = true
+    ignoreFailures = false
     toolVersion = detektVersion
     config.setFrom(project.files("${project.rootProject.projectDir}/config/detekt/detekt.yml"))
     baseline = file("${project.rootProject.projectDir}/config/detekt/baseline.xml")
