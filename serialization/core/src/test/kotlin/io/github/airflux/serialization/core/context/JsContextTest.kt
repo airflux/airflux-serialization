@@ -190,7 +190,7 @@ internal class JsContextTest : FreeSpec() {
         }
     }
 
-    class UserContext(val id: String) : JsAbstractContextElement(UserContext) {
+    class UserContext(val id: String) : JsAbstractContextElement<UserContext>(UserContext) {
         override fun toString(): String = NAME
         override fun equals(other: Any?): Boolean = this === other || other is UserContext
         override fun hashCode(): Int = Key.hashCode()
@@ -200,7 +200,7 @@ internal class JsContextTest : FreeSpec() {
         }
     }
 
-    class OrderContext : JsAbstractContextElement(OrderContext) {
+    class OrderContext : JsAbstractContextElement<OrderContext>(OrderContext) {
         override fun toString(): String = NAME
         override fun equals(other: Any?): Boolean = this === other || other is OrderContext
         override fun hashCode(): Int = UserContext.hashCode()
@@ -210,9 +210,9 @@ internal class JsContextTest : FreeSpec() {
         }
     }
 
-    class BillContext : JsAbstractContextElement(BillContext) {
+    class BillContext : JsAbstractContextElement<BillContext>(BillContext) {
         override fun toString(): String = NAME
-        override fun equals(other: Any?): Boolean = this === other || other is OrderContext
+        override fun equals(other: Any?): Boolean = this === other || other is BillContext
         override fun hashCode(): Int = UserContext.hashCode()
 
         companion object Key : JsContext.Key<BillContext> {

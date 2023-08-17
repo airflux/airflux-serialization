@@ -16,4 +16,6 @@
 
 package io.github.airflux.serialization.core.context
 
-public abstract class JsAbstractContextElement(public override val key: JsContext.Key<*>) : JsContext.Element
+public abstract class JsAbstractContextElement<E : JsContext.Element>(
+    public override val key: JsContext.Key<E>
+) : JsContext.Element
