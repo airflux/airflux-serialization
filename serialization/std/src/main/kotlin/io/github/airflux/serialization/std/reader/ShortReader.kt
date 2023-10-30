@@ -18,7 +18,7 @@ package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
+import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
 import io.github.airflux.serialization.core.reader.result.toFailure
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.readAsInteger
@@ -28,13 +28,13 @@ import io.github.airflux.serialization.core.value.readAsInteger
  */
 public fun <EB, O> shortReader(): JsReader<EB, O, Short>
     where EB : InvalidTypeErrorBuilder,
-          EB : ValueCastErrorBuilder =
+          EB : NumberFormatErrorBuilder =
     JsReader { env, context, location, source ->
         source.readAsInteger(env, context, location) { e, _, l, value ->
             try {
                 value.toShort().toSuccess(l)
             } catch (expected: NumberFormatException) {
-                e.errorBuilders.valueCastError(value, Short::class).toFailure(location = l)
+                e.errorBuilders.numberFormatError(value, Short::class).toFailure(location = l)
             }
         }
     }

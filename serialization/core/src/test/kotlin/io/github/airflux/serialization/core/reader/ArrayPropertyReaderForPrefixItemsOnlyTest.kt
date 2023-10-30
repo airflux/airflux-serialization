@@ -23,7 +23,6 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
@@ -35,7 +34,6 @@ import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
-import kotlin.reflect.KClass
 
 internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
 
@@ -351,15 +349,11 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
     }
 
     internal class EB : AdditionalItemsErrorBuilder,
-                        InvalidTypeErrorBuilder,
-                        ValueCastErrorBuilder {
+                        InvalidTypeErrorBuilder {
         override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
 
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected, actual)
-
-        override fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error =
-            JsonErrors.ValueCast(value, target)
     }
 
     internal class OPTS(override val failFast: Boolean) : FailFastOption

@@ -256,12 +256,12 @@ public abstract interface class io/github/airflux/serialization/core/reader/erro
 	public abstract fun invalidTypeError (Ljava/lang/Iterable;Ljava/lang/String;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 }
 
-public abstract interface class io/github/airflux/serialization/core/reader/error/PathMissingErrorBuilder {
-	public abstract fun pathMissingError ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
+public abstract interface class io/github/airflux/serialization/core/reader/error/NumberFormatErrorBuilder {
+	public abstract fun numberFormatError (Ljava/lang/String;Lkotlin/reflect/KClass;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 }
 
-public abstract interface class io/github/airflux/serialization/core/reader/error/ValueCastErrorBuilder {
-	public abstract fun valueCastError (Ljava/lang/String;Lkotlin/reflect/KClass;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
+public abstract interface class io/github/airflux/serialization/core/reader/error/PathMissingErrorBuilder {
+	public abstract fun pathMissingError ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/predicate/JsPredicate {

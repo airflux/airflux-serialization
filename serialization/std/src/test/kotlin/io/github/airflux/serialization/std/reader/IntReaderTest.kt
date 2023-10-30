@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.error.ValueCastErrorBuilder
+import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
@@ -106,11 +106,11 @@ internal class IntReaderTest : FreeSpec() {
     private fun getMoreValue(): String = (Int.MAX_VALUE.toLong() + 1).toString()
 
     internal class EB : InvalidTypeErrorBuilder,
-                        ValueCastErrorBuilder {
+                        NumberFormatErrorBuilder {
         override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error =
+        override fun numberFormatError(value: String, target: KClass<*>): ReadingResult.Error =
             JsonErrors.ValueCast(value, target)
     }
 }

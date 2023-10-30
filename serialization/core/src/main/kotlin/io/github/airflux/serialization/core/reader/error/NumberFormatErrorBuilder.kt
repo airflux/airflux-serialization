@@ -22,6 +22,6 @@ import kotlin.reflect.KClass
 /**
  * The builder of an error that occurs when an element cannot be converted to the specified type.
  */
-public fun interface ValueCastErrorBuilder {
-    public fun valueCastError(value: String, target: KClass<*>): ReadingResult.Error
+public fun interface NumberFormatErrorBuilder {
+    public fun numberFormatError(value: String, target: KClass<*>): ReadingResult.Error
 }
