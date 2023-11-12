@@ -50,7 +50,7 @@ jobs:
       with:
         args: >
           -Dsonar.organization=airflux
-          -Dsonar.projectKey=airflux_airflux
+          -Dsonar.projectKey=airflux_airflux-serialization
           -Dsonar.coverage.exclusions="**/test/**"
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@v1.3.0
