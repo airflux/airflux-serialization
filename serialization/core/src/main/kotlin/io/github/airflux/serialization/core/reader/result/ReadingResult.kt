@@ -18,13 +18,15 @@
 
 package io.github.airflux.serialization.core.reader.result
 
-import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.fold
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 public sealed class ReadingResult<out T> {
 
@@ -73,92 +75,137 @@ public sealed class ReadingResult<out T> {
     }
 }
 
-public infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> =
-    bind { success -> transform(success.value).toSuccess(success.location) }
+@OptIn(ExperimentalContracts::class)
+public fun <T> ReadingResult<T>.isSuccess(): Boolean {
+    contract {
+        returns(true) implies (this@isSuccess is ReadingResult.Success<T>)
+        returns(false) implies (this@isSuccess is ReadingResult.Failure)
+    }
+    return this is ReadingResult.Success<T>
+}
 
-public infix fun <T, R> ReadingResult<T>.bind(transform: (ReadingResult.Success<T>) -> ReadingResult<R>): ReadingResult<R> =
-    fold(
-        ifFailure = ::identity,
-        ifSuccess = { transform(it) }
-    )
+@OptIn(ExperimentalContracts::class)
+public fun <T> ReadingResult<T>.isError(): Boolean {
+    contract {
+        returns(false) implies (this@isError is ReadingResult.Success<T>)
+        returns(true) implies (this@isError is ReadingResult.Failure)
+    }
+    return this is ReadingResult.Failure
+}
 
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> {
+    contract {
+        callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
+    }
+    return bind { success -> transform(success.value).toSuccess(success.location) }
+}
+
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <T, R> ReadingResult<T>.bind(
+    transform: (ReadingResult.Success<T>) -> ReadingResult<R>
+): ReadingResult<R> {
+    contract {
+        callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) transform(this) else this
+}
+
+@OptIn(ExperimentalContracts::class)
 public inline fun <T, R> ReadingResult<T>.fold(
     ifFailure: (ReadingResult.Failure) -> R,
     ifSuccess: (ReadingResult.Success<T>) -> R
-): R = when (this) {
-    is ReadingResult.Success -> ifSuccess(this)
-    is ReadingResult.Failure -> ifFailure(this)
+): R {
+    contract {
+        callsInPlace(ifFailure, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(ifSuccess, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) ifSuccess(this) else ifFailure(this)
 }
 
+@OptIn(ExperimentalContracts::class)
 public inline infix fun <T> ReadingResult<T>.recovery(
     function: (ReadingResult.Failure) -> ReadingResult<T>
-): ReadingResult<T> = fold(
-    ifFailure = { function(it) },
-    ifSuccess = ::identity
-)
+): ReadingResult<T> {
+    contract {
+        callsInPlace(function, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) this else function(this)
+}
 
-public fun <T> ReadingResult<T>.getOrNull(): T? = fold(
-    ifFailure = { null },
-    ifSuccess = { it.value }
-)
+public fun <T> ReadingResult<T>.getOrNull(): T? = if (isSuccess()) this.value else null
 
-public infix fun <T> ReadingResult<T>.getOrElse(defaultValue: () -> T): T = fold(
-    ifFailure = { defaultValue() },
-    ifSuccess = { it.value }
-)
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <T> ReadingResult<T>.getOrElse(defaultValue: () -> T): T {
+    contract {
+        callsInPlace(defaultValue, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) value else defaultValue()
+}
 
-public infix fun <T> ReadingResult<T>.getOrHandle(handler: (ReadingResult.Failure) -> T): T = fold(
-    ifFailure = { handler(it) },
-    ifSuccess = { it.value }
-)
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <T> ReadingResult<T>.getOrHandle(handler: (ReadingResult.Failure) -> T): T {
+    contract {
+        callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) value else handler(this)
+}
 
-public infix fun <T> ReadingResult<T>.orElse(defaultValue: () -> ReadingResult<T>): ReadingResult<T> = fold(
-    ifFailure = { defaultValue() },
-    ifSuccess = ::identity
-)
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <T> ReadingResult<T>.orElse(defaultValue: () -> ReadingResult<T>): ReadingResult<T> {
+    contract {
+        callsInPlace(defaultValue, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) this else defaultValue()
+}
 
-public infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.Failure) -> Throwable): T = fold(
-    ifFailure = { throw exceptionBuilder(it) },
-    ifSuccess = { it.value }
-)
+@OptIn(ExperimentalContracts::class)
+public inline infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.Failure) -> Throwable): T {
+    contract {
+        callsInPlace(exceptionBuilder, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess()) value else throw exceptionBuilder(this)
+}
 
 public fun <EB, O, T> ReadingResult<T>.filter(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     predicate: JsPredicate<EB, O, T & Any>
-): ReadingResult<T?> = fold(
-    ifFailure = ::identity,
-    ifSuccess = { result ->
-        if (result.value == null)
-            result
+): ReadingResult<T?> {
+    return if (isSuccess()) {
+        if (value == null)
+            this
         else {
-            if (predicate.test(env, context, result.location, result.value))
-                result
+            if (predicate.test(env, context, location, value))
+                this
             else
-                success(location = result.location, value = null)
+                success(location = location, value = null)
         }
-    }
-)
+    } else
+        this
+}
 
 public fun <EB, O, T> ReadingResult<T>.validation(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     validator: JsValidator<EB, O, T>
-): ReadingResult<T> = fold(
-    ifFailure = ::identity,
-    ifSuccess = { result ->
-        validator.validate(env, context, result.location, result.value)
+): ReadingResult<T> =
+    if (isSuccess())
+        validator.validate(env, context, location, value)
             .fold(
                 ifInvalid = { it },
-                ifValid = { result }
+                ifValid = { this }
             )
-    }
-)
+    else
+        this
 
-public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): ReadingResult<T> = fold(
-    ifFailure = ::identity,
-    ifSuccess = { result -> if (result.value != null) result else defaultValue().toSuccess(result.location) }
-)
+@OptIn(ExperimentalContracts::class)
+public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): ReadingResult<T> {
+    contract {
+        callsInPlace(defaultValue, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isSuccess() && value == null) defaultValue().toSuccess(location) else this
+}
 
 public fun <T> success(location: JsLocation, value: T): ReadingResult<T> =
     ReadingResult.Success(location = location, value = value)
@@ -176,14 +223,19 @@ public fun <E : ReadingResult.Error> E.toFailure(location: JsLocation): ReadingR
  * catching any [Throwable] exception that was thrown from the [block] function execution
  * and using the [io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler] from env to handle it.
  */
+@OptIn(ExperimentalContracts::class)
 public inline fun <EB, O, T> withCatching(
     env: JsReaderEnv<EB, O>,
     location: JsLocation,
     block: () -> ReadingResult<T>
-): ReadingResult<T> =
-    try {
+): ReadingResult<T> {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+    return try {
         block()
     } catch (expected: Throwable) {
         val handler = env.exceptionsHandler ?: throw expected
         handler.handle(env, location, expected).toFailure(location)
     }
+}
