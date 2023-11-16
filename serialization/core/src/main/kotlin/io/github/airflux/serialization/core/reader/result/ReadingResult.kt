@@ -98,17 +98,17 @@ public inline infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): Readin
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
-    return bind { success -> transform(success.value).toSuccess(success.location) }
+    return bind { location, value -> transform(value).toSuccess(location) }
 }
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, R> ReadingResult<T>.bind(
-    transform: (ReadingResult.Success<T>) -> ReadingResult<R>
+    transform: (location: JsLocation, value: T) -> ReadingResult<R>
 ): ReadingResult<R> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
-    return if (isSuccess()) transform(this) else this
+    return if (isSuccess()) transform(location, value) else this
 }
 
 @OptIn(ExperimentalContracts::class)
