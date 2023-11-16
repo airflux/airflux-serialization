@@ -152,11 +152,11 @@ public inline infix fun <T> ReadingResult<T>.getOrHandle(handler: (ReadingResult
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.orElse(defaultValue: () -> ReadingResult<T>): ReadingResult<T> {
+public inline infix fun <T> ReadingResult<T>.orElse(default: () -> ReadingResult<T>): ReadingResult<T> {
     contract {
-        callsInPlace(defaultValue, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(default, InvocationKind.AT_MOST_ONCE)
     }
-    return if (isSuccess()) this else defaultValue()
+    return if (isSuccess()) this else default()
 }
 
 @OptIn(ExperimentalContracts::class)
