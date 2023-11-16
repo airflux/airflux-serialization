@@ -178,7 +178,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
-                    val result = original.getOrElse { ALTERNATIVE_VALUE }
+                    val result = original.getOrElse(ALTERNATIVE_VALUE)
 
                     result shouldBe ORIGINAL_VALUE
                 }
@@ -188,7 +188,7 @@ internal class ReadingResultTest : FreeSpec() {
                 val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return the defaultValue value" {
-                    val result = original.getOrElse { ALTERNATIVE_VALUE }
+                    val result = original.getOrElse(ALTERNATIVE_VALUE)
 
                     result shouldBe ALTERNATIVE_VALUE
                 }

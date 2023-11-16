@@ -135,13 +135,7 @@ public inline infix fun <T> ReadingResult<T>.recovery(
 
 public fun <T> ReadingResult<T>.getOrNull(): T? = if (isSuccess()) this.value else null
 
-@OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.getOrElse(default: () -> T): T {
-    contract {
-        callsInPlace(default, InvocationKind.AT_MOST_ONCE)
-    }
-    return if (isSuccess()) value else default()
-}
+public infix fun <T> ReadingResult<T>.getOrElse(default: T): T = if (isSuccess()) value else default
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T> ReadingResult<T>.getOrHandle(handler: (ReadingResult.Failure) -> T): T {
