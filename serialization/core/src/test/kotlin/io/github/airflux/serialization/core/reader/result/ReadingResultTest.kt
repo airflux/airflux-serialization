@@ -195,13 +195,13 @@ internal class ReadingResultTest : FreeSpec() {
             }
         }
 
-        "The extension function ReadingResult#getOrHandle" - {
+        "The extension function ReadingResult#getOrElse with lambda" - {
 
             "when result is success" - {
                 val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 "then should return a value" {
-                    val result = original.getOrHandle { ALTERNATIVE_VALUE }
+                    val result = original.getOrElse { ALTERNATIVE_VALUE }
 
                     result shouldBe ORIGINAL_VALUE
                 }
@@ -212,7 +212,7 @@ internal class ReadingResultTest : FreeSpec() {
                     failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 "then should return a value from a handler" {
-                    val result = original.getOrHandle { ALTERNATIVE_VALUE }
+                    val result = original.getOrElse { ALTERNATIVE_VALUE }
 
                     result shouldBe ALTERNATIVE_VALUE
                 }

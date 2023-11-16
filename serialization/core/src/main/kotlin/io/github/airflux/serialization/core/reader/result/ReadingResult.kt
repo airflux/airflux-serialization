@@ -138,7 +138,7 @@ public fun <T> ReadingResult<T>.getOrNull(): T? = if (isSuccess()) this.value el
 public infix fun <T> ReadingResult<T>.getOrElse(default: T): T = if (isSuccess()) value else default
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.getOrHandle(handler: (ReadingResult.Failure) -> T): T {
+public inline infix fun <T> ReadingResult<T>.getOrElse(handler: (ReadingResult.Failure) -> T): T {
     contract {
         callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
     }
