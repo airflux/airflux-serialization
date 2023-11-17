@@ -19,6 +19,7 @@ package io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 public sealed class ValidationResult {
@@ -44,10 +45,20 @@ public fun ValidationResult.isInvalid(): Boolean {
     return this is ValidationResult.Invalid
 }
 
-public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -> T, ifValid: () -> T): T =
-    if (isValid()) ifValid() else ifInvalid(this.reason)
+@OptIn(ExperimentalContracts::class)
+public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -> T, ifValid: () -> T): T {
+    contract {
+        callsInPlace(ifInvalid, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(ifValid, InvocationKind.AT_MOST_ONCE)
+    }
+    return if (isValid()) ifValid() else ifInvalid(this.reason)
+}
 
+@OptIn(ExperimentalContracts::class)
 public inline fun ValidationResult.ifInvalid(handler: (ReadingResult.Failure) -> Unit) {
+    contract {
+        callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
+    }
     if (this is ValidationResult.Invalid) handler(this.reason)
 }
 
