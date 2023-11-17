@@ -378,7 +378,7 @@ public abstract class io/github/airflux/serialization/core/reader/validation/Val
 
 public final class io/github/airflux/serialization/core/reader/validation/ValidationResult$Invalid : io/github/airflux/serialization/core/reader/validation/ValidationResult {
 	public fun <init> (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;)V
-	public final fun getReason ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
+	public final fun getFailure ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 }
 
 public final class io/github/airflux/serialization/core/reader/validation/ValidationResult$Valid : io/github/airflux/serialization/core/reader/validation/ValidationResult {

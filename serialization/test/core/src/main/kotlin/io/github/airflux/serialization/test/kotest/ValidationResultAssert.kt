@@ -27,5 +27,5 @@ public fun ValidationResult.shouldBeValid() {
 
 public infix fun ValidationResult.shouldBeInvalid(expected: ReadingResult<*>) {
     val actual = this.shouldBeInstanceOf<ValidationResult.Invalid>()
-    actual.reason shouldBe expected
+    actual.failure shouldBe expected
 }

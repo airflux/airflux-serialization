@@ -24,7 +24,7 @@ import kotlin.contracts.contract
 
 public sealed class ValidationResult {
     public object Valid : ValidationResult()
-    public class Invalid(public val reason: ReadingResult.Failure) : ValidationResult()
+    public class Invalid(public val failure: ReadingResult.Failure) : ValidationResult()
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -51,7 +51,7 @@ public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -
         callsInPlace(ifInvalid, InvocationKind.AT_MOST_ONCE)
         callsInPlace(ifValid, InvocationKind.AT_MOST_ONCE)
     }
-    return if (isValid()) ifValid() else ifInvalid(this.reason)
+    return if (isValid()) ifValid() else ifInvalid(failure)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -59,7 +59,7 @@ public inline fun ValidationResult.ifInvalid(handler: (ReadingResult.Failure) ->
     contract {
         callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
     }
-    if (this is ValidationResult.Invalid) handler(this.reason)
+    if (this is ValidationResult.Invalid) handler(failure)
 }
 
 public fun valid(): ValidationResult = ValidationResult.Valid

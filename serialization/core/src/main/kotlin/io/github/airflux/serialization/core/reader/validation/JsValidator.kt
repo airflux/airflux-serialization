@@ -40,7 +40,7 @@ public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>)
         val right = alt.validate(env, context, location, value)
         if (right.isValid()) return@JsValidator valid()
 
-        ValidationResult.Invalid(left.reason + right.reason)
+        ValidationResult.Invalid(left.failure + right.failure)
     }
 }
 
