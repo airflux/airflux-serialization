@@ -389,6 +389,8 @@ public final class io/github/airflux/serialization/core/reader/validation/Valida
 	public static final fun fold (Lio/github/airflux/serialization/core/reader/validation/ValidationResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 	public static final fun ifInvalid (Lio/github/airflux/serialization/core/reader/validation/ValidationResult;Lkotlin/jvm/functions/Function1;)V
 	public static final fun invalid (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
+	public static final fun isInvalid (Lio/github/airflux/serialization/core/reader/validation/ValidationResult;)Z
+	public static final fun isValid (Lio/github/airflux/serialization/core/reader/validation/ValidationResult;)Z
 	public static final fun toInvalid (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;)Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 	public static final fun valid ()Lio/github/airflux/serialization/core/reader/validation/ValidationResult;
 }

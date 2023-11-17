@@ -18,17 +18,34 @@ package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.ReadingResult
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 public sealed class ValidationResult {
     public object Valid : ValidationResult()
     public class Invalid(public val reason: ReadingResult.Failure) : ValidationResult()
 }
 
-public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -> T, ifValid: () -> T): T =
-    when (this) {
-        is ValidationResult.Valid -> ifValid()
-        is ValidationResult.Invalid -> ifInvalid(this.reason)
+@OptIn(ExperimentalContracts::class)
+public fun ValidationResult.isValid(): Boolean {
+    contract {
+        returns(true) implies (this@isValid is ValidationResult.Valid)
+        returns(false) implies (this@isValid is ValidationResult.Invalid)
     }
+    return this is ValidationResult.Valid
+}
+
+@OptIn(ExperimentalContracts::class)
+public fun ValidationResult.isInvalid(): Boolean {
+    contract {
+        returns(false) implies (this@isInvalid is ValidationResult.Valid)
+        returns(true) implies (this@isInvalid is ValidationResult.Invalid)
+    }
+    return this is ValidationResult.Invalid
+}
+
+public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -> T, ifValid: () -> T): T =
+    if (isValid()) ifValid() else ifInvalid(this.reason)
 
 public inline fun ValidationResult.ifInvalid(handler: (ReadingResult.Failure) -> Unit) {
     if (this is ValidationResult.Invalid) handler(this.reason)

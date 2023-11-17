@@ -26,41 +26,93 @@ internal class ValidationResultTest : FreeSpec() {
     init {
         "The ValidationResult type" - {
 
-            "when value is valid" - {
-                val value = valid()
+            "the extension function `isValid`" - {
 
-                "then the fold method should execute the ifValid code block" {
-                    var result = 0
-                    value.fold(
-                        ifValid = { result = 10 },
-                        ifInvalid = { result = 20 }
-                    )
-                    result shouldBe 10
+                "when value is valid" - {
+                    val value = valid()
+
+                    "then should return the true" {
+                        value.isValid() shouldBe true
+                    }
                 }
 
-                "then the ifInvalid method should not do any action" {
-                    var result = false
-                    value.ifInvalid { result = true }
-                    result shouldBe false
+                "when value is invalid" - {
+                    val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
+
+                    "then should return the false" {
+                        value.isValid() shouldBe false
+                    }
                 }
             }
 
-            "when value is invalid" - {
-                val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
+            "the extension function `isInvalid`" - {
 
-                "then the fold method should execute the ifInvalid code block" {
-                    var result = 0
-                    value.fold(
-                        ifValid = { result = 10 },
-                        ifInvalid = { result = 20 }
-                    )
-                    result shouldBe 20
+                "when value is valid" - {
+                    val value = valid()
+
+                    "then should return the false" {
+                        value.isInvalid() shouldBe false
+                    }
                 }
 
-                "then the ifInvalid method should do some action" {
-                    var result = false
-                    value.ifInvalid { result = true }
-                    result shouldBe true
+                "when value is invalid" - {
+                    val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
+
+                    "then should return the true" {
+                        value.isInvalid() shouldBe true
+                    }
+                }
+            }
+
+            "the extension function `fold`" - {
+
+                "when value is valid" - {
+                    val value = valid()
+
+                    "then should be executed the `ifValid` code block" {
+                        var result = 0
+                        value.fold(
+                            ifValid = { result = 10 },
+                            ifInvalid = { result = 20 }
+                        )
+                        result shouldBe 10
+                    }
+                }
+
+                "when value is invalid" - {
+                    val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
+
+                    "then should be executed the `ifInvalid` code block" {
+                        var result = 0
+                        value.fold(
+                            ifValid = { result = 10 },
+                            ifInvalid = { result = 20 }
+                        )
+                        result shouldBe 20
+                    }
+                }
+            }
+
+            "the extension function `ifInvalid`" - {
+
+                "when value is valid" - {
+                    val value = valid()
+
+                    "then the `ifInvalid` method should not do any action" {
+                        var result = false
+                        value.ifInvalid { result = true }
+                        result shouldBe false
+                    }
+                }
+
+                "when value is invalid" - {
+                    val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
+
+                    "then the ifInvalid method should do some action" {
+                        var result = false
+                        value.ifInvalid { result = true }
+                        result shouldBe true
+                    }
                 }
             }
         }
