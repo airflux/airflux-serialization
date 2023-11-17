@@ -34,13 +34,13 @@ public fun interface JsValidator<EB, O, in T> {
 public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>): JsValidator<EB, O, T> {
     val self = this
     return JsValidator { env, context, location, value ->
-        when (val left = self.validate(env, context, location, value)) {
-            is ValidationResult.Valid -> left
-            is ValidationResult.Invalid -> when (val right = alt.validate(env, context, location, value)) {
-                is ValidationResult.Valid -> right
-                is ValidationResult.Invalid -> ValidationResult.Invalid(left.reason + right.reason)
-            }
-        }
+        val left = self.validate(env, context, location, value)
+        if (left.isValid()) return@JsValidator valid()
+
+        val right = alt.validate(env, context, location, value)
+        if (right.isValid()) return@JsValidator valid()
+
+        ValidationResult.Invalid(left.reason + right.reason)
     }
 }
 
@@ -54,9 +54,10 @@ public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>)
 public infix fun <EB, O, T> JsValidator<EB, O, T>.and(alt: JsValidator<EB, O, T>): JsValidator<EB, O, T> {
     val self = this
     return JsValidator { env, context, location, value ->
-        when (val result = self.validate(env, context, location, value)) {
-            is ValidationResult.Valid -> alt.validate(env, context, location, value)
-            is ValidationResult.Invalid -> result
-        }
+        val result = self.validate(env, context, location, value)
+        if (result.isValid())
+            alt.validate(env, context, location, value)
+        else
+            result
     }
 }
