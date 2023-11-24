@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.plus
 
 public fun interface JsValidator<EB, O, in T> {
-    public fun validate(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): ValidationResult
+    public fun validate(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): JsValidatorResult
 }
 
 /*
@@ -41,7 +41,7 @@ public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>)
         val right = alt.validate(env, context, location, value)
         if (right.isValid()) return@JsValidator valid()
 
-        ValidationResult.Invalid(left.failure + right.failure)
+        JsValidatorResult.Invalid(left.failure + right.failure)
     }
 }
 

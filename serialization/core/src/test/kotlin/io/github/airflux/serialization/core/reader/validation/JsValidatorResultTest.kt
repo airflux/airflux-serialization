@@ -21,10 +21,10 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ValidationResultTest : FreeSpec() {
+internal class JsValidatorResultTest : FreeSpec() {
 
     init {
-        "The ValidationResult type" - {
+        "The JsValidatorResult type" - {
 
             "the extension function `isValid`" - {
 

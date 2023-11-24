@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.array.validation
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.value.JsArray
 
 public fun interface ArrayValidator<EB, O> {
@@ -28,7 +28,7 @@ public fun interface ArrayValidator<EB, O> {
         context: JsContext,
         location: JsLocation,
         source: JsArray
-    ): ValidationResult
+    ): JsValidatorResult
 
     public fun interface Builder<EB, O> {
         public fun build(): ArrayValidator<EB, O>

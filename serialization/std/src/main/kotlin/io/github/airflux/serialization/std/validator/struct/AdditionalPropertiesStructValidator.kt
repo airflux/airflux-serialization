@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.toInvalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
@@ -41,7 +41,7 @@ public class AdditionalPropertiesStructValidator<EB, O> internal constructor(
         location: JsLocation,
         properties: StructProperties<EB, O>,
         source: JsStruct
-    ): ValidationResult {
+    ): JsValidatorResult {
         val failFast = env.options.failFast
 
         var failureAccumulator: JsReaderResult.Failure? = null

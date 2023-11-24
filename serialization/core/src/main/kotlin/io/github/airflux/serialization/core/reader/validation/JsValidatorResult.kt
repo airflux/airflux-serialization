@@ -22,31 +22,31 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public sealed class ValidationResult {
-    public object Valid : ValidationResult()
-    public class Invalid(public val failure: JsReaderResult.Failure) : ValidationResult()
+public sealed class JsValidatorResult {
+    public object Valid : JsValidatorResult()
+    public class Invalid(public val failure: JsReaderResult.Failure) : JsValidatorResult()
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun ValidationResult.isValid(): Boolean {
+public fun JsValidatorResult.isValid(): Boolean {
     contract {
-        returns(true) implies (this@isValid is ValidationResult.Valid)
-        returns(false) implies (this@isValid is ValidationResult.Invalid)
+        returns(true) implies (this@isValid is JsValidatorResult.Valid)
+        returns(false) implies (this@isValid is JsValidatorResult.Invalid)
     }
-    return this is ValidationResult.Valid
+    return this is JsValidatorResult.Valid
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun ValidationResult.isInvalid(): Boolean {
+public fun JsValidatorResult.isInvalid(): Boolean {
     contract {
-        returns(false) implies (this@isInvalid is ValidationResult.Valid)
-        returns(true) implies (this@isInvalid is ValidationResult.Invalid)
+        returns(false) implies (this@isInvalid is JsValidatorResult.Valid)
+        returns(true) implies (this@isInvalid is JsValidatorResult.Invalid)
     }
-    return this is ValidationResult.Invalid
+    return this is JsValidatorResult.Invalid
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T> ValidationResult.fold(ifInvalid: (JsReaderResult.Failure) -> T, ifValid: () -> T): T {
+public inline fun <T> JsValidatorResult.fold(ifInvalid: (JsReaderResult.Failure) -> T, ifValid: () -> T): T {
     contract {
         callsInPlace(ifInvalid, InvocationKind.AT_MOST_ONCE)
         callsInPlace(ifValid, InvocationKind.AT_MOST_ONCE)
@@ -55,16 +55,16 @@ public inline fun <T> ValidationResult.fold(ifInvalid: (JsReaderResult.Failure) 
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun ValidationResult.ifInvalid(handler: (JsReaderResult.Failure) -> Unit) {
+public inline fun JsValidatorResult.ifInvalid(handler: (JsReaderResult.Failure) -> Unit) {
     contract {
         callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
     }
-    if (this is ValidationResult.Invalid) handler(failure)
+    if (this is JsValidatorResult.Invalid) handler(failure)
 }
 
-public fun valid(): ValidationResult = ValidationResult.Valid
+public fun valid(): JsValidatorResult = JsValidatorResult.Valid
 
-public fun invalid(location: JsLocation, error: JsReaderResult.Error): ValidationResult =
+public fun invalid(location: JsLocation, error: JsReaderResult.Error): JsValidatorResult =
     JsReaderResult.Failure(location, error).toInvalid()
 
-public fun JsReaderResult.Failure.toInvalid(): ValidationResult = ValidationResult.Invalid(this)
+public fun JsReaderResult.Failure.toInvalid(): JsValidatorResult = JsValidatorResult.Invalid(this)

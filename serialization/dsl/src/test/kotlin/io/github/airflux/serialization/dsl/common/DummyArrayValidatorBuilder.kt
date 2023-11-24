@@ -20,24 +20,24 @@ import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 
-internal class DummyArrayValidatorBuilder<EB, O>(result: ValidationResult) : ArrayValidator.Builder<EB, O> {
+internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : ArrayValidator.Builder<EB, O> {
 
     private val validator = Validator<EB, O>(result)
     override fun build(): ArrayValidator<EB, O> = validator
 
-    internal class Validator<EB, O>(val result: ValidationResult) : ArrayValidator<EB, O> {
+    internal class Validator<EB, O>(val result: JsValidatorResult) : ArrayValidator<EB, O> {
         override fun validate(
             env: JsReaderEnv<EB, O>,
             context: JsContext,
             location: JsLocation,
             source: JsArray
-        ): ValidationResult = result
+        ): JsValidatorResult = result
     }
 
     companion object {

@@ -17,15 +17,15 @@
 package io.github.airflux.serialization.test.kotest
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-public fun ValidationResult.shouldBeValid() {
-    this.shouldBeInstanceOf<ValidationResult.Valid>()
+public fun JsValidatorResult.shouldBeValid() {
+    this.shouldBeInstanceOf<JsValidatorResult.Valid>()
 }
 
-public infix fun ValidationResult.shouldBeInvalid(expected: JsReaderResult<*>) {
-    val actual = this.shouldBeInstanceOf<ValidationResult.Invalid>()
+public infix fun JsValidatorResult.shouldBeInvalid(expected: JsReaderResult<*>) {
+    val actual = this.shouldBeInstanceOf<JsValidatorResult.Invalid>()
     actual.failure shouldBe expected
 }

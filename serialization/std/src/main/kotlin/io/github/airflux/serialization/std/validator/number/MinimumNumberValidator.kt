@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
-import io.github.airflux.serialization.core.reader.validation.ValidationResult
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
@@ -37,7 +37,7 @@ public class MinimumNumberValidator<EB, O, T> internal constructor(
         context: JsContext,
         location: JsLocation,
         value: T
-    ): ValidationResult =
+    ): JsValidatorResult =
         if (value >= expected)
             valid()
         else
