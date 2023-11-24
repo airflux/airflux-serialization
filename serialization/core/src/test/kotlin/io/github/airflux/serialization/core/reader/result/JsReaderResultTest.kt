@@ -34,7 +34,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
-internal class ReadingResultTest : FreeSpec() {
+internal class JsReaderResultTest : FreeSpec() {
 
     companion object {
         private const val ORIGINAL_VALUE = "10"
@@ -47,7 +47,7 @@ internal class ReadingResultTest : FreeSpec() {
 
     init {
 
-        "The `ReadingResult` type" - {
+        "The `JsReaderResult` type" - {
 
             "the extension function `isSuccess`" - {
 

@@ -24,7 +24,7 @@ import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 
-internal class ReadingResultFailureTest : FreeSpec() {
+internal class JsReaderResultFailureTest : FreeSpec() {
 
     companion object {
         private val LOCATION: JsLocation = JsLocation
@@ -32,7 +32,7 @@ internal class ReadingResultFailureTest : FreeSpec() {
 
     init {
 
-        "A ReadingResult#Failure type" - {
+        "A JsReaderResult#Failure type" - {
 
             "constructor(JsLocation, JsError)" {
                 val failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
@@ -45,7 +45,7 @@ internal class ReadingResultFailureTest : FreeSpec() {
                 )
             }
 
-            "constructor(JsLocation, ReadingResult#Errors)" {
+            "constructor(JsLocation, JsReaderResult#Errors)" {
                 val failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 failure.causes.items shouldContainExactly listOf(
@@ -53,7 +53,7 @@ internal class ReadingResultFailureTest : FreeSpec() {
                 )
             }
 
-            "the function ReadingResult#Failure#plus " {
+            "the function JsReaderResult#Failure#plus " {
                 val firstFailure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 val secondFailure = JsReaderResult.Failure(
                     location = LOCATION,

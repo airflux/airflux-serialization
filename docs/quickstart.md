@@ -107,7 +107,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 - Define parsing and validation errors
 
 ```kotlin
-sealed class JsonErrors : ReadingResult.Error {
+sealed class JsonErrors : JsReaderResult.Error {
     object PathMissing : JsonErrors()
     data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()

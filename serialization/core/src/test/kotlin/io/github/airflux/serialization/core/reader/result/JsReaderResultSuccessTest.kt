@@ -16,35 +16,38 @@
 
 package io.github.airflux.serialization.core.reader.result
 
-import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class ReadingResultFailureCauseTest : FreeSpec() {
+internal class JsReaderResultSuccessTest : FreeSpec() {
 
     companion object {
+        private const val ORIGINAL_VALUE = "10"
+        private const val ELSE_VALUE = "20"
+
         private val LOCATION: JsLocation = JsLocation
     }
 
     init {
-        "A ReadingResult#Failure#Cause type" - {
 
-            "constructor(JsLocation, Error)" {
-                val cause = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+        "A JsReaderResult#Success type" - {
 
-                cause.location shouldBe LOCATION
-                cause.error shouldBe JsonErrors.PathMissing
+            "constructor(JsLocation, T)" {
+                val result = JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+
+                result.location shouldBe LOCATION
+                result.value shouldBe ORIGINAL_VALUE
             }
 
             "should comply with equals() and hashCode() contract" {
-                JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
-                    y = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE).shouldBeEqualsContract(
+                    y = JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
                     others = listOf(
-                        JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
-                        JsReaderResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
+                        JsReaderResult.Success(location = LOCATION, value = ELSE_VALUE),
+                        JsReaderResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
                     )
                 )
             }

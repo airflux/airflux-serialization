@@ -3,8 +3,8 @@ public final class io/github/airflux/parser/AirFluxJsonModule : com/fasterxml/ja
 }
 
 public final class io/github/airflux/parser/DeserializationKt {
-	public static final fun deserialization (Ljava/lang/String;Lcom/fasterxml/jackson/databind/ObjectMapper;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
-	public static synthetic fun deserialization$default (Ljava/lang/String;Lcom/fasterxml/jackson/databind/ObjectMapper;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/JsReader;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
+	public static final fun deserialization (Ljava/lang/String;Lcom/fasterxml/jackson/databind/ObjectMapper;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static synthetic fun deserialization$default (Ljava/lang/String;Lcom/fasterxml/jackson/databind/ObjectMapper;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/JsReader;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 }
 
 public final class io/github/airflux/parser/SerializationKt {
