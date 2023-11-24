@@ -25,9 +25,9 @@ import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBui
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.readArray
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsValue
@@ -96,12 +96,13 @@ public class ArrayReader<EB, O, T> private constructor(
         source: JsArray
     ): ReadingResult<List<T>> {
         val failFast = env.options.failFast
-        val failures = mutableListOf<ReadingResult.Failure>()
+        var failureAccumulator: ReadingResult.Failure? = null
 
         validators.forEach { validator ->
             validator.validate(env, context, location, source)
                 .ifInvalid { failure ->
-                    if (failFast) return failure else failures.add(failure)
+                    if (failFast) return failure
+                    failureAccumulator += failure
                 }
         }
 
@@ -109,11 +110,10 @@ public class ArrayReader<EB, O, T> private constructor(
             .fold(
                 ifFailure = { failure ->
                     if (failFast) return failure
-                    failures.add(failure)
-                    failures.merge()
+                    failureAccumulator + failure
                 },
                 ifSuccess = { success ->
-                    if (failures.isNotEmpty()) failures.merge() else success
+                    failureAccumulator ?: success
                 }
             )
     }

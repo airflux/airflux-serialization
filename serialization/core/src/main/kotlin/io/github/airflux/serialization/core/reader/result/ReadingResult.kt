@@ -18,6 +18,9 @@
 
 package io.github.airflux.serialization.core.reader.result
 
+import io.github.airflux.serialization.core.common.NonEmptyList
+import io.github.airflux.serialization.core.common.identity
+import io.github.airflux.serialization.core.common.plus
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -32,47 +35,21 @@ public sealed class ReadingResult<out T> {
 
     public companion object;
 
-    public data class Success<T>(val location: JsLocation, val value: T) : ReadingResult<T>()
+    public data class Success<T>(public val location: JsLocation, public val value: T) : ReadingResult<T>()
 
-    public class Failure private constructor(public val causes: List<Cause>) : ReadingResult<Nothing>() {
+    public data class Failure(public val causes: NonEmptyList<Cause>) : ReadingResult<Nothing>() {
 
-        public constructor(location: JsLocation, error: Error) : this(listOf(Cause(location, error)))
-
-        public constructor(location: JsLocation, errors: Errors) : this(listOf(Cause(location, errors)))
-
-        public operator fun plus(other: Failure): Failure = Failure(this.causes + other.causes)
+        public constructor(location: JsLocation, error: Error) : this(NonEmptyList(Cause(location, error)))
 
         override fun equals(other: Any?): Boolean =
             this === other || (other is Failure && this.causes == other.causes)
 
         override fun hashCode(): Int = causes.hashCode()
 
-        override fun toString(): String = buildString {
-            append("Failure(causes=")
-            append(causes.toString())
-            append(")")
-        }
-
-        public data class Cause(val location: JsLocation, val errors: Errors) {
-            public constructor(location: JsLocation, error: Error) : this(location, Errors(error))
-        }
-
-        public companion object {
-
-            @JvmStatic
-            public fun Collection<Failure>.merge(): Failure = Failure(causes = flatMap { failure -> failure.causes })
-        }
+        public data class Cause(val location: JsLocation, val error: Error)
     }
 
     public interface Error
-
-    @JvmInline
-    public value class Errors private constructor(public val items: List<Error>) {
-
-        public constructor(error: Error) : this(listOf(error))
-
-        public operator fun plus(other: Errors): Errors = Errors(items + other.items)
-    }
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -165,19 +142,11 @@ public fun <EB, O, T> ReadingResult<T>.filter(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     predicate: JsPredicate<EB, O, T & Any>
-): ReadingResult<T?> {
-    return if (isSuccess()) {
-        if (value == null)
-            this
-        else {
-            if (predicate.test(env, context, location, value))
-                this
-            else
-                success(location = location, value = null)
-        }
-    } else
+): ReadingResult<T?> =
+    if (isSuccess() && value != null && !predicate.test(env, context, location, value))
+        success(location = location, value = null)
+    else
         this
-}
 
 public fun <EB, O, T> ReadingResult<T>.validation(
     env: JsReaderEnv<EB, O>,
@@ -186,10 +155,7 @@ public fun <EB, O, T> ReadingResult<T>.validation(
 ): ReadingResult<T> =
     if (isSuccess())
         validator.validate(env, context, location, value)
-            .fold(
-                ifInvalid = { it },
-                ifValid = { this }
-            )
+            .fold(ifInvalid = ::identity, ifValid = { this })
     else
         this
 
@@ -200,6 +166,12 @@ public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): Readi
     }
     return if (isSuccess() && value == null) defaultValue().toSuccess(location) else this
 }
+
+public operator fun ReadingResult.Failure?.plus(other: ReadingResult.Failure): ReadingResult.Failure =
+    if (this != null)
+        ReadingResult.Failure(causes + other.causes)
+    else
+        other
 
 public fun <T> success(location: JsLocation, value: T): ReadingResult<T> =
     ReadingResult.Success(location = location, value = value)

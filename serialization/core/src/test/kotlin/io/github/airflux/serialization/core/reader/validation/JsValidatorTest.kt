@@ -20,8 +20,8 @@ import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
 import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
@@ -75,10 +75,9 @@ internal class JsValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
-                        result shouldBeInvalid listOf(
-                            ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing),
+                        result shouldBeInvalid
+                            ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing) +
                             ReadingResult.Failure(LOCATION, ValidationErrors.InvalidType)
-                        ).merge()
                     }
                 }
             }

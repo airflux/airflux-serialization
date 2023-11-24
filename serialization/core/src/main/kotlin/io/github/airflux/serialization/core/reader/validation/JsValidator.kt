@@ -19,6 +19,7 @@ package io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
+import io.github.airflux.serialization.core.reader.result.plus
 
 public fun interface JsValidator<EB, O, in T> {
     public fun validate(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): ValidationResult

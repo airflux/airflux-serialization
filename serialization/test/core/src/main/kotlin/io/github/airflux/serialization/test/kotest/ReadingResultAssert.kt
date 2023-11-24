@@ -35,5 +35,5 @@ public infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult<*>) {
 
 public fun ReadingResult<*>.shouldBeFailure(vararg expected: ReadingResult.Failure.Cause) {
     val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
-    failure.causes shouldContainExactly expected.toList()
+    failure.causes.items shouldContainExactly expected.toList()
 }

@@ -22,7 +22,6 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.test.dummy.DummyReaderPredicate
@@ -31,7 +30,6 @@ import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -458,7 +456,7 @@ internal class ReadingResultTest : FreeSpec() {
 
             result shouldBeFailure ReadingResult.Failure(
                 location = LOCATION,
-                errors = ReadingResult.Errors(JsonErrors.PathMissing)
+                error = JsonErrors.PathMissing
             )
         }
 
@@ -521,42 +519,6 @@ internal class ReadingResultTest : FreeSpec() {
                         }
                     }
                 }
-            }
-        }
-
-        "The `Collection<Failure>` type" - {
-
-            "the extension function `merge`" {
-                val failures = listOf(
-                    ReadingResult.Failure(location = LOCATION, errors = ReadingResult.Errors(JsonErrors.PathMissing)),
-                    ReadingResult.Failure(
-                        location = LOCATION,
-                        errors = ReadingResult.Errors(
-                            JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsBoolean.nameOfType
-                            )
-                        )
-                    )
-                )
-
-                val failure = failures.merge()
-
-                failure.causes shouldContainExactly listOf(
-                    ReadingResult.Failure.Cause(
-                        location = LOCATION,
-                        errors = ReadingResult.Errors(JsonErrors.PathMissing)
-                    ),
-                    ReadingResult.Failure.Cause(
-                        location = LOCATION,
-                        errors = ReadingResult.Errors(
-                            JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsBoolean.nameOfType
-                            )
-                        )
-                    )
-                )
             }
         }
     }

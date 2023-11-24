@@ -24,6 +24,7 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
 
@@ -45,8 +46,8 @@ public fun <EB, O, T> readArray(
         val currentLocation = location.append(idx)
         itemsReader.read(env, context, currentLocation, elem)
             .fold(
-                ifFailure = { failure -> if (!failFast) acc + failure else return failure },
-                ifSuccess = { success -> acc + success }
+                ifFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
+                ifSuccess = { success -> acc.combine(success) }
             )
     }
 }
@@ -80,12 +81,12 @@ public fun <EB, O, T> readArray(
         if (reader != null) {
             reader.read(env, context, currentLocation, elem)
                 .fold(
-                    ifFailure = { failure -> if (!failFast) acc + failure else return failure },
-                    ifSuccess = { success -> acc + success }
+                    ifFailure = { failure -> if (!failFast) acc.combine(failure) else return failure },
+                    ifSuccess = { success -> acc.combine(success) }
                 )
         } else if (errorIfAdditionalItems) {
             val failure = ReadingResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
-            if (failFast) return failure else acc + failure
+            if (failFast) return failure else acc.combine(failure)
         } else
             acc
     }
@@ -121,13 +122,13 @@ public fun <EB, O, T> readArray(
         getReader(idx, prefixItemReaders, itemsReader)
             .read(env, context, currentLocation, elem)
             .fold(
-                ifFailure = { failure -> if (!failFast) acc + failure else return failure },
-                ifSuccess = { success -> acc + success }
+                ifFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
+                ifSuccess = { success -> acc.combine(success) }
             )
     }
 }
 
-private operator fun <T> ReadingResult<MutableList<T>>.plus(
+private fun <T> ReadingResult<MutableList<T>>.combine(
     result: ReadingResult.Success<T>
 ): ReadingResult<MutableList<T>> =
     fold(
@@ -135,7 +136,7 @@ private operator fun <T> ReadingResult<MutableList<T>>.plus(
         ifSuccess = { success -> success.apply { value += result.value } }
     )
 
-private operator fun <T> ReadingResult<MutableList<T>>.plus(
+private fun <T> ReadingResult<MutableList<T>>.combine(
     result: ReadingResult.Failure
 ): ReadingResult<MutableList<T>> =
     fold(

@@ -25,6 +25,7 @@ import io.github.airflux.serialization.core.reader.result.ReadingResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.map
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.validation

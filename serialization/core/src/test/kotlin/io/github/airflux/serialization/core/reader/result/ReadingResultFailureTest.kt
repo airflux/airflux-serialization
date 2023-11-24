@@ -37,51 +37,44 @@ internal class ReadingResultFailureTest : FreeSpec() {
             "constructor(JsLocation, JsError)" {
                 val failure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                failure.causes shouldContainExactly listOf(
+                failure.causes.items shouldContainExactly listOf(
                     ReadingResult.Failure.Cause(
                         location = LOCATION,
-                        errors = ReadingResult.Errors(JsonErrors.PathMissing)
+                        error = JsonErrors.PathMissing
                     )
                 )
             }
 
             "constructor(JsLocation, ReadingResult#Errors)" {
-                val errors = ReadingResult.Errors(JsonErrors.PathMissing)
+                val failure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                val failure = ReadingResult.Failure(location = LOCATION, errors = errors)
-
-                failure.causes shouldContainExactly listOf(
-                    ReadingResult.Failure.Cause(location = LOCATION, errors = errors)
+                failure.causes.items shouldContainExactly listOf(
+                    ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
                 )
             }
 
             "the function ReadingResult#Failure#plus " {
-                val firstFailure =
-                    ReadingResult.Failure(location = LOCATION, errors = ReadingResult.Errors(JsonErrors.PathMissing))
+                val firstFailure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
                 val secondFailure = ReadingResult.Failure(
                     location = LOCATION,
-                    errors = ReadingResult.Errors(
-                        JsonErrors.InvalidType(
-                            expected = listOf(JsString.nameOfType),
-                            actual = JsBoolean.nameOfType
-                        )
+                    error = JsonErrors.InvalidType(
+                        expected = listOf(JsString.nameOfType),
+                        actual = JsBoolean.nameOfType
                     )
                 )
 
                 val failure = firstFailure + secondFailure
 
-                failure.causes shouldContainExactly listOf(
+                failure.causes.items shouldContainExactly listOf(
                     ReadingResult.Failure.Cause(
                         location = LOCATION,
-                        errors = ReadingResult.Errors(JsonErrors.PathMissing)
+                        error = JsonErrors.PathMissing
                     ),
                     ReadingResult.Failure.Cause(
                         location = LOCATION,
-                        errors = ReadingResult.Errors(
-                            JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsBoolean.nameOfType
-                            )
+                        error = JsonErrors.InvalidType(
+                            expected = listOf(JsString.nameOfType),
+                            actual = JsBoolean.nameOfType
                         )
                     )
                 )

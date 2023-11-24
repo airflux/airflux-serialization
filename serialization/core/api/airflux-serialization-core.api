@@ -10,6 +10,41 @@ public final class io/github/airflux/serialization/core/common/IdentityKt {
 	public static final fun identity (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
+public final class io/github/airflux/serialization/core/common/NonEmptyList {
+	public static final field Companion Lio/github/airflux/serialization/core/common/NonEmptyList$Companion;
+	public static final fun add-G-AljhI (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
+	public static final fun addAll-G-AljhI (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final fun addAll-aF1CD50 (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/serialization/core/common/NonEmptyList;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
+	public final fun getItems ()Ljava/util/List;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/List;)I
+	public static final fun invoke-W6Hq0XY (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
+	public static final fun invoke-W6Hq0XY (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/util/List;
+	public static final fun invoke-cr98ui8 (Ljava/util/List;)Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/List;
+}
+
+public final class io/github/airflux/serialization/core/common/NonEmptyList$Companion {
+	public final fun add-G-AljhI (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
+	public final fun addAll-G-AljhI (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public final fun addAll-aF1CD50 (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public final fun invoke-W6Hq0XY (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
+	public final fun invoke-W6Hq0XY (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/util/List;
+	public final fun invoke-cr98ui8 (Ljava/util/List;)Ljava/util/List;
+}
+
+public final class io/github/airflux/serialization/core/common/NonEmptyListKt {
+	public static final fun plus-YU4y0zU (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+	public static final fun plus-rOXLWbo (Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
+	public static final fun plus-rOXLWbo (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
+}
+
 public abstract class io/github/airflux/serialization/core/context/JsAbstractContextElement : io/github/airflux/serialization/core/context/JsContext$Element {
 	public fun <init> (Lio/github/airflux/serialization/core/context/JsContext$Key;)V
 	public fun getKey ()Lio/github/airflux/serialization/core/context/JsContext$Key;
@@ -283,50 +318,29 @@ public final class io/github/airflux/serialization/core/reader/result/ReadingRes
 public abstract interface class io/github/airflux/serialization/core/reader/result/ReadingResult$Error {
 }
 
-public final class io/github/airflux/serialization/core/reader/result/ReadingResult$Errors {
-	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Errors;
-	public static fun constructor-impl (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;)Ljava/util/List;
-	public fun equals (Ljava/lang/Object;)Z
-	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
-	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
-	public final fun getItems ()Ljava/util/List;
-	public fun hashCode ()I
-	public static fun hashCode-impl (Ljava/util/List;)I
-	public static final fun plus-SRRFfEo (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
-	public fun toString ()Ljava/lang/String;
-	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
-	public final synthetic fun unbox-impl ()Ljava/util/List;
-}
-
 public final class io/github/airflux/serialization/core/reader/result/ReadingResult$Failure : io/github/airflux/serialization/core/reader/result/ReadingResult {
-	public static final field Companion Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Companion;
 	public fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;)V
-	public synthetic fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1--dOfQY0 ()Ljava/util/List;
+	public final fun copy-GdiUGCg (Ljava/util/List;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
+	public static synthetic fun copy-GdiUGCg$default (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;Ljava/util/List;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCauses ()Ljava/util/List;
+	public final fun getCauses--dOfQY0 ()Ljava/util/List;
 	public fun hashCode ()I
-	public static final fun merge (Ljava/util/Collection;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
-	public final fun plus (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause {
 	public fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;)V
-	public synthetic fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lio/github/airflux/serialization/core/location/JsLocation;
-	public final fun component2-wdPwT5k ()Ljava/util/List;
-	public final fun copy-xwrldvs (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause;
-	public static synthetic fun copy-xwrldvs$default (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause;
+	public final fun component2 ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
+	public final fun copy (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Cause;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getErrors-wdPwT5k ()Ljava/util/List;
+	public final fun getError ()Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;
 	public final fun getLocation ()Lio/github/airflux/serialization/core/location/JsLocation;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/airflux/serialization/core/reader/result/ReadingResult$Failure$Companion {
-	public final fun merge (Ljava/util/Collection;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 }
 
 public final class io/github/airflux/serialization/core/reader/result/ReadingResult$Success : io/github/airflux/serialization/core/reader/result/ReadingResult {
@@ -356,6 +370,7 @@ public final class io/github/airflux/serialization/core/reader/result/ReadingRes
 	public static final fun map (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun orElse (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun orThrow (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static final fun plus (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;)Lio/github/airflux/serialization/core/reader/result/ReadingResult$Failure;
 	public static final fun recovery (Lio/github/airflux/serialization/core/reader/result/ReadingResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun success (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;
 	public static final fun toFailure (Lio/github/airflux/serialization/core/reader/result/ReadingResult$Error;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/ReadingResult;

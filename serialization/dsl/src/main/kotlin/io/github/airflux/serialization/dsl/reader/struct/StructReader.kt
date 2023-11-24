@@ -23,9 +23,9 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
@@ -82,12 +82,13 @@ public class StructReader<EB, O, T> private constructor(
         source: JsStruct
     ): ReadingResult<T> {
         val failFast = env.options.failFast
-        val failures = mutableListOf<ReadingResult.Failure>()
+        var failureAccumulator: ReadingResult.Failure? = null
 
         validators.forEach { validator ->
             validator.validate(env, context, location, properties, source)
                 .ifInvalid { failure ->
-                    if (failFast) return failure else failures.add(failure)
+                    if (failFast) return failure
+                    failureAccumulator += failure
                 }
         }
 
@@ -97,7 +98,8 @@ public class StructReader<EB, O, T> private constructor(
                     property.read(env, context, location, source)
                         .fold(
                             ifFailure = { failure ->
-                                if (failFast) return failure else failures.add(failure)
+                                if (failFast) return failure
+                                failureAccumulator += failure
                             },
                             ifSuccess = { success ->
                                 this[property] = success.value
@@ -106,10 +108,7 @@ public class StructReader<EB, O, T> private constructor(
                 }
             }
 
-        return if (failures.isEmpty())
-            resultBuilder(propertyValues, env, context, location)
-        else
-            failures.merge()
+        return failureAccumulator ?: resultBuilder(propertyValues, env, context, location)
     }
 
     @AirfluxMarker

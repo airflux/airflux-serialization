@@ -24,8 +24,8 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
 import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
@@ -132,16 +132,15 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
 
-                        result shouldBeInvalid listOf(
+                        result shouldBeInvalid
                             ReadingResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
-                            ),
+                            ) +
                             ReadingResult.Failure(
                                 location = LOCATION.append(NAME_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
-                        ).merge()
                     }
                 }
             }

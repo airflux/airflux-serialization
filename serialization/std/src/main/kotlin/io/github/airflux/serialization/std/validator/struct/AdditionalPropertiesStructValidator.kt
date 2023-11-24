@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.result.ReadingResult
-import io.github.airflux.serialization.core.reader.result.ReadingResult.Failure.Companion.merge
+import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.toInvalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -44,16 +44,17 @@ public class AdditionalPropertiesStructValidator<EB, O> internal constructor(
     ): ValidationResult {
         val failFast = env.options.failFast
 
-        val failures = mutableListOf<ReadingResult.Failure>()
+        var failureAccumulator: ReadingResult.Failure? = null
         source.forEach { (name, _) ->
             if (name !in names) {
                 val failure =
                     ReadingResult.Failure(location.append(name), env.errorBuilders.additionalPropertiesStructError())
-                if (failFast) return failure.toInvalid() else failures.add(failure)
+                if (failFast) return failure.toInvalid()
+                failureAccumulator += failure
             }
         }
 
-        return if (failures.isEmpty()) valid() else failures.merge().toInvalid()
+        return failureAccumulator?.toInvalid() ?: valid()
     }
 
     public fun interface ErrorBuilder {
