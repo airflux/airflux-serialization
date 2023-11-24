@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
@@ -240,14 +240,14 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                             "then the reader should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                                 result.shouldBeFailure(
-                                    ReadingResult.Failure.Cause(
+                                    JsReaderResult.Failure.Cause(
                                         location = LOCATION,
                                         error = JsonErrors.Validation.Arrays.MinItems(
                                             expected = MIN_ITEMS,
                                             actual = source.size
                                         )
                                     ),
-                                    ReadingResult.Failure.Cause(
+                                    JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(0),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(JsString.nameOfType),
@@ -378,11 +378,11 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                             "then should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                                 result.shouldBeFailure(
-                                    ReadingResult.Failure.Cause(
+                                    JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.AdditionalItems
                                     ),
-                                    ReadingResult.Failure.Cause(
+                                    JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(3),
                                         error = JsonErrors.AdditionalItems
                                     )
@@ -397,9 +397,9 @@ internal class ArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
     internal class EB : AdditionalItemsErrorBuilder,
                         InvalidTypeErrorBuilder {
-        override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
+        override fun additionalItemsError(): JsReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 

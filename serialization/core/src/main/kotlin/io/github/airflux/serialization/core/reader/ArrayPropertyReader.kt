@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.result.success
@@ -38,10 +38,10 @@ public fun <EB, O, T> readArray(
     location: JsLocation,
     source: JsArray,
     itemsReader: JsReader<EB, O, T>
-): ReadingResult<List<T>>
+): JsReaderResult<List<T>>
     where O : FailFastOption {
     val failFast = env.options.failFast
-    val initial: ReadingResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
+    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         itemsReader.read(env, context, currentLocation, elem)
@@ -66,7 +66,7 @@ public fun <EB, O, T> readArray(
     source: JsArray,
     prefixItemReaders: List<JsReader<EB, O, T>>,
     errorIfAdditionalItems: Boolean
-): ReadingResult<List<T>>
+): JsReaderResult<List<T>>
     where EB : AdditionalItemsErrorBuilder,
           O : FailFastOption {
 
@@ -74,7 +74,7 @@ public fun <EB, O, T> readArray(
         prefixItems.getOrNull(idx)
 
     val failFast = env.options.failFast
-    val initial: ReadingResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
+    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         val reader = getReader(idx, prefixItemReaders)
@@ -85,7 +85,7 @@ public fun <EB, O, T> readArray(
                     ifSuccess = { success -> acc.combine(success) }
                 )
         } else if (errorIfAdditionalItems) {
-            val failure = ReadingResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
+            val failure = JsReaderResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
             if (failFast) return failure else acc.combine(failure)
         } else
             acc
@@ -105,7 +105,7 @@ public fun <EB, O, T> readArray(
     source: JsArray,
     prefixItemReaders: List<JsReader<EB, O, T>>,
     itemsReader: JsReader<EB, O, T>
-): ReadingResult<List<T>>
+): JsReaderResult<List<T>>
     where O : FailFastOption {
 
     fun <EB, O, T> getReader(
@@ -116,7 +116,7 @@ public fun <EB, O, T> readArray(
         if (idx < prefixItemReaders.size) prefixItemReaders[idx] else itemsReader
 
     val failFast = env.options.failFast
-    val initial: ReadingResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
+    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItemReaders, itemsReader)
@@ -128,17 +128,17 @@ public fun <EB, O, T> readArray(
     }
 }
 
-private fun <T> ReadingResult<MutableList<T>>.combine(
-    result: ReadingResult.Success<T>
-): ReadingResult<MutableList<T>> =
+private fun <T> JsReaderResult<MutableList<T>>.combine(
+    result: JsReaderResult.Success<T>
+): JsReaderResult<MutableList<T>> =
     fold(
         ifFailure = ::identity,
         ifSuccess = { success -> success.apply { value += result.value } }
     )
 
-private fun <T> ReadingResult<MutableList<T>>.combine(
-    result: ReadingResult.Failure
-): ReadingResult<MutableList<T>> =
+private fun <T> JsReaderResult<MutableList<T>>.combine(
+    result: JsReaderResult.Failure
+): JsReaderResult<MutableList<T>> =
     fold(
         ifFailure = { failure -> failure + result },
         ifSuccess = { result }

@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsBoolean
@@ -30,17 +30,17 @@ import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 
 public class DummyReader<EB, O, T>(
-    public val result: (JsReaderEnv<EB, O>, context: JsContext, JsLocation, JsValue) -> ReadingResult<T>
+    public val result: (JsReaderEnv<EB, O>, context: JsContext, JsLocation, JsValue) -> JsReaderResult<T>
 ) : JsReader<EB, O, T> {
 
-    public constructor(result: ReadingResult<T>) : this({ _, _, _, _ -> result })
+    public constructor(result: JsReaderResult<T>) : this({ _, _, _, _ -> result })
 
     override fun read(
         env: JsReaderEnv<EB, O>,
         context: JsContext,
         location: JsLocation,
         source: JsValue
-    ): ReadingResult<T> =
+    ): JsReaderResult<T> =
         result(env, context, location, source)
 
     public companion object {

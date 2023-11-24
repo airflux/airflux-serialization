@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
@@ -34,7 +34,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation.append("user")
-        private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, String) -> ReadingResult<Int> =
+        private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, String) -> JsReaderResult<Int> =
             { _, _, location, text ->
                 success(location = location, value = text.toInt())
             }
@@ -69,7 +69,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

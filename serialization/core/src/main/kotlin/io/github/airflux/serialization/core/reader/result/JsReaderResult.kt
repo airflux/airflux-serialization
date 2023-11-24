@@ -31,13 +31,13 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-public sealed class ReadingResult<out T> {
+public sealed class JsReaderResult<out T> {
 
     public companion object;
 
-    public data class Success<T>(public val location: JsLocation, public val value: T) : ReadingResult<T>()
+    public data class Success<T>(public val location: JsLocation, public val value: T) : JsReaderResult<T>()
 
-    public data class Failure(public val causes: NonEmptyList<Cause>) : ReadingResult<Nothing>() {
+    public data class Failure(public val causes: NonEmptyList<Cause>) : JsReaderResult<Nothing>() {
 
         public constructor(location: JsLocation, error: Error) : this(NonEmptyList(Cause(location, error)))
 
@@ -53,25 +53,25 @@ public sealed class ReadingResult<out T> {
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <T> ReadingResult<T>.isSuccess(): Boolean {
+public fun <T> JsReaderResult<T>.isSuccess(): Boolean {
     contract {
-        returns(true) implies (this@isSuccess is ReadingResult.Success<T>)
-        returns(false) implies (this@isSuccess is ReadingResult.Failure)
+        returns(true) implies (this@isSuccess is JsReaderResult.Success<T>)
+        returns(false) implies (this@isSuccess is JsReaderResult.Failure)
     }
-    return this is ReadingResult.Success<T>
+    return this is JsReaderResult.Success<T>
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <T> ReadingResult<T>.isError(): Boolean {
+public fun <T> JsReaderResult<T>.isError(): Boolean {
     contract {
-        returns(false) implies (this@isError is ReadingResult.Success<T>)
-        returns(true) implies (this@isError is ReadingResult.Failure)
+        returns(false) implies (this@isError is JsReaderResult.Success<T>)
+        returns(true) implies (this@isError is JsReaderResult.Failure)
     }
-    return this is ReadingResult.Failure
+    return this is JsReaderResult.Failure
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): ReadingResult<R> {
+public inline infix fun <T, R> JsReaderResult<T>.map(transform: (T) -> R): JsReaderResult<R> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
@@ -79,9 +79,9 @@ public inline infix fun <T, R> ReadingResult<T>.map(transform: (T) -> R): Readin
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T, R> ReadingResult<T>.bind(
-    transform: (location: JsLocation, value: T) -> ReadingResult<R>
-): ReadingResult<R> {
+public inline infix fun <T, R> JsReaderResult<T>.bind(
+    transform: (location: JsLocation, value: T) -> JsReaderResult<R>
+): JsReaderResult<R> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
@@ -89,9 +89,9 @@ public inline infix fun <T, R> ReadingResult<T>.bind(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T, R> ReadingResult<T>.fold(
-    ifFailure: (ReadingResult.Failure) -> R,
-    ifSuccess: (ReadingResult.Success<T>) -> R
+public inline fun <T, R> JsReaderResult<T>.fold(
+    ifFailure: (JsReaderResult.Failure) -> R,
+    ifSuccess: (JsReaderResult.Success<T>) -> R
 ): R {
     contract {
         callsInPlace(ifFailure, InvocationKind.AT_MOST_ONCE)
@@ -101,21 +101,21 @@ public inline fun <T, R> ReadingResult<T>.fold(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.recovery(
-    function: (ReadingResult.Failure) -> ReadingResult<T>
-): ReadingResult<T> {
+public inline infix fun <T> JsReaderResult<T>.recovery(
+    function: (JsReaderResult.Failure) -> JsReaderResult<T>
+): JsReaderResult<T> {
     contract {
         callsInPlace(function, InvocationKind.AT_MOST_ONCE)
     }
     return if (isSuccess()) this else function(this)
 }
 
-public fun <T> ReadingResult<T>.getOrNull(): T? = if (isSuccess()) this.value else null
+public fun <T> JsReaderResult<T>.getOrNull(): T? = if (isSuccess()) this.value else null
 
-public infix fun <T> ReadingResult<T>.getOrElse(default: T): T = if (isSuccess()) value else default
+public infix fun <T> JsReaderResult<T>.getOrElse(default: T): T = if (isSuccess()) value else default
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.getOrElse(handler: (ReadingResult.Failure) -> T): T {
+public inline infix fun <T> JsReaderResult<T>.getOrElse(handler: (JsReaderResult.Failure) -> T): T {
     contract {
         callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
     }
@@ -123,7 +123,7 @@ public inline infix fun <T> ReadingResult<T>.getOrElse(handler: (ReadingResult.F
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.orElse(default: () -> ReadingResult<T>): ReadingResult<T> {
+public inline infix fun <T> JsReaderResult<T>.orElse(default: () -> JsReaderResult<T>): JsReaderResult<T> {
     contract {
         callsInPlace(default, InvocationKind.AT_MOST_ONCE)
     }
@@ -131,28 +131,28 @@ public inline infix fun <T> ReadingResult<T>.orElse(default: () -> ReadingResult
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline infix fun <T> ReadingResult<T>.orThrow(exceptionBuilder: (ReadingResult.Failure) -> Throwable): T {
+public inline infix fun <T> JsReaderResult<T>.orThrow(exceptionBuilder: (JsReaderResult.Failure) -> Throwable): T {
     contract {
         callsInPlace(exceptionBuilder, InvocationKind.AT_MOST_ONCE)
     }
     return if (isSuccess()) value else throw exceptionBuilder(this)
 }
 
-public fun <EB, O, T> ReadingResult<T>.filter(
+public fun <EB, O, T> JsReaderResult<T>.filter(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     predicate: JsPredicate<EB, O, T & Any>
-): ReadingResult<T?> =
+): JsReaderResult<T?> =
     if (isSuccess() && value != null && !predicate.test(env, context, location, value))
         success(location = location, value = null)
     else
         this
 
-public fun <EB, O, T> ReadingResult<T>.validation(
+public fun <EB, O, T> JsReaderResult<T>.validation(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     validator: JsValidator<EB, O, T>
-): ReadingResult<T> =
+): JsReaderResult<T> =
     if (isSuccess())
         validator.validate(env, context, location, value)
             .fold(ifInvalid = ::identity, ifValid = { this })
@@ -160,28 +160,28 @@ public fun <EB, O, T> ReadingResult<T>.validation(
         this
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T> ReadingResult<T>.ifNullValue(defaultValue: () -> T): ReadingResult<T> {
+public inline fun <T> JsReaderResult<T>.ifNullValue(defaultValue: () -> T): JsReaderResult<T> {
     contract {
         callsInPlace(defaultValue, InvocationKind.AT_MOST_ONCE)
     }
     return if (isSuccess() && value == null) defaultValue().toSuccess(location) else this
 }
 
-public operator fun ReadingResult.Failure?.plus(other: ReadingResult.Failure): ReadingResult.Failure =
+public operator fun JsReaderResult.Failure?.plus(other: JsReaderResult.Failure): JsReaderResult.Failure =
     if (this != null)
-        ReadingResult.Failure(causes + other.causes)
+        JsReaderResult.Failure(causes + other.causes)
     else
         other
 
-public fun <T> success(location: JsLocation, value: T): ReadingResult<T> =
-    ReadingResult.Success(location = location, value = value)
+public fun <T> success(location: JsLocation, value: T): JsReaderResult<T> =
+    JsReaderResult.Success(location = location, value = value)
 
-public fun <E : ReadingResult.Error> failure(location: JsLocation, error: E): ReadingResult<Nothing> =
-    ReadingResult.Failure(location = location, error = error)
+public fun <E : JsReaderResult.Error> failure(location: JsLocation, error: E): JsReaderResult<Nothing> =
+    JsReaderResult.Failure(location = location, error = error)
 
-public fun <T> T.toSuccess(location: JsLocation): ReadingResult<T> = success(location = location, value = this)
+public fun <T> T.toSuccess(location: JsLocation): JsReaderResult<T> = success(location = location, value = this)
 
-public fun <E : ReadingResult.Error> E.toFailure(location: JsLocation): ReadingResult<Nothing> =
+public fun <E : JsReaderResult.Error> E.toFailure(location: JsLocation): JsReaderResult<Nothing> =
     failure(location = location, error = this)
 
 /**
@@ -193,8 +193,8 @@ public fun <E : ReadingResult.Error> E.toFailure(location: JsLocation): ReadingR
 public inline fun <EB, O, T> withCatching(
     env: JsReaderEnv<EB, O>,
     location: JsLocation,
-    block: () -> ReadingResult<T>
-): ReadingResult<T> {
+    block: () -> JsReaderResult<T>
+): JsReaderResult<T> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }

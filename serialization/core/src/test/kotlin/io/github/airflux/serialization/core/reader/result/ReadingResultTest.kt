@@ -52,7 +52,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `isSuccess`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return the true" {
                         original.isSuccess() shouldBe true
@@ -60,7 +60,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> =
+                    val original: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the false" {
@@ -72,7 +72,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `isError`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return the false" {
                         original.isError() shouldBe false
@@ -80,7 +80,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> =
+                    val original: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the true" {
@@ -92,7 +92,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `fold`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
                         val result = original.fold(ifFailure = { ALTERNATIVE_VALUE }, ifSuccess = { it.value })
@@ -102,7 +102,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> =
+                    val original: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the null value" {
@@ -116,7 +116,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `map`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a result of applying the [transform] function to the value" {
                         val result = original.map { it.toInt() }
@@ -126,7 +126,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val original: JsReaderResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return an original do not apply the [transform] function to a value" {
                         val result = original.map { it.toInt() }
@@ -139,7 +139,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `bind`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a result of applying the [transform] function to the value" {
                         val result = original.bind { location, value ->
@@ -151,7 +151,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val original: JsReaderResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return an original do not apply the [transform] function to a value" {
                         val result = original.bind { location, value ->
@@ -166,7 +166,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `recovery`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return an original value" {
                         val result =
@@ -177,7 +177,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> =
+                    val original: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the result of invoking the recovery function" {
@@ -192,7 +192,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `getOrNull`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
                         val result = original.getOrNull()
@@ -202,7 +202,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val original: JsReaderResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the null value" {
                         val result = original.getOrNull()
@@ -215,7 +215,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `getOrElse`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
                         val result = original.getOrElse(ALTERNATIVE_VALUE)
@@ -225,7 +225,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val original: JsReaderResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the defaultValue value" {
                         val result = original.getOrElse(ALTERNATIVE_VALUE)
@@ -238,7 +238,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `getOrElse` with lambda" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
                         val result = original.getOrElse { ALTERNATIVE_VALUE }
@@ -248,7 +248,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> =
+                    val original: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return a value from a handler" {
@@ -262,10 +262,10 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `orElse`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
-                        val elseResult: ReadingResult<String> = success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                        val elseResult: JsReaderResult<String> = success(location = LOCATION, value = ALTERNATIVE_VALUE)
 
                         val result = original.orElse { elseResult }
 
@@ -274,10 +274,10 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val original: JsReaderResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the defaultValue value" {
-                        val elseResult: ReadingResult<String> = success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                        val elseResult: JsReaderResult<String> = success(location = LOCATION, value = ALTERNATIVE_VALUE)
 
                         val result = original.orElse { elseResult }
 
@@ -289,7 +289,7 @@ internal class ReadingResultTest : FreeSpec() {
             "the extension function `orThrow`" - {
 
                 "when result is success" - {
-                    val original: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                    val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
                         val result = original.orThrow { throw IllegalStateException() }
@@ -299,7 +299,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val original: ReadingResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
+                    val original: JsReaderResult<String> = failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return an exception" {
                         shouldThrow<IllegalStateException> {
@@ -316,7 +316,7 @@ internal class ReadingResultTest : FreeSpec() {
                     "when the value in the result is not null" - {
 
                         "when the value satisfies the predicate" - {
-                            val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                            val result: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
@@ -326,7 +326,7 @@ internal class ReadingResultTest : FreeSpec() {
                         }
 
                         "when the value does not satisfy the predicate" - {
-                            val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                            val result: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                             "then filter should return null" {
@@ -337,7 +337,7 @@ internal class ReadingResultTest : FreeSpec() {
                     }
 
                     "when the value in the result is null" - {
-                        val result: ReadingResult<String?> = success(location = LOCATION, value = null)
+                        val result: JsReaderResult<String?> = success(location = LOCATION, value = null)
                         val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
@@ -350,7 +350,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val result: ReadingResult<String> = failure(
+                    val result: JsReaderResult<String> = failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(JsString.nameOfType),
@@ -374,7 +374,7 @@ internal class ReadingResultTest : FreeSpec() {
                 "when result is success" - {
 
                     "when the value does not contain a valid value" - {
-                        val result: ReadingResult<String> = success(location = LOCATION, value = "")
+                        val result: JsReaderResult<String> = success(location = LOCATION, value = "")
 
                         "then validator should return an error" {
                             val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
@@ -387,7 +387,7 @@ internal class ReadingResultTest : FreeSpec() {
                     }
 
                     "when the value contains a valid value" - {
-                        val result: ReadingResult<String> = success(location = LOCATION, value = "user")
+                        val result: JsReaderResult<String> = success(location = LOCATION, value = "user")
 
                         "then validator should return the original value" {
                             val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
@@ -397,7 +397,7 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val result: ReadingResult<String> =
+                    val result: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then validator should return the original value" {
@@ -412,20 +412,20 @@ internal class ReadingResultTest : FreeSpec() {
                 "when result is success" - {
 
                     "when the value is not null" - {
-                        val result: ReadingResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
+                        val result: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                         "then the method should return the original value" {
-                            val alternative: ReadingResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
+                            val alternative: JsReaderResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
 
                             alternative shouldBeSameInstanceAs result
                         }
                     }
 
                     "when the value is null" - {
-                        val result: ReadingResult<String?> = success(location = LOCATION, value = null)
+                        val result: JsReaderResult<String?> = success(location = LOCATION, value = null)
 
                         "then the method should return the default value" {
-                            val alternative: ReadingResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
+                            val alternative: JsReaderResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
 
                             alternative shouldBeSuccess success(location = LOCATION, value = ALTERNATIVE_VALUE)
                         }
@@ -433,11 +433,11 @@ internal class ReadingResultTest : FreeSpec() {
                 }
 
                 "when result is failure" - {
-                    val result: ReadingResult<String> =
+                    val result: JsReaderResult<String> =
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then the method should return the original value" {
-                        val alternative: ReadingResult<String> = result.ifNullValue { ALTERNATIVE_VALUE }
+                        val alternative: JsReaderResult<String> = result.ifNullValue { ALTERNATIVE_VALUE }
 
                         alternative shouldBeSameInstanceAs result
                     }
@@ -448,13 +448,13 @@ internal class ReadingResultTest : FreeSpec() {
         "the extension function `toSuccess`" {
             val result = ORIGINAL_VALUE.toSuccess(LOCATION)
 
-            result shouldBeSuccess ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+            result shouldBeSuccess JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
         "the extension function `E#toFailure`" {
             val result = JsonErrors.PathMissing.toFailure(LOCATION)
 
-            result shouldBeFailure ReadingResult.Failure(
+            result shouldBeFailure JsReaderResult.Failure(
                 location = LOCATION,
                 error = JsonErrors.PathMissing
             )
@@ -463,7 +463,7 @@ internal class ReadingResultTest : FreeSpec() {
         "the function `withCatching`" - {
 
             "when no exception is thrown in the block" - {
-                val block: () -> ReadingResult<String> = { ORIGINAL_VALUE.toSuccess(LOCATION) }
+                val block: () -> JsReaderResult<String> = { ORIGINAL_VALUE.toSuccess(LOCATION) }
 
                 "when the context contains the exceptions handler" - {
                     val env = JsReaderEnv(
@@ -486,7 +486,7 @@ internal class ReadingResultTest : FreeSpec() {
             }
 
             "when an exception is thrown in the block" - {
-                val block: () -> ReadingResult<String> = { throw IllegalStateException() }
+                val block: () -> JsReaderResult<String> = { throw IllegalStateException() }
 
                 "when the context contains the exceptions handler" - {
                     val env = JsReaderEnv(
@@ -524,7 +524,7 @@ internal class ReadingResultTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

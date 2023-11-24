@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.array
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -43,6 +43,6 @@ public class MinItemsArrayValidator<EB, O> internal constructor(
             valid()
 
     public fun interface ErrorBuilder {
-        public fun minItemsArrayError(expected: Int, actual: Int): ReadingResult.Error
+        public fun minItemsArrayError(expected: Int, actual: Int): JsReaderResult.Error
     }
 }

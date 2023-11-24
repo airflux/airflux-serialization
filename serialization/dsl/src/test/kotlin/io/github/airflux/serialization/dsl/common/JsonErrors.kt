@@ -16,9 +16,9 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 
-internal sealed class JsonErrors : ReadingResult.Error {
+internal sealed class JsonErrors : JsReaderResult.Error {
 
     object PathMissing : JsonErrors()
 

@@ -16,24 +16,24 @@
 
 package io.github.airflux.serialization.test.kotest
 
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-public infix fun <T> ReadingResult<T?>.shouldBeSuccess(expected: ReadingResult<T?>) {
-    val actualResult = this.shouldBeInstanceOf<ReadingResult.Success<T>>()
-    val expectedResult = expected.shouldBeInstanceOf<ReadingResult.Success<T>>()
+public infix fun <T> JsReaderResult<T?>.shouldBeSuccess(expected: JsReaderResult<T?>) {
+    val actualResult = this.shouldBeInstanceOf<JsReaderResult.Success<T>>()
+    val expectedResult = expected.shouldBeInstanceOf<JsReaderResult.Success<T>>()
     actualResult shouldBe expectedResult
 }
 
-public infix fun ReadingResult<*>.shouldBeFailure(expected: ReadingResult<*>) {
-    val actualFailure = this.shouldBeInstanceOf<ReadingResult.Failure>()
-    val expectedFailure = expected.shouldBeInstanceOf<ReadingResult.Failure>()
+public infix fun JsReaderResult<*>.shouldBeFailure(expected: JsReaderResult<*>) {
+    val actualFailure = this.shouldBeInstanceOf<JsReaderResult.Failure>()
+    val expectedFailure = expected.shouldBeInstanceOf<JsReaderResult.Failure>()
     actualFailure shouldBe expectedFailure
 }
 
-public fun ReadingResult<*>.shouldBeFailure(vararg expected: ReadingResult.Failure.Cause) {
-    val failure = this.shouldBeInstanceOf<ReadingResult.Failure>()
+public fun JsReaderResult<*>.shouldBeFailure(vararg expected: JsReaderResult.Failure.Cause) {
+    val failure = this.shouldBeInstanceOf<JsReaderResult.Failure>()
     failure.causes.items shouldContainExactly expected.toList()
 }

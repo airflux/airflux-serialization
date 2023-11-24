@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.std.common
 
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import kotlin.reflect.KClass
 
-internal sealed class JsonErrors : ReadingResult.Error {
+internal sealed class JsonErrors : JsReaderResult.Error {
 
     object PathMissing : JsonErrors()
 

@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
@@ -209,14 +209,14 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                             "then should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                                 result.shouldBeFailure(
-                                    ReadingResult.Failure.Cause(
+                                    JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(JsBoolean.nameOfType),
                                             actual = JsString.nameOfType
                                         )
                                     ),
-                                    ReadingResult.Failure.Cause(
+                                    JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(JsBoolean.nameOfType),
@@ -234,9 +234,9 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
     internal class EB : AdditionalItemsErrorBuilder,
                         InvalidTypeErrorBuilder {
-        override fun additionalItemsError(): ReadingResult.Error = JsonErrors.AdditionalItems
+        override fun additionalItemsError(): JsReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 

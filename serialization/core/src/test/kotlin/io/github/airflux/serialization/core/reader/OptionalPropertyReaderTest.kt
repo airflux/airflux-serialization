@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
@@ -57,7 +57,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                     )
 
                 "then should return the result of applying the reader" {
-                    val result: ReadingResult<String?> =
+                    val result: JsReaderResult<String?> =
                         readOptional(
                             env = ENV,
                             context = CONTEXT,
@@ -76,7 +76,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                     JsLookup.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the null value" {
-                    val result: ReadingResult<String?> =
+                    val result: JsReaderResult<String?> =
                         readOptional(
                             env = ENV,
                             context = CONTEXT,
@@ -95,7 +95,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: ReadingResult<String?> =
+                    val result: JsReaderResult<String?> =
                         readOptional(
                             env = ENV,
                             context = CONTEXT,
@@ -115,8 +115,8 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

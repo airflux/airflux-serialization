@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.core.reader.error
 
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 
 /**
  * The builder of an error that occurs when an element appears in the array that is not described in prefixItems.
  */
 public fun interface AdditionalItemsErrorBuilder {
-    public fun additionalItemsError(): ReadingResult.Error
+    public fun additionalItemsError(): JsReaderResult.Error
 }

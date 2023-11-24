@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
@@ -86,6 +86,6 @@ internal class IsNotBlankValidatorTest : FreeSpec() {
     }
 
     internal class EB : IsNotBlankStringValidator.ErrorBuilder {
-        override fun isNotBlankStringError(): ReadingResult.Error = JsonErrors.Validation.Strings.IsBlank
+        override fun isNotBlankStringError(): JsReaderResult.Error = JsonErrors.Validation.Strings.IsBlank
     }
 }

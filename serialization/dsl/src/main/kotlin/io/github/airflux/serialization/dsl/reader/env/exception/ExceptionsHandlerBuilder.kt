@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.env.exception
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import kotlin.reflect.KClass
 
@@ -40,12 +40,12 @@ public class ExceptionsHandlerBuilder<EB, O> {
     private val handlerSpecs: MutableList<ExceptionHandlerSpec<EB, O>> = mutableListOf()
 
     public inline fun <reified E : Throwable> exception(
-        noinline handler: (JsReaderEnv<EB, O>, JsLocation, E) -> ReadingResult.Error
+        noinline handler: (JsReaderEnv<EB, O>, JsLocation, E) -> JsReaderResult.Error
     ): Unit = exception(E::class, handler)
 
     public fun <E : Throwable> exception(
         exception: KClass<E>,
-        handler: (JsReaderEnv<EB, O>, JsLocation, E) -> ReadingResult.Error
+        handler: (JsReaderEnv<EB, O>, JsLocation, E) -> JsReaderResult.Error
     ) {
         handlerSpecs.add(ExceptionHandlerSpec(exception = exception, handler = handler))
     }

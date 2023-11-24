@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.result.recovery
@@ -39,7 +39,7 @@ public fun interface JsPathReader<EB, O, out T> {
         context: JsContext,
         location: JsLocation,
         source: JsValue
-    ): ReadingResult<T>
+    ): JsReaderResult<T>
 
     public companion object {
 

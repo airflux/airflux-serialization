@@ -19,7 +19,7 @@ package io.github.airflux.serialization.test.dummy
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -42,7 +42,7 @@ public class DummyValidator<EB, O, T>(
     public companion object {
 
         @JvmStatic
-        public fun <EB, O> isNotEmptyString(error: () -> ReadingResult.Error): JsValidator<EB, O, String?> =
+        public fun <EB, O> isNotEmptyString(error: () -> JsReaderResult.Error): JsValidator<EB, O, String?> =
             DummyValidator { _, _, location, value ->
                 if (value != null) {
                     if (value.isNotEmpty())

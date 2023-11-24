@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 
@@ -35,7 +35,7 @@ public fun <EB, O, T> readOptional(
     context: JsContext,
     lookup: JsLookup,
     using: JsReader<EB, O, T>
-): ReadingResult<T?>
+): JsReaderResult<T?>
     where EB : InvalidTypeErrorBuilder =
     when (lookup) {
         is JsLookup.Defined -> using.read(env, context, lookup.location, lookup.value)

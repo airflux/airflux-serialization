@@ -17,14 +17,14 @@
 package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 public sealed class ValidationResult {
     public object Valid : ValidationResult()
-    public class Invalid(public val failure: ReadingResult.Failure) : ValidationResult()
+    public class Invalid(public val failure: JsReaderResult.Failure) : ValidationResult()
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -46,7 +46,7 @@ public fun ValidationResult.isInvalid(): Boolean {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -> T, ifValid: () -> T): T {
+public inline fun <T> ValidationResult.fold(ifInvalid: (JsReaderResult.Failure) -> T, ifValid: () -> T): T {
     contract {
         callsInPlace(ifInvalid, InvocationKind.AT_MOST_ONCE)
         callsInPlace(ifValid, InvocationKind.AT_MOST_ONCE)
@@ -55,7 +55,7 @@ public inline fun <T> ValidationResult.fold(ifInvalid: (ReadingResult.Failure) -
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun ValidationResult.ifInvalid(handler: (ReadingResult.Failure) -> Unit) {
+public inline fun ValidationResult.ifInvalid(handler: (JsReaderResult.Failure) -> Unit) {
     contract {
         callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
     }
@@ -64,7 +64,7 @@ public inline fun ValidationResult.ifInvalid(handler: (ReadingResult.Failure) ->
 
 public fun valid(): ValidationResult = ValidationResult.Valid
 
-public fun invalid(location: JsLocation, error: ReadingResult.Error): ValidationResult =
-    ReadingResult.Failure(location, error).toInvalid()
+public fun invalid(location: JsLocation, error: JsReaderResult.Error): ValidationResult =
+    JsReaderResult.Failure(location, error).toInvalid()
 
-public fun ReadingResult.Failure.toInvalid(): ValidationResult = ValidationResult.Invalid(this)
+public fun JsReaderResult.Failure.toInvalid(): ValidationResult = ValidationResult.Invalid(this)

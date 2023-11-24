@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.map
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.validation.JsValidator
@@ -323,14 +323,14 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                     "then should be returned all read errors" {
                         result.shouldBeFailure(
-                            ReadingResult.Failure.Cause(
+                            JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsString.nameOfType),
                                     actual = JsBoolean.nameOfType
                                 )
                             ),
-                            ReadingResult.Failure.Cause(
+                            JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsNumeric.Integer.nameOfType),
@@ -347,9 +347,9 @@ internal class OptionalPropertySpecTest : FreeSpec() {
     internal class EB : PathMissingErrorBuilder,
                         InvalidTypeErrorBuilder {
 
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

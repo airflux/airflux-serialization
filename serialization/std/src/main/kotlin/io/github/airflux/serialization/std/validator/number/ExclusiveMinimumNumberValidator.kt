@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.number
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -44,6 +44,6 @@ public class ExclusiveMinimumNumberValidator<EB, O, T> internal constructor(
             invalid(location = location, error = env.errorBuilders.exclusiveMinimumNumberError(expected, value))
 
     public fun interface ErrorBuilder {
-        public fun exclusiveMinimumNumberError(expected: Number, actual: Number): ReadingResult.Error
+        public fun exclusiveMinimumNumberError(expected: Number, actual: Number): JsReaderResult.Error
     }
 }

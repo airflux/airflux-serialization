@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.array
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
@@ -91,7 +91,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     }
 
     internal class EB : MinItemsArrayValidator.ErrorBuilder {
-        override fun minItemsArrayError(expected: Int, actual: Int): ReadingResult.Error =
+        override fun minItemsArrayError(expected: Int, actual: Int): JsReaderResult.Error =
             JsonErrors.Validation.Arrays.MinItems(expected = expected, actual = actual)
     }
 }

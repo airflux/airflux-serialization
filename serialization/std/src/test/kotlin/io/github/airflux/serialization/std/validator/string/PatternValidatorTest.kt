@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
@@ -104,7 +104,7 @@ internal class PatternValidatorTest : FreeSpec() {
     }
 
     internal class EB : PatternStringValidator.ErrorBuilder {
-        override fun patternStringError(value: String, pattern: Regex): ReadingResult.Error =
+        override fun patternStringError(value: String, pattern: Regex): JsReaderResult.Error =
             JsonErrors.Validation.Strings.Pattern(value = value, regex = pattern)
     }
 }

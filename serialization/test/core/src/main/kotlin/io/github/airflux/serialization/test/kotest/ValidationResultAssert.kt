@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.test.kotest
 
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -25,7 +25,7 @@ public fun ValidationResult.shouldBeValid() {
     this.shouldBeInstanceOf<ValidationResult.Valid>()
 }
 
-public infix fun ValidationResult.shouldBeInvalid(expected: ReadingResult<*>) {
+public infix fun ValidationResult.shouldBeInvalid(expected: JsReaderResult<*>) {
     val actual = this.shouldBeInstanceOf<ValidationResult.Invalid>()
     actual.failure shouldBe expected
 }

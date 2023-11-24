@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -45,7 +45,7 @@ internal class ReaderMapTest : FreeSpec() {
             "should return new reader" {
                 val source = JsString(VALUE)
                 val transformedReader = reader.map { value -> value.toInt() }
-                val result: ReadingResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
+                val result: JsReaderResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
 
                 result shouldBeSuccess success(location = LOCATION, value = VALUE.toInt())
             }
@@ -53,8 +53,8 @@ internal class ReaderMapTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

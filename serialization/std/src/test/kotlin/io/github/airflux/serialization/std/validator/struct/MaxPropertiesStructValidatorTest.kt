@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
@@ -101,7 +101,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
     }
 
     internal class EB : MaxPropertiesStructValidator.ErrorBuilder {
-        override fun maxPropertiesStructError(expected: Int, actual: Int): ReadingResult.Error =
+        override fun maxPropertiesStructError(expected: Int, actual: Int): JsReaderResult.Error =
             JsonErrors.Validation.Struct.MaxProperties(expected = expected, actual = actual)
     }
 }

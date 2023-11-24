@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.core.reader.error
 
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import kotlin.reflect.KClass
 
 /**
  * The builder of an error that occurs when an element cannot be converted to the specified type.
  */
 public fun interface NumberFormatErrorBuilder {
-    public fun numberFormatError(value: String, target: KClass<*>): ReadingResult.Error
+    public fun numberFormatError(value: String, target: KClass<*>): JsReaderResult.Error
 }

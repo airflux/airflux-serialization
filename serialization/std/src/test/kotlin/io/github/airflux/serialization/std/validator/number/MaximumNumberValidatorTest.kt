@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.number
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -75,7 +75,7 @@ internal class MaximumNumberValidatorTest : FreeSpec() {
     }
 
     internal class EB : MaximumNumberValidator.ErrorBuilder {
-        override fun maximumNumberError(expected: Number, actual: Number): ReadingResult.Error =
+        override fun maximumNumberError(expected: Number, actual: Number): JsReaderResult.Error =
             JsonErrors.Validation.Numbers.Max(expected = expected, actual = actual)
     }
 }

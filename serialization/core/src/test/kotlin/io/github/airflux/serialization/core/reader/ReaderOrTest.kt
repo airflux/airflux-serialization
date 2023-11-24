@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsNull
@@ -93,11 +93,11 @@ internal class ReaderOrTest : FreeSpec() {
                         val result = reader.read(ENV, CONTEXT, LOCATION, JsNull)
 
                         result.shouldBeFailure(
-                            ReadingResult.Failure.Cause(
+                            JsReaderResult.Failure.Cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.PathMissing
                             ),
-                            ReadingResult.Failure.Cause(
+                            JsReaderResult.Failure.Cause(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsString.nameOfType),
@@ -112,8 +112,8 @@ internal class ReaderOrTest : FreeSpec() {
     }
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

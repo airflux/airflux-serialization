@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.toSuccess
@@ -332,14 +332,14 @@ internal class StructReaderTest : FreeSpec() {
                         "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result.shouldBeFailure(
-                                ReadingResult.Failure.Cause(
+                                JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsNumeric.Integer.nameOfType),
                                         actual = JsString.nameOfType
                                     )
                                 ),
-                                ReadingResult.Failure.Cause(
+                                JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(NAME_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsString.nameOfType),
@@ -376,18 +376,18 @@ internal class StructReaderTest : FreeSpec() {
                         "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
                             result.shouldBeFailure(
-                                ReadingResult.Failure.Cause(
+                                JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
                                     error = JsonErrors.Validation.Struct.AdditionalProperties
                                 ),
-                                ReadingResult.Failure.Cause(
+                                JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsNumeric.Integer.nameOfType),
                                         actual = JsString.nameOfType
                                     )
                                 ),
-                                ReadingResult.Failure.Cause(
+                                JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(NAME_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsString.nameOfType),
@@ -439,10 +439,10 @@ internal class StructReaderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
     }
 
     internal class OPTS(override val failFast: Boolean) : FailFastOption

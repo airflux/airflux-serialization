@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.reader.struct
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValuesInstance
@@ -254,9 +254,9 @@ internal class PropertyValuesTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
     }
 }

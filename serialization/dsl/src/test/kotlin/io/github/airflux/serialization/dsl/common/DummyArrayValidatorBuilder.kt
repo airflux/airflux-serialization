@@ -19,7 +19,7 @@ package io.github.airflux.serialization.dsl.common
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -45,7 +45,7 @@ internal class DummyArrayValidatorBuilder<EB, O>(result: ValidationResult) : Arr
         @JvmStatic
         internal fun <EB, O> minItems(
             expected: Int,
-            error: (expected: Int, actual: Int) -> ReadingResult.Error
+            error: (expected: Int, actual: Int) -> JsReaderResult.Error
         ): ArrayValidator.Builder<EB, O> =
             ArrayValidator.Builder {
                 ArrayValidator { _, _, location, source ->

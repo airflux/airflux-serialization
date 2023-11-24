@@ -32,19 +32,19 @@ internal class ReadingResultFailureCauseTest : FreeSpec() {
         "A ReadingResult#Failure#Cause type" - {
 
             "constructor(JsLocation, Error)" {
-                val cause = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                val cause = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
                 cause.error shouldBe JsonErrors.PathMissing
             }
 
             "should comply with equals() and hashCode() contract" {
-                ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
-                    y = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
+                    y = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
                     others = listOf(
-                        ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
-                        ReadingResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
+                        JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
+                        JsReaderResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                     )
                 )
             }

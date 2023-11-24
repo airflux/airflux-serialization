@@ -21,11 +21,11 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 
-public fun <EB, O> JsValue.readAsBoolean(env: JsReaderEnv<EB, O>, location: JsLocation): ReadingResult<Boolean>
+public fun <EB, O> JsValue.readAsBoolean(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Boolean>
     where EB : InvalidTypeErrorBuilder =
     if (this is JsBoolean)
         success(location = location, value = this.get)
@@ -35,7 +35,7 @@ public fun <EB, O> JsValue.readAsBoolean(env: JsReaderEnv<EB, O>, location: JsLo
             error = env.errorBuilders.invalidTypeError(listOf(JsBoolean.nameOfType), this.nameOfType)
         )
 
-public fun <EB, O> JsValue.readAsString(env: JsReaderEnv<EB, O>, location: JsLocation): ReadingResult<String>
+public fun <EB, O> JsValue.readAsString(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<String>
     where EB : InvalidTypeErrorBuilder =
     if (this is JsString)
         success(location = location, value = this.get)
@@ -49,8 +49,8 @@ public fun <EB, O, T : Number> JsValue.readAsInteger(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     location: JsLocation,
-    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, String) -> ReadingResult<T>
-): ReadingResult<T>
+    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, String) -> JsReaderResult<T>
+): JsReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is JsNumeric.Integer)
         reader(env, context, location, this.get)
@@ -67,8 +67,8 @@ public fun <EB, O, T : Number> JsValue.readAsNumber(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     location: JsLocation,
-    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, String) -> ReadingResult<T>
-): ReadingResult<T>
+    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, String) -> JsReaderResult<T>
+): JsReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is JsNumeric)
         reader(env, context, location, this.get)
@@ -85,8 +85,8 @@ public inline fun <EB, O, T> JsValue.readAsStruct(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     location: JsLocation,
-    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, JsStruct) -> ReadingResult<T>
-): ReadingResult<T>
+    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, JsStruct) -> JsReaderResult<T>
+): JsReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is JsStruct)
         reader(env, context, location, this)
@@ -100,8 +100,8 @@ public inline fun <EB, O, T> JsValue.readAsArray(
     env: JsReaderEnv<EB, O>,
     context: JsContext,
     location: JsLocation,
-    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, JsArray) -> ReadingResult<T>
-): ReadingResult<T>
+    reader: (JsReaderEnv<EB, O>, JsContext, JsLocation, JsArray) -> JsReaderResult<T>
+): JsReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
     if (this is JsArray)
         reader(env, context, location, this)

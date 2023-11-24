@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -45,6 +45,6 @@ public class MandatoryPropertyValidator<EB, O, T> internal constructor(
             valid()
 
     public fun interface ErrorBuilder {
-        public fun mandatoryPropertyError(): ReadingResult.Error
+        public fun mandatoryPropertyError(): JsReaderResult.Error
     }
 }

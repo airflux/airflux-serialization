@@ -18,11 +18,11 @@ package io.github.airflux.serialization.core.reader.env.exception
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 
 /**
  * Handler **uncaught** exceptions.
  */
 public fun interface ExceptionsHandler<EB, O> {
-    public fun handle(env: JsReaderEnv<EB, O>, location: JsLocation, exception: Throwable): ReadingResult.Error
+    public fun handle(env: JsReaderEnv<EB, O>, location: JsLocation, exception: Throwable): JsReaderResult.Error
 }

@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -91,6 +91,6 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
     }
 
     internal class EB : ForbiddenPropertyValidator.ErrorBuilder {
-        override fun forbiddenPropertyError(): ReadingResult.Error = JsonErrors.Validation.Struct.ForbiddenProperty
+        override fun forbiddenPropertyError(): JsReaderResult.Error = JsonErrors.Validation.Struct.ForbiddenProperty
     }
 }

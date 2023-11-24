@@ -35,10 +35,10 @@ internal class ReadingResultFailureTest : FreeSpec() {
         "A ReadingResult#Failure type" - {
 
             "constructor(JsLocation, JsError)" {
-                val failure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 failure.causes.items shouldContainExactly listOf(
-                    ReadingResult.Failure.Cause(
+                    JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.PathMissing
                     )
@@ -46,16 +46,16 @@ internal class ReadingResultFailureTest : FreeSpec() {
             }
 
             "constructor(JsLocation, ReadingResult#Errors)" {
-                val failure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                 failure.causes.items shouldContainExactly listOf(
-                    ReadingResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                    JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
                 )
             }
 
             "the function ReadingResult#Failure#plus " {
-                val firstFailure = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
-                val secondFailure = ReadingResult.Failure(
+                val firstFailure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
+                val secondFailure = JsReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
                         expected = listOf(JsString.nameOfType),
@@ -66,11 +66,11 @@ internal class ReadingResultFailureTest : FreeSpec() {
                 val failure = firstFailure + secondFailure
 
                 failure.causes.items shouldContainExactly listOf(
-                    ReadingResult.Failure.Cause(
+                    JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.PathMissing
                     ),
-                    ReadingResult.Failure.Cause(
+                    JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
                             expected = listOf(JsString.nameOfType),
@@ -81,12 +81,12 @@ internal class ReadingResultFailureTest : FreeSpec() {
             }
 
             "should comply with equals() and hashCode() contract" {
-                ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
-                    y = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = ReadingResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
+                    y = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
+                    z = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing),
                     others = listOf(
-                        ReadingResult.Failure(location = LOCATION, error = JsonErrors.AdditionalItems),
-                        ReadingResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
+                        JsReaderResult.Failure(location = LOCATION, error = JsonErrors.AdditionalItems),
+                        JsReaderResult.Failure(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
                     )
                 )
             }

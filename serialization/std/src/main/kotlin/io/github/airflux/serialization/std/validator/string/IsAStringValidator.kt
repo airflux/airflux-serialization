@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.ValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -42,6 +42,6 @@ public class IsAStringValidator<EB, O> internal constructor(
             invalid(location = location, error = env.errorBuilders.isAStringError(value))
 
     public fun interface ErrorBuilder {
-        public fun isAStringError(value: String): ReadingResult.Error
+        public fun isAStringError(value: String): JsReaderResult.Error
     }
 }

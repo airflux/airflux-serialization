@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
@@ -72,7 +72,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
     }
 
     internal class EB : IsNotEmptyStructValidator.ErrorBuilder {
-        override fun isNotEmptyStructError(): ReadingResult.Error =
+        override fun isNotEmptyStructError(): JsReaderResult.Error =
             JsonErrors.Validation.Struct.IsEmpty
     }
 }

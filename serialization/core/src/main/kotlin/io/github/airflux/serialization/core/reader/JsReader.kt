@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.map
@@ -38,7 +38,7 @@ public fun interface JsReader<EB, O, out T> {
     /**
      * Convert the [JsValue] into a T
      */
-    public fun read(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, source: JsValue): ReadingResult<T>
+    public fun read(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, source: JsValue): JsReaderResult<T>
 }
 
 /**
@@ -56,7 +56,7 @@ public infix fun <EB, O, T, R> JsReader<EB, O, T>.map(transform: (T) -> R): JsRe
     }
 
 public infix fun <EB, O, T, R> JsReader<EB, O, T>.bind(
-    transform: (JsReaderEnv<EB, O>, JsContext, ReadingResult.Success<T>) -> ReadingResult<R>
+    transform: (JsReaderEnv<EB, O>, JsContext, JsReaderResult.Success<T>) -> JsReaderResult<R>
 ): JsReader<EB, O, R> =
     JsReader { env, context, location, source ->
         this@bind.read(env, context, location, source)
@@ -68,10 +68,10 @@ public infix fun <EB, O, T, R> JsReader<EB, O, T>.bind(
 
 /**
  * Creates a new [JsReader], based on this one, which first executes this
- * [JsReader] logic then, if this [JsReader] resulted in a [ReadingResult.Error], runs
+ * [JsReader] logic then, if this [JsReader] resulted in a [JsReaderResult.Error], runs
  * the other [JsReader] on the [JsValue].
  *
- * @param alt the [JsReader] to run if this one gets a [ReadingResult.Error]
+ * @param alt the [JsReader] to run if this one gets a [JsReaderResult.Error]
  * @return A new [JsReader] with the updated behavior.
  */
 public infix fun <EB, O, T> JsReader<EB, O, T>.or(alt: JsReader<EB, O, T>): JsReader<EB, O, T> =

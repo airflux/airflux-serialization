@@ -35,19 +35,19 @@ internal class ReadingResultSuccessTest : FreeSpec() {
         "A ReadingResult#Success type" - {
 
             "constructor(JsLocation, T)" {
-                val result = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+                val result = JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
 
                 result.location shouldBe LOCATION
                 result.value shouldBe ORIGINAL_VALUE
             }
 
             "should comply with equals() and hashCode() contract" {
-                ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE).shouldBeEqualsContract(
-                    y = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
-                    z = ReadingResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE).shouldBeEqualsContract(
+                    y = JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
+                    z = JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE),
                     others = listOf(
-                        ReadingResult.Success(location = LOCATION, value = ELSE_VALUE),
-                        ReadingResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
+                        JsReaderResult.Success(location = LOCATION, value = ELSE_VALUE),
+                        JsReaderResult.Success(location = LOCATION.append("id"), value = ORIGINAL_VALUE)
                     )
                 )
             }

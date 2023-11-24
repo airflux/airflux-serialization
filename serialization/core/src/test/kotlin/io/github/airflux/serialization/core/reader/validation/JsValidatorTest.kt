@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
@@ -76,8 +76,8 @@ internal class JsValidatorTest : FreeSpec() {
                         val result = composeValidator.validate(ENV, CONTEXT, LOCATION, Unit)
 
                         result shouldBeInvalid
-                            ReadingResult.Failure(LOCATION, ValidationErrors.PathMissing) +
-                            ReadingResult.Failure(LOCATION, ValidationErrors.InvalidType)
+                            JsReaderResult.Failure(LOCATION, ValidationErrors.PathMissing) +
+                            JsReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
                     }
                 }
             }
@@ -126,7 +126,7 @@ internal class JsValidatorTest : FreeSpec() {
         }
     }
 
-    private sealed class ValidationErrors : ReadingResult.Error {
+    private sealed class ValidationErrors : JsReaderResult.Error {
         object PathMissing : ValidationErrors()
         object InvalidType : ValidationErrors()
     }

@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
-import io.github.airflux.serialization.core.reader.result.ReadingResult
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.value.JsString
@@ -133,11 +133,11 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                         val result = validator.validate(envWithFailFastIsFalse, CONTEXT, LOCATION, PROPERTIES, source)
 
                         result shouldBeInvalid
-                            ReadingResult.Failure(
+                            JsReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             ) +
-                            ReadingResult.Failure(
+                            JsReaderResult.Failure(
                                 location = LOCATION.append(NAME_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
@@ -151,13 +151,13 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                         PathMissingErrorBuilder,
                         AdditionalPropertiesStructValidator.ErrorBuilder {
 
-        override fun additionalPropertiesStructError(): ReadingResult.Error =
+        override fun additionalPropertiesStructError(): JsReaderResult.Error =
             JsonErrors.Validation.Struct.AdditionalProperties
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): ReadingResult.Error =
+        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
-        override fun pathMissingError(): ReadingResult.Error = JsonErrors.PathMissing
+        override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
     }
 
     internal class OPTS(override val failFast: Boolean) : FailFastOption
