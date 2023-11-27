@@ -20,6 +20,7 @@ import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 
 internal class NonEmptyListTest : FreeSpec() {
 
@@ -31,7 +32,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST)
 
                 "then the new instance of the type should only contain the passed element" {
-                    list.items shouldContainExactly listOf(FIRST)
+                    list shouldContainExactly listOf(FIRST)
                 }
             }
 
@@ -39,7 +40,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST, SECOND)
 
                 "then the new instance of the type should only contain the passed elements in the order in which they were passed" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND)
+                    list shouldContainExactly listOf(FIRST, SECOND)
                 }
             }
 
@@ -47,7 +48,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST, emptyList())
 
                 "then the new instance of the type should only contain the passed head element" {
-                    list.items shouldContainExactly listOf(FIRST)
+                    list shouldContainExactly listOf(FIRST)
                 }
             }
 
@@ -55,12 +56,12 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST, listOf(SECOND, THIRD))
 
                 "then the new instance of the type should all contain the passed elements in the order in which they were passed" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    list shouldContainExactly listOf(FIRST, SECOND, THIRD)
                 }
             }
 
             "when an empty list is passed to create an instance of the type" - {
-                val list = NonEmptyList(emptyList<Int>())
+                val list = NonEmptyList.valueOf(emptyList<Int>())
 
                 "then should return the null value" {
                     list.shouldBeNull()
@@ -68,11 +69,11 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when a non-empty list is passed to create an instance of the type" - {
-                val list = NonEmptyList(listOf(FIRST, SECOND, THIRD))
+                val list = NonEmptyList.valueOf(listOf(FIRST, SECOND, THIRD))
 
                 "then the new instance of the type should contain all the elements from the list in the order in which they were passed" {
                     list.shouldNotBeNull()
-                    list.items shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    list shouldContainExactly listOf(FIRST, SECOND, THIRD)
                 }
             }
 
@@ -80,7 +81,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST) + SECOND
 
                 "then the new instance of the type should contain the original elements and the passed element in the order in which they were passed" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND)
+                    list shouldContainExactly listOf(FIRST, SECOND)
                 }
             }
 
@@ -88,7 +89,7 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST) + listOf(SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from the original instance and the passed elements in the order in which they were passed" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    list shouldContainExactly listOf(FIRST, SECOND, THIRD)
                 }
             }
 
@@ -96,7 +97,25 @@ internal class NonEmptyListTest : FreeSpec() {
                 val list = NonEmptyList(FIRST) + NonEmptyList(SECOND, THIRD)
 
                 "then the new instance of the type should contain elements from both instances in the order in which they were in the originals" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    list shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                }
+            }
+
+            "when a predicate of the `exists` method for a list returns true" - {
+                val predicate: (Int) -> Boolean = { it == SECOND }
+
+                "then the `exists` method should return true" {
+                    val list = NonEmptyList(FIRST, SECOND, THIRD)
+                    list.exists(predicate) shouldBe true
+                }
+            }
+
+            "when a predicate of the `exists` method for a list returns false" - {
+                val predicate: (Int) -> Boolean = { it == THIRD }
+                val list = NonEmptyList(FIRST, SECOND)
+
+                "then the `exists` method should return false" {
+                    list.exists(predicate) shouldBe false
                 }
             }
         }

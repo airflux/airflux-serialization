@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.common
 
 @JvmInline
-public value class NonEmptyList<out T> private constructor(public val items: List<T>) {
+public value class NonEmptyList<out T> private constructor(private val items: List<T>) : List<T> by items {
 
     public companion object {
 
@@ -33,26 +33,29 @@ public value class NonEmptyList<out T> private constructor(public val items: Lis
         )
 
         @JvmStatic
-        public operator fun <T> invoke(list: List<T>): NonEmptyList<T>? =
+        public fun <T> valueOf(list: List<T>): NonEmptyList<T>? =
             list.takeIf { it.isNotEmpty() }
                 ?.let { NonEmptyList(it) }
 
         @JvmStatic
-        public fun <T> add(list: NonEmptyList<T>, item: T): NonEmptyList<T> =
-            NonEmptyList(list.items + item)
+        public fun <T> add(list: NonEmptyList<T>?, item: T): NonEmptyList<T> =
+            if (list != null) NonEmptyList(list.items + item) else NonEmptyList(item)
 
         @JvmStatic
         public fun <T> addAll(list: NonEmptyList<T>, items: List<T>): NonEmptyList<T> =
             if (items.isEmpty()) list else NonEmptyList(list.items + items)
 
         @JvmStatic
-        public fun <T> addAll(list: NonEmptyList<T>, other: NonEmptyList<T>): NonEmptyList<T> =
-            addAll(list, other.items)
+        public fun <T> add(list: NonEmptyList<T>?, other: NonEmptyList<T>): NonEmptyList<T> =
+            if (list != null) addAll(list, other.items) else other
     }
 }
+
+public fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = find { predicate(it) } != null
 
 public operator fun <T> NonEmptyList<T>.plus(item: T): NonEmptyList<T> = NonEmptyList.add(this, item)
 
 public operator fun <T> NonEmptyList<T>.plus(items: List<T>): NonEmptyList<T> = NonEmptyList.addAll(this, items)
 
-public operator fun <T> NonEmptyList<T>.plus(other: NonEmptyList<T>): NonEmptyList<T> = NonEmptyList.addAll(this, other)
+public operator fun <T> NonEmptyList<T>.plus(other: NonEmptyList<T>): NonEmptyList<T> =
+    NonEmptyList.add(this, other)
