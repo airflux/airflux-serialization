@@ -459,68 +459,6 @@ internal class JsReaderResultTest : FreeSpec() {
                 error = JsonErrors.PathMissing
             )
         }
-
-        "the function `withCatching`" - {
-
-            "when no exception is thrown in the block" - {
-                val block: () -> JsReaderResult<String> = { ORIGINAL_VALUE.toSuccess(LOCATION) }
-
-                "when the context contains the exceptions handler" - {
-                    val env = JsReaderEnv(
-                        errorBuilders = Unit,
-                        options = Unit,
-                        exceptionsHandler = { _, _, exception ->
-                            if (exception is IllegalStateException)
-                                JsonErrors.PathMissing
-                            else
-                                throw exception
-                        }
-                    )
-
-                    "then should return the value" {
-                        val result = withCatching(env, LOCATION, block)
-
-                        result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE)
-                    }
-                }
-            }
-
-            "when an exception is thrown in the block" - {
-                val block: () -> JsReaderResult<String> = { throw IllegalStateException() }
-
-                "when the context contains the exceptions handler" - {
-                    val env = JsReaderEnv(
-                        errorBuilders = Unit,
-                        options = Unit,
-                        exceptionsHandler = { _, _, exception ->
-                            if (exception is IllegalStateException)
-                                JsonErrors.PathMissing
-                            else
-                                throw exception
-                        }
-                    )
-
-                    "then should return an error value" {
-                        val result = withCatching(env, LOCATION, block)
-
-                        result shouldBeFailure failure(
-                            location = LOCATION,
-                            error = JsonErrors.PathMissing
-                        )
-                    }
-                }
-
-                "when the context does not contain the exceptions handler" - {
-                    val env = JsReaderEnv(Unit, Unit)
-
-                    "then should re-throwing the exception" {
-                        shouldThrow<IllegalStateException> {
-                            withCatching(env, LOCATION, block)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     internal class EB : InvalidTypeErrorBuilder {

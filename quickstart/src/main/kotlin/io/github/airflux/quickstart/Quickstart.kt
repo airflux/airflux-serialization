@@ -27,7 +27,6 @@ import io.github.airflux.quickstart.domain.model.LotStatus
 import io.github.airflux.quickstart.domain.model.Lots
 import io.github.airflux.quickstart.domain.model.Tender
 import io.github.airflux.quickstart.domain.model.Value
-import io.github.airflux.quickstart.infrastructure.web.error.JsonErrors
 import io.github.airflux.quickstart.infrastructure.web.model.Response
 import io.github.airflux.quickstart.infrastructure.web.model.reader.RequestReader
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
@@ -37,7 +36,6 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOp
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.reader.env.exception.exceptionsHandler
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
 import java.math.BigDecimal
 
@@ -49,11 +47,7 @@ fun main() {
     val env =
         JsReaderEnv(
             errorBuilders = ReaderErrorBuilders,
-            options = ReaderOptions(failFast = true),
-            exceptionsHandler = exceptionsHandler {
-                exception<IllegalArgumentException> { _, _, _ -> JsonErrors.PathMissing }
-                exception<Exception> { _, _, _ -> JsonErrors.PathMissing }
-            }
+            options = ReaderOptions(failFast = true)
         )
 
     JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)

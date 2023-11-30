@@ -183,25 +183,3 @@ public fun <T> T.toSuccess(location: JsLocation): JsReaderResult<T> = success(lo
 
 public fun <E : JsReaderResult.Error> E.toFailure(location: JsLocation): JsReaderResult<Nothing> =
     failure(location = location, error = this)
-
-/**
- * Calls the specified function [block] and returns its result if invocation was successful,
- * catching any [Throwable] exception that was thrown from the [block] function execution
- * and using the [io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler] from env to handle it.
- */
-@OptIn(ExperimentalContracts::class)
-public inline fun <EB, O, T> withCatching(
-    env: JsReaderEnv<EB, O>,
-    location: JsLocation,
-    block: () -> JsReaderResult<T>
-): JsReaderResult<T> {
-    contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-    }
-    return try {
-        block()
-    } catch (expected: Throwable) {
-        val handler = env.exceptionsHandler ?: throw expected
-        handler.handle(env, location, expected).toFailure(location)
-    }
-}

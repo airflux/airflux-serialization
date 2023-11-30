@@ -305,15 +305,9 @@ public final class io/github/airflux/serialization/core/reader/RequiredPropertyR
 }
 
 public final class io/github/airflux/serialization/core/reader/env/JsReaderEnv {
-	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;)V
-	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;)V
 	public final fun getErrorBuilders ()Ljava/lang/Object;
-	public final fun getExceptionsHandler ()Lio/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler;
 	public final fun getOptions ()Ljava/lang/Object;
-}
-
-public abstract interface class io/github/airflux/serialization/core/reader/env/exception/ExceptionsHandler {
-	public abstract fun handle (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Throwable;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/env/option/FailFastOption {
@@ -413,7 +407,6 @@ public final class io/github/airflux/serialization/core/reader/result/JsReaderRe
 	public static final fun toFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 	public static final fun toSuccess (Ljava/lang/Object;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 	public static final fun validation (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/context/JsContext;Lio/github/airflux/serialization/core/reader/validation/JsValidator;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun withCatching (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/validation/JsValidator {

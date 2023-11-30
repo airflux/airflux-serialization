@@ -16,16 +16,12 @@
 
 package io.github.airflux.serialization.core.reader.env
 
-import io.github.airflux.serialization.core.reader.env.exception.ExceptionsHandler
-
 /**
  * The environment of reading.
  * @param errorBuilders the builders of error.
  * @param options the options of reading.
- * @param exceptionsHandler handler **uncaught** exceptions.
  */
 public class JsReaderEnv<EB, O>(
     public val errorBuilders: EB,
-    public val options: O,
-    public val exceptionsHandler: ExceptionsHandler<EB, O>? = null
+    public val options: O
 )
