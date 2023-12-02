@@ -93,7 +93,7 @@ internal class ReaderNullValueTest : FreeSpec() {
             "when an attribute is missing" - {
                 val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
 
-                "then should return the default value" {
+                "then should return the null value" {
                     val result: JsReaderResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
 
                     result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
