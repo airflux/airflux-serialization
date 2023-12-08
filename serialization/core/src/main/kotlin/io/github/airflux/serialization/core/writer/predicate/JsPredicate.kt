@@ -16,20 +16,19 @@
 
 package io.github.airflux.serialization.core.writer.predicate
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 
 public fun interface JsPredicate<O, T> {
-    public fun test(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, value: T): Boolean
+    public fun test(env: JsWriterEnv<O>, location: JsLocation, value: T): Boolean
 }
 
 public infix fun <O, T> JsPredicate<O, T>.or(
     alt: JsPredicate<O, T>
 ): JsPredicate<O, T> {
     val self = this
-    return JsPredicate { env, context, location, value ->
-        self.test(env, context, location, value) || alt.test(env, context, location, value)
+    return JsPredicate { env, location, value ->
+        self.test(env, location, value) || alt.test(env, location, value)
     }
 }
 
@@ -37,7 +36,7 @@ public infix fun <O, T> JsPredicate<O, T>.and(
     alt: JsPredicate<O, T>
 ): JsPredicate<O, T> {
     val self = this
-    return JsPredicate { env, context, location, value ->
-        self.test(env, context, location, value) && alt.test(env, context, location, value)
+    return JsPredicate { env, location, value ->
+        self.test(env, location, value) && alt.test(env, location, value)
     }
 }

@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -44,7 +43,6 @@ internal class ReaderFilterTest : FreeSpec() {
         private const val CODE_PROPERTY_VALUE = "code"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
@@ -56,9 +54,9 @@ internal class ReaderFilterTest : FreeSpec() {
             "when an original reader returns a result as a success" - {
 
                 "when the value in the result is not null" - {
-                    val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
+                    val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                        readRequired(env, context, lookup, StringReader)
+                        readRequired(env, lookup, StringReader)
                     }
 
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
@@ -68,7 +66,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
                         "then filter should return the original value" {
                             val filtered = requiredReader.filter(predicate)
-                                .read(ENV, CONTEXT, LOCATION, source)
+                                .read(ENV, LOCATION, source)
 
                             filtered shouldBe success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
@@ -82,7 +80,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
                         "then filter should return the null value" {
                             val filtered = requiredReader.filter(predicate)
-                                .read(ENV, CONTEXT, LOCATION, source)
+                                .read(ENV, LOCATION, source)
 
                             filtered shouldBe success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                         }
@@ -90,36 +88,36 @@ internal class ReaderFilterTest : FreeSpec() {
                 }
 
                 "when the value in the result is null" - {
-                    val optionalReader: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
+                    val optionalReader: JsReader<EB, Unit, String?> = DummyReader { env, location, source ->
                         val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                        readOptional(env, context, lookup, StringReader)
+                        readOptional(env, lookup, StringReader)
                     }
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
                     "then the filter should not be applying" {
                         val filtered = optionalReader.filter(predicate)
-                            .read(ENV, CONTEXT, LOCATION, source)
+                            .read(ENV, LOCATION, source)
                         filtered shouldBe success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                     }
                 }
             }
 
             "when an original reader returns a result as a failure" - {
-                val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
+                val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
                     val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                    readRequired(env, context, lookup, StringReader)
+                    readRequired(env, lookup, StringReader)
                 }
                 val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
-                val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
                     throw io.kotest.assertions.failure("Predicate not called.")
                 }
 
                 "then the filter should not be applying" {
                     val filtered = requiredReader.filter(predicate)
-                        .read(ENV, CONTEXT, LOCATION, source)
+                        .read(ENV, LOCATION, source)
                     filtered shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -33,7 +32,6 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private const val MAX_ITEMS = 2
     }
@@ -48,7 +46,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = JsArray()
 
                 "then the validator should do not return any errors" {
-                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    val result = validator.validate(ENV, LOCATION, source)
                     result.shouldBeValid()
                 }
             }
@@ -57,7 +55,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = JsArray(JsString("A"))
 
                 "then the validator should do not return any errors" {
-                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    val result = validator.validate(ENV, LOCATION, source)
                     result.shouldBeValid()
                 }
             }
@@ -66,7 +64,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = JsArray(JsString("A"), JsString("B"))
 
                 "then the validator should do not return any errors" {
-                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    val result = validator.validate(ENV, LOCATION, source)
                     result.shouldBeValid()
                 }
             }
@@ -75,7 +73,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
                 val source = JsArray(JsString("A"), JsString("B"), JsString("C"))
 
                 "the validator should return an error" {
-                    val result = validator.validate(ENV, CONTEXT, LOCATION, source)
+                    val result = validator.validate(ENV, LOCATION, source)
 
                     result shouldBeInvalid failure(
                         location = LOCATION,

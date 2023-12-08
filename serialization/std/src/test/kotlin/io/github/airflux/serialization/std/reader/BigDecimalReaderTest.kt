@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -37,7 +36,6 @@ internal class BigDecimalReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val BigDecimalReader = bigDecimalReader<EB, Unit>()
     }
@@ -51,14 +49,14 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
                     val source: JsValue = JsNumeric.Number.valueOrNullOf(value)!!
-                    val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = BigDecimalReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = BigDecimalReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = BigDecimalReader.read(ENV, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(

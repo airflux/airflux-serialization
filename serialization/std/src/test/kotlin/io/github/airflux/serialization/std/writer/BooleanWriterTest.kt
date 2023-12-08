@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -28,7 +27,6 @@ internal class BooleanWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -41,7 +39,7 @@ internal class BooleanWriterTest : FreeSpec() {
                 val value = true
 
                 "then writer should return the JsBoolean.True value" {
-                    val result = writer.write(ENV, CONTEXT, LOCATION, value)
+                    val result = writer.write(ENV, LOCATION, value)
                     result shouldBe JsBoolean.True
                 }
             }
@@ -50,7 +48,7 @@ internal class BooleanWriterTest : FreeSpec() {
                 val value = false
 
                 "then writer should return the JsBoolean.False value" {
-                    val result = writer.write(ENV, CONTEXT, LOCATION, value)
+                    val result = writer.write(ENV, LOCATION, value)
                     result shouldBe JsBoolean.False
                 }
             }

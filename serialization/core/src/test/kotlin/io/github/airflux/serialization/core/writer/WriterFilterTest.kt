@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.core.writer
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
@@ -32,7 +31,6 @@ internal class WriterFilterTest : FreeSpec() {
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -46,19 +44,19 @@ internal class WriterFilterTest : FreeSpec() {
                     val value = PROPERTY_VALUE
 
                     "when passing a value that satisfies the predicate for filtering" - {
-                        val writerWithFilter = writer.filter { _, _, _, _ -> true }
+                        val writerWithFilter = writer.filter { _, _, _ -> true }
 
                         "then the writer should return non-null value" {
-                            val result = writerWithFilter.write(ENV, CONTEXT, LOCATION, value)
+                            val result = writerWithFilter.write(ENV, LOCATION, value)
                             result shouldBe JsString(PROPERTY_VALUE)
                         }
                     }
 
                     "when passing a value that does not satisfy the filter predicate" - {
-                        val writerWithFilter = writer.filter { _, _, _, _ -> false }
+                        val writerWithFilter = writer.filter { _, _, _ -> false }
 
                         "then the writer should return null value" {
-                            val result = writerWithFilter.write(ENV, CONTEXT, LOCATION, value)
+                            val result = writerWithFilter.write(ENV, LOCATION, value)
                             result.shouldBeNull()
                         }
                     }
@@ -68,19 +66,19 @@ internal class WriterFilterTest : FreeSpec() {
                     val value: String? = null
 
                     "when passing a value that satisfies the predicate for filtering" - {
-                        val writerWithFilter = writer.filter { _, _, _, _ -> throw failure("Predicate not called.") }
+                        val writerWithFilter = writer.filter { _, _, _ -> throw failure("Predicate not called.") }
 
                         "then the filter should not be applying" {
-                            val result = writerWithFilter.write(ENV, CONTEXT, LOCATION, value)
+                            val result = writerWithFilter.write(ENV, LOCATION, value)
                             result.shouldBeNull()
                         }
                     }
 
                     "when passing a value that does not satisfy the filter predicate" - {
-                        val writerWithFilter = writer.filter { _, _, _, _ -> throw failure("Predicate not called.") }
+                        val writerWithFilter = writer.filter { _, _, _ -> throw failure("Predicate not called.") }
 
                         "then the filter should not be applying" {
-                            val result = writerWithFilter.write(ENV, CONTEXT, LOCATION, value)
+                            val result = writerWithFilter.write(ENV, LOCATION, value)
                             result.shouldBeNull()
                         }
                     }

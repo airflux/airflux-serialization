@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -69,7 +68,7 @@ public fun <EB, O, T> ArrayReader.Builder<EB, O, T>.returns(
 
 public class ArrayReader<EB, O, T> private constructor(
     private val validators: List<ArrayValidator<EB, O>>,
-    private val resultBuilder: (JsReaderEnv<EB, O>, JsContext, JsLocation, JsArray) -> JsReaderResult<List<T>>
+    private val resultBuilder: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
 ) : JsReader<EB, O, List<T>>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
@@ -77,12 +76,11 @@ public class ArrayReader<EB, O, T> private constructor(
 
     override fun read(
         env: JsReaderEnv<EB, O>,
-        context: JsContext,
         location: JsLocation,
         source: JsValue
     ): JsReaderResult<List<T>> =
         if (source is JsArray)
-            read(env, context, location, source)
+            read(env, location, source)
         else
             failure(
                 location = location,
@@ -91,7 +89,6 @@ public class ArrayReader<EB, O, T> private constructor(
 
     private fun read(
         env: JsReaderEnv<EB, O>,
-        context: JsContext,
         location: JsLocation,
         source: JsArray
     ): JsReaderResult<List<T>> {
@@ -99,14 +96,14 @@ public class ArrayReader<EB, O, T> private constructor(
         var failureAccumulator: JsReaderResult.Failure? = null
 
         validators.forEach { validator ->
-            validator.validate(env, context, location, source)
+            validator.validate(env, location, source)
                 .ifInvalid { failure ->
                     if (failFast) return failure
                     failureAccumulator += failure
                 }
         }
 
-        return resultBuilder(env, context, location, source)
+        return resultBuilder(env, location, source)
             .fold(
                 ifFailure = { failure ->
                     if (failFast) return failure
@@ -143,24 +140,17 @@ public class ArrayReader<EB, O, T> private constructor(
         }
 
         internal fun build(items: JsReader<EB, O, T>): JsReader<EB, O, List<T>> =
-            build { env, context, location, source ->
-                readArray(
-                    env = env,
-                    context = context,
-                    location = location,
-                    source = source,
-                    itemsReader = items
-                )
+            build { env, location, source ->
+                readArray(env = env, location = location, source = source, itemsReader = items)
             }
 
         internal fun build(
             prefixItems: ArrayPrefixItems<EB, O, T>,
             items: Boolean
         ): JsReader<EB, O, List<T>> =
-            build { env, context, location, source ->
+            build { env, location, source ->
                 readArray(
                     env = env,
-                    context = context,
                     location = location,
                     source = source,
                     prefixItemReaders = prefixItems,
@@ -172,10 +162,9 @@ public class ArrayReader<EB, O, T> private constructor(
             prefixItems: ArrayPrefixItems<EB, O, T>,
             items: JsReader<EB, O, T>
         ): JsReader<EB, O, List<T>> =
-            build { env, context, location, source ->
+            build { env, location, source ->
                 readArray(
                     env = env,
-                    context = context,
                     location = location,
                     source = source,
                     prefixItemReaders = prefixItems,
@@ -184,7 +173,7 @@ public class ArrayReader<EB, O, T> private constructor(
             }
 
         private fun build(
-            block: (JsReaderEnv<EB, O>, JsContext, JsLocation, JsArray) -> JsReaderResult<List<T>>
+            block: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
         ): JsReader<EB, O, List<T>> {
             val validators = validatorBuilders.map { builder -> builder.build() }
                 .takeIf { it.isNotEmpty() }

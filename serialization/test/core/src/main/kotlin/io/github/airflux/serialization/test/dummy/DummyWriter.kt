@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.test.dummy
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
@@ -26,7 +25,7 @@ import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 
 public class DummyWriter<O, T>(public val result: (T) -> JsValue?) : JsWriter<O, T> {
-    override fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue? =
+    override fun write(env: JsWriterEnv<O>, location: JsLocation, source: T): JsValue? =
         result(source)
 
     public companion object {

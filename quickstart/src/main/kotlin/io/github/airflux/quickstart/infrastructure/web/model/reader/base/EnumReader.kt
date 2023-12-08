@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.toSuccess
 
 inline fun <EB, O, reified T : Enum<T>> JsReader<EB, O, String>.asEnum(): JsReader<EB, O, T> =
-    bind { _, _, value ->
+    bind { _, value ->
         try {
             enumValueOf<T>(value.value.uppercase()).toSuccess(value.location)
         } catch (ignored: Exception) {

@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -41,7 +40,6 @@ internal class JsReaderResultTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "20"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -320,7 +318,7 @@ internal class JsReaderResultTest : FreeSpec() {
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
 
                             "then filter should return the original value" {
-                                val filtered = result.filter(ENV, CONTEXT, predicate)
+                                val filtered = result.filter(ENV, predicate)
                                 filtered shouldBeSameInstanceAs result
                             }
                         }
@@ -330,7 +328,7 @@ internal class JsReaderResultTest : FreeSpec() {
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = false)
 
                             "then filter should return null" {
-                                val filtered = result.filter(ENV, CONTEXT, predicate)
+                                val filtered = result.filter(ENV, predicate)
                                 filtered shouldBe success(location = LOCATION, value = null)
                             }
                         }
@@ -338,12 +336,12 @@ internal class JsReaderResultTest : FreeSpec() {
 
                     "when the value in the result is null" - {
                         val result: JsReaderResult<String?> = success(location = LOCATION, value = null)
-                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                        val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
 
                         "then the filter should not be applying" {
-                            val filtered = result.filter(ENV, CONTEXT, predicate)
+                            val filtered = result.filter(ENV, predicate)
                             filtered shouldBe result
                         }
                     }
@@ -357,12 +355,12 @@ internal class JsReaderResultTest : FreeSpec() {
                             actual = JsBoolean.nameOfType
                         )
                     )
-                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _, _ ->
+                    val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
                         throw io.kotest.assertions.failure("Predicate not called.")
                     }
 
                     "then the filter should not be applying" {
-                        val filtered = result.filter(ENV, CONTEXT, predicate)
+                        val filtered = result.filter(ENV, predicate)
                         filtered shouldBe result
                     }
                 }
@@ -377,7 +375,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         val result: JsReaderResult<String> = success(location = LOCATION, value = "")
 
                         "then validator should return an error" {
-                            val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
+                            val validationResult = result.validation(ENV, isNotEmpty)
 
                             validationResult shouldBe failure(
                                 location = LOCATION,
@@ -390,7 +388,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         val result: JsReaderResult<String> = success(location = LOCATION, value = "user")
 
                         "then validator should return the original value" {
-                            val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
+                            val validationResult = result.validation(ENV, isNotEmpty)
                             validationResult shouldBe result
                         }
                     }
@@ -401,7 +399,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then validator should return the original value" {
-                        val validationResult = result.validation(ENV, CONTEXT, isNotEmpty)
+                        val validationResult = result.validation(ENV, isNotEmpty)
                         validationResult shouldBe result
                     }
                 }

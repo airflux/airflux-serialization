@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -33,11 +32,10 @@ internal class ReadAsArrayTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, JsArray) -> JsReaderResult<List<String>> =
-            { _, _, location, source ->
+        private val READER: (JsReaderEnv<EB, Unit>, JsLocation, JsArray) -> JsReaderResult<List<String>> =
+            { _, location, source ->
                 success(location = location, value = source.map { (it as JsString).get })
             }
     }
@@ -50,7 +48,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the collection of values" {
                     val json: JsValue = JsArray(JsString(USER_NAME))
 
-                    val result = json.readAsArray(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsArray(ENV, LOCATION, READER)
 
                     result shouldBeSuccess success(location = LOCATION, value = listOf(USER_NAME))
                 }
@@ -61,7 +59,7 @@ internal class ReadAsArrayTest : FreeSpec() {
                 "should return the invalid type error" {
                     val json: JsValue = JsBoolean.valueOf(true)
 
-                    val result = json.readAsArray(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsArray(ENV, LOCATION, READER)
 
                     result shouldBeFailure failure(
                         location = LOCATION,

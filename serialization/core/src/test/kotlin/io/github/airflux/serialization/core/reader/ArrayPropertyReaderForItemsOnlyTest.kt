@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -41,7 +40,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
         private const val FIRST_PHONE_VALUE = "123"
         private const val SECOND_PHONE_VALUE = "456"
 
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
     }
@@ -59,7 +57,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     "then reader should return result" {
                         val result: JsReaderResult<List<String>> = readArray(
                             env = envWithFailFastIsTrue,
-                            context = CONTEXT,
                             location = LOCATION,
                             source = source,
                             itemsReader = StringReader
@@ -75,7 +72,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     "then reader should return result" {
                         val result: JsReaderResult<List<String>> = readArray(
                             env = envWithFailFastIsFalse,
-                            context = CONTEXT,
                             location = LOCATION,
                             source = source,
                             itemsReader = StringReader
@@ -97,7 +93,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         "then reader should return result" {
                             val result: JsReaderResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
-                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 itemsReader = StringReader
@@ -116,7 +111,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         "then reader should return result" {
                             val result: JsReaderResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
-                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 itemsReader = StringReader
@@ -140,7 +134,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         "then the validator should return first error" {
                             val result: JsReaderResult<List<String>> = readArray(
                                 env = envWithFailFastIsTrue,
-                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 itemsReader = StringReader
@@ -162,7 +155,6 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         "then the validator should return all errors" {
                             val result: JsReaderResult<List<String>> = readArray(
                                 env = envWithFailFastIsFalse,
-                                context = CONTEXT,
                                 location = LOCATION,
                                 source = source,
                                 itemsReader = StringReader

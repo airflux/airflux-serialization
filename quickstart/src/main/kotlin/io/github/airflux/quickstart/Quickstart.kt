@@ -44,11 +44,10 @@ fun main() {
         registerModule(AirFluxJsonModule)
     }
 
-    val env =
-        JsReaderEnv(
-            errorBuilders = ReaderErrorBuilders,
-            options = ReaderOptions(failFast = true)
-        )
+    val env = JsReaderEnv(
+        errorBuilders = ReaderErrorBuilders,
+        options = ReaderOptions(failFast = true)
+    )
 
     JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
         .fold(

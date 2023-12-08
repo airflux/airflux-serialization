@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.test.dummy
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -30,18 +29,17 @@ import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 
 public class DummyReader<EB, O, T>(
-    public val result: (JsReaderEnv<EB, O>, context: JsContext, JsLocation, JsValue) -> JsReaderResult<T>
+    public val result: (JsReaderEnv<EB, O>, JsLocation, JsValue) -> JsReaderResult<T>
 ) : JsReader<EB, O, T> {
 
-    public constructor(result: JsReaderResult<T>) : this({ _, _, _, _ -> result })
+    public constructor(result: JsReaderResult<T>) : this({ _, _, _ -> result })
 
     override fun read(
         env: JsReaderEnv<EB, O>,
-        context: JsContext,
         location: JsLocation,
         source: JsValue
     ): JsReaderResult<T> =
-        result(env, context, location, source)
+        result(env, location, source)
 
     public companion object {
 
@@ -49,7 +47,7 @@ public class DummyReader<EB, O, T>(
         public fun <EB, O> boolean(): JsReader<EB, O, Boolean>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
-                result = { env, _, location, source ->
+                result = { env, location, source ->
                     if (source is JsBoolean)
                         success(location = location, value = source.get)
                     else
@@ -67,7 +65,7 @@ public class DummyReader<EB, O, T>(
         public fun <EB, O> string(): JsReader<EB, O, String>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
-                result = { env, _, location, source ->
+                result = { env, location, source ->
                     if (source is JsString)
                         success(location = location, value = source.get)
                     else
@@ -85,7 +83,7 @@ public class DummyReader<EB, O, T>(
         public fun <EB, O> int(): JsReader<EB, O, Int>
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
-                result = { env, _, location, source ->
+                result = { env, location, source ->
                     if (source is JsNumeric.Integer)
                         success(location = location, value = source.get.toInt())
                     else

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -36,7 +35,6 @@ internal class StringReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, Unit, String> = stringReader()
         private const val TEXT = "abc"
@@ -47,13 +45,13 @@ internal class StringReaderTest : FreeSpec() {
 
             "should return the string value" {
                 val source: JsValue = JsString(TEXT)
-                val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = StringReader.read(ENV, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = TEXT)
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsBoolean.valueOf(true)
-                val result = StringReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = StringReader.read(ENV, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(

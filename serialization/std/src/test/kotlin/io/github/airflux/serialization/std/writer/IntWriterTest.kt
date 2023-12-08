@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.valueOf
@@ -29,7 +28,6 @@ internal class IntWriterTest : FreeSpec() {
 
     companion object {
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -40,7 +38,7 @@ internal class IntWriterTest : FreeSpec() {
             val value: Int = Int.MAX_VALUE
 
             "should return the JsNumeric value" {
-                val result = writer.write(ENV, CONTEXT, LOCATION, value)
+                val result = writer.write(ENV, LOCATION, value)
                 result shouldBe JsNumeric.valueOf(value)
             }
         }

@@ -16,6 +16,8 @@
 
 package io.github.airflux.serialization.core.reader.env
 
+import io.github.airflux.serialization.core.context.JsContext
+
 /**
  * The environment of reading.
  * @param errorBuilders the builders of error.
@@ -23,5 +25,9 @@ package io.github.airflux.serialization.core.reader.env
  */
 public class JsReaderEnv<EB, O>(
     public val errorBuilders: EB,
-    public val options: O
+    public val options: O,
+    public val context: JsContext = JsContext.Empty
 )
+
+public operator fun <EB, O> JsReaderEnv<EB, O>.plus(element: JsContext.Element): JsReaderEnv<EB, O> =
+    JsReaderEnv(errorBuilders, options, this.context + element)

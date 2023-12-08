@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.core.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -34,12 +33,7 @@ import io.github.airflux.serialization.core.value.JsValue
 
 public fun interface JsPathReader<EB, O, out T> {
 
-    public fun read(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        source: JsValue
-    ): JsReaderResult<T>
+    public fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue): JsReaderResult<T>
 
     public companion object {
 
@@ -48,20 +42,20 @@ public fun interface JsPathReader<EB, O, out T> {
             reader: JsReader<EB, O, T>
         ): JsPathReader<EB, O, T?>
             where EB : InvalidTypeErrorBuilder =
-            JsPathReader { env, context, location, source ->
+            JsPathReader { env, location, source ->
                 val lookup = source.lookup(location, path)
-                readOptional(env, context, lookup, reader)
+                readOptional(env, lookup, reader)
             }
 
         public fun <EB, O, T> optional(
             path: JsPath,
             reader: JsReader<EB, O, T>,
-            default: (JsReaderEnv<EB, O>, JsContext) -> T
+            default: (JsReaderEnv<EB, O>) -> T
         ): JsPathReader<EB, O, T>
             where EB : InvalidTypeErrorBuilder =
-            JsPathReader { env, context, location, source ->
+            JsPathReader { env, location, source ->
                 val lookup = source.lookup(location, path)
-                readOptional(env, context, lookup, reader, default)
+                readOptional(env, lookup, reader, default)
             }
 
         public fun <EB, O, T> required(
@@ -70,33 +64,33 @@ public fun interface JsPathReader<EB, O, out T> {
         ): JsPathReader<EB, O, T>
             where EB : PathMissingErrorBuilder,
                   EB : InvalidTypeErrorBuilder =
-            JsPathReader { env, context, location, source ->
+            JsPathReader { env, location, source ->
                 val lookup = source.lookup(location, path)
-                readRequired(env, context, lookup, reader)
+                readRequired(env, lookup, reader)
             }
 
         public fun <EB, O, T> required(
             path: JsPath,
             reader: JsReader<EB, O, T>,
-            predicate: (JsReaderEnv<EB, O>, JsContext, JsLocation) -> Boolean
+            predicate: (JsReaderEnv<EB, O>, JsLocation) -> Boolean
         ): JsPathReader<EB, O, T?>
             where EB : PathMissingErrorBuilder,
                   EB : InvalidTypeErrorBuilder =
-            JsPathReader { env, context, location, source ->
+            JsPathReader { env, location, source ->
                 val lookup = source.lookup(location, path)
-                if (predicate(env, context, location.append(path)))
-                    readRequired(env, context, lookup, reader)
+                if (predicate(env, location.append(path)))
+                    readRequired(env, lookup, reader)
                 else
-                    readOptional(env, context, lookup, reader)
+                    readOptional(env, lookup, reader)
             }
     }
 }
 
 public infix fun <EB, O, T> JsPathReader<EB, O, T>.or(alt: JsPathReader<EB, O, T>): JsPathReader<EB, O, T> =
-    JsPathReader { env, context, location, source ->
-        this@or.read(env, context, location, source)
+    JsPathReader { env, location, source ->
+        this@or.read(env, location, source)
             .recovery { failure ->
-                alt.read(env, context, location, source)
+                alt.read(env, location, source)
                     .recovery { alternative -> failure + alternative }
             }
     }
@@ -104,15 +98,15 @@ public infix fun <EB, O, T> JsPathReader<EB, O, T>.or(alt: JsPathReader<EB, O, T
 public infix fun <EB, O, T> JsPathReader<EB, O, T>.filter(
     predicate: JsPredicate<EB, O, T & Any>
 ): JsPathReader<EB, O, T?> =
-    JsPathReader { env, context, location, source ->
-        this@filter.read(env, context, location, source)
-            .filter(env, context, predicate)
+    JsPathReader { env, location, source ->
+        this@filter.read(env, location, source)
+            .filter(env, predicate)
     }
 
 public infix fun <EB, O, T> JsPathReader<EB, O, T>.validation(
     validator: JsValidator<EB, O, T>
 ): JsPathReader<EB, O, T> =
-    JsPathReader { env, context, location, source ->
-        this@validation.read(env, context, location, source)
-            .validation(env, context, validator)
+    JsPathReader { env, location, source ->
+        this@validation.read(env, location, source)
+            .validation(env, validator)
     }

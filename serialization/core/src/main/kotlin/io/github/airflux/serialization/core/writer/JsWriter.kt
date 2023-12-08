@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.core.writer
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
@@ -24,28 +23,28 @@ import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
 public fun interface JsWriter<O, in T> {
-    public fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue?
+    public fun write(env: JsWriterEnv<O>, location: JsLocation, source: T): JsValue?
 }
 
 public fun <O, T, R> JsWriter<O, T>.contramap(transform: (R) -> T): JsWriter<O, R> =
-    JsWriter { env, context, location, source ->
-        this@contramap.write(env, context, location, transform(source))
+    JsWriter { env, location, source ->
+        this@contramap.write(env, location, transform(source))
     }
 
 public fun <O, T : Any> JsWriter<O, T>.nullable(): JsWriter<O, T?> =
-    JsWriter { env, context, location, source ->
-        if (source != null) this@nullable.write(env, context, location, source) else JsNull
+    JsWriter { env, location, source ->
+        if (source != null) this@nullable.write(env, location, source) else JsNull
     }
 
 public fun <O, T : Any> JsWriter<O, T>.optional(): JsWriter<O, T?> =
-    JsWriter { env, context, location, source ->
-        if (source != null) this@optional.write(env, context, location, source) else null
+    JsWriter { env, location, source ->
+        if (source != null) this@optional.write(env, location, source) else null
     }
 
 public fun <O, T> JsWriter<O, T>.filter(predicate: JsPredicate<O, T & Any>): JsWriter<O, T?> =
-    JsWriter { env, context, location, source ->
-        if (source != null && predicate.test(env, context, location, source))
-            this@filter.write(env, context, location, source)
+    JsWriter { env, location, source ->
+        if (source != null && predicate.test(env, location, source))
+            this@filter.write(env, location, source)
         else
             null
     }

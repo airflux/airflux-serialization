@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -33,10 +32,9 @@ internal class ReadAsNumberTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation.append("user")
-        private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, String) -> JsReaderResult<BigDecimal> =
-            { _, _, location, text ->
+        private val READER: (JsReaderEnv<EB, Unit>, JsLocation, String) -> JsReaderResult<BigDecimal> =
+            { _, location, text ->
                 success(location = location, value = BigDecimal(text))
             }
     }
@@ -48,7 +46,7 @@ internal class ReadAsNumberTest : FreeSpec() {
 
                 "should return the number value" {
                     val json: JsValue = JsNumeric.valueOf(Int.MAX_VALUE)
-                    val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsNumber(ENV, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
@@ -57,7 +55,7 @@ internal class ReadAsNumberTest : FreeSpec() {
 
                 "should return the number value" {
                     val json: JsValue = JsNumeric.Number.valueOrNullOf(Int.MAX_VALUE.toString())!!
-                    val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsNumber(ENV, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(Int.MAX_VALUE))
                 }
             }
@@ -65,7 +63,7 @@ internal class ReadAsNumberTest : FreeSpec() {
 
                 "should return the invalid type error" {
                     val json: JsValue = JsBoolean.valueOf(true)
-                    val result = json.readAsNumber(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsNumber(ENV, LOCATION, READER)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(

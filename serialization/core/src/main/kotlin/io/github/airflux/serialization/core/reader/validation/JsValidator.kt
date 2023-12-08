@@ -16,13 +16,12 @@
 
 package io.github.airflux.serialization.core.reader.validation
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.plus
 
 public fun interface JsValidator<EB, O, in T> {
-    public fun validate(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): JsValidatorResult
+    public fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: T): JsValidatorResult
 }
 
 /*
@@ -34,11 +33,11 @@ public fun interface JsValidator<EB, O, in T> {
  */
 public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>): JsValidator<EB, O, T> {
     val self = this
-    return JsValidator { env, context, location, value ->
-        val left = self.validate(env, context, location, value)
+    return JsValidator { env, location, value ->
+        val left = self.validate(env, location, value)
         if (left.isValid()) return@JsValidator valid()
 
-        val right = alt.validate(env, context, location, value)
+        val right = alt.validate(env, location, value)
         if (right.isValid()) return@JsValidator valid()
 
         JsValidatorResult.Invalid(left.failure + right.failure)
@@ -54,10 +53,10 @@ public infix fun <EB, O, T> JsValidator<EB, O, T>.or(alt: JsValidator<EB, O, T>)
  */
 public infix fun <EB, O, T> JsValidator<EB, O, T>.and(alt: JsValidator<EB, O, T>): JsValidator<EB, O, T> {
     val self = this
-    return JsValidator { env, context, location, value ->
-        val result = self.validate(env, context, location, value)
+    return JsValidator { env, location, value ->
+        val result = self.validate(env, location, value)
         if (result.isValid())
-            alt.validate(env, context, location, value)
+            alt.validate(env, location, value)
         else
             result
     }

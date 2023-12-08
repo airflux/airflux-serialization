@@ -29,8 +29,8 @@ import io.github.airflux.serialization.core.value.readAsInteger
 public fun <EB, O> intReader(): JsReader<EB, O, Int>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
-    JsReader { env, context, location, source ->
-        source.readAsInteger(env, context, location) { e, _, l, value ->
+    JsReader { env, location, source ->
+        source.readAsInteger(env, location) { e, l, value ->
             try {
                 value.toInt().toSuccess(l)
             } catch (expected: NumberFormatException) {

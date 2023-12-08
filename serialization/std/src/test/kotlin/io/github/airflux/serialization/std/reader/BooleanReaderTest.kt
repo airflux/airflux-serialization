@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -36,7 +35,6 @@ internal class BooleanReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val BooleanReader: JsReader<EB, Unit, Boolean> = booleanReader()
     }
@@ -47,19 +45,19 @@ internal class BooleanReaderTest : FreeSpec() {
 
             "should return value the true" {
                 val source: JsValue = JsBoolean.valueOf(true)
-                val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = BooleanReader.read(ENV, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = true)
             }
 
             "should return value the false" {
                 val source: JsValue = JsBoolean.valueOf(false)
-                val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = BooleanReader.read(ENV, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = false)
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = BooleanReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = BooleanReader.read(ENV, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(

@@ -21,7 +21,6 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.core.common.NonEmptyList
 import io.github.airflux.serialization.core.common.identity
 import io.github.airflux.serialization.core.common.plus
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -140,21 +139,19 @@ public inline infix fun <T> JsReaderResult<T>.orThrow(exceptionBuilder: (JsReade
 
 public fun <EB, O, T> JsReaderResult<T>.filter(
     env: JsReaderEnv<EB, O>,
-    context: JsContext,
     predicate: JsPredicate<EB, O, T & Any>
 ): JsReaderResult<T?> =
-    if (isSuccess() && value != null && !predicate.test(env, context, location, value))
+    if (isSuccess() && value != null && !predicate.test(env, location, value))
         success(location = location, value = null)
     else
         this
 
 public fun <EB, O, T> JsReaderResult<T>.validation(
     env: JsReaderEnv<EB, O>,
-    context: JsContext,
     validator: JsValidator<EB, O, T>
 ): JsReaderResult<T> =
     if (isSuccess())
-        validator.validate(env, context, location, value)
+        validator.validate(env, location, value)
             .fold(ifInvalid = ::identity, ifValid = { this })
     else
         this

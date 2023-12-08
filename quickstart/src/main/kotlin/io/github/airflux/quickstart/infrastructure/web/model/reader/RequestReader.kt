@@ -31,7 +31,7 @@ val RequestReader: JsReader<ReaderErrorBuilders, ReaderOptions, Request> = struc
 
     val tender = property(required(name = "tender", reader = TenderReader))
 
-    returns { _, _, location ->
+    returns { _, location ->
         Request(tender = this[tender]).toSuccess(location)
     }
 }

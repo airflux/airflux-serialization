@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -40,7 +39,6 @@ internal class IntReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val IntReader: JsReader<EB, Unit, Int> = intReader()
     }
@@ -58,14 +56,14 @@ internal class IntReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: JsValue = JsNumeric.valueOf(value)
-                    val result = IntReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = IntReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = IntReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = IntReader.read(ENV, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
@@ -92,7 +90,7 @@ internal class IntReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = JsNumeric.Integer.valueOrNullOf(value)!!
-                    val result = IntReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = IntReader.read(ENV, LOCATION, source)
                     result shouldBeFailure failure(
                         location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Int::class)

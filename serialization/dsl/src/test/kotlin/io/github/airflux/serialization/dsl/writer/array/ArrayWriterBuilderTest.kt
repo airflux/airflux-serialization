@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.array
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsNull
@@ -41,7 +40,6 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
         private const val FIRST_ITEM = "item-1"
         private const val SECOND_ITEM = "item-2"
 
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringWriter = DummyWriter.string<OPTS>()
@@ -63,7 +61,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                         "then should return a value of the JsArray type with items" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                         }
                     }
@@ -74,7 +72,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                         "then should return a value of the JsArray type with items" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                         }
                     }
@@ -85,7 +83,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                         "then should return a value of the JsArray type with items" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                         }
                     }
@@ -100,7 +98,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                         "then should return a value of the JsArray type without items" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsArray()
                         }
                     }
@@ -111,7 +109,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                         "then should return the null value" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
@@ -122,7 +120,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                         "then should return a value of the JsNull type" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsNull
                         }
                     }
@@ -143,7 +141,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -154,7 +152,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -165,7 +163,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -180,7 +178,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(
                                     JsNull, JsString(FIRST_ITEM), JsNull, JsString(SECOND_ITEM), JsNull
                                 )
@@ -193,7 +191,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(
                                     JsNull, JsString(FIRST_ITEM), JsNull, JsString(SECOND_ITEM), JsNull
                                 )
@@ -206,7 +204,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(
                                     JsNull, JsString(FIRST_ITEM), JsNull, JsString(SECOND_ITEM), JsNull
                                 )
@@ -223,7 +221,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with JsNull items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsNull, JsNull, JsNull)
                             }
                         }
@@ -234,7 +232,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with JsNull items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsNull, JsNull, JsNull)
                             }
                         }
@@ -245,7 +243,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with JsNull items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsNull, JsNull, JsNull)
                             }
                         }
@@ -260,7 +258,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type without items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray()
                             }
                         }
@@ -271,7 +269,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return the null value" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result.shouldBeNull()
                             }
                         }
@@ -282,7 +280,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsNull type" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsNull
                             }
                         }
@@ -301,7 +299,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -312,7 +310,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -323,7 +321,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -338,7 +336,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -349,7 +347,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -360,7 +358,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type with items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
                             }
                         }
@@ -375,7 +373,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type without items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray()
                             }
                         }
@@ -386,7 +384,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return the null value" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result.shouldBeNull()
                             }
                         }
@@ -397,7 +395,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsNull type" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsNull
                             }
                         }
@@ -412,7 +410,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsArray type without items" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsArray()
                             }
                         }
@@ -423,7 +421,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return the null value" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result.shouldBeNull()
                             }
                         }
@@ -434,7 +432,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
                             "then should return a value of the JsNull type" {
                                 val result =
-                                    writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                    writer.write(env = env, location = LOCATION, source = source)
                                 result shouldBe JsNull
                             }
                         }

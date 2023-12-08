@@ -28,7 +28,7 @@ import io.github.airflux.serialization.dsl.writer.struct.property.specification.
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
-val LotStatusWriter = JsWriter<WriterOptions, LotStatus> { _, _, _, value ->
+val LotStatusWriter = JsWriter<WriterOptions, LotStatus> { _, _, value ->
     JsString(value.name)
 }
 

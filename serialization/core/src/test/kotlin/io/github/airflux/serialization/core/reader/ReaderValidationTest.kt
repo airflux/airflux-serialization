@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -44,7 +43,6 @@ internal class ReaderValidationTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
@@ -52,9 +50,9 @@ internal class ReaderValidationTest : FreeSpec() {
 
     init {
         "The extension function JsReader#validation" - {
-            val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, context, location, source ->
+            val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
                 val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                readRequired(env, context, lookup, StringReader)
+                readRequired(env, lookup, StringReader)
             }
 
             "when an original reader returns a result as a success" - {
@@ -64,7 +62,7 @@ internal class ReaderValidationTest : FreeSpec() {
                     val validator: JsValidator<EB, Unit, String> = DummyValidator(result = valid())
 
                     "then should return the original result" {
-                        val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
+                        val result = requiredReader.validation(validator).read(ENV, LOCATION, source)
                         result shouldBe success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
@@ -81,7 +79,7 @@ internal class ReaderValidationTest : FreeSpec() {
                     )
 
                     "then should return the result of a validation" {
-                        val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
+                        val result = requiredReader.validation(validator).read(ENV, LOCATION, source)
 
                         result shouldBe failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -95,11 +93,11 @@ internal class ReaderValidationTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "then validation does not execute and the original result should be returned" {
-                    val validator: JsValidator<EB, Unit, String> = DummyValidator { _, _, location, _ ->
+                    val validator: JsValidator<EB, Unit, String> = DummyValidator { _, location, _ ->
                         invalid(location = location, error = JsonErrors.Validation.Strings.IsEmpty)
                     }
 
-                    val result = requiredReader.validation(validator).read(ENV, CONTEXT, LOCATION, source)
+                    val result = requiredReader.validation(validator).read(ENV, LOCATION, source)
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.Validation.Strings.IsEmpty

@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -37,7 +36,6 @@ internal class ReaderFlatMapTest : FreeSpec() {
     companion object {
         private const val VALUE = "42"
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -50,10 +48,10 @@ internal class ReaderFlatMapTest : FreeSpec() {
                 "then the new reader should return the transformed value" {
                     val source = JsString(VALUE)
                     val transformedReader =
-                        reader.bind { _, _, result ->
+                        reader.bind { _, result ->
                             result.value.toInt().toSuccess(result.location)
                         }
-                    val result: JsReaderResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result: JsReaderResult<Int> = transformedReader.read(ENV, LOCATION, source)
 
                     result shouldBeSuccess success(location = LOCATION, value = VALUE.toInt())
                 }
@@ -66,10 +64,10 @@ internal class ReaderFlatMapTest : FreeSpec() {
                 "then the new reader should return it error" {
                     val source = JsString(VALUE)
                     val transformedReader =
-                        reader.bind { _, _, result ->
+                        reader.bind { _, result ->
                             result.value.toInt().toSuccess(result.location)
                         }
-                    val result = transformedReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = transformedReader.read(ENV, LOCATION, source)
 
                     result shouldBeFailure failure
                 }

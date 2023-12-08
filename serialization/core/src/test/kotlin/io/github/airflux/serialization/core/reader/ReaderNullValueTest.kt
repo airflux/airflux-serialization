@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -46,15 +45,14 @@ internal class ReaderNullValueTest : FreeSpec() {
         private const val ALTERNATIVE_VALUE = "42"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string<EB, Unit>()
-            .ifNullValue { _, _, _ -> ALTERNATIVE_VALUE }
+            .ifNullValue { _, _ -> ALTERNATIVE_VALUE }
 
-        private val READER: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
+        private val READER: JsReader<EB, Unit, String?> = DummyReader { env, location, source ->
             val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-            readOptional(env, context, lookup, StringReader)
+            readOptional(env, lookup, StringReader)
         }
     }
 
@@ -67,7 +65,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then should return the original value" {
-                        val result: JsReaderResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
+                        val result: JsReaderResult<String?> = READER.read(ENV, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -80,7 +78,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsNull)
 
                     "then should return the default value" {
-                        val result: JsReaderResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
+                        val result: JsReaderResult<String?> = READER.read(ENV, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -94,7 +92,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
 
                 "then should return the null value" {
-                    val result: JsReaderResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
+                    val result: JsReaderResult<String?> = READER.read(ENV, LOCATION, source)
 
                     result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                 }
@@ -104,7 +102,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsBoolean.True)
 
                 "then should return the original value" {
-                    val result: JsReaderResult<String?> = READER.read(ENV, CONTEXT, LOCATION, source)
+                    val result: JsReaderResult<String?> = READER.read(ENV, LOCATION, source)
 
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -38,9 +37,7 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidators
 
-public fun <EB, O, T> structReader(
-    block: StructReader.Builder<EB, O, T>.() -> JsReader<EB, O, T>
-): JsReader<EB, O, T>
+public fun <EB, O, T> structReader(block: StructReader.Builder<EB, O, T>.() -> JsReader<EB, O, T>): JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
     val builder = StructReader.Builder<EB, O, T>()
@@ -48,7 +45,7 @@ public fun <EB, O, T> structReader(
 }
 
 public fun <EB, O, T> StructReader.Builder<EB, O, T>.returns(
-    block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsContext, JsLocation) -> JsReaderResult<T>
+    block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ): JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = this.build(block)
@@ -56,36 +53,26 @@ public fun <EB, O, T> StructReader.Builder<EB, O, T>.returns(
 public class StructReader<EB, O, T> private constructor(
     private val validators: StructValidators<EB, O>,
     private val properties: StructProperties<EB, O>,
-    private val resultBuilder: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsContext, JsLocation) -> JsReaderResult<T>
+    private val resultBuilder: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ) : JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
-    override fun read(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        source: JsValue
-    ): JsReaderResult<T> =
+    override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue): JsReaderResult<T> =
         if (source is JsStruct)
-            read(env, context, location, source)
+            read(env, location, source)
         else
             failure(
                 location = location,
                 error = env.errorBuilders.invalidTypeError(listOf(JsStruct.nameOfType), source.nameOfType)
             )
 
-    private fun read(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        source: JsStruct
-    ): JsReaderResult<T> {
+    private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
         val failFast = env.options.failFast
         var failureAccumulator: JsReaderResult.Failure? = null
 
         validators.forEach { validator ->
-            validator.validate(env, context, location, properties, source)
+            validator.validate(env, location, properties, source)
                 .ifInvalid { failure ->
                     if (failFast) return failure
                     failureAccumulator += failure
@@ -95,7 +82,7 @@ public class StructReader<EB, O, T> private constructor(
         val propertyValues: PropertyValues<EB, O> = PropertyValuesInstance<EB, O>()
             .apply {
                 properties.forEach { property ->
-                    property.read(env, context, location, source)
+                    property.read(env, location, source)
                         .fold(
                             ifFailure = { failure ->
                                 if (failFast) return failure
@@ -108,7 +95,7 @@ public class StructReader<EB, O, T> private constructor(
                 }
             }
 
-        return failureAccumulator ?: resultBuilder(propertyValues, env, context, location)
+        return failureAccumulator ?: resultBuilder(propertyValues, env, location)
     }
 
     @AirfluxMarker
@@ -140,7 +127,7 @@ public class StructReader<EB, O, T> private constructor(
             StructProperty(spec).also { properties.add(it) }
 
         public fun build(
-            block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsContext, JsLocation) -> JsReaderResult<T>
+            block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
         ): JsReader<EB, O, T> {
             val validators: StructValidators<EB, O> =
                 validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }

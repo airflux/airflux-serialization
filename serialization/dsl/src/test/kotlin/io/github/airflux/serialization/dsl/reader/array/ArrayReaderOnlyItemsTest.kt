@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -42,7 +41,6 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
         private const val FIRST_ITEM = "first"
         private const val SECOND_ITEM = "second"
 
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private const val MIN_ITEMS = 2
 
@@ -71,7 +69,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsString("")
 
                         "then the reader should return the invalid type error" {
-                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
@@ -86,7 +84,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                         "then should return successful value" {
-                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_ITEM, SECOND_ITEM)
@@ -98,7 +96,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsArray()
 
                         "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Arrays.MinItems(
@@ -113,7 +111,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsArray(JsBoolean.valueOf(true))
 
                         "then the reader should return validation error" {
-                            val result = reader.read(envWithFailFastIsTrue, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Arrays.MinItems(
@@ -132,7 +130,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsString("")
 
                         "then the reader should return the invalid type error" {
-                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
@@ -147,7 +145,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsArray(JsString(FIRST_ITEM), JsString(SECOND_ITEM))
 
                         "then should return successful value" {
-                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeSuccess success(
                                 location = LOCATION,
                                 value = listOf(FIRST_ITEM, SECOND_ITEM)
@@ -159,7 +157,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsArray()
 
                         "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Arrays.MinItems(
@@ -174,7 +172,7 @@ internal class ArrayReaderOnlyItemsTest : FreeSpec() {
                         val source = JsArray(JsBoolean.valueOf(true))
 
                         "then the reader should return all errors" {
-                            val result = reader.read(envWithFailFastIsFalse, CONTEXT, LOCATION, source)
+                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result.shouldBeFailure(
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION,

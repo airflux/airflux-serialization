@@ -29,6 +29,6 @@ import io.github.airflux.serialization.dsl.reader.array.returns
 val LotsReader: JsReader<ReaderErrorBuilders, ReaderOptions, Lots> = arrayReader {
     validation(CommonArrayReaderValidators)
     returns(items = LotReader)
-}.bind { _, _, result ->
+}.bind { _, result ->
     Lots(result.value).toSuccess(result.location)
 }

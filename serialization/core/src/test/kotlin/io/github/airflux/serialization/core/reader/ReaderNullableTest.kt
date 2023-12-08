@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
@@ -43,7 +42,6 @@ internal class ReaderNullableTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String?> = DummyReader.string<EB, Unit>().nullable()
@@ -51,9 +49,9 @@ internal class ReaderNullableTest : FreeSpec() {
 
     init {
         "The extension-function JsReader#toNullableType" - {
-            val reader: JsReader<EB, Unit, String?> = DummyReader { env, context, location, source ->
+            val reader: JsReader<EB, Unit, String?> = DummyReader { env, location, source ->
                 val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                readOptional(env, context, lookup, StringReader)
+                readOptional(env, lookup, StringReader)
             }
 
             "when an original reader returns a result as a success" - {
@@ -62,7 +60,7 @@ internal class ReaderNullableTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                     "then should return the read value" {
-                        val result: JsReaderResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: JsReaderResult<String?> = reader.read(ENV, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -75,7 +73,7 @@ internal class ReaderNullableTest : FreeSpec() {
                     val source = JsStruct(ID_PROPERTY_NAME to JsNull)
 
                     "then should return the null value" {
-                        val result: JsReaderResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result: JsReaderResult<String?> = reader.read(ENV, LOCATION, source)
 
                         result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                     }
@@ -86,7 +84,7 @@ internal class ReaderNullableTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsBoolean.True)
 
                 "then should return the original value" {
-                    val result: JsReaderResult<String?> = reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result: JsReaderResult<String?> = reader.read(ENV, LOCATION, source)
 
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),

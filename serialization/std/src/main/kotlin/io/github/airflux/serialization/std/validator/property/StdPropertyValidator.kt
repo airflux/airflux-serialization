@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.property
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.validation.JsValidator
@@ -29,7 +28,7 @@ public object StdPropertyValidator {
      */
     @JvmStatic
     public fun <EB, O, T> forbidden(
-        predicate: (env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation) -> Boolean
+        predicate: (env: JsReaderEnv<EB, O>, location: JsLocation) -> Boolean
     ): JsValidator<EB, O, T>
         where EB : ForbiddenPropertyValidator.ErrorBuilder = ForbiddenPropertyValidator(predicate)
 
@@ -39,7 +38,7 @@ public object StdPropertyValidator {
      */
     @JvmStatic
     public fun <EB, O, T> mandatory(
-        predicate: (env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation) -> Boolean
+        predicate: (env: JsReaderEnv<EB, O>, location: JsLocation) -> Boolean
     ): JsValidator<EB, O, T>
         where EB : MandatoryPropertyValidator.ErrorBuilder = MandatoryPropertyValidator(predicate)
 }

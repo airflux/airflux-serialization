@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -34,7 +33,6 @@ import io.github.airflux.serialization.core.value.JsArray
  */
 public fun <EB, O, T> readArray(
     env: JsReaderEnv<EB, O>,
-    context: JsContext,
     location: JsLocation,
     source: JsArray,
     itemsReader: JsReader<EB, O, T>
@@ -44,7 +42,7 @@ public fun <EB, O, T> readArray(
     val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
-        itemsReader.read(env, context, currentLocation, elem)
+        itemsReader.read(env, currentLocation, elem)
             .fold(
                 ifFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
                 ifSuccess = { success -> acc.combine(success) }
@@ -61,7 +59,6 @@ public fun <EB, O, T> readArray(
 @Suppress("LongParameterList")
 public fun <EB, O, T> readArray(
     env: JsReaderEnv<EB, O>,
-    context: JsContext,
     location: JsLocation,
     source: JsArray,
     prefixItemReaders: List<JsReader<EB, O, T>>,
@@ -79,7 +76,7 @@ public fun <EB, O, T> readArray(
         val currentLocation = location.append(idx)
         val reader = getReader(idx, prefixItemReaders)
         if (reader != null) {
-            reader.read(env, context, currentLocation, elem)
+            reader.read(env, currentLocation, elem)
                 .fold(
                     ifFailure = { failure -> if (!failFast) acc.combine(failure) else return failure },
                     ifSuccess = { success -> acc.combine(success) }
@@ -100,7 +97,6 @@ public fun <EB, O, T> readArray(
 @Suppress("LongParameterList")
 public fun <EB, O, T> readArray(
     env: JsReaderEnv<EB, O>,
-    context: JsContext,
     location: JsLocation,
     source: JsArray,
     prefixItemReaders: List<JsReader<EB, O, T>>,
@@ -120,7 +116,7 @@ public fun <EB, O, T> readArray(
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItemReaders, itemsReader)
-            .read(env, context, currentLocation, elem)
+            .read(env, currentLocation, elem)
             .fold(
                 ifFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
                 ifSuccess = { success -> acc.combine(success) }

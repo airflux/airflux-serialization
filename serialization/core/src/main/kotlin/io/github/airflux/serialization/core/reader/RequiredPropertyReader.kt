@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.core.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -33,14 +32,13 @@ import io.github.airflux.serialization.core.reader.result.failure
  */
 public fun <EB, O, T> readRequired(
     env: JsReaderEnv<EB, O>,
-    context: JsContext,
     lookup: JsLookup,
     using: JsReader<EB, O, T>
 ): JsReaderResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     when (lookup) {
-        is JsLookup.Defined -> using.read(env, context, lookup.location, lookup.value)
+        is JsLookup.Defined -> using.read(env, lookup.location, lookup.value)
 
         is JsLookup.Undefined -> when (lookup) {
             is JsLookup.Undefined.PathMissing ->

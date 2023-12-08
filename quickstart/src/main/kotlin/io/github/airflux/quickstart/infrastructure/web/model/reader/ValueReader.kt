@@ -35,7 +35,7 @@ val ValueReader: JsReader<ReaderErrorBuilders, ReaderOptions, Value> = structRea
     val amount = property(required(name = "amount", reader = AmountReader))
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
-    returns { _, _, location ->
+    returns { _, location ->
         Value(amount = Amount(+amount), currency = Currency(+currency)).toSuccess(location)
     }
 }

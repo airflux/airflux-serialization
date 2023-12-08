@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -30,8 +29,8 @@ public class StructProperty<O, T, P> private constructor(
 
     internal constructor(spec: StructPropertySpec<O, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
-    public fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue? =
-        writer.write(env, context, location, source)
+    public fun write(env: JsWriterEnv<O>, location: JsLocation, source: T): JsValue? =
+        writer.write(env, location, source)
 
     internal companion object {
 
@@ -40,17 +39,17 @@ public class StructProperty<O, T, P> private constructor(
             val writer = spec.writer
 
             return when (spec.from) {
-                is StructPropertySpec.Extractor.WithoutContext -> {
+                is StructPropertySpec.Extractor.WithoutEnv -> {
                     val extractor = spec.from.extractor
-                    JsWriter { env, context, location, source ->
-                        writer.write(env, context, location, source.extractor())
+                    JsWriter { env, location, source ->
+                        writer.write(env, location, source.extractor())
                     }
                 }
 
-                is StructPropertySpec.Extractor.WithContext -> {
+                is StructPropertySpec.Extractor.WithEnv -> {
                     val extractor = spec.from.extractor
-                    JsWriter { env, context, location, source ->
-                        writer.write(env, context, location, source.extractor(context))
+                    JsWriter { env, location, source ->
+                        writer.write(env, location, source.extractor(env))
                     }
                 }
             }

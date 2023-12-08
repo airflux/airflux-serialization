@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -43,12 +42,11 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
         private val ENV = JsReaderEnv(errorBuilders = EB(), options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
-        private val READER: JsPathReader<EB, Unit, String> = DummyPathReader { env, context, location, source ->
-            StringReader.read(env, context, location, source)
+        private val READER: JsPathReader<EB, Unit, String> = DummyPathReader { env, location, source ->
+            StringReader.read(env, location, source)
         }
     }
 
@@ -64,7 +62,7 @@ internal class StructPropertyTest : FreeSpec() {
 
             "then the method read should return the value" {
                 val source = JsString(PROPERTY_VALUE)
-                val result = property.read(ENV, CONTEXT, LOCATION, source)
+                val result = property.read(ENV, LOCATION, source)
                 result shouldBeSuccess success(location = LOCATION, value = PROPERTY_VALUE)
             }
         }

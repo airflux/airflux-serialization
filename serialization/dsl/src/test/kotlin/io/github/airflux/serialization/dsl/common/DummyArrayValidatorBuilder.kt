@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -32,12 +31,8 @@ internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : Ar
     override fun build(): ArrayValidator<EB, O> = validator
 
     internal class Validator<EB, O>(val result: JsValidatorResult) : ArrayValidator<EB, O> {
-        override fun validate(
-            env: JsReaderEnv<EB, O>,
-            context: JsContext,
-            location: JsLocation,
-            source: JsArray
-        ): JsValidatorResult = result
+        override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =
+            result
     }
 
     companion object {
@@ -48,7 +43,7 @@ internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : Ar
             error: (expected: Int, actual: Int) -> JsReaderResult.Error
         ): ArrayValidator.Builder<EB, O> =
             ArrayValidator.Builder {
-                ArrayValidator { _, _, location, source ->
+                ArrayValidator { _, location, source ->
                     if (source.size < expected)
                         return@ArrayValidator invalid(location = location, error = error(expected, source.size))
                     else

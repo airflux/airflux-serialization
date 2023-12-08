@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -39,7 +38,6 @@ internal class ByteReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val ByteReader = byteReader<EB, Unit>()
     }
@@ -57,14 +55,14 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: JsValue = JsNumeric.valueOf(value)
-                    val result = ByteReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = ByteReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = ByteReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = ByteReader.read(ENV, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
@@ -91,7 +89,7 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = JsNumeric.Integer.valueOrNullOf(value)!!
-                    val result = ByteReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = ByteReader.read(ENV, LOCATION, source)
                     result shouldBeFailure failure(
                         location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Byte::class)

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsStruct
@@ -41,12 +40,12 @@ public class StructWriter<O, T> private constructor(
 ) : JsWriter<O, T>
     where O : WriterActionBuilderIfResultIsEmptyOption {
 
-    override fun write(env: JsWriterEnv<O>, context: JsContext, location: JsLocation, source: T): JsValue? {
+    override fun write(env: JsWriterEnv<O>, location: JsLocation, source: T): JsValue? {
         val struct = JsStruct.builder()
             .apply {
                 properties.forEach { property ->
                     val currentLocation = location.append(property.name)
-                    property.write(env, context, currentLocation, source)
+                    property.write(env, currentLocation, source)
                         ?.let { value -> add(name = property.name, value = value) }
                 }
             }

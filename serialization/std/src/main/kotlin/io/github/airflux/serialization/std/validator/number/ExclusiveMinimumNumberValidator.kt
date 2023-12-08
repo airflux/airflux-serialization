@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.number
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -32,12 +31,7 @@ public class ExclusiveMinimumNumberValidator<EB, O, T> internal constructor(
           T : Number,
           T : Comparable<T> {
 
-    override fun validate(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        value: T
-    ): JsValidatorResult =
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: T): JsValidatorResult =
         if (value > expected)
             valid()
         else

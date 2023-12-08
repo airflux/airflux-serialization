@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -30,12 +29,7 @@ public class PatternStringValidator<EB, O, T : String?> internal constructor(
 ) : JsValidator<EB, O, T>
     where EB : PatternStringValidator.ErrorBuilder {
 
-    override fun validate(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        value: T
-    ): JsValidatorResult =
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: T): JsValidatorResult =
         if (value != null) {
             if (pattern.matches(value))
                 valid()

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
@@ -52,7 +51,6 @@ internal class RequiredPropertySpecTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE_AS_INT = "10"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
@@ -77,7 +75,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                     "when a read is success" - {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
                             result shouldBeSuccess success(
@@ -89,7 +87,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                     "when a read error occurred" - {
                         val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
@@ -105,7 +103,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                 "when the property is missing" - {
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then an error should be returned" {
                         result shouldBeFailure failure(
@@ -128,7 +126,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                     "when a read is success" - {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
                             result shouldBeSuccess success(
@@ -140,7 +138,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                     "when a read error occurred" - {
                         val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
-                        val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
@@ -156,7 +154,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                 "when the property is missing" - {
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
-                    val result = spec.reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = spec.reader.read(ENV, LOCATION, source)
 
                     "then an error should be returned" {
                         result shouldBeFailure failure(
@@ -176,7 +174,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     "then a value should be returned if validation is a success" {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
-                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result shouldBeSuccess success(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -187,7 +185,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     "then a validation error should be returned if validation is a failure" {
                         val source = JsStruct(ID_PROPERTY_NAME to JsString(""))
 
-                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -201,7 +199,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     "then should be returned a read error" {
                         val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
 
-                        val result = specWithValidator.reader.read(ENV, CONTEXT, LOCATION, source)
+                        val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
@@ -225,7 +223,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                 "when the main reader has successfully read" - {
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
-                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned" {
                         result shouldBeSuccess success(
@@ -238,7 +236,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 "when the main reader has failure read" - {
                     val source =
                         JsStruct(ID_PROPERTY_NAME to JsNumeric.Integer.valueOrNullOf(ID_PROPERTY_VALUE_AS_INT)!!)
-                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
                         result shouldBeSuccess success(
@@ -250,7 +248,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                 "when the alternative reader has failure read" - {
                     val source = JsStruct(ID_PROPERTY_NAME to JsBoolean.True)
-                    val result = specWithAlternative.reader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then should be returned all read errors" {
                         result.shouldBeFailure(

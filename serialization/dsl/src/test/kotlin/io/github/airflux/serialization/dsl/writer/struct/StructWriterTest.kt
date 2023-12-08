@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.struct
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsNumeric
@@ -44,7 +43,6 @@ internal class StructWriterTest : FreeSpec() {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = 42
 
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -64,7 +62,7 @@ internal class StructWriterTest : FreeSpec() {
 
                     "then should return a struct with property" {
                         val result =
-                            writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                            writer.write(env = env, location = LOCATION, source = source)
                         result shouldBe JsStruct(
                             ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
@@ -76,7 +74,7 @@ internal class StructWriterTest : FreeSpec() {
 
                     "then should return a struct with property" {
                         val result =
-                            writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                            writer.write(env = env, location = LOCATION, source = source)
                         result shouldBe JsStruct(
                             ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
@@ -88,7 +86,7 @@ internal class StructWriterTest : FreeSpec() {
 
                     "then should return a struct with property" {
                         val result =
-                            writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                            writer.write(env = env, location = LOCATION, source = source)
                         result shouldBe JsStruct(
                             ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
                         )
@@ -115,7 +113,7 @@ internal class StructWriterTest : FreeSpec() {
 
                         "then should return a struct with property" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsStruct(ID_PROPERTY_NAME to JsNull)
                         }
                     }
@@ -125,7 +123,7 @@ internal class StructWriterTest : FreeSpec() {
 
                         "then should return a struct with property" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsStruct(ID_PROPERTY_NAME to JsNull)
                         }
                     }
@@ -135,7 +133,7 @@ internal class StructWriterTest : FreeSpec() {
 
                         "then should return a struct with property" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsStruct(ID_PROPERTY_NAME to JsNull)
                         }
                     }
@@ -157,7 +155,7 @@ internal class StructWriterTest : FreeSpec() {
 
                         "then should return an empty struct" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsStruct()
                         }
                     }
@@ -167,7 +165,7 @@ internal class StructWriterTest : FreeSpec() {
 
                         "then should return a null value" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result.shouldBeNull()
                         }
                     }
@@ -177,7 +175,7 @@ internal class StructWriterTest : FreeSpec() {
 
                         "then should return a JsNull value" {
                             val result =
-                                writer.write(env = env, context = CONTEXT, location = LOCATION, source = source)
+                                writer.write(env = env, location = LOCATION, source = source)
                             result shouldBe JsNull
                         }
                     }

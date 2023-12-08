@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -32,11 +31,10 @@ internal class ReadAsStructTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation.append("user")
         private const val USER_NAME = "user"
-        private val reader: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, JsStruct) -> JsReaderResult<DTO> =
-            { _, _, location, source ->
+        private val reader: (JsReaderEnv<EB, Unit>, JsLocation, JsStruct) -> JsReaderResult<DTO> =
+            { _, location, source ->
                 val name = source["name"] as JsString
                 success(location = location, value = DTO(name = name.get))
             }
@@ -49,7 +47,7 @@ internal class ReadAsStructTest : FreeSpec() {
 
                 "should return the DTO" {
                     val json: JsValue = JsStruct("name" to JsString(USER_NAME))
-                    val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
+                    val result = json.readAsStruct(ENV, LOCATION, reader)
                     result shouldBeSuccess success(location = LOCATION, value = DTO(name = USER_NAME))
                 }
             }
@@ -57,7 +55,7 @@ internal class ReadAsStructTest : FreeSpec() {
 
                 "should return the invalid type' error" {
                     val json: JsValue = JsBoolean.valueOf(true)
-                    val result = json.readAsStruct(ENV, CONTEXT, LOCATION, reader)
+                    val result = json.readAsStruct(ENV, LOCATION, reader)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(

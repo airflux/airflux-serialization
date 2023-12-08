@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -34,7 +33,6 @@ internal class ReaderMapTest : FreeSpec() {
     companion object {
         private const val VALUE = "42"
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -45,7 +43,7 @@ internal class ReaderMapTest : FreeSpec() {
             "should return new reader" {
                 val source = JsString(VALUE)
                 val transformedReader = reader.map { value -> value.toInt() }
-                val result: JsReaderResult<Int> = transformedReader.read(ENV, CONTEXT, LOCATION, source)
+                val result: JsReaderResult<Int> = transformedReader.read(ENV, LOCATION, source)
 
                 result shouldBeSuccess success(location = LOCATION, value = VALUE.toInt())
             }

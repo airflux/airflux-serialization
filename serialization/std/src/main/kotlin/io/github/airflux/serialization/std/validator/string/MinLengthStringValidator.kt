@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -30,18 +29,14 @@ public class MinLengthStringValidator<EB, O> internal constructor(
 ) : JsValidator<EB, O, String?>
     where EB : MinLengthStringValidator.ErrorBuilder {
 
-    override fun validate(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        value: String?
-    ): JsValidatorResult = if (value != null) {
-        if (value.length >= expected)
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: String?): JsValidatorResult =
+        if (value != null) {
+            if (value.length >= expected)
+                valid()
+            else
+                invalid(location = location, error = env.errorBuilders.minLengthStringError(expected, value.length))
+        } else
             valid()
-        else
-            invalid(location = location, error = env.errorBuilders.minLengthStringError(expected, value.length))
-    } else
-        valid()
 
     public fun interface ErrorBuilder {
         public fun minLengthStringError(expected: Int, actual: Int): JsReaderResult.Error

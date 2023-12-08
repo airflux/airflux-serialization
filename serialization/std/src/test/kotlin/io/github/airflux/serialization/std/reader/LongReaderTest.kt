@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.reader
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -40,7 +39,6 @@ internal class LongReaderTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val LongReader = longReader<EB, Unit>()
     }
@@ -58,14 +56,14 @@ internal class LongReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: JsValue = JsNumeric.valueOf(value)
-                    val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = LongReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
+                val result = LongReader.read(ENV, LOCATION, source)
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
@@ -92,7 +90,7 @@ internal class LongReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = JsNumeric.Integer.valueOrNullOf(value)!!
-                    val result = LongReader.read(ENV, CONTEXT, LOCATION, source)
+                    val result = LongReader.read(ENV, LOCATION, source)
                     result shouldBeFailure failure(
                         location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Long::class)

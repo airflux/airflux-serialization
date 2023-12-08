@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.condition
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.failure
@@ -31,7 +30,6 @@ internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(Unit, Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val IsNotEmptyStringValidator: JsValidator<Unit, Unit, String> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }
@@ -43,13 +41,13 @@ internal class ConditionValidatorsTest : FreeSpec() {
             val validator = IsNotEmptyStringValidator.applyIfNotNull()
 
             "should return the result of applying the validator to the value if it is not the null value" {
-                val result = validator.validate(ENV, CONTEXT, LOCATION, "")
+                val result = validator.validate(ENV, LOCATION, "")
 
                 result shouldBeInvalid failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
             }
 
             "should return the null value if the value is the null value" {
-                val result = validator.validate(ENV, CONTEXT, LOCATION, null)
+                val result = validator.validate(ENV, LOCATION, null)
                 result.shouldBeValid()
             }
         }
@@ -57,17 +55,17 @@ internal class ConditionValidatorsTest : FreeSpec() {
         "JsPropertyValidator<T>#applyIf(_)" - {
 
             "should return the result of applying the validator to the value if the predicate returns true" {
-                val validator = IsNotEmptyStringValidator.applyIf { _, _, _, _ -> true }
+                val validator = IsNotEmptyStringValidator.applyIf { _, _, _ -> true }
 
-                val result = validator.validate(ENV, CONTEXT, LOCATION, "")
+                val result = validator.validate(ENV, LOCATION, "")
 
                 result shouldBeInvalid failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
             }
 
             "should return the null value if the predicate returns false" {
-                val validator = IsNotEmptyStringValidator.applyIf { _, _, _, _ -> false }
+                val validator = IsNotEmptyStringValidator.applyIf { _, _, _ -> false }
 
-                val result = validator.validate(ENV, CONTEXT, LOCATION, "")
+                val result = validator.validate(ENV, LOCATION, "")
                 result.shouldBeValid()
             }
         }

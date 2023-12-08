@@ -24,4 +24,4 @@ import io.github.airflux.serialization.core.writer.JsWriter
  * Writer for primitive [Long] type.
  */
 public fun <O> longWriter(): JsWriter<O, Long> =
-    JsWriter { _, _, _, value -> JsNumeric.valueOf(value) }
+    JsWriter { _, _, value -> JsNumeric.valueOf(value) }

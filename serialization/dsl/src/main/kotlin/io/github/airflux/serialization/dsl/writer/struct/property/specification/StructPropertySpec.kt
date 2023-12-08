@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.writer.JsWriter
+import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.core.writer.filter
 import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
@@ -26,50 +26,51 @@ public fun <O, T : Any, P : Any> nonNullable(
     from: T.() -> P,
     writer: JsWriter<O, P>
 ): StructPropertySpec<O, T, P> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutContext(from), writer = writer)
+    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
 
 public fun <O, T : Any, P : Any> nonNullable(
     name: String,
-    from: T.(JsContext) -> P,
+    from: T.(JsWriterEnv<O>) -> P,
     writer: JsWriter<O, P>
 ): StructPropertySpec<O, T, P> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithContext(from), writer = writer)
+    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithEnv(from), writer = writer)
 
 public fun <O, T : Any, P : Any> nullable(
     name: String,
     from: T.() -> P?,
     writer: JsWriter<O, P?>
 ): StructPropertySpec<O, T, P?> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor(from), writer = writer)
+    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
 
 public fun <O, T : Any, P : Any> nullable(
     name: String,
-    from: T.(JsContext) -> P?,
+    from: T.(JsWriterEnv<O>) -> P?,
     writer: JsWriter<O, P?>
 ): StructPropertySpec<O, T, P?> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor(from), writer = writer)
+    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithEnv(from), writer = writer)
 
 public class StructPropertySpec<O, T, P> internal constructor(
     public val name: String,
-    public val from: Extractor<T, P>,
+    public val from: Extractor<O, T, P>,
     public val writer: JsWriter<O, P>
 ) {
 
-    public sealed class Extractor<T, P> {
+    public sealed class Extractor<O, T, P> {
 
-        internal class WithoutContext<T, P>(val extractor: T.() -> P) : Extractor<T, P>()
-        internal class WithContext<T, P>(val extractor: T.(JsContext) -> P) : Extractor<T, P>()
+        internal class WithoutEnv<O, T, P>(val extractor: T.() -> P) : Extractor<O, T, P>()
+        internal class WithEnv<O, T, P>(val extractor: T.(JsWriterEnv<O>) -> P) : Extractor<O, T, P>()
 
-        public companion object {
-
-            @JvmStatic
-            public operator fun <T, P> invoke(extractor: T.() -> P): Extractor<T, P> =
-                WithoutContext(extractor)
-
-            @JvmStatic
-            public operator fun <T, P> invoke(extractor: T.(JsContext) -> P): Extractor<T, P> =
-                WithContext(extractor)
-        }
+        //TODO DELETE
+//        public companion object {
+//
+//            @JvmStatic
+//            public operator fun <O, T, P> invoke(extractor: T.() -> P): Extractor<O, T, P> =
+//                WithoutEnv(extractor)
+//
+//            @JvmStatic
+//            public operator fun <O, T, P> invoke(extractor: T.(JsWriterEnv<O>) -> P): Extractor<O, T, P> =
+//                WithEnv(extractor)
+//        }
     }
 }
 

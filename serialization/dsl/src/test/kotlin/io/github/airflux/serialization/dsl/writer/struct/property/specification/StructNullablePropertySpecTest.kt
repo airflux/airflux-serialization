@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -35,7 +34,6 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val WRITER: JsWriter<Unit, String?> = DummyWriter.string<Unit>().nullable()
@@ -58,18 +56,18 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from = spec.from
-                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutContext<DTO, String>>()
+                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutEnv<Unit, DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
                     "then the initialized writer should return a property value" {
-                        val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
+                        val result = spec.writer.write(ENV, LOCATION, PROPERTY_VALUE)
                         result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
 
                 "when using an extractor expression with context" - {
-                    val extractor: (DTO, JsContext) -> String? = { value, _ -> value.id }
+                    val extractor: (DTO, JsWriterEnv<Unit>) -> String? = { value, _ -> value.id }
                     val spec: StructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
@@ -79,12 +77,12 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from =
-                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithContext<DTO, String>>()
+                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithEnv<Unit, DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
                     "then the initialized writer should return a property value" {
-                        val result = spec.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
+                        val result = spec.writer.write(ENV, LOCATION, PROPERTY_VALUE)
                         result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
@@ -93,10 +91,10 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
                     val extractor: (DTO) -> String? = { it.id }
                     val spec: StructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
-                    val specWithFilter = spec.filter { _, _, _, value -> value.isNotEmpty() }
+                    val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
                     "when passing a value that satisfies the predicate for filtering" - {
-                        val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, PROPERTY_VALUE)
+                        val result = specWithFilter.writer.write(ENV, LOCATION, PROPERTY_VALUE)
 
                         "then a non-null property value should be returned" {
                             result shouldBe JsString(PROPERTY_VALUE)
@@ -104,7 +102,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
                     }
 
                     "when passing a value that does not satisfy the filter predicate" - {
-                        val result = specWithFilter.writer.write(ENV, CONTEXT, LOCATION, "")
+                        val result = specWithFilter.writer.write(ENV, LOCATION, "")
 
                         "then the null value should be returned" {
                             result.shouldBeNull()

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.core.writer
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
@@ -31,7 +30,6 @@ internal class WriterNullableTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
     }
 
@@ -46,7 +44,7 @@ internal class WriterNullableTest : FreeSpec() {
                     val source: String = ID_PROPERTY_VALUE
 
                     "then should return the written value" {
-                        val result = writer.write(ENV, CONTEXT, LOCATION, source)
+                        val result = writer.write(ENV, LOCATION, source)
 
                         result shouldBe JsString(ID_PROPERTY_VALUE)
                     }
@@ -56,7 +54,7 @@ internal class WriterNullableTest : FreeSpec() {
                     val source: String? = null
 
                     "then should return the JsNull" {
-                        val result = writer.write(ENV, CONTEXT, LOCATION, source)
+                        val result = writer.write(ENV, LOCATION, source)
 
                         result shouldBe JsNull
                     }

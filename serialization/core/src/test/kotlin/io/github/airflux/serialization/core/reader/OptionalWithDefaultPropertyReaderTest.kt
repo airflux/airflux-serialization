@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookup
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -41,10 +40,9 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
         private const val ID_PROPERTY_DEFAULT_VALUE = "7815943d-5c55-4fe6-92f8-0be816caed78"
 
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private val READER: JsReader<EB, Unit, String> = DummyReader.string()
-        private val DEFAULT: (JsReaderEnv<EB, Unit>, JsContext) -> String = { _, _ -> ID_PROPERTY_DEFAULT_VALUE }
+        private val DEFAULT: (JsReaderEnv<EB, Unit>) -> String = { _ -> ID_PROPERTY_DEFAULT_VALUE }
     }
 
     init {
@@ -60,7 +58,6 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                 "then should return the result of applying the reader" {
                     val result: JsReaderResult<String?> = readOptional(
                         env = ENV,
-                        context = CONTEXT,
                         lookup = lookup,
                         using = READER,
                         defaultValue = DEFAULT
@@ -80,7 +77,6 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                 "then should return the default value" {
                     val result: JsReaderResult<String?> = readOptional(
                         env = ENV,
-                        context = CONTEXT,
                         lookup = lookup,
                         using = READER,
                         defaultValue = DEFAULT
@@ -103,7 +99,6 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                 "then should return the invalid type error" {
                     val result: JsReaderResult<String?> = readOptional(
                         env = ENV,
-                        context = CONTEXT,
                         lookup = lookup,
                         using = READER,
                         defaultValue = DEFAULT

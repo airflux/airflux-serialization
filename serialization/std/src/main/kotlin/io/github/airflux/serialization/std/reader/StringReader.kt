@@ -25,6 +25,6 @@ import io.github.airflux.serialization.core.value.readAsString
  */
 public fun <EB, O> stringReader(): JsReader<EB, O, String>
     where EB : InvalidTypeErrorBuilder =
-    JsReader { env, _, location, source ->
+    JsReader { env, location, source ->
         source.readAsString(env, location)
     }

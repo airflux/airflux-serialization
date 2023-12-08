@@ -17,7 +17,6 @@
 package io.github.airflux.parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.deserialization
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
@@ -27,7 +26,6 @@ import io.github.airflux.serialization.core.value.JsValue
 public fun <EB, O, T : Any> String.deserialization(
     mapper: ObjectMapper,
     env: JsReaderEnv<EB, O>,
-    context: JsContext = JsContext,
     reader: JsReader<EB, O, T>
 ): JsReaderResult<T> =
-    mapper.readValue(this, JsValue::class.java).deserialization(env, context, reader)
+    mapper.readValue(this, JsValue::class.java).deserialization(env, reader)

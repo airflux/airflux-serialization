@@ -43,7 +43,7 @@ val LotReader: JsReader<ReaderErrorBuilders, ReaderOptions, Lot> = structReader 
     val status = property(required(name = "status", reader = LotStatusReader))
     val value = property(required(name = "value", reader = ValueReader))
 
-    returns { _, _, location ->
+    returns { _, location ->
         Lot(id = +id, status = +status, value = +value).toSuccess(location)
     }
 }

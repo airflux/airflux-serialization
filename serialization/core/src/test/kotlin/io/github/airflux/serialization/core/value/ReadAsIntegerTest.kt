@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -32,10 +31,9 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation.append("user")
-        private val READER: (JsReaderEnv<EB, Unit>, JsContext, JsLocation, String) -> JsReaderResult<Int> =
-            { _, _, location, text ->
+        private val READER: (JsReaderEnv<EB, Unit>, JsLocation, String) -> JsReaderResult<Int> =
+            { _, location, text ->
                 success(location = location, value = text.toInt())
             }
     }
@@ -47,7 +45,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
                 "should return the number value" {
                     val json: JsValue = JsNumeric.valueOf(Int.MAX_VALUE)
-                    val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsInteger(ENV, LOCATION, READER)
                     result shouldBeSuccess success(location = LOCATION, value = Int.MAX_VALUE)
                 }
             }
@@ -55,7 +53,7 @@ internal class ReadAsIntegerTest : FreeSpec() {
 
                 "should return the invalid type error" {
                     val json: JsValue = JsBoolean.valueOf(true)
-                    val result = json.readAsInteger(ENV, CONTEXT, LOCATION, READER)
+                    val result = json.readAsInteger(ENV, LOCATION, READER)
                     result shouldBeFailure failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(

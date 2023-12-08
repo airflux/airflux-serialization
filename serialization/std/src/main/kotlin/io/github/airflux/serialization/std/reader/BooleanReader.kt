@@ -25,6 +25,6 @@ import io.github.airflux.serialization.core.value.readAsBoolean
  */
 public fun <EB, O> booleanReader(): JsReader<EB, O, Boolean>
     where EB : InvalidTypeErrorBuilder =
-    JsReader { env, _, location, source ->
+    JsReader { env, location, source ->
         source.readAsBoolean(env, location)
     }

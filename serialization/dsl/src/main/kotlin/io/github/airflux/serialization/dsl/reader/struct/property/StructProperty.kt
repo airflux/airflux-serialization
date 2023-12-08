@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPaths
 import io.github.airflux.serialization.core.reader.JsPathReader
@@ -33,9 +32,8 @@ public class StructProperty<EB, O, T> private constructor(
 
     public fun read(
         env: JsReaderEnv<EB, O>,
-        context: JsContext,
         location: JsLocation,
         source: JsValue
     ): JsReaderResult<T> =
-        reader.read(env, context, location, source)
+        reader.read(env, location, source)
 }

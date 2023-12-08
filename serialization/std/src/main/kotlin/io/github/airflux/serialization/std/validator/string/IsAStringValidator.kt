@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -30,12 +29,7 @@ public class IsAStringValidator<EB, O> internal constructor(
 ) : JsValidator<EB, O, String>
     where EB : IsAStringValidator.ErrorBuilder {
 
-    override fun validate(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        value: String
-    ): JsValidatorResult =
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: String): JsValidatorResult =
         if (predicate(value))
             valid()
         else

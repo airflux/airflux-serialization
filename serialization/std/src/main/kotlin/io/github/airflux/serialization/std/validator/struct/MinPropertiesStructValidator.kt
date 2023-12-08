@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.struct
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -33,7 +32,6 @@ public class MinPropertiesStructValidator<EB, O> internal constructor(private va
 
     override fun validate(
         env: JsReaderEnv<EB, O>,
-        context: JsContext,
         location: JsLocation,
         properties: StructProperties<EB, O>,
         source: JsStruct

@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.property
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -31,7 +30,6 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
         private const val VALUE: Int = 2
     }
@@ -41,13 +39,13 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
         "The property value validator the Mandatory" - {
 
             "when the predicate returns the true value" - {
-                val validator: JsValidator<EB, Unit, Int?> = StdPropertyValidator.forbidden { _, _, _ -> true }
+                val validator: JsValidator<EB, Unit, Int?> = StdPropertyValidator.forbidden { _, _ -> true }
 
                 "when a value is missing" - {
                     val value: Int? = null
 
                     "then the validator should return the null value" {
-                        val result = validator.validate(ENV, CONTEXT, LOCATION, value)
+                        val result = validator.validate(ENV, LOCATION, value)
                         result.shouldBeValid()
                     }
                 }
@@ -56,7 +54,7 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
                     val value = VALUE
 
                     "then the validator should return an error" {
-                        val result = validator.validate(ENV, CONTEXT, LOCATION, value)
+                        val result = validator.validate(ENV, LOCATION, value)
 
                         result shouldBeInvalid failure(
                             location = LOCATION,
@@ -67,13 +65,13 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
             }
 
             "when the predicate returns the false value" - {
-                val validator: JsValidator<EB, Unit, Int?> = StdPropertyValidator.forbidden { _, _, _ -> false }
+                val validator: JsValidator<EB, Unit, Int?> = StdPropertyValidator.forbidden { _, _ -> false }
 
                 "when a value is missing" - {
                     val value: Int? = null
 
                     "then the validator should return the null value" {
-                        val result = validator.validate(ENV, CONTEXT, LOCATION, value)
+                        val result = validator.validate(ENV, LOCATION, value)
                         result.shouldBeValid()
                     }
                 }
@@ -82,7 +80,7 @@ internal class ForbiddenPropertyValidatorTest : FreeSpec() {
                     val value = VALUE
 
                     "then the validator should return the null value" {
-                        val result = validator.validate(ENV, CONTEXT, LOCATION, value)
+                        val result = validator.validate(ENV, LOCATION, value)
                         result.shouldBeValid()
                     }
                 }

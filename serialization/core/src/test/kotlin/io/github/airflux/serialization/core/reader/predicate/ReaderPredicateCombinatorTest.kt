@@ -17,7 +17,6 @@
 package io.github.airflux.serialization.core.reader.predicate
 
 import io.github.airflux.serialization.core.common.JsonErrors
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -30,7 +29,6 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private const val MIN_VALUE = 10
@@ -39,8 +37,8 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
 
     init {
         "The 'AND' combinator" - {
-            val leftFilter = JsPredicate<EB, Unit, Int> { _, _, _, value -> value > MIN_VALUE }
-            val rightFilter = JsPredicate<EB, Unit, Int> { _, _, _, value -> value < MAX_VALUE }
+            val leftFilter = JsPredicate<EB, Unit, Int> { _, _, value -> value > MIN_VALUE }
+            val rightFilter = JsPredicate<EB, Unit, Int> { _, _, value -> value < MAX_VALUE }
             val composedFilter = leftFilter and rightFilter
             withData(
                 nameFn = { it.first },
@@ -53,14 +51,14 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
                     Triple("the value is more than the maximum value of the range", MAX_VALUE + 1, false)
                 )
             ) { (_, value, expected) ->
-                val result = composedFilter.test(ENV, CONTEXT, LOCATION, value)
+                val result = composedFilter.test(ENV, LOCATION, value)
                 result shouldBe expected
             }
         }
 
         "The 'OR' combinator" - {
-            val leftFilter = JsPredicate<EB, Unit, Int> { _, _, _, value -> value < MIN_VALUE }
-            val rightFilter = JsPredicate<EB, Unit, Int> { _, _, _, value -> value > MAX_VALUE }
+            val leftFilter = JsPredicate<EB, Unit, Int> { _, _, value -> value < MIN_VALUE }
+            val rightFilter = JsPredicate<EB, Unit, Int> { _, _, value -> value > MAX_VALUE }
             val composedFilter = leftFilter or rightFilter
             withData(
                 nameFn = { it.first },
@@ -73,7 +71,7 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
                     Triple("the value is more than the maximum value of the range", MAX_VALUE + 1, true)
                 )
             ) { (_, value, expected) ->
-                val result = composedFilter.test(ENV, CONTEXT, LOCATION, value)
+                val result = composedFilter.test(ENV, LOCATION, value)
                 result shouldBe expected
             }
         }

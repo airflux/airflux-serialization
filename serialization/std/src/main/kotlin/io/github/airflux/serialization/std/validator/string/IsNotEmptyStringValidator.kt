@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.std.validator.string
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -28,18 +27,14 @@ import io.github.airflux.serialization.core.reader.validation.valid
 public class IsNotEmptyStringValidator<EB, O> internal constructor() : JsValidator<EB, O, String?>
     where EB : IsNotEmptyStringValidator.ErrorBuilder {
 
-    override fun validate(
-        env: JsReaderEnv<EB, O>,
-        context: JsContext,
-        location: JsLocation,
-        value: String?
-    ): JsValidatorResult = if (value != null) {
-        if (value.isNotEmpty())
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: String?): JsValidatorResult =
+        if (value != null) {
+            if (value.isNotEmpty())
+                valid()
+            else
+                invalid(location = location, error = env.errorBuilders.isNotEmptyStringError())
+        } else
             valid()
-        else
-            invalid(location = location, error = env.errorBuilders.isNotEmptyStringError())
-    } else
-        valid()
 
     public fun interface ErrorBuilder {
         public fun isNotEmptyStringError(): JsReaderResult.Error

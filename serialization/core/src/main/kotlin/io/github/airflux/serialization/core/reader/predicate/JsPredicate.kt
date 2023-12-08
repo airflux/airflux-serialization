@@ -16,20 +16,19 @@
 
 package io.github.airflux.serialization.core.reader.predicate
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 
 public fun interface JsPredicate<EB, O, T : Any> {
-    public fun test(env: JsReaderEnv<EB, O>, context: JsContext, location: JsLocation, value: T): Boolean
+    public fun test(env: JsReaderEnv<EB, O>, location: JsLocation, value: T): Boolean
 }
 
 public infix fun <EB, O, T : Any> JsPredicate<EB, O, T>.or(
     alt: JsPredicate<EB, O, T>
 ): JsPredicate<EB, O, T> {
     val self = this
-    return JsPredicate { env, context, location, value ->
-        self.test(env, context, location, value) || alt.test(env, context, location, value)
+    return JsPredicate { env, location, value ->
+        self.test(env, location, value) || alt.test(env, location, value)
     }
 }
 
@@ -37,7 +36,7 @@ public infix fun <EB, O, T : Any> JsPredicate<EB, O, T>.and(
     alt: JsPredicate<EB, O, T>
 ): JsPredicate<EB, O, T> {
     val self = this
-    return JsPredicate { env, context, location, value ->
-        self.test(env, context, location, value) && alt.test(env, context, location, value)
+    return JsPredicate { env, location, value ->
+        self.test(env, location, value) && alt.test(env, location, value)
     }
 }

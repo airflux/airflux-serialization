@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -33,7 +32,6 @@ internal class StructPropertyTest : FreeSpec() {
         private const val PROPERTY_VALUE = "205424cf-2ebf-4b65-b3c3-7c848dc8f343"
 
         private val ENV = JsWriterEnv(options = Unit)
-        private val CONTEXT: JsContext = JsContext
         private val LOCATION: JsLocation = JsLocation
 
         private val WRITER: JsWriter<Unit, String> = DummyWriter.string()
@@ -46,7 +44,7 @@ internal class StructPropertyTest : FreeSpec() {
             "when using an expression the from without context in spec" - {
                 val spec = StructPropertySpec<Unit, DTO, String>(
                     name = PROPERTY_NAME,
-                    from = StructPropertySpec.Extractor.WithoutContext { id },
+                    from = StructPropertySpec.Extractor.WithoutEnv { id },
                     writer = WRITER
                 )
 
@@ -58,7 +56,7 @@ internal class StructPropertyTest : FreeSpec() {
                     }
 
                     "then the method write should return the value" {
-                        val result = property.write(ENV, CONTEXT, LOCATION, DTO(id = PROPERTY_VALUE))
+                        val result = property.write(ENV, LOCATION, DTO(id = PROPERTY_VALUE))
                         result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }
@@ -67,7 +65,7 @@ internal class StructPropertyTest : FreeSpec() {
             "when using an expression the from with context in spec" - {
                 val spec = StructPropertySpec<Unit, DTO, String>(
                     name = PROPERTY_NAME,
-                    from = StructPropertySpec.Extractor.WithContext { id },
+                    from = StructPropertySpec.Extractor.WithEnv { id },
                     writer = WRITER
                 )
 
@@ -79,7 +77,7 @@ internal class StructPropertyTest : FreeSpec() {
                     }
 
                     "then the method write should return the value" {
-                        val result = property.write(ENV, CONTEXT, LOCATION, DTO(id = PROPERTY_VALUE))
+                        val result = property.write(ENV, LOCATION, DTO(id = PROPERTY_VALUE))
                         result shouldBe JsString(PROPERTY_VALUE)
                     }
                 }

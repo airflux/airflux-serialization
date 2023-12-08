@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
@@ -36,7 +35,6 @@ internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : S
     internal class Validator<EB, O>(val result: JsValidatorResult) : StructValidator<EB, O> {
         override fun validate(
             env: JsReaderEnv<EB, O>,
-            context: JsContext,
             location: JsLocation,
             properties: StructProperties<EB, O>,
             source: JsStruct
@@ -51,7 +49,7 @@ internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : S
             error: JsReaderResult.Error
         ): StructValidator.Builder<EB, O> =
             StructValidator.Builder {
-                StructValidator { _, _, location, _, node ->
+                StructValidator { _, location, _, node ->
                     node.forEach { (name, _) ->
                         if (name !in nameProperties)
                             return@StructValidator invalid(location = location.append(name), error = error)
