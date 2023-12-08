@@ -29,6 +29,8 @@ import io.github.airflux.serialization.core.reader.validation.ifInvalid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.AirfluxMarker
+import io.github.airflux.serialization.dsl.common.Either
+import io.github.airflux.serialization.dsl.common.fold
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
@@ -67,37 +69,6 @@ public class StructReader<EB, O, T> private constructor(
                 error = env.errorBuilders.invalidTypeError(listOf(JsStruct.nameOfType), source.nameOfType)
             )
 
-    private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
-        val failFast = env.options.failFast
-        var failureAccumulator: JsReaderResult.Failure? = null
-
-        validators.forEach { validator ->
-            validator.validate(env, location, properties, source)
-                .ifInvalid { failure ->
-                    if (failFast) return failure
-                    failureAccumulator += failure
-                }
-        }
-
-        val propertyValues: PropertyValues<EB, O> = PropertyValuesInstance<EB, O>()
-            .apply {
-                properties.forEach { property ->
-                    property.read(env, location, source)
-                        .fold(
-                            ifFailure = { failure ->
-                                if (failFast) return failure
-                                failureAccumulator += failure
-                            },
-                            ifSuccess = { success ->
-                                this[property] = success.value
-                            }
-                        )
-                }
-            }
-
-        return failureAccumulator ?: resultBuilder(propertyValues, env, location)
-    }
-
     @AirfluxMarker
     public class Builder<EB, O, T> internal constructor()
         where EB : InvalidTypeErrorBuilder,
@@ -135,5 +106,57 @@ public class StructReader<EB, O, T> private constructor(
                     .orEmpty()
             return StructReader(validators, properties, block)
         }
+    }
+
+    private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
+        val failFast = env.options.failFast
+        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location)
+        if (failureAccumulator != null && failFast) return failureAccumulator
+        return source.read(env, location)
+            .fold(
+                onLeft = { failure -> failureAccumulator + failure },
+                onRight = { failureAccumulator ?: resultBuilder(it, env, location) }
+            )
+    }
+
+    private fun JsStruct.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult.Failure? {
+        val failFast = env.options.failFast
+        var failureAccumulator: JsReaderResult.Failure? = null
+
+        validators.forEach { validator ->
+            validator.validate(env, location, properties, this)
+                .ifInvalid { failure ->
+                    if (failFast) return failure
+                    failureAccumulator += failure
+                }
+        }
+
+        return failureAccumulator
+    }
+
+    private fun JsStruct.read(
+        env: JsReaderEnv<EB, O>,
+        location: JsLocation
+    ): Either<JsReaderResult.Failure, PropertyValuesInstance<EB, O>> {
+        val failFast = env.options.failFast
+        var failureAccumulator: JsReaderResult.Failure? = null
+
+        val values = PropertyValuesInstance<EB, O>()
+            .apply {
+                properties.forEach { property ->
+                    property.read(env, location, this@read)
+                        .fold(
+                            ifFailure = { failure ->
+                                if (failFast) return Either.Left(failure)
+                                failureAccumulator += failure
+                            },
+                            ifSuccess = { success ->
+                                this[property] = success.value
+                            }
+                        )
+                }
+            }
+
+        return failureAccumulator?.let { Either.Left(it) } ?: Either.Right(values)
     }
 }
