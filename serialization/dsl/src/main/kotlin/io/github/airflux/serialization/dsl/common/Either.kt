@@ -175,7 +175,7 @@ internal inline infix fun <L, R> Either<L, R>.getOrForward(block: (Either.Left<L
 internal fun <L, R> Either<L, R>.getOrNull(): R? {
     contract {
         returns(null) implies (this@getOrNull is Either.Left<L>)
-        returnsNotNull() implies ((this@getOrNull is Either.Right<R>))
+        returnsNotNull() implies (this@getOrNull is Either.Right<R>)
     }
 
     return if (isRight()) get else null
