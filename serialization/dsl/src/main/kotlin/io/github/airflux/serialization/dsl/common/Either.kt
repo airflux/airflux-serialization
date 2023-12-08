@@ -18,6 +18,7 @@
 
 package io.github.airflux.serialization.dsl.common
 
+import io.github.airflux.serialization.core.common.identity
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.InvocationKind.AT_MOST_ONCE
@@ -214,7 +215,7 @@ internal inline infix fun <L, R> Either<L, R>.forEach(block: (R) -> Unit) {
     return if (isRight()) block(this.get) else Unit
 }
 
-internal fun <T> Either<T, T>.merge(): T = if (isRight()) this.get else this.get
+internal fun <T> Either<T, T>.merge(): T = fold(onLeft = ::identity, onRight = ::identity)
 
 internal fun <L, R> Iterable<Either<L, R>>.sequence(): Either<L, List<R>> {
     val items = buildList {
