@@ -30,8 +30,8 @@ internal fun <R> R.right(): Either<Nothing, R> = Either.Right(this)
 
 internal sealed interface Either<out L, out R> {
 
-    class Left<out L>(val get: L) : Either<L, Nothing>
-    class Right<out R>(val get: R) : Either<Nothing, R>
+    data class Left<out L>(val get: L) : Either<L, Nothing>
+    data class Right<out R>(val get: R) : Either<Nothing, R>
 
     companion object {
         val asNull: Right<Nothing?> = Right(null)
