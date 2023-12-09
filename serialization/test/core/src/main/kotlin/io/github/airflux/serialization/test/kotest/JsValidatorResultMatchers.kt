@@ -18,14 +18,51 @@ package io.github.airflux.serialization.test.kotest
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.isInvalid
+import io.github.airflux.serialization.core.reader.validation.isValid
+import io.kotest.assertions.collectOrThrow
+import io.kotest.assertions.errorCollector
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
-public fun JsValidatorResult.shouldBeValid() {
-    this.shouldBeInstanceOf<JsValidatorResult.Valid>()
+@OptIn(ExperimentalContracts::class)
+public fun JsValidatorResult.shouldBeValid(): JsValidatorResult.Valid {
+    contract {
+        returns() implies (this@shouldBeValid is JsValidatorResult.Valid)
+    }
+
+    if (this.isInvalid()) {
+        errorCollector.collectOrThrow(
+            failure(
+                expected = JsValidatorResult.Valid::class.qualifiedName!!,
+                actual = this::class.qualifiedName!!,
+                failureMessage = "Expected a Valid, but got ${this::class.simpleName}. "
+            )
+        )
+    }
+    return this as JsValidatorResult.Valid
+}
+
+@OptIn(ExperimentalContracts::class)
+public fun JsValidatorResult.shouldBeInvalid(): JsValidatorResult.Invalid {
+    contract {
+        returns() implies (this@shouldBeInvalid is JsValidatorResult.Invalid)
+    }
+
+    if (this.isValid()) {
+        errorCollector.collectOrThrow(
+            failure(
+                expected = JsValidatorResult.Invalid::class.qualifiedName!!,
+                actual = this::class.qualifiedName!!,
+                failureMessage = "Expected a Invalid, but got ${this::class.simpleName}. "
+            )
+        )
+    }
+    return this as JsValidatorResult.Invalid
 }
 
 public infix fun JsValidatorResult.shouldBeInvalid(expected: JsReaderResult<*>) {
-    val actual = this.shouldBeInstanceOf<JsValidatorResult.Invalid>()
+    val actual = this.shouldBeInvalid()
     actual.failure shouldBe expected
 }
