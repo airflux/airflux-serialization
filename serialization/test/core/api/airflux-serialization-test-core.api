@@ -1,0 +1,79 @@
+public final class io/github/airflux/serialization/test/dummy/DummyPathReader : io/github/airflux/serialization/core/reader/JsPathReader {
+	public fun <init> (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)V
+	public fun <init> (Lkotlin/jvm/functions/Function3;)V
+	public fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyReader : io/github/airflux/serialization/core/reader/JsReader {
+	public static final field Companion Lio/github/airflux/serialization/test/dummy/DummyReader$Companion;
+	public fun <init> (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)V
+	public fun <init> (Lkotlin/jvm/functions/Function3;)V
+	public static final fun boolean ()Lio/github/airflux/serialization/core/reader/JsReader;
+	public final fun getResult ()Lkotlin/jvm/functions/Function3;
+	public static final fun int ()Lio/github/airflux/serialization/core/reader/JsReader;
+	public fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun string ()Lio/github/airflux/serialization/core/reader/JsReader;
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyReader$Companion {
+	public final fun boolean ()Lio/github/airflux/serialization/core/reader/JsReader;
+	public final fun int ()Lio/github/airflux/serialization/core/reader/JsReader;
+	public final fun string ()Lio/github/airflux/serialization/core/reader/JsReader;
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyReaderPredicate : io/github/airflux/serialization/core/reader/predicate/JsPredicate {
+	public fun <init> (Lkotlin/jvm/functions/Function3;)V
+	public fun <init> (Z)V
+	public final fun getBlock ()Lkotlin/jvm/functions/Function3;
+	public fun test (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Z
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyValidator : io/github/airflux/serialization/core/reader/validation/JsValidator {
+	public static final field Companion Lio/github/airflux/serialization/test/dummy/DummyValidator$Companion;
+	public fun <init> (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;)V
+	public fun <init> (Lkotlin/jvm/functions/Function3;)V
+	public final fun getResult ()Lkotlin/jvm/functions/Function3;
+	public static final fun isNotEmptyString (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/validation/JsValidator;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyValidator$Companion {
+	public final fun isNotEmptyString (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/validation/JsValidator;
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyWriter : io/github/airflux/serialization/core/writer/JsWriter {
+	public static final field Companion Lio/github/airflux/serialization/test/dummy/DummyWriter$Companion;
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final fun getResult ()Lkotlin/jvm/functions/Function1;
+	public static final fun int ()Lio/github/airflux/serialization/core/writer/JsWriter;
+	public static final fun string ()Lio/github/airflux/serialization/core/writer/JsWriter;
+	public fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
+}
+
+public final class io/github/airflux/serialization/test/dummy/DummyWriter$Companion {
+	public final fun int ()Lio/github/airflux/serialization/core/writer/JsWriter;
+	public final fun string ()Lio/github/airflux/serialization/core/writer/JsWriter;
+}
+
+public final class io/github/airflux/serialization/test/kotest/EqualsMatchersKt {
+	public static final fun shouldBeEqualsContract (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+	public static final fun shouldBeEqualsContract (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/Collection;)V
+	public static final fun shouldBeEqualsString (Ljava/lang/Object;Ljava/lang/String;)V
+}
+
+public final class io/github/airflux/serialization/test/kotest/FailureKt {
+	public static final fun failure (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Throwable;
+}
+
+public final class io/github/airflux/serialization/test/kotest/JsReaderResultMatchersKt {
+	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;
+	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)V
+	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;[Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;)V
+}
+
+public final class io/github/airflux/serialization/test/kotest/JsValidatorResultMatchersKt {
+	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult$Invalid;
+	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)V
+	public static final fun shouldBeValid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult$Valid;
+}
+

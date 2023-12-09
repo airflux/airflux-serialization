@@ -1,5 +1,5 @@
 plugins {
-    id("kotlin-internal-library-convention")
+    id("kotlin-library-convention")
 }
 
 repositories {
