@@ -72,8 +72,8 @@ internal class JsValidatorResultTest : FreeSpec() {
                     "then should be executed the `ifValid` code block" {
                         var result = 0
                         value.fold(
-                            ifValid = { result = 10 },
-                            ifInvalid = { result = 20 }
+                            onValid = { result = 10 },
+                            onInvalid = { result = 20 }
                         )
                         result shouldBe 10
                     }
@@ -85,8 +85,8 @@ internal class JsValidatorResultTest : FreeSpec() {
                     "then should be executed the `ifInvalid` code block" {
                         var result = 0
                         value.fold(
-                            ifValid = { result = 10 },
-                            ifInvalid = { result = 20 }
+                            onValid = { result = 10 },
+                            onInvalid = { result = 20 }
                         )
                         result shouldBe 20
                     }

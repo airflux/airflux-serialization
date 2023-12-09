@@ -152,7 +152,7 @@ public fun <EB, O, T> JsReaderResult<T>.validation(
 ): JsReaderResult<T> =
     if (isSuccess())
         validator.validate(env, location, value)
-            .fold(ifInvalid = ::identity, ifValid = { this })
+            .fold(onInvalid = ::identity, onValid = { this })
     else
         this
 

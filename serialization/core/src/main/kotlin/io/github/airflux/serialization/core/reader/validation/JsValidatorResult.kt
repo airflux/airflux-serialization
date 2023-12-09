@@ -46,12 +46,12 @@ public fun JsValidatorResult.isInvalid(): Boolean {
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun <T> JsValidatorResult.fold(ifInvalid: (JsReaderResult.Failure) -> T, ifValid: () -> T): T {
+public inline fun <T> JsValidatorResult.fold(onInvalid: (JsReaderResult.Failure) -> T, onValid: () -> T): T {
     contract {
-        callsInPlace(ifInvalid, InvocationKind.AT_MOST_ONCE)
-        callsInPlace(ifValid, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(onInvalid, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(onValid, InvocationKind.AT_MOST_ONCE)
     }
-    return if (isValid()) ifValid() else ifInvalid(failure)
+    return if (isValid()) onValid() else onInvalid(failure)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -59,7 +59,7 @@ public inline fun JsValidatorResult.ifInvalid(handler: (JsReaderResult.Failure) 
     contract {
         callsInPlace(handler, InvocationKind.AT_MOST_ONCE)
     }
-    if (this is JsValidatorResult.Invalid) handler(failure)
+    if (isInvalid()) handler(failure)
 }
 
 public fun valid(): JsValidatorResult = JsValidatorResult.Valid
