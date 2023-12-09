@@ -17,23 +17,60 @@
 package io.github.airflux.serialization.test.kotest
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.reader.result.isError
+import io.github.airflux.serialization.core.reader.result.isSuccess
+import io.kotest.assertions.collectOrThrow
+import io.kotest.assertions.errorCollector
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
-public infix fun <T> JsReaderResult<T?>.shouldBeSuccess(expected: JsReaderResult<T?>) {
-    val actualResult = this.shouldBeInstanceOf<JsReaderResult.Success<T>>()
-    val expectedResult = expected.shouldBeInstanceOf<JsReaderResult.Success<T>>()
-    actualResult shouldBe expectedResult
+@OptIn(ExperimentalContracts::class)
+public inline fun <reified T> JsReaderResult<T>.shouldBeSuccess(): JsReaderResult.Success<T> {
+    contract {
+        returns() implies (this@shouldBeSuccess is JsReaderResult.Success<T>)
+    }
+
+    if (this.isError()) {
+        errorCollector.collectOrThrow(
+            failure(
+                expected = JsReaderResult.Success::class.qualifiedName!!,
+                actual = this::class.qualifiedName!!,
+                failureMessage = "Expected a Success, but got ${this::class.simpleName}. "
+            )
+        )
+    }
+    return this as JsReaderResult.Success<T>
+}
+
+public inline infix fun <reified T> JsReaderResult<T>.shouldBeSuccess(expected: JsReaderResult<T>) {
+    this.shouldBeSuccess() shouldBe expected
+}
+
+@OptIn(ExperimentalContracts::class)
+public fun JsReaderResult<*>.shouldBeFailure(): JsReaderResult.Failure {
+    contract {
+        returns() implies (this@shouldBeFailure is JsReaderResult.Failure)
+    }
+
+    if (this.isSuccess()) {
+        errorCollector.collectOrThrow(
+            failure(
+                expected = JsReaderResult.Failure::class.qualifiedName!!,
+                actual = this::class.qualifiedName!!,
+                failureMessage = "Expected a Failure, but got ${this::class.simpleName}. "
+            )
+        )
+    }
+    return this as JsReaderResult.Failure
 }
 
 public infix fun JsReaderResult<*>.shouldBeFailure(expected: JsReaderResult<*>) {
-    val actualFailure = this.shouldBeInstanceOf<JsReaderResult.Failure>()
-    val expectedFailure = expected.shouldBeInstanceOf<JsReaderResult.Failure>()
-    actualFailure shouldBe expectedFailure
+    this.shouldBeFailure() shouldBe expected
 }
 
 public fun JsReaderResult<*>.shouldBeFailure(vararg expected: JsReaderResult.Failure.Cause) {
-    val failure = this.shouldBeInstanceOf<JsReaderResult.Failure>()
+    val failure = this.shouldBeFailure()
     failure.causes shouldContainExactly expected.toList()
 }
