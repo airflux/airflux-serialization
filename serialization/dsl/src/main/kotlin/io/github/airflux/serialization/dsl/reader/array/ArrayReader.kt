@@ -74,11 +74,7 @@ public class ArrayReader<EB, O, T> private constructor(
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
-    override fun read(
-        env: JsReaderEnv<EB, O>,
-        location: JsLocation,
-        source: JsValue
-    ): JsReaderResult<List<T>> =
+    override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue): JsReaderResult<List<T>> =
         if (source is JsArray)
             read(env, location, source)
         else
@@ -87,31 +83,15 @@ public class ArrayReader<EB, O, T> private constructor(
                 error = env.errorBuilders.invalidTypeError(listOf(JsArray.nameOfType), source.nameOfType)
             )
 
-    private fun read(
-        env: JsReaderEnv<EB, O>,
-        location: JsLocation,
-        source: JsArray
-    ): JsReaderResult<List<T>> {
+    private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsReaderResult<List<T>> {
         val failFast = env.options.failFast
-        var failureAccumulator: JsReaderResult.Failure? = null
-
-        validators.forEach { validator ->
-            validator.validate(env, location, source)
-                .ifInvalid { failure ->
-                    if (failFast) return failure
-                    failureAccumulator += failure
-                }
-        }
+        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location)
+        if (failureAccumulator != null && failFast) return failureAccumulator
 
         return resultBuilder(env, location, source)
             .fold(
-                ifFailure = { failure ->
-                    if (failFast) return failure
-                    failureAccumulator + failure
-                },
-                ifSuccess = { success ->
-                    failureAccumulator ?: success
-                }
+                ifFailure = { failure -> failureAccumulator + failure },
+                ifSuccess = { success -> failureAccumulator ?: success }
             )
     }
 
@@ -128,10 +108,11 @@ public class ArrayReader<EB, O, T> private constructor(
             vararg validators: ArrayValidator.Builder<EB, O>
         ) {
             validation(
-                validators = mutableListOf<ArrayValidator.Builder<EB, O>>().apply {
-                    add(validator)
-                    addAll(validators)
-                }
+                validators = mutableListOf<ArrayValidator.Builder<EB, O>>()
+                    .apply {
+                        add(validator)
+                        addAll(validators)
+                    }
             )
         }
 
@@ -182,5 +163,17 @@ public class ArrayReader<EB, O, T> private constructor(
         }
     }
 
+    private fun JsArray.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult.Failure? {
+        val failFast = env.options.failFast
+        var failureAccumulator: JsReaderResult.Failure? = null
 
+        validators.forEach { validator ->
+            validator.validate(env, location, this)
+                .ifInvalid { failure ->
+                    if (failFast) return failure
+                    failureAccumulator += failure
+                }
+        }
+        return failureAccumulator
+    }
 }
