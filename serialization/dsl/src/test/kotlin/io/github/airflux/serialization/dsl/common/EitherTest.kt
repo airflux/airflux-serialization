@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.dsl.common
 
-import io.github.airflux.serialization.dsl.common.Either.Companion.asEmptyList
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
@@ -38,38 +37,28 @@ internal class EitherTest : FreeSpec() {
         "The `Either` type properties" - {
 
             "the `asNull` property should return the `Either#Right` type with the `null` value" {
-                val value = Either.asNull
-
-                value.shouldBeRight()
-                value.get shouldBe null
+                val value: Either<Unit, String?> = Either.asNull
+                value shouldBeRight null
             }
 
             "the `asTrue` property should return the `Either#Right` type with the `true` value" {
                 val value = Either.asTrue
-
-                value.shouldBeRight()
-                value.get shouldBe true
+                value shouldBeRight true
             }
 
             "the `asFalse` property should return the `Either#Right` type with the `false` value" {
                 val value = Either.asFalse
-
-                value.shouldBeRight()
-                value.get shouldBe false
+                value shouldBeRight false
             }
 
             "the `asUnit` property should return the `Either#Right` type with the `Unit` value" {
-                val value = Either.asUnit
-
-                value.shouldBeRight()
-                value.get shouldBe Unit
+                val value: Either<Int, Unit> = Either.asUnit
+                value shouldBeRight Unit
             }
 
             "the `asEmptyList` property should return the `Either#Right` type with the `empty list` value" {
-                val value = asEmptyList
-
-                value.shouldBeRight()
-                value.get shouldBe emptyList()
+                val value: Either<Int, List<String>> = Either.asEmptyList
+                value shouldBeRight emptyList()
             }
         }
 
@@ -81,8 +70,8 @@ internal class EitherTest : FreeSpec() {
                     val param = true
 
                     "then should return the `Either#Right` type with the `true` value" {
-                        val result = Either.of(param)
-                        result.get shouldBe true
+                        val value: Either<Int, Boolean> = Either.of(param)
+                        value shouldBeRight true
                     }
                 }
 
@@ -90,8 +79,8 @@ internal class EitherTest : FreeSpec() {
                     val param = false
 
                     "then should return the `Either#Right` type with the `true` value" {
-                        val result = Either.of(param)
-                        result.get shouldBe false
+                        val value: Either<Int, Boolean> = Either.of(param)
+                        value shouldBeRight false
                     }
                 }
             }
@@ -103,7 +92,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the true value" {
                         val value: Boolean = original.isRight()
-
                         value shouldBe true
                     }
                 }
@@ -113,7 +101,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the false value" {
                         val value: Boolean = original.isRight()
-
                         value shouldBe false
                     }
                 }
@@ -129,7 +116,6 @@ internal class EitherTest : FreeSpec() {
 
                         "then should return the true value" {
                             val value: Boolean = original.isRight(predicate)
-
                             value shouldBe true
                         }
                     }
@@ -139,7 +125,6 @@ internal class EitherTest : FreeSpec() {
 
                         "then should return the true value" {
                             val value: Boolean = original.isRight(predicate)
-
                             value shouldBe false
                         }
                     }
@@ -151,7 +136,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then the predicate is not invoked and should return the false value" {
                         val value: Boolean = original.isRight(predicate)
-
                         value shouldBe false
                     }
                 }
@@ -164,7 +148,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the false value" {
                         val value: Boolean = original.isLeft()
-
                         value shouldBe false
                     }
                 }
@@ -174,7 +157,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the true value" {
                         val value: Boolean = original.isLeft()
-
                         value shouldBe true
                     }
                 }
@@ -188,7 +170,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then the predicate is not invoked and should return the false value" {
                         val value: Boolean = original.isLeft(predicate)
-
                         value shouldBe false
                     }
                 }
@@ -201,7 +182,6 @@ internal class EitherTest : FreeSpec() {
 
                         "then should return the true value" {
                             val value: Boolean = original.isLeft(predicate)
-
                             value shouldBe true
                         }
                     }
@@ -211,7 +191,6 @@ internal class EitherTest : FreeSpec() {
 
                         "then should return the true value" {
                             val value: Boolean = original.isLeft(predicate)
-
                             value shouldBe false
                         }
                     }
@@ -225,7 +204,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.fold(onLeft = { ALTERNATIVE_VALUE }, onRight = { it })
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -235,7 +213,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the null value" {
                         val value = original.fold(onLeft = { ALTERNATIVE_VALUE }, onRight = { it })
-
                         value shouldBe ALTERNATIVE_VALUE
                     }
                 }
@@ -248,9 +225,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a result of applying the [transform] function to the value" {
                         val value = original.map { it.toInt() }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ORIGINAL_VALUE.toInt()
+                        value shouldBeRight ORIGINAL_VALUE.toInt()
                     }
                 }
 
@@ -259,7 +234,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return an original do not apply the [transform] function to a value" {
                         val value = original.map { it.toInt() }
-
                         value shouldBe original
                     }
                 }
@@ -272,9 +246,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a result of applying the [transform] function to the value" {
                         val value = original.flatMap { result -> result.toInt().right() }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ORIGINAL_VALUE.toInt()
+                        value shouldBeRight ORIGINAL_VALUE.toInt()
                     }
                 }
 
@@ -298,9 +270,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a result of invoke the [block]" {
                         val value = original.andThen { result -> result.toInt().right() }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ORIGINAL_VALUE.toInt()
+                        value shouldBeRight ORIGINAL_VALUE.toInt()
                     }
                 }
 
@@ -324,9 +294,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return an original do not apply the [transform] function to an error" {
                         val value = original.mapLeft { Error.Blank }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ORIGINAL_VALUE
+                        value shouldBeRight ORIGINAL_VALUE
                     }
                 }
 
@@ -335,9 +303,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a result of applying the [transform] function to an error" {
                         val value = original.mapLeft { Error.Blank }
-
-                        value.shouldBeLeft()
-                        value.get shouldBe Error.Blank
+                        value shouldBeLeft Error.Blank
                     }
                 }
             }
@@ -349,9 +315,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return an original do not apply the [transform] function to an error" {
                         val value = original.flatMapLeft { Error.Blank.left() }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ORIGINAL_VALUE
+                        value shouldBeRight ORIGINAL_VALUE
                     }
                 }
 
@@ -360,9 +324,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a result of applying the [transform] function to an error" {
                         val value = original.flatMapLeft { Error.Blank.left() }
-
-                        value.shouldBeLeft()
-                        value.get shouldBe Error.Blank
+                        value shouldBeLeft Error.Blank
                     }
                 }
             }
@@ -420,7 +382,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.getOrForward { throw IllegalStateException() }
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -443,7 +404,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return an original value" {
                         val value = original.recover { ALTERNATIVE_VALUE }
-
                         value shouldBeSameInstanceAs original
                     }
                 }
@@ -453,9 +413,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the result of invoking the recovery function" {
                         val value = original.recover { ALTERNATIVE_VALUE }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ALTERNATIVE_VALUE
+                        value shouldBeRight ALTERNATIVE_VALUE
                     }
                 }
             }
@@ -467,7 +425,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return an original value" {
                         val value = original.recoverWith { ALTERNATIVE_VALUE.right() }
-
                         value shouldBeSameInstanceAs original
                     }
                 }
@@ -477,9 +434,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the result of invoking the recovery function" {
                         val value = original.recoverWith { ALTERNATIVE_VALUE.right() }
-
-                        value.shouldBeRight()
-                        value.get shouldBe ALTERNATIVE_VALUE
+                        value shouldBeRight ALTERNATIVE_VALUE
                     }
                 }
             }
@@ -491,7 +446,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.getOrNull()
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -501,7 +455,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the null value" {
                         val value = original.getOrNull()
-
                         value.shouldBeNull()
                     }
                 }
@@ -514,7 +467,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.getOrElse(ALTERNATIVE_VALUE)
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -524,7 +476,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the defaultValue value" {
                         val value = original.getOrElse(ALTERNATIVE_VALUE)
-
                         value shouldBe ALTERNATIVE_VALUE
                     }
                 }
@@ -537,7 +488,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.getOrElse { ALTERNATIVE_VALUE }
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -547,7 +497,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value from a handler" {
                         val value = original.getOrElse { ALTERNATIVE_VALUE }
-
                         value shouldBe ALTERNATIVE_VALUE
                     }
                 }
@@ -560,9 +509,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val elseResult: Either<Error, String> = ALTERNATIVE_VALUE.right()
-
                         val value = original.orElse { elseResult }
-
                         value shouldBe original
                     }
                 }
@@ -572,9 +519,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the defaultValue value" {
                         val elseResult: Either<Error, String> = ALTERNATIVE_VALUE.right()
-
                         val value = original.orElse { elseResult }
-
                         value shouldBe elseResult
                     }
                 }
@@ -587,7 +532,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.orThrow { throw IllegalStateException() }
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -633,7 +577,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a value" {
                         val value = original.merge()
-
                         value shouldBe ORIGINAL_VALUE
                     }
                 }
@@ -643,7 +586,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the error value" {
                         val value = original.merge()
-
                         value shouldBe ALTERNATIVE_VALUE
                     }
                 }
@@ -656,9 +598,8 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the value of the asEmptyList property" {
                         val value = original.sequence()
-
                         value.shouldBeRight()
-                        value shouldBeSameInstanceAs asEmptyList
+                        value shouldBeSameInstanceAs Either.asEmptyList
                     }
                 }
 
@@ -667,8 +608,7 @@ internal class EitherTest : FreeSpec() {
                         listOf(ORIGINAL_VALUE.right(), ALTERNATIVE_VALUE.right())
 
                     "then should return a list with all values" {
-                        val value = original.sequence()
-
+                        val value: Either<Error, List<String>> = original.sequence()
                         value.shouldBeRight()
                         value.get shouldContainExactly listOf(ORIGINAL_VALUE, ALTERNATIVE_VALUE)
                     }
@@ -679,9 +619,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the error value" {
                         val value = original.sequence()
-
-                        value.shouldBeLeft()
-                        value.get shouldBe Error.Empty
+                        value shouldBeLeft Error.Empty
                     }
                 }
             }
@@ -694,9 +632,8 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the value of the asEmptyList property" {
                         val value: Either<Error, List<Int>> = original.traverse(transform)
-
                         value.shouldBeRight()
-                        value shouldBeSameInstanceAs asEmptyList
+                        value shouldBeSameInstanceAs Either.asEmptyList
                     }
                 }
 
@@ -706,7 +643,6 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return a list with all transformed values" {
                         val value: Either<Error, List<Int>> = original.traverse(transform)
-
                         value.shouldBeRight()
                         value.get shouldContainExactly listOf(ORIGINAL_VALUE.toInt(), ALTERNATIVE_VALUE.toInt())
                     }
@@ -721,9 +657,7 @@ internal class EitherTest : FreeSpec() {
 
                     "then should return the error value" {
                         val value: Either<Error, List<Int>> = original.traverse(transform)
-
-                        value.shouldBeLeft()
-                        value.get shouldBe Error.Empty
+                        value shouldBeLeft Error.Empty
                     }
                 }
             }
@@ -731,16 +665,12 @@ internal class EitherTest : FreeSpec() {
 
         "The `success` function should return the `Either#Right` type with the passed value" {
             val value: Either<Error.Empty, String> = ORIGINAL_VALUE.right()
-
-            value.shouldBeRight()
-            value.get shouldBe ORIGINAL_VALUE
+            value shouldBeRight ORIGINAL_VALUE
         }
 
         "The `error` function should return the `Either#Left` type with the passed value" {
             val value: Either<Error.Empty, String> = Error.Empty.left()
-
-            value.shouldBeLeft()
-            value.get shouldBe Error.Empty
+            value shouldBeLeft Error.Empty
         }
     }
 
