@@ -44,8 +44,8 @@ public fun <EB, O, T> readArray(
         val currentLocation = location.append(idx)
         itemsReader.read(env, currentLocation, elem)
             .fold(
-                ifFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
-                ifSuccess = { success -> acc.combine(success) }
+                onFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
+                onSuccess = { success -> acc.combine(success) }
             )
     }
 }
@@ -78,8 +78,8 @@ public fun <EB, O, T> readArray(
         if (reader != null) {
             reader.read(env, currentLocation, elem)
                 .fold(
-                    ifFailure = { failure -> if (!failFast) acc.combine(failure) else return failure },
-                    ifSuccess = { success -> acc.combine(success) }
+                    onFailure = { failure -> if (!failFast) acc.combine(failure) else return failure },
+                    onSuccess = { success -> acc.combine(success) }
                 )
         } else if (errorIfAdditionalItems) {
             val failure = JsReaderResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
@@ -118,8 +118,8 @@ public fun <EB, O, T> readArray(
         getReader(idx, prefixItemReaders, itemsReader)
             .read(env, currentLocation, elem)
             .fold(
-                ifFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
-                ifSuccess = { success -> acc.combine(success) }
+                onFailure = { failure -> if (failFast) return failure else acc.combine(failure) },
+                onSuccess = { success -> acc.combine(success) }
             )
     }
 }
@@ -128,14 +128,14 @@ private fun <T> JsReaderResult<MutableList<T>>.combine(
     result: JsReaderResult.Success<T>
 ): JsReaderResult<MutableList<T>> =
     fold(
-        ifFailure = ::identity,
-        ifSuccess = { success -> success.apply { value += result.value } }
+        onFailure = ::identity,
+        onSuccess = { success -> success.apply { value += result.value } }
     )
 
 private fun <T> JsReaderResult<MutableList<T>>.combine(
     result: JsReaderResult.Failure
 ): JsReaderResult<MutableList<T>> =
     fold(
-        ifFailure = { failure -> failure + result },
-        ifSuccess = { result }
+        onFailure = { failure -> failure + result },
+        onSuccess = { result }
     )

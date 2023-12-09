@@ -90,8 +90,8 @@ public class ArrayReader<EB, O, T> private constructor(
 
         return resultBuilder(env, location, source)
             .fold(
-                ifFailure = { failure -> failureAccumulator + failure },
-                ifSuccess = { success -> failureAccumulator ?: success }
+                onFailure = { failure -> failureAccumulator + failure },
+                onSuccess = { success -> failureAccumulator ?: success }
             )
     }
 

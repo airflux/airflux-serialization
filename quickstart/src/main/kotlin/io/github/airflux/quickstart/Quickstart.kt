@@ -51,8 +51,8 @@ fun main() {
 
     JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
         .fold(
-            ifSuccess = { result -> println(result.value) },
-            ifFailure = { result -> println(result.causes) }
+            onSuccess = { result -> println(result.value) },
+            onFailure = { result -> println(result.causes) }
         )
 
     val value = Value(amount = Amount(BigDecimal("125.52")), currency = Currency("USD"))

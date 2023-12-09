@@ -146,11 +146,11 @@ public class StructReader<EB, O, T> private constructor(
                 properties.forEach { property ->
                     property.read(env, location, this@read)
                         .fold(
-                            ifFailure = { failure ->
+                            onFailure = { failure ->
                                 if (failFast) return Either.Left(failure)
                                 failureAccumulator += failure
                             },
-                            ifSuccess = { success ->
+                            onSuccess = { success ->
                                 this[property] = success.value
                             }
                         )

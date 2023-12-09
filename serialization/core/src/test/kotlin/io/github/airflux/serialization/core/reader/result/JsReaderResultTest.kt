@@ -93,7 +93,7 @@ internal class JsReaderResultTest : FreeSpec() {
                     val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return a value" {
-                        val result = original.fold(ifFailure = { ALTERNATIVE_VALUE }, ifSuccess = { it.value })
+                        val result = original.fold(onFailure = { ALTERNATIVE_VALUE }, onSuccess = { it.value })
 
                         result shouldBe ORIGINAL_VALUE
                     }
@@ -104,7 +104,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the null value" {
-                        val result = original.fold(ifFailure = { ALTERNATIVE_VALUE }, ifSuccess = { it.value })
+                        val result = original.fold(onFailure = { ALTERNATIVE_VALUE }, onSuccess = { it.value })
 
                         result shouldBe ALTERNATIVE_VALUE
                     }

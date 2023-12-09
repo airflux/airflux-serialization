@@ -60,8 +60,8 @@ public infix fun <EB, O, T, R> JsReader<EB, O, T>.bind(
     JsReader { env, location, source ->
         this@bind.read(env, location, source)
             .fold(
-                ifFailure = ::identity,
-                ifSuccess = { transform(env, it) }
+                onFailure = ::identity,
+                onSuccess = { transform(env, it) }
             )
     }
 

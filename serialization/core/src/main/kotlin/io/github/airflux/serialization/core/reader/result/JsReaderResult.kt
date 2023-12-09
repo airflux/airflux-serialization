@@ -89,14 +89,14 @@ public inline infix fun <T, R> JsReaderResult<T>.bind(
 
 @OptIn(ExperimentalContracts::class)
 public inline fun <T, R> JsReaderResult<T>.fold(
-    ifFailure: (JsReaderResult.Failure) -> R,
-    ifSuccess: (JsReaderResult.Success<T>) -> R
+    onFailure: (JsReaderResult.Failure) -> R,
+    onSuccess: (JsReaderResult.Success<T>) -> R
 ): R {
     contract {
-        callsInPlace(ifFailure, InvocationKind.AT_MOST_ONCE)
-        callsInPlace(ifSuccess, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(onFailure, InvocationKind.AT_MOST_ONCE)
+        callsInPlace(onSuccess, InvocationKind.AT_MOST_ONCE)
     }
-    return if (isSuccess()) ifSuccess(this) else ifFailure(this)
+    return if (isSuccess()) onSuccess(this) else onFailure(this)
 }
 
 @OptIn(ExperimentalContracts::class)
