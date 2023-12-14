@@ -17,7 +17,11 @@
 package io.github.airflux.serialization.core.common
 
 @JvmInline
-public value class NonEmptyList<out T> private constructor(private val items: List<T>) : List<T> by items {
+public value class NonEmptyList<out T> @PublishedApi internal constructor(@PublishedApi internal val items: List<T>) {
+
+    public fun toList(): List<T> = items
+
+    public operator fun iterator(): Iterator<T> = items.iterator()
 
     public companion object {
 
@@ -38,20 +42,20 @@ public value class NonEmptyList<out T> private constructor(private val items: Li
                 ?.let { NonEmptyList(it) }
 
         @JvmStatic
-        public fun <T> add(list: NonEmptyList<T>?, item: T): NonEmptyList<T> =
-            if (list != null) NonEmptyList(list.items + item) else NonEmptyList(item)
+        public fun <T> add(list: NonEmptyList<T>, item: T): NonEmptyList<T> =
+            NonEmptyList(list.items + item)
+
+        @JvmStatic
+        public fun <T> add(list: NonEmptyList<T>, other: NonEmptyList<T>): NonEmptyList<T> =
+            addAll(list, other.items)
 
         @JvmStatic
         public fun <T> addAll(list: NonEmptyList<T>, items: List<T>): NonEmptyList<T> =
             if (items.isEmpty()) list else NonEmptyList(list.items + items)
-
-        @JvmStatic
-        public fun <T> add(list: NonEmptyList<T>?, other: NonEmptyList<T>): NonEmptyList<T> =
-            if (list != null) addAll(list, other.items) else other
     }
 }
 
-public fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = find { predicate(it) } != null
+public fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = items.find { predicate(it) } != null
 
 public operator fun <T> NonEmptyList<T>.plus(item: T): NonEmptyList<T> = NonEmptyList.add(this, item)
 
