@@ -323,7 +323,6 @@ public abstract interface class io/github/airflux/serialization/core/reader/resu
 
 public final class io/github/airflux/serialization/core/reader/result/JsReaderResult$Failure : io/github/airflux/serialization/core/reader/result/JsReaderResult {
 	public fun <init> (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;)V
-	public fun <init> (Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;)V
 	public synthetic fun <init> (Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1--dOfQY0 ()Ljava/util/List;
 	public final fun copy-GdiUGCg (Ljava/util/List;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;
