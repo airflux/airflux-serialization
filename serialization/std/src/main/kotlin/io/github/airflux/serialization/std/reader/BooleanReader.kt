@@ -18,7 +18,9 @@ package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.value.readAsBoolean
+import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.std.reader.env.invalidTypeError
 
 /**
  * Reader for primitive [Boolean] type.
@@ -26,5 +28,8 @@ import io.github.airflux.serialization.core.value.readAsBoolean
 public fun <EB, O> booleanReader(): JsReader<EB, O, Boolean>
     where EB : InvalidTypeErrorBuilder =
     JsReader { env, location, source ->
-        source.readAsBoolean(env, location)
+        if (source is JsBoolean)
+            success(location = location, value = source.get)
+        else
+            env.invalidTypeError(location, expected = JsBoolean.nameOfType, actual = source.nameOfType)
     }

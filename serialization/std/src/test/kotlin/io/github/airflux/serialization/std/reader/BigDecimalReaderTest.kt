@@ -60,7 +60,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsNumeric.Number.nameOfType),
+                        expected = listOf(JsNumeric.Number.nameOfType, JsNumeric.Integer.nameOfType),
                         actual = JsString.nameOfType
                     )
                 )

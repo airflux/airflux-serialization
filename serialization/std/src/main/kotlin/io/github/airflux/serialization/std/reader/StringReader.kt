@@ -18,7 +18,9 @@ package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.value.readAsString
+import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.std.reader.env.invalidTypeError
 
 /**
  * Reader for primitive [String] type.
@@ -26,5 +28,8 @@ import io.github.airflux.serialization.core.value.readAsString
 public fun <EB, O> stringReader(): JsReader<EB, O, String>
     where EB : InvalidTypeErrorBuilder =
     JsReader { env, location, source ->
-        source.readAsString(env, location)
+        if (source is JsString)
+            success(location = location, value = source.get)
+        else
+            env.invalidTypeError(location, expected = JsString.nameOfType, actual = source.nameOfType)
     }

@@ -578,15 +578,6 @@ public final class io/github/airflux/serialization/core/value/JsValueKt {
 	public static final fun valueOf (Lio/github/airflux/serialization/core/value/JsNumeric$Companion;S)Lio/github/airflux/serialization/core/value/JsNumeric;
 }
 
-public final class io/github/airflux/serialization/core/value/JsValueOpsKt {
-	public static final fun readAsArray (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readAsBoolean (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readAsInteger (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readAsNumber (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readAsString (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readAsStruct (Lio/github/airflux/serialization/core/value/JsValue;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-}
-
 public abstract interface class io/github/airflux/serialization/core/writer/JsWriter {
 	public abstract fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
 }

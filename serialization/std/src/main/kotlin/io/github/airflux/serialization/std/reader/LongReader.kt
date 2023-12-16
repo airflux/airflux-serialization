@@ -16,12 +16,16 @@
 
 package io.github.airflux.serialization.std.reader
 
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.toFailure
 import io.github.airflux.serialization.core.reader.result.toSuccess
-import io.github.airflux.serialization.core.value.readAsInteger
+import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.std.reader.env.invalidTypeError
 
 /**
  * Reader for primitive [Long] type.
@@ -30,11 +34,17 @@ public fun <EB, O> longReader(): JsReader<EB, O, Long>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     JsReader { env, location, source ->
-        source.readAsInteger(env, location) { e, l, value ->
-            try {
-                value.toLong().toSuccess(l)
-            } catch (expected: NumberFormatException) {
-                e.errorBuilders.numberFormatError(value, Long::class).toFailure(location = l)
-            }
-        }
+        if (source is JsNumeric.Integer)
+            source.toLong(env, location)
+        else
+            env.invalidTypeError(location, expected = JsNumeric.Integer.nameOfType, actual = source.nameOfType)
+    }
+
+private fun <EB, O> JsNumeric.Integer.toLong(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Long>
+    where EB : InvalidTypeErrorBuilder,
+          EB : NumberFormatErrorBuilder =
+    try {
+        get.toLong().toSuccess(location)
+    } catch (expected: NumberFormatException) {
+        env.errorBuilders.numberFormatError(get, Long::class).toFailure(location = location)
     }
