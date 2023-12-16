@@ -568,6 +568,7 @@ public final class io/github/airflux/serialization/core/value/JsStruct$Property 
 
 public abstract class io/github/airflux/serialization/core/value/JsValue {
 	public abstract fun getNameOfType ()Ljava/lang/String;
+	public final fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/value/JsValueKt {

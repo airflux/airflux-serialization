@@ -16,10 +16,20 @@
 
 package io.github.airflux.serialization.core.value
 
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 
 public sealed class JsValue {
     public abstract val nameOfType: String
+
+    public fun <EB, O, T> read(
+        env: JsReaderEnv<EB, O>,
+        location: JsLocation,
+        reader: JsReader<EB, O, T>
+    ): JsReaderResult<T> = reader.read(env, location, this)
 }
 
 public object JsNull : JsValue() {
