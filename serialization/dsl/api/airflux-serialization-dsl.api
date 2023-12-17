@@ -7,9 +7,9 @@ public final class io/github/airflux/serialization/dsl/location/JsLocationKt {
 	public static final fun div (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/String;)Lio/github/airflux/serialization/core/location/JsLocation;
 }
 
-public final class io/github/airflux/serialization/dsl/lookup/JsLookupKt {
-	public static final fun div (Lio/github/airflux/serialization/core/lookup/JsLookup;I)Lio/github/airflux/serialization/core/lookup/JsLookup;
-	public static final fun div (Lio/github/airflux/serialization/core/lookup/JsLookup;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/JsLookup;
+public final class io/github/airflux/serialization/dsl/lookup/JsLookupResultExtensionKt {
+	public static final fun div (Lio/github/airflux/serialization/core/lookup/JsLookupResult;I)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
+	public static final fun div (Lio/github/airflux/serialization/core/lookup/JsLookupResult;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
 }
 
 public final class io/github/airflux/serialization/dsl/path/JsPathKt {
@@ -122,8 +122,8 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 }
 
 public final class io/github/airflux/serialization/dsl/value/JsValueKt {
-	public static final fun div (Lio/github/airflux/serialization/core/value/JsValue;I)Lio/github/airflux/serialization/core/lookup/JsLookup;
-	public static final fun div (Lio/github/airflux/serialization/core/value/JsValue;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/JsLookup;
+	public static final fun div (Lio/github/airflux/serialization/core/value/JsValue;I)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
+	public static final fun div (Lio/github/airflux/serialization/core/value/JsValue;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/array/ArrayWriter : io/github/airflux/serialization/core/writer/JsWriter {

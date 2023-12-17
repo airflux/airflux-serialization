@@ -23,23 +23,23 @@ import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 
-public sealed class JsLookup {
+public sealed class JsLookupResult {
 
-    public fun apply(key: String): JsLookup = apply(Element.Key(key))
-    public fun apply(idx: Int): JsLookup = apply(Element.Idx(idx))
-    public abstract fun apply(key: Element.Key): JsLookup
-    public abstract fun apply(idx: Element.Idx): JsLookup
+    public fun apply(key: String): JsLookupResult = apply(Element.Key(key))
+    public fun apply(idx: Int): JsLookupResult = apply(Element.Idx(idx))
+    public abstract fun apply(key: Element.Key): JsLookupResult
+    public abstract fun apply(idx: Element.Idx): JsLookupResult
 
-    public data class Defined(val location: JsLocation, val value: JsValue) : JsLookup() {
-        override fun apply(key: Element.Key): JsLookup = value.lookup(location, key)
-        override fun apply(idx: Element.Idx): JsLookup = value.lookup(location, idx)
+    public data class Defined(val location: JsLocation, val value: JsValue) : JsLookupResult() {
+        override fun apply(key: Element.Key): JsLookupResult = value.lookup(location, key)
+        override fun apply(idx: Element.Idx): JsLookupResult = value.lookup(location, idx)
     }
 
-    public sealed class Undefined : JsLookup() {
+    public sealed class Undefined : JsLookupResult() {
 
         public data class PathMissing(val location: JsLocation) : Undefined() {
-            override fun apply(key: Element.Key): JsLookup = PathMissing(location = this.location.append(key))
-            override fun apply(idx: Element.Idx): JsLookup = PathMissing(location = this.location.append(idx))
+            override fun apply(key: Element.Key): JsLookupResult = PathMissing(location = this.location.append(key))
+            override fun apply(idx: Element.Idx): JsLookupResult = PathMissing(location = this.location.append(idx))
         }
 
         public data class InvalidType(
@@ -47,46 +47,46 @@ public sealed class JsLookup {
             public val actual: String,
             val breakpoint: JsLocation
         ) : Undefined() {
-            override fun apply(key: Element.Key): JsLookup = this
-            override fun apply(idx: Element.Idx): JsLookup = this
+            override fun apply(key: Element.Key): JsLookupResult = this
+            override fun apply(idx: Element.Idx): JsLookupResult = this
         }
     }
 }
 
-public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookup =
+public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookupResult =
     if (this is JsStruct)
         this[key]
-            ?.let { JsLookup.Defined(location = location.append(key), value = it) }
-            ?: JsLookup.Undefined.PathMissing(location = location.append(key))
+            ?.let { JsLookupResult.Defined(location = location.append(key), value = it) }
+            ?: JsLookupResult.Undefined.PathMissing(location = location.append(key))
     else
-        JsLookup.Undefined.InvalidType(
+        JsLookupResult.Undefined.InvalidType(
             expected = listOf(JsStruct.nameOfType),
             actual = this.nameOfType,
             breakpoint = location
         )
 
-public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookup =
+public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResult =
     if (this is JsArray)
         this[idx]
-            ?.let { JsLookup.Defined(location = location.append(idx), value = it) }
-            ?: JsLookup.Undefined.PathMissing(location = location.append(idx))
+            ?.let { JsLookupResult.Defined(location = location.append(idx), value = it) }
+            ?: JsLookupResult.Undefined.PathMissing(location = location.append(idx))
     else
-        JsLookup.Undefined.InvalidType(
+        JsLookupResult.Undefined.InvalidType(
             expected = listOf(JsArray.nameOfType),
             actual = this.nameOfType,
             breakpoint = location
         )
 
-public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookup {
-    tailrec fun lookup(location: JsLocation, path: JsPath?, source: JsValue): JsLookup {
+public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
+    tailrec fun lookup(location: JsLocation, path: JsPath?, source: JsValue): JsLookupResult {
         return if (path != null) {
             when (val element = path.head) {
                 is Element.Key -> if (source is JsStruct) {
                     val value = source[element]
-                        ?: return JsLookup.Undefined.PathMissing(location = location.append(path))
+                        ?: return JsLookupResult.Undefined.PathMissing(location = location.append(path))
                     lookup(location.append(element), path.tail, value)
                 } else
-                    JsLookup.Undefined.InvalidType(
+                    JsLookupResult.Undefined.InvalidType(
                         expected = listOf(JsStruct.nameOfType),
                         actual = source.nameOfType,
                         breakpoint = location
@@ -94,17 +94,17 @@ public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookup {
 
                 is Element.Idx -> if (source is JsArray) {
                     val value = source[element]
-                        ?: return JsLookup.Undefined.PathMissing(location = location.append(path))
+                        ?: return JsLookupResult.Undefined.PathMissing(location = location.append(path))
                     lookup(location.append(element), path.tail, value)
                 } else
-                    JsLookup.Undefined.InvalidType(
+                    JsLookupResult.Undefined.InvalidType(
                         expected = listOf(JsArray.nameOfType),
                         actual = source.nameOfType,
                         breakpoint = location
                     )
             }
         } else
-            JsLookup.Defined(location = location, value = source)
+            JsLookupResult.Defined(location = location, value = source)
     }
 
     return lookup(location, path, this)

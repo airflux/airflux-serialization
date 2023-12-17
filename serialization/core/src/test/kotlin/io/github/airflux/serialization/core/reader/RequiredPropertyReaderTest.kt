@@ -18,7 +18,7 @@ package io.github.airflux.serialization.core.reader
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.JsLookupResult
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
@@ -48,7 +48,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
         "The readRequired function" - {
 
             "when the element is defined" - {
-                val lookup: JsLookup = JsLookup.Defined(
+                val lookup: JsLookupResult = JsLookupResult.Defined(
                     location = LOCATION.append(ID_PROPERTY_NAME),
                     value = JsString(ID_PROPERTY_VALUE)
                 )
@@ -64,8 +64,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is missing" - {
-                val lookup: JsLookup =
-                    JsLookup.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
+                val lookup: JsLookupResult =
+                    JsLookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the missing path error" {
                     val result: JsReaderResult<String?> =
@@ -78,7 +78,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
             }
 
             "when the element is invalid type" - {
-                val lookup: JsLookup = JsLookup.Undefined.InvalidType(
+                val lookup: JsLookupResult = JsLookupResult.Undefined.InvalidType(
                     expected = listOf(JsStruct.nameOfType),
                     actual = JsString.nameOfType,
                     breakpoint = LOCATION.append(ID_PROPERTY_NAME)

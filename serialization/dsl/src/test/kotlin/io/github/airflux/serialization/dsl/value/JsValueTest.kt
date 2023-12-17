@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.dsl.value
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.JsLookupResult
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
@@ -50,7 +50,7 @@ internal class JsValueTest : FreeSpec() {
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / KEY_NAME
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
+                        lookup shouldBe JsLookupResult.Defined(LOCATION.append(KEY_NAME), JsString(VALUE))
                     }
                 }
 
@@ -59,7 +59,7 @@ internal class JsValueTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined#PathMissing" {
                         val lookup = json / UNKNOWN_KEY_NAME
-                        lookup shouldBe JsLookup.Undefined.PathMissing(LOCATION.append(UNKNOWN_KEY_NAME))
+                        lookup shouldBe JsLookupResult.Undefined.PathMissing(LOCATION.append(UNKNOWN_KEY_NAME))
                     }
                 }
 
@@ -68,7 +68,7 @@ internal class JsValueTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined#InvalidType" {
                         val lookup = json / KEY_NAME
-                        lookup shouldBe JsLookup.Undefined.InvalidType(
+                        lookup shouldBe JsLookupResult.Undefined.InvalidType(
                             expected = listOf(JsStruct.nameOfType),
                             actual = JsArray.nameOfType,
                             breakpoint = LOCATION
@@ -84,7 +84,7 @@ internal class JsValueTest : FreeSpec() {
 
                     "then should return the value as an instance of type Defined" {
                         val lookup = json / IDX
-                        lookup shouldBe JsLookup.Defined(LOCATION.append(IDX), JsString(VALUE))
+                        lookup shouldBe JsLookupResult.Defined(LOCATION.append(IDX), JsString(VALUE))
                     }
                 }
 
@@ -93,7 +93,7 @@ internal class JsValueTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined#PathMissing" {
                         val lookup = json / UNKNOWN_IDX
-                        lookup shouldBe JsLookup.Undefined.PathMissing(LOCATION.append(UNKNOWN_IDX))
+                        lookup shouldBe JsLookupResult.Undefined.PathMissing(LOCATION.append(UNKNOWN_IDX))
                     }
                 }
 
@@ -102,7 +102,7 @@ internal class JsValueTest : FreeSpec() {
 
                     "then should return the value as an instance of type Undefined#InvalidType" {
                         val lookup = json / IDX
-                        lookup shouldBe JsLookup.Undefined.InvalidType(
+                        lookup shouldBe JsLookupResult.Undefined.InvalidType(
                             expected = listOf(JsArray.nameOfType),
                             actual = JsStruct.nameOfType,
                             breakpoint = LOCATION

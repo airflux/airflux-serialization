@@ -17,12 +17,12 @@
 package io.github.airflux.serialization.dsl.value
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.lookup.JsLookup
+import io.github.airflux.serialization.core.lookup.JsLookupResult
 import io.github.airflux.serialization.core.lookup.lookup
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.value.JsValue
 
-public operator fun JsValue.div(key: String): JsLookup =
+public operator fun JsValue.div(key: String): JsLookupResult =
     this.lookup(JsLocation, JsPath.Element.Key(key))
 
-public operator fun JsValue.div(idx: Int): JsLookup = this.lookup(JsLocation, JsPath.Element.Idx(idx))
+public operator fun JsValue.div(idx: Int): JsLookupResult = this.lookup(JsLocation, JsPath.Element.Idx(idx))

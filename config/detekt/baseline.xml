@@ -6,10 +6,10 @@
   <ID>CyclomaticComplexMethod:AirFluxJsonModule.kt$AirFluxJsonModule.AirFluxDeserializer$private tailrec fun deserialize( jp: JsonParser, context: DeserializationContext, parserContext: Stack&lt;DeserializerContext&gt; ): JsValue</ID>
   <ID>LongMethod:AirFluxJsonModule.kt$AirFluxJsonModule.AirFluxDeserializer$private tailrec fun deserialize( jp: JsonParser, context: DeserializationContext, parserContext: Stack&lt;DeserializerContext&gt; ): JsValue</ID>
   <ID>ThrowsCount:AirFluxJsonModule.kt$AirFluxJsonModule.AirFluxDeserializer$private tailrec fun deserialize( jp: JsonParser, context: DeserializationContext, parserContext: Stack&lt;DeserializerContext&gt; ): JsValue</ID>
-  <ID>CognitiveComplexMethod:JsLookup.kt$public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookup</ID>
+  <ID>CognitiveComplexMethod:JsLookupResult.kt$public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult</ID>
   <ID>CognitiveComplexMethod:JsValueExtensions.kt$internal fun JsValue.getOrNull(path: JsPath): JsValue?</ID>
   <ID>ReturnCount:ArrayPropertyReader.kt$@Suppress("LongParameterList") public fun &lt;EB, O, T&gt; readArray( env: JsReaderEnv&lt;EB, O&gt;, location: JsLocation, source: JsArray, prefixItemReaders: List&lt;JsReader&lt;EB, O, T&gt;&gt;, errorIfAdditionalItems: Boolean ): JsReaderResult&lt;List&lt;T&gt;&gt;</ID>
-  <ID>ReturnCount:JsLookup.kt$tailrec fun lookup(location: JsLocation, path: JsPath?, source: JsValue): JsLookup</ID>
+  <ID>ReturnCount:JsLookupResult.kt$tailrec fun lookup(location: JsLocation, path: JsPath?, source: JsValue): JsLookupResult</ID>
   <ID>ReturnCount:ArrayReader.kt$ArrayReader$private fun read( env: JsReaderEnv&lt;EB, O&gt;, location: JsLocation, source: JsArray ): JsReaderResult&lt;List&lt;T&gt;&gt;</ID>
   <ID>ReturnCount:StructReader.kt$StructReader$private fun read(env: JsReaderEnv&lt;EB, O&gt;, location: JsLocation, source: JsStruct): JsReaderResult&lt;T&gt;</ID>
 </CurrentIssues>
