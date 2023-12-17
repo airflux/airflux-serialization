@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.core.value
+package io.github.airflux.serialization.core.value.extension
 
 import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.value.JsArray
+import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.core.value.getOrNull
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.nulls.shouldBeNull
