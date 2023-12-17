@@ -7,7 +7,7 @@ public final class io/github/airflux/serialization/dsl/location/JsLocationKt {
 	public static final fun div (Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/String;)Lio/github/airflux/serialization/core/location/JsLocation;
 }
 
-public final class io/github/airflux/serialization/dsl/lookup/JsLookupResultExtensionKt {
+public final class io/github/airflux/serialization/dsl/lookup/JsLookupResultKt {
 	public static final fun div (Lio/github/airflux/serialization/core/lookup/JsLookupResult;I)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
 	public static final fun div (Lio/github/airflux/serialization/core/lookup/JsLookupResult;Ljava/lang/String;)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
 }
