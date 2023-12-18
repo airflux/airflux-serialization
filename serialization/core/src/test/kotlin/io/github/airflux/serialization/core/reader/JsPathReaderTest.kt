@@ -315,7 +315,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 val reader = JsPathReader.optional(
                     path = JsPath(ID_PROPERTY_NAME),
                     reader = StringReader,
-                    default = { _ -> DEFAULT_VALUE })
+                    default = { _, _ -> DEFAULT_VALUE })
 
                 "when the property is present" - {
 

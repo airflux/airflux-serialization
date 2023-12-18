@@ -233,7 +233,7 @@ public abstract interface class io/github/airflux/serialization/core/reader/JsPa
 
 public final class io/github/airflux/serialization/core/reader/JsPathReader$Companion {
 	public final fun optional (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsPathReader;
-	public final fun optional (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/JsPathReader;
+	public final fun optional (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/JsPathReader;
 	public final fun required (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsPathReader;
 	public final fun required (Lio/github/airflux/serialization/core/path/JsPath;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/JsPathReader;
 }
@@ -263,7 +263,7 @@ public final class io/github/airflux/serialization/core/reader/OptionalPropertyR
 }
 
 public final class io/github/airflux/serialization/core/reader/OptionalWithDefaultPropertyReaderKt {
-	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/lookup/JsLookupResult;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun readOptional (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/lookup/JsLookupResult;Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/RequiredPropertyReaderKt {

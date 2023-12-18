@@ -42,7 +42,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
         private val READER: JsReader<EB, Unit, String> = DummyReader.string()
-        private val DEFAULT: (JsReaderEnv<EB, Unit>) -> String = { _ -> ID_PROPERTY_DEFAULT_VALUE }
+        private val DEFAULT: (JsReaderEnv<EB, Unit>, JsLocation) -> String = { _, _ -> ID_PROPERTY_DEFAULT_VALUE }
     }
 
     init {
@@ -60,7 +60,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                         env = ENV,
                         lookup = lookup,
                         using = READER,
-                        defaultValue = DEFAULT
+                        default = DEFAULT
                     )
 
                     result shouldBeSuccess success(
@@ -79,7 +79,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                         env = ENV,
                         lookup = lookup,
                         using = READER,
-                        defaultValue = DEFAULT
+                        default = DEFAULT
                     )
 
                     result shouldBeSuccess success(
@@ -101,7 +101,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                         env = ENV,
                         lookup = lookup,
                         using = READER,
-                        defaultValue = DEFAULT
+                        default = DEFAULT
                     )
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),

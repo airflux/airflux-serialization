@@ -53,7 +53,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val DEFAULT: (JsReaderEnv<EB, Unit>) -> String = { _ -> DEFAULT_VALUE }
+        private val DEFAULT: (JsReaderEnv<EB, Unit>, JsLocation) -> String = { _, _ -> DEFAULT_VALUE }
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
         private val IntReader: JsReader<EB, Unit, Int> = DummyReader.int()

@@ -50,7 +50,7 @@ public fun interface JsPathReader<EB, O, out T> {
         public fun <EB, O, T> optional(
             path: JsPath,
             reader: JsReader<EB, O, T>,
-            default: (JsReaderEnv<EB, O>) -> T
+            default: (JsReaderEnv<EB, O>, JsLocation) -> T
         ): JsPathReader<EB, O, T>
             where EB : InvalidTypeErrorBuilder =
             JsPathReader { env, location, source ->

@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.reader
 
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.lookup.JsLookupResult
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
@@ -27,13 +28,13 @@ import io.github.airflux.serialization.core.reader.result.success
  * Reads optional property or return default if a property is not found.
  *
  * - If a node is found ([lookup] is [JsLookupResult.Defined]) then applies [reader]
- * - If a node is not found ([lookup] is [JsLookupResult.Undefined]) then returns [defaultValue]
+ * - If a node is not found ([lookup] is [JsLookupResult.Undefined]) then returns [default]
  */
 public fun <EB, O, T> readOptional(
     env: JsReaderEnv<EB, O>,
     lookup: JsLookupResult,
     using: JsReader<EB, O, T>,
-    defaultValue: (JsReaderEnv<EB, O>) -> T
+    default: (JsReaderEnv<EB, O>, JsLocation) -> T
 ): JsReaderResult<T>
     where EB : InvalidTypeErrorBuilder =
     when (lookup) {
@@ -41,7 +42,7 @@ public fun <EB, O, T> readOptional(
 
         is JsLookupResult.Undefined -> when (lookup) {
             is JsLookupResult.Undefined.PathMissing ->
-                success(location = lookup.location, value = defaultValue(env))
+                success(location = lookup.location, value = default(env, lookup.location))
 
             is JsLookupResult.Undefined.InvalidType -> failure(
                 location = lookup.breakpoint,
