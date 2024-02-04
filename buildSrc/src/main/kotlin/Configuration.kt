@@ -50,17 +50,19 @@ object Configuration {
 
         fun RepositoryHandler.mavenSonatypeRepository(project: Project) {
             maven {
-                name = "sonatype"
-                url = if (project.version.toString().endsWith("SNAPSHOT"))
-                    project.uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                name = "mvn-repository"
+                url = if (project.version.toString().endsWith("SNAPSHOT", true))
+                    project.uri(System.getenv("REPOSITORY_SNAPSHOTS_URL") ?: DEFAULT_REPOSITORY_URL)
                 else
-                    project.uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    project.uri(System.getenv("REPOSITORY_RELEASES_URL") ?: DEFAULT_REPOSITORY_URL)
 
                 credentials {
-                    username = System.getenv("SONATYPE_USER")
-                    password = System.getenv("SONATYPE_PASSWORD")
+                    username = System.getenv("REPOSITORY_USERNAME")
+                    password = System.getenv("REPOSITORY_PASSWORD")
                 }
             }
         }
+
+        private const val DEFAULT_REPOSITORY_URL = ""
     }
 }
