@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":airflux-serialization-core"))
     implementation(project(":airflux-serialization-dsl"))
     implementation(project(":airflux-serialization-std"))
-    implementation(project(":airflux-jackson-parser"))
+    implementation(project(":airflux-parser-jackson"))
 
     /* Kotlin */
     implementation(kotlin("stdlib"))
