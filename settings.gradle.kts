@@ -21,6 +21,9 @@ project(":airflux-bom").projectDir = file("./bom")
 include(":quickstart")
 project(":quickstart").projectDir = file("./quickstart")
 
+include(":airflux-parser-api")
+project(":airflux-parser-api").projectDir = file("./parser/api")
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("testLibs") {

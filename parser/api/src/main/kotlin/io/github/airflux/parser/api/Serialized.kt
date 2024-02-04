@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.parser
+package io.github.airflux.parser.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.parser.api.Serialized
-import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.serialization
-import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-
-public fun <O, T : Any> T.serialization(mapper: ObjectMapper, env: JsWriterEnv<O>, writer: JsWriter<O, T>): Serialized =
-    Serialized(this.serialization(env, JsLocation, writer)?.let { mapper.writeValueAsString(it) })
+@JvmInline
+public value class Serialized(public val get: String?) {
+    public fun orEmptyArray(): String = get ?: "[]"
+    public fun orEmptyStruct(): String = get ?: "{}"
+}
