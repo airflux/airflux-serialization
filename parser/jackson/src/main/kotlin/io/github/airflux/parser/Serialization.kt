@@ -17,7 +17,7 @@
 package io.github.airflux.parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.parser.api.Serialized
+import io.github.airflux.parser.core.Serialized
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.serialization
 import io.github.airflux.serialization.core.writer.JsWriter
