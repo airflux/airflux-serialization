@@ -10,8 +10,6 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
-      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
       GPG_PRIVATE_PASSWORD: ${{ secrets.GPG_PRIVATE_PASSWORD }}
       
@@ -41,7 +39,12 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build publish koverXmlReport
+      env:
+        REPOSITORY_SNAPSHOTS_URL: ${{ secrets.REPOSITORY_SNAPSHOTS_URL }}
+        REPOSITORY_RELEASES_URL: ${{ secrets.REPOSITORY_RELEASES_URL }}
+        REPOSITORY_USERNAME: ${{ secrets.REPOSITORY_USERNAME }}
+        REPOSITORY_PASSWORD: ${{ secrets.REPOSITORY_PASSWORD }}
+      run: ./gradlew build publish koverXmlReport publish
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
