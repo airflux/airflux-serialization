@@ -63,7 +63,7 @@ fun main() {
     val writerEnv =
         JsWriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
     val output = response.serialization(mapper, writerEnv, writer = ResponseWriter)
-    println(output.get)
+    println(output.orThrow())
 }
 
 const val JSON = """{

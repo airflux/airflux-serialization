@@ -17,7 +17,17 @@
 package io.github.airflux.parser.core
 
 @JvmInline
-public value class Serialized(public val get: String?) {
-    public fun orEmptyArray(): String = get ?: "[]"
-    public fun orEmptyStruct(): String = get ?: "{}"
+public value class Serialized(private val value: String?) {
+
+    public fun isNone(): Boolean = value == null
+
+    public fun orNull(): String? = value
+
+    public fun orThrow(): String = orThrow { IllegalStateException("No serialized value.") }
+
+    public fun orThrow(builder: () -> Throwable): String = value ?: throw builder()
+
+    public fun orEmptyArray(): String = value ?: "[]"
+
+    public fun orEmptyStruct(): String = value ?: "{}"
 }

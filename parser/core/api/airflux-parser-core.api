@@ -4,11 +4,14 @@ public final class io/github/airflux/parser/core/Serialized {
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
 	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
-	public final fun getGet ()Ljava/lang/String;
 	public fun hashCode ()I
 	public static fun hashCode-impl (Ljava/lang/String;)I
+	public static final fun isNone-impl (Ljava/lang/String;)Z
 	public static final fun orEmptyArray-impl (Ljava/lang/String;)Ljava/lang/String;
 	public static final fun orEmptyStruct-impl (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun orNull-impl (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun orThrow-impl (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun orThrow-impl (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
