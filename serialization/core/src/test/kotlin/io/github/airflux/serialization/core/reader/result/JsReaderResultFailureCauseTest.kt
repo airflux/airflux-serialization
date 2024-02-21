@@ -37,7 +37,7 @@ internal class JsReaderResultFailureCauseTest : FreeSpec() {
                 val cause = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
-                cause.errors.toList() shouldContainExactly listOf(JsonErrors.PathMissing)
+                cause.errors.items shouldContainExactly listOf(JsonErrors.PathMissing)
             }
 
             "constructor(JsLocation, NonEmptyList)" {
@@ -47,7 +47,7 @@ internal class JsReaderResultFailureCauseTest : FreeSpec() {
                 )
 
                 cause.location shouldBe LOCATION
-                cause.errors.toList() shouldContainExactly listOf(JsonErrors.PathMissing)
+                cause.errors.items shouldContainExactly listOf(JsonErrors.PathMissing)
             }
 
             "should comply with equals() and hashCode() contract" {

@@ -17,9 +17,7 @@
 package io.github.airflux.serialization.core.common
 
 @JvmInline
-public value class NonEmptyList<out T> @PublishedApi internal constructor(@PublishedApi internal val items: List<T>) {
-
-    public fun toList(): List<T> = items
+public value class NonEmptyList<out T> @PublishedApi internal constructor(public val items: List<T>) {
 
     public operator fun iterator(): Iterator<T> = items.iterator()
 

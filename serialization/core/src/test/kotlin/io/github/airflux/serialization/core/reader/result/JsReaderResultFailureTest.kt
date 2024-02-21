@@ -37,7 +37,7 @@ internal class JsReaderResultFailureTest : FreeSpec() {
             "constructor(JsLocation, JsError)" {
                 val failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                failure.causes.toList() shouldContainExactly listOf(
+                failure.causes.items shouldContainExactly listOf(
                     JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.PathMissing
@@ -48,7 +48,7 @@ internal class JsReaderResultFailureTest : FreeSpec() {
             "constructor(JsLocation, JsReaderResult#Errors)" {
                 val failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.PathMissing)
 
-                failure.causes.toList() shouldContainExactly listOf(
+                failure.causes.items shouldContainExactly listOf(
                     JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
                 )
             }
@@ -65,7 +65,7 @@ internal class JsReaderResultFailureTest : FreeSpec() {
 
                 val failure = firstFailure + secondFailure
 
-                failure.causes.toList() shouldContainExactly listOf(
+                failure.causes.items shouldContainExactly listOf(
                     JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.PathMissing

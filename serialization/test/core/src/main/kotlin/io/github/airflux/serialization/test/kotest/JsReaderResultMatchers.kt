@@ -72,5 +72,5 @@ public infix fun JsReaderResult<*>.shouldBeFailure(expected: JsReaderResult<*>) 
 
 public fun JsReaderResult<*>.shouldBeFailure(vararg expected: JsReaderResult.Failure.Cause) {
     val failure = this.shouldBeFailure()
-    failure.causes.toList() shouldContainExactly expected.toList()
+    failure.causes.items shouldContainExactly expected.toList()
 }
