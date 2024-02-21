@@ -17,9 +17,11 @@
 package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.JsonErrors
+import io.github.airflux.serialization.core.common.NonEmptyList
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
 internal class JsReaderResultFailureCauseTest : FreeSpec() {
@@ -35,18 +37,32 @@ internal class JsReaderResultFailureCauseTest : FreeSpec() {
                 val cause = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
 
                 cause.location shouldBe LOCATION
-                cause.error shouldBe JsonErrors.PathMissing
+                cause.errors.toList() shouldContainExactly listOf(JsonErrors.PathMissing)
+            }
+
+            "constructor(JsLocation, NonEmptyList)" {
+                val cause = JsReaderResult.Failure.Cause(
+                    location = LOCATION,
+                    errors = NonEmptyList(JsonErrors.PathMissing)
+                )
+
+                cause.location shouldBe LOCATION
+                cause.errors.toList() shouldContainExactly listOf(JsonErrors.PathMissing)
             }
 
             "should comply with equals() and hashCode() contract" {
-                JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing).shouldBeEqualsContract(
-                    y = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    z = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
-                    others = listOf(
-                        JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
-                        JsReaderResult.Failure.Cause(location = LOCATION.append("id"), error = JsonErrors.PathMissing)
+                JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing)
+                    .shouldBeEqualsContract(
+                        y = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                        z = JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.PathMissing),
+                        others = listOf(
+                            JsReaderResult.Failure.Cause(location = LOCATION, error = JsonErrors.AdditionalItems),
+                            JsReaderResult.Failure.Cause(
+                                location = LOCATION.append("id"),
+                                error = JsonErrors.PathMissing
+                            )
+                        )
                     )
-                )
             }
         }
     }
