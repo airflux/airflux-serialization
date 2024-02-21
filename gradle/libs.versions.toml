@@ -1,5 +1,5 @@
 [versions]
-jackson = "2.13.3"
+jackson = "2.16.1"
 
 
 [libraries]

@@ -10,7 +10,7 @@ dependencies {
     implementation(project(":airflux-serialization-core"))
 
     /* JSON */
-    implementation(libs.bundles.jackson) {
+    api(libs.bundles.jackson) {
         exclude(group = "org.jetbrains.kotlin")
     }
 
