@@ -1,4 +1,5 @@
 public final class io/github/airflux/parser/core/Serialized {
+	public static final field Companion Lio/github/airflux/parser/core/Serialized$Companion;
 	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/airflux/parser/core/Serialized;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
 	public fun equals (Ljava/lang/Object;)Z
@@ -15,5 +16,9 @@ public final class io/github/airflux/parser/core/Serialized {
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/parser/core/Serialized$Companion {
+	public final fun getNone-8pNG618 ()Ljava/lang/String;
 }
 

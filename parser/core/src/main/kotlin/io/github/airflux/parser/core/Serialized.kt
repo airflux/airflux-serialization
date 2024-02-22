@@ -30,4 +30,8 @@ public value class Serialized(private val value: String?) {
     public fun orEmptyArray(): String = value ?: "[]"
 
     public fun orEmptyStruct(): String = value ?: "{}"
+
+    public companion object {
+        public val None: Serialized = Serialized(null)
+    }
 }
