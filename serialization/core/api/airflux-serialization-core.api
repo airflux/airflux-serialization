@@ -360,7 +360,7 @@ public final class io/github/airflux/serialization/core/reader/result/JsReaderRe
 }
 
 public final class io/github/airflux/serialization/core/reader/result/JsReaderResultKt {
-	public static final fun bind (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function2;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun bind (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 	public static final fun failure (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 	public static final fun filter (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/reader/predicate/JsPredicate;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 	public static final fun fold (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;

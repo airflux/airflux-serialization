@@ -76,17 +76,17 @@ public inline infix fun <T, R> JsReaderResult<T>.map(transform: (T) -> R): JsRea
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
-    return bind { location, value -> transform(value).toSuccess(location) }
+    return bind { transform(it.value).toSuccess(it.location) }
 }
 
 @OptIn(ExperimentalContracts::class)
 public inline infix fun <T, R> JsReaderResult<T>.bind(
-    transform: (location: JsLocation, value: T) -> JsReaderResult<R>
+    transform: (JsReaderResult.Success<T>) -> JsReaderResult<R>
 ): JsReaderResult<R> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
-    return if (isSuccess()) transform(location, value) else this
+    return if (isSuccess()) transform(this) else this
 }
 
 @OptIn(ExperimentalContracts::class)
