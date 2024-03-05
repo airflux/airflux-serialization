@@ -65,6 +65,8 @@ public inline fun JsValidatorResult.ifInvalid(handler: (JsReaderResult.Failure) 
 public fun valid(): JsValidatorResult = JsValidatorResult.Valid
 
 public fun invalid(location: JsLocation, error: JsReaderResult.Error): JsValidatorResult =
-    JsReaderResult.Failure(location, error).toInvalid()
+    invalid(JsReaderResult.Failure(location, error))
 
-public fun JsReaderResult.Failure.toInvalid(): JsValidatorResult = JsValidatorResult.Invalid(this)
+public fun invalid(failure: JsReaderResult.Failure): JsValidatorResult = JsValidatorResult.Invalid(failure)
+
+public fun JsReaderResult.Failure.toInvalid(): JsValidatorResult = invalid(this)
