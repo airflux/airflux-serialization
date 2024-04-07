@@ -404,6 +404,7 @@ public final class io/github/airflux/serialization/core/reader/validation/JsVali
 
 public final class io/github/airflux/serialization/core/reader/validation/JsValidatorResultKt {
 	public static final fun fold (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public static final fun getOrNull (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;
 	public static final fun ifInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function1;)V
 	public static final fun invalid (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;
 	public static final fun invalid (Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;

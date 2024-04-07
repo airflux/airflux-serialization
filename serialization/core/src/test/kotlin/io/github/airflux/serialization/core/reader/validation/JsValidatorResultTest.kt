@@ -18,6 +18,7 @@ package io.github.airflux.serialization.core.reader.validation
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -60,6 +61,28 @@ internal class JsValidatorResultTest : FreeSpec() {
 
                     "then should return the true" {
                         value.isInvalid() shouldBe true
+                    }
+                }
+            }
+
+            "the extension function `getOrNull`" - {
+
+                "when value is valid" - {
+                    val value = valid()
+
+                    "then should return the null value" {
+                        value.getOrNull() shouldBe null
+                    }
+                }
+
+                "when value is invalid" - {
+                    val value = invalid(location = JsLocation, error = JsonErrors.PathMissing)
+
+                    "then should return an error" {
+                        value.getOrNull() shouldBe JsReaderResult.Failure(
+                            location = JsLocation,
+                            error = JsonErrors.PathMissing
+                        )
                     }
                 }
             }

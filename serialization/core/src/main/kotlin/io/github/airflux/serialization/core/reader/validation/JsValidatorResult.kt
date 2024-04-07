@@ -45,6 +45,8 @@ public fun JsValidatorResult.isInvalid(): Boolean {
     return this is JsValidatorResult.Invalid
 }
 
+public fun JsValidatorResult.getOrNull(): JsReaderResult.Failure? = if (isInvalid()) failure else null
+
 @OptIn(ExperimentalContracts::class)
 public inline fun <T> JsValidatorResult.fold(onInvalid: (JsReaderResult.Failure) -> T, onValid: () -> T): T {
     contract {
