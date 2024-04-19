@@ -16,10 +16,10 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
-internal class MinItemsArrayValidatorBuilder<EB, O>(private val value: Int) : ArrayValidator.Builder<EB, O>
+internal class MinItemsArrayValidatorBuilder<EB, O>(private val value: Int) : JsArrayValidator.Builder<EB, O>
     where EB : MinItemsArrayValidator.ErrorBuilder {
 
-    override fun build(): ArrayValidator<EB, O> = MinItemsArrayValidator(value)
+    override fun build(): JsArrayValidator<EB, O> = MinItemsArrayValidator(value)
 }

@@ -23,14 +23,14 @@ import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
-internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : ArrayValidator.Builder<EB, O> {
+internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : JsArrayValidator.Builder<EB, O> {
 
     private val validator = Validator<EB, O>(result)
-    override fun build(): ArrayValidator<EB, O> = validator
+    override fun build(): JsArrayValidator<EB, O> = validator
 
-    internal class Validator<EB, O>(val result: JsValidatorResult) : ArrayValidator<EB, O> {
+    internal class Validator<EB, O>(val result: JsValidatorResult) : JsArrayValidator<EB, O> {
         override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =
             result
     }
@@ -41,11 +41,11 @@ internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : Ar
         internal fun <EB, O> minItems(
             expected: Int,
             error: (expected: Int, actual: Int) -> JsReaderResult.Error
-        ): ArrayValidator.Builder<EB, O> =
-            ArrayValidator.Builder {
-                ArrayValidator { _, location, source ->
+        ): JsArrayValidator.Builder<EB, O> =
+            JsArrayValidator.Builder {
+                JsArrayValidator { _, location, source ->
                     if (source.size < expected)
-                        return@ArrayValidator invalid(location = location, error = error(expected, source.size))
+                        return@JsArrayValidator invalid(location = location, error = error(expected, source.size))
                     else
                         valid()
                 }

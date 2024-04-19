@@ -16,12 +16,12 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
-internal class IsNotEmptyArrayValidatorBuilder<EB, O> : ArrayValidator.Builder<EB, O>
+internal class IsNotEmptyArrayValidatorBuilder<EB, O> : JsArrayValidator.Builder<EB, O>
     where EB : IsNotEmptyArrayValidator.ErrorBuilder {
 
-    override fun build(): ArrayValidator<EB, O> = validator
+    override fun build(): JsArrayValidator<EB, O> = validator
 
     private val validator = IsNotEmptyArrayValidator<EB, O>()
 }

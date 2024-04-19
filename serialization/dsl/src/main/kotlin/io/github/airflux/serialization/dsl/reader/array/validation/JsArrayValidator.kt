@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.validation.isValid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 
-public fun interface ArrayValidator<EB, O> {
+public fun interface JsArrayValidator<EB, O> {
     public fun validate(
         env: JsReaderEnv<EB, O>,
         location: JsLocation,
@@ -32,7 +32,7 @@ public fun interface ArrayValidator<EB, O> {
     ): JsValidatorResult
 
     public fun interface Builder<EB, O> {
-        public fun build(): ArrayValidator<EB, O>
+        public fun build(): JsArrayValidator<EB, O>
     }
 }
 
@@ -43,11 +43,11 @@ public fun interface ArrayValidator<EB, O> {
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-public infix fun <EB, O> ArrayValidator.Builder<EB, O>.or(
-    alt: ArrayValidator.Builder<EB, O>
-): ArrayValidator.Builder<EB, O> {
+public infix fun <EB, O> JsArrayValidator.Builder<EB, O>.or(
+    alt: JsArrayValidator.Builder<EB, O>
+): JsArrayValidator.Builder<EB, O> {
     val self = this
-    return ArrayValidator.Builder {
+    return JsArrayValidator.Builder {
         self.build() or alt.build()
     }
 }
@@ -59,11 +59,11 @@ public infix fun <EB, O> ArrayValidator.Builder<EB, O>.or(
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-public infix fun <EB, O> ArrayValidator.Builder<EB, O>.and(
-    alt: ArrayValidator.Builder<EB, O>
-): ArrayValidator.Builder<EB, O> {
+public infix fun <EB, O> JsArrayValidator.Builder<EB, O>.and(
+    alt: JsArrayValidator.Builder<EB, O>
+): JsArrayValidator.Builder<EB, O> {
     val self = this
-    return ArrayValidator.Builder {
+    return JsArrayValidator.Builder {
         self.build() and alt.build()
     }
 }
@@ -75,14 +75,14 @@ public infix fun <EB, O> ArrayValidator.Builder<EB, O>.and(
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-internal infix fun <EB, O> ArrayValidator<EB, O>.or(alt: ArrayValidator<EB, O>): ArrayValidator<EB, O> {
+internal infix fun <EB, O> JsArrayValidator<EB, O>.or(alt: JsArrayValidator<EB, O>): JsArrayValidator<EB, O> {
     val self = this
-    return ArrayValidator { env, location, value ->
+    return JsArrayValidator { env, location, value ->
         val left = self.validate(env, location, value)
-        if (left.isValid()) return@ArrayValidator valid()
+        if (left.isValid()) return@JsArrayValidator valid()
 
         val right = alt.validate(env, location, value)
-        if (right.isValid()) return@ArrayValidator valid()
+        if (right.isValid()) return@JsArrayValidator valid()
 
         JsValidatorResult.Invalid(left.failure + right.failure)
     }
@@ -95,9 +95,9 @@ internal infix fun <EB, O> ArrayValidator<EB, O>.or(alt: ArrayValidator<EB, O>):
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-internal infix fun <EB, O> ArrayValidator<EB, O>.and(alt: ArrayValidator<EB, O>): ArrayValidator<EB, O> {
+internal infix fun <EB, O> JsArrayValidator<EB, O>.and(alt: JsArrayValidator<EB, O>): JsArrayValidator<EB, O> {
     val self = this
-    return ArrayValidator { env, location, value ->
+    return JsArrayValidator { env, location, value ->
         val left = self.validate(env, location, value)
         if (left.isValid())
             alt.validate(env, location, value)

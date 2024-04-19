@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.validator.array
 
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
 public object StdArrayValidator {
 
@@ -24,7 +24,7 @@ public object StdArrayValidator {
      * If the array is empty then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O> isNotEmpty(): ArrayValidator.Builder<EB, O>
+    public fun <EB, O> isNotEmpty(): JsArrayValidator.Builder<EB, O>
         where EB : IsNotEmptyArrayValidator.ErrorBuilder =
         IsNotEmptyArrayValidatorBuilder()
 
@@ -32,7 +32,7 @@ public object StdArrayValidator {
      * If a number of elements in the array are less than an expected [value] then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O> minItems(value: Int): ArrayValidator.Builder<EB, O>
+    public fun <EB, O> minItems(value: Int): JsArrayValidator.Builder<EB, O>
         where EB : MinItemsArrayValidator.ErrorBuilder =
         MinItemsArrayValidatorBuilder(value)
 
@@ -40,7 +40,7 @@ public object StdArrayValidator {
      * If a number of elements in the array are more than an expected [value] then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O> maxItems(value: Int): ArrayValidator.Builder<EB, O>
+    public fun <EB, O> maxItems(value: Int): JsArrayValidator.Builder<EB, O>
         where EB : MaxItemsArrayValidator.ErrorBuilder =
         MaxItemsArrayValidatorBuilder(value)
 }

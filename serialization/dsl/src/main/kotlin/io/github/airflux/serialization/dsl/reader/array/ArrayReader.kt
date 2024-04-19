@@ -33,7 +33,7 @@ import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
 public fun <EB, O, T> arrayReader(
     block: ArrayReader.Builder<EB, O, T>.() -> JsReader<EB, O, List<T>>
@@ -69,7 +69,7 @@ public fun <EB, O, T> ArrayReader.Builder<EB, O, T>.returns(
           O : FailFastOption = this.build(prefixItems, items)
 
 public class ArrayReader<EB, O, T> private constructor(
-    private val validator: ArrayValidator<EB, O>?,
+    private val validator: JsArrayValidator<EB, O>?,
     private val resultBuilder: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
 ) : JsReader<EB, O, List<T>>
     where EB : AdditionalItemsErrorBuilder,
@@ -103,9 +103,9 @@ public class ArrayReader<EB, O, T> private constructor(
               EB : InvalidTypeErrorBuilder,
               O : FailFastOption {
 
-        private var validatorBuilder: ArrayValidator.Builder<EB, O>? = null
+        private var validatorBuilder: JsArrayValidator.Builder<EB, O>? = null
 
-        public fun validation(validator: ArrayValidator.Builder<EB, O>) {
+        public fun validation(validator: JsArrayValidator.Builder<EB, O>) {
             validatorBuilder = validator
         }
 

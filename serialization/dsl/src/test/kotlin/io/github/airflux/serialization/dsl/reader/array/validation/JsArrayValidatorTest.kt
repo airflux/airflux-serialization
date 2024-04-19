@@ -21,7 +21,6 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
@@ -29,7 +28,7 @@ import io.github.airflux.serialization.test.kotest.shouldBeInvalid
 import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
-internal class ArrayValidatorBuilderTest : FreeSpec() {
+internal class JsArrayValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(Unit, Unit)
@@ -39,46 +38,43 @@ internal class ArrayValidatorBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsStructValidator#Builder type" - {
+        "The JsArrayValidator type" - {
 
             "testing the or composite operator" - {
 
                 "if the left validator returns success then the right validator doesn't execute" {
-                    val leftValidator = ArrayValidator.Builder { createValidator(valid()) }
+                    val leftValidator = JsArrayValidator<Unit, Unit> { _, _, _ -> valid() }
 
-                    val rightValidator = ArrayValidator.Builder {
-                        createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                    val rightValidator = JsArrayValidator<Unit, Unit> { _, location, _ ->
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
-                    val builder = leftValidator or rightValidator
-                    val composeValidator = builder.build()
+                    val composeValidator = leftValidator or rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, SOURCE)
 
                     result.shouldBeValid()
                 }
 
                 "if the left validator returns an error" - {
-                    val leftValidator = ArrayValidator.Builder {
-                        createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                    val leftValidator = JsArrayValidator<Unit, Unit> { _, location, _ ->
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
                     "and the right validator returns success then returning the first error" {
-                        val rightValidator = ArrayValidator.Builder { createValidator(valid()) }
+                        val rightValidator = JsArrayValidator<Unit, Unit> { _, _, _ -> valid() }
 
-                        val builder = leftValidator or rightValidator
-                        val composeValidator = builder.build()
+                        val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, SOURCE)
 
                         result.shouldBeValid()
                     }
 
                     "and the right validator returns an error then returning both errors" {
-                        val rightValidator = ArrayValidator.Builder {
-                            createValidator { location -> invalid(location, ValidationErrors.InvalidType) }
+                        val rightValidator = JsArrayValidator<Unit, Unit> { _, location, _ ->
+                            invalid(location, ValidationErrors.InvalidType)
                         }
 
-                        val builder = leftValidator or rightValidator
-                        val composeValidator = builder.build()
+                        val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, SOURCE)
 
                         result shouldBeInvalid
@@ -91,41 +87,38 @@ internal class ArrayValidatorBuilderTest : FreeSpec() {
             "testing the and composite operator" - {
 
                 "if the left validator returns an error then the right validator doesn't execute" {
-                    val leftValidator = ArrayValidator.Builder {
-                        createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                    val leftValidator = JsArrayValidator<Unit, Unit> { _, location, _ ->
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
-                    val rightValidator = ArrayValidator.Builder {
-                        createValidator { location -> invalid(location, ValidationErrors.InvalidType) }
+                    val rightValidator = JsArrayValidator<Unit, Unit> { _, location, _ ->
+                        invalid(location, ValidationErrors.InvalidType)
                     }
 
-                    val builder = leftValidator and rightValidator
-                    val composeValidator = builder.build()
+                    val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, SOURCE)
 
                     result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
-                    val leftValidator = ArrayValidator.Builder { createValidator(valid()) }
+                    val leftValidator = JsArrayValidator<Unit, Unit> { _, _, _ -> valid() }
 
                     "and the second validator returns success, then success is returned" {
-                        val rightValidator = ArrayValidator.Builder { createValidator(valid()) }
+                        val rightValidator = JsArrayValidator<Unit, Unit> { _, _, _ -> valid() }
 
-                        val builder = leftValidator and rightValidator
-                        val composeValidator = builder.build()
+                        val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, SOURCE)
 
                         result.shouldBeValid()
                     }
 
                     "and the right validator returns an error, then an error is returned" {
-                        val rightValidator = ArrayValidator.Builder {
-                            createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                        val rightValidator = JsArrayValidator<Unit, Unit> { _, location, _ ->
+                            invalid(location, ValidationErrors.PathMissing)
                         }
 
-                        val builder = leftValidator and rightValidator
-                        val composeValidator = builder.build()
+                        val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, SOURCE)
 
                         result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
@@ -139,10 +132,4 @@ internal class ArrayValidatorBuilderTest : FreeSpec() {
         object PathMissing : ValidationErrors()
         object InvalidType : ValidationErrors()
     }
-
-    private fun createValidator(result: (JsLocation) -> JsValidatorResult): ArrayValidator<Unit, Unit> =
-        ArrayValidator { _, location, _ -> result(location) }
-
-    private fun createValidator(result: JsValidatorResult): ArrayValidator<Unit, Unit> =
-        ArrayValidator { _, _, _ -> result }
 }

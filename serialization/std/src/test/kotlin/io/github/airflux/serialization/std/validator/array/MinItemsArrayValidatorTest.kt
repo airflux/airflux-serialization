@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
 import io.github.airflux.serialization.test.kotest.shouldBeValid
@@ -39,7 +39,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator: ArrayValidator<EB, Unit> =
+            val validator: JsArrayValidator<EB, Unit> =
                 StdArrayValidator.minItems<EB, Unit>(MIN_ITEMS).build()
 
             "when a collection is empty" - {

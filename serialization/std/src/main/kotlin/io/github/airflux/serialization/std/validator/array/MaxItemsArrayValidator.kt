@@ -23,11 +23,11 @@ import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
 public class MaxItemsArrayValidator<EB, O> internal constructor(
     private val expected: Int
-) : ArrayValidator<EB, O>
+) : JsArrayValidator<EB, O>
     where EB : MaxItemsArrayValidator.ErrorBuilder {
 
     override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =

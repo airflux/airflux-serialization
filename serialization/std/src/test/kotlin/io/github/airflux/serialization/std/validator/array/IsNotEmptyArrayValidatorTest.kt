@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
+import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
 import io.github.airflux.serialization.test.kotest.shouldBeValid
@@ -38,7 +38,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator IsNotEmpty" - {
-            val validator: ArrayValidator<EB, Unit> = StdArrayValidator.isNotEmpty<EB, Unit>().build()
+            val validator: JsArrayValidator<EB, Unit> = StdArrayValidator.isNotEmpty<EB, Unit>().build()
 
             "when an array is empty" - {
                 val source = JsArray()
