@@ -20,4 +20,4 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderEr
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
 
-val CommonStructReaderValidators: List<StructValidator.Builder<ReaderErrorBuilders, ReaderOptions>> = listOf(isNotEmpty)
+val CommonStructReaderValidators: StructValidator.Builder<ReaderErrorBuilders, ReaderOptions> = isNotEmpty

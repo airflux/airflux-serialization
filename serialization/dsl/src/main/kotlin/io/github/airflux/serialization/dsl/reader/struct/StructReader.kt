@@ -25,7 +25,8 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.ifInvalid
+import io.github.airflux.serialization.core.reader.validation.getOrNull
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -37,7 +38,6 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidators
 
 public fun <EB, O, T> structReader(block: StructReader.Builder<EB, O, T>.() -> JsReader<EB, O, T>): JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
@@ -53,7 +53,7 @@ public fun <EB, O, T> StructReader.Builder<EB, O, T>.returns(
           O : FailFastOption = this.build(block)
 
 public class StructReader<EB, O, T> private constructor(
-    private val validators: StructValidators<EB, O>,
+    private val validator: StructValidator<EB, O>?,
     private val properties: StructProperties<EB, O>,
     private val resultBuilder: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ) : JsReader<EB, O, T>
@@ -75,23 +75,10 @@ public class StructReader<EB, O, T> private constructor(
               O : FailFastOption {
 
         private val properties = mutableListOf<StructProperty<EB, O, *>>()
-        private val validatorBuilders = mutableListOf<StructValidator.Builder<EB, O>>()
+        private var validatorBuilder: StructValidator.Builder<EB, O>? = null
 
-        public fun validation(
-            validator: StructValidator.Builder<EB, O>,
-            vararg validators: StructValidator.Builder<EB, O>
-        ) {
-            validation(
-                validators = mutableListOf<StructValidator.Builder<EB, O>>()
-                    .apply {
-                        add(validator)
-                        addAll(validators)
-                    }
-            )
-        }
-
-        public fun validation(validators: List<StructValidator.Builder<EB, O>>) {
-            validatorBuilders.addAll(validators)
+        public fun validation(validator: StructValidator.Builder<EB, O>) {
+            validatorBuilder = validator
         }
 
         public fun <P> property(spec: StructPropertySpec<EB, O, P>): StructProperty<EB, O, P> =
@@ -100,41 +87,26 @@ public class StructReader<EB, O, T> private constructor(
         public fun build(
             block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
         ): JsReader<EB, O, T> {
-            val validators: StructValidators<EB, O> =
-                validatorBuilders.map { validatorBuilder -> validatorBuilder.build(properties) }
-                    .takeIf { it.isNotEmpty() }
-                    .orEmpty()
-            return StructReader(validators, properties, block)
+            val validator: StructValidator<EB, O>? = validatorBuilder?.build(properties)
+            return StructReader(validator, properties, block)
         }
     }
 
     private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
         val failFast = env.options.failFast
-        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location)
+        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location).getOrNull()
         if (failureAccumulator != null && failFast) return failureAccumulator
-        return source.read(env, location)
+        return source.readProperties(env, location)
             .fold(
                 onLeft = { failure -> failureAccumulator + failure },
                 onRight = { failureAccumulator ?: resultBuilder(it, env, location) }
             )
     }
 
-    private fun JsStruct.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult.Failure? {
-        val failFast = env.options.failFast
-        var failureAccumulator: JsReaderResult.Failure? = null
+    private fun JsStruct.validate(env: JsReaderEnv<EB, O>, location: JsLocation) =
+        validator?.validate(env, location, properties, this) ?: valid()
 
-        validators.forEach { validator ->
-            validator.validate(env, location, properties, this)
-                .ifInvalid { failure ->
-                    if (failFast) return failure
-                    failureAccumulator += failure
-                }
-        }
-
-        return failureAccumulator
-    }
-
-    private fun JsStruct.read(
+    private fun JsStruct.readProperties(
         env: JsReaderEnv<EB, O>,
         location: JsLocation
     ): Either<JsReaderResult.Failure, PropertyValuesInstance<EB, O>> {
@@ -144,7 +116,7 @@ public class StructReader<EB, O, T> private constructor(
         val values = PropertyValuesInstance<EB, O>()
             .apply {
                 properties.forEach { property ->
-                    property.read(env, location, this@read)
+                    property.read(env, location, this@readProperties)
                         .fold(
                             onFailure = { failure ->
                                 if (failFast) return Either.Left(failure)
