@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
@@ -57,7 +57,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
     init {
 
         "The struct validator AdditionalProperties" - {
-            val validator: StructValidator<EB, OPTS> =
+            val validator: JsStructValidator<EB, OPTS> =
                 StdStructValidator.additionalProperties<EB, OPTS>().build(PROPERTIES)
 
             "when the struct is empty" - {

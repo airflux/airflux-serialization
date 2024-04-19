@@ -17,13 +17,13 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 internal class MaxPropertiesStructValidatorBuilder<EB, O>(
     private val value: Int
-) : StructValidator.Builder<EB, O>
+) : JsStructValidator.Builder<EB, O>
     where EB : MaxPropertiesStructValidator.ErrorBuilder {
 
-    override fun build(properties: StructProperties<EB, O>): StructValidator<EB, O> =
+    override fun build(properties: StructProperties<EB, O>): JsStructValidator<EB, O> =
         MaxPropertiesStructValidator(value)
 }

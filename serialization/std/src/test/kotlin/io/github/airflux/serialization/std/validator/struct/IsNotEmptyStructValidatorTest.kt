@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
 import io.github.airflux.serialization.test.kotest.shouldBeValid
@@ -42,7 +42,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
     init {
 
         "The struct validator IsNotEmpty" - {
-            val validator: StructValidator<EB, Unit> =
+            val validator: JsStructValidator<EB, Unit> =
                 StdStructValidator.isNotEmpty<EB, Unit>().build(PROPERTIES)
 
             "when the struct is empty" - {

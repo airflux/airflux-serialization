@@ -21,19 +21,18 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validation.and
 import io.github.airflux.serialization.dsl.reader.struct.validation.or
 import io.github.airflux.serialization.test.kotest.shouldBeInvalid
 import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
-internal class StructValidatorBuilderTest : FreeSpec() {
+internal class JsStructValidatorTest : FreeSpec() {
 
     companion object {
         private val ENV = JsReaderEnv(Unit, Unit)
@@ -44,46 +43,43 @@ internal class StructValidatorBuilderTest : FreeSpec() {
 
     init {
 
-        "The JsStructValidator#Builder type" - {
+        "The JsStructValidator type" - {
 
             "testing the or composite operator" - {
 
                 "if the left validator returns success then the right validator doesn't execute" {
-                    val leftValidator = StructValidator.Builder { _ -> createValidator(valid()) }
+                    val leftValidator = JsStructValidator<Unit, Unit> { _, _, _, _ -> valid() }
 
-                    val rightValidator = StructValidator.Builder { _ ->
-                        createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                    val rightValidator = JsStructValidator<Unit, Unit> { _, location, _, _ ->
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
-                    val builder = leftValidator or rightValidator
-                    val composeValidator = builder.build(PROPERTIES)
+                    val composeValidator = leftValidator or rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
                     result.shouldBeValid()
                 }
 
                 "if the left validator returns an error" - {
-                    val leftValidator = StructValidator.Builder { _ ->
-                        createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                    val leftValidator = JsStructValidator<Unit, Unit> { _, location, _, _ ->
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
                     "and the right validator returns success then returning the first error" {
-                        val rightValidator = StructValidator.Builder { _ -> createValidator(valid()) }
+                        val rightValidator = JsStructValidator<Unit, Unit> { _, _, _, _ -> valid() }
 
-                        val builder = leftValidator or rightValidator
-                        val composeValidator = builder.build(PROPERTIES)
+                        val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
                         result.shouldBeValid()
                     }
 
                     "and the right validator returns an error then returning both errors" {
-                        val rightValidator = StructValidator.Builder { _ ->
-                            createValidator { location -> invalid(location, ValidationErrors.InvalidType) }
+                        val rightValidator = JsStructValidator<Unit, Unit> { _, location, _, _ ->
+                            invalid(location, ValidationErrors.InvalidType)
                         }
 
-                        val builder = leftValidator or rightValidator
-                        val composeValidator = builder.build(PROPERTIES)
+                        val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
                         result shouldBeInvalid
@@ -96,41 +92,38 @@ internal class StructValidatorBuilderTest : FreeSpec() {
             "testing the and composite operator" - {
 
                 "if the left validator returns an error then the right validator doesn't execute" {
-                    val leftValidator = StructValidator.Builder { _ ->
-                        createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                    val leftValidator = JsStructValidator<Unit, Unit> { _, location, _, _ ->
+                        invalid(location, ValidationErrors.PathMissing)
                     }
 
-                    val rightValidator = StructValidator.Builder { _ ->
-                        createValidator { location -> invalid(location, ValidationErrors.InvalidType) }
+                    val rightValidator = JsStructValidator<Unit, Unit> { _, location, _, _ ->
+                        invalid(location, ValidationErrors.InvalidType)
                     }
 
-                    val builder = leftValidator and rightValidator
-                    val composeValidator = builder.build(PROPERTIES)
+                    val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
                     result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
                 }
 
                 "if the left validator returns a success" - {
-                    val leftValidator = StructValidator.Builder { _ -> createValidator(valid()) }
+                    val leftValidator = JsStructValidator<Unit, Unit> { _, _, _, _ -> valid() }
 
                     "and the second validator returns success, then success is returned" {
-                        val rightValidator = StructValidator.Builder { _ -> createValidator(valid()) }
+                        val rightValidator = JsStructValidator<Unit, Unit> { _, _, _, _ -> valid() }
 
-                        val builder = leftValidator and rightValidator
-                        val composeValidator = builder.build(PROPERTIES)
+                        val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
                         result.shouldBeValid()
                     }
 
                     "and the right validator returns an error, then an error is returned" {
-                        val rightValidator = StructValidator.Builder { _ ->
-                            createValidator { location -> invalid(location, ValidationErrors.PathMissing) }
+                        val rightValidator = JsStructValidator<Unit, Unit> { _, location, _, _ ->
+                            invalid(location, ValidationErrors.PathMissing)
                         }
 
-                        val builder = leftValidator and rightValidator
-                        val composeValidator = builder.build(PROPERTIES)
+                        val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
                         result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
@@ -144,10 +137,4 @@ internal class StructValidatorBuilderTest : FreeSpec() {
         object PathMissing : ValidationErrors()
         object InvalidType : ValidationErrors()
     }
-
-    private fun createValidator(result: (JsLocation) -> JsValidatorResult): StructValidator<Unit, Unit> =
-        StructValidator { _, location, _, _ -> result(location) }
-
-    private fun createValidator(result: JsValidatorResult): StructValidator<Unit, Unit> =
-        StructValidator { _, _, _, _ -> result }
 }

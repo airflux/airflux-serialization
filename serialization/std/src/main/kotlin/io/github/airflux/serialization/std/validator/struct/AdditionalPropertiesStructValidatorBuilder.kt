@@ -20,13 +20,13 @@ import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-internal class AdditionalPropertiesStructValidatorBuilder<EB, O> : StructValidator.Builder<EB, O>
+internal class AdditionalPropertiesStructValidatorBuilder<EB, O> : JsStructValidator.Builder<EB, O>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 
-    override fun build(properties: StructProperties<EB, O>): StructValidator<EB, O> {
+    override fun build(properties: StructProperties<EB, O>): JsStructValidator<EB, O> {
         val names: Set<String> = properties.names()
         return AdditionalPropertiesStructValidator(names)
     }

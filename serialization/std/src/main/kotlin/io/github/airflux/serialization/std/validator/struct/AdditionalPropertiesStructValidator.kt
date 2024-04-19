@@ -26,11 +26,11 @@ import io.github.airflux.serialization.core.reader.validation.toInvalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 public class AdditionalPropertiesStructValidator<EB, O> internal constructor(
     private val names: Set<String>
-) : StructValidator<EB, O>
+) : JsStructValidator<EB, O>
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 

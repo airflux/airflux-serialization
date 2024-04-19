@@ -17,12 +17,12 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-internal class IsNotEmptyStructValidatorBuilder<EB, O> : StructValidator.Builder<EB, O>
+internal class IsNotEmptyStructValidatorBuilder<EB, O> : JsStructValidator.Builder<EB, O>
     where EB : IsNotEmptyStructValidator.ErrorBuilder {
 
-    override fun build(properties: StructProperties<EB, O>): StructValidator<EB, O> = validator
+    override fun build(properties: StructProperties<EB, O>): JsStructValidator<EB, O> = validator
 
     private val validator = IsNotEmptyStructValidator<EB, O>()
 }

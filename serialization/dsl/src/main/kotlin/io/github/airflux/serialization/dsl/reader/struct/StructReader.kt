@@ -37,7 +37,7 @@ import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 public fun <EB, O, T> structReader(block: StructReader.Builder<EB, O, T>.() -> JsReader<EB, O, T>): JsReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
@@ -53,7 +53,7 @@ public fun <EB, O, T> StructReader.Builder<EB, O, T>.returns(
           O : FailFastOption = this.build(block)
 
 public class StructReader<EB, O, T> private constructor(
-    private val validator: StructValidator<EB, O>?,
+    private val validator: JsStructValidator<EB, O>?,
     private val properties: StructProperties<EB, O>,
     private val resultBuilder: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ) : JsReader<EB, O, T>
@@ -75,9 +75,9 @@ public class StructReader<EB, O, T> private constructor(
               O : FailFastOption {
 
         private val properties = mutableListOf<StructProperty<EB, O, *>>()
-        private var validatorBuilder: StructValidator.Builder<EB, O>? = null
+        private var validatorBuilder: JsStructValidator.Builder<EB, O>? = null
 
-        public fun validation(validator: StructValidator.Builder<EB, O>) {
+        public fun validation(validator: JsStructValidator.Builder<EB, O>) {
             validatorBuilder = validator
         }
 
@@ -87,7 +87,7 @@ public class StructReader<EB, O, T> private constructor(
         public fun build(
             block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
         ): JsReader<EB, O, T> {
-            val validator: StructValidator<EB, O>? = validatorBuilder?.build(properties)
+            val validator: JsStructValidator<EB, O>? = validatorBuilder?.build(properties)
             return StructReader(validator, properties, block)
         }
     }

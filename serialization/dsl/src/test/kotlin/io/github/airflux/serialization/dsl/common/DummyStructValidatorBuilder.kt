@@ -24,15 +24,15 @@ import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.StructValidator
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : StructValidator.Builder<EB, O> {
+internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : JsStructValidator.Builder<EB, O> {
 
     private val validator = Validator<EB, O>(result)
 
-    override fun build(properties: StructProperties<EB, O>): StructValidator<EB, O> = validator
+    override fun build(properties: StructProperties<EB, O>): JsStructValidator<EB, O> = validator
 
-    internal class Validator<EB, O>(val result: JsValidatorResult) : StructValidator<EB, O> {
+    internal class Validator<EB, O>(val result: JsValidatorResult) : JsStructValidator<EB, O> {
         override fun validate(
             env: JsReaderEnv<EB, O>,
             location: JsLocation,
@@ -47,12 +47,12 @@ internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : S
         internal fun <EB, O> additionalProperties(
             nameProperties: Set<String>,
             error: JsReaderResult.Error
-        ): StructValidator.Builder<EB, O> =
-            StructValidator.Builder {
-                StructValidator { _, location, _, node ->
+        ): JsStructValidator.Builder<EB, O> =
+            JsStructValidator.Builder {
+                JsStructValidator { _, location, _, node ->
                     node.forEach { (name, _) ->
                         if (name !in nameProperties)
-                            return@StructValidator invalid(location = location.append(name), error = error)
+                            return@JsStructValidator invalid(location = location.append(name), error = error)
                     }
                     valid()
                 }
