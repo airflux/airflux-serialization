@@ -21,6 +21,5 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOp
 import io.github.airflux.serialization.dsl.reader.array.validation.ArrayValidator
 import io.github.airflux.serialization.std.validator.array.StdArrayValidator
 
-val CommonArrayReaderValidators: List<ArrayValidator.Builder<ReaderErrorBuilders, ReaderOptions>> = listOf(
+val CommonArrayReaderValidators: ArrayValidator.Builder<ReaderErrorBuilders, ReaderOptions> =
     StdArrayValidator.isNotEmpty()
-)

@@ -27,7 +27,9 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.ifInvalid
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.getOrNull
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.AirfluxMarker
@@ -67,7 +69,7 @@ public fun <EB, O, T> ArrayReader.Builder<EB, O, T>.returns(
           O : FailFastOption = this.build(prefixItems, items)
 
 public class ArrayReader<EB, O, T> private constructor(
-    private val validators: List<ArrayValidator<EB, O>>,
+    private val validator: ArrayValidator<EB, O>?,
     private val resultBuilder: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
 ) : JsReader<EB, O, List<T>>
     where EB : AdditionalItemsErrorBuilder,
@@ -85,7 +87,7 @@ public class ArrayReader<EB, O, T> private constructor(
 
     private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsReaderResult<List<T>> {
         val failFast = env.options.failFast
-        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location)
+        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location).getOrNull()
         if (failureAccumulator != null && failFast) return failureAccumulator
 
         return resultBuilder(env, location, source)
@@ -101,23 +103,10 @@ public class ArrayReader<EB, O, T> private constructor(
               EB : InvalidTypeErrorBuilder,
               O : FailFastOption {
 
-        private val validatorBuilders = mutableListOf<ArrayValidator.Builder<EB, O>>()
+        private var validatorBuilder: ArrayValidator.Builder<EB, O>? = null
 
-        public fun validation(
-            validator: ArrayValidator.Builder<EB, O>,
-            vararg validators: ArrayValidator.Builder<EB, O>
-        ) {
-            validation(
-                validators = mutableListOf<ArrayValidator.Builder<EB, O>>()
-                    .apply {
-                        add(validator)
-                        addAll(validators)
-                    }
-            )
-        }
-
-        public fun validation(validators: List<ArrayValidator.Builder<EB, O>>) {
-            validatorBuilders.addAll(validators)
+        public fun validation(validator: ArrayValidator.Builder<EB, O>) {
+            validatorBuilder = validator
         }
 
         internal fun build(items: JsReader<EB, O, T>): JsReader<EB, O, List<T>> =
@@ -156,24 +145,11 @@ public class ArrayReader<EB, O, T> private constructor(
         private fun build(
             block: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
         ): JsReader<EB, O, List<T>> {
-            val validators = validatorBuilders.map { builder -> builder.build() }
-                .takeIf { it.isNotEmpty() }
-                .orEmpty()
-            return ArrayReader(validators, block)
+            val validator = validatorBuilder?.build()
+            return ArrayReader(validator, block)
         }
     }
 
-    private fun JsArray.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult.Failure? {
-        val failFast = env.options.failFast
-        var failureAccumulator: JsReaderResult.Failure? = null
-
-        validators.forEach { validator ->
-            validator.validate(env, location, this)
-                .ifInvalid { failure ->
-                    if (failFast) return failure
-                    failureAccumulator += failure
-                }
-        }
-        return failureAccumulator
-    }
+    private fun JsArray.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsValidatorResult =
+        validator?.validate(env, location, this) ?: valid()
 }
