@@ -25,13 +25,12 @@ import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
+import io.github.airflux.serialization.dsl.reader.struct.validation
 
 val RequestReader: JsReader<ReaderErrorBuilders, ReaderOptions, Request> = structReader {
-    validation(CommonStructReaderValidators)
-
     val tender = property(required(name = "tender", reader = TenderReader))
 
     returns { _, location ->
         Request(tender = this[tender]).toSuccess(location)
     }
-}
+}.validation(CommonStructReaderValidators)

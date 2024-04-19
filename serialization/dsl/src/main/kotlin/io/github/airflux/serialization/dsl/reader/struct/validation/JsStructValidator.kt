@@ -78,7 +78,7 @@ public infix fun <EB, O> JsStructValidator.Builder<EB, O>.and(
  * | F    | S      | S      |
  * | F    | F`     | F + F` |
  */
-internal infix fun <EB, O> JsStructValidator<EB, O>.or(alt: JsStructValidator<EB, O>): JsStructValidator<EB, O> {
+public infix fun <EB, O> JsStructValidator<EB, O>.or(alt: JsStructValidator<EB, O>): JsStructValidator<EB, O> {
     val self = this
     return JsStructValidator { env, location, properties, value ->
         val left = self.validate(env, location, properties, value)
@@ -98,7 +98,7 @@ internal infix fun <EB, O> JsStructValidator<EB, O>.or(alt: JsStructValidator<EB
  * | S    | F      | F      |
  * | F    | ignore | F      |
  */
-internal infix fun <EB, O> JsStructValidator<EB, O>.and(alt: JsStructValidator<EB, O>): JsStructValidator<EB, O> {
+public infix fun <EB, O> JsStructValidator<EB, O>.and(alt: JsStructValidator<EB, O>): JsStructValidator<EB, O> {
     val self = this
     return JsStructValidator { env, location, properties, value ->
         val left = self.validate(env, location, properties, value)

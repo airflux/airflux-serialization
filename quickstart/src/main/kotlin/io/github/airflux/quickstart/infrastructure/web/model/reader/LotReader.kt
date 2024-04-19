@@ -32,14 +32,13 @@ import io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
+import io.github.airflux.serialization.dsl.reader.struct.validation
 import io.github.airflux.serialization.dsl.reader.struct.validation.and
 
 val LotStatusReader: JsReader<ReaderErrorBuilders, ReaderOptions, LotStatus> =
     StringReader.validation(isNotBlank).asEnum()
 
 val LotReader: JsReader<ReaderErrorBuilders, ReaderOptions, Lot> = structReader {
-    validation(CommonStructReaderValidators and additionalProperties)
-
     val id = property(identifierPropertySpec)
     val status = property(required(name = "status", reader = LotStatusReader))
     val value = property(required(name = "value", reader = ValueReader))
@@ -47,4 +46,4 @@ val LotReader: JsReader<ReaderErrorBuilders, ReaderOptions, Lot> = structReader 
     returns { _, location ->
         Lot(id = +id, status = +status, value = +value).toSuccess(location)
     }
-}
+}.validation(CommonStructReaderValidators and additionalProperties)

@@ -28,15 +28,14 @@ import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
+import io.github.airflux.serialization.dsl.reader.struct.validation
 import io.github.airflux.serialization.dsl.reader.struct.validation.and
 
 val ValueReader: JsReader<ReaderErrorBuilders, ReaderOptions, Value> = structReader {
-    validation(CommonStructReaderValidators and additionalProperties)
-
     val amount = property(required(name = "amount", reader = AmountReader))
     val currency = property(required(name = "currency", reader = CurrencyReader))
 
     returns { _, location ->
         Value(amount = Amount(+amount), currency = Currency(+currency)).toSuccess(location)
     }
-}
+}.validation(CommonStructReaderValidators and additionalProperties)
