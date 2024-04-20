@@ -24,7 +24,7 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
 @AirfluxMarker
-public class ArrayReaderBuilder<EB, O>
+public class JsArrayReaderBuilder<EB, O>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
