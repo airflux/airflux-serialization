@@ -16,140 +16,40 @@
 
 package io.github.airflux.serialization.dsl.reader.array
 
-import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.readArray
-import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.fold
-import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
-import io.github.airflux.serialization.core.reader.validation.getOrNull
-import io.github.airflux.serialization.core.reader.validation.valid
-import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
-public fun <EB, O, T> arrayReader(
-    block: ArrayReader.Builder<EB, O, T>.() -> JsReader<EB, O, List<T>>
-): JsReader<EB, O, List<T>>
+public interface ArrayReader<EB, O, T> : JsReader<EB, O, List<T>>
+
+public fun <EB, O, T> arrayReader(block: ArrayReaderBuilder<EB, O>.() -> ArrayReader<EB, O, T>): ArrayReader<EB, O, T>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
-    val readerBuilder = ArrayReader.Builder<EB, O, T>()
+    val readerBuilder = ArrayReaderBuilder<EB, O>()
     return block(readerBuilder)
 }
 
-public fun <EB, O, T> ArrayReader.Builder<EB, O, T>.returns(
+public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
     items: JsReader<EB, O, T>
-): JsReader<EB, O, List<T>>
+): ArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
           O : FailFastOption = this.build(items)
 
-public fun <EB, O, T> ArrayReader.Builder<EB, O, T>.returns(
+public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
     prefixItems: ArrayPrefixItems<EB, O, T>,
     items: Boolean
-): JsReader<EB, O, List<T>>
+): ArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
           O : FailFastOption = this.build(prefixItems, items)
 
-public fun <EB, O, T> ArrayReader.Builder<EB, O, T>.returns(
+public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
     prefixItems: ArrayPrefixItems<EB, O, T>,
     items: JsReader<EB, O, T>
-): JsReader<EB, O, List<T>>
+): ArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
           O : FailFastOption = this.build(prefixItems, items)
-
-public class ArrayReader<EB, O, T> private constructor(
-    private val validator: JsArrayValidator<EB, O>?,
-    private val resultBuilder: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
-) : JsReader<EB, O, List<T>>
-    where EB : AdditionalItemsErrorBuilder,
-          EB : InvalidTypeErrorBuilder,
-          O : FailFastOption {
-
-    override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue): JsReaderResult<List<T>> =
-        if (source is JsArray)
-            read(env, location, source)
-        else
-            failure(
-                location = location,
-                error = env.errorBuilders.invalidTypeError(listOf(JsArray.nameOfType), source.nameOfType)
-            )
-
-    private fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsReaderResult<List<T>> {
-        val failFast = env.options.failFast
-        val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location).getOrNull()
-        if (failureAccumulator != null && failFast) return failureAccumulator
-
-        return resultBuilder(env, location, source)
-            .fold(
-                onFailure = { failure -> failureAccumulator + failure },
-                onSuccess = { success -> failureAccumulator ?: success }
-            )
-    }
-
-    @AirfluxMarker
-    public class Builder<EB, O, T> internal constructor()
-        where EB : AdditionalItemsErrorBuilder,
-              EB : InvalidTypeErrorBuilder,
-              O : FailFastOption {
-
-        private var validatorBuilder: JsArrayValidator.Builder<EB, O>? = null
-
-        public fun validation(validator: JsArrayValidator.Builder<EB, O>) {
-            validatorBuilder = validator
-        }
-
-        internal fun build(items: JsReader<EB, O, T>): JsReader<EB, O, List<T>> =
-            build { env, location, source ->
-                readArray(env = env, location = location, source = source, itemsReader = items)
-            }
-
-        internal fun build(
-            prefixItems: ArrayPrefixItems<EB, O, T>,
-            items: Boolean
-        ): JsReader<EB, O, List<T>> =
-            build { env, location, source ->
-                readArray(
-                    env = env,
-                    location = location,
-                    source = source,
-                    prefixItemReaders = prefixItems,
-                    errorIfAdditionalItems = !items
-                )
-            }
-
-        internal fun build(
-            prefixItems: ArrayPrefixItems<EB, O, T>,
-            items: JsReader<EB, O, T>
-        ): JsReader<EB, O, List<T>> =
-            build { env, location, source ->
-                readArray(
-                    env = env,
-                    location = location,
-                    source = source,
-                    prefixItemReaders = prefixItems,
-                    itemsReader = items
-                )
-            }
-
-        private fun build(
-            block: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
-        ): JsReader<EB, O, List<T>> {
-            val validator = validatorBuilder?.build()
-            return ArrayReader(validator, block)
-        }
-    }
-
-    private fun JsArray.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsValidatorResult =
-        validator?.validate(env, location, this) ?: valid()
-}
