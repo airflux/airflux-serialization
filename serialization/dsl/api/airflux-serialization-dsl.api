@@ -25,24 +25,24 @@ public final class io/github/airflux/serialization/dsl/path/JsPathsKt {
 	public static final fun or-pbhATDY (Ljava/util/List;Lio/github/airflux/serialization/core/path/JsPath;)Ljava/util/List;
 }
 
-public abstract interface class io/github/airflux/serialization/dsl/reader/array/ArrayReader : io/github/airflux/serialization/core/reader/JsReader {
-}
-
 public final class io/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder {
 	public fun <init> ()V
-	public final fun build (Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
-	public final fun build (Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
-	public final fun build (Ljava/util/List;Z)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
+	public final fun build (Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
+	public final fun build (Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
+	public final fun build (Ljava/util/List;Z)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
 	public final fun validation (Lio/github/airflux/serialization/dsl/reader/array/validation/JsArrayValidator$Builder;)V
 	public final fun validation (Lio/github/airflux/serialization/dsl/reader/array/validation/JsArrayValidator;)V
 	public final fun validation (Lkotlin/jvm/functions/Function0;)V
 }
 
-public final class io/github/airflux/serialization/dsl/reader/array/ArrayReaderKt {
-	public static final fun arrayReader (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
-	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
-	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder;Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
-	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder;Ljava/util/List;Z)Lio/github/airflux/serialization/dsl/reader/array/ArrayReader;
+public abstract interface class io/github/airflux/serialization/dsl/reader/array/JsArrayReader : io/github/airflux/serialization/core/reader/JsReader {
+}
+
+public final class io/github/airflux/serialization/dsl/reader/array/JsArrayReaderKt {
+	public static final fun arrayReader (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
+	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
+	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder;Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
+	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/array/ArrayReaderBuilder;Ljava/util/List;Z)Lio/github/airflux/serialization/dsl/reader/array/JsArrayReader;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/validation/JsArrayValidator {

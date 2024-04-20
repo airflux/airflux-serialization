@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsValue
 
-internal abstract class AbstractArrayReader<EB, O, T> : ArrayReader<EB, O, T>
+internal abstract class AbstractArrayReader<EB, O, T> : JsArrayReader<EB, O, T>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {

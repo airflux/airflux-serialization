@@ -21,9 +21,9 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 
-public interface ArrayReader<EB, O, T> : JsReader<EB, O, List<T>>
+public interface JsArrayReader<EB, O, T> : JsReader<EB, O, List<T>>
 
-public fun <EB, O, T> arrayReader(block: ArrayReaderBuilder<EB, O>.() -> ArrayReader<EB, O, T>): ArrayReader<EB, O, T>
+public fun <EB, O, T> arrayReader(block: ArrayReaderBuilder<EB, O>.() -> JsArrayReader<EB, O, T>): JsArrayReader<EB, O, T>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
@@ -33,7 +33,7 @@ public fun <EB, O, T> arrayReader(block: ArrayReaderBuilder<EB, O>.() -> ArrayRe
 
 public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
     items: JsReader<EB, O, T>
-): ArrayReader<EB, O, T>
+): JsArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
           O : FailFastOption = this.build(items)
@@ -41,7 +41,7 @@ public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
 public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
     prefixItems: ArrayPrefixItems<EB, O, T>,
     items: Boolean
-): ArrayReader<EB, O, T>
+): JsArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
           O : FailFastOption = this.build(prefixItems, items)
@@ -49,7 +49,7 @@ public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
 public fun <EB, O, T> ArrayReaderBuilder<EB, O>.returns(
     prefixItems: ArrayPrefixItems<EB, O, T>,
     items: JsReader<EB, O, T>
-): ArrayReader<EB, O, T>
+): JsArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
           O : FailFastOption = this.build(prefixItems, items)

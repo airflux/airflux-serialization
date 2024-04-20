@@ -31,7 +31,7 @@ import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValida
 
 internal class ArrayReaderWithValidation<EB, O, T>(
     private val validator: JsArrayValidator<EB, O>,
-    private val reader: ArrayReader<EB, O, T>
+    private val reader: JsArrayReader<EB, O, T>
 ) : AbstractArrayReader<EB, O, T>()
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
