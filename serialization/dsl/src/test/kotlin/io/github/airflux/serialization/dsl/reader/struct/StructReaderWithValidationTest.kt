@@ -69,12 +69,13 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )
                 val reader: JsStructReader<EB, OPTS, DTO> = structReader {
+                    validation(validator)
                     val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
                     val name = property(optional(name = NAME_PROPERTY_NAME, reader = StringReader))
                     returns { _, location ->
                         DTO(id = +id, name = +name).toSuccess(location)
                     }
-                }.validation(validator)
+                }
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ENV_WITH_FAIL_FAST_IS_TRUE

@@ -27,9 +27,10 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.returns
 import io.github.airflux.serialization.dsl.reader.struct.structReader
-import io.github.airflux.serialization.dsl.reader.struct.validation
 
 val TenderReader: JsReader<ReaderErrorBuilders, ReaderOptions, Tender> = structReader {
+    validation(CommonStructReaderValidators)
+
     val id = property(identifierPropertySpec)
     val title = property(optional(name = "title", reader = TitleReader))
     val value = property(optional(name = "value", reader = ValueReader))
@@ -38,4 +39,4 @@ val TenderReader: JsReader<ReaderErrorBuilders, ReaderOptions, Tender> = structR
     returns { _, location ->
         Tender(+id, +title, +value, +lots).toSuccess(location)
     }
-}.validation(CommonStructReaderValidators)
+}

@@ -24,7 +24,6 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
     public val properties: StructProperties<EB, O>
@@ -42,21 +41,3 @@ public fun <EB, O, T> JsStructReaderBuilder<EB, O>.returns(
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = this.build(block)
-
-public inline fun <EB, O, T> JsStructReader<EB, O, T>.validation(
-    validator: (properties: StructProperties<EB, O>) -> JsStructValidator<EB, O>
-): JsStructReader<EB, O, T>
-    where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption = validation(validator(this.properties))
-
-public fun <EB, O, T> JsStructReader<EB, O, T>.validation(
-    validator: JsStructValidator.Builder<EB, O>
-): JsStructReader<EB, O, T>
-    where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption = validation { validator.build(it) }
-
-public fun <EB, O, T> JsStructReader<EB, O, T>.validation(
-    validator: JsStructValidator<EB, O>
-): JsStructReader<EB, O, T>
-    where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption = StructReaderWithValidation(validator, this)

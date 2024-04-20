@@ -25,6 +25,7 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 @AirfluxMarker
 public class JsStructReaderBuilder<EB, O>
@@ -32,11 +33,29 @@ public class JsStructReaderBuilder<EB, O>
           O : FailFastOption {
 
     private val properties = mutableListOf<StructProperty<EB, O, *>>()
+    private var validatorBuilder: ((List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>)? = null
+
+    public fun validation(validator: (List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>) {
+        validatorBuilder = validator
+    }
+
+    public fun validation(validator: JsStructValidator.Builder<EB, O>) {
+        validatorBuilder = { validator.build(it) }
+    }
+
+    public fun validation(validator: JsStructValidator<EB, O>) {
+        validatorBuilder = { validator }
+    }
 
     public fun <P> property(spec: StructPropertySpec<EB, O, P>): StructProperty<EB, O, P> =
         StructProperty(spec).also { properties.add(it) }
 
     public fun <T> build(
         block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
-    ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block)
+    ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block).addValidator(validatorBuilder)
+
+    private fun <T> PropertiesStructReader<EB, O, T>.addValidator(
+        builder: ((List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>)?
+    ): JsStructReader<EB, O, T> =
+        if (builder != null) StructReaderWithValidation(builder(properties), this) else this
 }
