@@ -22,11 +22,8 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
@@ -63,18 +60,3 @@ public fun <EB, O, T> JsStructReader<EB, O, T>.validation(
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = StructReaderWithValidation(validator, this)
-
-@AirfluxMarker
-public class JsStructReaderBuilder<EB, O>
-    where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption {
-
-    private val properties = mutableListOf<StructProperty<EB, O, *>>()
-
-    public fun <P> property(spec: StructPropertySpec<EB, O, P>): StructProperty<EB, O, P> =
-        StructProperty(spec).also { properties.add(it) }
-
-    public fun <T> build(
-        block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
-    ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block)
-}
