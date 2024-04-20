@@ -36,7 +36,7 @@ import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
-internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
+internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
     companion object {
         private const val FIRST_ITEM = "first"
@@ -51,7 +51,7 @@ internal class ArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
 
     init {
 
-        "The ArrayReader type" - {
+        "The JsArrayReader type" - {
 
             "when a reader was created for prefixItems and items" - {
                 val reader: JsReader<EB, OPTS, List<Any>> = arrayReader {
