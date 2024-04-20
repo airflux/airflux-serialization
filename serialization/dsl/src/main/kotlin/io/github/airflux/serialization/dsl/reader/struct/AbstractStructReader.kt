@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 
-internal abstract class AbstractStructReader<EB, O, T> : StructReader<EB, O, T>
+internal abstract class AbstractStructReader<EB, O, T> : JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 

@@ -29,11 +29,11 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-public interface StructReader<EB, O, T> : JsReader<EB, O, T> {
+public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
     public val properties: StructProperties<EB, O>
 }
 
-public fun <EB, O, T> structReader(block: StructReaderBuilder<EB, O>.() -> StructReader<EB, O, T>): StructReader<EB, O, T>
+public fun <EB, O, T> structReader(block: StructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
     val builder = StructReaderBuilder<EB, O>()
@@ -42,25 +42,25 @@ public fun <EB, O, T> structReader(block: StructReaderBuilder<EB, O>.() -> Struc
 
 public fun <EB, O, T> StructReaderBuilder<EB, O>.returns(
     block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
-): StructReader<EB, O, T>
+): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = this.build(block)
 
-public inline fun <EB, O, T> StructReader<EB, O, T>.validation(
+public inline fun <EB, O, T> JsStructReader<EB, O, T>.validation(
     validator: (properties: StructProperties<EB, O>) -> JsStructValidator<EB, O>
-): StructReader<EB, O, T>
+): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = validation(validator(this.properties))
 
-public fun <EB, O, T> StructReader<EB, O, T>.validation(
+public fun <EB, O, T> JsStructReader<EB, O, T>.validation(
     validator: JsStructValidator.Builder<EB, O>
-): StructReader<EB, O, T>
+): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = validation { validator.build(it) }
 
-public fun <EB, O, T> StructReader<EB, O, T>.validation(
+public fun <EB, O, T> JsStructReader<EB, O, T>.validation(
     validator: JsStructValidator<EB, O>
-): StructReader<EB, O, T>
+): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = StructReaderWithValidation(validator, this)
 
@@ -76,5 +76,5 @@ public class StructReaderBuilder<EB, O>
 
     public fun <T> build(
         block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
-    ): StructReader<EB, O, T> = SimpleStructReader(properties, block)
+    ): JsStructReader<EB, O, T> = SimpleStructReader(properties, block)
 }

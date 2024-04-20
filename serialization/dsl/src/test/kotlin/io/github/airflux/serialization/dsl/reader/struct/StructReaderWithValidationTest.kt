@@ -68,7 +68,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )
-                val reader: StructReader<EB, OPTS, DTO> = structReader {
+                val reader: JsStructReader<EB, OPTS, DTO> = structReader {
                     val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
                     val name = property(optional(name = NAME_PROPERTY_NAME, reader = StringReader))
                     returns { _, location ->

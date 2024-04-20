@@ -30,7 +30,7 @@ import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructVali
 
 internal class StructReaderWithValidation<EB, O, T>(
     private val validator: JsStructValidator<EB, O>,
-    private val reader: StructReader<EB, O, T>,
+    private val reader: JsStructReader<EB, O, T>,
 ) : AbstractStructReader<EB, O, T>()
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {

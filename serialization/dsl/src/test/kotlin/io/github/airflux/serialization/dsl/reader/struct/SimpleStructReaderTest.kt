@@ -62,7 +62,7 @@ internal class SimpleStructReaderTest : FreeSpec() {
         "The SimpleStructReader type" - {
 
             "when was created reader" - {
-                val reader: StructReader<EB, OPTS, DTO> = structReader {
+                val reader: JsStructReader<EB, OPTS, DTO> = structReader {
                     val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
                     val name = property(optional(name = NAME_PROPERTY_NAME, reader = StringReader))
                     returns { _, location ->
