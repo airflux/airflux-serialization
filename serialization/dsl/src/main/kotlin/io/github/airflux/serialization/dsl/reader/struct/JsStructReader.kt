@@ -33,14 +33,14 @@ public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
     public val properties: StructProperties<EB, O>
 }
 
-public fun <EB, O, T> structReader(block: StructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>): JsStructReader<EB, O, T>
+public fun <EB, O, T> structReader(block: JsStructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
-    val builder = StructReaderBuilder<EB, O>()
+    val builder = JsStructReaderBuilder<EB, O>()
     return block(builder)
 }
 
-public fun <EB, O, T> StructReaderBuilder<EB, O>.returns(
+public fun <EB, O, T> JsStructReaderBuilder<EB, O>.returns(
     block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
@@ -65,7 +65,7 @@ public fun <EB, O, T> JsStructReader<EB, O, T>.validation(
           O : FailFastOption = StructReaderWithValidation(validator, this)
 
 @AirfluxMarker
-public class StructReaderBuilder<EB, O>
+public class JsStructReaderBuilder<EB, O>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
