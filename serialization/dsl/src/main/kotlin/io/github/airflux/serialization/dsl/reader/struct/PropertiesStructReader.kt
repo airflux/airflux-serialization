@@ -28,7 +28,7 @@ import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValuesInstance
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 
-internal class SimpleStructReader<EB, O, T>(
+internal class PropertiesStructReader<EB, O, T>(
     override val properties: StructProperties<EB, O>,
     private val typeBuilder: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ) : AbstractStructReader<EB, O, T>()

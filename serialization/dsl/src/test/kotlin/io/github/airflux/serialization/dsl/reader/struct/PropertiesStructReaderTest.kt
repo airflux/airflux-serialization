@@ -40,7 +40,7 @@ import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 
-internal class SimpleStructReaderTest : FreeSpec() {
+internal class PropertiesStructReaderTest : FreeSpec() {
 
     companion object {
 
@@ -59,7 +59,7 @@ internal class SimpleStructReaderTest : FreeSpec() {
 
     init {
 
-        "The SimpleStructReader type" - {
+        "The PropertiesStructReader type" - {
 
             "when was created reader" - {
                 val reader: JsStructReader<EB, OPTS, DTO> = structReader {

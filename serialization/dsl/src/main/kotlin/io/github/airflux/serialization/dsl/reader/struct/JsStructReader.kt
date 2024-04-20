@@ -76,5 +76,5 @@ public class StructReaderBuilder<EB, O>
 
     public fun <T> build(
         block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
-    ): JsStructReader<EB, O, T> = SimpleStructReader(properties, block)
+    ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block)
 }
