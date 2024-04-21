@@ -23,20 +23,19 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 
 public interface JsArrayReader<EB, O, T> : JsReader<EB, O, List<T>>
 
-public fun <EB, O, T> arrayReader(block: JsArrayReaderBuilder<EB, O>.() -> JsArrayReader<EB, O, T>): JsArrayReader<EB, O, T>
+public inline fun <EB, O, T> arrayReader(
+    block: JsArrayReaderBuilder<EB, O>.() -> JsArrayReader<EB, O, T>
+): JsArrayReader<EB, O, T>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
-          O : FailFastOption {
-    val readerBuilder = JsArrayReaderBuilder<EB, O>()
-    return block(readerBuilder)
-}
+          O : FailFastOption = JsArrayReaderBuilder<EB, O>().block()
 
 public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
     items: JsReader<EB, O, T>
 ): JsArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
-          O : FailFastOption = this.build(items)
+          O : FailFastOption = build(items)
 
 public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
     prefixItems: ArrayPrefixItems<EB, O, T>,
@@ -44,7 +43,7 @@ public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
 ): JsArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
-          O : FailFastOption = this.build(prefixItems, items)
+          O : FailFastOption = build(prefixItems, items)
 
 public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
     prefixItems: ArrayPrefixItems<EB, O, T>,
@@ -52,4 +51,4 @@ public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
 ): JsArrayReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           EB : AdditionalItemsErrorBuilder,
-          O : FailFastOption = this.build(prefixItems, items)
+          O : FailFastOption = build(prefixItems, items)

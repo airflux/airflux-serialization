@@ -29,7 +29,7 @@ public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
     public val properties: StructProperties<EB, O>
 }
 
-public fun <EB, O, T> structReader(
+public inline fun <EB, O, T> structReader(
     block: JsStructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
