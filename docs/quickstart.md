@@ -170,7 +170,8 @@ val PhoneNumberReader: JsReader<ReaderErrorBuilders, ReaderOptions, String> =
 val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderOptions>()
 
 //Object validators
-val additionalProperties = StdStructValidator.additionalProperties<ReaderErrorBuilders, ReaderOptions>()
+fun additionalProperties(properties: StructProperties<ReaderErrorBuilders, ReaderOptions>) =
+    StdStructValidator.additionalProperties(properties)
 
 //Array validators
 val isNotEmptyArray = StdArrayValidator.isNotEmpty<ReaderErrorBuilders, ReaderOptions>()
@@ -180,12 +181,12 @@ val isNotEmptyArray = StdArrayValidator.isNotEmpty<ReaderErrorBuilders, ReaderOp
 
 ```kotlin
 val PhoneReader: JsReader<ReaderErrorBuilders, ReaderOptions, Phone> = structReader {
-    validation(additionalProperties)
+    validation { properties -> additionalProperties(properties) }
 
     val title = property(required(name = "title", reader = NonEmptyStringReader))
     val number = property(required(name = "number", reader = PhoneNumberReader))
 
-    returns { _, _, location ->
+    returns { _, location ->
         Phone(title = +title, number = +number).toSuccess(location)
     }
 }
@@ -209,7 +210,7 @@ val UserReader: JsReader<ReaderErrorBuilders, ReaderOptions, User> = structReade
     val name = property(required(name = "name", reader = NonEmptyStringReader))
     val phones = property(optional(name = "phones", reader = PhonesReader, default = { _, _ -> Phones() }))
 
-    returns { _, _, location ->
+    returns { _, location ->
         User(id = +id, name = +name, phones = +phones).toSuccess(location)
     }
 }
