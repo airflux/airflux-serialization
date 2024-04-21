@@ -18,6 +18,7 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.validator
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.github.airflux.serialization.std.validator.struct.StdStructValidator
 
@@ -26,4 +27,5 @@ val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderOption
 
 //Struct validators
 val isNotEmpty = StdStructValidator.isNotEmpty<ReaderErrorBuilders, ReaderOptions>()
-val additionalProperties = StdStructValidator.additionalProperties<ReaderErrorBuilders, ReaderOptions>()
+fun additionalProperties(properties: StructProperties<ReaderErrorBuilders, ReaderOptions>) =
+    StdStructValidator.additionalProperties(properties)

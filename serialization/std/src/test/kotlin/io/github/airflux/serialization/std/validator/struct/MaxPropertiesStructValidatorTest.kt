@@ -47,8 +47,7 @@ internal class MaxPropertiesStructValidatorTest : FreeSpec() {
     init {
 
         "The struct validator MaxProperties" - {
-            val validator: JsStructValidator<EB, Unit> =
-                StdStructValidator.maxProperties<EB, Unit>(MAX_PROPERTIES).build(PROPERTIES)
+            val validator: JsStructValidator<EB, Unit> = StdStructValidator.maxProperties(MAX_PROPERTIES)
 
             "when the struct is empty" - {
                 val source = JsStruct()

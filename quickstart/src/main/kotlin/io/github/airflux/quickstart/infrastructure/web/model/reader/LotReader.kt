@@ -38,7 +38,7 @@ val LotStatusReader: JsReader<ReaderErrorBuilders, ReaderOptions, LotStatus> =
     StringReader.validation(isNotBlank).asEnum()
 
 val LotReader: JsReader<ReaderErrorBuilders, ReaderOptions, Lot> = structReader {
-    validation(CommonStructReaderValidators and additionalProperties)
+    validation { properties -> CommonStructReaderValidators and additionalProperties(properties) }
 
     val id = property(identifierPropertySpec)
     val status = property(required(name = "status", reader = LotStatusReader))

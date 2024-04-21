@@ -24,23 +24,23 @@ public object StdArrayValidator {
      * If the array is empty then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O> isNotEmpty(): JsArrayValidator.Builder<EB, O>
+    public fun <EB, O> isNotEmpty(): JsArrayValidator<EB, O>
         where EB : IsNotEmptyArrayValidator.ErrorBuilder =
-        IsNotEmptyArrayValidatorBuilder()
+        IsNotEmptyArrayValidator()
 
     /**
      * If a number of elements in the array are less than an expected [value] then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O> minItems(value: Int): JsArrayValidator.Builder<EB, O>
+    public fun <EB, O> minItems(value: Int): JsArrayValidator<EB, O>
         where EB : MinItemsArrayValidator.ErrorBuilder =
-        MinItemsArrayValidatorBuilder(value)
+        MinItemsArrayValidator(value)
 
     /**
      * If a number of elements in the array are more than an expected [value] then an error, otherwise a success.
      */
     @JvmStatic
-    public fun <EB, O> maxItems(value: Int): JsArrayValidator.Builder<EB, O>
+    public fun <EB, O> maxItems(value: Int): JsArrayValidator<EB, O>
         where EB : MaxItemsArrayValidator.ErrorBuilder =
-        MaxItemsArrayValidatorBuilder(value)
+        MaxItemsArrayValidator(value)
 }

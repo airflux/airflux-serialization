@@ -21,5 +21,5 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOp
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.std.validator.array.StdArrayValidator
 
-val CommonArrayReaderValidators: JsArrayValidator.Builder<ReaderErrorBuilders, ReaderOptions> =
+val CommonArrayReaderValidators: JsArrayValidator<ReaderErrorBuilders, ReaderOptions> =
     StdArrayValidator.isNotEmpty()

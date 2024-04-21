@@ -33,42 +33,6 @@ public fun interface JsStructValidator<EB, O> {
         properties: StructProperties<EB, O>,
         source: JsStruct
     ): JsValidatorResult
-
-    public fun interface Builder<EB, O> {
-        public fun build(properties: StructProperties<EB, O>): JsStructValidator<EB, O>
-    }
-}
-
-/*
- * | This | Other  | Result |
- * |------|--------|--------|
- * | S    | ignore | S      |
- * | F    | S      | S      |
- * | F    | F`     | F + F` |
- */
-public infix fun <EB, O> JsStructValidator.Builder<EB, O>.or(
-    alt: JsStructValidator.Builder<EB, O>
-): JsStructValidator.Builder<EB, O> {
-    val self = this
-    return JsStructValidator.Builder { properties ->
-        self.build(properties) or alt.build(properties)
-    }
-}
-
-/*
- * | This | Other  | Result |
- * |------|--------|--------|
- * | S    | S      | S      |
- * | S    | F      | F      |
- * | F    | ignore | F      |
- */
-public infix fun <EB, O> JsStructValidator.Builder<EB, O>.and(
-    alt: JsStructValidator.Builder<EB, O>
-): JsStructValidator.Builder<EB, O> {
-    val self = this
-    return JsStructValidator.Builder { properties ->
-        self.build(properties) and alt.build(properties)
-    }
 }
 
 /*

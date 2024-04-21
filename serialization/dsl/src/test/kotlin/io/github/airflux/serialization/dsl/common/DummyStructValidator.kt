@@ -26,20 +26,14 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : JsStructValidator.Builder<EB, O> {
+internal class DummyStructValidator<EB, O>(private val result: JsValidatorResult) : JsStructValidator<EB, O> {
 
-    private val validator = Validator<EB, O>(result)
-
-    override fun build(properties: StructProperties<EB, O>): JsStructValidator<EB, O> = validator
-
-    internal class Validator<EB, O>(val result: JsValidatorResult) : JsStructValidator<EB, O> {
-        override fun validate(
-            env: JsReaderEnv<EB, O>,
-            location: JsLocation,
-            properties: StructProperties<EB, O>,
-            source: JsStruct
-        ): JsValidatorResult = result
-    }
+    override fun validate(
+        env: JsReaderEnv<EB, O>,
+        location: JsLocation,
+        properties: StructProperties<EB, O>,
+        source: JsStruct
+    ): JsValidatorResult = result
 
     companion object {
 
@@ -47,15 +41,13 @@ internal class DummyStructValidatorBuilder<EB, O>(result: JsValidatorResult) : J
         internal fun <EB, O> additionalProperties(
             nameProperties: Set<String>,
             error: JsReaderResult.Error
-        ): JsStructValidator.Builder<EB, O> =
-            JsStructValidator.Builder {
-                JsStructValidator { _, location, _, node ->
-                    node.forEach { (name, _) ->
-                        if (name !in nameProperties)
-                            return@JsStructValidator invalid(location = location.append(name), error = error)
-                    }
-                    valid()
+        ): JsStructValidator<EB, O> =
+            JsStructValidator { _, location, _, node ->
+                node.forEach { (name, _) ->
+                    if (name !in nameProperties)
+                        return@JsStructValidator invalid(location = location.append(name), error = error)
                 }
+                valid()
             }
     }
 }

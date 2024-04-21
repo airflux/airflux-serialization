@@ -23,24 +23,20 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
+public typealias JsArrayValidatorBuilder<EB, O> = () -> JsArrayValidator<EB, O>
+
 @AirfluxMarker
 public class JsArrayReaderBuilder<EB, O>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
-    private var validatorBuilder: (() -> JsArrayValidator<EB, O>)? = null
+    private var validatorBuilder: JsArrayValidatorBuilder<EB, O>? = null
 
-    public fun validation(validator: () -> JsArrayValidator<EB, O>) {
+    public fun validation(validator: JsArrayValidator<EB, O>): Unit = validation { validator }
+
+    public fun validation(validator: JsArrayValidatorBuilder<EB, O>) {
         validatorBuilder = validator
-    }
-
-    public fun validation(validator: JsArrayValidator.Builder<EB, O>) {
-        validatorBuilder = { validator.build() }
-    }
-
-    public fun validation(validator: JsArrayValidator<EB, O>) {
-        validatorBuilder = { validator }
     }
 
     public fun <T> build(items: JsReader<EB, O, T>): JsArrayReader<EB, O, T> =

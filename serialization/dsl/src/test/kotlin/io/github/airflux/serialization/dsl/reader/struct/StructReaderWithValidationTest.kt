@@ -30,7 +30,7 @@ import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.valueOf
-import io.github.airflux.serialization.dsl.common.DummyStructValidatorBuilder
+import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
@@ -64,7 +64,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
         "The StructReaderWithValidation type" - {
 
             "when was created reader" - {
-                val validator = DummyStructValidatorBuilder.additionalProperties<EB, OPTS>(
+                val validator = DummyStructValidator.additionalProperties<EB, OPTS>(
                     nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )

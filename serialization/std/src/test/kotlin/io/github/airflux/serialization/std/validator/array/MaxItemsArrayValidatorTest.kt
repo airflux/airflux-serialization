@@ -39,8 +39,7 @@ internal class MaxItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MaxItems" - {
-            val validator: JsArrayValidator<EB, Unit> =
-                StdArrayValidator.maxItems<EB, Unit>(MAX_ITEMS).build()
+            val validator: JsArrayValidator<EB, Unit> = StdArrayValidator.maxItems(MAX_ITEMS)
 
             "when a collection is empty" - {
                 val source = JsArray()

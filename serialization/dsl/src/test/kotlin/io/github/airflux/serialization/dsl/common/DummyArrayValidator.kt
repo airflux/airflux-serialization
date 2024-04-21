@@ -25,15 +25,9 @@ import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
-internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : JsArrayValidator.Builder<EB, O> {
+internal class DummyArrayValidator<EB, O>(private val result: JsValidatorResult) : JsArrayValidator<EB, O> {
 
-    private val validator = Validator<EB, O>(result)
-    override fun build(): JsArrayValidator<EB, O> = validator
-
-    internal class Validator<EB, O>(val result: JsValidatorResult) : JsArrayValidator<EB, O> {
-        override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =
-            result
-    }
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult = result
 
     companion object {
 
@@ -41,14 +35,12 @@ internal class DummyArrayValidatorBuilder<EB, O>(result: JsValidatorResult) : Js
         internal fun <EB, O> minItems(
             expected: Int,
             error: (expected: Int, actual: Int) -> JsReaderResult.Error
-        ): JsArrayValidator.Builder<EB, O> =
-            JsArrayValidator.Builder {
-                JsArrayValidator { _, location, source ->
-                    if (source.size < expected)
-                        return@JsArrayValidator invalid(location = location, error = error(expected, source.size))
-                    else
-                        valid()
-                }
+        ): JsArrayValidator<EB, O> =
+            JsArrayValidator { _, location, source ->
+                if (source.size < expected)
+                    return@JsArrayValidator invalid(location = location, error = error(expected, source.size))
+                else
+                    valid()
             }
     }
 }

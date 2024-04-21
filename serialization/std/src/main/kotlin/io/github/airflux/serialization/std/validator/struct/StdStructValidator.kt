@@ -17,27 +17,29 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
 public object StdStructValidator {
 
     @JvmStatic
-    public fun <EB, O> additionalProperties(): JsStructValidator.Builder<EB, O>
+    public fun <EB, O> additionalProperties(properties: StructProperties<EB, O>): JsStructValidator<EB, O>
         where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
               O : FailFastOption =
-        AdditionalPropertiesStructValidatorBuilder()
+        AdditionalPropertiesStructValidator(properties)
 
     @JvmStatic
-    public fun <EB, O> isNotEmpty(): JsStructValidator.Builder<EB, O>
-        where EB : IsNotEmptyStructValidator.ErrorBuilder = IsNotEmptyStructValidatorBuilder()
+    public fun <EB, O> isNotEmpty(): JsStructValidator<EB, O>
+        where EB : IsNotEmptyStructValidator.ErrorBuilder =
+        IsNotEmptyStructValidator()
 
     @JvmStatic
-    public fun <EB, O> minProperties(value: Int): JsStructValidator.Builder<EB, O>
+    public fun <EB, O> minProperties(value: Int): JsStructValidator<EB, O>
         where EB : MinPropertiesStructValidator.ErrorBuilder =
-        MinPropertiesStructValidatorBuilder(value)
+        MinPropertiesStructValidator(value)
 
     @JvmStatic
-    public fun <EB, O> maxProperties(value: Int): JsStructValidator.Builder<EB, O>
+    public fun <EB, O> maxProperties(value: Int): JsStructValidator<EB, O>
         where EB : MaxPropertiesStructValidator.ErrorBuilder =
-        MaxPropertiesStructValidatorBuilder(value)
+        MaxPropertiesStructValidator(value)
 }

@@ -39,8 +39,7 @@ internal class MinItemsArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator MinItems" - {
-            val validator: JsArrayValidator<EB, Unit> =
-                StdArrayValidator.minItems<EB, Unit>(MIN_ITEMS).build()
+            val validator: JsArrayValidator<EB, Unit> = StdArrayValidator.minItems(MIN_ITEMS)
 
             "when a collection is empty" - {
                 val source = JsArray()

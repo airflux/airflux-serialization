@@ -42,8 +42,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
     init {
 
         "The struct validator IsNotEmpty" - {
-            val validator: JsStructValidator<EB, Unit> =
-                StdStructValidator.isNotEmpty<EB, Unit>().build(PROPERTIES)
+            val validator: JsStructValidator<EB, Unit> = StdStructValidator.isNotEmpty()
 
             "when the struct is empty" - {
                 val source = JsStruct()

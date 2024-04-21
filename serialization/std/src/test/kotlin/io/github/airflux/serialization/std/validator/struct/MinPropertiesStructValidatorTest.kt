@@ -47,8 +47,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
     init {
 
         "The struct validator MinProperties" - {
-            val validator: JsStructValidator<EB, Unit> =
-                StdStructValidator.minProperties<EB, Unit>(MIN_PROPERTIES).build(PROPERTIES)
+            val validator: JsStructValidator<EB, Unit> = StdStructValidator.minProperties(MIN_PROPERTIES)
 
             "when the struct is empty" - {
                 val source = JsStruct()

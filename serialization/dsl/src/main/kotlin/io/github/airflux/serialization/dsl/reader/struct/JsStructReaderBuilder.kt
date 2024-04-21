@@ -27,24 +27,20 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
+public typealias JsStructValidatorBuilder<EB, O> = (List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>
+
 @AirfluxMarker
 public class JsStructReaderBuilder<EB, O>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
 
     private val properties = mutableListOf<StructProperty<EB, O, *>>()
-    private var validatorBuilder: ((List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>)? = null
+    private var validatorBuilder: JsStructValidatorBuilder<EB, O>? = null
 
-    public fun validation(validator: (List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>) {
+    public fun validation(validator: JsStructValidator<EB, O>): Unit = validation { validator }
+
+    public fun validation(validator: JsStructValidatorBuilder<EB, O>) {
         validatorBuilder = validator
-    }
-
-    public fun validation(validator: JsStructValidator.Builder<EB, O>) {
-        validatorBuilder = { validator.build(it) }
-    }
-
-    public fun validation(validator: JsStructValidator<EB, O>) {
-        validatorBuilder = { validator }
     }
 
     public fun <P> property(spec: StructPropertySpec<EB, O, P>): StructProperty<EB, O, P> =

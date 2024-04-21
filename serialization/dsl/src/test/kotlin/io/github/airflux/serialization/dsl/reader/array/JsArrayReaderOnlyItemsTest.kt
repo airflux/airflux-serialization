@@ -28,7 +28,7 @@ import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.dsl.common.DummyArrayValidatorBuilder.Companion.minItems
+import io.github.airflux.serialization.dsl.common.DummyArrayValidator.Companion.minItems
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure

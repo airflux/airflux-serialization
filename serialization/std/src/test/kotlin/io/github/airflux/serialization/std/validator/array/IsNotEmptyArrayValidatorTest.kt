@@ -38,7 +38,7 @@ internal class IsNotEmptyArrayValidatorTest : FreeSpec() {
     init {
 
         "The array validator IsNotEmpty" - {
-            val validator: JsArrayValidator<EB, Unit> = StdArrayValidator.isNotEmpty<EB, Unit>().build()
+            val validator: JsArrayValidator<EB, Unit> = StdArrayValidator.isNotEmpty()
 
             "when an array is empty" - {
                 val source = JsArray()

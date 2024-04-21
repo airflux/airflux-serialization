@@ -25,47 +25,7 @@ import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 
 public fun interface JsArrayValidator<EB, O> {
-    public fun validate(
-        env: JsReaderEnv<EB, O>,
-        location: JsLocation,
-        source: JsArray
-    ): JsValidatorResult
-
-    public fun interface Builder<EB, O> {
-        public fun build(): JsArrayValidator<EB, O>
-    }
-}
-
-/*
- * | This | Other  | Result |
- * |------|--------|--------|
- * | S    | ignore | S      |
- * | F    | S      | S      |
- * | F    | F`     | F + F` |
- */
-public infix fun <EB, O> JsArrayValidator.Builder<EB, O>.or(
-    alt: JsArrayValidator.Builder<EB, O>
-): JsArrayValidator.Builder<EB, O> {
-    val self = this
-    return JsArrayValidator.Builder {
-        self.build() or alt.build()
-    }
-}
-
-/*
- * | This | Other  | Result |
- * |------|--------|--------|
- * | S    | S      | S      |
- * | S    | F      | F      |
- * | F    | ignore | F      |
- */
-public infix fun <EB, O> JsArrayValidator.Builder<EB, O>.and(
-    alt: JsArrayValidator.Builder<EB, O>
-): JsArrayValidator.Builder<EB, O> {
-    val self = this
-    return JsArrayValidator.Builder {
-        self.build() and alt.build()
-    }
+    public fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult
 }
 
 /*

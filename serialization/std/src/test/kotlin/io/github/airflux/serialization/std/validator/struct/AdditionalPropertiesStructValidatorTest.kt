@@ -57,8 +57,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
     init {
 
         "The struct validator AdditionalProperties" - {
-            val validator: JsStructValidator<EB, OPTS> =
-                StdStructValidator.additionalProperties<EB, OPTS>().build(PROPERTIES)
+            val validator: JsStructValidator<EB, OPTS> = StdStructValidator.additionalProperties(PROPERTIES)
 
             "when the struct is empty" - {
                 val source = JsStruct()
