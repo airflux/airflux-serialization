@@ -142,6 +142,7 @@ public final class io/github/airflux/serialization/dsl/writer/env/option/WriterA
 	public static final field RETURN_EMPTY_VALUE Lio/github/airflux/serialization/dsl/writer/env/option/WriterActionIfResultIsEmpty;
 	public static final field RETURN_NOTHING Lio/github/airflux/serialization/dsl/writer/env/option/WriterActionIfResultIsEmpty;
 	public static final field RETURN_NULL_VALUE Lio/github/airflux/serialization/dsl/writer/env/option/WriterActionIfResultIsEmpty;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/dsl/writer/env/option/WriterActionIfResultIsEmpty;
 	public static fun values ()[Lio/github/airflux/serialization/dsl/writer/env/option/WriterActionIfResultIsEmpty;
 }
