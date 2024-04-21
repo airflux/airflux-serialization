@@ -29,15 +29,14 @@ public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
     public val properties: StructProperties<EB, O>
 }
 
-public fun <EB, O, T> structReader(block: JsStructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>): JsStructReader<EB, O, T>
+public fun <EB, O, T> structReader(
+    block: JsStructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>
+): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption {
-    val builder = JsStructReaderBuilder<EB, O>()
-    return block(builder)
-}
+          O : FailFastOption = JsStructReaderBuilder<EB, O>().block()
 
 public fun <EB, O, T> JsStructReaderBuilder<EB, O>.returns(
     block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption = this.build(block)
+          O : FailFastOption = build(block)
