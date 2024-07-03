@@ -120,14 +120,14 @@ public object AirFluxJsonModule : SimpleModule() {
                 JsonToken.START_ARRAY -> {
                     maybeValue = null
                     nextContext = parserContext.apply {
-                        push(DeserializerContext.ReadingList(mutableListOf()))
+                        push(DeserializerContext.ReadingList())
                     }
                 }
 
                 JsonToken.END_ARRAY -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingList) {
-                        maybeValue = JsArray(head.values)
+                        maybeValue = JsArray(head.items)
                         nextContext = parserContext
                     } else
                         throw ParsingException("We should have been reading list, something got wrong")
@@ -136,7 +136,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 JsonToken.START_OBJECT -> {
                     maybeValue = null
                     nextContext = parserContext.apply {
-                        push(DeserializerContext.ReadingObject(LinkedList()))
+                        push(DeserializerContext.ReadingObject())
                     }
                 }
 
@@ -153,7 +153,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 JsonToken.END_OBJECT -> {
                     val head = parserContext.pop()
                     if (head is DeserializerContext.ReadingObject) {
-                        maybeValue = JsStruct(head.values)
+                        maybeValue = JsStruct(head.properties)
                         nextContext = parserContext
                     } else
                         throw ParsingException("We should have been reading an object, something got wrong ($head)")
@@ -173,7 +173,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 maybeValue
             else {
                 val toPass: Stack<DeserializerContext> = maybeValue?.let { v ->
-                    val previous = nextContext.pop()
+                    val previous: DeserializerContext = nextContext.pop()
                     val p = previous.addValue(v)
                     nextContext.push(p)
                     nextContext
@@ -187,22 +187,31 @@ public object AirFluxJsonModule : SimpleModule() {
         override fun getNullValue(): JsNull = JsNull
 
         private sealed class DeserializerContext {
+
             abstract fun addValue(value: JsValue): DeserializerContext
 
-            data class ReadingList(val values: MutableList<JsValue>) : DeserializerContext() {
-                override fun addValue(value: JsValue): DeserializerContext = ReadingList(values.apply { add(value) })
+            class ReadingList : DeserializerContext() {
+                private val _items: MutableList<JsValue> = mutableListOf()
+                val items: List<JsValue>
+                    get() = _items
+
+                override fun addValue(value: JsValue): DeserializerContext = this.apply { _items.add(value) }
             }
 
-            data class KeyRead(val fieldName: String, val values: MutableList<Pair<String, JsValue>>) :
-                DeserializerContext() {
-                override fun addValue(value: JsValue): DeserializerContext =
-                    ReadingObject(values.apply { add(fieldName to value) })
-            }
+            class ReadingObject : DeserializerContext() {
+                private val _properties: MutableList<Pair<String, JsValue>> = mutableListOf()
+                val properties: List<Pair<String, JsValue>>
+                    get() = _properties
 
-            class ReadingObject(val values: MutableList<Pair<String, JsValue>>) : DeserializerContext() {
-                fun setField(fieldName: String): KeyRead = KeyRead(fieldName, values)
+                fun setField(fieldName: String): KeyRead = KeyRead(fieldName)
+
                 override fun addValue(value: JsValue): DeserializerContext =
                     throw ParsingException("Cannot add a value on an object without a key, malformed JSON object!")
+
+                inner class KeyRead(val fieldName: String) : DeserializerContext() {
+                    override fun addValue(value: JsValue): DeserializerContext =
+                        this@ReadingObject.apply { _properties.add(fieldName to value) }
+                }
             }
         }
 
