@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.writer.JsWriter
 import java.math.BigDecimal
 
@@ -29,5 +29,5 @@ public fun <O> bigDecimalWriter(stripTrailingZeros: Boolean): JsWriter<O, BigDec
             value.stripTrailingZeros().toPlainString()
         else
             value.toPlainString()
-        JsNumeric.Number.valueOrNullOf(text)!!
+        JsNumber.Real.valueOrNullOf(text)!!
     }

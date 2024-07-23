@@ -27,6 +27,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
@@ -151,7 +152,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         override fun additionalPropertiesStructError(): JsReaderResult.Error =
             JsonErrors.Validation.Struct.AdditionalProperties
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

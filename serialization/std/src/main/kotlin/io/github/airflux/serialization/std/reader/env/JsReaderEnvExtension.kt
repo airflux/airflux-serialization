@@ -21,18 +21,19 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.value.JsValue
 
 internal fun <EB, O> JsReaderEnv<EB, O>.invalidTypeError(
     location: JsLocation,
-    expected: String,
-    actual: String
+    expected: JsValue.Type,
+    actual: JsValue.Type
 ): JsReaderResult<Nothing>
     where EB : InvalidTypeErrorBuilder = invalidTypeError(location, listOf(expected), actual)
 
 internal fun <EB, O> JsReaderEnv<EB, O>.invalidTypeError(
     location: JsLocation,
-    expected: List<String>,
-    actual: String
+    expected: List<JsValue.Type>,
+    actual: JsValue.Type
 ): JsReaderResult<Nothing>
     where EB : InvalidTypeErrorBuilder =
     failure(location = location, error = errorBuilders.invalidTypeError(expected, actual))

@@ -27,6 +27,7 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.test.dummy.DummyPathReader
@@ -71,7 +72,7 @@ internal class StructPropertyTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

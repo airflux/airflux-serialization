@@ -21,8 +21,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.dummy.DummyReaderPredicate
 import io.github.airflux.serialization.test.dummy.DummyValidator
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
@@ -351,8 +350,8 @@ internal class JsReaderResultTest : FreeSpec() {
                     val result: JsReaderResult<String> = failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsString.nameOfType),
-                            actual = JsBoolean.nameOfType
+                            expected = listOf(JsValue.Type.STRING),
+                            actual = JsValue.Type.BOOLEAN
                         )
                     )
                     val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
@@ -460,7 +459,7 @@ internal class JsReaderResultTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

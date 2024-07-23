@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.test.dummy
 
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
@@ -32,7 +32,7 @@ public class DummyWriter<O, T>(public val result: (T) -> JsValue?) : JsWriter<O,
 
         @JvmStatic
         public fun <O> int(): JsWriter<O, Int> =
-            DummyWriter(result = { source -> JsNumeric.valueOf(source) })
+            DummyWriter(result = { source -> JsNumber.valueOf(source) })
 
         @JvmStatic
         public fun <O> string(): JsWriter<O, String> =

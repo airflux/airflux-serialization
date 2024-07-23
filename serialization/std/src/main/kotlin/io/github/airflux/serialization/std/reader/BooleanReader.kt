@@ -20,6 +20,7 @@ import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsBoolean
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.std.reader.env.invalidTypeError
 
 /**
@@ -31,5 +32,5 @@ public fun <EB, O> booleanReader(): JsReader<EB, O, Boolean>
         if (source is JsBoolean)
             success(location = location, value = source.get)
         else
-            env.invalidTypeError(location, expected = JsBoolean.nameOfType, actual = source.nameOfType)
+            env.invalidTypeError(location, expected = JsValue.Type.BOOLEAN, actual = source.type)
     }

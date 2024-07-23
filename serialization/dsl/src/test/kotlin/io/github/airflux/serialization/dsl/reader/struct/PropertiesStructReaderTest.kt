@@ -27,9 +27,10 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
@@ -81,8 +82,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsStruct.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.STRUCT),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -96,8 +97,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsStruct.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.STRUCT),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -106,7 +107,7 @@ internal class PropertiesStructReaderTest : FreeSpec() {
 
                 "when the source contains all properties" - {
                     val source = JsStruct(
-                        ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                        ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
                         NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                     )
 
@@ -167,7 +168,7 @@ internal class PropertiesStructReaderTest : FreeSpec() {
 
                 "when the source does not contain optional properties" - {
                     val source = JsStruct(
-                        ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE)
+                        ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)
                     )
 
                     "when fail-fast is true" - {
@@ -209,8 +210,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -224,8 +225,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -234,7 +235,7 @@ internal class PropertiesStructReaderTest : FreeSpec() {
 
                 "when the source contains the optional property of an invalid type" - {
                     val source = JsStruct(
-                        ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                        ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
                         NAME_PROPERTY_NAME to JsBoolean.valueOf(true),
                     )
 
@@ -246,8 +247,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(NAME_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsBoolean.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.BOOLEAN
                                 )
                             )
                         }
@@ -261,8 +262,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(NAME_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsBoolean.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.BOOLEAN
                                 )
                             )
                         }
@@ -283,8 +284,8 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -299,15 +300,15 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsNumeric.Integer.nameOfType),
-                                        actual = JsString.nameOfType
+                                        expected = listOf(JsValue.Type.INTEGER),
+                                        actual = JsValue.Type.STRING
                                     )
                                 ),
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(NAME_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsString.nameOfType),
-                                        actual = JsBoolean.nameOfType
+                                        expected = listOf(JsValue.Type.STRING),
+                                        actual = JsValue.Type.BOOLEAN
                                     )
                                 )
                             )
@@ -324,7 +325,7 @@ internal class PropertiesStructReaderTest : FreeSpec() {
                 }
 
                 val source = JsStruct(
-                    ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                    ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
                     NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                 )
 
@@ -357,7 +358,7 @@ internal class PropertiesStructReaderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

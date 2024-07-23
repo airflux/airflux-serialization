@@ -103,7 +103,7 @@ internal class JsArrayTest : FreeSpec() {
                 }
 
                 "then the toString() method should return the expected string" {
-                    array shouldBeEqualsString "[]"
+                    array shouldBeEqualsString "JsArray()"
                 }
 
                 "then should comply with equals() and hashCode() contract" {
@@ -149,7 +149,7 @@ internal class JsArrayTest : FreeSpec() {
                 }
 
                 "then the toString() method should return the expected string" {
-                    array shouldBeEqualsString """["$FIRST_PHONE_VALUE", "$SECOND_PHONE_VALUE"]"""
+                    array shouldBeEqualsString "JsArray(JsString($FIRST_PHONE_VALUE), JsString($SECOND_PHONE_VALUE))"
                 }
 
                 "then should comply with equals() and hashCode() contract" {

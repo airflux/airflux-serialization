@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
@@ -91,8 +91,8 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
 
             "when the element is invalid type" - {
                 val lookup: JsLookupResult = JsLookupResult.Undefined.InvalidType(
-                    expected = listOf(JsStruct.nameOfType),
-                    actual = JsString.nameOfType,
+                    expected = listOf(JsValue.Type.STRUCT),
+                    actual = JsValue.Type.STRING,
                     breakpoint = LOCATION.append(ID_PROPERTY_NAME)
                 )
 
@@ -106,8 +106,8 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsStruct.nameOfType),
-                            actual = JsString.nameOfType
+                            expected = listOf(JsValue.Type.STRUCT),
+                            actual = JsValue.Type.STRING
                         )
                     )
                 }
@@ -117,7 +117,7 @@ internal class OptionalWithDefaultPropertyReaderTest : FreeSpec() {
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

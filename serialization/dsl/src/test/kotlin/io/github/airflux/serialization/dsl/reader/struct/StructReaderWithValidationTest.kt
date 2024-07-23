@@ -26,9 +26,10 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -82,7 +83,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when the error occurs only at the validation step" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -107,8 +108,8 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -120,7 +121,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when the error occurs only at the validation step" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -145,8 +146,8 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -169,8 +170,8 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsNumeric.Integer.nameOfType),
-                                        actual = JsString.nameOfType
+                                        expected = listOf(JsValue.Type.INTEGER),
+                                        actual = JsValue.Type.STRING
                                     )
                                 )
                             )
@@ -179,7 +180,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when no validation or reading errors occur" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumeric.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 
@@ -198,7 +199,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

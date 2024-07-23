@@ -34,7 +34,7 @@ internal class JsBooleanTest : FreeSpec() {
                 }
 
                 "then the toString() method should return the expected string" {
-                    value shouldBeEqualsString "true"
+                    value shouldBeEqualsString "JsBoolean.True"
                 }
 
                 "should comply with equals() and hashCode() contract" {
@@ -54,7 +54,7 @@ internal class JsBooleanTest : FreeSpec() {
                 }
 
                 "then the toString() method should return the expected string" {
-                    value shouldBeEqualsString "false"
+                    value shouldBeEqualsString "JsBoolean.False"
                 }
 
                 "should comply with equals() and hashCode() contract" {

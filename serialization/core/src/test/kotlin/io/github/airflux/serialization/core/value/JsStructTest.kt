@@ -173,7 +173,7 @@ internal class JsStructTest : FreeSpec() {
                 }
 
                 "then the `toString` method should return the expected string" {
-                    struct shouldBeEqualsString "{}"
+                    struct shouldBeEqualsString "JsStruct()"
                 }
 
                 "then should comply with equals() and hashCode() contract" {
@@ -256,7 +256,7 @@ internal class JsStructTest : FreeSpec() {
 
                 "then the toString() method should return the expected string" {
                     struct.shouldBeEqualsString(
-                        """{"$USER_PROPERTY_NAME": "$USER_VALUE", "$IS_ACTIVE_PROPERTY_NAME": $IS_ACTIVE_VALUE}"""
+                        """JsStruct($USER_PROPERTY_NAME=JsString($USER_VALUE), $IS_ACTIVE_PROPERTY_NAME=JsBoolean.True)"""
                     )
                 }
 

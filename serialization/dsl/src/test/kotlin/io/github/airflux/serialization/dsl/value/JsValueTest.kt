@@ -69,8 +69,8 @@ internal class JsValueTest : FreeSpec() {
                     "then should return the value as an instance of type Undefined#InvalidType" {
                         val lookup = json / KEY_NAME
                         lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                            expected = listOf(JsStruct.nameOfType),
-                            actual = JsArray.nameOfType,
+                            expected = listOf(JsValue.Type.STRUCT),
+                            actual = JsValue.Type.ARRAY,
                             breakpoint = LOCATION
                         )
                     }
@@ -103,8 +103,8 @@ internal class JsValueTest : FreeSpec() {
                     "then should return the value as an instance of type Undefined#InvalidType" {
                         val lookup = json / IDX
                         lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                            expected = listOf(JsArray.nameOfType),
-                            actual = JsStruct.nameOfType,
+                            expected = listOf(JsValue.Type.ARRAY),
+                            actual = JsValue.Type.STRUCT,
                             breakpoint = LOCATION
                         )
                     }

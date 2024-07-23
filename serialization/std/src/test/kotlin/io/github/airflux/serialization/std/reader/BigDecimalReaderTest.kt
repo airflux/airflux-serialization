@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -48,7 +48,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 withData(
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
-                    val source: JsValue = JsNumeric.Number.valueOrNullOf(value)!!
+                    val source: JsValue = JsNumber.Real.valueOrNullOf(value)!!
                     val result = BigDecimalReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(value))
                 }
@@ -60,8 +60,8 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsNumeric.Number.nameOfType, JsNumeric.Integer.nameOfType),
-                        actual = JsString.nameOfType
+                        expected = listOf(JsValue.Type.REAL, JsValue.Type.INTEGER),
+                        actual = JsValue.Type.STRING
                     )
                 )
             }
@@ -69,7 +69,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

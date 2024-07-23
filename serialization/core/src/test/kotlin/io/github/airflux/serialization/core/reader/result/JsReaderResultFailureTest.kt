@@ -18,8 +18,7 @@ package io.github.airflux.serialization.core.reader.result
 
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -58,8 +57,8 @@ internal class JsReaderResultFailureTest : FreeSpec() {
                 val secondFailure = JsReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsString.nameOfType),
-                        actual = JsBoolean.nameOfType
+                        expected = listOf(JsValue.Type.STRING),
+                        actual = JsValue.Type.BOOLEAN
                     )
                 )
 
@@ -73,8 +72,8 @@ internal class JsReaderResultFailureTest : FreeSpec() {
                     JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsString.nameOfType),
-                            actual = JsBoolean.nameOfType
+                            expected = listOf(JsValue.Type.STRING),
+                            actual = JsValue.Type.BOOLEAN
                         )
                     )
                 )

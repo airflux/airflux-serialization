@@ -17,76 +17,74 @@
 package io.github.airflux.serialization.core.value
 
 import io.github.airflux.serialization.common.NumberMatcher
-import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
-import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.JsReaderResult
 
 public sealed class JsValue {
-    public abstract val nameOfType: String
+    public abstract val type: Type
 
-    public fun <EB, O, T> read(
-        env: JsReaderEnv<EB, O>,
-        location: JsLocation,
-        reader: JsReader<EB, O, T>
-    ): JsReaderResult<T> = reader.read(env, location, this)
+    public enum class Type {
+        NULL,
+        BOOLEAN,
+        STRING,
+        INTEGER,
+        REAL,
+        ARRAY,
+        STRUCT
+    }
 }
 
-public object JsNull : JsValue() {
-    override val nameOfType: String = "null"
+public data object JsNull : JsValue() {
+    override val type: Type = Type.NULL
 
-    override fun toString(): String = "null"
+    override fun toString(): String = "JsNull"
 }
 
 public sealed class JsBoolean(public val get: Boolean) : JsValue() {
 
-    override val nameOfType: String = JsBoolean.nameOfType
+    override val type: Type = Type.BOOLEAN
 
-    public object True : JsBoolean(true)
-    public object False : JsBoolean(false)
+    public data object True : JsBoolean(true) {
+        override fun toString(): String = "JsBoolean.True"
+    }
 
-    override fun toString(): String = get.toString()
+    public data object False : JsBoolean(false) {
+        override fun toString(): String = "JsBoolean.False"
+    }
 
     public companion object {
 
         @JvmStatic
         public fun valueOf(value: Boolean): JsBoolean = if (value) True else False
-
-        public const val nameOfType: String = "boolean"
     }
 }
 
 public class JsString(public val get: String) : JsValue() {
 
-    override val nameOfType: String = JsString.nameOfType
-
-    override fun toString(): String = """"$get""""
+    override val type: Type = Type.STRING
 
     override fun equals(other: Any?): Boolean =
         this === other || (other is JsString && this.get == other.get)
 
     override fun hashCode(): Int = get.hashCode()
 
-    public companion object {
-        public const val nameOfType: String = "string"
-    }
+    override fun toString(): String = """JsString($get)"""
+
+    public companion object;
 }
 
-public sealed class JsNumeric private constructor(public val get: String) : JsValue() {
+public sealed class JsNumber private constructor(public val get: String) : JsValue() {
 
-    override fun equals(other: Any?): Boolean =
-        this === other || (other is JsNumeric && this.get == other.get)
+    public class Integer internal constructor(value: String) : JsNumber(value) {
+        override val type: Type = Type.INTEGER
 
-    override fun hashCode(): Int = get.hashCode()
+        override fun equals(other: Any?): Boolean =
+            this === other || (other is Integer && this.get == other.get)
 
-    override fun toString(): String = get
+        override fun hashCode(): Int = get.hashCode()
 
-    public class Integer internal constructor(value: String) : JsNumeric(value) {
-        override val nameOfType: String = Integer.nameOfType
+        override fun toString(): String = "JsNumber.Integer($get)"
 
         public companion object {
-            public const val nameOfType: String = "integer"
 
             @JvmStatic
             public fun valueOrNullOf(value: String): Integer? {
@@ -96,17 +94,23 @@ public sealed class JsNumeric private constructor(public val get: String) : JsVa
         }
     }
 
-    public class Number internal constructor(value: String) : JsNumeric(value) {
-        override val nameOfType: String = Number.nameOfType
+    public class Real internal constructor(value: String) : JsNumber(value) {
+        override val type: Type = Type.REAL
+
+        override fun equals(other: Any?): Boolean =
+            this === other || (other is Real && this.get == other.get)
+
+        override fun hashCode(): Int = get.hashCode()
+
+        override fun toString(): String = "JsNumber.Real($get)"
 
         public companion object {
-            public const val nameOfType: String = "number"
 
             @JvmStatic
-            public fun valueOrNullOf(value: String): Number? {
+            public fun valueOrNullOf(value: String): Real? {
                 val result = NumberMatcher.match(value)
                 return if (result == NumberMatcher.Result.INTEGER || result == NumberMatcher.Result.REAL)
-                    Number(value)
+                    Real(value)
                 else
                     null
             }
@@ -115,30 +119,30 @@ public sealed class JsNumeric private constructor(public val get: String) : JsVa
 
     public companion object {
 
-        public fun valueOrNull(value: String): JsNumeric? =
+        public fun valueOrNull(value: String): JsNumber? =
             when (NumberMatcher.match(value)) {
                 NumberMatcher.Result.INTEGER -> Integer(value)
-                NumberMatcher.Result.REAL -> Number(value)
+                NumberMatcher.Result.REAL -> Real(value)
                 else -> null
             }
     }
 }
 
-public fun JsNumeric.Companion.valueOf(value: Byte): JsNumeric =
-    JsNumeric.Integer.valueOrNullOf(value.toString())!!
+public fun JsNumber.Companion.valueOf(value: Byte): JsNumber =
+    JsNumber.Integer.valueOrNullOf(value.toString())!!
 
-public fun JsNumeric.Companion.valueOf(value: Short): JsNumeric =
-    JsNumeric.Integer.valueOrNullOf(value.toString())!!
+public fun JsNumber.Companion.valueOf(value: Short): JsNumber =
+    JsNumber.Integer.valueOrNullOf(value.toString())!!
 
-public fun JsNumeric.Companion.valueOf(value: Int): JsNumeric =
-    JsNumeric.Integer.valueOrNullOf(value.toString())!!
+public fun JsNumber.Companion.valueOf(value: Int): JsNumber =
+    JsNumber.Integer.valueOrNullOf(value.toString())!!
 
-public fun JsNumeric.Companion.valueOf(value: Long): JsNumeric =
-    JsNumeric.Integer.valueOrNullOf(value.toString())!!
+public fun JsNumber.Companion.valueOf(value: Long): JsNumber =
+    JsNumber.Integer.valueOrNullOf(value.toString())!!
 
 public class JsArray private constructor(private val items: List<JsValue>) : JsValue(), Iterable<JsValue> {
 
-    override val nameOfType: String = JsArray.nameOfType
+    override val type: Type = Type.ARRAY
 
     public val size: Int
         get() = items.size
@@ -149,12 +153,12 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
 
     override fun iterator(): Iterator<JsValue> = items.iterator()
 
-    override fun toString(): String = items.joinToString(prefix = "[", postfix = "]")
-
     override fun equals(other: Any?): Boolean =
         this === other || (other is JsArray && this.items == other.items)
 
     override fun hashCode(): Int = items.hashCode()
+
+    override fun toString(): String = "JsArray" + items.joinToString(prefix = "(", postfix = ")")
 
     public class Builder internal constructor() {
         private val items = mutableListOf<JsValue>()
@@ -169,7 +173,6 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
     }
 
     public companion object {
-        public const val nameOfType: String = "array"
 
         @JvmStatic
         public operator fun invoke(vararg items: JsValue): JsArray =
@@ -191,7 +194,8 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
 public class JsStruct private constructor(private val properties: Map<String, JsValue>) : JsValue(),
                                                                                           Iterable<JsStruct.Property> {
 
-    override val nameOfType: String = JsStruct.nameOfType
+    override val type: Type = Type.STRUCT
+
     public val count: Int
         get() = properties.size
 
@@ -203,13 +207,13 @@ public class JsStruct private constructor(private val properties: Map<String, Js
 
     override fun iterator(): Iterator<Property> = PropertiesIterator(properties)
 
-    override fun toString(): String = properties.map { (name, value) -> """"$name": $value""" }
-        .joinToString(prefix = "{", postfix = "}")
-
     override fun equals(other: Any?): Boolean =
         this === other || (other is JsStruct && this.properties.keys == other.properties.keys)
 
     override fun hashCode(): Int = properties.keys.hashCode()
+
+    override fun toString(): String = "JsStruct" + properties.map { (name, value) -> "$name=$value" }
+        .joinToString(prefix = "(", postfix = ")")
 
     public data class Property(val name: String, val value: JsValue)
 
@@ -239,8 +243,6 @@ public class JsStruct private constructor(private val properties: Map<String, Js
     }
 
     public companion object {
-
-        public const val nameOfType: String = "object"
 
         @JvmStatic
         public operator fun invoke(vararg properties: Pair<String, JsValue>): JsStruct =

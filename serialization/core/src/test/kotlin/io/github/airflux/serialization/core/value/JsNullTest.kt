@@ -25,7 +25,7 @@ internal class JsNullTest : FreeSpec() {
         "The JsNull type" - {
 
             "then the toString() method should return the expected string" {
-                JsNull shouldBeEqualsString "null"
+                JsNull shouldBeEqualsString "JsNull"
             }
         }
     }

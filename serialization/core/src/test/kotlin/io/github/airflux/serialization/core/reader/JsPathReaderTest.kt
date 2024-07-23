@@ -31,9 +31,10 @@ import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.test.dummy.DummyPathReader
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -107,8 +108,8 @@ internal class JsPathReaderTest : FreeSpec() {
                             failure(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -125,8 +126,8 @@ internal class JsPathReaderTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsString.nameOfType),
-                                        actual = JsNumeric.Integer.nameOfType
+                                        expected = listOf(JsValue.Type.STRING),
+                                        actual = JsValue.Type.INTEGER
                                     )
                                 )
                             )
@@ -286,15 +287,15 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -332,15 +333,15 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -378,15 +379,15 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -430,15 +431,15 @@ internal class JsPathReaderTest : FreeSpec() {
                         }
 
                         "when a read error occurred" - {
-                            val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                            val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
                                 result shouldBeFailure failure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsString.nameOfType),
-                                        actual = JsNumeric.Integer.nameOfType
+                                        expected = listOf(JsValue.Type.STRING),
+                                        actual = JsValue.Type.INTEGER
                                     )
                                 )
                             }
@@ -480,15 +481,15 @@ internal class JsPathReaderTest : FreeSpec() {
                         }
 
                         "when a read error occurred" - {
-                            val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                            val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
                                 result shouldBeFailure failure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsString.nameOfType),
-                                        actual = JsNumeric.Integer.nameOfType
+                                        expected = listOf(JsValue.Type.STRING),
+                                        actual = JsValue.Type.INTEGER
                                     )
                                 )
                             }
@@ -513,7 +514,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

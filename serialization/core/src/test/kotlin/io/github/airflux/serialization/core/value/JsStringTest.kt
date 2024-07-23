@@ -38,7 +38,7 @@ internal class JsStringTest : FreeSpec() {
                 }
 
                 "then the toString() method should return the expected string" {
-                    value shouldBeEqualsString "\"$TEXT\""
+                    value shouldBeEqualsString "JsString($TEXT)"
                 }
 
                 "should comply with equals() and hashCode() contract" {

@@ -7,7 +7,6 @@ repositories {
 }
 
 dependencies {
-
     implementation(project(":airflux-common"))
 
     /* Kotlin */

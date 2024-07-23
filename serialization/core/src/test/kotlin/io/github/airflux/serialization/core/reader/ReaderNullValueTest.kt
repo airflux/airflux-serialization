@@ -30,6 +30,7 @@ import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
@@ -107,8 +108,8 @@ internal class ReaderNullValueTest : FreeSpec() {
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsString.nameOfType),
-                            actual = JsBoolean.nameOfType
+                            expected = listOf(JsValue.Type.STRING),
+                            actual = JsValue.Type.BOOLEAN
                         )
                     )
                 }
@@ -121,7 +122,7 @@ internal class ReaderNullValueTest : FreeSpec() {
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

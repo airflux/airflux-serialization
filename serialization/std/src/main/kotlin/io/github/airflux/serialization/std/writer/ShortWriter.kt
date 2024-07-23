@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.std.writer
 
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.JsWriter
 
@@ -24,4 +24,4 @@ import io.github.airflux.serialization.core.writer.JsWriter
  * Writer for primitive [Short] type.
  */
 public fun <O> shortWriter(): JsWriter<O, Short> =
-    JsWriter { _, _, value -> JsNumeric.valueOf(value) }
+    JsWriter { _, _, value -> JsNumber.valueOf(value) }

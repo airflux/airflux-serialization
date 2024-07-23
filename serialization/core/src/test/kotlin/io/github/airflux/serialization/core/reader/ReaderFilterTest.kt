@@ -29,6 +29,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.dummy.DummyReaderPredicate
 import io.kotest.core.spec.style.FreeSpec
@@ -132,7 +133,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

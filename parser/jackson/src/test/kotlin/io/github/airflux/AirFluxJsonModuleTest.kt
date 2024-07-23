@@ -21,7 +21,7 @@ import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
@@ -50,12 +50,12 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                 "the value as the JsStruct type" - {
 
                     //TODO
-                    "with the value as the JsNumeric type" {
+                    "with the value as the JsNumber type" {
                         val json = """{"id": 123}""".deserialization()
 
                         val root = json.shouldBeInstanceOf<JsStruct>()
                         val id = root["id"]
-                        val value = id.shouldBeInstanceOf<JsNumeric>()
+                        val value = id.shouldBeInstanceOf<JsNumber>()
                         value.get shouldBe "123"
                     }
 
@@ -132,7 +132,7 @@ internal class AirFluxJsonModuleTest : FreeSpec() {
                     }
 
                     "with property as a number value" {
-                        val json = JsStruct("id" to JsNumeric.valueOf(123))
+                        val json = JsStruct("id" to JsNumber.valueOf(123))
                         val value = json.serialization()
                         value shouldBe """{"id":123}"""
                     }

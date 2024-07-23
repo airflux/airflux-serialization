@@ -92,8 +92,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             key = ID,
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         )
                     )
@@ -137,8 +137,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             index = IDX,
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRING
                             )
                         )
                     )
@@ -234,8 +234,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(PHONES).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsArray.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.ARRAY
                             )
                         ),
                         TestCaseData.WithPath(
@@ -254,8 +254,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(ID),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         ),
                         TestCaseData.WithPath(
@@ -264,8 +264,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(USER).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         ),
                         TestCaseData.WithPath(
@@ -274,8 +274,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(PHONES).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         ),
 
@@ -286,8 +286,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(ACCOUNT).append(USER),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION.append(ACCOUNT),
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         ),
                         TestCaseData.WithPath(
@@ -296,8 +296,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(ACCOUNT).append(USER).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION.append(ACCOUNT),
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         ),
                         TestCaseData.WithPath(
@@ -306,8 +306,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(ACCOUNT).append(USER).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION.append(ACCOUNT),
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING
                             )
                         ),
 
@@ -318,8 +318,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRING
                             )
                         ),
                         TestCaseData.WithPath(
@@ -328,8 +328,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(IDX).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION,
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRING
                             )
                         ),
 
@@ -340,8 +340,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(PHONES).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION.append(PHONES),
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRING
                             )
                         ),
                         TestCaseData.WithPath(
@@ -350,8 +350,8 @@ internal class JsLookupResultTest : FreeSpec() {
                             path = JsPath(PHONES).append(IDX).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
                                 breakpoint = LOCATION.append(PHONES),
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsString.nameOfType
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRING
                             )
                         ),
 
@@ -455,8 +455,8 @@ internal class JsLookupResultTest : FreeSpec() {
                         "then should return the value as an instance of the Undefined#InvalidType type" {
                             val lookup = defined.apply(searchKey)
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsString.nameOfType,
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.STRING,
                                 breakpoint = LOCATION.append(USER)
                             )
                         }
@@ -518,8 +518,8 @@ internal class JsLookupResultTest : FreeSpec() {
                         "then should return the value as an instance of the Undefined#InvalidType type" {
                             val lookup = defined.apply(searchIndex)
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsString.nameOfType,
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRING,
                                 breakpoint = LOCATION.append(USER)
                             )
                         }
@@ -529,8 +529,8 @@ internal class JsLookupResultTest : FreeSpec() {
 
             "The `JsLookupResult#Undefined#InvalidType` type" - {
                 val undefined = JsLookupResult.Undefined.InvalidType(
-                    expected = listOf(JsArray.nameOfType),
-                    actual = JsString.nameOfType,
+                    expected = listOf(JsValue.Type.ARRAY),
+                    actual = JsValue.Type.STRING,
                     breakpoint = LOCATION.append(USER)
                 )
 

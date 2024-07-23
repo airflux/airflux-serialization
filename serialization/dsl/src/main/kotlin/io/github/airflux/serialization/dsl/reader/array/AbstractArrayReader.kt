@@ -42,6 +42,6 @@ internal abstract class AbstractArrayReader<EB, O, T> : JsArrayReader<EB, O, T>
     private fun failure(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue) =
         failure(
             location = location,
-            error = env.errorBuilders.invalidTypeError(listOf(JsArray.nameOfType), source.nameOfType)
+            error = env.errorBuilders.invalidTypeError(expected = listOf(JsValue.Type.ARRAY), actual = source.type)
         )
 }

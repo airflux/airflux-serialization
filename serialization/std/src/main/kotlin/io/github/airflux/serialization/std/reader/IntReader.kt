@@ -24,7 +24,8 @@ import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilde
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.toFailure
 import io.github.airflux.serialization.core.reader.result.toSuccess
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.std.reader.env.invalidTypeError
 
 /**
@@ -34,13 +35,13 @@ public fun <EB, O> intReader(): JsReader<EB, O, Int>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     JsReader { env, location, source ->
-        if (source is JsNumeric.Integer)
+        if (source is JsNumber.Integer)
             source.toInt(env, location)
         else
-            env.invalidTypeError(location, expected = JsNumeric.Integer.nameOfType, actual = source.nameOfType)
+            env.invalidTypeError(location, expected = JsValue.Type.INTEGER, actual = source.type)
     }
 
-private fun <EB, O> JsNumeric.Integer.toInt(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Int>
+private fun <EB, O> JsNumber.Integer.toInt(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Int>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     try {

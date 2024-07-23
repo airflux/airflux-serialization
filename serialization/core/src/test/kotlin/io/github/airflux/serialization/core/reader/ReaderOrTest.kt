@@ -25,8 +25,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsNumeric
-import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
@@ -80,8 +79,8 @@ internal class ReaderOrTest : FreeSpec() {
                         failure(
                             location = LOCATION.append("identifier"),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsNumeric.Integer.nameOfType
+                                expected = listOf(JsValue.Type.STRING),
+                                actual = JsValue.Type.INTEGER
                             )
                         )
                     }
@@ -98,8 +97,8 @@ internal class ReaderOrTest : FreeSpec() {
                             JsReaderResult.Failure.Cause(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         )
@@ -111,7 +110,7 @@ internal class ReaderOrTest : FreeSpec() {
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

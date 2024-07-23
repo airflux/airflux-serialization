@@ -30,9 +30,10 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -89,15 +90,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -137,15 +138,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -194,15 +195,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when a read error occurred" - {
 
                     "then should be returned a read error" {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsNumeric.Integer.nameOfType
+                                expected = listOf(JsValue.Type.STRING),
+                                actual = JsValue.Type.INTEGER
                             )
                         )
                     }
@@ -263,7 +264,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                 "when a read error occurred" - {
 
                     "then should be returned a read error" {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumeric.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
                         val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
                             throw io.kotest.assertions.failure("Predicate not called.")
                         }
@@ -273,8 +274,8 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(JsString.nameOfType),
-                                actual = JsNumeric.Integer.nameOfType
+                                expected = listOf(JsValue.Type.STRING),
+                                actual = JsValue.Type.INTEGER
                             )
                         )
                     }
@@ -304,7 +305,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
                 "when the main reader has failure read" - {
                     val source =
-                        JsStruct(ID_PROPERTY_NAME to JsNumeric.Integer.valueOrNullOf(ID_PROPERTY_VALUE_AS_INT)!!)
+                        JsStruct(ID_PROPERTY_NAME to JsNumber.Integer.valueOrNullOf(ID_PROPERTY_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
@@ -324,15 +325,15 @@ internal class OptionalPropertySpecTest : FreeSpec() {
                             JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsBoolean.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.BOOLEAN
                                 )
                             ),
                             JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsBoolean.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.BOOLEAN
                                 )
                             )
                         )
@@ -347,7 +348,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

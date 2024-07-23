@@ -55,8 +55,8 @@ internal class StringReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsString.nameOfType),
-                        actual = JsBoolean.nameOfType
+                        expected = listOf(JsValue.Type.STRING),
+                        actual = JsValue.Type.BOOLEAN
                     )
                 )
             }
@@ -64,7 +64,7 @@ internal class StringReaderTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

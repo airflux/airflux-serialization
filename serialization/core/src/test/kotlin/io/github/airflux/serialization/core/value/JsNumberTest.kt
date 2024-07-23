@@ -23,112 +23,150 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class JsNumericTest : FreeSpec() {
+internal class JsNumberTest : FreeSpec() {
 
     init {
 
-        "The JsNumeric#Integer type" - {
+        "The JsNumber#Integer type" - {
 
-            "when the object creating from Byte type" - {
+            "when an instance is created from Byte type" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Byte.MIN_VALUE, Byte.MAX_VALUE)
                 ) { value ->
-                    JsNumeric.valueOf(value).get.toByte() shouldBe value
+                    JsNumber.valueOf(value).get.toByte() shouldBe value
                 }
             }
 
-            "when the object creating from Short type" - {
+            "when an instance is created from Short type" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Short.MIN_VALUE, Short.MAX_VALUE)
                 ) { value ->
-                    JsNumeric.valueOf(value).get.toShort() shouldBe value
+                    JsNumber.valueOf(value).get.toShort() shouldBe value
                 }
             }
 
-            "when the object creating from Int type" - {
+            "when an instance is created from Int type" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Int.MIN_VALUE, Int.MAX_VALUE)
                 ) { value ->
-                    JsNumeric.valueOf(value).get.toInt() shouldBe value
+                    JsNumber.valueOf(value).get.toInt() shouldBe value
                 }
             }
 
-            "when the object creating from Long type" - {
+            "when an instance is created from Long type" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
                     listOf(Long.MIN_VALUE, Long.MAX_VALUE)
                 ) { value ->
-                    JsNumeric.valueOf(value).get.toLong() shouldBe value
+                    JsNumber.valueOf(value).get.toLong() shouldBe value
                 }
             }
 
-            "when the object creating from a valid string representing a numeric value" - {
+            "when an instance is created from a string representing a integer value" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
-                    listOf(Long.MIN_VALUE.toString(), "-1", "1", Long.MAX_VALUE.toString())
+                    integerValues
                 ) { value ->
-                    JsNumeric.Integer.valueOrNullOf(value)?.get shouldBe value
+                    JsNumber.Integer.valueOrNullOf(value)?.get shouldBe value
                 }
             }
 
-            "when an object creating from an invalid string" - {
+            "when an instance is created from an invalid string" - {
                 withData(
                     nameFn = { "with value '$it' should return the null value" },
                     listOf(".0", "+.0", "-.0", "1.5", "-1.5", "1.50", "-1.50")
                 ) { value ->
-                    JsNumeric.Integer.valueOrNullOf(value).shouldBeNull()
+                    JsNumber.Integer.valueOrNullOf(value).shouldBeNull()
                 }
             }
 
             "should comply with equals() and hashCode() contract" {
-                JsNumeric.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
-                    y = JsNumeric.valueOf(Byte.MIN_VALUE),
-                    z = JsNumeric.valueOf(Byte.MIN_VALUE),
-                    other = JsNumeric.valueOf(Byte.MAX_VALUE)
+                JsNumber.valueOf(Byte.MIN_VALUE).shouldBeEqualsContract(
+                    y = JsNumber.valueOf(Byte.MIN_VALUE),
+                    z = JsNumber.valueOf(Byte.MIN_VALUE),
+                    other = JsNumber.valueOf(Byte.MAX_VALUE)
                 )
             }
 
             "then the toString() method should return the expected string" {
                 val value = Byte.MIN_VALUE.toString()
-                JsNumeric.Integer.valueOrNullOf(value)!! shouldBeEqualsString value
+                JsNumber.Integer.valueOrNullOf(value)!! shouldBeEqualsString "JsNumber.Integer($value)"
             }
         }
 
-        "The JsNumeric#Number type" - {
+        "The JsNumber#Real type" - {
 
-            "when an object creating from a valid string representing a numeric value" - {
+            "when an instance is created from a string representing a number value" - {
                 withData(
                     nameFn = { "then the object should contain the passed value $it" },
-                    listOf("-10", "-10.5", "10", "10.5")
+                    numberValues
                 ) { value ->
-                    JsNumeric.Number.valueOrNullOf(value)?.get shouldBe value
+                    JsNumber.Real.valueOrNullOf(value)?.get shouldBe value
                 }
             }
 
-            "when an object creating from an invalid string" - {
+            "when an instance is created from an invalid string" - {
                 withData(
                     nameFn = { "with value '$it' should return the null value" },
                     listOf("false")
                 ) { value ->
-                    JsNumeric.Number.valueOrNullOf(value)?.get.shouldBeNull()
+                    JsNumber.Real.valueOrNullOf(value)?.get.shouldBeNull()
                 }
             }
 
             "should comply with equals() and hashCode() contract" {
-                JsNumeric.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!.shouldBeEqualsContract(
-                    y = JsNumeric.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
-                    z = JsNumeric.Number.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
-                    other = JsNumeric.Number.valueOrNullOf(Byte.MAX_VALUE.toString())!!
+                JsNumber.Real.valueOrNullOf(Byte.MIN_VALUE.toString())!!.shouldBeEqualsContract(
+                    y = JsNumber.Real.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
+                    z = JsNumber.Real.valueOrNullOf(Byte.MIN_VALUE.toString())!!,
+                    other = JsNumber.Real.valueOrNullOf(Byte.MAX_VALUE.toString())!!
                 )
             }
 
             "then the toString() method should return the expected string" {
                 val value = Byte.MIN_VALUE.toString()
-                JsNumeric.Number.valueOrNullOf(value)!! shouldBeEqualsString value
+                JsNumber.Real.valueOrNullOf(value)!! shouldBeEqualsString "JsNumber.Real($value)"
             }
         }
+
+        "The JsNumber type" - {
+
+            "when an instance is created from a string representing a numeric value" - {
+                withData(
+                    nameFn = { "then the object should contain the passed value $it" },
+                    integerValues + numberValues
+                ) { value ->
+                    JsNumber.valueOrNull(value)?.get shouldBe value
+                }
+            }
+
+            "when an instance is created from an invalid string" - {
+                val value = "abc"
+
+                "then the function should return the null value" {
+                    JsNumber.valueOrNull(value).shouldBeNull()
+                }
+            }
+        }
+    }
+
+    private companion object {
+        private val integerValues = listOf(
+            Long.MIN_VALUE.toString(),
+            "-1",
+            "0",
+            "1",
+            Long.MAX_VALUE.toString()
+        )
+
+        private val numberValues = listOf(
+            "-10",
+            "-10.5",
+            "0.0",
+            "10",
+            "10.5"
+        )
     }
 }

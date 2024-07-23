@@ -21,6 +21,7 @@ import io.github.airflux.serialization.core.lookup.JsLookupResult
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
+import io.github.airflux.serialization.core.value.JsValue
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -69,8 +70,8 @@ internal class JsLookupResultTest : FreeSpec() {
                         "then should return the value as an instance of type Undefined#InvalidType" {
                             val lookup = defined / ARRAY_INDEX
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                                expected = listOf(JsArray.nameOfType),
-                                actual = JsStruct.nameOfType,
+                                expected = listOf(JsValue.Type.ARRAY),
+                                actual = JsValue.Type.STRUCT,
                                 breakpoint = LOCATION
                             )
                         }
@@ -88,8 +89,8 @@ internal class JsLookupResultTest : FreeSpec() {
 
                 "when the receiver is of type Undefined#InvalidType" - {
                     val undefined = JsLookupResult.Undefined.InvalidType(
-                        expected = listOf(JsStruct.nameOfType),
-                        actual = JsString.nameOfType,
+                        expected = listOf(JsValue.Type.STRUCT),
+                        actual = JsValue.Type.STRING,
                         breakpoint = LOCATION
                     )
 
@@ -126,8 +127,8 @@ internal class JsLookupResultTest : FreeSpec() {
                         "then should return the value as an instance of type Undefined#InvalidType" {
                             val lookup = defined / ID_PROPERTY_NAME
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                                expected = listOf(JsStruct.nameOfType),
-                                actual = JsArray.nameOfType,
+                                expected = listOf(JsValue.Type.STRUCT),
+                                actual = JsValue.Type.ARRAY,
                                 breakpoint = LOCATION
                             )
                         }
@@ -145,8 +146,8 @@ internal class JsLookupResultTest : FreeSpec() {
 
                 "when the receiver is of type Undefined#InvalidType" - {
                     val undefined = JsLookupResult.Undefined.InvalidType(
-                        expected = listOf(JsArray.nameOfType),
-                        actual = JsStruct.nameOfType,
+                        expected = listOf(JsValue.Type.ARRAY),
+                        actual = JsValue.Type.STRUCT,
                         breakpoint = LOCATION
                     )
 

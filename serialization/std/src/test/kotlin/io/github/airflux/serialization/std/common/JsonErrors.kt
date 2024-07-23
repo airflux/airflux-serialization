@@ -17,28 +17,29 @@
 package io.github.airflux.serialization.std.common
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.value.JsValue
 import kotlin.reflect.KClass
 
 internal sealed class JsonErrors : JsReaderResult.Error {
 
-    object PathMissing : JsonErrors()
+    data object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
+    data class InvalidType(val expected: Iterable<JsValue.Type>, val actual: JsValue.Type) : JsonErrors()
 
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 
     sealed class Validation : JsonErrors() {
 
         sealed class Struct : Validation() {
-            object ForbiddenProperty : Struct()
-            object AdditionalProperties : Struct()
-            object IsEmpty : Struct()
+            data object ForbiddenProperty : Struct()
+            data object AdditionalProperties : Struct()
+            data object IsEmpty : Struct()
             data class MinProperties(val expected: Int, val actual: Int) : Struct()
             data class MaxProperties(val expected: Int, val actual: Int) : Struct()
         }
 
         sealed class Arrays : Validation() {
-            object IsEmpty : Arrays()
+            data object IsEmpty : Arrays()
             data class MinItems(val expected: Int, val actual: Int) : Arrays()
             data class MaxItems(val expected: Int, val actual: Int) : Arrays()
         }
@@ -55,8 +56,8 @@ internal sealed class JsonErrors : JsReaderResult.Error {
             data class MaxLength(val expected: Int, val actual: Int) : Strings()
             data class Pattern(val value: String, val regex: Regex) : Strings()
             data class IsA(val value: String) : Strings()
-            object IsEmpty : Strings()
-            object IsBlank : Strings()
+            data object IsEmpty : Strings()
+            data object IsBlank : Strings()
         }
     }
 }

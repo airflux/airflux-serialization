@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 
@@ -54,8 +54,8 @@ public class DummyReader<EB, O, T>(
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsBoolean.nameOfType),
-                                actual = source.nameOfType
+                                expected = listOf(JsValue.Type.BOOLEAN),
+                                actual = source.type
                             )
                         )
                 }
@@ -72,8 +72,8 @@ public class DummyReader<EB, O, T>(
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsString.nameOfType),
-                                actual = source.nameOfType
+                                expected = listOf(JsValue.Type.STRING),
+                                actual = source.type
                             )
                         )
                 }
@@ -84,14 +84,14 @@ public class DummyReader<EB, O, T>(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, location, source ->
-                    if (source is JsNumeric.Integer)
+                    if (source is JsNumber.Integer)
                         success(location = location, value = source.get.toInt())
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsNumeric.Integer.nameOfType),
-                                actual = source.nameOfType
+                                expected = listOf(JsValue.Type.INTEGER),
+                                actual = source.type
                             )
                         )
                 }

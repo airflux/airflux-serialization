@@ -17,16 +17,17 @@
 package io.github.airflux.quickstart.infrastructure.web.error
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.value.JsValue
 
 sealed class JsonErrors : JsReaderResult.Error {
 
-    object PathMissing : JsonErrors()
+    data object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
+    data class InvalidType(val expected: Iterable<JsValue.Type>, val actual: JsValue.Type) : JsonErrors()
 
     data class EnumCast(val expected: String, val actual: String) : JsonErrors()
 
-    object AdditionalItems : Validation.Arrays()
+    data object AdditionalItems : Validation.Arrays()
 
     sealed class Validation : JsonErrors() {
 
@@ -36,16 +37,16 @@ sealed class JsonErrors : JsReaderResult.Error {
         }
 
         sealed class Arrays : Validation() {
-            object IsEmpty : Arrays()
+            data object IsEmpty : Arrays()
         }
 
         sealed class Strings : Validation() {
-            object IsBlank : Strings()
+            data object IsBlank : Strings()
         }
 
         sealed class Struct : Validation() {
-            object IsEmpty : Struct()
-            object AdditionalProperties : Struct()
+            data object IsEmpty : Struct()
+            data object AdditionalProperties : Struct()
         }
     }
 }

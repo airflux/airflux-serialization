@@ -26,8 +26,9 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
@@ -125,7 +126,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                 }
 
                 "when read was some errors" - {
-                    val source = JsArray(JsNumeric.valueOf(10), JsBoolean.True)
+                    val source = JsArray(JsNumber.valueOf(10), JsBoolean.True)
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue =
@@ -142,8 +143,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsString.nameOfType),
-                                    actual = JsNumeric.Integer.nameOfType
+                                    expected = listOf(JsValue.Type.STRING),
+                                    actual = JsValue.Type.INTEGER
                                 )
                             )
                         }
@@ -164,15 +165,15 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsString.nameOfType),
-                                        actual = JsNumeric.Integer.nameOfType
+                                        expected = listOf(JsValue.Type.STRING),
+                                        actual = JsValue.Type.INTEGER
                                     )
                                 ),
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsString.nameOfType),
-                                        actual = JsBoolean.nameOfType
+                                        expected = listOf(JsValue.Type.STRING),
+                                        actual = JsValue.Type.BOOLEAN
                                     )
                                 )
                             )
@@ -185,7 +186,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 

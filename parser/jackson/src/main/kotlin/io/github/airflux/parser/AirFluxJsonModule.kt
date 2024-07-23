@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
@@ -47,7 +47,7 @@ public object AirFluxJsonModule : SimpleModule() {
                 is JsNull -> gen.writeNull()
                 is JsString -> gen.writeString(value.get)
                 is JsBoolean -> gen.writeBoolean(value.get)
-                is JsNumeric -> gen.writeNumber(value.get)
+                is JsNumber -> gen.writeNumber(value.get)
                 is JsArray -> {
                     gen.writeStartArray()
                     value.forEach { element ->
@@ -101,14 +101,14 @@ public object AirFluxJsonModule : SimpleModule() {
                 }
 
                 JsonToken.VALUE_NUMBER_INT -> {
-                    maybeValue = JsNumeric.Integer.valueOrNullOf(jp.text)
+                    maybeValue = JsNumber.Integer.valueOrNullOf(jp.text)
                         ?: throw ParsingException("Invalid number value.")
                     nextContext = parserContext
                 }
 
                 JsonToken.VALUE_NUMBER_FLOAT -> {
                     maybeValue =
-                        JsNumeric.Number.valueOrNullOf(jp.text) ?: throw ParsingException("Invalid number value.")
+                        JsNumber.Real.valueOrNullOf(jp.text) ?: throw ParsingException("Invalid number value.")
                     nextContext = parserContext
                 }
 

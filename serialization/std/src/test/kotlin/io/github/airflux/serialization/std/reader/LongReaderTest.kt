@@ -23,7 +23,7 @@ import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilde
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
-import io.github.airflux.serialization.core.value.JsNumeric
+import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.value.valueOf
@@ -55,7 +55,7 @@ internal class LongReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Long.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: JsValue = JsNumeric.valueOf(value)
+                    val source: JsValue = JsNumber.valueOf(value)
                     val result = LongReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = value)
                 }
@@ -67,8 +67,8 @@ internal class LongReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsNumeric.Integer.nameOfType),
-                        actual = JsString.nameOfType
+                        expected = listOf(JsValue.Type.INTEGER),
+                        actual = JsValue.Type.STRING
                     )
                 )
             }
@@ -89,7 +89,7 @@ internal class LongReaderTest : FreeSpec() {
                         ),
                     )
                 ) { (_, value) ->
-                    val source = JsNumeric.Integer.valueOrNullOf(value)!!
+                    val source = JsNumber.Integer.valueOrNullOf(value)!!
                     val result = LongReader.read(ENV, LOCATION, source)
                     result shouldBeFailure failure(
                         location = JsLocation,
@@ -105,7 +105,7 @@ internal class LongReaderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         NumberFormatErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun numberFormatError(value: String, target: KClass<*>): JsReaderResult.Error =

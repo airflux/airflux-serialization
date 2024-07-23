@@ -17,22 +17,20 @@
 package io.github.airflux.serialization.core.common
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import kotlin.reflect.KClass
+import io.github.airflux.serialization.core.value.JsValue
 
 internal sealed class JsonErrors : JsReaderResult.Error {
 
-    object PathMissing : JsonErrors()
+    data object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
+    data class InvalidType(val expected: Iterable<JsValue.Type>, val actual: JsValue.Type) : JsonErrors()
 
-    data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
-
-    object AdditionalItems : JsonErrors()
+    data object AdditionalItems : JsonErrors()
 
     sealed class Validation : JsonErrors() {
 
         sealed class Strings : Validation() {
-            object IsEmpty : Strings()
+            data object IsEmpty : Strings()
         }
     }
 }

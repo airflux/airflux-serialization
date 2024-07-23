@@ -26,9 +26,8 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
-import io.github.airflux.serialization.core.value.JsBoolean
-import io.github.airflux.serialization.core.value.JsNumeric
 import io.github.airflux.serialization.core.value.JsString
+import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
@@ -292,8 +291,8 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsNumeric.Integer.nameOfType),
-                                    actual = JsString.nameOfType
+                                    expected = listOf(JsValue.Type.INTEGER),
+                                    actual = JsValue.Type.STRING
                                 )
                             )
                         }
@@ -315,15 +314,15 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsNumeric.Integer.nameOfType),
-                                        actual = JsString.nameOfType
+                                        expected = listOf(JsValue.Type.INTEGER),
+                                        actual = JsValue.Type.STRING
                                     )
                                 ),
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsBoolean.nameOfType),
-                                        actual = JsString.nameOfType
+                                        expected = listOf(JsValue.Type.BOOLEAN),
+                                        actual = JsValue.Type.STRING
                                     )
                                 )
                             )
@@ -338,7 +337,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                         InvalidTypeErrorBuilder {
         override fun additionalItemsError(): JsReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<String>, actual: String): JsReaderResult.Error =
+        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 

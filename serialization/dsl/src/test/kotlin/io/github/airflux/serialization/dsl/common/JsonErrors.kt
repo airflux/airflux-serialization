@@ -17,19 +17,20 @@
 package io.github.airflux.serialization.dsl.common
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.value.JsValue
 
 internal sealed class JsonErrors : JsReaderResult.Error {
 
-    object PathMissing : JsonErrors()
+    data object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
+    data class InvalidType(val expected: Iterable<JsValue.Type>, val actual: JsValue.Type) : JsonErrors()
 
-    object AdditionalItems : JsonErrors()
+    data object AdditionalItems : JsonErrors()
 
     sealed class Validation : JsonErrors() {
 
         sealed class Struct : Validation() {
-            object AdditionalProperties : Struct()
+            data object AdditionalProperties : Struct()
         }
 
         sealed class Arrays : Validation() {
@@ -41,7 +42,7 @@ internal sealed class JsonErrors : JsReaderResult.Error {
         }
 
         sealed class Strings : Validation() {
-            object IsEmpty : Strings()
+            data object IsEmpty : Strings()
         }
     }
 }
