@@ -8,6 +8,8 @@ repositories {
 
 dependencies {
 
+    implementation(project(":airflux-common"))
+
     /* Kotlin */
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))

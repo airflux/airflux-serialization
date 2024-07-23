@@ -1,0 +1,14 @@
+public final class io/github/airflux/serialization/common/NumberMatcher {
+	public static final field INSTANCE Lio/github/airflux/serialization/common/NumberMatcher;
+	public final fun match (Ljava/lang/CharSequence;)Lio/github/airflux/serialization/common/NumberMatcher$Result;
+}
+
+public final class io/github/airflux/serialization/common/NumberMatcher$Result : java/lang/Enum {
+	public static final field INTEGER Lio/github/airflux/serialization/common/NumberMatcher$Result;
+	public static final field NONE Lio/github/airflux/serialization/common/NumberMatcher$Result;
+	public static final field REAL Lio/github/airflux/serialization/common/NumberMatcher$Result;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/common/NumberMatcher$Result;
+	public static fun values ()[Lio/github/airflux/serialization/common/NumberMatcher$Result;
+}
+

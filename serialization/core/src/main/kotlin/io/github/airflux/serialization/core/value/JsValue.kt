@@ -16,6 +16,7 @@
 
 package io.github.airflux.serialization.core.value
 
+import io.github.airflux.serialization.common.NumberMatcher
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.reader.JsReader
@@ -81,31 +82,46 @@ public sealed class JsNumeric private constructor(public val get: String) : JsVa
 
     override fun toString(): String = get
 
-    public class Integer private constructor(value: String) : JsNumeric(value) {
+    public class Integer internal constructor(value: String) : JsNumeric(value) {
         override val nameOfType: String = Integer.nameOfType
 
         public companion object {
             public const val nameOfType: String = "integer"
-            private val pattern = "^-?(0|[1-9][0-9]*)$".toRegex()
 
             @JvmStatic
-            public fun valueOrNullOf(value: String): Integer? = if (value.matches(pattern)) Integer(value) else null
+            public fun valueOrNullOf(value: String): Integer? {
+                val result = NumberMatcher.match(value)
+                return if (result == NumberMatcher.Result.INTEGER) Integer(value) else null
+            }
         }
     }
 
-    public class Number private constructor(value: String) : JsNumeric(value) {
+    public class Number internal constructor(value: String) : JsNumeric(value) {
         override val nameOfType: String = Number.nameOfType
 
         public companion object {
             public const val nameOfType: String = "number"
-            private val pattern = "^(-?(0|[1-9][0-9]*))((\\.[0-9]+)?|(\\.[0-9]+)?[eE][+-]?[0-9]+)$".toRegex()
 
             @JvmStatic
-            public fun valueOrNullOf(value: String): Number? = if (value.matches(pattern)) Number(value) else null
+            public fun valueOrNullOf(value: String): Number? {
+                val result = NumberMatcher.match(value)
+                return if (result == NumberMatcher.Result.INTEGER || result == NumberMatcher.Result.REAL)
+                    Number(value)
+                else
+                    null
+            }
         }
     }
 
-    public companion object
+    public companion object {
+
+        public fun valueOrNull(value: String): JsNumeric? =
+            when (NumberMatcher.match(value)) {
+                NumberMatcher.Result.INTEGER -> Integer(value)
+                NumberMatcher.Result.REAL -> Number(value)
+                else -> null
+            }
+    }
 }
 
 public fun JsNumeric.Companion.valueOf(value: Byte): JsNumeric =

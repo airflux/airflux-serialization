@@ -482,12 +482,12 @@ public abstract class io/github/airflux/serialization/core/value/JsNumeric : io/
 }
 
 public final class io/github/airflux/serialization/core/value/JsNumeric$Companion {
+	public final fun valueOrNull (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumeric;
 }
 
 public final class io/github/airflux/serialization/core/value/JsNumeric$Integer : io/github/airflux/serialization/core/value/JsNumeric {
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsNumeric$Integer$Companion;
 	public static final field nameOfType Ljava/lang/String;
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getNameOfType ()Ljava/lang/String;
 	public static final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumeric$Integer;
 }
@@ -499,7 +499,6 @@ public final class io/github/airflux/serialization/core/value/JsNumeric$Integer$
 public final class io/github/airflux/serialization/core/value/JsNumeric$Number : io/github/airflux/serialization/core/value/JsNumeric {
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsNumeric$Number$Companion;
 	public static final field nameOfType Ljava/lang/String;
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getNameOfType ()Ljava/lang/String;
 	public static final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumeric$Number;
 }
