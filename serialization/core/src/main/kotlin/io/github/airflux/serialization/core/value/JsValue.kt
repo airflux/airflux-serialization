@@ -191,6 +191,7 @@ public class JsArray private constructor(private val items: List<JsValue>) : JsV
     }
 }
 
+@Suppress("TooManyFunctions")
 public class JsStruct private constructor(private val properties: Map<String, JsValue>) : JsValue(),
                                                                                           Iterable<JsStruct.Property> {
 
@@ -208,9 +209,9 @@ public class JsStruct private constructor(private val properties: Map<String, Js
     override fun iterator(): Iterator<Property> = PropertiesIterator(properties)
 
     override fun equals(other: Any?): Boolean =
-        this === other || (other is JsStruct && this.properties.keys == other.properties.keys)
+        this === other || (other is JsStruct && isEqualTo(other.properties))
 
-    override fun hashCode(): Int = properties.keys.hashCode()
+    override fun hashCode(): Int = calculateHashCode()
 
     override fun toString(): String = "JsStruct" + properties.map { (name, value) -> "$name=$value" }
         .joinToString(prefix = "(", postfix = ")")
@@ -227,6 +228,21 @@ public class JsStruct private constructor(private val properties: Map<String, Js
             else
                 done()
         }
+    }
+
+    private fun isEqualTo(other: Map<String, JsValue>): Boolean {
+        if (properties.size != other.size) return false
+        return properties.all { entry ->
+            entry.key in other
+        }
+    }
+
+    private fun calculateHashCode(): Int {
+        var hash = START_HASH
+        properties.forEach { (name, _) ->
+            hash = SALT * hash + name.hashCode()
+        }
+        return hash
     }
 
     public class Builder internal constructor() {
@@ -258,5 +274,8 @@ public class JsStruct private constructor(private val properties: Map<String, Js
 
         @JvmStatic
         public fun builder(): Builder = Builder()
+
+        private const val START_HASH = 7
+        private const val SALT = 31
     }
 }
