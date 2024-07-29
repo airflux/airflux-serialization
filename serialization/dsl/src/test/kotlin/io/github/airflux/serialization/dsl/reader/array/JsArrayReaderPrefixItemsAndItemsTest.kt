@@ -30,7 +30,6 @@ import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
@@ -43,7 +42,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
         private const val FIRST_ITEM = "first"
         private const val SECOND_ITEM = "second"
         private const val THIRD_ITEM = "third"
-
+        private const val NUMBER_VALUE = "10"
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
@@ -122,7 +121,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 JsString(FIRST_ITEM),
                                 JsString(SECOND_ITEM),
                                 JsString(THIRD_ITEM),
-                                JsNumber.valueOf(10)
+                                JsNumber.valueOf(NUMBER_VALUE)!!
                             )
 
                             "then should return an error" {
@@ -202,7 +201,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 JsString(FIRST_ITEM),
                                 JsString(SECOND_ITEM),
                                 JsString(THIRD_ITEM),
-                                JsNumber.valueOf(10)
+                                JsNumber.valueOf(NUMBER_VALUE)!!
                             )
 
                             "then should return all errors" {
@@ -219,7 +218,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
                                             expected = listOf(JsValue.Type.BOOLEAN),
-                                            actual = JsValue.Type.INTEGER
+                                            actual = JsValue.Type.NUMBER
                                         )
                                     )
                                 )

@@ -35,13 +35,13 @@ public fun <EB, O> longReader(): JsReader<EB, O, Long>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     JsReader { env, location, source ->
-        if (source is JsNumber.Integer)
+        if (source is JsNumber)
             source.toLong(env, location)
         else
-            env.invalidTypeError(location, expected = JsValue.Type.INTEGER, actual = source.type)
+            env.invalidTypeError(location, expected = JsValue.Type.NUMBER, actual = source.type)
     }
 
-private fun <EB, O> JsNumber.Integer.toLong(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Long>
+private fun <EB, O> JsNumber.toLong(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Long>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     try {

@@ -35,13 +35,13 @@ public fun <EB, O> intReader(): JsReader<EB, O, Int>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     JsReader { env, location, source ->
-        if (source is JsNumber.Integer)
+        if (source is JsNumber)
             source.toInt(env, location)
         else
-            env.invalidTypeError(location, expected = JsValue.Type.INTEGER, actual = source.type)
+            env.invalidTypeError(location, expected = JsValue.Type.NUMBER, actual = source.type)
     }
 
-private fun <EB, O> JsNumber.Integer.toInt(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Int>
+private fun <EB, O> JsNumber.toInt(env: JsReaderEnv<EB, O>, location: JsLocation): JsReaderResult<Int>
     where EB : InvalidTypeErrorBuilder,
           EB : NumberFormatErrorBuilder =
     try {

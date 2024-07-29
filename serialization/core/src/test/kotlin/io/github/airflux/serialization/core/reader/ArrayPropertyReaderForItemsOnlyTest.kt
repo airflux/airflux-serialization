@@ -29,7 +29,6 @@ import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
@@ -40,6 +39,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
     companion object {
         private const val FIRST_PHONE_VALUE = "123"
         private const val SECOND_PHONE_VALUE = "456"
+        private const val NUMBER_VALUE = "10"
 
         private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
@@ -126,7 +126,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                 }
 
                 "when read was some errors" - {
-                    val source = JsArray(JsNumber.valueOf(10), JsBoolean.True)
+                    val source = JsArray(JsNumber.valueOf(NUMBER_VALUE)!!, JsBoolean.True)
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue =
@@ -144,7 +144,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -166,7 +166,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsValue.Type.STRING),
-                                        actual = JsValue.Type.INTEGER
+                                        actual = JsValue.Type.NUMBER
                                     )
                                 ),
                                 JsReaderResult.Failure.Cause(

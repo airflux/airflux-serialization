@@ -477,40 +477,27 @@ public final class io/github/airflux/serialization/core/value/JsNull : io/github
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract class io/github/airflux/serialization/core/value/JsNumber : io/github/airflux/serialization/core/value/JsValue {
+public final class io/github/airflux/serialization/core/value/JsNumber : io/github/airflux/serialization/core/value/JsValue {
 	public static final field Companion Lio/github/airflux/serialization/core/value/JsNumber$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lio/github/airflux/serialization/core/value/JsNumber$SubType;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getGet ()Ljava/lang/String;
+	public final fun getSubType ()Lio/github/airflux/serialization/core/value/JsNumber$SubType;
+	public fun getType ()Lio/github/airflux/serialization/core/value/JsValue$Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/airflux/serialization/core/value/JsNumber$Companion {
-	public final fun valueOrNull (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber;
+	public final fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber;
 }
 
-public final class io/github/airflux/serialization/core/value/JsNumber$Integer : io/github/airflux/serialization/core/value/JsNumber {
-	public static final field Companion Lio/github/airflux/serialization/core/value/JsNumber$Integer$Companion;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getType ()Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-	public static final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber$Integer;
-}
-
-public final class io/github/airflux/serialization/core/value/JsNumber$Integer$Companion {
-	public final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber$Integer;
-}
-
-public final class io/github/airflux/serialization/core/value/JsNumber$Real : io/github/airflux/serialization/core/value/JsNumber {
-	public static final field Companion Lio/github/airflux/serialization/core/value/JsNumber$Real$Companion;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getType ()Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-	public static final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber$Real;
-}
-
-public final class io/github/airflux/serialization/core/value/JsNumber$Real$Companion {
-	public final fun valueOrNullOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber$Real;
+public final class io/github/airflux/serialization/core/value/JsNumber$SubType : java/lang/Enum {
+	public static final field INTEGER Lio/github/airflux/serialization/core/value/JsNumber$SubType;
+	public static final field REAL Lio/github/airflux/serialization/core/value/JsNumber$SubType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsNumber$SubType;
+	public static fun values ()[Lio/github/airflux/serialization/core/value/JsNumber$SubType;
 }
 
 public final class io/github/airflux/serialization/core/value/JsString : io/github/airflux/serialization/core/value/JsValue {
@@ -578,21 +565,13 @@ public abstract class io/github/airflux/serialization/core/value/JsValue {
 public final class io/github/airflux/serialization/core/value/JsValue$Type : java/lang/Enum {
 	public static final field ARRAY Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public static final field BOOLEAN Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public static final field INTEGER Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public static final field NULL Lio/github/airflux/serialization/core/value/JsValue$Type;
-	public static final field REAL Lio/github/airflux/serialization/core/value/JsValue$Type;
+	public static final field NUMBER Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public static final field STRING Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public static final field STRUCT Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public static fun values ()[Lio/github/airflux/serialization/core/value/JsValue$Type;
-}
-
-public final class io/github/airflux/serialization/core/value/JsValueKt {
-	public static final fun valueOf (Lio/github/airflux/serialization/core/value/JsNumber$Companion;B)Lio/github/airflux/serialization/core/value/JsNumber;
-	public static final fun valueOf (Lio/github/airflux/serialization/core/value/JsNumber$Companion;I)Lio/github/airflux/serialization/core/value/JsNumber;
-	public static final fun valueOf (Lio/github/airflux/serialization/core/value/JsNumber$Companion;J)Lio/github/airflux/serialization/core/value/JsNumber;
-	public static final fun valueOf (Lio/github/airflux/serialization/core/value/JsNumber$Companion;S)Lio/github/airflux/serialization/core/value/JsNumber;
 }
 
 public abstract interface class io/github/airflux/serialization/core/writer/JsWriter {

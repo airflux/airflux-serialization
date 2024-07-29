@@ -84,13 +84,13 @@ public class DummyReader<EB, O, T>(
             where EB : InvalidTypeErrorBuilder =
             DummyReader(
                 result = { env, location, source ->
-                    if (source is JsNumber.Integer)
+                    if (source is JsNumber)
                         success(location = location, value = source.get.toInt())
                     else
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsValue.Type.INTEGER),
+                                expected = listOf(JsValue.Type.NUMBER),
                                 actual = source.type
                             )
                         )

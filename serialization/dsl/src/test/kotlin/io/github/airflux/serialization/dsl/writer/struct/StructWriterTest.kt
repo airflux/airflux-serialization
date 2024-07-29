@@ -20,7 +20,6 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsStruct
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.core.writer.nullable
@@ -64,7 +63,7 @@ internal class StructWriterTest : FreeSpec() {
                         val result =
                             writer.write(env = env, location = LOCATION, source = source)
                         result shouldBe JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!
                         )
                     }
                 }
@@ -76,7 +75,7 @@ internal class StructWriterTest : FreeSpec() {
                         val result =
                             writer.write(env = env, location = LOCATION, source = source)
                         result shouldBe JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!
                         )
                     }
                 }
@@ -88,7 +87,7 @@ internal class StructWriterTest : FreeSpec() {
                         val result =
                             writer.write(env = env, location = LOCATION, source = source)
                         result shouldBe JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!
                         )
                     }
                 }

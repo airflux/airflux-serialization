@@ -35,7 +35,7 @@ public fun <EB, O> bigDecimalReader(): JsReader<EB, O, BigDecimal>
         else
             env.invalidTypeError(
                 location = location,
-                expected = listOf(JsValue.Type.REAL, JsValue.Type.INTEGER),
+                expected = listOf(JsValue.Type.NUMBER),
                 actual = source.type
             )
     }

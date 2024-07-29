@@ -149,7 +149,7 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.INTEGER),
+                                    expected = listOf(JsValue.Type.NUMBER),
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -172,14 +172,14 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.INTEGER),
+                                        expected = listOf(JsValue.Type.NUMBER),
                                         actual = JsValue.Type.STRING
                                     )
                                 ),
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.INTEGER),
+                                        expected = listOf(JsValue.Type.NUMBER),
                                         actual = JsValue.Type.STRING
                                     )
                                 )

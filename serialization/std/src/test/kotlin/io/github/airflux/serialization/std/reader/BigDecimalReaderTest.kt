@@ -48,7 +48,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 withData(
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
-                    val source: JsValue = JsNumber.Real.valueOrNullOf(value)!!
+                    val source: JsValue = JsNumber.valueOf(value)!!
                     val result = BigDecimalReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = BigDecimal(value))
                 }
@@ -60,7 +60,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsValue.Type.REAL, JsValue.Type.INTEGER),
+                        expected = listOf(JsValue.Type.NUMBER),
                         actual = JsValue.Type.STRING
                     )
                 )

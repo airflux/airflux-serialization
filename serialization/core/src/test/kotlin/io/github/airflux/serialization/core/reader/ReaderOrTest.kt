@@ -80,7 +80,7 @@ internal class ReaderOrTest : FreeSpec() {
                             location = LOCATION.append("identifier"),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(JsValue.Type.STRING),
-                                actual = JsValue.Type.INTEGER
+                                actual = JsValue.Type.NUMBER
                             )
                         )
                     }
@@ -98,7 +98,7 @@ internal class ReaderOrTest : FreeSpec() {
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         )

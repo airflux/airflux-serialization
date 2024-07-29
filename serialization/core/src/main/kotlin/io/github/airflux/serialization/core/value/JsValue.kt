@@ -26,8 +26,7 @@ public sealed class JsValue {
         NULL,
         BOOLEAN,
         STRING,
-        INTEGER,
-        REAL,
+        NUMBER,
         ARRAY,
         STRUCT
     }
@@ -72,73 +71,34 @@ public class JsString(public val get: String) : JsValue() {
     public companion object;
 }
 
-public sealed class JsNumber private constructor(public val get: String) : JsValue() {
+public class JsNumber private constructor(public val get: String, public val subType: SubType) : JsValue() {
 
-    public class Integer internal constructor(value: String) : JsNumber(value) {
-        override val type: Type = Type.INTEGER
+    override val type: Type = Type.NUMBER
 
-        override fun equals(other: Any?): Boolean =
-            this === other || (other is Integer && this.get == other.get)
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is JsNumber && this.get == other.get)
 
-        override fun hashCode(): Int = get.hashCode()
+    override fun hashCode(): Int = get.hashCode()
 
-        override fun toString(): String = "JsNumber.Integer($get)"
-
-        public companion object {
-
-            @JvmStatic
-            public fun valueOrNullOf(value: String): Integer? {
-                val result = NumberMatcher.match(value)
-                return if (result == NumberMatcher.Result.INTEGER) Integer(value) else null
-            }
-        }
-    }
-
-    public class Real internal constructor(value: String) : JsNumber(value) {
-        override val type: Type = Type.REAL
-
-        override fun equals(other: Any?): Boolean =
-            this === other || (other is Real && this.get == other.get)
-
-        override fun hashCode(): Int = get.hashCode()
-
-        override fun toString(): String = "JsNumber.Real($get)"
-
-        public companion object {
-
-            @JvmStatic
-            public fun valueOrNullOf(value: String): Real? {
-                val result = NumberMatcher.match(value)
-                return if (result == NumberMatcher.Result.INTEGER || result == NumberMatcher.Result.REAL)
-                    Real(value)
-                else
-                    null
-            }
-        }
-    }
+    override fun toString(): String = "JsNumber($get)"
 
     public companion object {
 
-        public fun valueOrNull(value: String): JsNumber? =
-            when (NumberMatcher.match(value)) {
-                NumberMatcher.Result.INTEGER -> Integer(value)
-                NumberMatcher.Result.REAL -> Real(value)
+        public fun valueOf(value: String): JsNumber? {
+            val result = NumberMatcher.match(value)
+            return when (result) {
+                NumberMatcher.Result.INTEGER -> JsNumber(value, SubType.INTEGER)
+                NumberMatcher.Result.REAL -> JsNumber(value, SubType.REAL)
                 else -> null
             }
+        }
+    }
+
+    public enum class SubType {
+        INTEGER,
+        REAL
     }
 }
-
-public fun JsNumber.Companion.valueOf(value: Byte): JsNumber =
-    JsNumber.Integer.valueOrNullOf(value.toString())!!
-
-public fun JsNumber.Companion.valueOf(value: Short): JsNumber =
-    JsNumber.Integer.valueOrNullOf(value.toString())!!
-
-public fun JsNumber.Companion.valueOf(value: Int): JsNumber =
-    JsNumber.Integer.valueOrNullOf(value.toString())!!
-
-public fun JsNumber.Companion.valueOf(value: Long): JsNumber =
-    JsNumber.Integer.valueOrNullOf(value.toString())!!
 
 public class JsArray private constructor(private val items: List<JsValue>) : JsValue(), Iterable<JsValue> {
 

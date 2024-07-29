@@ -33,7 +33,6 @@ import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.dummy.DummyValidator
@@ -87,7 +86,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -95,7 +94,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -138,7 +137,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -146,7 +145,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -198,7 +197,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                 "when a read error occurred" - {
 
                     "then should be returned a read error" {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
 
                         val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
@@ -206,7 +205,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
                                 expected = listOf(JsValue.Type.STRING),
-                                actual = JsValue.Type.INTEGER
+                                actual = JsValue.Type.NUMBER
                             )
                         )
                     }
@@ -236,7 +235,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
                 "when the main reader has failure read" - {
                     val source =
-                        JsStruct(ID_PROPERTY_NAME to JsNumber.Integer.valueOrNullOf(ID_PROPERTY_VALUE_AS_INT)!!)
+                        JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                     val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                     "then a value should be returned from the alternative reader" {
@@ -263,7 +262,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
                             JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.INTEGER),
+                                    expected = listOf(JsValue.Type.NUMBER),
                                     actual = JsValue.Type.BOOLEAN
                                 )
                             )

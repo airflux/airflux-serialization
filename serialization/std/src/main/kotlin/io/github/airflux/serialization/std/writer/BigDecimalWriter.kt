@@ -29,5 +29,5 @@ public fun <O> bigDecimalWriter(stripTrailingZeros: Boolean): JsWriter<O, BigDec
             value.stripTrailingZeros().toPlainString()
         else
             value.toPlainString()
-        JsNumber.Real.valueOrNullOf(text)!!
+        JsNumber.valueOf(text)!!
     }

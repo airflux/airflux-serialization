@@ -30,7 +30,6 @@ import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
@@ -83,7 +82,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when the error occurs only at the validation step" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -108,7 +107,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.INTEGER),
+                                    expected = listOf(JsValue.Type.NUMBER),
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -121,7 +120,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when the error occurs only at the validation step" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
                         )
@@ -146,7 +145,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.INTEGER),
+                                    expected = listOf(JsValue.Type.NUMBER),
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -170,7 +169,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.INTEGER),
+                                        expected = listOf(JsValue.Type.NUMBER),
                                         actual = JsValue.Type.STRING
                                     )
                                 )
@@ -180,7 +179,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when no validation or reading errors occur" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE),
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 

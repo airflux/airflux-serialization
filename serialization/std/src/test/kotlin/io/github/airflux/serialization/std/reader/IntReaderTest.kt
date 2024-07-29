@@ -27,7 +27,6 @@ import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
@@ -55,7 +54,7 @@ internal class IntReaderTest : FreeSpec() {
                         Pair("Value is an equal maximum of the allowed range", Int.MAX_VALUE)
                     )
                 ) { (_, value) ->
-                    val source: JsValue = JsNumber.valueOf(value)
+                    val source: JsValue = JsNumber.valueOf(value.toString())!!
                     val result = IntReader.read(ENV, LOCATION, source)
                     result shouldBeSuccess success(location = LOCATION, value = value)
                 }
@@ -67,7 +66,7 @@ internal class IntReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsValue.Type.INTEGER),
+                        expected = listOf(JsValue.Type.NUMBER),
                         actual = JsValue.Type.STRING
                     )
                 )
@@ -89,7 +88,7 @@ internal class IntReaderTest : FreeSpec() {
                         ),
                     )
                 ) { (_, value) ->
-                    val source = JsNumber.Integer.valueOrNullOf(value)!!
+                    val source = JsNumber.valueOf(value)!!
                     val result = IntReader.read(ENV, LOCATION, source)
                     result shouldBeFailure failure(
                         location = JsLocation,

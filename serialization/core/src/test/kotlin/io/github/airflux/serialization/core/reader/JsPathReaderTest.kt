@@ -35,7 +35,6 @@ import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.core.value.valueOf
 import io.github.airflux.serialization.test.dummy.DummyPathReader
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.dummy.DummyReaderPredicate
@@ -49,7 +48,8 @@ internal class JsPathReaderTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
-        private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
+        private const val ID_PROPERTY_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
+        private const val ID_PROPERTY_VALUE_AS_INT = "10"
         private const val CODE_PROPERTY_NAME = "code"
         private const val CODE_PROPERTY_VALUE = "code"
         private const val LEFT_VALUE = "true"
@@ -109,7 +109,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -127,7 +127,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsValue.Type.STRING),
-                                        actual = JsValue.Type.INTEGER
+                                        actual = JsValue.Type.NUMBER
                                     )
                                 )
                             )
@@ -139,7 +139,7 @@ internal class JsPathReaderTest : FreeSpec() {
             "the `validation` function" - {
 
                 "when an original reader returns a result as a success" - {
-                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
                     "when validation is a success" - {
                         val validator: JsValidator<EB, Unit, String> = DummyValidator(result = valid())
@@ -149,7 +149,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 .read(ENV, LOCATION, source)
                             result shouldBe success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = ID_PROPERTY_VALUE
+                                value = ID_PROPERTY_VALUE_AS_UUID
                             )
                         }
                     }
@@ -175,7 +175,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 }
 
                 "when an original reader returns a result as a failure" - {
-                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                    val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
                     "then validation does not execute and the original result should be returned" {
                         val validator: JsValidator<EB, Unit, String> = DummyValidator { _, location, _ ->
@@ -198,7 +198,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
                     "when the value in the result is not null" - {
 
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
 
                         "when the value satisfies the predicate" - {
                             val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate(result = true)
@@ -209,7 +209,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
                                 filtered shouldBe success(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
-                                    value = ID_PROPERTY_VALUE
+                                    value = ID_PROPERTY_VALUE_AS_UUID
                                 )
                             }
                         }
@@ -275,19 +275,19 @@ internal class JsPathReaderTest : FreeSpec() {
                 "when the property is present" - {
 
                     "when a read is success" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
                             result shouldBeSuccess success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = ID_PROPERTY_VALUE
+                                value = ID_PROPERTY_VALUE_AS_UUID
                             )
                         }
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -295,7 +295,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -303,7 +303,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 }
 
                 "when the property is missing" - {
-                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                     val result = reader.read(ENV, LOCATION, source)
 
                     "then the null value should be returned" {
@@ -321,19 +321,19 @@ internal class JsPathReaderTest : FreeSpec() {
                 "when the property is present" - {
 
                     "when a read is success" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
                             result shouldBeSuccess success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = ID_PROPERTY_VALUE
+                                value = ID_PROPERTY_VALUE_AS_UUID
                             )
                         }
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -341,7 +341,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -349,7 +349,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 }
 
                 "when the property is missing" - {
-                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                     val result = reader.read(ENV, LOCATION, source)
 
                     "then a default value should be returned" {
@@ -367,19 +367,19 @@ internal class JsPathReaderTest : FreeSpec() {
                 "when the property is present" - {
 
                     "when a read is success" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
                             result shouldBeSuccess success(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                value = ID_PROPERTY_VALUE
+                                value = ID_PROPERTY_VALUE_AS_UUID
                             )
                         }
                     }
 
                     "when a read error occurred" - {
-                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                        val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
@@ -387,7 +387,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = listOf(JsValue.Type.STRING),
-                                    actual = JsValue.Type.INTEGER
+                                    actual = JsValue.Type.NUMBER
                                 )
                             )
                         }
@@ -395,7 +395,7 @@ internal class JsPathReaderTest : FreeSpec() {
                 }
 
                 "when the property is missing" - {
-                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                    val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                     val result = reader.read(ENV, LOCATION, source)
 
                     "then an error should be returned" {
@@ -419,19 +419,19 @@ internal class JsPathReaderTest : FreeSpec() {
                     "when the property is present" - {
 
                         "when a read is success" - {
-                            val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                            val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
                                 result shouldBeSuccess success(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
-                                    value = ID_PROPERTY_VALUE
+                                    value = ID_PROPERTY_VALUE_AS_UUID
                                 )
                             }
                         }
 
                         "when a read error occurred" - {
-                            val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                            val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
@@ -439,7 +439,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsValue.Type.STRING),
-                                        actual = JsValue.Type.INTEGER
+                                        actual = JsValue.Type.NUMBER
                                     )
                                 )
                             }
@@ -447,7 +447,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when the property is missing" - {
-                        val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                        val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then an error should be returned" {
@@ -469,19 +469,19 @@ internal class JsPathReaderTest : FreeSpec() {
                     "when the property is present" - {
 
                         "when a read is success" - {
-                            val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                            val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
                                 result shouldBeSuccess success(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
-                                    value = ID_PROPERTY_VALUE
+                                    value = ID_PROPERTY_VALUE_AS_UUID
                                 )
                             }
                         }
 
                         "when a read error occurred" - {
-                            val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(10))
+                            val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
@@ -489,7 +489,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = listOf(JsValue.Type.STRING),
-                                        actual = JsValue.Type.INTEGER
+                                        actual = JsValue.Type.NUMBER
                                     )
                                 )
                             }
@@ -497,7 +497,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     }
 
                     "when the property is missing" - {
-                        val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
+                        val source = JsStruct(CODE_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE_AS_UUID))
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then the null value should be returned" {
