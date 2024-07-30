@@ -57,7 +57,7 @@ internal class JsReaderResultFailureTest : FreeSpec() {
                 val secondFailure = JsReaderResult.Failure(
                     location = LOCATION,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsValue.Type.STRING),
+                        expected = JsValue.Type.STRING,
                         actual = JsValue.Type.BOOLEAN
                     )
                 )
@@ -72,7 +72,7 @@ internal class JsReaderResultFailureTest : FreeSpec() {
                     JsReaderResult.Failure.Cause(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsValue.Type.STRING),
+                            expected = JsValue.Type.STRING,
                             actual = JsValue.Type.BOOLEAN
                         )
                     )

@@ -33,9 +33,5 @@ public fun <EB, O> bigDecimalReader(): JsReader<EB, O, BigDecimal>
         if (source is JsNumber)
             BigDecimal(source.get).toSuccess(location)
         else
-            env.invalidTypeError(
-                location = location,
-                expected = listOf(JsValue.Type.NUMBER),
-                actual = source.type
-            )
+            env.invalidTypeError(location = location, expected = JsValue.Type.NUMBER, actual = source.type)
     }

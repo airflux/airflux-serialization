@@ -28,12 +28,5 @@ internal fun <EB, O> JsReaderEnv<EB, O>.invalidTypeError(
     expected: JsValue.Type,
     actual: JsValue.Type
 ): JsReaderResult<Nothing>
-    where EB : InvalidTypeErrorBuilder = invalidTypeError(location, listOf(expected), actual)
-
-internal fun <EB, O> JsReaderEnv<EB, O>.invalidTypeError(
-    location: JsLocation,
-    expected: List<JsValue.Type>,
-    actual: JsValue.Type
-): JsReaderResult<Nothing>
     where EB : InvalidTypeErrorBuilder =
     failure(location = location, error = errorBuilders.invalidTypeError(expected, actual))

@@ -53,7 +53,7 @@ internal class ReaderMapTest : FreeSpec() {
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

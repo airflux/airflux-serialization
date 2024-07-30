@@ -72,7 +72,7 @@ internal class StructPropertyTest : FreeSpec() {
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

@@ -95,7 +95,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -146,7 +146,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -206,7 +206,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                         result shouldBeFailure failure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.InvalidType(
-                                expected = listOf(JsValue.Type.STRING),
+                                expected = JsValue.Type.STRING,
                                 actual = JsValue.Type.NUMBER
                             )
                         )
@@ -261,14 +261,14 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                             JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.BOOLEAN
                                 )
                             ),
                             JsReaderResult.Failure.Cause(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.NUMBER),
+                                    expected = JsValue.Type.NUMBER,
                                     actual = JsValue.Type.BOOLEAN
                                 )
                             )
@@ -283,7 +283,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
                         InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

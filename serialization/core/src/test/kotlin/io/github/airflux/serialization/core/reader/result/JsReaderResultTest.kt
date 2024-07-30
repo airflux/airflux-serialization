@@ -350,7 +350,7 @@ internal class JsReaderResultTest : FreeSpec() {
                     val result: JsReaderResult<String> = failure(
                         location = LOCATION,
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsValue.Type.STRING),
+                            expected = JsValue.Type.STRING,
                             actual = JsValue.Type.BOOLEAN
                         )
                     )
@@ -459,7 +459,7 @@ internal class JsReaderResultTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

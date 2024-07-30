@@ -70,7 +70,7 @@ internal class JsLookupResultTest : FreeSpec() {
                         "then should return the value as an instance of type Undefined#InvalidType" {
                             val lookup = defined / ARRAY_INDEX
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                                expected = listOf(JsValue.Type.ARRAY),
+                                expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRUCT,
                                 breakpoint = LOCATION
                             )
@@ -89,7 +89,7 @@ internal class JsLookupResultTest : FreeSpec() {
 
                 "when the receiver is of type Undefined#InvalidType" - {
                     val undefined = JsLookupResult.Undefined.InvalidType(
-                        expected = listOf(JsValue.Type.STRUCT),
+                        expected = JsValue.Type.STRUCT,
                         actual = JsValue.Type.STRING,
                         breakpoint = LOCATION
                     )
@@ -127,7 +127,7 @@ internal class JsLookupResultTest : FreeSpec() {
                         "then should return the value as an instance of type Undefined#InvalidType" {
                             val lookup = defined / ID_PROPERTY_NAME
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
-                                expected = listOf(JsValue.Type.STRUCT),
+                                expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.ARRAY,
                                 breakpoint = LOCATION
                             )
@@ -146,7 +146,7 @@ internal class JsLookupResultTest : FreeSpec() {
 
                 "when the receiver is of type Undefined#InvalidType" - {
                     val undefined = JsLookupResult.Undefined.InvalidType(
-                        expected = listOf(JsValue.Type.ARRAY),
+                        expected = JsValue.Type.ARRAY,
                         actual = JsValue.Type.STRUCT,
                         breakpoint = LOCATION
                     )

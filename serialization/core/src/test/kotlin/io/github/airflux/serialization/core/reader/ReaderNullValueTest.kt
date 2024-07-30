@@ -108,7 +108,7 @@ internal class ReaderNullValueTest : FreeSpec() {
                     result shouldBe failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsValue.Type.STRING),
+                            expected = JsValue.Type.STRING,
                             actual = JsValue.Type.BOOLEAN
                         )
                     )
@@ -122,7 +122,7 @@ internal class ReaderNullValueTest : FreeSpec() {
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 }

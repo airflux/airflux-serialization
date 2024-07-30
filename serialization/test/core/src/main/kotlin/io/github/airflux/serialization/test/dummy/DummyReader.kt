@@ -54,7 +54,7 @@ public class DummyReader<EB, O, T>(
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsValue.Type.BOOLEAN),
+                                expected = JsValue.Type.BOOLEAN,
                                 actual = source.type
                             )
                         )
@@ -72,7 +72,7 @@ public class DummyReader<EB, O, T>(
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsValue.Type.STRING),
+                                expected = JsValue.Type.STRING,
                                 actual = source.type
                             )
                         )
@@ -90,7 +90,7 @@ public class DummyReader<EB, O, T>(
                         failure(
                             location = location,
                             error = env.errorBuilders.invalidTypeError(
-                                expected = listOf(JsValue.Type.NUMBER),
+                                expected = JsValue.Type.NUMBER,
                                 actual = source.type
                             )
                         )

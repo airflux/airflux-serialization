@@ -108,7 +108,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             failure(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -126,7 +126,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.STRING),
+                                        expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.NUMBER
                                     )
                                 )
@@ -294,7 +294,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -340,7 +340,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -386,7 +386,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -438,7 +438,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 result shouldBeFailure failure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.STRING),
+                                        expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.NUMBER
                                     )
                                 )
@@ -488,7 +488,7 @@ internal class JsPathReaderTest : FreeSpec() {
                                 result shouldBeFailure failure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.STRING),
+                                        expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.NUMBER
                                     )
                                 )
@@ -514,7 +514,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

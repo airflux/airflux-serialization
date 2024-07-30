@@ -69,7 +69,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.ARRAY),
+                                    expected = JsValue.Type.ARRAY,
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -129,7 +129,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                 result shouldBeFailure failure(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.BOOLEAN),
+                                        expected = JsValue.Type.BOOLEAN,
                                         actual = JsValue.Type.STRING
                                     )
                                 )
@@ -149,7 +149,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.ARRAY),
+                                    expected = JsValue.Type.ARRAY,
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -210,14 +210,14 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                                     JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.InvalidType(
-                                            expected = listOf(JsValue.Type.BOOLEAN),
+                                            expected = JsValue.Type.BOOLEAN,
                                             actual = JsValue.Type.STRING
                                         )
                                     ),
                                     JsReaderResult.Failure.Cause(
                                         location = LOCATION.append(3),
                                         error = JsonErrors.InvalidType(
-                                            expected = listOf(JsValue.Type.BOOLEAN),
+                                            expected = JsValue.Type.BOOLEAN,
                                             actual = JsValue.Type.NUMBER
                                         )
                                     )
@@ -234,7 +234,7 @@ internal class JsArrayReaderPrefixItemsAndItemsTest : FreeSpec() {
                         InvalidTypeErrorBuilder {
         override fun additionalItemsError(): JsReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 

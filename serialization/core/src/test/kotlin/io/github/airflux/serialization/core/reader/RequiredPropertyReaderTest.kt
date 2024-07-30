@@ -79,7 +79,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
 
             "when the element is invalid type" - {
                 val lookup: JsLookupResult = JsLookupResult.Undefined.InvalidType(
-                    expected = listOf(JsValue.Type.STRUCT),
+                    expected = JsValue.Type.STRUCT,
                     actual = JsValue.Type.STRING,
                     breakpoint = LOCATION.append(ID_PROPERTY_NAME)
                 )
@@ -90,7 +90,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                     result shouldBeFailure failure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
-                            expected = listOf(JsValue.Type.STRUCT),
+                            expected = JsValue.Type.STRUCT,
                             actual = JsValue.Type.STRING
                         )
                     )
@@ -101,7 +101,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
 
     internal class EB : PathMissingErrorBuilder, InvalidTypeErrorBuilder {
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

@@ -24,7 +24,7 @@ internal sealed class JsonErrors : JsReaderResult.Error {
 
     data object PathMissing : JsonErrors()
 
-    data class InvalidType(val expected: Iterable<JsValue.Type>, val actual: JsValue.Type) : JsonErrors()
+    data class InvalidType(val expected: JsValue.Type, val actual: JsValue.Type) : JsonErrors()
 
     data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
 

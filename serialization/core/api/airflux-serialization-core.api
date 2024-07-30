@@ -123,18 +123,18 @@ public abstract class io/github/airflux/serialization/core/lookup/JsLookupResult
 }
 
 public final class io/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType : io/github/airflux/serialization/core/lookup/JsLookupResult$Undefined {
-	public fun <init> (Ljava/lang/Iterable;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/location/JsLocation;)V
+	public fun <init> (Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/location/JsLocation;)V
 	public fun apply (Lio/github/airflux/serialization/core/path/JsPath$Element$Idx;)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
 	public fun apply (Lio/github/airflux/serialization/core/path/JsPath$Element$Key;)Lio/github/airflux/serialization/core/lookup/JsLookupResult;
-	public final fun component1 ()Ljava/lang/Iterable;
+	public final fun component1 ()Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public final fun component2 ()Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public final fun component3 ()Lio/github/airflux/serialization/core/location/JsLocation;
-	public final fun copy (Ljava/lang/Iterable;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType;Ljava/lang/Iterable;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/location/JsLocation;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType;
+	public final fun copy (Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/location/JsLocation;)Lio/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/location/JsLocation;ILjava/lang/Object;)Lio/github/airflux/serialization/core/lookup/JsLookupResult$Undefined$InvalidType;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getActual ()Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public final fun getBreakpoint ()Lio/github/airflux/serialization/core/location/JsLocation;
-	public final fun getExpected ()Ljava/lang/Iterable;
+	public final fun getExpected ()Lio/github/airflux/serialization/core/value/JsValue$Type;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -290,7 +290,7 @@ public abstract interface class io/github/airflux/serialization/core/reader/erro
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/error/InvalidTypeErrorBuilder {
-	public abstract fun invalidTypeError (Ljava/lang/Iterable;Lio/github/airflux/serialization/core/value/JsValue$Type;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;
+	public abstract fun invalidTypeError (Lio/github/airflux/serialization/core/value/JsValue$Type;Lio/github/airflux/serialization/core/value/JsValue$Type;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/error/NumberFormatErrorBuilder {

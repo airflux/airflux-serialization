@@ -23,5 +23,5 @@ import io.github.airflux.serialization.core.value.JsValue
  * The builder of an error that occurs when an element is an invalid type by the specified path.
  */
 public fun interface InvalidTypeErrorBuilder {
-    public fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error
+    public fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error
 }

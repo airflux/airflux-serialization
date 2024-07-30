@@ -74,7 +74,7 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.ARRAY),
+                                    expected = JsValue.Type.ARRAY,
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -135,7 +135,7 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION,
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.ARRAY),
+                                    expected = JsValue.Type.ARRAY,
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -185,7 +185,7 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.STRING),
+                                        expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.BOOLEAN
                                     )
                                 )
@@ -201,7 +201,7 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
                         InvalidTypeErrorBuilder {
         override fun additionalItemsError(): JsReaderResult.Error = JsonErrors.AdditionalItems
 
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
     }
 

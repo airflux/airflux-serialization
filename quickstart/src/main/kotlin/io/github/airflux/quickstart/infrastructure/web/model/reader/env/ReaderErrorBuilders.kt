@@ -36,7 +36,7 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              ExclusiveMinimumNumberValidator.ErrorBuilder,
                              AdditionalItemsErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
-    override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+    override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
 
     override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

@@ -107,7 +107,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.NUMBER),
+                                    expected = JsValue.Type.NUMBER,
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -145,7 +145,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.NUMBER),
+                                    expected = JsValue.Type.NUMBER,
                                     actual = JsValue.Type.STRING
                                 )
                             )
@@ -169,7 +169,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.NUMBER),
+                                        expected = JsValue.Type.NUMBER,
                                         actual = JsValue.Type.STRING
                                     )
                                 )
@@ -198,7 +198,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         PathMissingErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing

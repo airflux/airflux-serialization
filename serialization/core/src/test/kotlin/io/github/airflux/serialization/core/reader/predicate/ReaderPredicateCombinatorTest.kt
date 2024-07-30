@@ -79,7 +79,7 @@ internal class ReaderPredicateCombinatorTest : FreeSpec() {
     }
 
     internal class EB : InvalidTypeErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 }

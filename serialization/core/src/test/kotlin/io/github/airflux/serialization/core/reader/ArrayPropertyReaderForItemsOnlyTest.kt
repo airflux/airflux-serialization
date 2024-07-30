@@ -143,7 +143,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             result shouldBeFailure failure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
-                                    expected = listOf(JsValue.Type.STRING),
+                                    expected = JsValue.Type.STRING,
                                     actual = JsValue.Type.NUMBER
                                 )
                             )
@@ -165,14 +165,14 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.STRING),
+                                        expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.NUMBER
                                     )
                                 ),
                                 JsReaderResult.Failure.Cause(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.InvalidType(
-                                        expected = listOf(JsValue.Type.STRING),
+                                        expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.BOOLEAN
                                     )
                                 )
@@ -186,7 +186,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder {
 
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected, actual)
     }
 

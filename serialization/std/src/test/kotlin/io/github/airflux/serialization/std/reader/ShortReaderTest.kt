@@ -65,7 +65,7 @@ internal class ShortReaderTest : FreeSpec() {
                 result shouldBeFailure failure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
-                        expected = listOf(JsValue.Type.NUMBER),
+                        expected = JsValue.Type.NUMBER,
                         actual = JsValue.Type.STRING
                     )
                 )
@@ -103,7 +103,7 @@ internal class ShortReaderTest : FreeSpec() {
 
     internal class EB : InvalidTypeErrorBuilder,
                         NumberFormatErrorBuilder {
-        override fun invalidTypeError(expected: Iterable<JsValue.Type>, actual: JsValue.Type): JsReaderResult.Error =
+        override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun numberFormatError(value: String, target: KClass<*>): JsReaderResult.Error =

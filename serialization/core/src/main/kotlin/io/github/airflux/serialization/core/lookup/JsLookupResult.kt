@@ -43,7 +43,7 @@ public sealed class JsLookupResult {
         }
 
         public data class InvalidType(
-            public val expected: Iterable<JsValue.Type>,
+            public val expected: JsValue.Type,
             public val actual: JsValue.Type,
             val breakpoint: JsLocation
         ) : Undefined() {
@@ -60,7 +60,7 @@ public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookupResul
             ?: JsLookupResult.Undefined.PathMissing(location = location.append(key))
     else
         JsLookupResult.Undefined.InvalidType(
-            expected = listOf(JsValue.Type.STRUCT),
+            expected = JsValue.Type.STRUCT,
             actual = this.type,
             breakpoint = location
         )
@@ -72,7 +72,7 @@ public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResul
             ?: JsLookupResult.Undefined.PathMissing(location = location.append(idx))
     else
         JsLookupResult.Undefined.InvalidType(
-            expected = listOf(JsValue.Type.ARRAY),
+            expected = JsValue.Type.ARRAY,
             actual = this.type,
             breakpoint = location
         )
@@ -87,7 +87,7 @@ public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
                     lookup(location.append(element), path.tail, value)
                 } else
                     JsLookupResult.Undefined.InvalidType(
-                        expected = listOf(JsValue.Type.STRUCT),
+                        expected = JsValue.Type.STRUCT,
                         actual = source.type,
                         breakpoint = location
                     )
@@ -98,7 +98,7 @@ public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
                     lookup(location.append(element), path.tail, value)
                 } else
                     JsLookupResult.Undefined.InvalidType(
-                        expected = listOf(JsValue.Type.ARRAY),
+                        expected = JsValue.Type.ARRAY,
                         actual = source.type,
                         breakpoint = location
                     )
