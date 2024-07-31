@@ -19,6 +19,7 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.env
 import io.github.airflux.quickstart.infrastructure.web.error.JsonErrors
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.value.JsValue
@@ -27,8 +28,10 @@ import io.github.airflux.serialization.std.validator.number.ExclusiveMinimumNumb
 import io.github.airflux.serialization.std.validator.string.IsNotBlankStringValidator
 import io.github.airflux.serialization.std.validator.struct.AdditionalPropertiesStructValidator
 import io.github.airflux.serialization.std.validator.struct.IsNotEmptyStructValidator
+import kotlin.reflect.KClass
 
 object ReaderErrorBuilders : InvalidTypeErrorBuilder,
+                             NumberFormatErrorBuilder,
                              PathMissingErrorBuilder,
                              IsNotBlankStringValidator.ErrorBuilder,
                              IsNotEmptyStructValidator.ErrorBuilder,
@@ -38,6 +41,9 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              IsNotEmptyArrayValidator.ErrorBuilder {
     override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
+
+    override fun numberFormatError(value: String, target: KClass<*>): JsReaderResult.Error =
+        JsonErrors.ValueCast(value, target)
 
     override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 

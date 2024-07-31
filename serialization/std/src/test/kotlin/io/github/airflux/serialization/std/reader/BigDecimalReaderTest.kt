@@ -19,6 +19,7 @@ package io.github.airflux.serialization.std.reader
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
@@ -31,6 +32,7 @@ import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 internal class BigDecimalReaderTest : FreeSpec() {
 
@@ -68,8 +70,12 @@ internal class BigDecimalReaderTest : FreeSpec() {
         }
     }
 
-    internal class EB : InvalidTypeErrorBuilder {
+    internal class EB : InvalidTypeErrorBuilder,
+                        NumberFormatErrorBuilder {
         override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
+
+        override fun numberFormatError(value: String, target: KClass<*>): JsReaderResult.Error =
+            JsonErrors.ValueCast(value, target)
     }
 }

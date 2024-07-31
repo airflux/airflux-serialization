@@ -18,20 +18,15 @@ package io.github.airflux.serialization.std.reader
 
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.toSuccess
-import io.github.airflux.serialization.core.value.JsNumber
-import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.std.reader.env.invalidTypeError
+import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
 import java.math.BigDecimal
 
 /**
  * Reader for [BigDecimal] type.
  */
 public fun <EB, O> bigDecimalReader(): JsReader<EB, O, BigDecimal>
-    where EB : InvalidTypeErrorBuilder =
+    where EB : InvalidTypeErrorBuilder,
+          EB : NumberFormatErrorBuilder =
     JsReader { env, location, source ->
-        if (source is JsNumber)
-            BigDecimal(source.get).toSuccess(location)
-        else
-            env.invalidTypeError(location = location, expected = JsValue.Type.NUMBER, actual = source.type)
+        source.tryConvertToNumber(env, location, String::toBigDecimal)
     }
