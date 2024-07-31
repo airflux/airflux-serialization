@@ -37,7 +37,9 @@ public class JsStructReaderBuilder<EB, O>
     private val properties = mutableListOf<StructProperty<EB, O, *>>()
     private var validatorBuilder: JsStructValidatorBuilder<EB, O>? = null
 
-    public fun validation(validator: JsStructValidator<EB, O>): Unit = validation { validator }
+    public fun validation(validator: JsStructValidator<EB, O>) {
+        validation { validator }
+    }
 
     public fun validation(validator: JsStructValidatorBuilder<EB, O>) {
         validatorBuilder = validator
@@ -51,7 +53,7 @@ public class JsStructReaderBuilder<EB, O>
     ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block).addValidator(validatorBuilder)
 
     private fun <T> PropertiesStructReader<EB, O, T>.addValidator(
-        builder: ((List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>)?
+        builder: JsStructValidatorBuilder<EB, O>?
     ): JsStructReader<EB, O, T> =
         if (builder != null) StructReaderWithValidation(builder(properties), this) else this
 }
