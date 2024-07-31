@@ -23,11 +23,12 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-public typealias JsStructValidatorBuilder<EB, O> = (List<StructProperty<EB, O, *>>) -> JsStructValidator<EB, O>
+public typealias JsStructValidatorBuilder<EB, O> = (StructProperties<EB, O>) -> JsStructValidator<EB, O>
 
 @AirfluxMarker
 public class JsStructReaderBuilder<EB, O>
