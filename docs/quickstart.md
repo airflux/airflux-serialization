@@ -63,7 +63,7 @@ val readerEnv = JsReaderEnv(
 ```kotlin
 object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              PathMissingErrorBuilder,
-                             ValueCastErrorBuilder,
+                             NumberFormatErrorBuilder,
                              IsNotBlankStringValidator.ErrorBuilder,
                              PatternStringValidator.ErrorBuilder,
                              IsNotEmptyStructValidator.ErrorBuilder,
@@ -73,33 +73,33 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
                              MinimumNumberValidator.ErrorBuilder {
 
     //Reading error builders
-    override fun invalidTypeError(expected: Iterable<String>, actual: String): ReaderResult.Error =
+    override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
         JsonErrors.InvalidType(expected = expected, actual = actual)
 
-    override fun pathMissingError(): ReaderResult.Error = JsonErrors.PathMissing
+    override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
 
-    override fun valueCastError(value: String, target: KClass<*>): ReaderResult.Error =
-        JsonErrors.ValueCast(value, target)
+    override fun numberFormatError(value: String, target: KClass<*>): JsReaderResult.Error =
+        JsonErrors.NumberFormat(value, target)
 
     //String validation error builders
-    override fun isNotBlankStringError(): ReaderResult.Error = JsonErrors.Validation.Strings.IsBlank
+    override fun isNotBlankStringError(): JsReaderResult.Error = JsonErrors.Validation.Strings.IsBlank
 
-    override fun patternStringError(value: String, pattern: Regex): ReaderResult.Error =
+    override fun patternStringError(value: String, pattern: Regex): JsReaderResult.Error =
         JsonErrors.Validation.Strings.Pattern(value, pattern)
 
     //Object validation error builders
-    override fun isNotEmptyStructError(): ReaderResult.Error = JsonErrors.Validation.Struct.IsEmpty
+    override fun isNotEmptyStructError(): JsReaderResult.Error = JsonErrors.Validation.Struct.IsEmpty
 
-    override fun additionalPropertiesStructError(): ReaderResult.Error =
+    override fun additionalPropertiesStructError(): JsReaderResult.Error =
         JsonErrors.Validation.Struct.AdditionalProperties
 
     //Array validation error builders
-    override fun isNotEmptyArrayError(): ReaderResult.Error = JsonErrors.Validation.Arrays.IsEmpty
+    override fun isNotEmptyArrayError(): JsReaderResult.Error = JsonErrors.Validation.Arrays.IsEmpty
 
-    override fun additionalItemsError(): ReaderResult.Error = JsonErrors.Validation.Arrays.AdditionalItems
+    override fun additionalItemsError(): JsReaderResult.Error = JsonErrors.Validation.Arrays.AdditionalItems
 
     //Number validation error builders
-    override fun minimumNumberError(expected: Number, actual: Number): ReaderResult.Error =
+    override fun minimumNumberError(expected: Number, actual: Number): JsReaderResult.Error =
         JsonErrors.Validation.Numbers.Min(expected = expected, actual = actual)
 }
 ```
@@ -108,23 +108,23 @@ object ReaderErrorBuilders : InvalidTypeErrorBuilder,
 
 ```kotlin
 sealed class JsonErrors : JsReaderResult.Error {
-    object PathMissing : JsonErrors()
-    data class InvalidType(val expected: Iterable<String>, val actual: String) : JsonErrors()
-    data class ValueCast(val value: String, val type: KClass<*>) : JsonErrors()
+    data object PathMissing : JsonErrors()
+    data class InvalidType(val expected: JsValue.Type, val actual: JsValue.Type) : JsonErrors()
+    data class NumberFormat(val value: String, val type: KClass<*>) : JsonErrors()
 
     sealed class Validation : JsonErrors() {
         sealed class Struct : Validation() {
-            object IsEmpty : Struct()
-            object AdditionalProperties : Struct()
+            data object IsEmpty : Struct()
+            data object AdditionalProperties : Struct()
         }
 
         sealed class Arrays : Validation() {
-            object IsEmpty : Arrays()
-            object AdditionalItems : Arrays()
+            data object IsEmpty : Arrays()
+            data object AdditionalItems : Arrays()
         }
 
         sealed class Strings : Validation() {
-            object IsBlank : Strings()
+            data object IsBlank : Strings()
             class Pattern(val value: String, val pattern: Regex) : Strings()
         }
 
