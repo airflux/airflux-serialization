@@ -18,7 +18,6 @@ package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
@@ -26,8 +25,7 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 
 internal abstract class AbstractStructReader<EB, O, T> : JsStructReader<EB, O, T>
-    where EB : InvalidTypeErrorBuilder,
-          O : FailFastOption {
+    where EB : InvalidTypeErrorBuilder {
 
     final override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue): JsReaderResult<T> =
         if (source is JsStruct)
