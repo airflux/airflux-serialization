@@ -22,5 +22,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kover-gradle-plugin:0.7.6")
     implementation("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0")
     implementation("com.github.jk1:gradle-license-report:2.5")
-    implementation("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.14.0")
+    implementation("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.16.2")
 }
