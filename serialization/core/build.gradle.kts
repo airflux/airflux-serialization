@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":airflux-common"))
+    implementation(project(":airflux-serialization-common"))
 
     /* Kotlin */
     implementation(kotlin("stdlib"))
