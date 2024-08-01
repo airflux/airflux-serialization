@@ -71,6 +71,7 @@ internal class NumberMatcherTest : FreeSpec() {
                         "+-1.2e-3",
                         "-+1.2e-3",
                         "++1.2e-3",
+                        "1.",
                         "-.2e-3",
                         "+.2e-3",
                         ".2e-1",
