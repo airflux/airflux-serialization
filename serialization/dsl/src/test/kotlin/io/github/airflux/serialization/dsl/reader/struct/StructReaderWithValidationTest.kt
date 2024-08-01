@@ -17,6 +17,9 @@
 package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.path.JsPath
+import io.github.airflux.serialization.core.path.JsPaths
+import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
@@ -32,8 +35,8 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.optional
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
+import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.github.airflux.serialization.test.kotest.shouldBeSuccess
@@ -42,46 +45,23 @@ import io.kotest.matchers.shouldBe
 
 internal class StructReaderWithValidationTest : FreeSpec() {
 
-    companion object {
-
-        private const val ID_PROPERTY_NAME = "id"
-        private const val ID_PROPERTY_VALUE = 42
-        private const val NAME_PROPERTY_NAME = "name"
-        private const val NAME_PROPERTY_VALUE = "user"
-        private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
-        private const val IS_ACTIVE_PROPERTY_VALUE = true
-
-        private val ENV_WITH_FAIL_FAST_IS_TRUE = JsReaderEnv(EB(), OPTS(failFast = true))
-        private val ENV_WITH_FAIL_FAST_IS_FALSE = JsReaderEnv(EB(), OPTS(failFast = false))
-
-        private val LOCATION: JsLocation = JsLocation
-        private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
-        private val IntReader: JsReader<EB, OPTS, Int> = DummyReader.int()
-    }
-
     init {
 
         "The StructReaderWithValidation type" - {
 
-            "when was created reader" - {
+            "when the reader was created" - {
                 val validator = DummyStructValidator.additionalProperties<EB, OPTS>(
                     nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
                     error = JsonErrors.Validation.Struct.AdditionalProperties
                 )
-                val reader: JsStructReader<EB, OPTS, DTO> = structReader {
-                    validation(validator)
-                    val id = property(required(name = ID_PROPERTY_NAME, reader = IntReader))
-                    val name = property(optional(name = NAME_PROPERTY_NAME, reader = StringReader))
-                    returns { _, location ->
-                        DTO(id = +id, name = +name).toSuccess(location)
-                    }
-                }
+
+                val reader = StructReaderWithValidation(validator, reader())
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ENV_WITH_FAIL_FAST_IS_TRUE
 
                     "when the error occurs only at the validation step" - {
-                        val source = JsStruct(
+                        val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
@@ -97,7 +77,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     }
 
                     "when the error occurs only in the read step" - {
-                        val source = JsStruct(
+                        val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
@@ -119,7 +99,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     val envWithFailFastIsTrue = ENV_WITH_FAIL_FAST_IS_FALSE
 
                     "when the error occurs only at the validation step" - {
-                        val source = JsStruct(
+                        val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
@@ -135,7 +115,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     }
 
                     "when the error occurs only in the read step" - {
-                        val source = JsStruct(
+                        val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
@@ -153,7 +133,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     }
 
                     "when the error occurs at the validation step and in the read step" - {
-                        val source = JsStruct(
+                        val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                             IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
@@ -178,7 +158,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     }
 
                     "when no validation or reading errors occur" - {
-                        val source = JsStruct(
+                        val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
@@ -194,15 +174,51 @@ internal class StructReaderWithValidationTest : FreeSpec() {
         }
     }
 
-    internal data class DTO(val id: Int, val name: String?)
+    private fun reader(): JsStructReader<EB, OPTS, DTO> {
+        val idProperty = property(ID_PROPERTY_NAME, IntReader)
+        val nameProperty = property(NAME_PROPERTY_NAME, StringReader)
+        val properties = listOf(idProperty, nameProperty)
+        return PropertiesStructReader(
+            properties = properties,
+            typeBuilder = { _, _ ->
+                DTO(id = +idProperty, name = +nameProperty).toSuccess(LOCATION)
+            }
+        )
+    }
 
-    internal class EB : InvalidTypeErrorBuilder,
-                        PathMissingErrorBuilder {
+    private fun <EB, O, P> property(name: String, reader: JsReader<EB, O, P>): StructProperty<EB, O, P>
+        where EB : InvalidTypeErrorBuilder,
+              EB : PathMissingErrorBuilder {
+        val path = JsPath(name)
+        val spec = StructPropertySpec(paths = JsPaths(path), reader = JsPathReader.required(path, reader))
+        return StructProperty(spec)
+    }
+
+    companion object {
+        private const val ID_PROPERTY_NAME = "id"
+        private const val ID_PROPERTY_VALUE = 42
+        private const val NAME_PROPERTY_NAME = "name"
+        private const val NAME_PROPERTY_VALUE = "user"
+        private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
+        private const val IS_ACTIVE_PROPERTY_VALUE = true
+
+        private val ENV_WITH_FAIL_FAST_IS_TRUE = JsReaderEnv(EB(), OPTS(failFast = true))
+        private val ENV_WITH_FAIL_FAST_IS_FALSE = JsReaderEnv(EB(), OPTS(failFast = false))
+
+        private val LOCATION: JsLocation = JsLocation
+        private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
+        private val IntReader: JsReader<EB, OPTS, Int> = DummyReader.int()
+    }
+
+    private data class DTO(val id: Int, val name: String?)
+
+    private class EB : InvalidTypeErrorBuilder,
+                       PathMissingErrorBuilder {
         override fun invalidTypeError(expected: JsValue.Type, actual: JsValue.Type): JsReaderResult.Error =
             JsonErrors.InvalidType(expected = expected, actual = actual)
 
         override fun pathMissingError(): JsReaderResult.Error = JsonErrors.PathMissing
     }
 
-    internal class OPTS(override val failFast: Boolean) : FailFastOption
+    private class OPTS(override val failFast: Boolean) : FailFastOption
 }
