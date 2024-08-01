@@ -16,4 +16,22 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property
 
+import io.github.airflux.serialization.core.path.JsPath
+
 public typealias StructProperties<EB, O> = List<StructProperty<EB, O, *>>
+
+/**
+ * Returns a set of start keys from the paths of each property.
+ */
+internal fun <EB, O> StructProperties<EB, O>.startKeysOfPaths(): Set<String> {
+    fun JsPath.Element.getKeyOrNull(): String? = if (this is JsPath.Element.Key) get else null
+
+    fun StructProperty<EB, O, *>.getStartKeysOfPaths(): List<String> = paths.items
+        .mapNotNull { path -> path.head.getKeyOrNull() }
+
+    return buildSet {
+        for (property in this@startKeysOfPaths) {
+            addAll(property.getStartKeysOfPaths())
+        }
+    }
+}
