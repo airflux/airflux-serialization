@@ -23,7 +23,7 @@ public typealias StructProperties<EB, O> = List<StructProperty<EB, O, *>>
 /**
  * Returns a set of start keys from the paths of each property.
  */
-internal fun <EB, O> StructProperties<EB, O>.startKeysOfPaths(): Set<String> {
+public fun <EB, O> StructProperties<EB, O>.startKeysOfPaths(): Collection<String> {
     fun JsPath.Element.getKeyOrNull(): String? = if (this is JsPath.Element.Key) get else null
 
     fun StructProperty<EB, O, *>.getStartKeysOfPaths(): List<String> = paths.items

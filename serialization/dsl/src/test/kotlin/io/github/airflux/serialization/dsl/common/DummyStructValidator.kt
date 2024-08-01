@@ -39,7 +39,7 @@ internal class DummyStructValidator<EB, O>(private val result: JsValidatorResult
 
         @JvmStatic
         internal fun <EB, O> additionalProperties(
-            nameProperties: Set<String>,
+            nameProperties: Collection<String>,
             error: JsReaderResult.Error
         ): JsStructValidator<EB, O> =
             JsStructValidator { _, location, _, node ->

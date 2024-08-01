@@ -73,6 +73,10 @@ public abstract interface class io/github/airflux/serialization/dsl/reader/struc
 	public fun unaryPlus (Lio/github/airflux/serialization/dsl/reader/struct/property/StructProperty;)Ljava/lang/Object;
 }
 
+public final class io/github/airflux/serialization/dsl/reader/struct/property/StructPropertiesKt {
+	public static final fun startKeysOfPaths (Ljava/util/List;)Ljava/util/Collection;
+}
+
 public final class io/github/airflux/serialization/dsl/reader/struct/property/StructProperty {
 	public fun <init> (Lio/github/airflux/serialization/dsl/reader/struct/property/specification/StructPropertySpec;)V
 	public final fun getPaths-DU0FY7s ()Ljava/util/List;
