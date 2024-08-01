@@ -66,9 +66,14 @@ public final class io/github/airflux/serialization/test/kotest/FailureKt {
 }
 
 public final class io/github/airflux/serialization/test/kotest/JsReaderResultMatchersKt {
-	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;
+	public static final fun escape (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun makeDescription (Ljava/lang/String;)Ljava/lang/String;
 	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)V
-	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;[Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;)V
+	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;)V
+	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;
+	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;[Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun shouldBeFailure$default (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;
+	public static synthetic fun shouldBeFailure$default (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;[Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
 
 public final class io/github/airflux/serialization/test/kotest/JsValidatorResultMatchersKt {
