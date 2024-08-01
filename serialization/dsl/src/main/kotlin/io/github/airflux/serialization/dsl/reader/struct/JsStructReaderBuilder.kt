@@ -53,8 +53,14 @@ public class JsStructReaderBuilder<EB, O>
         block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
     ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block).addValidator(validatorBuilder)
 
-    private fun <T> PropertiesStructReader<EB, O, T>.addValidator(
-        builder: JsStructValidatorBuilder<EB, O>?
-    ): JsStructReader<EB, O, T> =
-        if (builder != null) StructReaderWithValidation(builder(properties), this) else this
+    private companion object {
+
+        @JvmStatic
+        private fun <EB, O, T> PropertiesStructReader<EB, O, T>.addValidator(
+            validatorBuilder: JsStructValidatorBuilder<EB, O>?
+        ): JsStructReader<EB, O, T>
+            where EB : InvalidTypeErrorBuilder,
+                  O : FailFastOption =
+            if (validatorBuilder != null) StructReaderWithValidation(validatorBuilder(properties), this) else this
+    }
 }
