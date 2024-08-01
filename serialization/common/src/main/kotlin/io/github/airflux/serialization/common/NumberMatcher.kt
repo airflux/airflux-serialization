@@ -61,15 +61,12 @@ public object NumberMatcher {
         else
             null
 
-    private fun integerPart(char: Char) =
-        if (char.isDigit())
-            State.INTEGER_PART
-        else if (char.isFractalDelimiter())
-            State.FRACTAL_PART
-        else if (char.isExponentialChar())
-            State.EXPONENTIAL_PART
-        else
-            null
+    private fun integerPart(char: Char) = when {
+        char.isDigit() -> State.INTEGER_PART
+        char.isFractalDelimiter() -> State.FRACTAL_PART
+        char.isExponentialChar() -> State.EXPONENTIAL_PART
+        else -> null
+    }
 
     private fun fractalPart(char: Char) =
         if (char.isDigit())

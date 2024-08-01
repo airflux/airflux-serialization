@@ -26,6 +26,14 @@ internal class NumberMatcherTest : FreeSpec() {
 
         "The NumberMatcher" - {
 
+            "when the text is empty" - {
+                NumberMatcher.match("") shouldBe NumberMatcher.Result.NONE
+            }
+
+            "when the text is blank" - {
+                NumberMatcher.match("  ") shouldBe NumberMatcher.Result.NONE
+            }
+
             "when the text is a number" - {
                 withData(
                     nameFn = { (text, result) -> "when text is `$text` then a result should be the `$result`" },
