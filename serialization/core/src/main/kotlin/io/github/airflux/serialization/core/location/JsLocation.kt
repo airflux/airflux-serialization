@@ -61,10 +61,10 @@ public sealed interface JsLocation {
         override fun equals(other: Any?): Boolean {
             tailrec fun equals(self: JsLocation, other: JsLocation): Boolean = when {
                 self is Element && other is Element ->
-                    if (self.head == other.head) equals(self.tail, other.tail) else false
+                    if (self.head == other.head) equals(self.tail, other.tail) else NOT_EQUAL
 
-                self is Root && other is Root -> true
-                else -> false
+                self is Root && other is Root -> EQUAL
+                else -> NOT_EQUAL
             }
 
             return this === other || (other is JsLocation && equals(this, other))
@@ -74,5 +74,8 @@ public sealed interface JsLocation {
     public companion object Root : JsLocation {
         override val isEmpty: Boolean = true
         override fun toString(): String = "#"
+
+        private const val EQUAL = true
+        private const val NOT_EQUAL = false
     }
 }
