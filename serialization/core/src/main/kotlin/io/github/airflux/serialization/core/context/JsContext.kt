@@ -68,7 +68,7 @@ public sealed interface JsContext {
                 when (element) {
                     is Empty -> key in element
                     is Element -> key in element
-                    is Combined -> if (key in element.head) true else contains(key, element.tail)
+                    is Combined -> if (key in element.head) CONTAINS else contains(key, element.tail)
                 }
 
             return contains(key, this)
@@ -90,7 +90,10 @@ public sealed interface JsContext {
     public companion object Empty : JsContext {
         override val isEmpty: Boolean = true
         override fun <E : Element> get(key: Key<E>): E? = null
-        override fun <E : Element> contains(key: Key<E>): Boolean = false
+        override fun <E : Element> contains(key: Key<E>): Boolean = NOT_CONTAINS
         override fun <R> fold(initial: R, operation: (R, Element) -> R): R = initial
+
+        private const val CONTAINS = true
+        private const val NOT_CONTAINS = false
     }
 }
