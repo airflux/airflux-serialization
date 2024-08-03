@@ -83,10 +83,10 @@ public sealed interface JsPath {
             tailrec fun equals(self: JsPath?, other: JsPath?): Boolean =
                 when {
                     self != null && other != null ->
-                        if (self.head == other.head) equals(self.tail, other.tail) else false
+                        if (self.head == other.head) equals(self.tail, other.tail) else NOT_EQUAL
 
-                    self == null && other == null -> true
-                    else -> false
+                    self == null && other == null -> EQUAL
+                    else -> NOT_EQUAL
                 }
             return this === other || (other is Multiple && equals(this, other))
         }
@@ -102,5 +102,8 @@ public sealed interface JsPath {
 
         @JvmStatic
         public operator fun invoke(element: Element): JsPath = Single(element)
+
+        private const val EQUAL = true
+        private const val NOT_EQUAL = false
     }
 }
