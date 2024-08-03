@@ -46,7 +46,7 @@ internal class PropertiesStructReader<EB, O, T>(
                         .fold(
                             onFailure = { failure ->
                                 if (failFast) return failure
-                                failureAccumulator += failure
+                                failureAccumulator = failureAccumulator + failure
                             },
                             onSuccess = { success ->
                                 this[property] = success.value
