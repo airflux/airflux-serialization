@@ -35,7 +35,7 @@ public class AdditionalPropertiesStructValidator<EB, O>(
     where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
           O : FailFastOption {
 
-    private val names: Collection<String> = properties.startKeysOfPaths()
+    private val keys: Collection<String> = properties.startKeysOfPaths()
 
     override fun validate(
         env: JsReaderEnv<EB, O>,
@@ -46,17 +46,22 @@ public class AdditionalPropertiesStructValidator<EB, O>(
         val failFast = env.options.failFast
 
         var failureAccumulator: JsReaderResult.Failure? = null
-        source.forEach { (name, _) ->
-            if (name !in names) {
-                val failure =
-                    JsReaderResult.Failure(location.append(name), env.errorBuilders.additionalPropertiesStructError())
-                if (failFast) return failure.toInvalid()
+        for ((key, _) in source) {
+            if (key !in keys) {
+                val failure = env.error(location.append(key))
                 failureAccumulator = failureAccumulator + failure
+                if (failFast) break
             }
         }
 
-        return failureAccumulator?.toInvalid() ?: valid()
+        return result(failureAccumulator)
     }
+
+    private fun JsReaderEnv<EB, O>.error(location: JsLocation): JsReaderResult.Failure =
+        JsReaderResult.Failure(location = location, error = errorBuilders.additionalPropertiesStructError())
+
+    private fun result(failure: JsReaderResult.Failure?): JsValidatorResult =
+        if (failure != null) failure.toInvalid() else valid()
 
     public fun interface ErrorBuilder {
         public fun additionalPropertiesStructError(): JsReaderResult.Error
