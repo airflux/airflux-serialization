@@ -38,22 +38,35 @@ internal class NumberMatcherTest : FreeSpec() {
                 withData(
                     nameFn = { (text, result) -> "when text is `$text` then a result should be the `$result`" },
                     listOf(
+                        //INTEGER_PART
                         "-0" to NumberMatcher.Result.INTEGER,
-                        "0" to NumberMatcher.Result.INTEGER,
                         "+0" to NumberMatcher.Result.INTEGER,
-
+                        "0" to NumberMatcher.Result.INTEGER,
+                        "00" to NumberMatcher.Result.INTEGER,
+                        "01" to NumberMatcher.Result.INTEGER,
                         "1234567890" to NumberMatcher.Result.INTEGER,
-                        "1.1234567890" to NumberMatcher.Result.REAL,
-                        "1.2e3" to NumberMatcher.Result.REAL,
+
+                        //FRACTAL_DIGITAL_PART
                         "0.0" to NumberMatcher.Result.REAL,
+                        "0.1" to NumberMatcher.Result.REAL,
+                        "00.1" to NumberMatcher.Result.REAL,
+                        "01.2" to NumberMatcher.Result.REAL,
+                        "001.2" to NumberMatcher.Result.REAL,
+                        "1.23" to NumberMatcher.Result.REAL,
 
-                        "1.2e-34" to NumberMatcher.Result.REAL,
-                        "1.2e+34" to NumberMatcher.Result.REAL,
-                        "1.2e34" to NumberMatcher.Result.REAL,
+                        //EXPONENTIAL_DIGIT_PART
+                        "1e2" to NumberMatcher.Result.REAL,
+                        "1E2" to NumberMatcher.Result.REAL,
 
-                        "1.2E-34" to NumberMatcher.Result.REAL,
-                        "1.2E+34" to NumberMatcher.Result.REAL,
-                        "1.2E34" to NumberMatcher.Result.REAL
+                        "1e23" to NumberMatcher.Result.REAL,
+
+                        "1e-2" to NumberMatcher.Result.REAL,
+                        "1e+2" to NumberMatcher.Result.REAL,
+
+                        "1E-2" to NumberMatcher.Result.REAL,
+                        "1E+2" to NumberMatcher.Result.REAL,
+
+                        "1e-23" to NumberMatcher.Result.REAL,
                     )
                 ) { (token, result) ->
                     NumberMatcher.match(token) shouldBe result
@@ -64,34 +77,77 @@ internal class NumberMatcherTest : FreeSpec() {
                 withData(
                     nameFn = { text -> "when text is `$text` then a result should be the `NONE`" },
                     listOf(
+                        //START
                         "true",
+                        ".",
+
+                        //SIGN_PART
                         "-",
                         "+",
-                        "--1.2e-3",
-                        "+-1.2e-3",
-                        "-+1.2e-3",
-                        "++1.2e-3",
+                        "-a",
+                        "+a",
+
+                        //INTEGER_PART
+                        "1a",
+
+                        //FRACTAL_PART
                         "1.",
-                        "-.2e-3",
-                        "+.2e-3",
-                        ".2e-1",
-                        ".2e+1",
-                        "1.e-1",
-                        "1.e+1",
-                        "1.2-1",
-                        "1.2+1",
-                        "1.2a-1",
-                        "1.2a+1",
+                        "1..",
+                        "1.a",
+
+                        //FRACTAL_DIGITAL_PART
+                        "1.2a",
+
+                        //EXPONENTIAL_PART
                         "1e",
+                        "1ea",
+
                         "1E",
+                        "1Ea",
+
                         "1.2e",
+                        "1.2ea",
+
                         "1.2E",
+                        "1.2Ea",
+
+                        //EXPONENTIAL_SIGN_PART
+                        "1e-",
+                        "1e+",
+                        "1e-a",
+                        "1e+a",
+
+                        "1E-",
+                        "1E+",
+                        "1E-a",
+                        "1E+a",
+
                         "1.2e-",
                         "1.2e+",
-                        "1.2ee",
-                        "1.2e+e",
-                        "1.2e-23e",
-                        "1a"
+                        "1.2e-a",
+                        "1.2e+a",
+
+                        "1.2E-",
+                        "1.2E+",
+                        "1.2Ea-",
+                        "1.2E+a",
+
+                        //EXPONENTIAL_DIGIT_PART
+                        "1e2a",
+                        "1e-2a",
+                        "1e+2a",
+
+                        "1E2a",
+                        "1E-2a",
+                        "1E+2a",
+
+                        "1.2e3a",
+                        "1.2e-3a",
+                        "1.2e+3a",
+
+                        "1.2E3a",
+                        "1.2E-3a",
+                        "1.2E+3a",
                     )
                 ) { text ->
                     NumberMatcher.match(text) shouldBe NumberMatcher.Result.NONE
