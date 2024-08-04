@@ -86,10 +86,21 @@ internal class NonEmptyListTest : FreeSpec() {
             }
 
             "when a list of elements is added to the instance of the type" - {
-                val list = NonEmptyList(FIRST) + listOf(SECOND, THIRD)
 
-                "then the new instance of the type should contain elements from the original instance and the passed elements in the order in which they were passed" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                "when the list of elements is empty" - {
+                    val list = NonEmptyList(FIRST) + emptyList()
+
+                    "then the new instance of the type should contain only the original element" {
+                        list.items shouldContainExactly listOf(FIRST)
+                    }
+                }
+
+                "when the list of elements is not empty" - {
+                    val list = NonEmptyList(FIRST) + listOf(SECOND, THIRD)
+
+                    "then the new instance of the type should contain elements from the original instance and the passed elements in the order in which they were passed" {
+                        list.items shouldContainExactly listOf(FIRST, SECOND, THIRD)
+                    }
                 }
             }
 

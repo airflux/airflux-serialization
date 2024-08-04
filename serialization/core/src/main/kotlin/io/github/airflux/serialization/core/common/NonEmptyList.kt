@@ -53,7 +53,7 @@ public value class NonEmptyList<out T> @PublishedApi internal constructor(public
     }
 }
 
-public fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = items.find { predicate(it) } != null
+public fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = items.any { predicate(it) }
 
 public operator fun <T> NonEmptyList<T>.plus(item: T): NonEmptyList<T> = NonEmptyList.add(this, item)
 
