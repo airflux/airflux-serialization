@@ -33,7 +33,7 @@ internal class JsContextTest : FreeSpec() {
         "The JsContext" - {
 
             "when the context does not contain any elements" - {
-                val context = JsContext
+                val context = JsContext.Empty
 
                 "then the `isEmpty` property should return true" {
                     context.isEmpty shouldBe true
@@ -63,7 +63,7 @@ internal class JsContextTest : FreeSpec() {
             }
 
             "when the context contains some elements" - {
-                val context = JsContext + UserContext(FIRST_USER_ID) + OrderContext()
+                val context = JsContext.Empty + UserContext(FIRST_USER_ID) + OrderContext()
 
                 "then the `isEmpty` property should return false" {
                     context.isEmpty shouldBe false
@@ -179,7 +179,7 @@ internal class JsContextTest : FreeSpec() {
             }
 
             "when a duplicate element is added to the context" - {
-                val contextWithDuplicate = JsContext + UserContext(FIRST_USER_ID) + UserContext(SECOND_USER_ID)
+                val contextWithDuplicate = JsContext.Empty + UserContext(FIRST_USER_ID) + UserContext(SECOND_USER_ID)
 
                 "then the `get` function should return the value of the last added element" {
                     val result = contextWithDuplicate[UserContext]

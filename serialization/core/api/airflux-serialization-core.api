@@ -54,13 +54,16 @@ public abstract class io/github/airflux/serialization/core/context/JsAbstractCon
 }
 
 public abstract interface class io/github/airflux/serialization/core/context/JsContext {
-	public static final field Empty Lio/github/airflux/serialization/core/context/JsContext$Empty;
+	public static final field Companion Lio/github/airflux/serialization/core/context/JsContext$Companion;
 	public abstract fun contains (Lio/github/airflux/serialization/core/context/JsContext$Key;)Z
 	public abstract fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public abstract fun get (Lio/github/airflux/serialization/core/context/JsContext$Key;)Lio/github/airflux/serialization/core/context/JsContext$Element;
 	public abstract fun isEmpty ()Z
 	public fun isNotEmpty ()Z
 	public fun plus (Lio/github/airflux/serialization/core/context/JsContext$Element;)Lio/github/airflux/serialization/core/context/JsContext;
+}
+
+public final class io/github/airflux/serialization/core/context/JsContext$Companion {
 }
 
 public abstract interface class io/github/airflux/serialization/core/context/JsContext$Element : io/github/airflux/serialization/core/context/JsContext {
@@ -72,10 +75,14 @@ public abstract interface class io/github/airflux/serialization/core/context/JsC
 }
 
 public final class io/github/airflux/serialization/core/context/JsContext$Empty : io/github/airflux/serialization/core/context/JsContext {
+	public static final field INSTANCE Lio/github/airflux/serialization/core/context/JsContext$Empty;
 	public fun contains (Lio/github/airflux/serialization/core/context/JsContext$Key;)Z
+	public fun equals (Ljava/lang/Object;)Z
 	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
 	public fun get (Lio/github/airflux/serialization/core/context/JsContext$Key;)Lio/github/airflux/serialization/core/context/JsContext$Element;
+	public fun hashCode ()I
 	public fun isEmpty ()Z
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/airflux/serialization/core/context/JsContext$Key {

@@ -48,6 +48,13 @@ public sealed interface JsContext {
         public override fun <R> fold(initial: R, operation: (R, Element) -> R): R = operation(initial, this)
     }
 
+    public data object Empty : JsContext {
+        override val isEmpty: Boolean = true
+        override fun <E : Element> get(key: Key<E>): E? = null
+        override fun <E : Element> contains(key: Key<E>): Boolean = NOT_CONTAINS
+        override fun <R> fold(initial: R, operation: (R, Element) -> R): R = initial
+    }
+
     private class Combined(val head: Element, val tail: JsContext) : JsContext {
 
         override val isEmpty: Boolean = false
@@ -87,12 +94,7 @@ public sealed interface JsContext {
         }
     }
 
-    public companion object Empty : JsContext {
-        override val isEmpty: Boolean = true
-        override fun <E : Element> get(key: Key<E>): E? = null
-        override fun <E : Element> contains(key: Key<E>): Boolean = NOT_CONTAINS
-        override fun <R> fold(initial: R, operation: (R, Element) -> R): R = initial
-
+    public companion object {
         private const val CONTAINS = true
         private const val NOT_CONTAINS = false
     }
