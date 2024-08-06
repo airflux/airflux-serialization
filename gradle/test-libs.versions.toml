@@ -1,5 +1,5 @@
 [versions]
-kotest = "5.6.1"
+kotest = "5.9.0"
 pitest-junit = "0.15"
 
 [libraries]
