@@ -22,4 +22,5 @@ dependencies{
     kover(project(":airflux-serialization-core"))
     kover(project(":airflux-serialization-dsl"))
     kover(project(":airflux-serialization-std"))
+    kover(project(":airflux-serialization-parser-json"))
 }

@@ -1,0 +1,115 @@
+public final class io/github/airflux/serialization/parser/json/DeserializeKt {
+	public static final fun deserialize (Lio/github/airflux/serialization/parser/json/lexer/JsSourceInput;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun deserialize (Ljava/lang/String;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+}
+
+public abstract class io/github/airflux/serialization/parser/json/JsParserErrors {
+	public static final field Companion Lio/github/airflux/serialization/parser/json/JsParserErrors$Companion;
+	public abstract fun getColumn ()I
+	public abstract fun getDescription ()Ljava/lang/String;
+	public abstract fun getLine ()I
+	public abstract fun getPosition ()I
+}
+
+public final class io/github/airflux/serialization/parser/json/JsParserErrors$Companion {
+}
+
+public final class io/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedCharacter : io/github/airflux/serialization/parser/json/JsParserErrors {
+	public fun <init> (CIIILjava/lang/String;)V
+	public synthetic fun <init> (CIIILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()C
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (CIIILjava/lang/String;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedCharacter;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedCharacter;CIIILjava/lang/String;ILjava/lang/Object;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedCharacter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChar ()C
+	public fun getColumn ()I
+	public fun getDescription ()Ljava/lang/String;
+	public fun getLine ()I
+	public fun getPosition ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedEndOfInput : io/github/airflux/serialization/parser/json/JsParserErrors {
+	public fun <init> (IIILjava/lang/String;)V
+	public synthetic fun <init> (IIILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun copy (IIILjava/lang/String;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedEndOfInput;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedEndOfInput;IIILjava/lang/String;ILjava/lang/Object;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnexpectedEndOfInput;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getColumn ()I
+	public fun getDescription ()Ljava/lang/String;
+	public fun getLine ()I
+	public fun getPosition ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedCharacterEscape : io/github/airflux/serialization/parser/json/JsParserErrors {
+	public fun <init> (CIII)V
+	public final fun component1 ()C
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (CIII)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedCharacterEscape;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedCharacterEscape;CIIIILjava/lang/Object;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedCharacterEscape;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChar ()C
+	public fun getColumn ()I
+	public fun getDescription ()Ljava/lang/String;
+	public fun getLine ()I
+	public fun getPosition ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedToken : io/github/airflux/serialization/parser/json/JsParserErrors {
+	public fun <init> (Ljava/lang/String;IIILjava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;IIILjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (Ljava/lang/String;IIILjava/lang/String;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedToken;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedToken;Ljava/lang/String;IIILjava/lang/String;ILjava/lang/Object;)Lio/github/airflux/serialization/parser/json/JsParserErrors$UnrecognizedToken;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getColumn ()I
+	public fun getDescription ()Ljava/lang/String;
+	public fun getLine ()I
+	public fun getPosition ()I
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/airflux/serialization/parser/json/ParsingErrorBuilder {
+	public abstract fun contextMissingError ()Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;
+	public abstract fun parsingError (Ljava/lang/String;III)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;
+}
+
+public abstract interface class io/github/airflux/serialization/parser/json/PropertyNamePoolOption {
+	public abstract fun getUsePropertyNamePool ()Z
+}
+
+public final class io/github/airflux/serialization/parser/json/lexer/JsInputString : io/github/airflux/serialization/parser/json/lexer/JsSourceInput {
+	public fun <init> (Ljava/lang/String;)V
+	public fun getColumn ()I
+	public fun getLine ()I
+	public fun getPosition ()I
+	public fun isEOF ()Z
+	public fun nextChar ()Ljava/lang/Character;
+}
+
+public abstract interface class io/github/airflux/serialization/parser/json/lexer/JsSourceInput {
+	public abstract fun getColumn ()I
+	public abstract fun getLine ()I
+	public abstract fun getPosition ()I
+	public abstract fun isEOF ()Z
+	public abstract fun nextChar ()Ljava/lang/Character;
+}
+
