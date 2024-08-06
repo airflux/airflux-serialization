@@ -15,8 +15,8 @@ project(":airflux-serialization-std").projectDir = file("./serialization/std")
 include(":airflux-serialization-test-core")
 project(":airflux-serialization-test-core").projectDir = file("./serialization/test/core")
 
-include(":airflux-parser-core")
-project(":airflux-parser-core").projectDir = file("./parser/core")
+include(":airflux-serialization-parser-common")
+project(":airflux-serialization-parser-common").projectDir = file("./serialization/parser/common")
 
 include(":airflux-parser-jackson")
 project(":airflux-parser-jackson").projectDir = file("./parser/jackson")
@@ -29,8 +29,6 @@ project(":airflux-bom").projectDir = file("./bom")
 
 include(":quickstart")
 project(":quickstart").projectDir = file("./quickstart")
-
-
 
 dependencyResolutionManagement {
     versionCatalogs {

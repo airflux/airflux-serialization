@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":airflux-parser-core"))
+    api(project(":airflux-serialization-parser-common"))
     implementation(project(":airflux-serialization-common"))
     implementation(project(":airflux-serialization-core"))
 

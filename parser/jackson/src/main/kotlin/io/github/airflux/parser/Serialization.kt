@@ -17,11 +17,11 @@
 package io.github.airflux.parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.parser.core.Serialized
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.serialization
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
+import io.github.airflux.serialization.parser.common.Serialized
 
 public fun <O, T : Any> T.serialization(mapper: ObjectMapper, env: JsWriterEnv<O>, writer: JsWriter<O, T>): Serialized =
     Serialized(this.serialization(env, JsLocation, writer)?.let { mapper.writeValueAsString(it) })

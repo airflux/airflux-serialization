@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.parser.core
+package io.github.airflux.serialization.parser.common
 
 @JvmInline
 public value class Serialized(private val value: String?) {
