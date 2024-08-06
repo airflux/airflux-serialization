@@ -63,10 +63,10 @@ public fun <T> JsReaderResult<T>.isSuccess(): Boolean {
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun <T> JsReaderResult<T>.isError(): Boolean {
+public fun <T> JsReaderResult<T>.isFailure(): Boolean {
     contract {
-        returns(false) implies (this@isError is JsReaderResult.Success<T>)
-        returns(true) implies (this@isError is JsReaderResult.Failure)
+        returns(false) implies (this@isFailure is JsReaderResult.Success<T>)
+        returns(true) implies (this@isFailure is JsReaderResult.Failure)
     }
     return this is JsReaderResult.Failure
 }

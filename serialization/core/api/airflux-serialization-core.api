@@ -375,7 +375,7 @@ public final class io/github/airflux/serialization/core/reader/result/JsReaderRe
 	public static final fun getOrElse (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
 	public static final fun getOrNull (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)Ljava/lang/Object;
 	public static final fun ifNullValue (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun isError (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)Z
+	public static final fun isFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)Z
 	public static final fun isSuccess (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;)Z
 	public static final fun map (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 	public static final fun orElse (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;

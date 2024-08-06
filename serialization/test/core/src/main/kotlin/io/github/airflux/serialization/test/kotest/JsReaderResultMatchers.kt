@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.test.kotest
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.isError
+import io.github.airflux.serialization.core.reader.result.isFailure
 import io.github.airflux.serialization.core.reader.result.isSuccess
 import io.kotest.assertions.collectOrThrow
 import io.kotest.assertions.errorCollector
@@ -34,7 +34,7 @@ public inline fun <reified T> JsReaderResult<T>.shouldBeSuccess(
         returns() implies (this@shouldBeSuccess is JsReaderResult.Success<T>)
     }
 
-    if (this.isError()) {
+    if (this.isFailure()) {
         val expectedType = JsReaderResult.Success::class.qualifiedName!!
         val actualType = this::class.qualifiedName!!
         val causeDescription = message(this).makeDescription()

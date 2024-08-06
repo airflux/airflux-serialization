@@ -66,13 +66,13 @@ internal class JsReaderResultTest : FreeSpec() {
                 }
             }
 
-            "the extension function `isError`" - {
+            "the extension function `isFailure`" - {
 
                 "when result is success" - {
                     val original: JsReaderResult<String> = success(location = LOCATION, value = ORIGINAL_VALUE)
 
                     "then should return the false" {
-                        original.isError() shouldBe false
+                        original.isFailure() shouldBe false
                     }
                 }
 
@@ -81,7 +81,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         failure(location = LOCATION, error = JsonErrors.PathMissing)
 
                     "then should return the true" {
-                        original.isError() shouldBe true
+                        original.isFailure() shouldBe true
                     }
                 }
             }

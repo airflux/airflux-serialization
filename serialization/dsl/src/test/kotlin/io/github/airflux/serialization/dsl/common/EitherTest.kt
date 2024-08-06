@@ -141,7 +141,7 @@ internal class EitherTest : FreeSpec() {
                 }
             }
 
-            "the `isError` function" - {
+            "the `isFailure` function" - {
 
                 "when a variable has the `Either#Right` type" - {
                     val original: Either<Error, String> = ORIGINAL_VALUE.right()
@@ -162,7 +162,7 @@ internal class EitherTest : FreeSpec() {
                 }
             }
 
-            "the `isError` function with predicate" - {
+            "the `isFailure` function with predicate" - {
 
                 "when a variable has the `Either#Right` type" - {
                     val original: Either<Error, String> = ORIGINAL_VALUE.right()
