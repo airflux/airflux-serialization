@@ -13,5 +13,4 @@ dependencies {
     /* Test */
     testImplementation(project(":airflux-serialization-test-core"))
     testImplementation(testLibs.bundles.kotest)
-    testImplementation(testLibs.pitest.junit5)
 }
