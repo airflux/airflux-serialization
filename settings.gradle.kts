@@ -3,8 +3,8 @@ rootProject.name = "airflux"
 include(":serialization-common")
 project(":serialization-common").projectDir = file("./serialization/common")
 
-include(":airflux-serialization-core")
-project(":airflux-serialization-core").projectDir = file("./serialization/core")
+include(":serialization-core")
+project(":serialization-core").projectDir = file("./serialization/core")
 
 include(":airflux-serialization-dsl")
 project(":airflux-serialization-dsl").projectDir = file("./serialization/dsl")

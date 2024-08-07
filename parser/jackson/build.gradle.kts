@@ -7,7 +7,7 @@ dependencies {
     implementation(kotlin("stdlib"))
 
     api(project(":airflux-serialization-parser-common"))
-    implementation(project(":airflux-serialization-core"))
+    implementation(project(":serialization-core"))
 
     /* JSON */
     api(libs.bundles.jackson) {
