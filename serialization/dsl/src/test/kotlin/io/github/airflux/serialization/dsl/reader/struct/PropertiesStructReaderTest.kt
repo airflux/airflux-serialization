@@ -34,8 +34,8 @@ import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.test.dummy.DummyReader
-import io.github.airflux.serialization.test.kotest.shouldBeFailure
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 

@@ -33,9 +33,9 @@ import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.property.startKeysOfPaths
+import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
+import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
-import io.github.airflux.serialization.test.kotest.shouldBeFailure
-import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
 internal class JsStructReaderBuilderTest : FreeSpec() {

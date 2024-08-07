@@ -22,10 +22,10 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
+import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReaderPredicate
 import io.github.airflux.serialization.test.dummy.DummyValidator
-import io.github.airflux.serialization.test.kotest.shouldBeFailure
-import io.github.airflux.serialization.test.kotest.shouldBeSuccess
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull

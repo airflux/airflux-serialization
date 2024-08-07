@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.test.kotest
+package io.github.airflux.serialization.kotest.assertions
 
 import io.kotest.assertions.Actual
 import io.kotest.assertions.Expected
 import io.kotest.assertions.failure
 import io.kotest.assertions.print.Printed
 
-public fun failure(expected: String, actual: String, failureMessage: String): Throwable =
+@PublishedApi
+internal fun failure(expected: String, actual: String, failureMessage: String): Throwable =
     failure(Expected(Printed(expected)), Actual(Printed(actual)), failureMessage)
+
+@PublishedApi
+internal fun String.makeDescription(): String = escape()
+    .takeIf { it.isNotBlank() }
+    ?.let { " ($it)." }
+    ?: "."
+
+@PublishedApi
+internal fun String.escape(): String = this.replace(System.lineSeparator(), ". ")

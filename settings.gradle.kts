@@ -15,6 +15,9 @@ project(":airflux-serialization-std").projectDir = file("./serialization/std")
 include(":airflux-serialization-test-core")
 project(":airflux-serialization-test-core").projectDir = file("./serialization/test/core")
 
+include(":serialization-kotest-assertions")
+project(":serialization-kotest-assertions").projectDir = file("./serialization/test/kotest-assertions")
+
 include(":airflux-serialization-parser-common")
 project(":airflux-serialization-parser-common").projectDir = file("./serialization/parser/common")
 

@@ -23,8 +23,8 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.test.kotest.shouldBeFailure
-import io.github.airflux.serialization.test.kotest.shouldBeSuccess
+import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
+import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 

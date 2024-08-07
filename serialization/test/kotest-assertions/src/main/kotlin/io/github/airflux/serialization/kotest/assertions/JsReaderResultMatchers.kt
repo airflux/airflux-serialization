@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.test.kotest
+package io.github.airflux.serialization.kotest.assertions
 
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.isFailure
@@ -105,12 +105,3 @@ public fun JsReaderResult<*>.shouldBeFailure(
     val failure = this.shouldBeFailure(message)
     failure.causes.items shouldContainExactly expected.toList()
 }
-
-@PublishedApi
-internal fun String.makeDescription(): String = escape()
-    .takeIf { it.isNotBlank() }
-    ?.let { " ($it)." }
-    ?: "."
-
-@PublishedApi
-internal fun String.escape(): String = this.replace(System.lineSeparator(), ". ")

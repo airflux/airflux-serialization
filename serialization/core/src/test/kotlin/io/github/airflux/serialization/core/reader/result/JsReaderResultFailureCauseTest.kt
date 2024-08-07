@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.result
 import io.github.airflux.serialization.core.common.JsonErrors
 import io.github.airflux.serialization.core.common.NonEmptyList
 import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
+import io.github.airflux.serialization.kotest.assertions.shouldBeEqualsContract
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe

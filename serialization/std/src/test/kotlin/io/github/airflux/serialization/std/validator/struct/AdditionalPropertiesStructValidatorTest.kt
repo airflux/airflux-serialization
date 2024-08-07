@@ -32,10 +32,10 @@ import io.github.airflux.serialization.dsl.reader.struct.property.StructProperti
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
+import io.github.airflux.serialization.kotest.assertions.shouldBeInvalid
+import io.github.airflux.serialization.kotest.assertions.shouldBeValid
 import io.github.airflux.serialization.std.common.JsonErrors
 import io.github.airflux.serialization.test.dummy.DummyReader
-import io.github.airflux.serialization.test.kotest.shouldBeInvalid
-import io.github.airflux.serialization.test.kotest.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
 internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {

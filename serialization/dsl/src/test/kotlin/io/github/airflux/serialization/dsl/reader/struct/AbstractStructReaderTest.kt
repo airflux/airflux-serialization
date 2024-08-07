@@ -27,8 +27,8 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.test.kotest.shouldBeFailure
-import io.github.airflux.serialization.test.kotest.shouldBeSuccess
+import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
+import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.kotest.core.spec.style.FreeSpec
 
 internal class AbstractStructReaderTest : FreeSpec() {

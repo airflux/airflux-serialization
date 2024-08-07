@@ -21,8 +21,8 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.test.kotest.shouldBeInvalid
-import io.github.airflux.serialization.test.kotest.shouldBeValid
+import io.github.airflux.serialization.kotest.assertions.shouldBeInvalid
+import io.github.airflux.serialization.kotest.assertions.shouldBeValid
 import io.kotest.core.spec.style.FreeSpec
 
 internal class JsValidatorTest : FreeSpec() {

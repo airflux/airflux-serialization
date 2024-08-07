@@ -17,4 +17,5 @@ dependencies {
     /* Test */
     testImplementation(testLibs.bundles.kotest)
     testImplementation(project(":airflux-serialization-test-core"))
+    testImplementation(project(":serialization-kotest-assertions"))
 }

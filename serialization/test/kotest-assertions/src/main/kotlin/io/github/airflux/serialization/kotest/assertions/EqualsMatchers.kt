@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.test.kotest
+package io.github.airflux.serialization.kotest.assertions
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue

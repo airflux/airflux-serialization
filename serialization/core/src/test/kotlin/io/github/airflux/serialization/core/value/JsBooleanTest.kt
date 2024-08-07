@@ -16,8 +16,8 @@
 
 package io.github.airflux.serialization.core.value
 
-import io.github.airflux.serialization.test.kotest.shouldBeEqualsContract
-import io.github.airflux.serialization.test.kotest.shouldBeEqualsString
+import io.github.airflux.serialization.kotest.assertions.shouldBeEqualsContract
+import io.github.airflux.serialization.kotest.assertions.shouldBeEqualsString
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
