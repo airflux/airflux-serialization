@@ -21,8 +21,8 @@ project(":serialization-kotest-assertions").projectDir = file("./serialization/t
 include(":serialization-parser-common")
 project(":serialization-parser-common").projectDir = file("./serialization/parser/common")
 
-include(":parser-jackson")
-project(":parser-jackson").projectDir = file("./parser/jackson")
+include(":serialization-parser-jackson")
+project(":serialization-parser-jackson").projectDir = file("./serialization/parser/jackson")
 
 include(":serialization-parser-json")
 project(":serialization-parser-json").projectDir = file("./serialization/parser/json")

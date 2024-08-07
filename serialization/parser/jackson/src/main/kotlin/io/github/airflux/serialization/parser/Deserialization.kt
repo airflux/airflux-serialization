@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.parser
+package io.github.airflux.serialization.parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.serialization
-import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.parser.common.Serialized
+import io.github.airflux.serialization.core.deserialization
+import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.env.JsReaderEnv
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.value.JsValue
 
-public fun <O, T : Any> T.serialization(mapper: ObjectMapper, env: JsWriterEnv<O>, writer: JsWriter<O, T>): Serialized =
-    Serialized(this.serialization(env, JsLocation, writer)?.let { mapper.writeValueAsString(it) })
+public fun <EB, O, T : Any> String.deserialization(
+    mapper: ObjectMapper,
+    env: JsReaderEnv<EB, O>,
+    reader: JsReader<EB, O, T>
+): JsReaderResult<T> =
+    mapper.readValue(this, JsValue::class.java).deserialization(env, reader)

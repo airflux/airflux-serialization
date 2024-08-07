@@ -17,9 +17,6 @@
 package io.github.airflux.quickstart
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.parser.AirFluxJsonModule
-import io.github.airflux.parser.deserialization
-import io.github.airflux.parser.serialization
 import io.github.airflux.quickstart.domain.model.Amount
 import io.github.airflux.quickstart.domain.model.Currency
 import io.github.airflux.quickstart.domain.model.Lot
@@ -37,6 +34,9 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.parser.AirFluxJsonModule
+import io.github.airflux.serialization.parser.deserialization
+import io.github.airflux.serialization.parser.serialization
 import java.math.BigDecimal
 
 fun main() {

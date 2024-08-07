@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.airflux
+package io.github.airflux.serialization.parser
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.airflux.parser.AirFluxJsonModule
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull

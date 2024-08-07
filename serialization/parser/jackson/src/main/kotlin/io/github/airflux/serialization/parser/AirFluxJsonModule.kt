@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.airflux.parser
+package io.github.airflux.serialization.parser
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser

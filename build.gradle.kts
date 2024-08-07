@@ -17,10 +17,10 @@ allprojects {
 }
 
 dependencies{
-    kover(project(":parser-jackson"))
     kover(project(":serialization-common"))
     kover(project(":serialization-core"))
     kover(project(":serialization-dsl"))
     kover(project(":serialization-std"))
+    kover(project(":serialization-parser-jackson"))
     kover(project(":serialization-parser-json"))
 }

@@ -15,7 +15,7 @@ dependencies {
         api(project(":serialization-core"))
         api(project(":serialization-dsl"))
         api(project(":serialization-std"))
-        api(project(":parser-jackson"))
+        api(project(":serialization-parser-jackson"))
     }
 }
 
