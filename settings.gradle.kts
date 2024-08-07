@@ -12,8 +12,8 @@ project(":serialization-dsl").projectDir = file("./serialization/dsl")
 include(":serialization-std")
 project(":serialization-std").projectDir = file("./serialization/std")
 
-include(":airflux-serialization-test-core")
-project(":airflux-serialization-test-core").projectDir = file("./serialization/test/core")
+include(":serialization-test-core")
+project(":serialization-test-core").projectDir = file("./serialization/test/core")
 
 include(":serialization-kotest-assertions")
 project(":serialization-kotest-assertions").projectDir = file("./serialization/test/kotest-assertions")
