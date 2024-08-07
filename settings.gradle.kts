@@ -9,8 +9,8 @@ project(":serialization-core").projectDir = file("./serialization/core")
 include(":serialization-dsl")
 project(":serialization-dsl").projectDir = file("./serialization/dsl")
 
-include(":airflux-serialization-std")
-project(":airflux-serialization-std").projectDir = file("./serialization/std")
+include(":serialization-std")
+project(":serialization-std").projectDir = file("./serialization/std")
 
 include(":airflux-serialization-test-core")
 project(":airflux-serialization-test-core").projectDir = file("./serialization/test/core")
