@@ -14,10 +14,10 @@ repositories {
 val jacksonVersion by extra { "2.13.3" }
 
 dependencies {
-    implementation(project(":serialization-core"))
-    implementation(project(":serialization-dsl"))
-    implementation(project(":serialization-std"))
-    implementation(project(":serialization-parser-jackson"))
+    implementation(project(":airflux-serialization-core"))
+    implementation(project(":airflux-serialization-dsl"))
+    implementation(project(":airflux-serialization-std"))
+    implementation(project(":airflux-serialization-parser-jackson"))
 
     /* Kotlin */
     implementation(kotlin("stdlib"))

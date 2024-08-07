@@ -3,15 +3,15 @@ plugins {
 }
 
 dependencies {
-    api(project(":serialization-parser-common"))
-    implementation(project(":serialization-common"))
-    implementation(project(":serialization-core"))
+    api(project(":airflux-serialization-parser-common"))
+    implementation(project(":airflux-serialization-common"))
+    implementation(project(":airflux-serialization-core"))
 
     /* Kotlin */
     implementation(kotlin("stdlib"))
 
     /* Test */
-    testImplementation(project(":serialization-test-core"))
+    testImplementation(project(":airflux-serialization-test-core"))
     testImplementation(testLibs.bundles.kotest)
-    testImplementation(project(":serialization-kotest-assertions"))
+    testImplementation(project(":airflux-serialization-kotest-assertions"))
 }

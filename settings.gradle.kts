@@ -1,31 +1,31 @@
 rootProject.name = "airflux"
 
-include(":serialization-common")
-project(":serialization-common").projectDir = file("./serialization/common")
+include(":airflux-serialization-common")
+project(":airflux-serialization-common").projectDir = file("./serialization/common")
 
-include(":serialization-core")
-project(":serialization-core").projectDir = file("./serialization/core")
+include(":airflux-serialization-core")
+project(":airflux-serialization-core").projectDir = file("./serialization/core")
 
-include(":serialization-dsl")
-project(":serialization-dsl").projectDir = file("./serialization/dsl")
+include(":airflux-serialization-dsl")
+project(":airflux-serialization-dsl").projectDir = file("./serialization/dsl")
 
-include(":serialization-std")
-project(":serialization-std").projectDir = file("./serialization/std")
+include(":airflux-serialization-std")
+project(":airflux-serialization-std").projectDir = file("./serialization/std")
 
-include(":serialization-test-core")
-project(":serialization-test-core").projectDir = file("./serialization/test/core")
+include(":airflux-serialization-test-core")
+project(":airflux-serialization-test-core").projectDir = file("./serialization/test/core")
 
-include(":serialization-kotest-assertions")
-project(":serialization-kotest-assertions").projectDir = file("./serialization/test/kotest-assertions")
+include(":airflux-serialization-kotest-assertions")
+project(":airflux-serialization-kotest-assertions").projectDir = file("./serialization/test/kotest-assertions")
 
-include(":serialization-parser-common")
-project(":serialization-parser-common").projectDir = file("./serialization/parser/common")
+include(":airflux-serialization-parser-common")
+project(":airflux-serialization-parser-common").projectDir = file("./serialization/parser/common")
 
-include(":serialization-parser-jackson")
-project(":serialization-parser-jackson").projectDir = file("./serialization/parser/jackson")
+include(":airflux-serialization-parser-jackson")
+project(":airflux-serialization-parser-jackson").projectDir = file("./serialization/parser/jackson")
 
-include(":serialization-parser-json")
-project(":serialization-parser-json").projectDir = file("./serialization/parser/json")
+include(":airflux-serialization-parser-json")
+project(":airflux-serialization-parser-json").projectDir = file("./serialization/parser/json")
 
 include(":airflux-bom")
 project(":airflux-bom").projectDir = file("./bom")

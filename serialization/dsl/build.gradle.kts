@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":serialization-core"))
+    implementation(project(":airflux-serialization-core"))
 
     /* Kotlin */
     implementation(kotlin("stdlib"))
@@ -15,6 +15,6 @@ dependencies {
 
     /* Test */
     testImplementation(testLibs.bundles.kotest)
-    testImplementation(project(":serialization-test-core"))
-    testImplementation(project(":serialization-kotest-assertions"))
+    testImplementation(project(":airflux-serialization-test-core"))
+    testImplementation(project(":airflux-serialization-kotest-assertions"))
 }

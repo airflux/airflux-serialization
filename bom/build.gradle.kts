@@ -12,10 +12,10 @@ repositories {
 
 dependencies {
     constraints {
-        api(project(":serialization-core"))
-        api(project(":serialization-dsl"))
-        api(project(":serialization-std"))
-        api(project(":serialization-parser-jackson"))
+        api(project(":airflux-serialization-core"))
+        api(project(":airflux-serialization-dsl"))
+        api(project(":airflux-serialization-std"))
+        api(project(":airflux-serialization-parser-jackson"))
     }
 }
 
