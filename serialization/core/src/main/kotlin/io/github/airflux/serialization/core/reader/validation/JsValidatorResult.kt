@@ -23,8 +23,8 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 public sealed class JsValidatorResult {
-    public object Valid : JsValidatorResult()
-    public class Invalid(public val failure: JsReaderResult.Failure) : JsValidatorResult()
+    public data object Valid : JsValidatorResult()
+    public data class Invalid(public val failure: JsReaderResult.Failure) : JsValidatorResult()
 }
 
 @OptIn(ExperimentalContracts::class)
