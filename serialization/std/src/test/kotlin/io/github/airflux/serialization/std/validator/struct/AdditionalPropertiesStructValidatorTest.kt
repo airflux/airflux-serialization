@@ -23,8 +23,8 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
@@ -117,9 +117,11 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return first error" {
                         val result = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
 
-                        result shouldBeInvalid failure(
-                            location = LOCATION.append(TITLE_PROPERTY_VALUE),
-                            error = JsonErrors.Validation.Struct.AdditionalProperties
+                        result shouldBeInvalid JsValidatorResult.Invalid(
+                            failure = JsReaderResult.Failure(
+                                location = LOCATION.append(TITLE_PROPERTY_VALUE),
+                                error = JsonErrors.Validation.Struct.AdditionalProperties
+                            )
                         )
                     }
                 }
@@ -130,15 +132,15 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
 
-                        result shouldBeInvalid
-                            JsReaderResult.Failure(
+                        result shouldBeInvalid JsValidatorResult.Invalid(
+                            failure = JsReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
-                            ) +
-                            JsReaderResult.Failure(
+                            ) + JsReaderResult.Failure(
                                 location = LOCATION.append(NAME_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
+                        )
                     }
                 }
             }

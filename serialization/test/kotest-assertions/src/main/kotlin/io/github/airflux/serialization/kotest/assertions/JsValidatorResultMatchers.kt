@@ -16,7 +16,6 @@
 
 package io.github.airflux.serialization.kotest.assertions
 
-import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.isInvalid
 import io.github.airflux.serialization.core.reader.validation.isValid
@@ -27,17 +26,23 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-public fun JsValidatorResult.shouldBeValid(): JsValidatorResult.Valid {
+public fun JsValidatorResult.shouldBeValid(
+    message: (JsValidatorResult.Invalid) -> String = { it.toString() }
+): JsValidatorResult.Valid {
     contract {
         returns() implies (this@shouldBeValid is JsValidatorResult.Valid)
     }
 
     if (this.isInvalid()) {
+        val expectedType = JsValidatorResult.Valid::class.qualifiedName!!
+        val actualType = this::class.qualifiedName!!
+        val causeDescription = message(this).makeDescription()
+
         errorCollector.collectOrThrow(
             failure(
-                expected = JsValidatorResult.Valid::class.qualifiedName!!,
-                actual = this::class.qualifiedName!!,
-                failureMessage = "Expected a Valid, but got ${this::class.simpleName}. "
+                expected = expectedType,
+                actual = actualType,
+                failureMessage = "Expected the `$expectedType` type, but got the `$actualType` type$causeDescription"
             )
         )
     }
@@ -45,24 +50,35 @@ public fun JsValidatorResult.shouldBeValid(): JsValidatorResult.Valid {
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun JsValidatorResult.shouldBeInvalid(): JsValidatorResult.Invalid {
+public fun JsValidatorResult.shouldBeInvalid(
+    message: () -> String = { "" }
+): JsValidatorResult.Invalid {
     contract {
         returns() implies (this@shouldBeInvalid is JsValidatorResult.Invalid)
     }
 
     if (this.isValid()) {
+        val expectedType = JsValidatorResult.Invalid::class.qualifiedName!!
+        val actualType = this::class.qualifiedName!!
+        val causeDescription = message().makeDescription()
+
         errorCollector.collectOrThrow(
             failure(
-                expected = JsValidatorResult.Invalid::class.qualifiedName!!,
-                actual = this::class.qualifiedName!!,
-                failureMessage = "Expected a Invalid, but got ${this::class.simpleName}. "
+                expected = expectedType,
+                actual = actualType,
+                failureMessage = "Expected the `$expectedType` type, but got the `$actualType` type$causeDescription"
             )
         )
     }
     return this as JsValidatorResult.Invalid
 }
 
-public infix fun JsValidatorResult.shouldBeInvalid(expected: JsReaderResult<*>) {
+public infix fun JsValidatorResult.shouldBeInvalid(expected: JsValidatorResult) {
     val actual = this.shouldBeInvalid()
-    actual.failure shouldBe expected
+    actual shouldBe expected
+}
+
+public fun JsValidatorResult.shouldBeInvalid(expected: JsValidatorResult, message: () -> String) {
+    val actual = this.shouldBeInvalid(message)
+    actual shouldBe expected
 }

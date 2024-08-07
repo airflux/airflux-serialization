@@ -19,7 +19,6 @@ package io.github.airflux.serialization.core.reader.validation
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.kotest.assertions.shouldBeInvalid
 import io.github.airflux.serialization.kotest.assertions.shouldBeValid
@@ -73,9 +72,12 @@ internal class JsValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, Unit)
 
-                        result shouldBeInvalid
-                            JsReaderResult.Failure(LOCATION, ValidationErrors.PathMissing) +
-                            JsReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
+                        result shouldBeInvalid JsValidatorResult.Invalid(
+                            failure = (
+                                JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing) +
+                                    JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.InvalidType)
+                                )
+                        )
                     }
                 }
             }
@@ -94,7 +96,9 @@ internal class JsValidatorTest : FreeSpec() {
                     val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, Unit)
 
-                    result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
+                    result shouldBeInvalid JsValidatorResult.Invalid(
+                        failure = JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing)
+                    )
                 }
 
                 "if the left validator returns a success" - {
@@ -117,7 +121,9 @@ internal class JsValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, Unit)
 
-                        result shouldBeInvalid failure(LOCATION, ValidationErrors.PathMissing)
+                        result shouldBeInvalid JsValidatorResult.Invalid(
+                            failure = JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing)
+                        )
                     }
                 }
             }
@@ -125,7 +131,7 @@ internal class JsValidatorTest : FreeSpec() {
     }
 
     private sealed class ValidationErrors : JsReaderResult.Error {
-        object PathMissing : ValidationErrors()
-        object InvalidType : ValidationErrors()
+        data object PathMissing : ValidationErrors()
+        data object InvalidType : ValidationErrors()
     }
 }

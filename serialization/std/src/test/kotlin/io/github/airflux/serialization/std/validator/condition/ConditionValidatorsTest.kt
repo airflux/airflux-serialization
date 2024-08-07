@@ -18,8 +18,9 @@ package io.github.airflux.serialization.std.validator.condition
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
-import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
+import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.kotest.assertions.shouldBeInvalid
 import io.github.airflux.serialization.kotest.assertions.shouldBeValid
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -43,7 +44,9 @@ internal class ConditionValidatorsTest : FreeSpec() {
             "should return the result of applying the validator to the value if it is not the null value" {
                 val result = validator.validate(ENV, LOCATION, "")
 
-                result shouldBeInvalid failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                result shouldBeInvalid JsValidatorResult.Invalid(
+                    failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                )
             }
 
             "should return the null value if the value is the null value" {
@@ -59,7 +62,9 @@ internal class ConditionValidatorsTest : FreeSpec() {
 
                 val result = validator.validate(ENV, LOCATION, "")
 
-                result shouldBeInvalid failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                result shouldBeInvalid JsValidatorResult.Invalid(
+                    failure = JsReaderResult.Failure(location = LOCATION, error = JsonErrors.Validation.Strings.IsEmpty)
+                )
             }
 
             "should return the null value if the predicate returns false" {
