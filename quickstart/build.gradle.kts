@@ -15,7 +15,7 @@ val jacksonVersion by extra { "2.13.3" }
 
 dependencies {
     implementation(project(":serialization-core"))
-    implementation(project(":airflux-serialization-dsl"))
+    implementation(project(":serialization-dsl"))
     implementation(project(":airflux-serialization-std"))
     implementation(project(":airflux-parser-jackson"))
 

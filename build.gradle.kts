@@ -20,7 +20,7 @@ dependencies{
     kover(project(":airflux-parser-jackson"))
     kover(project(":serialization-common"))
     kover(project(":serialization-core"))
-    kover(project(":airflux-serialization-dsl"))
+    kover(project(":serialization-dsl"))
     kover(project(":airflux-serialization-std"))
     kover(project(":airflux-serialization-parser-json"))
 }
