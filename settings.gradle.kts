@@ -24,8 +24,8 @@ project(":serialization-parser-common").projectDir = file("./serialization/parse
 include(":parser-jackson")
 project(":parser-jackson").projectDir = file("./parser/jackson")
 
-include(":airflux-serialization-parser-json")
-project(":airflux-serialization-parser-json").projectDir = file("./serialization/parser/json")
+include(":serialization-parser-json")
+project(":serialization-parser-json").projectDir = file("./serialization/parser/json")
 
 include(":airflux-bom")
 project(":airflux-bom").projectDir = file("./bom")
