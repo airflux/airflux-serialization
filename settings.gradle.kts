@@ -18,8 +18,8 @@ project(":serialization-test-core").projectDir = file("./serialization/test/core
 include(":serialization-kotest-assertions")
 project(":serialization-kotest-assertions").projectDir = file("./serialization/test/kotest-assertions")
 
-include(":airflux-serialization-parser-common")
-project(":airflux-serialization-parser-common").projectDir = file("./serialization/parser/common")
+include(":serialization-parser-common")
+project(":serialization-parser-common").projectDir = file("./serialization/parser/common")
 
 include(":airflux-parser-jackson")
 project(":airflux-parser-jackson").projectDir = file("./parser/jackson")

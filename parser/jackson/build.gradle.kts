@@ -6,7 +6,7 @@ dependencies {
     /* Kotlin */
     implementation(kotlin("stdlib"))
 
-    api(project(":airflux-serialization-parser-common"))
+    api(project(":serialization-parser-common"))
     implementation(project(":serialization-core"))
 
     /* JSON */
