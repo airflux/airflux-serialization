@@ -23,11 +23,10 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -65,7 +64,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBeSuccess success(location = LOCATION, value = emptyList())
+                        result.shouldBeSuccess(location = LOCATION, value = emptyList())
                     }
                 }
 
@@ -81,7 +80,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             errorIfAdditionalItems = true
                         )
 
-                        result shouldBeSuccess success(location = LOCATION, value = emptyList())
+                        result.shouldBeSuccess(location = LOCATION, value = emptyList())
                     }
                 }
             }
@@ -111,7 +110,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(1),
                                     error = JsonErrors.AdditionalItems
                                 )
@@ -131,11 +130,11 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 )
 
                                 result.shouldBeFailure(
-                                    JsReaderResult.Failure.Cause(
+                                    cause(
                                         location = LOCATION.append(1),
                                         error = JsonErrors.AdditionalItems
                                     ),
-                                    JsReaderResult.Failure.Cause(
+                                    cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.AdditionalItems
                                     )
@@ -159,7 +158,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -178,7 +177,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                     errorIfAdditionalItems = errorIfAdditionalItems
                                 )
 
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_PHONE_VALUE)
                                 )
@@ -203,7 +202,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -222,7 +221,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -246,7 +245,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -265,7 +264,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION,
                                 value = listOf(FIRST_PHONE_VALUE, SECOND_PHONE_VALUE, THIRD_PHONE_VALUE)
                             )
@@ -288,7 +287,7 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                                 errorIfAdditionalItems = errorIfAdditionalItems
                             )
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(0),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.NUMBER,
@@ -311,14 +310,14 @@ internal class ArrayPropertyReaderForPrefixItemsOnlyTest : FreeSpec() {
                             )
 
                             result.shouldBeFailure(
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(0),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.NUMBER,
                                         actual = JsValue.Type.STRING
                                     )
                                 ),
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.BOOLEAN,

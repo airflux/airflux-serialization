@@ -16,12 +16,13 @@
 
 package io.github.airflux.serialization.kotest.assertions
 
+import io.github.airflux.serialization.core.common.NonEmptyList
+import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.isFailure
 import io.github.airflux.serialization.core.reader.result.isSuccess
 import io.kotest.assertions.collectOrThrow
 import io.kotest.assertions.errorCollector
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -49,17 +50,12 @@ public inline fun <reified T> JsReaderResult<T>.shouldBeSuccess(
     return this as JsReaderResult.Success<T>
 }
 
-public inline infix fun <reified T> JsReaderResult<T>.shouldBeSuccess(expected: JsReaderResult<T>) {
-    val actual = this.shouldBeSuccess { failure -> failure.toString() }
-    actual shouldBe expected
-}
-
 public inline fun <reified T> JsReaderResult<T>.shouldBeSuccess(
-    expected: JsReaderResult<T>,
-    message: (JsReaderResult.Failure) -> String
+    location: JsLocation,
+    value: T,
+    message: (JsReaderResult.Failure) -> String = { it.toString() }
 ) {
-    val actual = this.shouldBeSuccess(message)
-    actual shouldBe expected
+    this.shouldBeSuccess(message) shouldBe JsReaderResult.Success(location, value)
 }
 
 @OptIn(ExperimentalContracts::class)
@@ -85,23 +81,28 @@ public fun JsReaderResult<*>.shouldBeFailure(
     return this as JsReaderResult.Failure
 }
 
-public infix fun JsReaderResult<*>.shouldBeFailure(expected: JsReaderResult<*>) {
-    val actual = this.shouldBeFailure { success -> success.toString() }
-    actual shouldBe expected
-}
-
 public fun JsReaderResult<*>.shouldBeFailure(
-    expected: JsReaderResult<*>,
-    message: (JsReaderResult.Success<*>) -> String
-) {
-    val actual = this.shouldBeFailure(message)
-    actual shouldBe expected
-}
-
-public fun JsReaderResult<*>.shouldBeFailure(
-    vararg expected: JsReaderResult.Failure.Cause,
+    cause: JsReaderResult.Failure.Cause,
+    vararg causes: JsReaderResult.Failure.Cause,
     message: (JsReaderResult.Success<*>) -> String = { it.toString() }
 ) {
-    val failure = this.shouldBeFailure(message)
-    failure.causes.items shouldContainExactly expected.toList()
+    val actual = this.shouldBeFailure(message)
+    val expected = JsReaderResult.Failure(NonEmptyList.invoke(cause, causes.toList()))
+
+    actual shouldBe expected
 }
+
+public fun JsReaderResult<*>.shouldBeFailure(
+    location: JsLocation,
+    error: JsReaderResult.Error,
+    message: (JsReaderResult.Success<*>) -> String = { it.toString() }
+) {
+    this.shouldBeFailure(cause = cause(location = location, error = error), message = message)
+}
+
+public fun cause(
+    location: JsLocation,
+    error: JsReaderResult.Error,
+    vararg errors: JsReaderResult.Error
+): JsReaderResult.Failure.Cause =
+    JsReaderResult.Failure.Cause(location, NonEmptyList.invoke(error, errors.toList()))

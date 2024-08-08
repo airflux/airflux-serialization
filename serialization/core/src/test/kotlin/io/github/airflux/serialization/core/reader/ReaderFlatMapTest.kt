@@ -23,14 +23,13 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 internal class ReaderFlatMapTest : FreeSpec() {
 
@@ -54,7 +53,7 @@ internal class ReaderFlatMapTest : FreeSpec() {
                         }
                     val result: JsReaderResult<Int> = transformedReader.read(ENV, LOCATION, source)
 
-                    result shouldBeSuccess success(location = LOCATION, value = VALUE.toInt())
+                    result.shouldBeSuccess(location = LOCATION, value = VALUE.toInt())
                 }
             }
 
@@ -70,7 +69,7 @@ internal class ReaderFlatMapTest : FreeSpec() {
                         }
                     val result = transformedReader.read(ENV, LOCATION, source)
 
-                    result shouldBeFailure failure
+                    result shouldBeSameInstanceAs failure
                 }
             }
         }

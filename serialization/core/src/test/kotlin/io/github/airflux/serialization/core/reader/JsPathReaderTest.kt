@@ -35,6 +35,7 @@ import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyPathReader
@@ -82,7 +83,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
                     "then the right reader doesn't execute" {
                         val result = reader.read(ENV, LOCATION, JsNull)
-                        result shouldBeSuccess success(location = LOCATION, value = LEFT_VALUE)
+                        result.shouldBeSuccess(location = LOCATION, value = LEFT_VALUE)
                     }
                 }
 
@@ -99,7 +100,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
                         "then the result of the right reader should be returned" {
                             val result = reader.read(ENV, LOCATION, JsNull)
-                            result shouldBeSuccess success(location = LOCATION, value = RIGHT_VALUE)
+                            result.shouldBeSuccess(location = LOCATION, value = RIGHT_VALUE)
                         }
                     }
 
@@ -119,11 +120,11 @@ internal class JsPathReaderTest : FreeSpec() {
                             val result = reader.read(ENV, LOCATION, JsNull)
 
                             result.shouldBeFailure(
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append("id"),
                                     error = JsonErrors.PathMissing
                                 ),
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append("identifier"),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -279,7 +280,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -291,7 +292,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -307,7 +308,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     val result = reader.read(ENV, LOCATION, source)
 
                     "then the null value should be returned" {
-                        result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
+                        result.shouldBeSuccess(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                     }
                 }
             }
@@ -325,7 +326,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -337,7 +338,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -353,7 +354,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     val result = reader.read(ENV, LOCATION, source)
 
                     "then a default value should be returned" {
-                        result shouldBeSuccess success(
+                        result.shouldBeSuccess(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = DEFAULT_VALUE
                         )
@@ -371,7 +372,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -383,7 +384,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then should be returned a read error" {
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -399,7 +400,7 @@ internal class JsPathReaderTest : FreeSpec() {
                     val result = reader.read(ENV, LOCATION, source)
 
                     "then an error should be returned" {
-                        result shouldBeFailure failure(
+                        result.shouldBeFailure(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             error = JsonErrors.PathMissing
                         )
@@ -423,7 +424,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -435,7 +436,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -451,7 +452,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then an error should be returned" {
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.PathMissing
                             )
@@ -473,7 +474,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -485,7 +486,7 @@ internal class JsPathReaderTest : FreeSpec() {
                             val result = reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -501,7 +502,7 @@ internal class JsPathReaderTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, source)
 
                         "then the null value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = null
                             )

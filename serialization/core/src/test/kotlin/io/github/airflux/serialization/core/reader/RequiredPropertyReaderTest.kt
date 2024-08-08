@@ -23,8 +23,6 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
@@ -56,7 +54,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 "then should return the result of applying the reader" {
                     val result: JsReaderResult<String?> =
                         readRequired(env = ENV, lookup = lookup, using = READER)
-                    result shouldBeSuccess success(
+                    result.shouldBeSuccess(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
                     )
@@ -70,7 +68,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 "then should return the missing path error" {
                     val result: JsReaderResult<String?> =
                         readRequired(env = ENV, lookup = lookup, using = READER)
-                    result shouldBeFailure failure(
+                    result.shouldBeFailure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
                     )
@@ -87,7 +85,7 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 "then should return the invalid type error" {
                     val result: JsReaderResult<String?> =
                         readRequired(env = ENV, lookup = lookup, using = READER)
-                    result shouldBeFailure failure(
+                    result.shouldBeFailure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(
                             expected = JsValue.Type.STRUCT,

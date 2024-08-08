@@ -26,6 +26,7 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -53,7 +54,7 @@ internal class ReaderOrTest : FreeSpec() {
 
                 "then the right reader doesn't execute" {
                     val result = reader.read(ENV, LOCATION, JsNull)
-                    result shouldBeSuccess success(location = LOCATION, value = LEFT_VALUE)
+                    result.shouldBeSuccess(location = LOCATION, value = LEFT_VALUE)
                 }
             }
 
@@ -70,7 +71,7 @@ internal class ReaderOrTest : FreeSpec() {
 
                     "then the result of the right reader should be returned" {
                         val result = reader.read(ENV, LOCATION, JsNull)
-                        result shouldBeSuccess success(location = LOCATION, value = RIGHT_VALUE)
+                        result.shouldBeSuccess(location = LOCATION, value = RIGHT_VALUE)
                     }
                 }
 
@@ -90,11 +91,11 @@ internal class ReaderOrTest : FreeSpec() {
                         val result = reader.read(ENV, LOCATION, JsNull)
 
                         result.shouldBeFailure(
-                            JsReaderResult.Failure.Cause(
+                            cause(
                                 location = LOCATION.append("id"),
                                 error = JsonErrors.PathMissing
                             ),
-                            JsReaderResult.Failure.Cause(
+                            cause(
                                 location = LOCATION.append("identifier"),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,

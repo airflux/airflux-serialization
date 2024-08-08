@@ -20,8 +20,6 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
@@ -45,7 +43,7 @@ internal class AbstractStructReaderTest : FreeSpec() {
 
                     "then the reader should return a value" {
                         val result = reader.read(ENV, LOCATION, source)
-                        result shouldBeSuccess success(location = LOCATION, value = ID_PROPERTY_VALUE)
+                        result.shouldBeSuccess(location = LOCATION, value = ID_PROPERTY_VALUE)
                     }
                 }
 
@@ -54,7 +52,7 @@ internal class AbstractStructReaderTest : FreeSpec() {
 
                     "then the reader should return an error" {
                         val result = reader.read(ENV, LOCATION, source)
-                        result shouldBeFailure failure(
+                        result.shouldBeFailure(
                             location = LOCATION,
                             error = JsonErrors.InvalidType(
                                 expected = JsValue.Type.STRUCT,

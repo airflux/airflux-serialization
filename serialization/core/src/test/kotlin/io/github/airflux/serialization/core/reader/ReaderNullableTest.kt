@@ -25,7 +25,6 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
@@ -63,7 +62,7 @@ internal class ReaderNullableTest : FreeSpec() {
                     "then should return the read value" {
                         val result: JsReaderResult<String?> = reader.read(ENV, LOCATION, source)
 
-                        result shouldBeSuccess success(
+                        result.shouldBeSuccess(
                             location = LOCATION.append(ID_PROPERTY_NAME),
                             value = ID_PROPERTY_VALUE
                         )
@@ -76,7 +75,7 @@ internal class ReaderNullableTest : FreeSpec() {
                     "then should return the null value" {
                         val result: JsReaderResult<String?> = reader.read(ENV, LOCATION, source)
 
-                        result shouldBeSuccess success(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
+                        result.shouldBeSuccess(location = LOCATION.append(ID_PROPERTY_NAME), value = null)
                     }
                 }
             }

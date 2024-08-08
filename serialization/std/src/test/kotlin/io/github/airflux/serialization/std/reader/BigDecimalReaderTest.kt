@@ -21,8 +21,6 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
@@ -52,14 +50,14 @@ internal class BigDecimalReaderTest : FreeSpec() {
                 ) { value ->
                     val source: JsValue = JsNumber.valueOf(value)!!
                     val result = BigDecimalReader.read(ENV, LOCATION, source)
-                    result shouldBeSuccess success(location = LOCATION, value = BigDecimal(value))
+                    result.shouldBeSuccess(location = LOCATION, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
                 val result = BigDecimalReader.read(ENV, LOCATION, source)
-                result shouldBeFailure failure(
+                result.shouldBeFailure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
                         expected = JsValue.Type.NUMBER,

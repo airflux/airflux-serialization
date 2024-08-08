@@ -26,7 +26,6 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNumber
@@ -37,6 +36,7 @@ import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -69,7 +69,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                         "then the reader should return it error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
@@ -84,7 +84,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                         "then the reader should return it error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.NUMBER,
@@ -107,7 +107,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                         "then the reader should return it error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
@@ -122,7 +122,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                         "then the reader should return it error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.NUMBER,
@@ -142,11 +142,11 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         "then the reader should return it errors" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result.shouldBeFailure(
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
                                     error = JsonErrors.Validation.Struct.AdditionalProperties
                                 ),
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.NUMBER,

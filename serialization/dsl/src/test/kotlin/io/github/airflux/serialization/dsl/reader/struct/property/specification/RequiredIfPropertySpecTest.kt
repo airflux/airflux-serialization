@@ -26,8 +26,6 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.map
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.validation.JsValidator
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNumber
@@ -35,6 +33,7 @@ import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
+import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -83,7 +82,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -95,7 +94,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -111,7 +110,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then an error should be returned" {
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.PathMissing
                             )
@@ -134,7 +133,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -146,7 +145,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -162,7 +161,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then an error should be returned" {
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.PathMissing
                             )
@@ -182,7 +181,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                             val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -193,7 +192,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                             val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.Validation.Strings.IsEmpty
                             )
@@ -206,7 +205,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                             val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -230,7 +229,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                                 val result = spec.filter(predicate)
                                     .reader.read(ENV, LOCATION, source)
 
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -244,7 +243,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                                 val result = spec.filter(predicate)
                                     .reader.read(ENV, LOCATION, source)
 
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = null
                                 )
@@ -262,7 +261,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.filter(predicate)
                                 .reader.read(ENV, LOCATION, source)
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -291,7 +290,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -304,7 +303,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned from the alternative reader" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_INT
                             )
@@ -317,14 +316,14 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                         "then should be returned all read errors" {
                             result.shouldBeFailure(
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.BOOLEAN
                                     )
                                 ),
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.NUMBER,
@@ -354,7 +353,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -366,7 +365,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -382,7 +381,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then the null value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = null
                             )
@@ -405,7 +404,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then a value should be returned" {
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -417,7 +416,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.reader.read(ENV, LOCATION, source)
 
                             "then should be returned a read error" {
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
@@ -433,7 +432,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = spec.reader.read(ENV, LOCATION, source)
 
                         "then the null value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = null
                             )
@@ -453,7 +452,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                             val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -464,7 +463,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                             val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.Validation.Strings.IsEmpty
                             )
@@ -477,7 +476,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val source = JsStruct(ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE_AS_INT)!!)
                             val result = specWithValidator.reader.read(ENV, LOCATION, source)
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -501,7 +500,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                                 val result = spec.filter(predicate)
                                     .reader.read(ENV, LOCATION, source)
 
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = ID_PROPERTY_VALUE_AS_UUID
                                 )
@@ -515,7 +514,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                                 val result = spec.filter(predicate)
                                     .reader.read(ENV, LOCATION, source)
 
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     value = null
                                 )
@@ -533,7 +532,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                             val result = spec.filter(predicate)
                                 .reader.read(ENV, LOCATION, source)
 
-                            result shouldBeFailure failure(
+                            result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 error = JsonErrors.InvalidType(
                                     expected = JsValue.Type.STRING,
@@ -562,7 +561,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_UUID
                             )
@@ -575,7 +574,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
                         val result = specWithAlternative.reader.read(ENV, LOCATION, source)
 
                         "then a value should be returned from the alternative reader" {
-                            result shouldBeSuccess success(
+                            result.shouldBeSuccess(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
                                 value = ID_PROPERTY_VALUE_AS_INT
                             )
@@ -588,14 +587,14 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
                         "then should be returned all read errors" {
                             result.shouldBeFailure(
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.STRING,
                                         actual = JsValue.Type.BOOLEAN
                                     )
                                 ),
-                                JsReaderResult.Failure.Cause(
+                                cause(
                                     location = LOCATION.append(ID_PROPERTY_NAME),
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.NUMBER,

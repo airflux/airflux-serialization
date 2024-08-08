@@ -23,14 +23,13 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.DummyArrayValidator.Companion.minItems
 import io.github.airflux.serialization.dsl.common.JsonErrors
+import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -75,7 +74,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.ARRAY,
@@ -90,7 +89,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM)
                                 )
@@ -103,7 +102,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM)
                                 )
@@ -120,7 +119,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should only return items from prefixItems" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM)
                                 )
@@ -132,7 +131,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return it error" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.Validation.Arrays.MinItems(
                                         expected = MIN_ITEMS,
@@ -147,7 +146,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return validation error" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.Validation.Arrays.MinItems(
                                         expected = MIN_ITEMS,
@@ -166,7 +165,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.ARRAY,
@@ -181,7 +180,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM)
                                 )
@@ -194,7 +193,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM)
                                 )
@@ -211,7 +210,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should only return items from prefixItems" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM, THIRD_ITEM)
                                 )
@@ -223,7 +222,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return it error" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.Validation.Arrays.MinItems(
                                         expected = MIN_ITEMS,
@@ -239,14 +238,14 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                             "then the reader should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                                 result.shouldBeFailure(
-                                    JsReaderResult.Failure.Cause(
+                                    cause(
                                         location = LOCATION,
                                         error = JsonErrors.Validation.Arrays.MinItems(
                                             expected = MIN_ITEMS,
                                             actual = source.size
                                         )
                                     ),
-                                    JsReaderResult.Failure.Cause(
+                                    cause(
                                         location = LOCATION.append(0),
                                         error = JsonErrors.InvalidType(
                                             expected = JsValue.Type.STRING,
@@ -272,7 +271,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.ARRAY,
@@ -287,7 +286,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM)
                                 )
@@ -299,7 +298,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM)
                                 )
@@ -316,7 +315,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return an error" {
                                 val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION.append(2),
                                     error = JsonErrors.AdditionalItems
                                 )
@@ -332,7 +331,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then the reader should return the invalid type error" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeFailure failure(
+                                result.shouldBeFailure(
                                     location = LOCATION,
                                     error = JsonErrors.InvalidType(
                                         expected = JsValue.Type.ARRAY,
@@ -347,7 +346,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM)
                                 )
@@ -359,7 +358,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                             "then should return all elements read" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                                result shouldBeSuccess success(
+                                result.shouldBeSuccess(
                                     location = LOCATION,
                                     value = listOf(FIRST_ITEM, SECOND_ITEM)
                                 )
@@ -377,11 +376,11 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                             "then should return all errors" {
                                 val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                                 result.shouldBeFailure(
-                                    JsReaderResult.Failure.Cause(
+                                    cause(
                                         location = LOCATION.append(2),
                                         error = JsonErrors.AdditionalItems
                                     ),
-                                    JsReaderResult.Failure.Cause(
+                                    cause(
                                         location = LOCATION.append(3),
                                         error = JsonErrors.AdditionalItems
                                     )

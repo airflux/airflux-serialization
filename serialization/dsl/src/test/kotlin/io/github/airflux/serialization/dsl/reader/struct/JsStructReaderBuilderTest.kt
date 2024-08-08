@@ -23,8 +23,6 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.failure
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.reader.result.toSuccess
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
@@ -56,7 +54,7 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
                 "then the reader should return the DTO instance" {
                     val result = reader.read(ENV, LOCATION, source)
 
-                    result shouldBeSuccess success(
+                    result.shouldBeSuccess(
                         location = LOCATION,
                         value = DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
                     )
@@ -83,7 +81,7 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
                     "then the reader should return the validation error" {
                         val result = reader.read(ENV, LOCATION, source)
 
-                        result shouldBeFailure failure(
+                        result.shouldBeFailure(
                             location = LOCATION.append(TITLE_PROPERTY_NAME),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
                         )
@@ -108,7 +106,7 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
                     "then the reader should return the validation error" {
                         val result = reader.read(ENV, LOCATION, source)
 
-                        result shouldBeFailure failure(
+                        result.shouldBeFailure(
                             location = LOCATION.append(TITLE_PROPERTY_NAME),
                             error = JsonErrors.Validation.Struct.AdditionalProperties
                         )

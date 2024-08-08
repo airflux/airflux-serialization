@@ -39,12 +39,7 @@ internal class DeserializeTest : FreeSpec() {
 
                 "then the function should return a context missing error" {
                     val result: JsReaderResult<Boolean> = json.deserialize(ENV, reader)
-                    result.shouldBeFailure(
-                        JsReaderResult.Failure.Cause(
-                            location = LOCATION,
-                            error = ContextMissingError
-                        )
-                    )
+                    result.shouldBeFailure(location = LOCATION, error = ContextMissingError)
                 }
             }
 
@@ -62,7 +57,7 @@ internal class DeserializeTest : FreeSpec() {
 
                 "then the function should return a parsing error" {
                     val result: JsReaderResult<Boolean> = json.deserialize(ENV, reader)
-                    result.shouldBeFailure(JsReaderResult.Failure.Cause(location = LOCATION, error = ParsingError))
+                    result.shouldBeFailure(location = LOCATION, error = ParsingError)
                 }
             }
         }

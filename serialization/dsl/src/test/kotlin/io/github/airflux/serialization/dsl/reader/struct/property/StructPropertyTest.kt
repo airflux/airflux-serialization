@@ -25,7 +25,6 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -64,7 +63,7 @@ internal class StructPropertyTest : FreeSpec() {
             "then the method read should return the value" {
                 val source = JsString(PROPERTY_VALUE)
                 val result = property.read(ENV, LOCATION, source)
-                result shouldBeSuccess success(location = LOCATION, value = PROPERTY_VALUE)
+                result.shouldBeSuccess(location = LOCATION, value = PROPERTY_VALUE)
             }
         }
     }

@@ -118,7 +118,7 @@ internal class JsReaderResultTest : FreeSpec() {
                     "then should return a result of applying the [transform] function to the value" {
                         val result = original.map { it.toInt() }
 
-                        result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                        result.shouldBeSuccess(location = LOCATION, value = ORIGINAL_VALUE.toInt())
                     }
                 }
 
@@ -143,7 +143,7 @@ internal class JsReaderResultTest : FreeSpec() {
                             success(location = result.location, value = result.value.toInt())
                         }
 
-                        result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE.toInt())
+                        result.shouldBeSuccess(location = LOCATION, value = ORIGINAL_VALUE.toInt())
                     }
                 }
 
@@ -169,7 +169,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         val result =
                             original.recovery { success(location = LOCATION, value = ALTERNATIVE_VALUE) }
 
-                        result shouldBeSuccess success(location = LOCATION, value = ORIGINAL_VALUE)
+                        result.shouldBeSuccess(location = LOCATION, value = ORIGINAL_VALUE)
                     }
                 }
 
@@ -181,7 +181,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         val result =
                             original.recovery { success(location = LOCATION, value = ALTERNATIVE_VALUE) }
 
-                        result shouldBeSuccess success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                        result.shouldBeSuccess(location = LOCATION, value = ALTERNATIVE_VALUE)
                     }
                 }
             }
@@ -424,7 +424,7 @@ internal class JsReaderResultTest : FreeSpec() {
                         "then the method should return the default value" {
                             val alternative: JsReaderResult<String?> = result.ifNullValue { ALTERNATIVE_VALUE }
 
-                            alternative shouldBeSuccess success(location = LOCATION, value = ALTERNATIVE_VALUE)
+                            alternative.shouldBeSuccess(location = LOCATION, value = ALTERNATIVE_VALUE)
                         }
                     }
                 }
@@ -445,16 +445,13 @@ internal class JsReaderResultTest : FreeSpec() {
         "the extension function `toSuccess`" {
             val result = ORIGINAL_VALUE.toSuccess(LOCATION)
 
-            result shouldBeSuccess JsReaderResult.Success(location = LOCATION, value = ORIGINAL_VALUE)
+            result.shouldBeSuccess(location = LOCATION, value = ORIGINAL_VALUE)
         }
 
         "the extension function `E#toFailure`" {
             val result = JsonErrors.PathMissing.toFailure(LOCATION)
 
-            result shouldBeFailure JsReaderResult.Failure(
-                location = LOCATION,
-                error = JsonErrors.PathMissing
-            )
+            result.shouldBeFailure(location = LOCATION, error = JsonErrors.PathMissing)
         }
     }
 
