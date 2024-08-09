@@ -5,7 +5,7 @@ public final class io/github/airflux/serialization/kotest/assertions/EqualsMatch
 }
 
 public final class io/github/airflux/serialization/kotest/assertions/JsReaderResultMatchersKt {
-	public static final fun cause (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;[Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;
+	public static final fun cause (Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;
 	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Error;Lkotlin/jvm/functions/Function1;)V
 	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;[Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure$Cause;Lkotlin/jvm/functions/Function1;)V
 	public static final fun shouldBeFailure (Lio/github/airflux/serialization/core/reader/result/JsReaderResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult$Failure;

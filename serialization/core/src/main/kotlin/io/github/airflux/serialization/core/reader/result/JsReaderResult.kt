@@ -45,9 +45,7 @@ public sealed class JsReaderResult<out T> {
 
         override fun hashCode(): Int = causes.hashCode()
 
-        public data class Cause(val location: JsLocation, val errors: NonEmptyList<Error>) {
-            public constructor(location: JsLocation, error: Error) : this(location, NonEmptyList(error))
-        }
+        public data class Cause(val location: JsLocation, val error: Error)
     }
 
     public interface Error

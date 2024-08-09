@@ -100,9 +100,5 @@ public fun JsReaderResult<*>.shouldBeFailure(
     this.shouldBeFailure(cause = cause(location = location, error = error), message = message)
 }
 
-public fun cause(
-    location: JsLocation,
-    error: JsReaderResult.Error,
-    vararg errors: JsReaderResult.Error
-): JsReaderResult.Failure.Cause =
-    JsReaderResult.Failure.Cause(location, NonEmptyList.invoke(error, errors.toList()))
+public fun cause(location: JsLocation, error: JsReaderResult.Error): JsReaderResult.Failure.Cause =
+    JsReaderResult.Failure.Cause(location, error)
