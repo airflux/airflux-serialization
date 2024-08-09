@@ -17,9 +17,7 @@
 package io.github.airflux.serialization.core.common
 
 @JvmInline
-public value class NonEmptyList<out T> @PublishedApi internal constructor(public val items: List<T>) {
-
-    public operator fun iterator(): Iterator<T> = items.iterator()
+public value class NonEmptyList<out T> private constructor(public val items: List<T>) {
 
     public companion object {
 
@@ -53,7 +51,7 @@ public value class NonEmptyList<out T> @PublishedApi internal constructor(public
     }
 }
 
-public fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = items.any { predicate(it) }
+public inline fun <T> NonEmptyList<T>.exists(predicate: (T) -> Boolean): Boolean = items.any { predicate(it) }
 
 public operator fun <T> NonEmptyList<T>.plus(item: T): NonEmptyList<T> = NonEmptyList.add(this, item)
 

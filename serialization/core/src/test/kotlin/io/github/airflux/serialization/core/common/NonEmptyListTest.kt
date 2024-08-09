@@ -112,37 +112,22 @@ internal class NonEmptyListTest : FreeSpec() {
                 }
             }
 
-            "when calling the `iterator()` function" - {
-                val list: NonEmptyList<Int> = NonEmptyList(FIRST, SECOND)
+            "when searching for an element in the list" - {
 
-                "then should return an iterator over all elements from the instance" {
-                    list.iterator().asSequence().toList() shouldContainExactly listOf(FIRST, SECOND)
-                }
-            }
-
-            "when calling the `toList()` function" - {
-                val list = NonEmptyList(FIRST, SECOND)
-
-                "then should return the list with all elements from the instance" {
-                    list.items shouldContainExactly listOf(FIRST, SECOND)
-                }
-            }
-
-            "when a predicate of the `exists` method for a list returns true" - {
-                val predicate: (Int) -> Boolean = { it == SECOND }
-
-                "then the `exists` method should return true" {
+                "when the element is in the list" - {
                     val list = NonEmptyList(FIRST, SECOND, THIRD)
-                    list.exists(predicate) shouldBe true
+
+                    "then the `exists` function should return true" {
+                        list.exists { it == SECOND } shouldBe true
+                    }
                 }
-            }
 
-            "when a predicate of the `exists` method for a list returns false" - {
-                val predicate: (Int) -> Boolean = { it == THIRD }
-                val list = NonEmptyList(FIRST, SECOND)
+                "when the element is not in the list" - {
+                    val list = NonEmptyList(FIRST, SECOND)
 
-                "then the `exists` method should return false" {
-                    list.exists(predicate) shouldBe false
+                    "then the `exists` function should return false" {
+                        list.exists { it == THIRD } shouldBe false
+                    }
                 }
             }
         }

@@ -16,7 +16,6 @@ public final class io/github/airflux/serialization/core/common/NonEmptyList {
 	public static final fun add-aF1CD50 (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
 	public static final fun addAll-G-AljhI (Ljava/util/List;Ljava/util/List;)Ljava/util/List;
 	public static final synthetic fun box-impl (Ljava/util/List;)Lio/github/airflux/serialization/core/common/NonEmptyList;
-	public static fun constructor-impl (Ljava/util/List;)Ljava/util/List;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/util/List;Ljava/lang/Object;)Z
 	public static final fun equals-impl0 (Ljava/util/List;Ljava/util/List;)Z
@@ -25,7 +24,6 @@ public final class io/github/airflux/serialization/core/common/NonEmptyList {
 	public static fun hashCode-impl (Ljava/util/List;)I
 	public static final fun invoke-W6Hq0XY (Ljava/lang/Object;Ljava/util/List;)Ljava/util/List;
 	public static final fun invoke-W6Hq0XY (Ljava/lang/Object;[Ljava/lang/Object;)Ljava/util/List;
-	public static final fun iterator-impl (Ljava/util/List;)Ljava/util/Iterator;
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/util/List;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/util/List;
