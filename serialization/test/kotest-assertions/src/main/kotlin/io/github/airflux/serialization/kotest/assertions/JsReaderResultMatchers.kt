@@ -16,11 +16,11 @@
 
 package io.github.airflux.serialization.kotest.assertions
 
-import io.github.airflux.serialization.core.common.NonEmptyList
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.isFailure
 import io.github.airflux.serialization.core.reader.result.isSuccess
+import io.github.airflux.serialization.core.reader.result.plus
 import io.kotest.assertions.collectOrThrow
 import io.kotest.assertions.errorCollector
 import io.kotest.matchers.shouldBe
@@ -87,8 +87,10 @@ public fun JsReaderResult<*>.shouldBeFailure(
     message: (JsReaderResult.Success<*>) -> String = { it.toString() }
 ) {
     val actual = this.shouldBeFailure(message)
-    val expected = JsReaderResult.Failure(NonEmptyList.invoke(cause, causes.toList()))
-
+//    val expected = JsReaderResult.Failure(JsReaderResult.Failure.Causes(cause, causes.toList()))
+    val expected = causes.fold(JsReaderResult.Failure(cause)) { acc, item ->
+        acc + JsReaderResult.Failure(item)
+    }
     actual shouldBe expected
 }
 

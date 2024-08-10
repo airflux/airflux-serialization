@@ -18,9 +18,7 @@
 
 package io.github.airflux.serialization.core.reader.result
 
-import io.github.airflux.serialization.core.common.NonEmptyList
 import io.github.airflux.serialization.core.common.identity
-import io.github.airflux.serialization.core.common.plus
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.predicate.JsPredicate
@@ -36,16 +34,27 @@ public sealed class JsReaderResult<out T> {
 
     public data class Success<T>(public val location: JsLocation, public val value: T) : JsReaderResult<T>()
 
-    public data class Failure(public val causes: NonEmptyList<Cause>) : JsReaderResult<Nothing>() {
+    public data class Failure(public val causes: Causes) : JsReaderResult<Nothing>() {
 
-        public constructor(location: JsLocation, error: Error) : this(NonEmptyList(Cause(location, error)))
+        public constructor(location: JsLocation, error: Error) : this(Cause(location, error))
 
-        override fun equals(other: Any?): Boolean =
-            this === other || (other is Failure && this.causes == other.causes)
-
-        override fun hashCode(): Int = causes.hashCode()
+        public constructor(cause: Cause) : this(Causes(cause))
 
         public data class Cause(val location: JsLocation, val error: Error)
+
+        @JvmInline
+        public value class Causes private constructor(public val items: List<Cause>) {
+
+            public operator fun plus(other: Causes): Causes = Causes(this.union(other))
+
+            public companion object {
+
+                @JvmStatic
+                public operator fun invoke(cause: Cause): Causes = Causes(listOf(cause))
+
+                private fun Causes.union(other: Causes): List<Cause> = items.union(other.items).toList()
+            }
+        }
     }
 
     public interface Error
