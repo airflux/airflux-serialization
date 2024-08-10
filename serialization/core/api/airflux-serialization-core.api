@@ -259,6 +259,7 @@ public final class io/github/airflux/serialization/core/reader/JsReaderKt {
 	public static final fun map (Lio/github/airflux/serialization/core/reader/JsReader;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/JsReader;
 	public static final fun nullable (Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsReader;
 	public static final fun or (Lio/github/airflux/serialization/core/reader/JsReader;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsReader;
+	public static final fun orElse (Lio/github/airflux/serialization/core/reader/JsReader;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/JsReader;
 	public static final fun validation (Lio/github/airflux/serialization/core/reader/JsReader;Lio/github/airflux/serialization/core/reader/validation/JsValidator;)Lio/github/airflux/serialization/core/reader/JsReader;
 }
 

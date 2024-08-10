@@ -24,6 +24,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.filter
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.map
+import io.github.airflux.serialization.core.reader.result.orElse
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.result.recovery
 import io.github.airflux.serialization.core.reader.result.success
@@ -63,6 +64,20 @@ public infix fun <EB, O, T, R> JsReader<EB, O, T>.bind(
                 onFailure = ::identity,
                 onSuccess = { transform(env, it) }
             )
+    }
+
+/**
+ * Combines the current [JsReader] with the provided `alt` reader.
+ * If the current reader fails to parse the JSON value, the `alt` reader will be used to attempt the parsing.
+ * The result of the first successful parsing will be returned or the last error.
+ *
+ * @param alt the alternative [JsReader] to use if the current reader fails
+ * @return a new [JsReader] that combines the current reader with the alternative reader
+ */
+public infix fun <EB, O, T> JsReader<EB, O, T>.orElse(alt: JsReader<EB, O, T>): JsReader<EB, O, T> =
+    JsReader { env, location, source ->
+        this@orElse.read(env, location, source)
+            .orElse { alt.read(env, location, source) }
     }
 
 /**
