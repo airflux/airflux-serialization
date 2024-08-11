@@ -37,7 +37,7 @@ internal class IntReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val IntReader: JsReader<EB, Unit, Int> = intReader()
+        private val IntReader: JsReader<EB, Unit, Int> = IntReader()
     }
 
     init {

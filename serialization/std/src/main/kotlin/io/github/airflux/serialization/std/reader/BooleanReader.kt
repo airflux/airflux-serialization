@@ -26,11 +26,14 @@ import io.github.airflux.serialization.std.reader.env.invalidTypeError
 /**
  * Reader for primitive [Boolean] type.
  */
-public fun <EB, O> booleanReader(): JsReader<EB, O, Boolean>
-    where EB : InvalidTypeErrorBuilder =
-    JsReader { env, location, source ->
-        if (source is JsBoolean)
-            success(location = location, value = source.get)
-        else
-            env.invalidTypeError(location, expected = JsValue.Type.BOOLEAN, actual = source.type)
-    }
+public object BooleanReader {
+
+    public operator fun <EB, O> invoke(): JsReader<EB, O, Boolean>
+        where EB : InvalidTypeErrorBuilder =
+        JsReader { env, location, source ->
+            if (source is JsBoolean)
+                success(location = location, value = source.get)
+            else
+                env.invalidTypeError(location, expected = JsValue.Type.BOOLEAN, actual = source.type)
+        }
+}

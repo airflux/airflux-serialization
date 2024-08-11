@@ -1,17 +1,21 @@
-public final class io/github/airflux/serialization/std/reader/BigDecimalReaderKt {
-	public static final fun bigDecimalReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/BigDecimalReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/BigDecimalReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/BooleanReaderKt {
-	public static final fun booleanReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/BooleanReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/BooleanReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/ByteReaderKt {
-	public static final fun byteReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/ByteReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/ByteReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/IntReaderKt {
-	public static final fun intReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/IntReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/IntReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
 public final class io/github/airflux/serialization/std/reader/JsArrayReader {
@@ -24,16 +28,19 @@ public final class io/github/airflux/serialization/std/reader/JsStructReader {
 	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/LongReaderKt {
-	public static final fun longReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/LongReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/LongReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/ShortReaderKt {
-	public static final fun shortReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/ShortReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/ShortReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/StringReaderKt {
-	public static final fun stringReader ()Lio/github/airflux/serialization/core/reader/JsReader;
+public final class io/github/airflux/serialization/std/reader/StringReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/StringReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
 public final class io/github/airflux/serialization/std/validator/array/IsNotEmptyArrayValidator : io/github/airflux/serialization/dsl/reader/array/validation/JsArrayValidator {

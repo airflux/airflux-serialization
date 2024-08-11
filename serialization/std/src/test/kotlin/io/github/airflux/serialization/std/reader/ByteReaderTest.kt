@@ -36,7 +36,7 @@ internal class ByteReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val ByteReader = byteReader<EB, Unit>()
+        private val ByteReader = ByteReader<EB, Unit>()
     }
 
     init {

@@ -37,7 +37,7 @@ internal class LongReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val LongReader = longReader<EB, Unit>()
+        private val LongReader = LongReader<EB, Unit>()
     }
 
     init {

@@ -24,9 +24,12 @@ import java.math.BigDecimal
 /**
  * Reader for [BigDecimal] type.
  */
-public fun <EB, O> bigDecimalReader(): JsReader<EB, O, BigDecimal>
-    where EB : InvalidTypeErrorBuilder,
-          EB : NumberFormatErrorBuilder =
-    JsReader { env, location, source ->
-        source.tryConvertToNumber(env, location, String::toBigDecimal)
-    }
+public object BigDecimalReader {
+
+    public operator fun <EB, O> invoke(): JsReader<EB, O, BigDecimal>
+        where EB : InvalidTypeErrorBuilder,
+              EB : NumberFormatErrorBuilder =
+        JsReader { env, location, source ->
+            source.tryConvertToNumber(env, location, String::toBigDecimal)
+        }
+}

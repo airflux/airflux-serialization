@@ -37,7 +37,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val BigDecimalReader = bigDecimalReader<EB, Unit>()
+        private val BigDecimalReader = BigDecimalReader<EB, Unit>()
     }
 
     init {

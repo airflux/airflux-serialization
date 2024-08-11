@@ -23,9 +23,12 @@ import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilde
 /**
  * Reader for primitive [Int] type.
  */
-public fun <EB, O> intReader(): JsReader<EB, O, Int>
-    where EB : InvalidTypeErrorBuilder,
-          EB : NumberFormatErrorBuilder =
-    JsReader { env, location, source ->
-        source.tryConvertToNumber(env, location, String::toInt)
-    }
+public object IntReader {
+
+    public operator fun <EB, O> invoke(): JsReader<EB, O, Int>
+        where EB : InvalidTypeErrorBuilder,
+              EB : NumberFormatErrorBuilder =
+        JsReader { env, location, source ->
+            source.tryConvertToNumber(env, location, String::toInt)
+        }
+}

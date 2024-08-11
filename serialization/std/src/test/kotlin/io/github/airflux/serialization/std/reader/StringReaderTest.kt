@@ -34,7 +34,7 @@ internal class StringReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val StringReader: JsReader<EB, Unit, String> = stringReader()
+        private val StringReader: JsReader<EB, Unit, String> = StringReader()
         private const val TEXT = "abc"
     }
 

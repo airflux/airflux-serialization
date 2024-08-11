@@ -36,7 +36,7 @@ internal class ShortReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val ShortReader = shortReader<EB, Unit>()
+        private val ShortReader = ShortReader<EB, Unit>()
     }
 
     init {
