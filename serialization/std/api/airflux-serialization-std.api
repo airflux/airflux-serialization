@@ -14,6 +14,11 @@ public final class io/github/airflux/serialization/std/reader/IntReaderKt {
 	public static final fun intReader ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
+public final class io/github/airflux/serialization/std/reader/JsArrayReader {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/JsArrayReader;
+	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
+}
+
 public final class io/github/airflux/serialization/std/reader/JsStructReader {
 	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/JsStructReader;
 	public final fun invoke ()Lio/github/airflux/serialization/core/reader/JsReader;
