@@ -28,7 +28,7 @@ import io.github.airflux.serialization.std.reader.env.invalidTypeError
  */
 public object JsStructReader {
 
-    public operator fun <EB, O> invoke(): JsReader<EB, O, JsStruct>
+    public fun <EB, O> build(): JsReader<EB, O, JsStruct>
         where EB : InvalidTypeErrorBuilder =
         JsReader { env, location, source ->
             if (source is JsStruct)

@@ -34,7 +34,7 @@ internal class BooleanReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val BooleanReader: JsReader<EB, Unit, Boolean> = BooleanReader()
+        private val reader: JsReader<EB, Unit, Boolean> = BooleanReader.build()
     }
 
     init {
@@ -43,19 +43,19 @@ internal class BooleanReaderTest : FreeSpec() {
 
             "should return value the true" {
                 val source: JsValue = JsBoolean.valueOf(true)
-                val result = BooleanReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeSuccess(location = LOCATION, value = true)
             }
 
             "should return value the false" {
                 val source: JsValue = JsBoolean.valueOf(false)
-                val result = BooleanReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeSuccess(location = LOCATION, value = false)
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = BooleanReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeFailure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(

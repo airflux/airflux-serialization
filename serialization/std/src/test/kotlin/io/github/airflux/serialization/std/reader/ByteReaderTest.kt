@@ -36,7 +36,7 @@ internal class ByteReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val ByteReader = ByteReader<EB, Unit>()
+        private val reader = ByteReader.build<EB, Unit>()
     }
 
     init {
@@ -52,14 +52,14 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: JsValue = JsNumber.valueOf(value.toString())!!
-                    val result = ByteReader.read(ENV, LOCATION, source)
+                    val result = reader.read(ENV, LOCATION, source)
                     result.shouldBeSuccess(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = ByteReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeFailure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
@@ -86,7 +86,7 @@ internal class ByteReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = JsNumber.valueOf(value)!!
-                    val result = ByteReader.read(ENV, LOCATION, source)
+                    val result = reader.read(ENV, LOCATION, source)
                     result.shouldBeFailure(
                         location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Byte::class)

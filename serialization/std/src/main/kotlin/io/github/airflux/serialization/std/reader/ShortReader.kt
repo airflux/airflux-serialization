@@ -25,7 +25,7 @@ import io.github.airflux.serialization.core.reader.error.NumberFormatErrorBuilde
  */
 public object ShortReader {
 
-    public operator fun <EB, O> invoke(): JsReader<EB, O, Short>
+    public fun <EB, O> build(): JsReader<EB, O, Short>
         where EB : InvalidTypeErrorBuilder,
               EB : NumberFormatErrorBuilder =
         JsReader { env, location, source ->

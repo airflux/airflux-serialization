@@ -37,7 +37,7 @@ internal class BigDecimalReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val BigDecimalReader = BigDecimalReader<EB, Unit>()
+        private val reader = BigDecimalReader.build<EB, Unit>()
     }
 
     init {
@@ -49,14 +49,14 @@ internal class BigDecimalReaderTest : FreeSpec() {
                     listOf("-10.5", "-10", "-0.5", "0", "0.5", "10", "10.5")
                 ) { value ->
                     val source: JsValue = JsNumber.valueOf(value)!!
-                    val result = BigDecimalReader.read(ENV, LOCATION, source)
+                    val result = reader.read(ENV, LOCATION, source)
                     result.shouldBeSuccess(location = LOCATION, value = BigDecimal(value))
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = BigDecimalReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeFailure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(

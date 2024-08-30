@@ -37,7 +37,7 @@ internal class IntReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val IntReader: JsReader<EB, Unit, Int> = IntReader()
+        private val reader: JsReader<EB, Unit, Int> = IntReader.build()
     }
 
     init {
@@ -53,14 +53,14 @@ internal class IntReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source: JsValue = JsNumber.valueOf(value.toString())!!
-                    val result = IntReader.read(ENV, LOCATION, source)
+                    val result = reader.read(ENV, LOCATION, source)
                     result.shouldBeSuccess(location = LOCATION, value = value)
                 }
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsString("abc")
-                val result = IntReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeFailure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(
@@ -87,7 +87,7 @@ internal class IntReaderTest : FreeSpec() {
                     )
                 ) { (_, value) ->
                     val source = JsNumber.valueOf(value)!!
-                    val result = IntReader.read(ENV, LOCATION, source)
+                    val result = reader.read(ENV, LOCATION, source)
                     result.shouldBeFailure(
                         location = JsLocation,
                         error = JsonErrors.ValueCast(value = value, type = Int::class)

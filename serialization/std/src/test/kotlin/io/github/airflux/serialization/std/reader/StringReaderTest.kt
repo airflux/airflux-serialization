@@ -34,7 +34,7 @@ internal class StringReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val StringReader: JsReader<EB, Unit, String> = StringReader()
+        private val reader: JsReader<EB, Unit, String> = StringReader.build()
         private const val TEXT = "abc"
     }
 
@@ -43,13 +43,13 @@ internal class StringReaderTest : FreeSpec() {
 
             "should return the string value" {
                 val source: JsValue = JsString(TEXT)
-                val result = StringReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeSuccess(location = LOCATION, value = TEXT)
             }
 
             "should return the invalid type error" {
                 val source: JsValue = JsBoolean.valueOf(true)
-                val result = StringReader.read(ENV, LOCATION, source)
+                val result = reader.read(ENV, LOCATION, source)
                 result.shouldBeFailure(
                     location = JsLocation,
                     error = JsonErrors.InvalidType(

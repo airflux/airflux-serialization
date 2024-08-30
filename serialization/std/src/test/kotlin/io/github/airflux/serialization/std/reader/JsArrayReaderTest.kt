@@ -35,7 +35,7 @@ internal class JsArrayReaderTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(EB(), Unit)
         private val LOCATION: JsLocation = JsLocation
-        private val reader: JsReader<EB, Unit, JsArray> = JsArrayReader()
+        private val reader: JsReader<EB, Unit, JsArray> = JsArrayReader.build()
 
         private const val TEXT = "abc"
         private const val FIRST_ITEM = "123"

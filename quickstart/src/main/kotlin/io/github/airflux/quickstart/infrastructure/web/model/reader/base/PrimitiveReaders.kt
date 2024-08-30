@@ -21,5 +21,5 @@ import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOp
 import io.github.airflux.serialization.std.reader.BigDecimalReader
 import io.github.airflux.serialization.std.reader.StringReader
 
-val StringReader = StringReader<ReaderErrorBuilders, ReaderOptions>()
-val BigDecimalReader = BigDecimalReader<ReaderErrorBuilders, ReaderOptions>()
+val StringReader = StringReader.build<ReaderErrorBuilders, ReaderOptions>()
+val BigDecimalReader = BigDecimalReader.build<ReaderErrorBuilders, ReaderOptions>()
