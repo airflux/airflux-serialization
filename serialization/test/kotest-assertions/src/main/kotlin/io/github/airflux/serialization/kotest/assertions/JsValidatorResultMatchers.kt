@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.kotest.assertions
 
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.isInvalid
 import io.github.airflux.serialization.core.reader.validation.isValid
 import io.kotest.assertions.collectOrThrow
@@ -26,15 +26,15 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 @OptIn(ExperimentalContracts::class)
-public fun JsValidatorResult.shouldBeValid(
-    message: (JsValidatorResult.Invalid) -> String = { it.toString() }
-): JsValidatorResult.Valid {
+public fun JsValidationResult.shouldBeValid(
+    message: (JsValidationResult.Invalid) -> String = { it.toString() }
+): JsValidationResult.Valid {
     contract {
-        returns() implies (this@shouldBeValid is JsValidatorResult.Valid)
+        returns() implies (this@shouldBeValid is JsValidationResult.Valid)
     }
 
     if (this.isInvalid()) {
-        val expectedType = JsValidatorResult.Valid::class.qualifiedName!!
+        val expectedType = JsValidationResult.Valid::class.qualifiedName!!
         val actualType = this::class.qualifiedName!!
         val causeDescription = message(this).makeDescription()
 
@@ -46,19 +46,19 @@ public fun JsValidatorResult.shouldBeValid(
             )
         )
     }
-    return this as JsValidatorResult.Valid
+    return this as JsValidationResult.Valid
 }
 
 @OptIn(ExperimentalContracts::class)
-public fun JsValidatorResult.shouldBeInvalid(
+public fun JsValidationResult.shouldBeInvalid(
     message: () -> String = { "" }
-): JsValidatorResult.Invalid {
+): JsValidationResult.Invalid {
     contract {
-        returns() implies (this@shouldBeInvalid is JsValidatorResult.Invalid)
+        returns() implies (this@shouldBeInvalid is JsValidationResult.Invalid)
     }
 
     if (this.isValid()) {
-        val expectedType = JsValidatorResult.Invalid::class.qualifiedName!!
+        val expectedType = JsValidationResult.Invalid::class.qualifiedName!!
         val actualType = this::class.qualifiedName!!
         val causeDescription = message().makeDescription()
 
@@ -70,15 +70,15 @@ public fun JsValidatorResult.shouldBeInvalid(
             )
         )
     }
-    return this as JsValidatorResult.Invalid
+    return this as JsValidationResult.Invalid
 }
 
-public infix fun JsValidatorResult.shouldBeInvalid(expected: JsValidatorResult) {
+public infix fun JsValidationResult.shouldBeInvalid(expected: JsValidationResult) {
     val actual = this.shouldBeInvalid()
     actual shouldBe expected
 }
 
-public fun JsValidatorResult.shouldBeInvalid(expected: JsValidatorResult, message: () -> String) {
+public fun JsValidationResult.shouldBeInvalid(expected: JsValidationResult, message: () -> String) {
     val actual = this.shouldBeInvalid(message)
     actual shouldBe expected
 }

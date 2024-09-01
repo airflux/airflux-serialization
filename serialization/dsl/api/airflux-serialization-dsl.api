@@ -45,7 +45,7 @@ public final class io/github/airflux/serialization/dsl/reader/array/JsArrayReade
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/validation/JsArrayValidator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/JsStructReader : io/github/airflux/serialization/core/reader/JsReader {
@@ -116,7 +116,7 @@ public final class io/github/airflux/serialization/dsl/reader/struct/property/sp
 }
 
 public abstract interface class io/github/airflux/serialization/dsl/reader/struct/validation/JsStructValidator {
-	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;
+	public abstract fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/value/JsStruct;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;
 }
 
 public final class io/github/airflux/serialization/dsl/reader/struct/validation/JsStructValidatorKt {

@@ -15,12 +15,12 @@ public final class io/github/airflux/serialization/kotest/assertions/JsReaderRes
 }
 
 public final class io/github/airflux/serialization/kotest/assertions/JsValidatorResultMatchersKt {
-	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;)V
-	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function0;)V
-	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult$Invalid;
-	public static synthetic fun shouldBeInvalid$default (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult$Invalid;
-	public static final fun shouldBeValid (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult$Valid;
-	public static synthetic fun shouldBeValid$default (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult$Valid;
+	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;)V
+	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lkotlin/jvm/functions/Function0;)V
+	public static final fun shouldBeInvalid (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult$Invalid;
+	public static synthetic fun shouldBeInvalid$default (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lkotlin/jvm/functions/Function0;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult$Invalid;
+	public static final fun shouldBeValid (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult$Valid;
+	public static synthetic fun shouldBeValid$default (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult$Valid;
 }
 
 public final class io/github/airflux/serialization/kotest/assertions/MatcherHelperKt {

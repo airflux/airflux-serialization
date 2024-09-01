@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
@@ -55,7 +55,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, LOCATION, PROPERTIES, source)
 
-                    result shouldBeInvalid JsValidatorResult.Invalid(
+                    result shouldBeInvalid JsValidationResult.Invalid(
                         failure = JsReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Struct.MinProperties(expected = MIN_PROPERTIES, actual = 0)
@@ -70,7 +70,7 @@ internal class MinPropertiesStructValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, LOCATION, PROPERTIES, source)
 
-                    result shouldBeInvalid JsValidatorResult.Invalid(
+                    result shouldBeInvalid JsValidationResult.Invalid(
                         failure = JsReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Struct.MinProperties(expected = MIN_PROPERTIES, actual = 1)

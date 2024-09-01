@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.toInvalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
@@ -42,7 +42,7 @@ public class AdditionalPropertiesStructValidator<EB, O>(
         location: JsLocation,
         properties: StructProperties<EB, O>,
         source: JsStruct
-    ): JsValidatorResult {
+    ): JsValidationResult {
         val failFast = env.options.failFast
 
         var failureAccumulator: JsReaderResult.Failure? = null
@@ -60,7 +60,7 @@ public class AdditionalPropertiesStructValidator<EB, O>(
     private fun JsReaderEnv<EB, O>.error(location: JsLocation): JsReaderResult.Failure =
         JsReaderResult.Failure(location = location, error = errorBuilders.additionalPropertiesStructError())
 
-    private fun result(failure: JsReaderResult.Failure?): JsValidatorResult =
+    private fun result(failure: JsReaderResult.Failure?): JsValidationResult =
         if (failure != null) failure.toInvalid() else valid()
 
     public fun interface ErrorBuilder {

@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.getOrNull
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
@@ -50,6 +50,6 @@ internal class ArrayReaderWithValidation<EB, O, T>(
                 )
     }
 
-    private fun JsArray.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsValidatorResult =
+    private fun JsArray.validate(env: JsReaderEnv<EB, O>, location: JsLocation): JsValidationResult =
         validator.validate(env, location, this)
 }

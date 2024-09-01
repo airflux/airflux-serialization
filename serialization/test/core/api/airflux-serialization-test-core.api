@@ -30,11 +30,11 @@ public final class io/github/airflux/serialization/test/dummy/DummyReaderPredica
 
 public final class io/github/airflux/serialization/test/dummy/DummyValidator : io/github/airflux/serialization/core/reader/validation/JsValidator {
 	public static final field Companion Lio/github/airflux/serialization/test/dummy/DummyValidator$Companion;
-	public fun <init> (Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;)V
+	public fun <init> (Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;)V
 	public fun <init> (Lkotlin/jvm/functions/Function3;)V
 	public final fun getResult ()Lkotlin/jvm/functions/Function3;
 	public static final fun isNotEmptyString (Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/validation/JsValidator;
-	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidatorResult;
+	public fun validate (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/reader/validation/JsValidationResult;
 }
 
 public final class io/github/airflux/serialization/test/dummy/DummyValidator$Companion {

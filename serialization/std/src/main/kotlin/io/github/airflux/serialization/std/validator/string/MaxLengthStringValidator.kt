@@ -19,8 +19,8 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
@@ -29,7 +29,7 @@ public class MaxLengthStringValidator<EB, O> internal constructor(
 ) : JsValidator<EB, O, String?>
     where EB : MaxLengthStringValidator.ErrorBuilder {
 
-    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: String?): JsValidatorResult =
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: String?): JsValidationResult =
         if (value != null) {
             if (value.length <= expected)
                 valid()

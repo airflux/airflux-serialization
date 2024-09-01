@@ -72,7 +72,7 @@ internal class JsValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, Unit)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = (
                                 JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing) +
                                     JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.InvalidType)
@@ -96,7 +96,7 @@ internal class JsValidatorTest : FreeSpec() {
                     val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, Unit)
 
-                    result shouldBeInvalid JsValidatorResult.Invalid(
+                    result shouldBeInvalid JsValidationResult.Invalid(
                         failure = JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing)
                     )
                 }
@@ -121,7 +121,7 @@ internal class JsValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, Unit)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing)
                         )
                     }

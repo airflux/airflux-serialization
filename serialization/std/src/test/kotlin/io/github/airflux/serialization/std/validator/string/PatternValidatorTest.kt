@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.string
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.kotest.assertions.shouldBeInvalid
 import io.github.airflux.serialization.kotest.assertions.shouldBeValid
 import io.github.airflux.serialization.std.common.JsonErrors
@@ -54,7 +54,7 @@ internal class PatternValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, LOCATION, str)
 
-                    result shouldBeInvalid JsValidatorResult.Invalid(
+                    result shouldBeInvalid JsValidationResult.Invalid(
                         failure = JsReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.Pattern(value = str, regex = PATTERN)
@@ -69,7 +69,7 @@ internal class PatternValidatorTest : FreeSpec() {
                 "then the validator should return an error" {
                     val result = validator.validate(ENV, LOCATION, str)
 
-                    result shouldBeInvalid JsValidatorResult.Invalid(
+                    result shouldBeInvalid JsValidationResult.Invalid(
                         failure = JsReaderResult.Failure(
                             location = LOCATION,
                             error = JsonErrors.Validation.Strings.Pattern(value = str, regex = PATTERN)
@@ -86,7 +86,7 @@ internal class PatternValidatorTest : FreeSpec() {
                     "then the validator should return an error" {
                         val result = validator.validate(ENV, LOCATION, str)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = JsReaderResult.Failure(
                                 location = LOCATION,
                                 error = JsonErrors.Validation.Strings.Pattern(value = str, regex = PATTERN)

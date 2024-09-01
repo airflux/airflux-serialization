@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsStruct
@@ -82,7 +82,7 @@ internal class JsStructValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator or rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = JsReaderResult.Failure(LOCATION, ValidationErrors.PathMissing) +
                                 JsReaderResult.Failure(LOCATION, ValidationErrors.InvalidType)
                         )
@@ -104,7 +104,7 @@ internal class JsStructValidatorTest : FreeSpec() {
                     val composeValidator = leftValidator and rightValidator
                     val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
-                    result shouldBeInvalid JsValidatorResult.Invalid(
+                    result shouldBeInvalid JsValidationResult.Invalid(
                         failure = JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing)
                     )
                 }
@@ -129,7 +129,7 @@ internal class JsStructValidatorTest : FreeSpec() {
                         val composeValidator = leftValidator and rightValidator
                         val result = composeValidator.validate(ENV, LOCATION, PROPERTIES, SOURCE)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = JsReaderResult.Failure(location = LOCATION, error = ValidationErrors.PathMissing)
                         )
                     }

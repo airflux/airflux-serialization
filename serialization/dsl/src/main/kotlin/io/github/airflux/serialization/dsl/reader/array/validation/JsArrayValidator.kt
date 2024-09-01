@@ -19,13 +19,13 @@ package io.github.airflux.serialization.dsl.reader.array.validation
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.isValid
 import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 
 public fun interface JsArrayValidator<EB, O> {
-    public fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult
+    public fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidationResult
 }
 
 /*
@@ -44,7 +44,7 @@ internal infix fun <EB, O> JsArrayValidator<EB, O>.or(alt: JsArrayValidator<EB, 
         val right = alt.validate(env, location, value)
         if (right.isValid()) return@JsArrayValidator valid()
 
-        JsValidatorResult.Invalid(left.failure + right.failure)
+        JsValidationResult.Invalid(left.failure + right.failure)
     }
 }
 

@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
@@ -117,7 +117,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return first error" {
                         val result = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = JsReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
@@ -132,7 +132,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
 
-                        result shouldBeInvalid JsValidatorResult.Invalid(
+                        result shouldBeInvalid JsValidationResult.Invalid(
                             failure = JsReaderResult.Failure(
                                 location = LOCATION.append(TITLE_PROPERTY_VALUE),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties

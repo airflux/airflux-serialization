@@ -22,10 +22,10 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class JsValidatorResultTest : FreeSpec() {
+internal class JsValidationResultTest : FreeSpec() {
 
     init {
-        "The JsValidatorResult type" - {
+        "The JsValidationResult type" - {
 
             "the extension function `isValid`" - {
 

@@ -19,8 +19,8 @@ package io.github.airflux.serialization.std.validator.property
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.reader.validation.JsValidationResult
 import io.github.airflux.serialization.core.reader.validation.JsValidator
-import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
 
@@ -29,7 +29,7 @@ public class ForbiddenPropertyValidator<EB, O, T> internal constructor(
 ) : JsValidator<EB, O, T>
     where EB : ForbiddenPropertyValidator.ErrorBuilder {
 
-    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: T): JsValidatorResult =
+    override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, value: T): JsValidationResult =
         if (predicate(env, location)) {
             if (value == null)
                 valid()
