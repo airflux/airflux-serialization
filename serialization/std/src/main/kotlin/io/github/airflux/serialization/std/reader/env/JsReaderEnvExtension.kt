@@ -29,4 +29,4 @@ internal fun <EB, O> JsReaderEnv<EB, O>.invalidTypeError(
     actual: JsValue.Type
 ): JsReaderResult<Nothing>
     where EB : InvalidTypeErrorBuilder =
-    failure(location = location, error = errorBuilders.invalidTypeError(expected, actual))
+    failure(location = location, error = config.errorBuilders.invalidTypeError(expected, actual))

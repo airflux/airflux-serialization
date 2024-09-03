@@ -32,7 +32,7 @@ public fun <EB, O, T> JsSourceInput.deserialize(env: JsReaderEnv<EB, O>, reader:
     where EB : ParsingErrorBuilder,
           O : PropertyNamePoolOption {
     val pool =
-        if (env.options.usePropertyNamePool) PropertyNamePool() else null
+        if (env.config.options.usePropertyNamePool) PropertyNamePool() else null
     val parser = JsParser(this, pool)
     return when (val result = parser.parse()) {
         is JsParserResult.Success -> {
@@ -40,14 +40,14 @@ public fun <EB, O, T> JsSourceInput.deserialize(env: JsReaderEnv<EB, O>, reader:
             if (value != null)
                 reader.read(env, JsLocation.Root, value)
             else
-                JsReaderResult.Failure(location = JsLocation.Root, error = env.errorBuilders.contextMissingError())
+                JsReaderResult.Failure(location = JsLocation.Root, error = env.config.errorBuilders.contextMissingError())
         }
 
         is JsParserResult.Failure -> {
             val error = result.error
             JsReaderResult.Failure(
                 location = JsLocation.Root,
-                error = env.errorBuilders.parsingError(
+                error = env.config.errorBuilders.parsingError(
                     description = error.description,
                     position = error.position,
                     line = error.line,

@@ -33,11 +33,6 @@ public final class io/github/airflux/serialization/std/reader/LongReader {
 	public final fun build ()Lio/github/airflux/serialization/core/reader/JsReader;
 }
 
-public final class io/github/airflux/serialization/std/reader/ReaderCache {
-	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/ReaderCache;
-	public final fun get (Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/Class;Lkotlin/jvm/functions/Function0;)Lio/github/airflux/serialization/core/reader/JsReader;
-}
-
 public final class io/github/airflux/serialization/std/reader/ShortReader {
 	public static final field INSTANCE Lio/github/airflux/serialization/std/reader/ShortReader;
 	public final fun build ()Lio/github/airflux/serialization/core/reader/JsReader;

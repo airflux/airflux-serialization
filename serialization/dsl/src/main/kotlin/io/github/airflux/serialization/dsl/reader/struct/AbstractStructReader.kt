@@ -33,7 +33,7 @@ internal abstract class AbstractStructReader<EB, O, T> : JsStructReader<EB, O, T
         else
             failure(
                 location = location,
-                error = env.errorBuilders.invalidTypeError(expected = JsValue.Type.STRUCT, actual = source.type)
+                error = env.config.errorBuilders.invalidTypeError(expected = JsValue.Type.STRUCT, actual = source.type)
             )
 
     abstract fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T>

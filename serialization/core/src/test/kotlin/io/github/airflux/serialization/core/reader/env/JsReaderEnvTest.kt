@@ -33,7 +33,7 @@ internal class JsReaderEnvTest : FreeSpec() {
         "The `JsReaderEnv` type" - {
 
             "when the environment instance is created with empty context" - {
-                val env = JsReaderEnv(errorBuilders = errorBuilder, options = options)
+                val env = JsReaderEnv(JsReaderEnv.Config(errorBuilders = errorBuilder, options = options))
 
                 "then the environment instance should contain the empty context" {
                     env.context.isEmpty shouldBe true
@@ -41,7 +41,10 @@ internal class JsReaderEnvTest : FreeSpec() {
             }
 
             "when the environment instance is created with a some element in the context" - {
-                val env = JsReaderEnv(errorBuilders = errorBuilder, options = options, context = UserContextElement())
+                val env = JsReaderEnv(
+                    config = JsReaderEnv.Config(errorBuilders = errorBuilder, options = options),
+                    context = UserContextElement()
+                )
 
                 "then the environment instance should contain context with the passed elements" {
                     env.context.isEmpty shouldBe false

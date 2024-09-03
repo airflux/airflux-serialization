@@ -29,7 +29,7 @@ internal class JsWriterEnvTest : FreeSpec() {
         "The `JsWriterEnv` type" - {
 
             "when the environment instance is created with empty context" - {
-                val env = JsWriterEnv(options = options)
+                val env = JsWriterEnv(config = JsWriterEnv.Config(options = options))
 
                 "then the environment instance should contain the empty context" {
                     env.context.isEmpty shouldBe true
@@ -37,7 +37,7 @@ internal class JsWriterEnvTest : FreeSpec() {
             }
 
             "when the environment instance is created with a some element in the context" - {
-                val env = JsWriterEnv(options = options, context = UserContextElement())
+                val env = JsWriterEnv(config = JsWriterEnv.Config(options = options), context = UserContextElement())
 
                 "then the environment instance should contain context with the passed elements" {
                     env.context.isEmpty shouldBe false

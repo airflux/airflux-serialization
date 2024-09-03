@@ -34,7 +34,7 @@ internal class IsNotEmptyStructValidatorTest : FreeSpec() {
     companion object {
         private const val ID_PROPERTY_NAME = "id"
         private const val ID_PROPERTY_VALUE = "property-id"
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private val PROPERTIES: StructProperties<EB, Unit> = emptyList()
     }

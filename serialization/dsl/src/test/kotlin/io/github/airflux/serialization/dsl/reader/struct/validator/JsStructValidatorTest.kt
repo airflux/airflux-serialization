@@ -35,7 +35,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class JsStructValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(Unit, Unit)
+        private val ENV = JsReaderEnv(JsReaderEnv.Config(errorBuilders = Unit, options = Unit))
         private val LOCATION: JsLocation = JsLocation
         private val PROPERTIES: StructProperties<Unit, Unit> = emptyList()
         private val SOURCE: JsStruct = JsStruct()

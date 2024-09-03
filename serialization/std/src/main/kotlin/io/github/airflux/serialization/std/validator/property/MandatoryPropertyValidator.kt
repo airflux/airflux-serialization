@@ -34,7 +34,7 @@ public class MandatoryPropertyValidator<EB, O, T> internal constructor(
             if (value != null)
                 valid()
             else
-                invalid(location = location, error = env.errorBuilders.mandatoryPropertyError())
+                invalid(location = location, error = env.config.errorBuilders.mandatoryPropertyError())
         } else
             valid()
 

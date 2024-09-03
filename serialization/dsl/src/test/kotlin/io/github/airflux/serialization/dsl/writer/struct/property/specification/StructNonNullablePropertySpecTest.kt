@@ -32,7 +32,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
         private const val PROPERTY_NAME = "id"
         private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
 
-        private val ENV = JsWriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(config = JsWriterEnv.Config(options = Unit))
         private val LOCATION: JsLocation = JsLocation
 
         private val WRITER: JsWriter<Unit, String> = DummyWriter.string()

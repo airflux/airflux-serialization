@@ -32,7 +32,7 @@ public class IsNotBlankStringValidator<EB, O> internal constructor() : JsValidat
             if (value.isNotBlank())
                 valid()
             else
-                invalid(location = location, error = env.errorBuilders.isNotBlankStringError())
+                invalid(location = location, error = env.config.errorBuilders.isNotBlankStringError())
         } else
             valid()
 

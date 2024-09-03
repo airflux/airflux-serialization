@@ -276,9 +276,14 @@ public final class io/github/airflux/serialization/core/reader/RequiredPropertyR
 }
 
 public final class io/github/airflux/serialization/core/reader/env/JsReaderEnv {
-	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/context/JsContext;)V
-	public synthetic fun <init> (Ljava/lang/Object;Ljava/lang/Object;Lio/github/airflux/serialization/core/context/JsContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;)V
+	public synthetic fun <init> (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getConfig ()Lio/github/airflux/serialization/core/reader/env/JsReaderEnv$Config;
 	public final fun getContext ()Lio/github/airflux/serialization/core/context/JsContext;
+}
+
+public final class io/github/airflux/serialization/core/reader/env/JsReaderEnv$Config {
+	public fun <init> (Ljava/lang/Object;Ljava/lang/Object;)V
 	public final fun getErrorBuilders ()Ljava/lang/Object;
 	public final fun getOptions ()Ljava/lang/Object;
 }
@@ -621,17 +626,22 @@ public final class io/github/airflux/serialization/core/writer/JsWriterKt {
 }
 
 public final class io/github/airflux/serialization/core/writer/env/JsWriterEnv {
-	public fun <init> (Ljava/lang/Object;Lio/github/airflux/serialization/core/context/JsContext;)V
-	public synthetic fun <init> (Ljava/lang/Object;Lio/github/airflux/serialization/core/context/JsContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/Object;
+	public fun <init> (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;)V
+	public synthetic fun <init> (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;
 	public final fun component2 ()Lio/github/airflux/serialization/core/context/JsContext;
-	public final fun copy (Ljava/lang/Object;Lio/github/airflux/serialization/core/context/JsContext;)Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;
-	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Ljava/lang/Object;Lio/github/airflux/serialization/core/context/JsContext;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;
+	public final fun copy (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;)Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;
+	public static synthetic fun copy$default (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;ILjava/lang/Object;)Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConfig ()Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;
 	public final fun getContext ()Lio/github/airflux/serialization/core/context/JsContext;
-	public final fun getOptions ()Ljava/lang/Object;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/airflux/serialization/core/writer/env/JsWriterEnv$Config {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun getOptions ()Ljava/lang/Object;
 }
 
 public final class io/github/airflux/serialization/core/writer/env/JsWriterEnvKt {

@@ -36,7 +36,7 @@ public class IsNotEmptyStructValidator<EB, O> internal constructor() : JsStructV
         source: JsStruct
     ): JsValidatorResult =
         if (source.isEmpty())
-            invalid(location = location, error = env.errorBuilders.isNotEmptyStructError())
+            invalid(location = location, error = env.config.errorBuilders.isNotEmptyStructError())
         else
             valid()
 

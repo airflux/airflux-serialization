@@ -50,7 +50,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE_AS_INT = "10"
         private const val DEFAULT_VALUE = "none"
 
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private val DEFAULT: (JsReaderEnv<EB, Unit>, JsLocation) -> String = { _, _ -> DEFAULT_VALUE }
 

@@ -38,7 +38,7 @@ internal class JsReaderResultTest : FreeSpec() {
         private const val ORIGINAL_VALUE = "10"
         private const val ALTERNATIVE_VALUE = "20"
 
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
     }
 

@@ -124,7 +124,7 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
         private const val TITLE_PROPERTY_NAME = "title"
         private const val TITLE_PROPERTY_VALUE = "Mr."
 
-        private val ENV = JsReaderEnv(EB(), OPTS(failFast = true))
+        private val ENV = JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
         private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
 

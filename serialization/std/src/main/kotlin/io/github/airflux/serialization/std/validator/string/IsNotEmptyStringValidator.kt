@@ -32,7 +32,7 @@ public class IsNotEmptyStringValidator<EB, O> internal constructor() : JsValidat
             if (value.isNotEmpty())
                 valid()
             else
-                invalid(location = location, error = env.errorBuilders.isNotEmptyStringError())
+                invalid(location = location, error = env.config.errorBuilders.isNotEmptyStringError())
         } else
             valid()
 

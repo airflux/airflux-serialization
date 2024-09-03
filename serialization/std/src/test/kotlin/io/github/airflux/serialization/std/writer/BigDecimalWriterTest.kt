@@ -26,7 +26,7 @@ import java.math.BigDecimal
 internal class BigDecimalWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsWriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(config = JsWriterEnv.Config(options = Unit))
         private val LOCATION: JsLocation = JsLocation
         private const val TEXT_VALUE = "10.50"
         private const val TEXT_VALUE_WITHOUT_TRAILING_ZEROS = "10.5"

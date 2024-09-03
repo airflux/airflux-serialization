@@ -34,7 +34,7 @@ public class PatternStringValidator<EB, O, T : String?> internal constructor(
             if (pattern.matches(value))
                 valid()
             else
-                invalid(location = location, error = env.errorBuilders.patternStringError(value, pattern))
+                invalid(location = location, error = env.config.errorBuilders.patternStringError(value, pattern))
         } else
             valid()
 

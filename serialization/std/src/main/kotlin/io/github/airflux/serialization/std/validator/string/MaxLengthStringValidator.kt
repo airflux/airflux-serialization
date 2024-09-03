@@ -36,7 +36,7 @@ public class MaxLengthStringValidator<EB, O> internal constructor(
             else
                 invalid(
                     location = location,
-                    error = env.errorBuilders.maxLengthStringError(expected, value.length)
+                    error = env.config.errorBuilders.maxLengthStringError(expected, value.length)
                 )
         } else
             valid()

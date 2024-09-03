@@ -57,7 +57,8 @@ internal class StructWriterTest : FreeSpec() {
                 }
 
                 "when the action of the writer was set to return empty value" - {
-                    val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                    val env =
+                        JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE)))
 
                     "then should return a struct with property" {
                         val result =
@@ -69,7 +70,8 @@ internal class StructWriterTest : FreeSpec() {
                 }
 
                 "when the action of the writer was set to return nothing" - {
-                    val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                    val env =
+                        JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING)))
 
                     "then should return a struct with property" {
                         val result =
@@ -81,7 +83,8 @@ internal class StructWriterTest : FreeSpec() {
                 }
 
                 "when the action of the writer was set to return null value" - {
-                    val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                    val env =
+                        JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE)))
 
                     "then should return a struct with property" {
                         val result =
@@ -108,7 +111,8 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return empty value" - {
-                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                        val env =
+                            JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE)))
 
                         "then should return a struct with property" {
                             val result =
@@ -118,7 +122,8 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return nothing" - {
-                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                        val env =
+                            JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING)))
 
                         "then should return a struct with property" {
                             val result =
@@ -128,7 +133,8 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return null value" - {
-                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                        val env =
+                            JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE)))
 
                         "then should return a struct with property" {
                             val result =
@@ -150,7 +156,8 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return empty value" - {
-                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE))
+                        val env =
+                            JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_EMPTY_VALUE)))
 
                         "then should return an empty struct" {
                             val result =
@@ -160,7 +167,8 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return nothing" - {
-                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING))
+                        val env =
+                            JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_NOTHING)))
 
                         "then should return a null value" {
                             val result =
@@ -170,7 +178,8 @@ internal class StructWriterTest : FreeSpec() {
                     }
 
                     "when the action of the writer was set to return null value" - {
-                        val env = JsWriterEnv(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE))
+                        val env =
+                            JsWriterEnv(config = JsWriterEnv.Config(options = OPTS(writerActionIfResultIsEmpty = RETURN_NULL_VALUE)))
 
                         "then should return a JsNull value" {
                             val result =

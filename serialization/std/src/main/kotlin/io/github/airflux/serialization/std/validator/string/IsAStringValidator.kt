@@ -33,7 +33,7 @@ public class IsAStringValidator<EB, O> internal constructor(
         if (predicate(value))
             valid()
         else
-            invalid(location = location, error = env.errorBuilders.isAStringError(value))
+            invalid(location = location, error = env.config.errorBuilders.isAStringError(value))
 
     public fun interface ErrorBuilder {
         public fun isAStringError(value: String): JsReaderResult.Error

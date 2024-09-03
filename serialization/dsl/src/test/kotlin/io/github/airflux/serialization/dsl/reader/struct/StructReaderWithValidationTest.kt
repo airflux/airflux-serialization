@@ -202,8 +202,10 @@ internal class StructReaderWithValidationTest : FreeSpec() {
         private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
         private const val IS_ACTIVE_PROPERTY_VALUE = true
 
-        private val ENV_WITH_FAIL_FAST_IS_TRUE = JsReaderEnv(EB(), OPTS(failFast = true))
-        private val ENV_WITH_FAIL_FAST_IS_FALSE = JsReaderEnv(EB(), OPTS(failFast = false))
+        private val ENV_WITH_FAIL_FAST_IS_TRUE =
+            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
+        private val ENV_WITH_FAIL_FAST_IS_FALSE =
+            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
         private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()

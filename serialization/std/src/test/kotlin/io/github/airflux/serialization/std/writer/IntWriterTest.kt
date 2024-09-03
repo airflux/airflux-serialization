@@ -26,7 +26,7 @@ import io.kotest.matchers.shouldBe
 internal class IntWriterTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsWriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(config = JsWriterEnv.Config(options = Unit))
         private val LOCATION: JsLocation = JsLocation
     }
 

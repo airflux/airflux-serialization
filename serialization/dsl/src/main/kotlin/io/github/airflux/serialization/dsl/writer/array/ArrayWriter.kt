@@ -41,7 +41,7 @@ public class ArrayWriter<O, T> internal constructor(
         return if (result.isNotEmpty())
             JsArray(result)
         else
-            when (env.options.writerActionIfResultIsEmpty) {
+            when (env.config.options.writerActionIfResultIsEmpty) {
                 RETURN_EMPTY_VALUE -> JsArray()
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> JsNull

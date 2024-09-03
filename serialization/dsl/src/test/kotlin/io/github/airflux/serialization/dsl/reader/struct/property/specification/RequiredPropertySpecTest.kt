@@ -49,7 +49,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE_AS_UUID = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val ID_PROPERTY_VALUE_AS_INT = "10"
 
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()

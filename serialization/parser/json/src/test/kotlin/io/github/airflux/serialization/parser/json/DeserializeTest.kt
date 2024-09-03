@@ -64,7 +64,8 @@ internal class DeserializeTest : FreeSpec() {
     }
 
     companion object {
-        private val ENV: JsReaderEnv<EB, Options> = JsReaderEnv(EB(), Options)
+        private val ENV: JsReaderEnv<EB, Options> =
+            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = Options))
         private val LOCATION: JsLocation = JsLocation.Root
 
         private val reader: JsReader<EB, Options, Boolean> = JsReader { env, location, value ->
@@ -73,7 +74,10 @@ internal class DeserializeTest : FreeSpec() {
                 is JsBoolean.False -> JsReaderResult.Success(location, false)
                 else -> JsReaderResult.Failure(
                     location = location,
-                    error = env.errorBuilders.invalidTypeError(expected = JsValue.Type.BOOLEAN, actual = value.type)
+                    error = env.config.errorBuilders.invalidTypeError(
+                        expected = JsValue.Type.BOOLEAN,
+                        actual = value.type
+                    )
                 )
             }
         }

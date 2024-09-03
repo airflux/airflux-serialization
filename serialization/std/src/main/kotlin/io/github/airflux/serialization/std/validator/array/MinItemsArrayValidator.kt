@@ -32,7 +32,7 @@ public class MinItemsArrayValidator<EB, O> internal constructor(
 
     override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =
         if (source.size < expected)
-            invalid(location, env.errorBuilders.minItemsArrayError(expected, source.size))
+            invalid(location, env.config.errorBuilders.minItemsArrayError(expected, source.size))
         else
             valid()
 

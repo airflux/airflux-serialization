@@ -46,7 +46,7 @@ public fun <EB, O, T> readOptional(
 
             is JsLookupResult.Undefined.InvalidType -> failure(
                 location = lookup.breakpoint,
-                error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
+                error = env.config.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
             )
         }
     }

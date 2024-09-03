@@ -30,7 +30,7 @@ internal class WriterFilterTest : FreeSpec() {
     companion object {
         private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
-        private val ENV = JsWriterEnv(options = Unit)
+        private val ENV = JsWriterEnv(config = JsWriterEnv.Config(options = Unit))
         private val LOCATION: JsLocation = JsLocation
     }
 

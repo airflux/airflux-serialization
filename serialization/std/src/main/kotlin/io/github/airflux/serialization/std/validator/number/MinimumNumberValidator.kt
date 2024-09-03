@@ -35,7 +35,7 @@ public class MinimumNumberValidator<EB, O, T> internal constructor(
         if (value >= expected)
             valid()
         else
-            invalid(location = location, error = env.errorBuilders.minimumNumberError(expected, value))
+            invalid(location = location, error = env.config.errorBuilders.minimumNumberError(expected, value))
 
     public fun interface ErrorBuilder {
         public fun minimumNumberError(expected: Number, actual: Number): JsReaderResult.Error

@@ -32,7 +32,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class StringReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private val reader: JsReader<EB, Unit, String> = StringReader.build()
         private const val TEXT = "abc"

@@ -19,9 +19,14 @@ package io.github.airflux.serialization.core.writer.env
 import io.github.airflux.serialization.core.context.JsContext
 
 public data class JsWriterEnv<O>(
-    public val options: O,
+    public val config: Config<O>,
     public val context: JsContext = JsContext.Empty
-)
+) {
+
+    public class Config<O>(
+        public val options: O
+    )
+}
 
 public operator fun <O> JsWriterEnv<O>.plus(element: JsContext.Element): JsWriterEnv<O> =
-    JsWriterEnv(options, this.context + element)
+    JsWriterEnv(config, this.context + element)

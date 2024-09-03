@@ -42,11 +42,11 @@ public fun <EB, O, T> readRequired(
 
         is JsLookupResult.Undefined -> when (lookup) {
             is JsLookupResult.Undefined.PathMissing ->
-                failure(location = lookup.location, error = env.errorBuilders.pathMissingError())
+                failure(location = lookup.location, error = env.config.errorBuilders.pathMissingError())
 
             is JsLookupResult.Undefined.InvalidType -> failure(
                 location = lookup.breakpoint,
-                error = env.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
+                error = env.config.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
             )
         }
     }

@@ -28,7 +28,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class PatternValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private val PATTERN: Regex = "\\d+".toRegex()
     }

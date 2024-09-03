@@ -35,7 +35,7 @@ public class MaximumNumberValidator<EB, O, T> internal constructor(
         if (value <= expected)
             valid()
         else
-            invalid(location = location, error = env.errorBuilders.maximumNumberError(expected, value))
+            invalid(location = location, error = env.config.errorBuilders.maximumNumberError(expected, value))
 
     public fun interface ErrorBuilder {
         public fun maximumNumberError(expected: Number, actual: Number): JsReaderResult.Error

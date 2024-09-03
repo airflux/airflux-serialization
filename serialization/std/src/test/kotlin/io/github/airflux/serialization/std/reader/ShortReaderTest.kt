@@ -34,7 +34,7 @@ import kotlin.reflect.KClass
 internal class ShortReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private val reader = ShortReader.build<EB, Unit>()
     }

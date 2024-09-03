@@ -49,5 +49,5 @@ internal inline fun <EB, O, reified T> JsNumber.tryConvertToNumber(
     try {
         success(location = location, value = converter(this.get))
     } catch (expected: NumberFormatException) {
-        failure(location = location, error = env.errorBuilders.numberFormatError(get, T::class))
+        failure(location = location, error = env.config.errorBuilders.numberFormatError(get, T::class))
     }

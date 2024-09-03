@@ -44,7 +44,7 @@ internal class ReaderNullValueTest : FreeSpec() {
         private const val CODE_PROPERTY_VALUE = "code"
         private const val ALTERNATIVE_VALUE = "42"
 
-        private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
+        private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string<EB, Unit>()

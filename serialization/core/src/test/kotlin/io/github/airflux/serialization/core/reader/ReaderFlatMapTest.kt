@@ -35,7 +35,7 @@ internal class ReaderFlatMapTest : FreeSpec() {
 
     companion object {
         private const val VALUE = "42"
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
     }
 

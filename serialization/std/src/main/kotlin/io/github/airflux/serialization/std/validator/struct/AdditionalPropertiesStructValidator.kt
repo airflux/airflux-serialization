@@ -43,7 +43,7 @@ public class AdditionalPropertiesStructValidator<EB, O>(
         properties: StructProperties<EB, O>,
         source: JsStruct
     ): JsValidatorResult {
-        val failFast = env.options.failFast
+        val failFast = env.config.options.failFast
 
         var failureAccumulator: JsReaderResult.Failure? = null
         for ((key, _) in source) {
@@ -58,7 +58,7 @@ public class AdditionalPropertiesStructValidator<EB, O>(
     }
 
     private fun JsReaderEnv<EB, O>.error(location: JsLocation): JsReaderResult.Failure =
-        JsReaderResult.Failure(location = location, error = errorBuilders.additionalPropertiesStructError())
+        JsReaderResult.Failure(location = location, error = config.errorBuilders.additionalPropertiesStructError())
 
     private fun result(failure: JsReaderResult.Failure?): JsValidatorResult =
         if (failure != null) failure.toInvalid() else valid()

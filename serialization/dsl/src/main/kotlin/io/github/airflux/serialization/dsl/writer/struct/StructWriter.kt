@@ -52,7 +52,7 @@ public class StructWriter<O, T> private constructor(
             .build()
 
         return if (struct.isEmpty())
-            when (env.options.writerActionIfResultIsEmpty) {
+            when (env.config.options.writerActionIfResultIsEmpty) {
                 RETURN_EMPTY_VALUE -> struct
                 RETURN_NOTHING -> null
                 RETURN_NULL_VALUE -> JsNull

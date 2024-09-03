@@ -59,18 +59,6 @@ public class StructPropertySpec<O, T, P> internal constructor(
 
         internal class WithoutEnv<O, T, P>(val extractor: T.() -> P) : Extractor<O, T, P>()
         internal class WithEnv<O, T, P>(val extractor: T.(JsWriterEnv<O>) -> P) : Extractor<O, T, P>()
-
-        //TODO DELETE
-//        public companion object {
-//
-//            @JvmStatic
-//            public operator fun <O, T, P> invoke(extractor: T.() -> P): Extractor<O, T, P> =
-//                WithoutEnv(extractor)
-//
-//            @JvmStatic
-//            public operator fun <O, T, P> invoke(extractor: T.(JsWriterEnv<O>) -> P): Extractor<O, T, P> =
-//                WithEnv(extractor)
-//        }
     }
 }
 

@@ -38,7 +38,7 @@ public fun <EB, O, T> readArray(
     itemsReader: JsReader<EB, O, T>
 ): JsReaderResult<List<T>>
     where O : FailFastOption {
-    val failFast = env.options.failFast
+    val failFast = env.config.options.failFast
     val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
@@ -70,7 +70,7 @@ public fun <EB, O, T> readArray(
     fun <EB, O, T> getReader(idx: Int, prefixItems: List<JsReader<EB, O, T>>): JsReader<EB, O, T>? =
         prefixItems.getOrNull(idx)
 
-    val failFast = env.options.failFast
+    val failFast = env.config.options.failFast
     val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
@@ -82,7 +82,7 @@ public fun <EB, O, T> readArray(
                     onSuccess = { success -> acc.combine(success) }
                 )
         } else if (errorIfAdditionalItems) {
-            val failure = JsReaderResult.Failure(currentLocation, env.errorBuilders.additionalItemsError())
+            val failure = JsReaderResult.Failure(currentLocation, env.config.errorBuilders.additionalItemsError())
             if (failFast) return failure else acc.combine(failure)
         } else
             acc
@@ -111,7 +111,7 @@ public fun <EB, O, T> readArray(
     ): JsReader<EB, O, T> =
         if (idx < prefixItemReaders.size) prefixItemReaders[idx] else itemsReader
 
-    val failFast = env.options.failFast
+    val failFast = env.config.options.failFast
     val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
     return source.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)

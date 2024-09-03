@@ -37,7 +37,7 @@ internal class ReaderOrTest : FreeSpec() {
     companion object {
         private const val LEFT_VALUE = "true"
         private const val RIGHT_VALUE = "false"
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
     }
 

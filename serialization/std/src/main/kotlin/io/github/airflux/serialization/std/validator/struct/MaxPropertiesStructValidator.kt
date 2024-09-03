@@ -37,7 +37,7 @@ public class MaxPropertiesStructValidator<EB, O> internal constructor(private va
         source: JsStruct
     ): JsValidatorResult =
         if (source.count > value)
-            invalid(location, env.errorBuilders.maxPropertiesStructError(value, source.count))
+            invalid(location, env.config.errorBuilders.maxPropertiesStructError(value, source.count))
         else
             valid()
 

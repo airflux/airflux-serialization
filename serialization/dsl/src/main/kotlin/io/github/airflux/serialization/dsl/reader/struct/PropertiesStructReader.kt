@@ -36,7 +36,7 @@ internal class PropertiesStructReader<EB, O, T>(
           O : FailFastOption {
 
     override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
-        val failFast = env.options.failFast
+        val failFast = env.config.options.failFast
         var failureAccumulator: JsReaderResult.Failure? = null
 
         val values = PropertyValuesInstance<EB, O>()

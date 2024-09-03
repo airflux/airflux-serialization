@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldBe
 internal class ReaderPredicateCombinatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
 
         private const val MIN_VALUE = 10

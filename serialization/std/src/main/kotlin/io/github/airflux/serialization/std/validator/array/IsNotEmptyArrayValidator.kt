@@ -30,7 +30,7 @@ public class IsNotEmptyArrayValidator<EB, O> internal constructor() : JsArrayVal
 
     override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =
         if (source.isEmpty())
-            invalid(location, env.errorBuilders.isNotEmptyArrayError())
+            invalid(location, env.config.errorBuilders.isNotEmptyArrayError())
         else
             valid()
 

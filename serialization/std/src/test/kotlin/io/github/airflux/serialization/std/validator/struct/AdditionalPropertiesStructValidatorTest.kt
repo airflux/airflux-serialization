@@ -64,7 +64,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 val source = JsStruct()
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue =
+                        JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(true)))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
@@ -73,7 +74,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse =
+                        JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
@@ -86,7 +88,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue =
+                        JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
@@ -95,7 +98,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse =
+                        JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "then the validator should do not return any errors" {
                         val result = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)
@@ -112,7 +116,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 )
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue =
+                        JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                     "then the validator should return first error" {
                         val result = validator.validate(envWithFailFastIsTrue, LOCATION, PROPERTIES, source)
@@ -127,7 +132,8 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse =
+                        JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "then the validator should return all errors" {
                         val result = validator.validate(envWithFailFastIsFalse, LOCATION, PROPERTIES, source)

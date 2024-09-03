@@ -45,8 +45,10 @@ fun main() {
     }
 
     val env = JsReaderEnv(
-        errorBuilders = ReaderErrorBuilders,
-        options = ReaderOptions(failFast = true)
+        config = JsReaderEnv.Config(
+            errorBuilders = ReaderErrorBuilders,
+            options = ReaderOptions(failFast = true)
+        )
     )
 
     JSON.deserialization(mapper = mapper, env = env, reader = RequestReader)
@@ -60,8 +62,11 @@ fun main() {
     val tender = Tender(id = "tender-1", title = "title", value = value, lots = Lots(listOf(lot)))
     val response = Response(tender = tender)
 
-    val writerEnv =
-        JsWriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+    val writerEnv = JsWriterEnv(
+        config = JsWriterEnv.Config(
+            options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING)
+        )
+    )
     val output = response.serialization(mapper, writerEnv, writer = ResponseWriter)
     println(output.orThrow())
 }

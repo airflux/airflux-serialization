@@ -32,7 +32,7 @@ public class MaxItemsArrayValidator<EB, O> internal constructor(
 
     override fun validate(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsValidatorResult =
         if (source.size > expected)
-            invalid(location, env.errorBuilders.maxItemsArrayError(expected, source.size))
+            invalid(location, env.config.errorBuilders.maxItemsArrayError(expected, source.size))
         else
             valid()
 

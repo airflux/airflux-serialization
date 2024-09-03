@@ -30,7 +30,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class ConditionValidatorsTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(Unit, Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(errorBuilders = Unit, options = Unit))
         private val LOCATION: JsLocation = JsLocation
         private val IsNotEmptyStringValidator: JsValidator<Unit, Unit, String> =
             DummyValidator.isNotEmptyString { JsonErrors.Validation.Strings.IsEmpty }

@@ -34,7 +34,7 @@ public class MinLengthStringValidator<EB, O> internal constructor(
             if (value.length >= expected)
                 valid()
             else
-                invalid(location = location, error = env.errorBuilders.minLengthStringError(expected, value.length))
+                invalid(location = location, error = env.config.errorBuilders.minLengthStringError(expected, value.length))
         } else
             valid()
 

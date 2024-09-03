@@ -67,7 +67,8 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "when source is not the array type" - {
                             val source = JsString("")
@@ -158,7 +159,8 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "when source is not the array type" - {
                             val source = JsString("")
@@ -264,7 +266,8 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "when source is not the array type" - {
                             val source = JsString("")
@@ -324,7 +327,8 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "when source is not the array type" - {
                             val source = JsString("")

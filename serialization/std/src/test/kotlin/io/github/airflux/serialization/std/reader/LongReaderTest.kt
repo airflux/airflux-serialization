@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
 internal class LongReaderTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private val reader = LongReader.build<EB, Unit>()
     }

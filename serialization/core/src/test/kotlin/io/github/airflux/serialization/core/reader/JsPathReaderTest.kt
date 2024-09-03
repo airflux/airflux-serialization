@@ -57,7 +57,7 @@ internal class JsPathReaderTest : FreeSpec() {
         private const val RIGHT_VALUE = "false"
         private const val DEFAULT_VALUE = "2a100f64-0cef-4cca-90c0-5148f71c5fca"
 
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()

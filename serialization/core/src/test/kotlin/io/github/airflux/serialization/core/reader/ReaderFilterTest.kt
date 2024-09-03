@@ -43,7 +43,7 @@ internal class ReaderFilterTest : FreeSpec() {
         private const val ID_PROPERTY_VALUE = "91a10692-7430-4d58-a465-633d45ea2f4b"
         private const val CODE_PROPERTY_VALUE = "code"
 
-        private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(EB(), Unit)
+        private val ENV: JsReaderEnv<EB, Unit> = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()

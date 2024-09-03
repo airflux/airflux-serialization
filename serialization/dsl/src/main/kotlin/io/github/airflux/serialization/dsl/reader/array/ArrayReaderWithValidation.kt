@@ -38,7 +38,7 @@ internal class ArrayReaderWithValidation<EB, O, T>(
           O : FailFastOption {
 
     override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsReaderResult<List<T>> {
-        val failFast = env.options.failFast
+        val failFast = env.config.options.failFast
         val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location).getOrNull()
         return if (failureAccumulator != null && failFast)
             failureAccumulator

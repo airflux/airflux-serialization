@@ -163,8 +163,10 @@ internal class PropertiesStructReaderTest : FreeSpec() {
         private const val NAME_PROPERTY_NAME = "name"
         private const val NAME_PROPERTY_VALUE = "user"
 
-        private val ENV_WITH_FAIL_FAST_IS_TRUE = JsReaderEnv(EB(), OPTS(failFast = true))
-        private val ENV_WITH_FAIL_FAST_IS_FALSE = JsReaderEnv(EB(), OPTS(failFast = false))
+        private val ENV_WITH_FAIL_FAST_IS_TRUE =
+            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
+        private val ENV_WITH_FAIL_FAST_IS_FALSE =
+            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
         private val LOCATION: JsLocation = JsLocation
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()

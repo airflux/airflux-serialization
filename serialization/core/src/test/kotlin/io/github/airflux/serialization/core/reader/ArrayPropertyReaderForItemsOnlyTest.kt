@@ -52,7 +52,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                 val source = JsArray()
 
                 "when fail-fast is true" - {
-                    val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                    val envWithFailFastIsTrue =
+                        JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                     "then reader should return result" {
                         val result: JsReaderResult<List<String>> = readArray(
@@ -67,7 +68,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                    val envWithFailFastIsFalse =
+                        JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "then reader should return result" {
                         val result: JsReaderResult<List<String>> = readArray(
@@ -88,7 +90,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     val source = JsArray(JsString(FIRST_PHONE_VALUE), JsString(SECOND_PHONE_VALUE))
 
                     "when fail-fast is true" - {
-                        val envWithFailFastIsTrue = JsReaderEnv(EB(), OPTS(failFast = true))
+                        val envWithFailFastIsTrue =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "then reader should return result" {
                             val result: JsReaderResult<List<String>> = readArray(
@@ -106,7 +109,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "then reader should return result" {
                             val result: JsReaderResult<List<String>> = readArray(
@@ -129,7 +133,7 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
 
                     "when fail-fast is true" - {
                         val envWithFailFastIsTrue =
-                            JsReaderEnv(errorBuilders = EB(), options = OPTS(failFast = true))
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "then the validator should return first error" {
                             val result: JsReaderResult<List<String>> = readArray(
@@ -150,7 +154,8 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                     }
 
                     "when fail-fast is false" - {
-                        val envWithFailFastIsFalse = JsReaderEnv(EB(), OPTS(failFast = false))
+                        val envWithFailFastIsFalse =
+                            JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "then the validator should return all errors" {
                             val result: JsReaderResult<List<String>> = readArray(

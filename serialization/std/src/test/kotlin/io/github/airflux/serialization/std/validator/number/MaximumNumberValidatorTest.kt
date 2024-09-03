@@ -29,7 +29,7 @@ import io.kotest.core.spec.style.FreeSpec
 internal class MaximumNumberValidatorTest : FreeSpec() {
 
     companion object {
-        private val ENV = JsReaderEnv(EB(), Unit)
+        private val ENV = JsReaderEnv(config = JsReaderEnv.Config(EB(), Unit))
         private val LOCATION: JsLocation = JsLocation
         private const val MAX_VALUE: Int = 2
     }

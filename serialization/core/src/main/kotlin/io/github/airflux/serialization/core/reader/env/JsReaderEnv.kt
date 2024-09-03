@@ -20,14 +20,24 @@ import io.github.airflux.serialization.core.context.JsContext
 
 /**
  * The environment of reading.
- * @param errorBuilders the builders of error.
- * @param options the options of reading.
+ * @param config the config of reading.
+ * @param context the context of reading.
  */
 public class JsReaderEnv<EB, O>(
-    public val errorBuilders: EB,
-    public val options: O,
+    public val config: Config<EB, O>,
     public val context: JsContext = JsContext.Empty
-)
+) {
+
+    /**
+     * The configuration of reading.
+     * @param errorBuilders the builders of error.
+     * @param options the options of reading.
+     */
+    public class Config<EB, O>(
+        public val errorBuilders: EB,
+        public val options: O
+    )
+}
 
 public operator fun <EB, O> JsReaderEnv<EB, O>.plus(element: JsContext.Element): JsReaderEnv<EB, O> =
-    JsReaderEnv(errorBuilders, options, this.context + element)
+    JsReaderEnv(config, this.context + element)

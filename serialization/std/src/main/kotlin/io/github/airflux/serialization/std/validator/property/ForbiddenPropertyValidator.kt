@@ -34,7 +34,7 @@ public class ForbiddenPropertyValidator<EB, O, T> internal constructor(
             if (value == null)
                 valid()
             else
-                invalid(location = location, error = env.errorBuilders.forbiddenPropertyError())
+                invalid(location = location, error = env.config.errorBuilders.forbiddenPropertyError())
         } else
             valid()
 

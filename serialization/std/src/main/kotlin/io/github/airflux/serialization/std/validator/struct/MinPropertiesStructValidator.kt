@@ -37,7 +37,7 @@ public class MinPropertiesStructValidator<EB, O> internal constructor(private va
         source: JsStruct
     ): JsValidatorResult =
         if (source.count < value)
-            invalid(location, env.errorBuilders.minPropertiesStructError(value, source.count))
+            invalid(location, env.config.errorBuilders.minPropertiesStructError(value, source.count))
         else
             valid()
 

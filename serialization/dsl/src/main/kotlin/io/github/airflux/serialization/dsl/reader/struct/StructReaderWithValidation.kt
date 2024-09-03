@@ -40,7 +40,7 @@ internal class StructReaderWithValidation<EB, O, T>(
 
     override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
         val failureAccumulator: JsReaderResult.Failure? = source.validate(env, location).getOrNull()
-        return if (failureAccumulator != null && env.options.failFast)
+        return if (failureAccumulator != null && env.config.options.failFast)
             failureAccumulator
         else
             reader.read(env, location, source)
