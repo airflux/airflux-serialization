@@ -51,5 +51,5 @@ public class JsArrayReaderBuilder<EB, O>
     private fun <T> JsArrayItemsReader<EB, O, T>.addValidator(
         builder: (() -> JsArrayValidator<EB, O>)?
     ): JsArrayReader<EB, O, T> =
-        if (builder != null) ArrayReaderWithValidation(builder(), this) else this
+        if (builder != null) JsArrayItemsReaderWithValidation(builder(), this) else this
 }

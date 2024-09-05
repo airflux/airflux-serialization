@@ -29,7 +29,7 @@ import io.github.airflux.serialization.core.reader.validation.getOrNull
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 
-internal class ArrayReaderWithValidation<EB, O, T>(
+internal class JsArrayItemsReaderWithValidation<EB, O, T>(
     private val validator: JsArrayValidator<EB, O>,
     private val reader: JsArrayReader<EB, O, T>
 ) : AbstractArrayReader<EB, O, T>()
