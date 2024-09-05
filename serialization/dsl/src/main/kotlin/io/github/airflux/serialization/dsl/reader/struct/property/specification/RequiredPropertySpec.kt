@@ -18,10 +18,10 @@ package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.readRequired
 
 public fun <EB, O, T> required(name: String, reader: JsReader<EB, O, T>): StructPropertySpec<EB, O, T>
     where EB : PathMissingErrorBuilder,
@@ -36,5 +36,5 @@ public fun <EB, O, T> required(
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec(
         paths = JsPaths(path),
-        reader = JsPathReader.required(path, reader)
+        reader = path.readRequired(reader)
     )

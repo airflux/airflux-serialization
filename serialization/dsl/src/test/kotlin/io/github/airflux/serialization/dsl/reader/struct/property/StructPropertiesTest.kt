@@ -18,11 +18,11 @@ package io.github.airflux.serialization.dsl.reader.struct.property
 
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.readRequired
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
@@ -104,7 +104,7 @@ internal class StructPropertiesTest : FreeSpec() {
     private fun property(path: JsPath): StructProperty<EB, OPTS, String> = StructProperty(
         spec = StructPropertySpec(
             paths = JsPaths(path),
-            reader = JsPathReader.required(path, StringReader)
+            reader = path.readRequired(StringReader)
         )
     )
 

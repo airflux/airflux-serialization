@@ -16,19 +16,19 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.property.specification
 
+import io.github.airflux.serialization.core.context.JsContext
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.path.JsPath
 import io.github.airflux.serialization.core.path.JsPaths
-import io.github.airflux.serialization.core.reader.JsPathReader
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
+import io.github.airflux.serialization.core.reader.readRequired
 
 public fun <EB, O, T> required(
     name: String,
     reader: JsReader<EB, O, T>,
-    predicate: (JsReaderEnv<EB, O>, JsLocation) -> Boolean
+    predicate: (JsContext, JsLocation) -> Boolean
 ): StructPropertySpec<EB, O, T?>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
@@ -37,11 +37,11 @@ public fun <EB, O, T> required(
 public fun <EB, O, T> required(
     path: JsPath,
     reader: JsReader<EB, O, T>,
-    predicate: (JsReaderEnv<EB, O>, JsLocation) -> Boolean
+    predicate: (JsContext, JsLocation) -> Boolean
 ): StructPropertySpec<EB, O, T?>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
     StructPropertySpec(
         paths = JsPaths(path),
-        reader = JsPathReader.required(path, reader, predicate)
+        reader = path.readRequired(reader, predicate)
     )
