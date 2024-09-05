@@ -55,10 +55,9 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                         JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                     "then reader should return result" {
-                        val result: JsReaderResult<List<String>> = readArray(
+                        val result: JsReaderResult<List<String>> = source.readItems(
                             env = envWithFailFastIsTrue,
                             location = LOCATION,
-                            source = source,
                             prefixItemReaders = listOf(StringReader),
                             itemsReader = StringReader
                         )
@@ -72,10 +71,9 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                         JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "then reader should return result" {
-                        val result: JsReaderResult<List<String>> = readArray(
+                        val result: JsReaderResult<List<String>> = source.readItems(
                             env = envWithFailFastIsFalse,
                             location = LOCATION,
-                            source = source,
                             prefixItemReaders = listOf(StringReader),
                             itemsReader = StringReader
                         )
@@ -99,10 +97,9 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "then reader should return result" {
-                            val result = readArray(
+                            val result = source.readItems(
                                 env = envWithFailFastIsTrue,
                                 location = LOCATION,
-                                source = source,
                                 prefixItemReaders = listOf(StringReader),
                                 itemsReader = StringReader
                             )
@@ -119,10 +116,9 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "then reader should return result" {
-                            val result = readArray(
+                            val result = source.readItems(
                                 env = envWithFailFastIsFalse,
                                 location = LOCATION,
-                                source = source,
                                 prefixItemReaders = listOf(StringReader),
                                 itemsReader = StringReader
                             )
@@ -142,10 +138,9 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "then reader should return first error" {
-                            val result: JsReaderResult<List<Int>> = readArray(
+                            val result: JsReaderResult<List<Int>> = source.readItems(
                                 env = envWithFailFastIsTrue,
                                 location = LOCATION,
-                                source = source,
                                 prefixItemReaders = listOf(IntReader),
                                 itemsReader = IntReader
                             )
@@ -165,10 +160,9 @@ internal class ArrayPropertyReaderForPrefixItemsAndItemsTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "then reader should return all errors" {
-                            val result = readArray(
+                            val result = source.readItems(
                                 env = envWithFailFastIsFalse,
                                 location = LOCATION,
-                                source = source,
                                 prefixItemReaders = listOf(IntReader, StringReader),
                                 itemsReader = IntReader
                             )

@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.readArray
+import io.github.airflux.serialization.core.reader.readItems
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.value.JsArray
 
@@ -35,15 +35,14 @@ internal class ItemsArrayReader<EB, O, T> private constructor(
 
     constructor(items: JsReader<EB, O, T>) :
         this({ env, location, source ->
-            readArray(env = env, location = location, source = source, itemsReader = items)
+            source.readItems(env = env, location = location, itemsReader = items)
         })
 
     constructor(prefixItems: ArrayPrefixItems<EB, O, T>, items: Boolean) :
         this({ env, location, source ->
-            readArray(
+            source.readItems(
                 env = env,
                 location = location,
-                source = source,
                 prefixItemReaders = prefixItems,
                 errorIfAdditionalItems = !items
             )
@@ -51,10 +50,9 @@ internal class ItemsArrayReader<EB, O, T> private constructor(
 
     constructor(prefixItems: ArrayPrefixItems<EB, O, T>, items: JsReader<EB, O, T>) :
         this({ env, location, source ->
-            readArray(
+            source.readItems(
                 env = env,
                 location = location,
-                source = source,
                 prefixItemReaders = prefixItems,
                 itemsReader = items
             )

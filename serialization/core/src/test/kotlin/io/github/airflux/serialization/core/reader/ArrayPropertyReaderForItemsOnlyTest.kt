@@ -56,10 +56,9 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                     "then reader should return result" {
-                        val result: JsReaderResult<List<String>> = readArray(
+                        val result: JsReaderResult<List<String>> = source.readItems(
                             env = envWithFailFastIsTrue,
                             location = LOCATION,
-                            source = source,
                             itemsReader = StringReader
                         )
 
@@ -72,10 +71,9 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                         JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "then reader should return result" {
-                        val result: JsReaderResult<List<String>> = readArray(
+                        val result: JsReaderResult<List<String>> = source.readItems(
                             env = envWithFailFastIsFalse,
                             location = LOCATION,
-                            source = source,
                             itemsReader = StringReader
                         )
 
@@ -94,10 +92,9 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "then reader should return result" {
-                            val result: JsReaderResult<List<String>> = readArray(
+                            val result: JsReaderResult<List<String>> = source.readItems(
                                 env = envWithFailFastIsTrue,
                                 location = LOCATION,
-                                source = source,
                                 itemsReader = StringReader
                             )
 
@@ -113,10 +110,9 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "then reader should return result" {
-                            val result: JsReaderResult<List<String>> = readArray(
+                            val result: JsReaderResult<List<String>> = source.readItems(
                                 env = envWithFailFastIsFalse,
                                 location = LOCATION,
-                                source = source,
                                 itemsReader = StringReader
                             )
 
@@ -136,10 +132,9 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
 
                         "then the validator should return first error" {
-                            val result: JsReaderResult<List<String>> = readArray(
+                            val result: JsReaderResult<List<String>> = source.readItems(
                                 env = envWithFailFastIsTrue,
                                 location = LOCATION,
-                                source = source,
                                 itemsReader = StringReader
                             )
 
@@ -158,10 +153,9 @@ internal class ArrayPropertyReaderForItemsOnlyTest : FreeSpec() {
                             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                         "then the validator should return all errors" {
-                            val result: JsReaderResult<List<String>> = readArray(
+                            val result: JsReaderResult<List<String>> = source.readItems(
                                 env = envWithFailFastIsFalse,
                                 location = LOCATION,
-                                source = source,
                                 itemsReader = StringReader
                             )
 

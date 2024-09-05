@@ -28,19 +28,18 @@ import io.github.airflux.serialization.core.reader.result.success
 import io.github.airflux.serialization.core.value.JsArray
 
 /**
- * Read a node which represent as array.
+ * Read items of an array.
  * @param itemsReader the reader for items of an array
  */
-public fun <EB, O, T> readArray(
+public fun <EB, O, T> JsArray.readItems(
     env: JsReaderEnv<EB, O>,
     location: JsLocation,
-    source: JsArray,
     itemsReader: JsReader<EB, O, T>
 ): JsReaderResult<List<T>>
     where O : FailFastOption {
     val failFast = env.config.options.failFast
-    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
-    return source.foldIndexed(initial) { idx, acc, elem ->
+    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(this.size))
+    return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         itemsReader.read(env, currentLocation, elem)
             .fold(
@@ -51,16 +50,14 @@ public fun <EB, O, T> readArray(
 }
 
 /**
- * Read a node which represent as array.
+ * Read items of an array.
  * @param prefixItemReaders the reader for prefix items of an array
  * @param errorIfAdditionalItems return error if the number of items of an array is more than the number of the reader
  * for prefix items of an array
  */
-@Suppress("LongParameterList")
-public fun <EB, O, T> readArray(
+public fun <EB, O, T> JsArray.readItems(
     env: JsReaderEnv<EB, O>,
     location: JsLocation,
-    source: JsArray,
     prefixItemReaders: List<JsReader<EB, O, T>>,
     errorIfAdditionalItems: Boolean
 ): JsReaderResult<List<T>>
@@ -71,8 +68,8 @@ public fun <EB, O, T> readArray(
         prefixItems.getOrNull(idx)
 
     val failFast = env.config.options.failFast
-    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
-    return source.foldIndexed(initial) { idx, acc, elem ->
+    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(this.size))
+    return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         val reader = getReader(idx, prefixItemReaders)
         if (reader != null) {
@@ -90,15 +87,13 @@ public fun <EB, O, T> readArray(
 }
 
 /**
- * Read a node which represent as array.
+ * Read items of an array.
  * @param prefixItemReaders the reader for prefix items of an array
  * @param itemsReader the reader for items of an array
  */
-@Suppress("LongParameterList")
-public fun <EB, O, T> readArray(
+public fun <EB, O, T> JsArray.readItems(
     env: JsReaderEnv<EB, O>,
     location: JsLocation,
-    source: JsArray,
     prefixItemReaders: List<JsReader<EB, O, T>>,
     itemsReader: JsReader<EB, O, T>
 ): JsReaderResult<List<T>>
@@ -112,8 +107,8 @@ public fun <EB, O, T> readArray(
         if (idx < prefixItemReaders.size) prefixItemReaders[idx] else itemsReader
 
     val failFast = env.config.options.failFast
-    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(source.size))
-    return source.foldIndexed(initial) { idx, acc, elem ->
+    val initial: JsReaderResult<MutableList<T>> = success(location = location, value = ArrayList(this.size))
+    return this.foldIndexed(initial) { idx, acc, elem ->
         val currentLocation = location.append(idx)
         getReader(idx, prefixItemReaders, itemsReader)
             .read(env, currentLocation, elem)

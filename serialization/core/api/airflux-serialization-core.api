@@ -226,9 +226,9 @@ public final class io/github/airflux/serialization/core/path/JsPaths {
 }
 
 public final class io/github/airflux/serialization/core/reader/ArrayPropertyReaderKt {
-	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
-	public static final fun readArray (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;Ljava/util/List;Z)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun readItems (Lio/github/airflux/serialization/core/value/JsArray;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun readItems (Lio/github/airflux/serialization/core/value/JsArray;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+	public static final fun readItems (Lio/github/airflux/serialization/core/value/JsArray;Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/util/List;Z)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 }
 
 public abstract interface class io/github/airflux/serialization/core/reader/JsPathReader : io/github/airflux/serialization/core/reader/JsReader {
