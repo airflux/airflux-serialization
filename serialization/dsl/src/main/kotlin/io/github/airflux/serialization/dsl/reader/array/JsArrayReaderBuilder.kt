@@ -40,15 +40,15 @@ public class JsArrayReaderBuilder<EB, O>
     }
 
     public fun <T> build(items: JsReader<EB, O, T>): JsArrayReader<EB, O, T> =
-        ItemsArrayReader(items).addValidator(validatorBuilder)
+        JsArrayItemsReader(items).addValidator(validatorBuilder)
 
     public fun <T> build(prefixItems: ArrayPrefixItems<EB, O, T>, items: Boolean): JsArrayReader<EB, O, T> =
-        ItemsArrayReader(prefixItems, items).addValidator(validatorBuilder)
+        JsArrayItemsReader(prefixItems, items).addValidator(validatorBuilder)
 
     public fun <T> build(prefixItems: ArrayPrefixItems<EB, O, T>, items: JsReader<EB, O, T>): JsArrayReader<EB, O, T> =
-        ItemsArrayReader(prefixItems, items).addValidator(validatorBuilder)
+        JsArrayItemsReader(prefixItems, items).addValidator(validatorBuilder)
 
-    private fun <T> ItemsArrayReader<EB, O, T>.addValidator(
+    private fun <T> JsArrayItemsReader<EB, O, T>.addValidator(
         builder: (() -> JsArrayValidator<EB, O>)?
     ): JsArrayReader<EB, O, T> =
         if (builder != null) ArrayReaderWithValidation(builder(), this) else this

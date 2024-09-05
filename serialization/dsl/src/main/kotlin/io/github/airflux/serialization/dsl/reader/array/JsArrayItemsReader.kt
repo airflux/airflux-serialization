@@ -26,7 +26,7 @@ import io.github.airflux.serialization.core.reader.readItems
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.value.JsArray
 
-internal class ItemsArrayReader<EB, O, T> private constructor(
+internal class JsArrayItemsReader<EB, O, T> private constructor(
     private val typeBuilder: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
 ) : AbstractArrayReader<EB, O, T>()
     where EB : AdditionalItemsErrorBuilder,
