@@ -52,8 +52,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the result of applying the reader" {
-                    val result: JsReaderResult<String?> =
-                        readRequired(env = ENV, lookup = lookup, using = READER)
+                    val result: JsReaderResult<String?> = lookup.readRequired(env = ENV, using = READER)
+
                     result.shouldBeSuccess(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         value = ID_PROPERTY_VALUE
@@ -66,8 +66,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                     JsLookupResult.Undefined.PathMissing(location = LOCATION.append(ID_PROPERTY_NAME))
 
                 "then should return the missing path error" {
-                    val result: JsReaderResult<String?> =
-                        readRequired(env = ENV, lookup = lookup, using = READER)
+                    val result: JsReaderResult<String?> = lookup.readRequired(env = ENV, using = READER)
+
                     result.shouldBeFailure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.PathMissing
@@ -83,8 +83,8 @@ internal class RequiredPropertyReaderTest : FreeSpec() {
                 )
 
                 "then should return the invalid type error" {
-                    val result: JsReaderResult<String?> =
-                        readRequired(env = ENV, lookup = lookup, using = READER)
+                    val result: JsReaderResult<String?> = lookup.readRequired(env = ENV, using = READER)
+
                     result.shouldBeFailure(
                         location = LOCATION.append(ID_PROPERTY_NAME),
                         error = JsonErrors.InvalidType(

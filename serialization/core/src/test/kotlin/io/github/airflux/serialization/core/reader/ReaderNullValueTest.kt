@@ -51,8 +51,8 @@ internal class ReaderNullValueTest : FreeSpec() {
             .ifNullValue { _, _ -> ALTERNATIVE_VALUE }
 
         private val READER: JsReader<EB, Unit, String?> = DummyReader { env, location, source ->
-            val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-            readOptional(env, lookup, StringReader)
+            source.lookup(location, JsPath(ID_PROPERTY_NAME))
+                .readOptional(env, StringReader)
         }
     }
 

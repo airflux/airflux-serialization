@@ -26,27 +26,26 @@ import io.github.airflux.serialization.core.reader.result.failure
 /**
  * Reads required property.
  *
- * - If a node is found ([lookup] is [JsLookupResult.Defined]) then applies [reader]
- * - If a node is not found ([lookup] is [JsLookupResult.Undefined]) then an error is returned
+ * - If a node is found (receiver is [JsLookupResult.Defined]) then applies [reader]
+ * - If a node is not found (receiver is [JsLookupResult.Undefined]) then an error is returned
  *   that was build using [PathMissingErrorBuilder]
  */
-public fun <EB, O, T> readRequired(
+public fun <EB, O, T> JsLookupResult.readRequired(
     env: JsReaderEnv<EB, O>,
-    lookup: JsLookupResult,
     using: JsReader<EB, O, T>
 ): JsReaderResult<T>
     where EB : PathMissingErrorBuilder,
           EB : InvalidTypeErrorBuilder =
-    when (lookup) {
-        is JsLookupResult.Defined -> using.read(env, lookup.location, lookup.value)
+    when (this) {
+        is JsLookupResult.Defined -> using.read(env, location, value)
 
-        is JsLookupResult.Undefined -> when (lookup) {
+        is JsLookupResult.Undefined -> when (this) {
             is JsLookupResult.Undefined.PathMissing ->
-                failure(location = lookup.location, error = env.config.errorBuilders.pathMissingError())
+                failure(location = location, error = env.config.errorBuilders.pathMissingError())
 
             is JsLookupResult.Undefined.InvalidType -> failure(
-                location = lookup.breakpoint,
-                error = env.config.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
+                location = breakpoint,
+                error = env.config.errorBuilders.invalidTypeError(expected = expected, actual = actual)
             )
         }
     }

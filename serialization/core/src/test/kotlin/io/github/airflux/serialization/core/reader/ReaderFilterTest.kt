@@ -56,8 +56,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
                 "when the value in the result is not null" - {
                     val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
-                        val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                        readRequired(env, lookup, StringReader)
+                        source.lookup(location, JsPath(ID_PROPERTY_NAME)).readRequired(env, StringReader)
                     }
 
                     val source = JsStruct(ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE))
@@ -90,8 +89,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
                 "when the value in the result is null" - {
                     val optionalReader: JsReader<EB, Unit, String?> = DummyReader { env, location, source ->
-                        val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                        readOptional(env, lookup, StringReader)
+                        source.lookup(location, JsPath(ID_PROPERTY_NAME)).readOptional(env, StringReader)
                     }
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                     val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
@@ -108,8 +106,7 @@ internal class ReaderFilterTest : FreeSpec() {
 
             "when an original reader returns a result as a failure" - {
                 val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
-                    val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                    readRequired(env, lookup, StringReader)
+                    source.lookup(location, JsPath(ID_PROPERTY_NAME)).readRequired(env, StringReader)
                 }
                 val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                 val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->

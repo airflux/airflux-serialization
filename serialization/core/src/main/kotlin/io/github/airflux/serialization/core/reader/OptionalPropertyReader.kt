@@ -26,23 +26,22 @@ import io.github.airflux.serialization.core.reader.result.success
 /**
  * Reads optional property.
  *
- * - If a node is found ([lookup] is [JsLookupResult.Defined]) then applies [reader]
- * - If a node is not found ([lookup] is [JsLookupResult.Undefined]) then returns 'null'
+ * - If a node is found (receiver is [JsLookupResult.Defined]) then applies [reader]
+ * - If a node is not found (receiver is [JsLookupResult.Undefined]) then returns 'null'
  */
-public fun <EB, O, T> readOptional(
+public fun <EB, O, T> JsLookupResult.readOptional(
     env: JsReaderEnv<EB, O>,
-    lookup: JsLookupResult,
     using: JsReader<EB, O, T>
 ): JsReaderResult<T?>
     where EB : InvalidTypeErrorBuilder =
-    when (lookup) {
-        is JsLookupResult.Defined -> using.read(env, lookup.location, lookup.value)
-        is JsLookupResult.Undefined -> when (lookup) {
-            is JsLookupResult.Undefined.PathMissing -> success(location = lookup.location, value = null)
+    when (this) {
+        is JsLookupResult.Defined -> using.read(env, location, value)
+        is JsLookupResult.Undefined -> when (this) {
+            is JsLookupResult.Undefined.PathMissing -> success(location = location, value = null)
 
             is JsLookupResult.Undefined.InvalidType -> failure(
-                location = lookup.breakpoint,
-                error = env.config.errorBuilders.invalidTypeError(expected = lookup.expected, actual = lookup.actual)
+                location = breakpoint,
+                error = env.config.errorBuilders.invalidTypeError(expected = expected, actual = actual)
             )
         }
     }

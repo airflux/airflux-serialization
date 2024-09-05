@@ -39,8 +39,7 @@ public fun interface JsPathReader<EB, O, out T> : JsReader<EB, O, T> {
         ): JsPathReader<EB, O, T?>
             where EB : InvalidTypeErrorBuilder =
             JsPathReader { env, location, source ->
-                val lookup = source.lookup(location, path)
-                readOptional(env, lookup, reader)
+                source.lookup(location, path).readOptional(env, reader)
             }
 
         public fun <EB, O, T> optional(
@@ -50,8 +49,7 @@ public fun interface JsPathReader<EB, O, out T> : JsReader<EB, O, T> {
         ): JsPathReader<EB, O, T>
             where EB : InvalidTypeErrorBuilder =
             JsPathReader { env, location, source ->
-                val lookup = source.lookup(location, path)
-                readOptional(env, lookup, reader, default)
+                source.lookup(location, path).readOptional(env, reader, default)
             }
 
         public fun <EB, O, T> required(
@@ -61,8 +59,7 @@ public fun interface JsPathReader<EB, O, out T> : JsReader<EB, O, T> {
             where EB : PathMissingErrorBuilder,
                   EB : InvalidTypeErrorBuilder =
             JsPathReader { env, location, source ->
-                val lookup = source.lookup(location, path)
-                readRequired(env, lookup, reader)
+                source.lookup(location, path).readRequired(env, reader)
             }
 
         public fun <EB, O, T> required(
@@ -75,9 +72,9 @@ public fun interface JsPathReader<EB, O, out T> : JsReader<EB, O, T> {
             JsPathReader { env, location, source ->
                 val lookup = source.lookup(location, path)
                 if (predicate(env, location.append(path)))
-                    readRequired(env, lookup, reader)
+                    lookup.readRequired(env, reader)
                 else
-                    readOptional(env, lookup, reader)
+                    lookup.readOptional(env, reader)
             }
     }
 }

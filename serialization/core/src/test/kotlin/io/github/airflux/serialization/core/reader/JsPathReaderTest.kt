@@ -62,8 +62,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
         private val StringReader: JsReader<EB, Unit, String> = DummyReader.string()
         private val READER: JsPathReader<EB, Unit, String> = DummyPathReader { env, location, source ->
-            val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-            readRequired(env, lookup, StringReader)
+            source.lookup(location, JsPath(ID_PROPERTY_NAME)).readRequired(env, StringReader)
         }
     }
 
@@ -230,8 +229,8 @@ internal class JsPathReaderTest : FreeSpec() {
                     "when the value in the result is null" - {
                         val optionalReader: JsReader<EB, Unit, String?> =
                             DummyReader { env, location, source ->
-                                val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                                readOptional(env, lookup, StringReader)
+                                source.lookup(location, JsPath(ID_PROPERTY_NAME))
+                                    .readOptional(env, StringReader)
                             }
                         val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                         val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->
@@ -248,8 +247,7 @@ internal class JsPathReaderTest : FreeSpec() {
 
                 "when an original reader returns a result as a failure" - {
                     val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
-                        val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                        readRequired(env, lookup, StringReader)
+                        source.lookup(location, JsPath(ID_PROPERTY_NAME)).readRequired(env, StringReader)
                     }
                     val source = JsStruct(CODE_PROPERTY_NAME to JsString(CODE_PROPERTY_VALUE))
                     val predicate: JsPredicate<EB, Unit, String> = DummyReaderPredicate { _, _, _ ->

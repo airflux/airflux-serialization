@@ -52,8 +52,7 @@ internal class ReaderValidationTest : FreeSpec() {
     init {
         "The extension function JsReader#validation" - {
             val requiredReader: JsReader<EB, Unit, String> = DummyReader { env, location, source ->
-                val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                readRequired(env, lookup, StringReader)
+                source.lookup(location, JsPath(ID_PROPERTY_NAME)).readRequired(env, StringReader)
             }
 
             "when an original reader returns a result as a success" - {

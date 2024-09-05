@@ -50,8 +50,8 @@ internal class ReaderNullableTest : FreeSpec() {
     init {
         "The extension-function JsReader#toNullableType" - {
             val reader: JsReader<EB, Unit, String?> = DummyReader { env, location, source ->
-                val lookup = source.lookup(location, JsPath(ID_PROPERTY_NAME))
-                readOptional(env, lookup, StringReader)
+                source.lookup(location, JsPath(ID_PROPERTY_NAME))
+                    .readOptional(env, StringReader)
             }
 
             "when an original reader returns a result as a success" - {
