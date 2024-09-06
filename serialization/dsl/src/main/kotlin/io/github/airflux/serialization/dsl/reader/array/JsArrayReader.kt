@@ -21,7 +21,7 @@ import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 
-public interface JsArrayReader<EB, O, T> : JsReader<EB, O, List<T>>
+public fun interface JsArrayReader<EB, O, T> : JsReader<EB, O, List<T>>
 
 public inline fun <EB, O, T> arrayReader(
     block: JsArrayReaderBuilder<EB, O>.() -> JsArrayReader<EB, O, T>

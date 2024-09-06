@@ -26,38 +26,46 @@ import io.github.airflux.serialization.core.reader.readItems
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.value.JsArray
 
-internal class JsArrayItemsReader<EB, O, T> private constructor(
-    private val typeBuilder: (JsReaderEnv<EB, O>, JsLocation, JsArray) -> JsReaderResult<List<T>>
-) : AbstractArrayReader<EB, O, T>()
+public fun interface JsArrayItemsReader<EB, O, T> {
+    public fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsReaderResult<List<T>>
+}
+
+public fun <EB, O, T> arrayItemsReader(items: JsReader<EB, O, T>): JsArrayItemsReader<EB, O, T>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
-          O : FailFastOption {
+          O : FailFastOption =
+    JsArrayItemsReader { env, location, source ->
+        source.readItems(env = env, location = location, itemsReader = items)
+    }
 
-    constructor(items: JsReader<EB, O, T>) :
-        this({ env, location, source ->
-            source.readItems(env = env, location = location, itemsReader = items)
-        })
+public fun <EB, O, T> arrayItemsReader(
+    prefixItems: ArrayPrefixItems<EB, O, T>,
+    items: Boolean
+): JsArrayItemsReader<EB, O, T>
+    where EB : AdditionalItemsErrorBuilder,
+          EB : InvalidTypeErrorBuilder,
+          O : FailFastOption =
+    JsArrayItemsReader { env, location, source ->
+        source.readItems(
+            env = env,
+            location = location,
+            prefixItemReaders = prefixItems,
+            errorIfAdditionalItems = !items
+        )
+    }
 
-    constructor(prefixItems: ArrayPrefixItems<EB, O, T>, items: Boolean) :
-        this({ env, location, source ->
-            source.readItems(
-                env = env,
-                location = location,
-                prefixItemReaders = prefixItems,
-                errorIfAdditionalItems = !items
-            )
-        })
-
-    constructor(prefixItems: ArrayPrefixItems<EB, O, T>, items: JsReader<EB, O, T>) :
-        this({ env, location, source ->
-            source.readItems(
-                env = env,
-                location = location,
-                prefixItemReaders = prefixItems,
-                itemsReader = items
-            )
-        })
-
-    override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsArray): JsReaderResult<List<T>> =
-        typeBuilder(env, location, source)
-}
+public fun <EB, O, T> arrayItemsReader(
+    prefixItems: ArrayPrefixItems<EB, O, T>,
+    items: JsReader<EB, O, T>
+): JsArrayItemsReader<EB, O, T>
+    where EB : AdditionalItemsErrorBuilder,
+          EB : InvalidTypeErrorBuilder,
+          O : FailFastOption =
+    JsArrayItemsReader { env, location, source ->
+        source.readItems(
+            env = env,
+            location = location,
+            prefixItemReaders = prefixItems,
+            itemsReader = items
+        )
+    }

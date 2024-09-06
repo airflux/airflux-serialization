@@ -25,6 +25,16 @@ public final class io/github/airflux/serialization/dsl/path/JsPathsKt {
 	public static final fun or-pbhATDY (Ljava/util/List;Lio/github/airflux/serialization/core/path/JsPath;)Ljava/util/List;
 }
 
+public abstract interface class io/github/airflux/serialization/dsl/reader/array/JsArrayItemsReader {
+	public abstract fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsArray;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+}
+
+public final class io/github/airflux/serialization/dsl/reader/array/JsArrayItemsReaderKt {
+	public static final fun arrayItemsReader (Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayItemsReader;
+	public static final fun arrayItemsReader (Ljava/util/List;Lio/github/airflux/serialization/core/reader/JsReader;)Lio/github/airflux/serialization/dsl/reader/array/JsArrayItemsReader;
+	public static final fun arrayItemsReader (Ljava/util/List;Z)Lio/github/airflux/serialization/dsl/reader/array/JsArrayItemsReader;
+}
+
 public abstract interface class io/github/airflux/serialization/dsl/reader/array/JsArrayReader : io/github/airflux/serialization/core/reader/JsReader {
 }
 
