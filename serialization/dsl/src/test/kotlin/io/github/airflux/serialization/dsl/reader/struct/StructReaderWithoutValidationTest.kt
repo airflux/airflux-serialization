@@ -46,7 +46,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
 
     init {
 
-        "The structReader function without validation" - {
+        "The buildStructReader function without validation" - {
 
             "when the reader was created" - {
                 val reader: JsStructReader<EB, OPTS, DTO> =

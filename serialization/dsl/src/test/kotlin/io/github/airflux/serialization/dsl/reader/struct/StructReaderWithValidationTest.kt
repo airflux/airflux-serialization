@@ -48,7 +48,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
     init {
 
-        "The structReader function with validation" - {
+        "The buildStructReader function with validation" - {
 
             "when the reader was created" - {
                 val reader = buildStructReader(
