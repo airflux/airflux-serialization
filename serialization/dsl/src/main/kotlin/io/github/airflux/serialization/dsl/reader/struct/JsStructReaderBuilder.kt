@@ -16,19 +16,13 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
-import io.github.airflux.serialization.core.location.JsLocation
-import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
-
-public typealias JsStructValidatorBuilder<EB, O> = (StructProperties<EB, O>) -> JsStructValidator<EB, O>
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidatorBuilder
 
 @AirfluxMarker
 public class JsStructReaderBuilder<EB, O>
@@ -49,18 +43,11 @@ public class JsStructReaderBuilder<EB, O>
     public fun <P> property(spec: StructPropertySpec<EB, O, P>): StructProperty<EB, O, P> =
         StructProperty(spec).also { properties.add(it) }
 
-    public fun <T> build(
-        block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
-    ): JsStructReader<EB, O, T> = PropertiesStructReader(properties, block).addValidator(validatorBuilder)
-
-    private companion object {
-
-        @JvmStatic
-        private fun <EB, O, T> PropertiesStructReader<EB, O, T>.addValidator(
-            validatorBuilder: JsStructValidatorBuilder<EB, O>?
-        ): JsStructReader<EB, O, T>
-            where EB : InvalidTypeErrorBuilder,
-                  O : FailFastOption =
-            if (validatorBuilder != null) StructReaderWithValidation(validatorBuilder(properties), this) else this
+    public fun <T> build(block: JsStructTypeBuilder<EB, O, T>): JsStructReader<EB, O, T> {
+        val validator = validatorBuilder?.invoke(properties)
+        return if (validator == null)
+            buildStructReader(properties, block)
+        else
+            buildStructReader(properties, validator, block)
     }
 }

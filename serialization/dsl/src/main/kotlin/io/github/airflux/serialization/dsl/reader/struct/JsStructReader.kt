@@ -16,13 +16,9 @@
 
 package io.github.airflux.serialization.dsl.reader.struct
 
-import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
-import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
 
 public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
@@ -36,7 +32,7 @@ public inline fun <EB, O, T> structReader(
           O : FailFastOption = JsStructReaderBuilder<EB, O>().block()
 
 public fun <EB, O, T> JsStructReaderBuilder<EB, O>.returns(
-    block: PropertyValues<EB, O>.(JsReaderEnv<EB, O>, JsLocation) -> JsReaderResult<T>
+    block: JsStructTypeBuilder<EB, O, T>
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
           O : FailFastOption = build(block)

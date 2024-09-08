@@ -18,13 +18,63 @@ package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
+import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.failure
+import io.github.airflux.serialization.core.reader.result.fold
+import io.github.airflux.serialization.core.reader.result.plus
+import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.validation.getOrNull
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
+import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValues
+import io.github.airflux.serialization.dsl.reader.struct.property.PropertyValuesInstance
+import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 
-internal abstract class AbstractStructReader<EB, O, T> : JsStructReader<EB, O, T>
+internal fun <EB, O, T> buildStructReader(
+    properties: StructProperties<EB, O>,
+    typeBuilder: JsStructTypeBuilder<EB, O, T>
+): JsStructReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          O : FailFastOption =
+    object : AbstractStructReader<EB, O, T>(properties) {
+        override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> =
+            readStructProperties(env, location, source, properties)
+                .fold(
+                    onSuccess = { result -> typeBuilder(result.value, env, location) },
+                    onFailure = { it }
+                )
+    }
+
+internal fun <EB, O, T> buildStructReader(
+    properties: StructProperties<EB, O>,
+    validator: JsStructValidator<EB, O>,
+    typeBuilder: JsStructTypeBuilder<EB, O, T>
+): JsStructReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          O : FailFastOption =
+    object : AbstractStructReader<EB, O, T>(properties) {
+        override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T> {
+            val failureAccumulator: JsReaderResult.Failure? =
+                validator.validate(env, location, properties, source).getOrNull()
+            return if (failureAccumulator != null && env.config.options.failFast)
+                failureAccumulator
+            else
+                readStructProperties(env, location, source, properties)
+                    .fold(
+                        onFailure = { failure -> failureAccumulator + failure },
+                        onSuccess = {
+                            failureAccumulator ?: typeBuilder(it.value, env, location)
+                        }
+                    )
+        }
+    }
+
+internal abstract class AbstractStructReader<EB, O, T>(
+    override val properties: StructProperties<EB, O>
+) : JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder {
 
     final override fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsValue): JsReaderResult<T> =
@@ -37,4 +87,34 @@ internal abstract class AbstractStructReader<EB, O, T> : JsStructReader<EB, O, T
             )
 
     abstract fun read(env: JsReaderEnv<EB, O>, location: JsLocation, source: JsStruct): JsReaderResult<T>
+
+    protected fun <EB, O> readStructProperties(
+        env: JsReaderEnv<EB, O>,
+        location: JsLocation,
+        source: JsStruct,
+        properties: StructProperties<EB, O>
+    ): JsReaderResult<PropertyValues<EB, O>>
+        where EB : InvalidTypeErrorBuilder,
+              O : FailFastOption {
+        val failFast = env.config.options.failFast
+        var failureAccumulator: JsReaderResult.Failure? = null
+
+        val values = PropertyValuesInstance<EB, O>()
+            .apply {
+                properties.forEach { property ->
+                    property.read(env, location, source)
+                        .fold(
+                            onFailure = { failure ->
+                                if (failFast) return failure
+                                failureAccumulator = failureAccumulator + failure
+                            },
+                            onSuccess = { success ->
+                                this[property] = success.value
+                            }
+                        )
+                }
+            }
+
+        return failureAccumulator ?: success(location, values)
+    }
 }
