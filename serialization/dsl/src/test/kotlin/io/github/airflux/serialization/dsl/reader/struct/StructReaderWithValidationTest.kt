@@ -61,7 +61,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ENV_WITH_FAIL_FAST_IS_TRUE
 
-                    "when there are no structure reading errors" - {
+                    "when the source does not have any errors" - {
                         val source = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
@@ -75,7 +75,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when source is not a struct type" - {
+                    "when the source is not a struct type" - {
                         val source: JsValue = JsString("")
 
                         "then the reader should return an error" {
@@ -90,7 +90,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the error occurs only at the validation step" - {
+                    "when the source has a validation error" - {
                         val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -106,7 +106,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the error occurs only in the read step" - {
+                    "when the source has a read error" - {
                         val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -123,12 +123,28 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                             )
                         }
                     }
+
+                    "when the source has a validation and a read errors" - {
+                        val source: JsValue = JsStruct(
+                            ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
+                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
+                        )
+
+                        "then the reader should return first error" {
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result.shouldBeFailure(
+                                location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
+                                error = JsonErrors.Validation.Struct.AdditionalProperties
+                            )
+                        }
+                    }
                 }
 
                 "when fail-fast is false" - {
                     val envWithFailFastIsFalse = ENV_WITH_FAIL_FAST_IS_FALSE
 
-                    "when there are no structure reading errors" - {
+                    "when the source does not have any errors" - {
                         val source = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
@@ -142,7 +158,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when source is not a struct type" - {
+                    "when the source is not a struct type" - {
                         val source: JsValue = JsString("")
 
                         "then the reader should return an error" {
@@ -157,7 +173,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the error occurs only at the validation step" - {
+                    "when the source has a validation error" - {
                         val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -173,7 +189,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the error occurs only in the read step" - {
+                    "when the source has a read error" - {
                         val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -191,7 +207,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the error occurs at the validation step and in the read step" - {
+                    "when the source has a validation and a read errors" - {
                         val source: JsValue = JsStruct(
                             ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -213,19 +229,6 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                                     )
                                 )
                             )
-                        }
-                    }
-
-                    "when no validation or reading errors occur" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
-                        )
-
-                        "then the reader should return an instance of the type" {
-                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                            val success = result.shouldBeSuccess()
-                            success.value shouldBe DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
                         }
                     }
                 }

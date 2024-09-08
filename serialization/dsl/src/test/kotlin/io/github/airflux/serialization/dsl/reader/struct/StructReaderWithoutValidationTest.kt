@@ -57,7 +57,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ENV_WITH_FAIL_FAST_IS_TRUE
 
-                    "when there are no structure reading errors" - {
+                    "when the source does not have any errors" - {
                         val source = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -71,7 +71,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when source is not a struct type" - {
+                    "when the source is not a struct type" - {
                         val source: JsValue = JsString("")
 
                         "then the reader should return an error" {
@@ -86,7 +86,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when some property reader returns an error" - {
+                    "when the source has a read error" - {
                         val source = JsStruct(
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
@@ -100,7 +100,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when multiple property readers return an error" - {
+                    "when the source has read errors" - {
                         val source = JsStruct()
 
                         "then the reader should return first error" {
@@ -116,7 +116,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                 "when fail-fast is false" - {
                     val envWithFailFastIsFalse = ENV_WITH_FAIL_FAST_IS_FALSE
 
-                    "when there are no structure reading errors" - {
+                    "when the source does not have any errors" - {
                         val source = JsStruct(
                             ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)!!,
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
@@ -130,7 +130,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when source is not a struct type" - {
+                    "when the source is not a struct type" - {
                         val source: JsValue = JsString("")
 
                         "then the reader should return an error" {
@@ -145,7 +145,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when some property reader returns an error" - {
+                    "when the source has a read error" - {
                         val source = JsStruct(
                             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
@@ -159,7 +159,7 @@ internal class StructReaderWithoutValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when multiple property readers return an error" - {
+                    "when the source has read errors" - {
                         val source = JsStruct()
 
                         "then the reader should return all errors" {
