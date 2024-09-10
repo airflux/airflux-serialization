@@ -72,7 +72,7 @@ internal fun <EB, O, T> buildStructReader(
         }
     }
 
-internal abstract class AbstractStructReader<EB, O, T>(
+private abstract class AbstractStructReader<EB, O, T>(
     override val properties: StructProperties<EB, O>
 ) : JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder {
