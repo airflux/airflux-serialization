@@ -64,7 +64,7 @@ internal fun <EB, O, T> buildArrayReader(
         }
     }
 
-internal abstract class AbstractArrayReader<EB, O, T> : JsArrayReader<EB, O, T>
+private abstract class AbstractArrayReader<EB, O, T> : JsArrayReader<EB, O, T>
     where EB : AdditionalItemsErrorBuilder,
           EB : InvalidTypeErrorBuilder,
           O : FailFastOption {
