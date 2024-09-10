@@ -27,12 +27,10 @@ import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.readRequired
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.toSuccess
-import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
@@ -44,34 +42,32 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class StructReaderWithValidationTest : FreeSpec() {
+internal class StructReaderBuildersWithoutValidationTest : FreeSpec() {
 
     init {
 
-        "The buildStructReader function with validation" - {
+        "The buildStructReader function without validation" - {
 
             "when the reader was created" - {
-                val reader = buildStructReader(
-                    properties = PROPERTIES,
-                    validator = VALIDATOR
-                ) { _, _ ->
-                    DTO(id = +ID_PROPERTY, name = +NAME_PROPERTY).toSuccess(LOCATION)
-                }
+                val reader: JsStructReader<EB, OPTS, DTO> =
+                    buildStructReader(properties = PROPERTIES) { _, _ ->
+                        DTO(id = +ID_PROPERTY, name = +NAME_PROPERTY).toSuccess(LOCATION)
+                    }
 
                 "when fail-fast is true" - {
                     val envWithFailFastIsTrue = ENV_WITH_FAIL_FAST_IS_TRUE
 
                     "when the source does not have any errors" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)!!,
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
 
                         "then the reader should return the DTO" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result.shouldBeSuccess()
                             result.location shouldBe LOCATION
-                            result.value shouldBe DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
+                            result.value shouldBe DTO(id = ID_PROPERTY_VALUE.toInt(), name = NAME_PROPERTY_VALUE)
                         }
                     }
 
@@ -90,52 +86,28 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the source has a validation error" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
-                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
-                        )
-
-                        "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result.shouldBeFailure(
-                                location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
-                                error = JsonErrors.Validation.Struct.AdditionalProperties
-                            )
-                        }
-                    }
-
                     "when the source has a read error" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
-                        )
-
-                        "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
-                            result.shouldBeFailure(
-                                location = LOCATION.append(ID_PROPERTY_NAME),
-                                error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
-                                )
-                            )
-                        }
-                    }
-
-                    "when the source has a validation and a read errors" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
-                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 
                         "then the reader should return first error" {
                             val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
                             result.shouldBeFailure(
-                                location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
-                                error = JsonErrors.Validation.Struct.AdditionalProperties
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                error = JsonErrors.PathMissing
+                            )
+                        }
+                    }
+
+                    "when the source has read errors" - {
+                        val source = JsStruct()
+
+                        "then the reader should return first error" {
+                            val result = reader.read(envWithFailFastIsTrue, LOCATION, source)
+                            result.shouldBeFailure(
+                                location = LOCATION.append(ID_PROPERTY_NAME),
+                                error = JsonErrors.PathMissing
                             )
                         }
                     }
@@ -146,15 +118,15 @@ internal class StructReaderWithValidationTest : FreeSpec() {
 
                     "when the source does not have any errors" - {
                         val source = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
+                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)!!,
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                         )
 
                         "then the reader should return the DTO" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result.shouldBeSuccess()
                             result.location shouldBe LOCATION
-                            result.value shouldBe DTO(id = ID_PROPERTY_VALUE, name = NAME_PROPERTY_VALUE)
+                            result.value shouldBe DTO(id = ID_PROPERTY_VALUE.toInt(), name = NAME_PROPERTY_VALUE)
                         }
                     }
 
@@ -173,60 +145,33 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                         }
                     }
 
-                    "when the source has a validation error" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
-                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE)
-                        )
-
-                        "then the reader should return it error" {
-                            val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
-                            result.shouldBeFailure(
-                                location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
-                                error = JsonErrors.Validation.Struct.AdditionalProperties
-                            )
-                        }
-                    }
-
                     "when the source has a read error" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
+                        val source = JsStruct(
+                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE)
                         )
 
-                        "then the reader should return it error" {
+                        "then the reader should return first error" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result.shouldBeFailure(
                                 location = LOCATION.append(ID_PROPERTY_NAME),
-                                error = JsonErrors.InvalidType(
-                                    expected = JsValue.Type.NUMBER,
-                                    actual = JsValue.Type.STRING
-                                )
+                                error = JsonErrors.PathMissing
                             )
                         }
                     }
 
-                    "when the source has a validation and a read errors" - {
-                        val source: JsValue = JsStruct(
-                            ID_PROPERTY_NAME to JsString(ID_PROPERTY_VALUE.toString()),
-                            NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
-                            IS_ACTIVE_PROPERTY_NAME to JsBoolean.valueOf(IS_ACTIVE_PROPERTY_VALUE),
-                        )
+                    "when the source has read errors" - {
+                        val source = JsStruct()
 
-                        "then the reader should return it errors" {
+                        "then the reader should return all errors" {
                             val result = reader.read(envWithFailFastIsFalse, LOCATION, source)
                             result.shouldBeFailure(
                                 cause(
-                                    location = LOCATION.append(IS_ACTIVE_PROPERTY_NAME),
-                                    error = JsonErrors.Validation.Struct.AdditionalProperties
+                                    location = LOCATION.append(ID_PROPERTY_NAME),
+                                    error = JsonErrors.PathMissing
                                 ),
                                 cause(
-                                    location = LOCATION.append(ID_PROPERTY_NAME),
-                                    error = JsonErrors.InvalidType(
-                                        expected = JsValue.Type.NUMBER,
-                                        actual = JsValue.Type.STRING
-                                    )
+                                    location = LOCATION.append(NAME_PROPERTY_NAME),
+                                    error = JsonErrors.PathMissing
                                 )
                             )
                         }
@@ -241,7 +186,7 @@ internal class StructReaderWithValidationTest : FreeSpec() {
                     }
 
                 val source = JsStruct(
-                    ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE.toString())!!,
+                    ID_PROPERTY_NAME to JsNumber.valueOf(ID_PROPERTY_VALUE)!!,
                     NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
                 )
 
@@ -269,12 +214,11 @@ internal class StructReaderWithValidationTest : FreeSpec() {
     }
 
     companion object {
+
         private const val ID_PROPERTY_NAME = "id"
-        private const val ID_PROPERTY_VALUE = 42
+        private const val ID_PROPERTY_VALUE = "42"
         private const val NAME_PROPERTY_NAME = "name"
         private const val NAME_PROPERTY_VALUE = "user"
-        private const val IS_ACTIVE_PROPERTY_NAME = "isActive"
-        private const val IS_ACTIVE_PROPERTY_VALUE = true
 
         private val ENV_WITH_FAIL_FAST_IS_TRUE =
             JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = true)))
@@ -288,11 +232,6 @@ internal class StructReaderWithValidationTest : FreeSpec() {
         private val ID_PROPERTY = property(ID_PROPERTY_NAME, IntReader)
         private val NAME_PROPERTY = property(NAME_PROPERTY_NAME, StringReader)
         private val PROPERTIES = listOf(ID_PROPERTY, NAME_PROPERTY)
-
-        private val VALIDATOR = DummyStructValidator.additionalProperties<EB, OPTS>(
-            nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
-            error = JsonErrors.Validation.Struct.AdditionalProperties
-        )
 
         private fun <EB, O, P> property(name: String, reader: JsReader<EB, O, P>): StructProperty<EB, O, P>
             where EB : InvalidTypeErrorBuilder,
