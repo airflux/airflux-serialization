@@ -24,6 +24,18 @@ import io.github.airflux.serialization.dsl.reader.struct.property.specification.
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidatorBuilder
 
+public inline fun <EB, O, T> structReader(
+    block: JsStructReaderBuilder<EB, O>.() -> JsStructReader<EB, O, T>
+): JsStructReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          O : FailFastOption = JsStructReaderBuilder<EB, O>().block()
+
+public fun <EB, O, T> JsStructReaderBuilder<EB, O>.returns(
+    block: JsStructTypeBuilder<EB, O, T>
+): JsStructReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          O : FailFastOption = build(block)
+
 @AirfluxMarker
 public class JsStructReaderBuilder<EB, O>
     where EB : InvalidTypeErrorBuilder,

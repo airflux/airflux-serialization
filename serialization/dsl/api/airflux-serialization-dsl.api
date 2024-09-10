@@ -70,7 +70,7 @@ public final class io/github/airflux/serialization/dsl/reader/struct/JsStructRea
 	public final fun validation (Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class io/github/airflux/serialization/dsl/reader/struct/JsStructReaderKt {
+public final class io/github/airflux/serialization/dsl/reader/struct/JsStructReaderBuilderKt {
 	public static final fun returns (Lio/github/airflux/serialization/dsl/reader/struct/JsStructReaderBuilder;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/dsl/reader/struct/JsStructReader;
 	public static final fun structReader (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/dsl/reader/struct/JsStructReader;
 }
