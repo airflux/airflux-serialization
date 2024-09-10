@@ -24,6 +24,36 @@ import io.github.airflux.serialization.dsl.AirfluxMarker
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidatorBuilder
 
+public inline fun <EB, O, T> arrayReader(
+    block: JsArrayReaderBuilder<EB, O>.() -> JsArrayReader<EB, O, T>
+): JsArrayReader<EB, O, T>
+    where EB : AdditionalItemsErrorBuilder,
+          EB : InvalidTypeErrorBuilder,
+          O : FailFastOption = JsArrayReaderBuilder<EB, O>().block()
+
+public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
+    items: JsReader<EB, O, T>
+): JsArrayReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          EB : AdditionalItemsErrorBuilder,
+          O : FailFastOption = build(items)
+
+public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
+    prefixItems: ArrayPrefixItems<EB, O, T>,
+    items: Boolean
+): JsArrayReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          EB : AdditionalItemsErrorBuilder,
+          O : FailFastOption = build(prefixItems, items)
+
+public fun <EB, O, T> JsArrayReaderBuilder<EB, O>.returns(
+    prefixItems: ArrayPrefixItems<EB, O, T>,
+    items: JsReader<EB, O, T>
+): JsArrayReader<EB, O, T>
+    where EB : InvalidTypeErrorBuilder,
+          EB : AdditionalItemsErrorBuilder,
+          O : FailFastOption = build(prefixItems, items)
+
 @AirfluxMarker
 public class JsArrayReaderBuilder<EB, O>
     where EB : AdditionalItemsErrorBuilder,
