@@ -18,23 +18,17 @@ package io.github.airflux.serialization.dsl.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.core.writer.filter
-import io.github.airflux.serialization.core.writer.predicate.JsPredicate
 
-public class JsStructPropertySpec<O, T, P> internal constructor(
-    public val name: String,
-    public val from: Extractor<O, T, P>,
-    public val writer: JsWriter<O, P>
-) {
+public fun <O, T : Any, P : Any> nullable(
+    name: String,
+    from: T.() -> P?,
+    writer: JsWriter<O, P?>
+): JsStructPropertySpec<O, T, P?> =
+    JsStructPropertySpec(name = name, from = JsStructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
 
-    public sealed class Extractor<O, T, P> {
-
-        internal class WithoutEnv<O, T, P>(val extractor: T.() -> P) : Extractor<O, T, P>()
-        internal class WithEnv<O, T, P>(val extractor: T.(JsWriterEnv<O>) -> P) : Extractor<O, T, P>()
-    }
-}
-
-public fun <O, T, P> JsStructPropertySpec<O, T, P>.filter(
-    predicate: JsPredicate<O, P & Any>
-): JsStructPropertySpec<O, T, P> =
-    JsStructPropertySpec(name = this.name, from = this.from, writer = writer.filter(predicate))
+public fun <O, T : Any, P : Any> nullable(
+    name: String,
+    from: T.(JsWriterEnv<O>) -> P?,
+    writer: JsWriter<O, P?>
+): JsStructPropertySpec<O, T, P?> =
+    JsStructPropertySpec(name = name, from = JsStructPropertySpec.Extractor.WithEnv(from), writer = writer)
