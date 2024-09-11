@@ -18,10 +18,13 @@ package io.github.airflux.serialization.dsl.reader.struct
 
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
+import io.github.airflux.serialization.core.reader.struct.JsStructReader
+import io.github.airflux.serialization.core.reader.struct.JsStructTypeBuilder
+import io.github.airflux.serialization.core.reader.struct.buildStructReader
+import io.github.airflux.serialization.core.reader.struct.property.StructProperty
+import io.github.airflux.serialization.core.reader.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperty
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.StructPropertySpec
-import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidatorBuilder
 
 public inline fun <EB, O, T> structReader(

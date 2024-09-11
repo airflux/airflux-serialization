@@ -24,13 +24,16 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.toSuccess
+import io.github.airflux.serialization.core.reader.struct.JsStructReader
+import io.github.airflux.serialization.core.reader.struct.property.specification.required
+import io.github.airflux.serialization.core.reader.struct.property.startKeysOfPaths
+import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.dsl.common.DummyStructValidator
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.reader.struct.property.specification.required
-import io.github.airflux.serialization.dsl.reader.struct.property.startKeysOfPaths
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
 import io.github.airflux.serialization.test.dummy.DummyReader
@@ -64,13 +67,13 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
             "when the reader was created with some validation" - {
 
                 "when the validator instance was passed" - {
-                    val validator = DummyStructValidator.additionalProperties<EB, OPTS>(
-                        nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
-                        error = JsonErrors.Validation.Struct.AdditionalProperties
-                    )
-
                     val reader: JsStructReader<EB, OPTS, DTO> = structReader {
-                        validation(validator)
+                        validation(
+                            validator = additionalProperties(
+                                nameProperties = setOf(ID_PROPERTY_NAME, NAME_PROPERTY_NAME),
+                                error = JsonErrors.Validation.Struct.AdditionalProperties
+                            )
+                        )
                         val id = property(required(name = ID_PROPERTY_NAME, reader = StringReader))
                         val name = property(required(name = NAME_PROPERTY_NAME, reader = StringReader))
                         returns { _, location ->
@@ -91,7 +94,7 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
                 "when the validator builder instance was passed" - {
                     val reader: JsStructReader<EB, OPTS, DTO> = structReader {
                         validation { properties ->
-                            DummyStructValidator.additionalProperties(
+                            additionalProperties(
                                 nameProperties = properties.startKeysOfPaths(),
                                 error = JsonErrors.Validation.Struct.AdditionalProperties
                             )
@@ -133,6 +136,19 @@ internal class JsStructReaderBuilderTest : FreeSpec() {
             NAME_PROPERTY_NAME to JsString(NAME_PROPERTY_VALUE),
             TITLE_PROPERTY_NAME to JsString(TITLE_PROPERTY_VALUE)
         )
+
+        @JvmStatic
+        private fun <EB, O> additionalProperties(
+            nameProperties: Collection<String>,
+            error: JsReaderResult.Error
+        ): JsStructValidator<EB, O> =
+            JsStructValidator { _, location, _, node ->
+                node.forEach { (name, _) ->
+                    if (name !in nameProperties)
+                        return@JsStructValidator invalid(location = location.append(name), error = error)
+                }
+                valid()
+            }
     }
 
     private data class DTO(val id: String, val name: String)

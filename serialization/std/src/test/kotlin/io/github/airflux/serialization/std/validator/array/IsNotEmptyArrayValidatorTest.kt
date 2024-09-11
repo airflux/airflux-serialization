@@ -17,12 +17,12 @@
 package io.github.airflux.serialization.std.validator.array
 
 import io.github.airflux.serialization.core.location.JsLocation
+import io.github.airflux.serialization.core.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsString
-import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.kotest.assertions.shouldBeInvalid
 import io.github.airflux.serialization.kotest.assertions.shouldBeValid
 import io.github.airflux.serialization.std.common.JsonErrors

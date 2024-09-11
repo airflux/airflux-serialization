@@ -18,16 +18,18 @@ package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.dsl.common.DummyArrayValidator.Companion.minItems
 import io.github.airflux.serialization.dsl.common.JsonErrors
 import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
@@ -45,6 +47,15 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
         private const val MIN_ITEMS = 2
 
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
+        private val VALIDATOR = JsArrayValidator<EB, OPTS> { _, location, source ->
+            if (source.size < MIN_ITEMS)
+                invalid(
+                    location = location,
+                    error = JsonErrors.Validation.Arrays.MinItems(MIN_ITEMS, source.size)
+                )
+            else
+                valid()
+        }
     }
 
     init {
@@ -53,12 +64,7 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
 
             "when a reader was created for only items" - {
                 val reader: JsReader<EB, OPTS, List<String>> = arrayReader {
-                    validation(
-                        minItems(
-                            expected = MIN_ITEMS,
-                            error = { expected, actual -> JsonErrors.Validation.Arrays.MinItems(expected, actual) }
-                        )
-                    )
+                    validation(VALIDATOR)
                     returns(items = StringReader)
                 }
 
@@ -125,7 +131,8 @@ internal class JsArrayReaderOnlyItemsTest : FreeSpec() {
                 }
 
                 "when fail-fast is false" - {
-                    val envWithFailFastIsFalse = JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
+                    val envWithFailFastIsFalse =
+                        JsReaderEnv(JsReaderEnv.Config(errorBuilders = EB(), options = OPTS(failFast = false)))
 
                     "when source is not the array type" - {
                         val source = JsString("")

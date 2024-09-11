@@ -32,5 +32,13 @@ internal sealed class JsonErrors : JsReaderResult.Error {
         sealed class Strings : Validation() {
             data object IsEmpty : Strings()
         }
+
+        sealed class Struct : Validation() {
+            data object AdditionalProperties : Struct()
+        }
+
+        sealed class Arrays : Validation() {
+            data class MinItems(val expected: Int, val actual: Int) : Arrays()
+        }
     }
 }

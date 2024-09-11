@@ -16,4 +16,6 @@
 
 package io.github.airflux.serialization.dsl.reader.array.validation
 
+import io.github.airflux.serialization.core.reader.array.validation.JsArrayValidator
+
 public typealias JsArrayValidatorBuilder<EB, O> = () -> JsArrayValidator<EB, O>

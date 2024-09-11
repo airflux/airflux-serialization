@@ -18,17 +18,21 @@ package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.reader.validation.invalid
+import io.github.airflux.serialization.core.reader.validation.valid
 import io.github.airflux.serialization.core.value.JsArray
 import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
-import io.github.airflux.serialization.dsl.common.DummyArrayValidator.Companion.minItems
 import io.github.airflux.serialization.dsl.common.JsonErrors
+import io.github.airflux.serialization.dsl.reader.array.JsArrayReaderOnlyItemsTest.EB
+import io.github.airflux.serialization.dsl.reader.array.JsArrayReaderOnlyItemsTest.OPTS
 import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
@@ -47,6 +51,15 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
         private const val MIN_ITEMS = 2
 
         private val StringReader: JsReader<EB, OPTS, String> = DummyReader.string()
+        private val VALIDATOR = JsArrayValidator<EB, OPTS> { _, location, source ->
+            if (source.size < MIN_ITEMS)
+                invalid(
+                    location = location,
+                    error = JsonErrors.Validation.Arrays.MinItems(MIN_ITEMS, source.size)
+                )
+            else
+                valid()
+        }
     }
 
     init {
@@ -57,12 +70,7 @@ internal class JsArrayReaderOnlyPrefixItemsTest : FreeSpec() {
 
                 "when the additional items do not cause an error" - {
                     val reader: JsReader<EB, OPTS, List<String>> = arrayReader {
-                        validation(
-                            minItems(
-                                expected = MIN_ITEMS,
-                                error = { expected, actual -> JsonErrors.Validation.Arrays.MinItems(expected, actual) }
-                            )
-                        )
+                        validation(VALIDATOR)
                         returns(prefixItems = listOf(StringReader, StringReader, StringReader), items = true)
                     }
 

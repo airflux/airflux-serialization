@@ -18,7 +18,7 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.validator
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.StructProperties
 import io.github.airflux.serialization.std.validator.string.StdStringValidator
 import io.github.airflux.serialization.std.validator.struct.StdStructValidator
 

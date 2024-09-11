@@ -17,11 +17,16 @@
 package io.github.airflux.serialization.dsl.reader.array
 
 import io.github.airflux.serialization.core.reader.JsReader
+import io.github.airflux.serialization.core.reader.array.ArrayPrefixItems
+import io.github.airflux.serialization.core.reader.array.JsArrayItemsReader
+import io.github.airflux.serialization.core.reader.array.JsArrayReader
+import io.github.airflux.serialization.core.reader.array.arrayItemsReader
+import io.github.airflux.serialization.core.reader.array.buildArrayReader
+import io.github.airflux.serialization.core.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
 import io.github.airflux.serialization.core.reader.error.AdditionalItemsErrorBuilder
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.dsl.AirfluxMarker
-import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidator
 import io.github.airflux.serialization.dsl.reader.array.validation.JsArrayValidatorBuilder
 
 public inline fun <EB, O, T> arrayReader(

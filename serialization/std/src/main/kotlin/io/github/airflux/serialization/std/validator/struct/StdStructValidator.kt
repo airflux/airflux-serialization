@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
-import io.github.airflux.serialization.dsl.reader.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
+import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 
 public object StdStructValidator {
 

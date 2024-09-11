@@ -18,6 +18,6 @@ package io.github.airflux.quickstart.infrastructure.web.model.reader.validator
 
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderErrorBuilders
 import io.github.airflux.quickstart.infrastructure.web.model.reader.env.ReaderOptions
-import io.github.airflux.serialization.dsl.reader.struct.validation.JsStructValidator
+import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 
 val CommonStructReaderValidators: JsStructValidator<ReaderErrorBuilders, ReaderOptions> = isNotEmpty
