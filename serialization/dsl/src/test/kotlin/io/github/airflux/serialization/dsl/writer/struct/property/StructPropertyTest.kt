@@ -49,7 +49,7 @@ internal class StructPropertyTest : FreeSpec() {
                 )
 
                 "when created an instance of an property" - {
-                    val property = StructProperty(spec)
+                    val property = JsStructProperty(spec)
 
                     "then the property name should equal the property name from the spec" {
                         property.name shouldBe spec.name
@@ -70,7 +70,7 @@ internal class StructPropertyTest : FreeSpec() {
                 )
 
                 "when created an instance of an property" - {
-                    val property = StructProperty(spec)
+                    val property = JsStructProperty(spec)
 
                     "then the property name should equal the property name from the spec" {
                         property.name shouldBe spec.name

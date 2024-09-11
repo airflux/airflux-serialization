@@ -27,8 +27,8 @@ import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilder
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
 import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
+import io.github.airflux.serialization.dsl.writer.struct.property.JsStructProperty
 import io.github.airflux.serialization.dsl.writer.struct.property.StructProperties
-import io.github.airflux.serialization.dsl.writer.struct.property.StructProperty
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
 public fun <O, T> structWriter(block: StructWriter.Builder<O, T>.() -> Unit): JsWriter<O, T>
@@ -65,10 +65,10 @@ public class StructWriter<O, T> private constructor(
     public class Builder<O, T> internal constructor()
         where O : WriterActionBuilderIfResultIsEmptyOption {
 
-        private val properties = mutableListOf<StructProperty<O, T, *>>()
+        private val properties = mutableListOf<JsStructProperty<O, T, *>>()
 
-        public fun <P> property(spec: StructPropertySpec<O, T, P>): StructProperty<O, T, P> =
-            StructProperty(spec).also { properties.add(it) }
+        public fun <P> property(spec: StructPropertySpec<O, T, P>): JsStructProperty<O, T, P> =
+            JsStructProperty(spec).also { properties.add(it) }
 
         internal fun build(): JsWriter<O, T> = StructWriter(properties)
     }

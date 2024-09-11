@@ -22,7 +22,7 @@ import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
 import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
 
-public class StructProperty<O, T, P> private constructor(
+public class JsStructProperty<O, T, P> private constructor(
     public val name: String,
     private val writer: JsWriter<O, T>
 ) {
