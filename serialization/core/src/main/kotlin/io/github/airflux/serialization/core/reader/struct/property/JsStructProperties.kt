@@ -18,12 +18,12 @@ package io.github.airflux.serialization.core.reader.struct.property
 
 import io.github.airflux.serialization.core.path.JsPath
 
-public typealias StructProperties<EB, O> = List<JsStructProperty<EB, O, *>>
+public typealias JsStructProperties<EB, O> = List<JsStructProperty<EB, O, *>>
 
 /**
  * Returns a set of start keys from the paths of each property.
  */
-public fun <EB, O> StructProperties<EB, O>.startKeysOfPaths(): Collection<String> {
+public fun <EB, O> JsStructProperties<EB, O>.startKeysOfPaths(): Collection<String> {
     fun JsPath.Element.getKeyOrNull(): String? = if (this is JsPath.Element.Key) get else null
 
     fun JsStructProperty<EB, O, *>.getStartKeysOfPaths(): List<String> = paths.items

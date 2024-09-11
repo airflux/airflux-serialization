@@ -19,7 +19,7 @@ package io.github.airflux.serialization.std.validator.struct
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
@@ -33,7 +33,7 @@ public class MaxPropertiesStructValidator<EB, O> internal constructor(private va
     override fun validate(
         env: JsReaderEnv<EB, O>,
         location: JsLocation,
-        properties: StructProperties<EB, O>,
+        properties: JsStructProperties<EB, O>,
         source: JsStruct
     ): JsValidatorResult =
         if (source.count > value)

@@ -16,7 +16,7 @@
 
 package io.github.airflux.serialization.dsl.reader.struct.validation
 
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 
-public typealias JsStructValidatorBuilder<EB, O> = (StructProperties<EB, O>) -> JsStructValidator<EB, O>
+public typealias JsStructValidatorBuilder<EB, O> = (JsStructProperties<EB, O>) -> JsStructValidator<EB, O>

@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.invalid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -34,7 +34,7 @@ internal class JsStructValidatorTest : FreeSpec() {
     companion object {
         private val ENV = JsReaderEnv(JsReaderEnv.Config(errorBuilders = Unit, options = Unit))
         private val LOCATION: JsLocation = JsLocation
-        private val PROPERTIES: StructProperties<Unit, Unit> = emptyList()
+        private val PROPERTIES: JsStructProperties<Unit, Unit> = emptyList()
         private val SOURCE: JsStruct = JsStruct()
     }
 

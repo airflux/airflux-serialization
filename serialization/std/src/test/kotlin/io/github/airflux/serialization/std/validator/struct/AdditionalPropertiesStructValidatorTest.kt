@@ -24,8 +24,8 @@ import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.result.plus
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.struct.property.JsStructProperty
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
 import io.github.airflux.serialization.core.reader.struct.property.specification.required
 import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
@@ -52,7 +52,7 @@ internal class AdditionalPropertiesStructValidatorTest : FreeSpec() {
         private val LOCATION: JsLocation = JsLocation
         private val idProperty: JsStructProperty<EB, OPTS, String> =
             JsStructProperty(required(ID_PROPERTY_NAME, StringReader))
-        private val PROPERTIES: StructProperties<EB, OPTS> = listOf(idProperty)
+        private val PROPERTIES: JsStructProperties<EB, OPTS> = listOf(idProperty)
     }
 
     init {

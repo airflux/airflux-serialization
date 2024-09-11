@@ -25,16 +25,16 @@ import io.github.airflux.serialization.core.reader.result.failure
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.reader.result.plus
 import io.github.airflux.serialization.core.reader.result.success
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.core.reader.struct.property.PropertyValuesInstance
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
 import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 import io.github.airflux.serialization.core.reader.validation.getOrNull
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 
 public fun <EB, O, T> buildStructReader(
-    properties: StructProperties<EB, O>,
+    properties: JsStructProperties<EB, O>,
     typeBuilder: JsStructTypeBuilder<EB, O, T>
 ): JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder,
@@ -49,7 +49,7 @@ public fun <EB, O, T> buildStructReader(
     }
 
 public fun <EB, O, T> buildStructReader(
-    properties: StructProperties<EB, O>,
+    properties: JsStructProperties<EB, O>,
     validator: JsStructValidator<EB, O>,
     typeBuilder: JsStructTypeBuilder<EB, O, T>
 ): JsStructReader<EB, O, T>
@@ -73,7 +73,7 @@ public fun <EB, O, T> buildStructReader(
     }
 
 private abstract class AbstractStructReader<EB, O, T>(
-    override val properties: StructProperties<EB, O>
+    override val properties: JsStructProperties<EB, O>
 ) : JsStructReader<EB, O, T>
     where EB : InvalidTypeErrorBuilder {
 
@@ -92,7 +92,7 @@ private abstract class AbstractStructReader<EB, O, T>(
         env: JsReaderEnv<EB, O>,
         location: JsLocation,
         source: JsStruct,
-        properties: StructProperties<EB, O>
+        properties: JsStructProperties<EB, O>
     ): JsReaderResult<PropertyValues<EB, O>>
         where EB : InvalidTypeErrorBuilder,
               O : FailFastOption {

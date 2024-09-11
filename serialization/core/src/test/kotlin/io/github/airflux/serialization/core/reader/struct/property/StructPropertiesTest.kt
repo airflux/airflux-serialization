@@ -41,7 +41,7 @@ internal class StructPropertiesTest : FreeSpec() {
 
                 "when the properties are empty" - {
 
-                    val properties: StructProperties<EB, OPTS> = emptyList()
+                    val properties: JsStructProperties<EB, OPTS> = emptyList()
 
                     "then this function should return an empty set" {
                         val keys = properties.startKeysOfPaths()
@@ -51,7 +51,7 @@ internal class StructPropertiesTest : FreeSpec() {
 
                 "when properties do not contain paths with start elements being keys" - {
 
-                    val properties: StructProperties<EB, OPTS> = listOf(
+                    val properties: JsStructProperties<EB, OPTS> = listOf(
 
                         // [0]
                         property(path = JsPath(FIRST_ARRAY_ELEMENT_INDEX)),
@@ -69,7 +69,7 @@ internal class StructPropertiesTest : FreeSpec() {
                 "when properties contain paths with start elements being keys" - {
 
                     "then this function should return the set of the keys" {
-                        val properties: StructProperties<EB, OPTS> = listOf(
+                        val properties: JsStructProperties<EB, OPTS> = listOf(
 
                             // id
                             property(path = JsPath(ID_PROPERTY_NAME)),

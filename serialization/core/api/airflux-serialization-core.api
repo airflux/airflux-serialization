@@ -439,6 +439,10 @@ public final class io/github/airflux/serialization/core/reader/struct/StructRead
 	public static final fun buildStructReader (Ljava/util/List;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/struct/JsStructReader;
 }
 
+public final class io/github/airflux/serialization/core/reader/struct/property/JsStructPropertiesKt {
+	public static final fun startKeysOfPaths (Ljava/util/List;)Ljava/util/Collection;
+}
+
 public final class io/github/airflux/serialization/core/reader/struct/property/JsStructProperty {
 	public fun <init> (Lio/github/airflux/serialization/core/reader/struct/property/specification/StructPropertySpec;)V
 	public final fun getPaths-DU0FY7s ()Ljava/util/List;
@@ -451,10 +455,6 @@ public abstract interface class io/github/airflux/serialization/core/reader/stru
 	public abstract fun isEmpty ()Z
 	public abstract fun isNotEmpty ()Z
 	public fun unaryPlus (Lio/github/airflux/serialization/core/reader/struct/property/JsStructProperty;)Ljava/lang/Object;
-}
-
-public final class io/github/airflux/serialization/core/reader/struct/property/StructPropertiesKt {
-	public static final fun startKeysOfPaths (Ljava/util/List;)Ljava/util/Collection;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/property/specification/OptionalPropertySpecKt {

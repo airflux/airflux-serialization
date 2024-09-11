@@ -19,7 +19,7 @@ package io.github.airflux.serialization.core.reader.struct.validation
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.plus
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.validation.JsValidatorResult
 import io.github.airflux.serialization.core.reader.validation.isValid
 import io.github.airflux.serialization.core.reader.validation.valid
@@ -30,7 +30,7 @@ public fun interface JsStructValidator<EB, O> {
     public fun validate(
         env: JsReaderEnv<EB, O>,
         location: JsLocation,
-        properties: StructProperties<EB, O>,
+        properties: JsStructProperties<EB, O>,
         source: JsStruct
     ): JsValidatorResult
 }

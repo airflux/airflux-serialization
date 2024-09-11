@@ -17,13 +17,13 @@
 package io.github.airflux.serialization.std.validator.struct
 
 import io.github.airflux.serialization.core.reader.env.option.FailFastOption
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 import io.github.airflux.serialization.core.reader.struct.validation.JsStructValidator
 
 public object StdStructValidator {
 
     @JvmStatic
-    public fun <EB, O> additionalProperties(properties: StructProperties<EB, O>): JsStructValidator<EB, O>
+    public fun <EB, O> additionalProperties(properties: JsStructProperties<EB, O>): JsStructValidator<EB, O>
         where EB : AdditionalPropertiesStructValidator.ErrorBuilder,
               O : FailFastOption =
         AdditionalPropertiesStructValidator(properties)

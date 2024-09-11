@@ -17,8 +17,8 @@
 package io.github.airflux.serialization.core.reader.struct
 
 import io.github.airflux.serialization.core.reader.JsReader
-import io.github.airflux.serialization.core.reader.struct.property.StructProperties
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperties
 
 public interface JsStructReader<EB, O, T> : JsReader<EB, O, T> {
-    public val properties: StructProperties<EB, O>
+    public val properties: JsStructProperties<EB, O>
 }
