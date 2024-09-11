@@ -65,7 +65,7 @@ internal class OptionalPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The OptionalPropertySpec type" - {
+        "The builder function for the specification of a optional property" - {
 
             "when creating the instance by a property name" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader)

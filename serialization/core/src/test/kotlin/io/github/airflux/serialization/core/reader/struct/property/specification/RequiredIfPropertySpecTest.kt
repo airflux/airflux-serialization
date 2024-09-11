@@ -64,7 +64,7 @@ internal class RequiredIfPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The RequiredIfPropertySpec type" - {
+        "The builder function for the specification of a required property with a predicate" - {
 
             "when the predicate returns the true value" - {
                 val readerPredicate: (JsContext, JsLocation) -> Boolean = { _, _ -> true }

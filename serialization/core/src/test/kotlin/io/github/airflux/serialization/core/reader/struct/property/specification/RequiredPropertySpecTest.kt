@@ -61,7 +61,7 @@ internal class RequiredPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The RequiredPropertySpec type" - {
+        "The builder function for the specification of a required property" - {
 
             "when creating the instance by a property name" - {
                 val spec = required(name = ID_PROPERTY_NAME, reader = StringReader)

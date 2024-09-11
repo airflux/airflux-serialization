@@ -63,7 +63,7 @@ internal class OptionalWithDefaultPropertySpecTest : FreeSpec() {
 
     init {
 
-        "The OptionalWithDefaultPropertySpec type" - {
+        "The builder function for the specification of a optional property with default" - {
 
             "when creating the instance by a property name" - {
                 val spec = optional(name = ID_PROPERTY_NAME, reader = StringReader, default = DEFAULT)
