@@ -24,7 +24,7 @@ import io.github.airflux.serialization.core.reader.result.JsReaderResult
 import io.github.airflux.serialization.core.reader.struct.property.specification.StructPropertySpec
 import io.github.airflux.serialization.core.value.JsValue
 
-public class StructProperty<EB, O, T> private constructor(
+public class JsStructProperty<EB, O, T> private constructor(
     public val paths: JsPaths,
     private val reader: JsPathReader<EB, O, T>
 ) {

@@ -17,7 +17,7 @@
 package io.github.airflux.serialization.core.reader.struct.property
 
 internal class PropertyValuesInstance<EB, O> : PropertyValues<EB, O> {
-    private val values: MutableMap<StructProperty<EB, O, *>, Value> = mutableMapOf()
+    private val values: MutableMap<JsStructProperty<EB, O, *>, Value> = mutableMapOf()
 
     override val isEmpty: Boolean
         get() = !isNotEmpty
@@ -28,7 +28,7 @@ internal class PropertyValuesInstance<EB, O> : PropertyValues<EB, O> {
     override val size: Int
         get() = values.count { r -> r.value is Value.Some }
 
-    override operator fun <T> get(property: StructProperty<EB, O, T>): T {
+    override operator fun <T> get(property: JsStructProperty<EB, O, T>): T {
         val value: Value? = values[property]
         return if (value != null) {
             @Suppress("UNCHECKED_CAST")
@@ -37,7 +37,7 @@ internal class PropertyValuesInstance<EB, O> : PropertyValues<EB, O> {
             throw NoSuchElementException("Property by paths '${property.paths}' is missing in the map.")
     }
 
-    operator fun set(property: StructProperty<EB, O, *>, value: Any?) {
+    operator fun set(property: JsStructProperty<EB, O, *>, value: Any?) {
         if (value != null)
             values[property] = Value.Some(value)
         else

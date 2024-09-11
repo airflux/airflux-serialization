@@ -22,6 +22,6 @@ public sealed interface PropertyValues<EB, O> {
     public val isNotEmpty: Boolean
     public val size: Int
 
-    public infix operator fun <T> get(property: StructProperty<EB, O, T>): T
-    public operator fun <T> StructProperty<EB, O, T>.unaryPlus(): T = get(this)
+    public infix operator fun <T> get(property: JsStructProperty<EB, O, T>): T
+    public operator fun <T> JsStructProperty<EB, O, T>.unaryPlus(): T = get(this)
 }

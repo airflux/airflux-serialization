@@ -439,22 +439,22 @@ public final class io/github/airflux/serialization/core/reader/struct/StructRead
 	public static final fun buildStructReader (Ljava/util/List;Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/struct/JsStructReader;
 }
 
+public final class io/github/airflux/serialization/core/reader/struct/property/JsStructProperty {
+	public fun <init> (Lio/github/airflux/serialization/core/reader/struct/property/specification/StructPropertySpec;)V
+	public final fun getPaths-DU0FY7s ()Ljava/util/List;
+	public final fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
+}
+
 public abstract interface class io/github/airflux/serialization/core/reader/struct/property/PropertyValues {
-	public abstract fun get (Lio/github/airflux/serialization/core/reader/struct/property/StructProperty;)Ljava/lang/Object;
+	public abstract fun get (Lio/github/airflux/serialization/core/reader/struct/property/JsStructProperty;)Ljava/lang/Object;
 	public abstract fun getSize ()I
 	public abstract fun isEmpty ()Z
 	public abstract fun isNotEmpty ()Z
-	public fun unaryPlus (Lio/github/airflux/serialization/core/reader/struct/property/StructProperty;)Ljava/lang/Object;
+	public fun unaryPlus (Lio/github/airflux/serialization/core/reader/struct/property/JsStructProperty;)Ljava/lang/Object;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/property/StructPropertiesKt {
 	public static final fun startKeysOfPaths (Ljava/util/List;)Ljava/util/Collection;
-}
-
-public final class io/github/airflux/serialization/core/reader/struct/property/StructProperty {
-	public fun <init> (Lio/github/airflux/serialization/core/reader/struct/property/specification/StructPropertySpec;)V
-	public final fun getPaths-DU0FY7s ()Ljava/util/List;
-	public final fun read (Lio/github/airflux/serialization/core/reader/env/JsReaderEnv;Lio/github/airflux/serialization/core/location/JsLocation;Lio/github/airflux/serialization/core/value/JsValue;)Lio/github/airflux/serialization/core/reader/result/JsReaderResult;
 }
 
 public final class io/github/airflux/serialization/core/reader/struct/property/specification/OptionalPropertySpecKt {

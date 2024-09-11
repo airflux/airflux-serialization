@@ -54,7 +54,7 @@ internal class StructPropertyTest : FreeSpec() {
 
         "The StructProperty type" - {
             val spec = StructPropertySpec(paths = JsPaths(JsPath(PROPERTY_NAME)), reader = READER)
-            val property = StructProperty(spec)
+            val property = JsStructProperty(spec)
 
             "then the paths should equal the paths from the spec" {
                 property.paths shouldBe spec.paths

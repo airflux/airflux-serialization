@@ -44,7 +44,7 @@ public final class io/github/airflux/serialization/dsl/reader/array/JsArrayReade
 public final class io/github/airflux/serialization/dsl/reader/struct/JsStructReaderBuilder {
 	public fun <init> ()V
 	public final fun build (Lkotlin/jvm/functions/Function3;)Lio/github/airflux/serialization/core/reader/struct/JsStructReader;
-	public final fun property (Lio/github/airflux/serialization/core/reader/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/core/reader/struct/property/StructProperty;
+	public final fun property (Lio/github/airflux/serialization/core/reader/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/core/reader/struct/property/JsStructProperty;
 	public final fun validation (Lio/github/airflux/serialization/core/reader/struct/validation/JsStructValidator;)V
 	public final fun validation (Lkotlin/jvm/functions/Function1;)V
 }

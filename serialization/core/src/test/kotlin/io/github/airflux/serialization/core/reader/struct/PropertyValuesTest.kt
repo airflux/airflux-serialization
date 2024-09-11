@@ -21,9 +21,9 @@ import io.github.airflux.serialization.core.reader.JsReader
 import io.github.airflux.serialization.core.reader.error.InvalidTypeErrorBuilder
 import io.github.airflux.serialization.core.reader.error.PathMissingErrorBuilder
 import io.github.airflux.serialization.core.reader.result.JsReaderResult
+import io.github.airflux.serialization.core.reader.struct.property.JsStructProperty
 import io.github.airflux.serialization.core.reader.struct.property.PropertyValues
 import io.github.airflux.serialization.core.reader.struct.property.PropertyValuesInstance
-import io.github.airflux.serialization.core.reader.struct.property.StructProperty
 import io.github.airflux.serialization.core.reader.struct.property.specification.optional
 import io.github.airflux.serialization.core.reader.struct.property.specification.required
 import io.github.airflux.serialization.core.value.JsValue
@@ -62,7 +62,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for non-nullable property" - {
-                    val property = StructProperty(required(PROPERTY_NAME, StringReader))
+                    val property = JsStructProperty(required(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -78,7 +78,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty(optional(PROPERTY_NAME, StringReader))
+                    val property = JsStructProperty(optional(PROPERTY_NAME, StringReader))
 
                     "then the method 'get' should throw an exception" {
                         shouldThrow<NoSuchElementException> { map[property] }
@@ -97,7 +97,7 @@ internal class PropertyValuesTest : FreeSpec() {
             "when the added value is not null" - {
 
                 "for non-nullable property" - {
-                    val property = StructProperty(required(PROPERTY_NAME, StringReader))
+                    val property = JsStructProperty(required(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -130,7 +130,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty(required(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsStructProperty(required(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -147,7 +147,7 @@ internal class PropertyValuesTest : FreeSpec() {
                 }
 
                 "for nullable property" - {
-                    val property = StructProperty(optional(PROPERTY_NAME, StringReader))
+                    val property = JsStructProperty(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = PROPERTY_VALUE
                     }
@@ -180,7 +180,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsStructProperty(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }
@@ -200,7 +200,7 @@ internal class PropertyValuesTest : FreeSpec() {
             "when the added value is null" - {
 
                 "for nullable property" - {
-                    val property = StructProperty(optional(PROPERTY_NAME, StringReader))
+                    val property = JsStructProperty(optional(PROPERTY_NAME, StringReader))
                     val map: PropertyValues<EB, Unit> = PropertyValuesInstance<EB, Unit>().apply {
                         this[property] = null
                     }
@@ -233,7 +233,7 @@ internal class PropertyValuesTest : FreeSpec() {
                     }
 
                     "then for unknown property" - {
-                        val unknownProperty = StructProperty(optional(UNKNOWN_PROPERTY_NAME, StringReader))
+                        val unknownProperty = JsStructProperty(optional(UNKNOWN_PROPERTY_NAME, StringReader))
 
                         "the method 'get' should thrown an exception" {
                             shouldThrow<NoSuchElementException> { map[unknownProperty] }

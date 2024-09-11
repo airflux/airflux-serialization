@@ -101,7 +101,7 @@ internal class StructPropertiesTest : FreeSpec() {
         }
     }
 
-    private fun property(path: JsPath): StructProperty<EB, OPTS, String> = StructProperty(
+    private fun property(path: JsPath): JsStructProperty<EB, OPTS, String> = JsStructProperty(
         spec = StructPropertySpec(
             paths = JsPaths(path),
             reader = path.readRequired(StringReader)
