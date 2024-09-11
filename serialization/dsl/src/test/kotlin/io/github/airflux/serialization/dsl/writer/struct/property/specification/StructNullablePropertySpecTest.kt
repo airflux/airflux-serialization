@@ -47,7 +47,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                 "when using an extractor expression without context" - {
                     val extractor: (DTO) -> String? = { it.id }
-                    val spec: StructPropertySpec<Unit, DTO, String?> =
+                    val spec: JsStructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                     "then the property name should equal the passed property name" {
@@ -56,7 +56,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from = spec.from
-                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutEnv<Unit, DTO, String>>()
+                            .shouldBeInstanceOf<JsStructPropertySpec.Extractor.WithoutEnv<Unit, DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -68,7 +68,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                 "when using an extractor expression with context" - {
                     val extractor: (DTO, JsWriterEnv<Unit>) -> String? = { value, _ -> value.id }
-                    val spec: StructPropertySpec<Unit, DTO, String?> =
+                    val spec: JsStructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                     "then the property name should equal the passed property name" {
@@ -77,7 +77,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from =
-                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithEnv<Unit, DTO, String>>()
+                            spec.from.shouldBeInstanceOf<JsStructPropertySpec.Extractor.WithEnv<Unit, DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -89,7 +89,7 @@ internal class StructNullablePropertySpecTest : FreeSpec() {
 
                 "when some filter was added to the spec" - {
                     val extractor: (DTO) -> String? = { it.id }
-                    val spec: StructPropertySpec<Unit, DTO, String?> =
+                    val spec: JsStructPropertySpec<Unit, DTO, String?> =
                         nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
                     val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 

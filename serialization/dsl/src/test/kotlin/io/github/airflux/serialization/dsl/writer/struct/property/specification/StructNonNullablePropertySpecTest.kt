@@ -54,7 +54,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from = spec.from
-                            .shouldBeInstanceOf<StructPropertySpec.Extractor.WithoutEnv<Unit, DTO, String>>()
+                            .shouldBeInstanceOf<JsStructPropertySpec.Extractor.WithoutEnv<Unit, DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -74,7 +74,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
 
                     "then the value extractor should equals the passed the value extractor" {
                         val from =
-                            spec.from.shouldBeInstanceOf<StructPropertySpec.Extractor.WithEnv<Unit, DTO, String>>()
+                            spec.from.shouldBeInstanceOf<JsStructPropertySpec.Extractor.WithEnv<Unit, DTO, String>>()
                         from.extractor shouldBe extractor
                     }
 
@@ -85,7 +85,7 @@ internal class StructNonNullablePropertySpecTest : FreeSpec() {
                 }
 
                 "when some filter was added to the spec" - {
-                    val spec: StructPropertySpec<Unit, DTO, String> =
+                    val spec: JsStructPropertySpec<Unit, DTO, String> =
                         nonNullable(name = PROPERTY_NAME, from = { -> id }, writer = WRITER)
                     val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 

@@ -25,31 +25,31 @@ public fun <O, T : Any, P : Any> nonNullable(
     name: String,
     from: T.() -> P,
     writer: JsWriter<O, P>
-): StructPropertySpec<O, T, P> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
+): JsStructPropertySpec<O, T, P> =
+    JsStructPropertySpec(name = name, from = JsStructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
 
 public fun <O, T : Any, P : Any> nonNullable(
     name: String,
     from: T.(JsWriterEnv<O>) -> P,
     writer: JsWriter<O, P>
-): StructPropertySpec<O, T, P> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithEnv(from), writer = writer)
+): JsStructPropertySpec<O, T, P> =
+    JsStructPropertySpec(name = name, from = JsStructPropertySpec.Extractor.WithEnv(from), writer = writer)
 
 public fun <O, T : Any, P : Any> nullable(
     name: String,
     from: T.() -> P?,
     writer: JsWriter<O, P?>
-): StructPropertySpec<O, T, P?> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
+): JsStructPropertySpec<O, T, P?> =
+    JsStructPropertySpec(name = name, from = JsStructPropertySpec.Extractor.WithoutEnv(from), writer = writer)
 
 public fun <O, T : Any, P : Any> nullable(
     name: String,
     from: T.(JsWriterEnv<O>) -> P?,
     writer: JsWriter<O, P?>
-): StructPropertySpec<O, T, P?> =
-    StructPropertySpec(name = name, from = StructPropertySpec.Extractor.WithEnv(from), writer = writer)
+): JsStructPropertySpec<O, T, P?> =
+    JsStructPropertySpec(name = name, from = JsStructPropertySpec.Extractor.WithEnv(from), writer = writer)
 
-public class StructPropertySpec<O, T, P> internal constructor(
+public class JsStructPropertySpec<O, T, P> internal constructor(
     public val name: String,
     public val from: Extractor<O, T, P>,
     public val writer: JsWriter<O, P>
@@ -62,7 +62,7 @@ public class StructPropertySpec<O, T, P> internal constructor(
     }
 }
 
-public fun <O, T, P> StructPropertySpec<O, T, P>.filter(
+public fun <O, T, P> JsStructPropertySpec<O, T, P>.filter(
     predicate: JsPredicate<O, P & Any>
-): StructPropertySpec<O, T, P> =
-    StructPropertySpec(name = this.name, from = this.from, writer = writer.filter(predicate))
+): JsStructPropertySpec<O, T, P> =
+    JsStructPropertySpec(name = this.name, from = this.from, writer = writer.filter(predicate))

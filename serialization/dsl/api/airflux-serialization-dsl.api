@@ -87,7 +87,7 @@ public final class io/github/airflux/serialization/dsl/writer/struct/StructWrite
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriter$Builder {
-	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/dsl/writer/struct/property/JsStructProperty;
+	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;)Lio/github/airflux/serialization/dsl/writer/struct/property/JsStructProperty;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriterKt {
@@ -99,20 +99,20 @@ public final class io/github/airflux/serialization/dsl/writer/struct/property/Js
 	public final fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec {
-	public final fun getFrom ()Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor;
+public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec {
+	public final fun getFrom ()Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec$Extractor;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public abstract class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec$Extractor {
+public abstract class io/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec$Extractor {
 }
 
-public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpecKt {
-	public static final fun filter (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;
-	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;
-	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;
-	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;
-	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;
+public final class io/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpecKt {
+	public static final fun filter (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;
+	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;
+	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;
+	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;
+	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/dsl/writer/struct/property/specification/JsStructPropertySpec;
 }
 

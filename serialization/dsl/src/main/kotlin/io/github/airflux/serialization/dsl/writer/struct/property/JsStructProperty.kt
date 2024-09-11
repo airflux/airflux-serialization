@@ -20,14 +20,14 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.JsStructPropertySpec
 
 public class JsStructProperty<O, T, P> private constructor(
     public val name: String,
     private val writer: JsWriter<O, T>
 ) {
 
-    internal constructor(spec: StructPropertySpec<O, T, P>) : this(name = spec.name, writer = createWriter(spec))
+    internal constructor(spec: JsStructPropertySpec<O, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
     public fun write(env: JsWriterEnv<O>, location: JsLocation, source: T): JsValue? =
         writer.write(env, location, source)
@@ -35,18 +35,18 @@ public class JsStructProperty<O, T, P> private constructor(
     internal companion object {
 
         @JvmStatic
-        private fun <O, T, P> createWriter(spec: StructPropertySpec<O, T, P>): JsWriter<O, T> {
+        private fun <O, T, P> createWriter(spec: JsStructPropertySpec<O, T, P>): JsWriter<O, T> {
             val writer = spec.writer
 
             return when (spec.from) {
-                is StructPropertySpec.Extractor.WithoutEnv -> {
+                is JsStructPropertySpec.Extractor.WithoutEnv -> {
                     val extractor = spec.from.extractor
                     JsWriter { env, location, source ->
                         writer.write(env, location, source.extractor())
                     }
                 }
 
-                is StructPropertySpec.Extractor.WithEnv -> {
+                is JsStructPropertySpec.Extractor.WithEnv -> {
                     val extractor = spec.from.extractor
                     JsWriter { env, location, source ->
                         writer.write(env, location, source.extractor(env))

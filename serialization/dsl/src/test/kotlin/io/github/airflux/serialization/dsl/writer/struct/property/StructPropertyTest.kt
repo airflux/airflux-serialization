@@ -20,7 +20,7 @@ import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.StructPropertySpec
+import io.github.airflux.serialization.dsl.writer.struct.property.specification.JsStructPropertySpec
 import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
@@ -42,9 +42,9 @@ internal class StructPropertyTest : FreeSpec() {
         "The StructProperty type" - {
 
             "when using an expression the from without context in spec" - {
-                val spec = StructPropertySpec<Unit, DTO, String>(
+                val spec = JsStructPropertySpec<Unit, DTO, String>(
                     name = PROPERTY_NAME,
-                    from = StructPropertySpec.Extractor.WithoutEnv { id },
+                    from = JsStructPropertySpec.Extractor.WithoutEnv { id },
                     writer = WRITER
                 )
 
@@ -63,9 +63,9 @@ internal class StructPropertyTest : FreeSpec() {
             }
 
             "when using an expression the from with context in spec" - {
-                val spec = StructPropertySpec<Unit, DTO, String>(
+                val spec = JsStructPropertySpec<Unit, DTO, String>(
                     name = PROPERTY_NAME,
-                    from = StructPropertySpec.Extractor.WithEnv { id },
+                    from = JsStructPropertySpec.Extractor.WithEnv { id },
                     writer = WRITER
                 )
 
