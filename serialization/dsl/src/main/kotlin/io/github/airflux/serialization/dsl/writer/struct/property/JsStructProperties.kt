@@ -16,4 +16,4 @@
 
 package io.github.airflux.serialization.dsl.writer.struct.property
 
-public typealias StructProperties<O, T> = List<JsStructProperty<O, T, *>>
+public typealias JsStructProperties<O, T> = List<JsStructProperty<O, T, *>>

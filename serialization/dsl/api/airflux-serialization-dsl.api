@@ -87,14 +87,14 @@ public final class io/github/airflux/serialization/dsl/writer/struct/StructWrite
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriter$Builder {
-	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/dsl/writer/struct/property/StructProperty;
+	public final fun property (Lio/github/airflux/serialization/dsl/writer/struct/property/specification/StructPropertySpec;)Lio/github/airflux/serialization/dsl/writer/struct/property/JsStructProperty;
 }
 
 public final class io/github/airflux/serialization/dsl/writer/struct/StructWriterKt {
 	public static final fun structWriter (Lkotlin/jvm/functions/Function1;)Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/dsl/writer/struct/property/StructProperty {
+public final class io/github/airflux/serialization/dsl/writer/struct/property/JsStructProperty {
 	public final fun getName ()Ljava/lang/String;
 	public final fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
 }
