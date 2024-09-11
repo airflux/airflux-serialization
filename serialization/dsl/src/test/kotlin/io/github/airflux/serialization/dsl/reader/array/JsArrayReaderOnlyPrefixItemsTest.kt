@@ -31,8 +31,6 @@ import io.github.airflux.serialization.core.value.JsBoolean
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.dsl.common.JsonErrors
-import io.github.airflux.serialization.dsl.reader.array.JsArrayReaderOnlyItemsTest.EB
-import io.github.airflux.serialization.dsl.reader.array.JsArrayReaderOnlyItemsTest.OPTS
 import io.github.airflux.serialization.kotest.assertions.cause
 import io.github.airflux.serialization.kotest.assertions.shouldBeFailure
 import io.github.airflux.serialization.kotest.assertions.shouldBeSuccess
