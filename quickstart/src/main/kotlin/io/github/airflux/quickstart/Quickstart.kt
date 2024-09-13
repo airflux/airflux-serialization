@@ -33,7 +33,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOp
 import io.github.airflux.serialization.core.reader.env.JsReaderEnv
 import io.github.airflux.serialization.core.reader.result.fold
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
 import io.github.airflux.serialization.parser.AirFluxJsonModule
 import io.github.airflux.serialization.parser.deserialization
 import io.github.airflux.serialization.parser.serialization

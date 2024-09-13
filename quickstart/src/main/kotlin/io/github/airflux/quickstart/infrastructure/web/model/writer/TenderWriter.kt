@@ -21,8 +21,8 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringW
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.nullable
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
+import io.github.airflux.serialization.core.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.core.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val TenderWriter: JsWriter<WriterOptions, Tender> = structWriter {

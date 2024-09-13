@@ -22,19 +22,19 @@ import io.github.airflux.serialization.core.value.JsNull
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class ArrayWriterBuilderTest : FreeSpec() {
+internal class JsArrayWriterBuilderTest : FreeSpec() {
 
     companion object {
         private const val FIRST_ITEM = "item-1"
@@ -47,7 +47,7 @@ internal class ArrayWriterBuilderTest : FreeSpec() {
 
     init {
 
-        "The ArrayWriter type" - {
+        "The `JsArrayWriterBuilder` type" - {
 
             "when items is non-nullable type" - {
                 val writer: JsWriter<OPTS, Iterable<String>> = arrayWriter(items = StringWriter)

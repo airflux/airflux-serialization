@@ -21,7 +21,7 @@ import io.github.airflux.quickstart.infrastructure.web.model.writer.base.AmountW
 import io.github.airflux.quickstart.infrastructure.web.model.writer.base.CurrencyWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.core.writer.struct.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val ValueWriter: JsWriter<WriterOptions, Value> = structWriter {

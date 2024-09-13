@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.property
+package io.github.airflux.serialization.core.writer.struct.property
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsValue
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.JsStructPropertySpec
+import io.github.airflux.serialization.core.writer.struct.property.specification.JsStructPropertySpec
 
 public class JsStructProperty<O, T, P> private constructor(
     public val name: String,
     private val writer: JsWriter<O, T>
 ) {
 
-    internal constructor(spec: JsStructPropertySpec<O, T, P>) : this(name = spec.name, writer = createWriter(spec))
+    public constructor(spec: JsStructPropertySpec<O, T, P>) : this(name = spec.name, writer = createWriter(spec))
 
     public fun write(env: JsWriterEnv<O>, location: JsLocation, source: T): JsValue? =
         writer.write(env, location, source)

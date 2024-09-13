@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.env.option
+package io.github.airflux.serialization.core.writer.struct.property
 
-public interface WriterActionBuilderIfResultIsEmptyOption {
-    public val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty
-}
+public typealias JsStructProperties<O, T> = List<JsStructProperty<O, T, *>>

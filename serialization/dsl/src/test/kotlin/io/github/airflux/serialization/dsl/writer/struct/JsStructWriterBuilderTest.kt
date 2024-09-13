@@ -22,21 +22,21 @@ import io.github.airflux.serialization.core.value.JsNumber
 import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
 import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.core.writer.optional
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_EMPTY_VALUE
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NOTHING
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty.RETURN_NULL_VALUE
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.nullable
+import io.github.airflux.serialization.core.writer.struct.property.specification.nonNullable
+import io.github.airflux.serialization.core.writer.struct.property.specification.nullable
 import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 
-internal class StructWriterTest : FreeSpec() {
+internal class JsStructWriterBuilderTest : FreeSpec() {
 
     companion object {
         private const val ID_PROPERTY_NAME = "id"
@@ -47,7 +47,7 @@ internal class StructWriterTest : FreeSpec() {
 
     init {
 
-        "The StructWriter type" - {
+        "The `JsStructWriterBuilder` type" - {
 
             "when a property is non-nullable type" - {
                 val source = ID(id = ID_PROPERTY_VALUE)

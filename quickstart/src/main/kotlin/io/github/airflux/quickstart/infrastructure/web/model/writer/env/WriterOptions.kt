@@ -16,8 +16,8 @@
 
 package io.github.airflux.quickstart.infrastructure.web.model.writer.env
 
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
-import io.github.airflux.serialization.dsl.writer.env.option.WriterActionIfResultIsEmpty
+import io.github.airflux.serialization.core.writer.env.option.WriterActionBuilderIfResultIsEmptyOption
+import io.github.airflux.serialization.core.writer.env.option.WriterActionIfResultIsEmpty
 
 class WriterOptions(override val writerActionIfResultIsEmpty: WriterActionIfResultIsEmpty) :
     WriterActionBuilderIfResultIsEmptyOption

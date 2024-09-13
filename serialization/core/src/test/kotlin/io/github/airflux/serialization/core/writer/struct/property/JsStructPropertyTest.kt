@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.property
+package io.github.airflux.serialization.core.writer.struct.property
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
-import io.github.airflux.serialization.dsl.writer.struct.property.specification.JsStructPropertySpec
+import io.github.airflux.serialization.core.writer.struct.property.specification.JsStructPropertySpec
 import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
-internal class StructPropertyTest : FreeSpec() {
+internal class JsStructPropertyTest : FreeSpec() {
 
     companion object {
         private const val PROPERTY_NAME = "id"
@@ -39,7 +39,7 @@ internal class StructPropertyTest : FreeSpec() {
 
     init {
 
-        "The StructProperty type" - {
+        "The JsStructProperty type" - {
 
             "when using an expression the from without context in spec" - {
                 val spec = JsStructPropertySpec<Unit, DTO, String>(

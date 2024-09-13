@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.env.option
+package io.github.airflux.serialization.core.writer.struct
 
-public enum class WriterActionIfResultIsEmpty {
-    RETURN_EMPTY_VALUE,
-    RETURN_NOTHING,
-    RETURN_NULL_VALUE
-}
+import io.github.airflux.serialization.core.writer.JsWriter
+
+public fun interface JsStructWriter<O, T> : JsWriter<O, T>

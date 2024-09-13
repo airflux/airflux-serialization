@@ -711,6 +711,13 @@ public final class io/github/airflux/serialization/core/writer/JsWriterKt {
 	public static final fun optional (Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
+public final class io/github/airflux/serialization/core/writer/array/ArrayWriterBuildersKt {
+	public static final fun buildArrayWriter (Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/writer/array/JsArrayWriter;
+}
+
+public abstract interface class io/github/airflux/serialization/core/writer/array/JsArrayWriter : io/github/airflux/serialization/core/writer/JsWriter {
+}
+
 public final class io/github/airflux/serialization/core/writer/env/JsWriterEnv {
 	public fun <init> (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;)V
 	public synthetic fun <init> (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv$Config;Lio/github/airflux/serialization/core/context/JsContext;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -734,6 +741,19 @@ public final class io/github/airflux/serialization/core/writer/env/JsWriterEnvKt
 	public static final fun plus (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/context/JsContext$Element;)Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;
 }
 
+public abstract interface class io/github/airflux/serialization/core/writer/env/option/WriterActionBuilderIfResultIsEmptyOption {
+	public abstract fun getWriterActionIfResultIsEmpty ()Lio/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty;
+}
+
+public final class io/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty : java/lang/Enum {
+	public static final field RETURN_EMPTY_VALUE Lio/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty;
+	public static final field RETURN_NOTHING Lio/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty;
+	public static final field RETURN_NULL_VALUE Lio/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty;
+	public static fun values ()[Lio/github/airflux/serialization/core/writer/env/option/WriterActionIfResultIsEmpty;
+}
+
 public abstract interface class io/github/airflux/serialization/core/writer/predicate/JsPredicate {
 	public abstract fun test (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Z
 }
@@ -741,5 +761,41 @@ public abstract interface class io/github/airflux/serialization/core/writer/pred
 public final class io/github/airflux/serialization/core/writer/predicate/JsPredicateKt {
 	public static final fun and (Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;
 	public static final fun or (Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;
+}
+
+public abstract interface class io/github/airflux/serialization/core/writer/struct/JsStructWriter : io/github/airflux/serialization/core/writer/JsWriter {
+}
+
+public final class io/github/airflux/serialization/core/writer/struct/StructWriterBuildersKt {
+	public static final fun buildStructWriter (Ljava/util/List;)Lio/github/airflux/serialization/core/writer/struct/JsStructWriter;
+}
+
+public final class io/github/airflux/serialization/core/writer/struct/property/JsStructProperty {
+	public fun <init> (Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;)V
+	public final fun getName ()Ljava/lang/String;
+	public final fun write (Lio/github/airflux/serialization/core/writer/env/JsWriterEnv;Lio/github/airflux/serialization/core/location/JsLocation;Ljava/lang/Object;)Lio/github/airflux/serialization/core/value/JsValue;
+}
+
+public final class io/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec {
+	public final fun getFrom ()Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec$Extractor;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+}
+
+public abstract class io/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec$Extractor {
+}
+
+public final class io/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpecKt {
+	public static final fun filter (Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;Lio/github/airflux/serialization/core/writer/predicate/JsPredicate;)Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;
+}
+
+public final class io/github/airflux/serialization/core/writer/struct/property/specification/NonNullablePropertySpecKt {
+	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;
+	public static final fun nonNullable (Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;
+}
+
+public final class io/github/airflux/serialization/core/writer/struct/property/specification/NullablePropertySpecKt {
+	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;
+	public static final fun nullable (Ljava/lang/String;Lkotlin/jvm/functions/Function2;Lio/github/airflux/serialization/core/writer/JsWriter;)Lio/github/airflux/serialization/core/writer/struct/property/specification/JsStructPropertySpec;
 }
 

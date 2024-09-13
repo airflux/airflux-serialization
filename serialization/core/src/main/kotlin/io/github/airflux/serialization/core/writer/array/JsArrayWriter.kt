@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.airflux.quickstart.infrastructure.web.model.writer
+package io.github.airflux.serialization.core.writer.array
 
-import io.github.airflux.quickstart.infrastructure.web.model.Response
-import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.JsWriter
-import io.github.airflux.serialization.core.writer.struct.property.specification.nonNullable
-import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
-val ResponseWriter: JsWriter<WriterOptions, Response> = structWriter {
-    property(nonNullable(name = "tender", from = { -> tender }, writer = TenderWriter))
-}
+public fun interface JsArrayWriter<O, T> : JsWriter<O, Iterable<T>>

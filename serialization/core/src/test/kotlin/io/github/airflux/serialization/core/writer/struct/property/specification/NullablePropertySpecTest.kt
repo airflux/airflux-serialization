@@ -14,37 +14,39 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.property.specification
+package io.github.airflux.serialization.core.writer.struct.property.specification
 
 import io.github.airflux.serialization.core.location.JsLocation
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.env.JsWriterEnv
+import io.github.airflux.serialization.core.writer.nullable
 import io.github.airflux.serialization.test.dummy.DummyWriter
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-internal class NonNullablePropertySpecTest : FreeSpec() {
+internal class NullablePropertySpecTest : FreeSpec() {
 
     companion object {
         private const val PROPERTY_NAME = "id"
-        private const val PROPERTY_VALUE = "e205b1a4-06de-450e-a374-8d0950338a99"
+        private const val PROPERTY_VALUE = "89ec69f1-c636-42b8-8e62-6250c4321330"
 
         private val ENV = JsWriterEnv(config = JsWriterEnv.Config(options = Unit))
         private val LOCATION: JsLocation = JsLocation
 
-        private val WRITER: JsWriter<Unit, String> = DummyWriter.string()
+        private val WRITER: JsWriter<Unit, String?> = DummyWriter.string<Unit>().nullable()
     }
 
     init {
 
-        "The builder function for the specification of a non-nullable property" - {
+        "The builder function for the specification of a nullable property" - {
 
-            "when using an expression the from without context" - {
-                val extractor: (DTO) -> String = { it.id }
-                val spec = nonNullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
+            "when using an extractor expression without context" - {
+                val extractor: (DTO) -> String? = { it.id }
+                val spec: JsStructPropertySpec<Unit, DTO, String?> =
+                    nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                 "then the property name should equal the passed property name" {
                     spec.name shouldBe PROPERTY_NAME
@@ -62,9 +64,10 @@ internal class NonNullablePropertySpecTest : FreeSpec() {
                 }
             }
 
-            "when using an expression the from with context" - {
-                val extractor: (DTO, JsWriterEnv<Unit>) -> String = { value, _ -> value.id }
-                val spec = nonNullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
+            "when using an extractor expression with context" - {
+                val extractor: (DTO, JsWriterEnv<Unit>) -> String? = { value, _ -> value.id }
+                val spec: JsStructPropertySpec<Unit, DTO, String?> =
+                    nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
 
                 "then the property name should equal the passed property name" {
                     spec.name shouldBe PROPERTY_NAME
@@ -83,8 +86,9 @@ internal class NonNullablePropertySpecTest : FreeSpec() {
             }
 
             "when some filter was added to the spec" - {
-                val spec: JsStructPropertySpec<Unit, DTO, String> =
-                    nonNullable(name = PROPERTY_NAME, from = { -> id }, writer = WRITER)
+                val extractor: (DTO) -> String? = { it.id }
+                val spec: JsStructPropertySpec<Unit, DTO, String?> =
+                    nullable(name = PROPERTY_NAME, from = extractor, writer = WRITER)
                 val specWithFilter = spec.filter { _, _, value -> value.isNotEmpty() }
 
                 "when passing a value that satisfies the predicate for filtering" - {
@@ -106,5 +110,5 @@ internal class NonNullablePropertySpecTest : FreeSpec() {
         }
     }
 
-    internal class DTO(val id: String)
+    internal class DTO(val id: String?)
 }

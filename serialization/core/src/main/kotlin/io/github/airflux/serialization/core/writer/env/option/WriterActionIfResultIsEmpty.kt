@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-package io.github.airflux.serialization.dsl.writer.struct.property
+package io.github.airflux.serialization.core.writer.env.option
 
-public typealias JsStructProperties<O, T> = List<JsStructProperty<O, T, *>>
+public enum class WriterActionIfResultIsEmpty {
+    RETURN_EMPTY_VALUE,
+    RETURN_NOTHING,
+    RETURN_NULL_VALUE
+}
