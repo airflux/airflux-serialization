@@ -72,7 +72,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRUCT,
-                                breakpoint = LOCATION
+                                location = LOCATION
                             )
                         }
                     }
@@ -91,7 +91,7 @@ internal class JsLookupResultTest : FreeSpec() {
                     val undefined = JsLookupResult.Undefined.InvalidType(
                         expected = JsValue.Type.STRUCT,
                         actual = JsValue.Type.STRING,
-                        breakpoint = LOCATION
+                        location = LOCATION
                     )
 
                     "then should return the same instance of Undefined#InvalidType type" {
@@ -129,7 +129,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.ARRAY,
-                                breakpoint = LOCATION
+                                location = LOCATION
                             )
                         }
                     }
@@ -148,7 +148,7 @@ internal class JsLookupResultTest : FreeSpec() {
                     val undefined = JsLookupResult.Undefined.InvalidType(
                         expected = JsValue.Type.ARRAY,
                         actual = JsValue.Type.STRUCT,
-                        breakpoint = LOCATION
+                        location = LOCATION
                     )
 
                     "then should return the same instance of Undefined#InvalidType type" {

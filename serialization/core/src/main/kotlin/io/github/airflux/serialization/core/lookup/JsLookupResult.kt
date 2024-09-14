@@ -24,28 +24,34 @@ import io.github.airflux.serialization.core.value.JsStruct
 import io.github.airflux.serialization.core.value.JsValue
 
 public sealed class JsLookupResult {
+    public abstract val location: JsLocation
 
     public fun apply(key: String): JsLookupResult = apply(Element.Key(key))
     public fun apply(idx: Int): JsLookupResult = apply(Element.Idx(idx))
     public abstract fun apply(key: Element.Key): JsLookupResult
     public abstract fun apply(idx: Element.Idx): JsLookupResult
 
-    public data class Defined(val location: JsLocation, val value: JsValue) : JsLookupResult() {
+    public data class Defined(
+        override val location: JsLocation,
+        public val value: JsValue
+    ) : JsLookupResult() {
         override fun apply(key: Element.Key): JsLookupResult = value.lookup(location, key)
         override fun apply(idx: Element.Idx): JsLookupResult = value.lookup(location, idx)
     }
 
     public sealed class Undefined : JsLookupResult() {
 
-        public data class PathMissing(val location: JsLocation) : Undefined() {
+        public data class PathMissing(
+            override val location: JsLocation
+        ) : Undefined() {
             override fun apply(key: Element.Key): JsLookupResult = PathMissing(location = this.location.append(key))
             override fun apply(idx: Element.Idx): JsLookupResult = PathMissing(location = this.location.append(idx))
         }
 
         public data class InvalidType(
+            override val location: JsLocation,
             public val expected: JsValue.Type,
-            public val actual: JsValue.Type,
-            val breakpoint: JsLocation
+            public val actual: JsValue.Type
         ) : Undefined() {
             override fun apply(key: Element.Key): JsLookupResult = this
             override fun apply(idx: Element.Idx): JsLookupResult = this
@@ -60,9 +66,9 @@ public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookupResul
             ?: JsLookupResult.Undefined.PathMissing(location = location.append(key))
     else
         JsLookupResult.Undefined.InvalidType(
+            location = location,
             expected = JsValue.Type.STRUCT,
-            actual = this.type,
-            breakpoint = location
+            actual = this.type
         )
 
 public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResult =
@@ -72,9 +78,9 @@ public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResul
             ?: JsLookupResult.Undefined.PathMissing(location = location.append(idx))
     else
         JsLookupResult.Undefined.InvalidType(
+            location = location,
             expected = JsValue.Type.ARRAY,
-            actual = this.type,
-            breakpoint = location
+            actual = this.type
         )
 
 public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
@@ -87,9 +93,9 @@ public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
                     lookup(location.append(element), path.tail, value)
                 } else
                     JsLookupResult.Undefined.InvalidType(
+                        location = location,
                         expected = JsValue.Type.STRUCT,
-                        actual = source.type,
-                        breakpoint = location
+                        actual = source.type
                     )
 
                 is Element.Idx -> if (source is JsArray) {
@@ -98,9 +104,9 @@ public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
                     lookup(location.append(element), path.tail, value)
                 } else
                     JsLookupResult.Undefined.InvalidType(
+                        location = location,
                         expected = JsValue.Type.ARRAY,
-                        actual = source.type,
-                        breakpoint = location
+                        actual = source.type
                     )
             }
         } else

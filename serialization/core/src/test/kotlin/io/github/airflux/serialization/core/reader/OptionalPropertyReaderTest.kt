@@ -75,7 +75,7 @@ internal class OptionalPropertyReaderTest : FreeSpec() {
                 val lookup: JsLookupResult = JsLookupResult.Undefined.InvalidType(
                     expected = JsValue.Type.STRUCT,
                     actual = JsValue.Type.STRING,
-                    breakpoint = LOCATION.append(ID_PROPERTY_NAME)
+                    location = LOCATION.append(ID_PROPERTY_NAME)
                 )
 
                 "then should return the invalid type error" {

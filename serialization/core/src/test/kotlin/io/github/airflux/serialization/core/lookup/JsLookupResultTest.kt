@@ -91,7 +91,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             key = ID,
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -136,7 +136,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             index = IDX,
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRING
                             )
@@ -233,7 +233,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsArray(),
                             path = JsPath(PHONES).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.ARRAY
                             )
@@ -253,7 +253,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             path = JsPath(ID),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -263,7 +263,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             path = JsPath(USER).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -273,7 +273,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             path = JsPath(PHONES).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -285,7 +285,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsStruct(ACCOUNT to JsString(VALUE)),
                             path = JsPath(ACCOUNT).append(USER),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION.append(ACCOUNT),
+                                location = LOCATION.append(ACCOUNT),
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -295,7 +295,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsStruct(ACCOUNT to JsString(VALUE)),
                             path = JsPath(ACCOUNT).append(USER).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION.append(ACCOUNT),
+                                location = LOCATION.append(ACCOUNT),
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -305,7 +305,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsStruct(ACCOUNT to JsString(VALUE)),
                             path = JsPath(ACCOUNT).append(USER).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION.append(ACCOUNT),
+                                location = LOCATION.append(ACCOUNT),
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING
                             )
@@ -317,7 +317,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             path = JsPath(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRING
                             )
@@ -327,7 +327,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsString(VALUE),
                             path = JsPath(IDX).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION,
+                                location = LOCATION,
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRING
                             )
@@ -339,7 +339,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsStruct(PHONES to JsString(VALUE)),
                             path = JsPath(PHONES).append(IDX),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION.append(PHONES),
+                                location = LOCATION.append(PHONES),
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRING
                             )
@@ -349,7 +349,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             source = JsStruct(PHONES to JsString(VALUE)),
                             path = JsPath(PHONES).append(IDX).append(ID),
                             result = JsLookupResult.Undefined.InvalidType(
-                                breakpoint = LOCATION.append(PHONES),
+                                location = LOCATION.append(PHONES),
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRING
                             )
@@ -457,7 +457,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
                                 expected = JsValue.Type.STRUCT,
                                 actual = JsValue.Type.STRING,
-                                breakpoint = LOCATION.append(USER)
+                                location = LOCATION.append(USER)
                             )
                         }
                     }
@@ -520,7 +520,7 @@ internal class JsLookupResultTest : FreeSpec() {
                             lookup shouldBe JsLookupResult.Undefined.InvalidType(
                                 expected = JsValue.Type.ARRAY,
                                 actual = JsValue.Type.STRING,
-                                breakpoint = LOCATION.append(USER)
+                                location = LOCATION.append(USER)
                             )
                         }
                     }
@@ -531,7 +531,7 @@ internal class JsLookupResultTest : FreeSpec() {
                 val undefined = JsLookupResult.Undefined.InvalidType(
                     expected = JsValue.Type.ARRAY,
                     actual = JsValue.Type.STRING,
-                    breakpoint = LOCATION.append(USER)
+                    location = LOCATION.append(USER)
                 )
 
                 "when lookup by a key element" - {

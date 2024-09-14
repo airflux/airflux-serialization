@@ -44,7 +44,7 @@ public fun <EB, O, T> JsLookupResult.readRequired(
                 failure(location = location, error = env.config.errorBuilders.pathMissingError())
 
             is JsLookupResult.Undefined.InvalidType -> failure(
-                location = breakpoint,
+                location = location,
                 error = env.config.errorBuilders.invalidTypeError(expected = expected, actual = actual)
             )
         }

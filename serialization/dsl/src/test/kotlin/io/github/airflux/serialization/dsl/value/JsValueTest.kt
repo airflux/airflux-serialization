@@ -71,7 +71,7 @@ internal class JsValueTest : FreeSpec() {
                         lookup shouldBe JsLookupResult.Undefined.InvalidType(
                             expected = JsValue.Type.STRUCT,
                             actual = JsValue.Type.ARRAY,
-                            breakpoint = LOCATION
+                            location = LOCATION
                         )
                     }
                 }
@@ -105,7 +105,7 @@ internal class JsValueTest : FreeSpec() {
                         lookup shouldBe JsLookupResult.Undefined.InvalidType(
                             expected = JsValue.Type.ARRAY,
                             actual = JsValue.Type.STRUCT,
-                            breakpoint = LOCATION
+                            location = LOCATION
                         )
                     }
                 }
