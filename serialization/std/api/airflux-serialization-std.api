@@ -250,31 +250,38 @@ public final class io/github/airflux/serialization/std/validator/struct/StdStruc
 	public static final fun minProperties (I)Lio/github/airflux/serialization/core/reader/struct/validation/JsStructValidator;
 }
 
-public final class io/github/airflux/serialization/std/writer/BigDecimalWriterKt {
-	public static final fun bigDecimalWriter (Z)Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/BigDecimalWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/BigDecimalWriter;
+	public final fun build (Z)Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/std/writer/BooleanWriterKt {
-	public static final fun booleanWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/BooleanWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/BooleanWriter;
+	public final fun build ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/std/writer/ByteWriterKt {
-	public static final fun byteWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/ByteWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/ByteWriter;
+	public final fun build ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/std/writer/IntWriterKt {
-	public static final fun intWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/IntWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/IntWriter;
+	public final fun build ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/std/writer/LongWriterKt {
-	public static final fun longWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/LongWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/LongWriter;
+	public final fun build ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/std/writer/ShortWriterKt {
-	public static final fun shortWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/ShortWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/ShortWriter;
+	public final fun build ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 
-public final class io/github/airflux/serialization/std/writer/StringWriterKt {
-	public static final fun stringWriter ()Lio/github/airflux/serialization/core/writer/JsWriter;
+public final class io/github/airflux/serialization/std/writer/StringWriter {
+	public static final field INSTANCE Lio/github/airflux/serialization/std/writer/StringWriter;
+	public final fun build ()Lio/github/airflux/serialization/core/writer/JsWriter;
 }
 

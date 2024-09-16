@@ -17,14 +17,14 @@
 package io.github.airflux.quickstart.infrastructure.web.model.writer
 
 import io.github.airflux.quickstart.domain.model.Value
-import io.github.airflux.quickstart.infrastructure.web.model.writer.base.AmountWriter
-import io.github.airflux.quickstart.infrastructure.web.model.writer.base.CurrencyWriter
+import io.github.airflux.quickstart.infrastructure.web.model.writer.base.amountWriter
+import io.github.airflux.quickstart.infrastructure.web.model.writer.base.currencyWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.JsWriter
 import io.github.airflux.serialization.core.writer.struct.property.specification.nonNullable
 import io.github.airflux.serialization.dsl.writer.struct.structWriter
 
 val ValueWriter: JsWriter<WriterOptions, Value> = structWriter {
-    property(nonNullable(name = "amount", from = { -> amount }, writer = AmountWriter))
-    property(nonNullable(name = "currency", from = { -> currency }, writer = CurrencyWriter))
+    property(nonNullable(name = "amount", from = { -> amount }, writer = amountWriter))
+    property(nonNullable(name = "currency", from = { -> currency }, writer = currencyWriter))
 }

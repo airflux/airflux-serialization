@@ -22,5 +22,8 @@ import io.github.airflux.serialization.core.writer.JsWriter
 /**
  * Writer for primitive [Boolean] type.
  */
-public fun <O> booleanWriter(): JsWriter<O, Boolean> =
-    JsWriter { _, _, value -> if (value) JsBoolean.True else JsBoolean.False }
+public object BooleanWriter {
+
+    public fun <O> build(): JsWriter<O, Boolean> =
+        JsWriter { _, _, value -> if (value) JsBoolean.True else JsBoolean.False }
+}

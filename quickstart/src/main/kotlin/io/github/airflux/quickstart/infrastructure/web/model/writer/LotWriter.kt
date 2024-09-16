@@ -18,7 +18,7 @@ package io.github.airflux.quickstart.infrastructure.web.model.writer
 
 import io.github.airflux.quickstart.domain.model.Lot
 import io.github.airflux.quickstart.domain.model.LotStatus
-import io.github.airflux.quickstart.infrastructure.web.model.writer.base.StringWriter
+import io.github.airflux.quickstart.infrastructure.web.model.writer.base.stringWriter
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.value.JsString
 import io.github.airflux.serialization.core.writer.JsWriter
@@ -34,7 +34,7 @@ val LotStatusWriter = JsWriter<WriterOptions, LotStatus> { _, _, value ->
 }
 
 val LotWriter: JsStructWriter<WriterOptions, Lot> = structWriter {
-    property(nonNullable(name = "id", from = Lot::id, StringWriter))
+    property(nonNullable(name = "id", from = Lot::id, stringWriter))
     property(nonNullable(name = "status", from = { -> status }, writer = LotStatusWriter))
     property(nullable(name = "value", from = { -> value }, writer = ValueWriter.optional()))
 }

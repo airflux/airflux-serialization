@@ -22,5 +22,8 @@ import io.github.airflux.serialization.core.writer.JsWriter
 /**
  * Writer for primitive [Short] type.
  */
-public fun <O> shortWriter(): JsWriter<O, Short> =
-    JsWriter { _, _, value -> JsNumber.valueOf(value.toString()) }
+public object ShortWriter {
+
+    public fun <O> build(): JsWriter<O, Short> =
+        JsWriter { _, _, value -> JsNumber.valueOf(value.toString()) }
+}

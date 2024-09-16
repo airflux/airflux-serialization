@@ -33,7 +33,7 @@ internal class BooleanWriterTest : FreeSpec() {
     init {
 
         "The boolean type writer" - {
-            val writer: JsWriter<Unit, Boolean> = booleanWriter()
+            val writer: JsWriter<Unit, Boolean> = BooleanWriter.build()
 
             "when the value contains the true value" - {
                 val value = true

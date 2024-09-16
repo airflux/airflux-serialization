@@ -33,7 +33,7 @@ internal class LongWriterTest : FreeSpec() {
     init {
 
         "The long type writer" - {
-            val writer: JsWriter<Unit, Long> = longWriter()
+            val writer: JsWriter<Unit, Long> = LongWriter.build()
             val value: Long = Long.MAX_VALUE
 
             "should return the JsNumeric value" {

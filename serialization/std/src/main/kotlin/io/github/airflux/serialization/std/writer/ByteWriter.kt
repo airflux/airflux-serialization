@@ -22,5 +22,8 @@ import io.github.airflux.serialization.core.writer.JsWriter
 /**
  * Writer for primitive [Byte] type.
  */
-public fun <O> byteWriter(): JsWriter<O, Byte> =
-    JsWriter { _, _, value -> JsNumber.valueOf(value.toString()) }
+public object ByteWriter {
+
+    public fun <O> build(): JsWriter<O, Byte> =
+        JsWriter { _, _, value -> JsNumber.valueOf(value.toString()) }
+}

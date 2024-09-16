@@ -37,7 +37,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
         "The big decimal type writer" - {
 
             "when the stripTrailingZeros option is true" - {
-                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = true)
+                val writer = BigDecimalWriter.build<Unit>(stripTrailingZeros = true)
 
                 "then the writer should return the value without trailing zeros" {
                     val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))
@@ -46,7 +46,7 @@ internal class BigDecimalWriterTest : FreeSpec() {
             }
 
             "when the stripTrailingZeros option is false" - {
-                val writer = bigDecimalWriter<Unit>(stripTrailingZeros = false)
+                val writer = BigDecimalWriter.build<Unit>(stripTrailingZeros = false)
 
                 "then the writer should return the original value" {
                     val result = writer.write(ENV, LOCATION, BigDecimal(TEXT_VALUE))

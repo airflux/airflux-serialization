@@ -22,5 +22,8 @@ import io.github.airflux.serialization.core.writer.JsWriter
 /**
  * Writer for primitive [String] type.
  */
-public fun <O> stringWriter(): JsWriter<O, String> =
-    JsWriter { _, _, value -> JsString(value) }
+public object StringWriter {
+
+    public fun <O> build(): JsWriter<O, String> =
+        JsWriter { _, _, value -> JsString(value) }
+}

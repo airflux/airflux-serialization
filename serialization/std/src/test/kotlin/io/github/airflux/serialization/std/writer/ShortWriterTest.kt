@@ -33,7 +33,7 @@ internal class ShortWriterTest : FreeSpec() {
     init {
 
         "The short type writer" - {
-            val writer: JsWriter<Unit, Short> = shortWriter()
+            val writer: JsWriter<Unit, Short> = ShortWriter.build()
             val value: Short = Short.MAX_VALUE
 
             "should return the JsNumeric value" {

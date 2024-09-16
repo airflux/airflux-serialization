@@ -33,7 +33,7 @@ internal class StringWriterTest : FreeSpec() {
     init {
 
         "The string type writer" - {
-            val writer: JsWriter<Unit, String> = stringWriter()
+            val writer: JsWriter<Unit, String> = StringWriter.build()
             val value = "value"
 
             "should return the JsString value" {

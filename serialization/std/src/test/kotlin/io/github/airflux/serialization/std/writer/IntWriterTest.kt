@@ -33,7 +33,7 @@ internal class IntWriterTest : FreeSpec() {
     init {
 
         "The int type writer" - {
-            val writer: JsWriter<Unit, Int> = intWriter()
+            val writer: JsWriter<Unit, Int> = IntWriter.build()
             val value: Int = Int.MAX_VALUE
 
             "should return the JsNumeric value" {

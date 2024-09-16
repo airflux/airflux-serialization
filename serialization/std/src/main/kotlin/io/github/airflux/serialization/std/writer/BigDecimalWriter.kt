@@ -23,11 +23,14 @@ import java.math.BigDecimal
 /**
  * Writer for primitive [BigDecimal] type.
  */
-public fun <O> bigDecimalWriter(stripTrailingZeros: Boolean): JsWriter<O, BigDecimal> =
-    JsWriter { _, _, value ->
-        val text = if (stripTrailingZeros)
-            value.stripTrailingZeros().toPlainString()
-        else
-            value.toPlainString()
-        JsNumber.valueOf(text)!!
-    }
+public object BigDecimalWriter {
+
+    public fun <O> build(stripTrailingZeros: Boolean): JsWriter<O, BigDecimal> =
+        JsWriter { _, _, value ->
+            val text = if (stripTrailingZeros)
+                value.stripTrailingZeros().toPlainString()
+            else
+                value.toPlainString()
+            JsNumber.valueOf(text)!!
+        }
+}

@@ -20,11 +20,11 @@ import io.github.airflux.quickstart.domain.model.Amount
 import io.github.airflux.quickstart.domain.model.Currency
 import io.github.airflux.quickstart.infrastructure.web.model.writer.env.WriterOptions
 import io.github.airflux.serialization.core.writer.contramap
-import io.github.airflux.serialization.std.writer.bigDecimalWriter
-import io.github.airflux.serialization.std.writer.stringWriter
+import io.github.airflux.serialization.std.writer.BigDecimalWriter
+import io.github.airflux.serialization.std.writer.StringWriter
 
-val StringWriter = stringWriter<WriterOptions>()
-val BigDecimalWriter = bigDecimalWriter<WriterOptions>(stripTrailingZeros = false)
+val stringWriter = StringWriter.build<WriterOptions>()
+val bigDecimalWriter = BigDecimalWriter.build<WriterOptions>(stripTrailingZeros = false)
 
-val AmountWriter = BigDecimalWriter.contramap { value: Amount -> value.get }
-val CurrencyWriter = StringWriter.contramap { value: Currency -> value.get }
+val amountWriter = bigDecimalWriter.contramap { value: Amount -> value.get }
+val currencyWriter = stringWriter.contramap { value: Currency -> value.get }

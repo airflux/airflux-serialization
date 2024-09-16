@@ -33,7 +33,7 @@ internal class ByteWriterTest : FreeSpec() {
     init {
 
         "The byte type writer" - {
-            val writer: JsWriter<Unit, Byte> = byteWriter()
+            val writer: JsWriter<Unit, Byte> = ByteWriter.build()
             val value: Byte = Byte.MAX_VALUE
 
             "should return the JsNumeric value" {
