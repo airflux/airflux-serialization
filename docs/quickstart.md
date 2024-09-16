@@ -53,8 +53,10 @@ Define the environment to deserialization of some domain type using the reader
 
 ```kotlin
 val readerEnv = JsReaderEnv(
-    errorBuilders = ReaderErrorBuilders,
-    options = ReaderOptions(failFast = true)
+    config = JsReaderEnv.Config(
+        errorBuilders = ReaderErrorBuilders,
+        options = ReaderOptions(failFast = true)
+    )
 )
 ```
 
@@ -147,8 +149,8 @@ class ReaderOptions(override val failFast: Boolean) : FailFastOption
 
 ```kotlin
 // Primitive type readers
-val intReader = IntReader<ReaderErrorBuilders, ReaderOptions>()
-val stringReader = StringReader<ReaderErrorBuilders, ReaderOptions>()
+val intReader = IntReader.build<ReaderErrorBuilders, ReaderOptions>()
+val stringReader = StringReader.build<ReaderErrorBuilders, ReaderOptions>()
 
 // The generic reader for the id property
 val positiveNumberReader: JsReader<ReaderErrorBuilders, ReaderOptions, Int> =
@@ -170,7 +172,7 @@ val phoneNumberReader: JsReader<ReaderErrorBuilders, ReaderOptions, String> =
 val isNotBlank = StdStringValidator.isNotBlank<ReaderErrorBuilders, ReaderOptions>()
 
 //Object validators
-fun additionalProperties(properties: StructProperties<ReaderErrorBuilders, ReaderOptions>) =
+fun additionalProperties(properties: JsStructProperties<ReaderErrorBuilders, ReaderOptions>) =
     StdStructValidator.additionalProperties(properties)
 
 //Array validators
@@ -221,14 +223,17 @@ val userReader: JsReader<ReaderErrorBuilders, ReaderOptions, User> = structReade
 
 ```kotlin
 val user = User(id = 42, name = "user", phones = Phones(listOf(Phone(title = "mobil", number = "123456789"))))
-val json = user.serialization(mapper = mapper, env = writerEnv, writer = UserWriter)
+val json = user.serialization(mapper = mapper, env = writerEnv, writer = userWriter)
 ```
 
 #### Define the environment to serialization of some domain type using the writer
 
 ```kotlin
-val writerEnv =
-    JsWriterEnv(options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING))
+val writerEnv = JsWriterEnv(
+    config = JsWriterEnv.Config(
+        options = WriterOptions(writerActionIfResultIsEmpty = WriterActionIfResultIsEmpty.RETURN_NOTHING)
+    )
+)
 ```
 
 - Define the options for the writing environment
@@ -243,31 +248,31 @@ class WriterOptions(override val writerActionIfResultIsEmpty: WriterActionIfResu
 - Define the generic writers
 
 ```kotlin
-val StringWriter = stringWriter<WriterOptions>()
-val IntWriter = intWriter<WriterOptions>()
+val stringWriter = StringWriter.build<WriterOptions>()
+val intWriter = IntWriter.build<WriterOptions>()
 ```
 
 - Define the writer for the Phone type
 
 ```kotlin
-val PhoneWriter: JsWriter<WriterOptions, Phone> = structWriter {
-    property(nonNullable(name = "title", from = Phone::title, writer = StringWriter))
-    property(nonNullable(name = "number", from = Phone::number, writer = StringWriter))
+val phoneWriter: JsWriter<WriterOptions, Phone> = structWriter {
+    property(nonNullable(name = "title", from = Phone::title, writer = stringWriter))
+    property(nonNullable(name = "number", from = Phone::number, writer = stringWriter))
 }
 ```
 
 - Define the writer for the Phones type
 
 ```kotlin
-val PhonesWriter: JsWriter<WriterOptions, Iterable<Phone>> = arrayWriter(PhoneWriter)
+val phonesWriter: JsWriter<WriterOptions, Iterable<Phone>> = arrayWriter(phoneWriter)
 ```
 
 - Define the writer for the User type
 
 ```kotlin
-val UserWriter: JsWriter<WriterOptions, User> = structWriter {
-    property(nonNullable(name = "id", from = User::id, writer = IntWriter))
-    property(nonNullable(name = "name", from = User::name, writer = StringWriter))
-    property(nonNullable(name = "phones", from = User::phones, writer = PhonesWriter))
+val userWriter: JsWriter<WriterOptions, User> = structWriter {
+    property(nonNullable(name = "id", from = User::id, writer = intWriter))
+    property(nonNullable(name = "name", from = User::name, writer = stringWriter))
+    property(nonNullable(name = "phones", from = User::phones, writer = phonesWriter))
 }
 ```
