@@ -1,0 +1,967 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../installation/">
+      
+      
+        <link rel="next" href="../readers/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Quickstart - Airflux serialization</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#quickstart" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Airflux serialization" class="md-header__button md-logo" aria-label="Airflux serialization" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Airflux serialization
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Quickstart
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/airflux/airflux-serialization" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    airflux/airflux-serialization
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Airflux serialization" class="md-nav__button md-logo" aria-label="Airflux serialization" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    Airflux serialization
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/airflux/airflux-serialization" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    airflux/airflux-serialization
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Quickstart
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Quickstart
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-domain-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      The domain types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-the-jackson" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration the Jackson
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reading
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-example-of-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      The example of JSON
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deserialization-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deserialization JSON
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deserialization JSON">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#define-the-environment-for-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define the environment for reading
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#define-readers-for-domain-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define readers for domain types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serialization-the-user-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Serialization the User object
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Serialization the User object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#define-the-environment-to-serialization-of-some-domain-type-using-the-writer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define the environment to serialization of some domain type using the writer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#define-the-writers-for-some-domain-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define the writers for some domain types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Readers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../env/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../standard-tools/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard tools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-domain-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      The domain types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-the-jackson" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration the Jackson
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reading
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-example-of-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      The example of JSON
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deserialization-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deserialization JSON
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deserialization JSON">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#define-the-environment-for-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define the environment for reading
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#define-readers-for-domain-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define readers for domain types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#serialization-the-user-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Serialization the User object
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Serialization the User object">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#define-the-environment-to-serialization-of-some-domain-type-using-the-writer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define the environment to serialization of some domain type using the writer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#define-the-writers-for-some-domain-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define the writers for some domain types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="quickstart">Quickstart</h1>
+<h2 id="the-domain-types">The domain types</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><a href="#__codelineno-0-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">id</span><span class="p">:</span><span class="w"> </span><span class="kt">Int</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">phones</span><span class="p">:</span><span class="w"> </span><span class="n">Phones</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><a href="#__codelineno-0-2"><span class="linenos" data-linenos="2 "></span></a><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Phones</span><span class="p">(</span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">items</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Phone</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Phone</span><span class="o">&gt;</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">items</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><a href="#__codelineno-0-3"><span class="linenos" data-linenos="3 "></span></a><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Phone</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">title</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">number</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="configuration-the-jackson">Configuration the Jackson</h2>
+<p>Registering the module 'AirFluxJsonModule' with Jackson to use its parser</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><a href="#__codelineno-1-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">mapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ObjectMapper</span><span class="p">().</span><span class="na">apply</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a><a href="#__codelineno-1-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">registerModule</span><span class="p">(</span><span class="n">AirFluxJsonModule</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a><a href="#__codelineno-1-3"><span class="linenos" data-linenos="3 "></span></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="reading">Reading</h2>
+<h3 id="the-example-of-json">The example of JSON</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><a href="#__codelineno-2-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">JSON</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a><a href="#__codelineno-2-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="s">{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a><a href="#__codelineno-2-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="s">  &quot;id&quot;: 42,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><a href="#__codelineno-2-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="s">  &quot;name&quot;: &quot;User&quot;,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a><a href="#__codelineno-2-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="s">  &quot;phones&quot;: [</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a><a href="#__codelineno-2-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="s">    {</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a><a href="#__codelineno-2-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="s">      &quot;title&quot;: &quot;mobile&quot;,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a><a href="#__codelineno-2-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="s">      &quot;number&quot;: &quot;+0123456789&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a><a href="#__codelineno-2-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="s">    }</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a><a href="#__codelineno-2-10"><span class="linenos" data-linenos="10 "></span></a><span class="s">  ]</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11"></a><a href="#__codelineno-2-11"><span class="linenos" data-linenos="11 "></span></a><span class="s">}</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12"></a><a href="#__codelineno-2-12"><span class="linenos" data-linenos="12 "></span></a><span class="s">&quot;&quot;&quot;</span>
+</code></pre></div>
+<h3 id="deserialization-json">Deserialization JSON</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><a href="#__codelineno-3-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">parsedUser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JSON</span><span class="p">.</span><span class="na">deserialization</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><a href="#__codelineno-3-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">mapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapper</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><a href="#__codelineno-3-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readerEnv</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><a href="#__codelineno-3-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">    </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserReader</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><a href="#__codelineno-3-5"><span class="linenos" data-linenos="5 "></span></a><span class="p">).</span><span class="na">orThrow</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h4 id="define-the-environment-for-reading">Define the environment for reading</h4>
+<p>Define the environment to deserialization of some domain type using the reader</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><a href="#__codelineno-4-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">readerEnv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsReaderEnv</span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><a href="#__codelineno-4-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsReaderEnv</span><span class="p">.</span><span class="na">Config</span><span class="p">(</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><a href="#__codelineno-4-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">        </span><span class="n">errorBuilders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReaderErrorBuilders</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><a href="#__codelineno-4-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">        </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">(</span><span class="n">failFast</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><a href="#__codelineno-4-5"><span class="linenos" data-linenos="5 "></span></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><a href="#__codelineno-4-6"><span class="linenos" data-linenos="6 "></span></a><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>Define error builders for the reading environment</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><a href="#__codelineno-5-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kd">object</span><span class="w"> </span><span class="nc">ReaderErrorBuilders</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">InvalidTypeErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><a href="#__codelineno-5-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="w">                             </span><span class="n">PathMissingErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><a href="#__codelineno-5-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="w">                             </span><span class="n">NumberFormatErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><a href="#__codelineno-5-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="w">                             </span><span class="n">IsNotBlankStringValidator</span><span class="p">.</span><span class="na">ErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><a href="#__codelineno-5-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="w">                             </span><span class="n">PatternStringValidator</span><span class="p">.</span><span class="na">ErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><a href="#__codelineno-5-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="w">                             </span><span class="n">IsNotEmptyStructValidator</span><span class="p">.</span><span class="na">ErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><a href="#__codelineno-5-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">                             </span><span class="n">AdditionalPropertiesStructValidator</span><span class="p">.</span><span class="na">ErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><a href="#__codelineno-5-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">                             </span><span class="n">AdditionalItemsErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><a href="#__codelineno-5-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">                             </span><span class="n">IsNotEmptyArrayValidator</span><span class="p">.</span><span class="na">ErrorBuilder</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><a href="#__codelineno-5-10"><span class="linenos" data-linenos="10 "></span></a><span class="w">                             </span><span class="n">MinimumNumberValidator</span><span class="p">.</span><span class="na">ErrorBuilder</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><a href="#__codelineno-5-11"><span class="linenos" data-linenos="11 "></span></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><a href="#__codelineno-5-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">    </span><span class="c1">//Reading error builders</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><a href="#__codelineno-5-13"><span class="linenos" data-linenos="13 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">invalidTypeError</span><span class="p">(</span><span class="n">expected</span><span class="p">:</span><span class="w"> </span><span class="n">JsValue</span><span class="p">.</span><span class="na">Type</span><span class="p">,</span><span class="w"> </span><span class="n">actual</span><span class="p">:</span><span class="w"> </span><span class="n">JsValue</span><span class="p">.</span><span class="na">Type</span><span class="p">):</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><a href="#__codelineno-5-14"><span class="linenos" data-linenos="14 "></span></a><span class="w">        </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">InvalidType</span><span class="p">(</span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">actual</span><span class="p">)</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><a href="#__codelineno-5-15"><span class="linenos" data-linenos="15 "></span></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><a href="#__codelineno-5-16"><span class="linenos" data-linenos="16 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">pathMissingError</span><span class="p">():</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">PathMissing</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17"></a><a href="#__codelineno-5-17"><span class="linenos" data-linenos="17 "></span></a>
+<a id="__codelineno-5-18" name="__codelineno-5-18"></a><a href="#__codelineno-5-18"><span class="linenos" data-linenos="18 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">numberFormatError</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">:</span><span class="w"> </span><span class="n">KClass</span><span class="o">&lt;*&gt;</span><span class="p">):</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19"></a><a href="#__codelineno-5-19"><span class="linenos" data-linenos="19 "></span></a><span class="w">        </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">NumberFormat</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">)</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20"></a><a href="#__codelineno-5-20"><span class="linenos" data-linenos="20 "></span></a>
+<a id="__codelineno-5-21" name="__codelineno-5-21"></a><a href="#__codelineno-5-21"><span class="linenos" data-linenos="21 "></span></a><span class="w">    </span><span class="c1">//String validation error builders</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22"></a><a href="#__codelineno-5-22"><span class="linenos" data-linenos="22 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">isNotBlankStringError</span><span class="p">():</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Strings</span><span class="p">.</span><span class="na">IsBlank</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23"></a><a href="#__codelineno-5-23"><span class="linenos" data-linenos="23 "></span></a>
+<a id="__codelineno-5-24" name="__codelineno-5-24"></a><a href="#__codelineno-5-24"><span class="linenos" data-linenos="24 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">patternStringError</span><span class="p">(</span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="p">:</span><span class="w"> </span><span class="n">Regex</span><span class="p">):</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25"></a><a href="#__codelineno-5-25"><span class="linenos" data-linenos="25 "></span></a><span class="w">        </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Strings</span><span class="p">.</span><span class="na">Pattern</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="p">)</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26"></a><a href="#__codelineno-5-26"><span class="linenos" data-linenos="26 "></span></a>
+<a id="__codelineno-5-27" name="__codelineno-5-27"></a><a href="#__codelineno-5-27"><span class="linenos" data-linenos="27 "></span></a><span class="w">    </span><span class="c1">//Object validation error builders</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28"></a><a href="#__codelineno-5-28"><span class="linenos" data-linenos="28 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">isNotEmptyStructError</span><span class="p">():</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Struct</span><span class="p">.</span><span class="na">IsEmpty</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29"></a><a href="#__codelineno-5-29"><span class="linenos" data-linenos="29 "></span></a>
+<a id="__codelineno-5-30" name="__codelineno-5-30"></a><a href="#__codelineno-5-30"><span class="linenos" data-linenos="30 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">additionalPropertiesStructError</span><span class="p">():</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31"></a><a href="#__codelineno-5-31"><span class="linenos" data-linenos="31 "></span></a><span class="w">        </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Struct</span><span class="p">.</span><span class="na">AdditionalProperties</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32"></a><a href="#__codelineno-5-32"><span class="linenos" data-linenos="32 "></span></a>
+<a id="__codelineno-5-33" name="__codelineno-5-33"></a><a href="#__codelineno-5-33"><span class="linenos" data-linenos="33 "></span></a><span class="w">    </span><span class="c1">//Array validation error builders</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34"></a><a href="#__codelineno-5-34"><span class="linenos" data-linenos="34 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">isNotEmptyArrayError</span><span class="p">():</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Arrays</span><span class="p">.</span><span class="na">IsEmpty</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35"></a><a href="#__codelineno-5-35"><span class="linenos" data-linenos="35 "></span></a>
+<a id="__codelineno-5-36" name="__codelineno-5-36"></a><a href="#__codelineno-5-36"><span class="linenos" data-linenos="36 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">additionalItemsError</span><span class="p">():</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Arrays</span><span class="p">.</span><span class="na">AdditionalItems</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37"></a><a href="#__codelineno-5-37"><span class="linenos" data-linenos="37 "></span></a>
+<a id="__codelineno-5-38" name="__codelineno-5-38"></a><a href="#__codelineno-5-38"><span class="linenos" data-linenos="38 "></span></a><span class="w">    </span><span class="c1">//Number validation error builders</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39"></a><a href="#__codelineno-5-39"><span class="linenos" data-linenos="39 "></span></a><span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">minimumNumberError</span><span class="p">(</span><span class="n">expected</span><span class="p">:</span><span class="w"> </span><span class="n">Number</span><span class="p">,</span><span class="w"> </span><span class="n">actual</span><span class="p">:</span><span class="w"> </span><span class="n">Number</span><span class="p">):</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40"></a><a href="#__codelineno-5-40"><span class="linenos" data-linenos="40 "></span></a><span class="w">        </span><span class="n">JsonErrors</span><span class="p">.</span><span class="na">Validation</span><span class="p">.</span><span class="na">Numbers</span><span class="p">.</span><span class="na">Min</span><span class="p">(</span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">actual</span><span class="p">)</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41"></a><a href="#__codelineno-5-41"><span class="linenos" data-linenos="41 "></span></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Define parsing and validation errors</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><a href="#__codelineno-6-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">JsonErrors</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">JsReaderResult</span><span class="p">.</span><span class="na">Error</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><a href="#__codelineno-6-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">PathMissing</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">()</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a><a href="#__codelineno-6-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">InvalidType</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">expected</span><span class="p">:</span><span class="w"> </span><span class="n">JsValue</span><span class="p">.</span><span class="na">Type</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">actual</span><span class="p">:</span><span class="w"> </span><span class="n">JsValue</span><span class="p">.</span><span class="na">Type</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">()</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><a href="#__codelineno-6-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="w">    </span><span class="kd">data</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">NumberFormat</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">value</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">type</span><span class="p">:</span><span class="w"> </span><span class="n">KClass</span><span class="o">&lt;*&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">()</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><a href="#__codelineno-6-5"><span class="linenos" data-linenos=" 5 "></span></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><a href="#__codelineno-6-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="w">    </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Validation</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">JsonErrors</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><a href="#__codelineno-6-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">        </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Struct</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Validation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><a href="#__codelineno-6-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">            </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">IsEmpty</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Struct</span><span class="p">()</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><a href="#__codelineno-6-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">            </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">AdditionalProperties</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Struct</span><span class="p">()</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><a href="#__codelineno-6-10"><span class="linenos" data-linenos="10 "></span></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><a href="#__codelineno-6-11"><span class="linenos" data-linenos="11 "></span></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><a href="#__codelineno-6-12"><span class="linenos" data-linenos="12 "></span></a><span class="w">        </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Arrays</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Validation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><a href="#__codelineno-6-13"><span class="linenos" data-linenos="13 "></span></a><span class="w">            </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">IsEmpty</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Arrays</span><span class="p">()</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14"></a><a href="#__codelineno-6-14"><span class="linenos" data-linenos="14 "></span></a><span class="w">            </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">AdditionalItems</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Arrays</span><span class="p">()</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15"></a><a href="#__codelineno-6-15"><span class="linenos" data-linenos="15 "></span></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16"></a><a href="#__codelineno-6-16"><span class="linenos" data-linenos="16 "></span></a>
+<a id="__codelineno-6-17" name="__codelineno-6-17"></a><a href="#__codelineno-6-17"><span class="linenos" data-linenos="17 "></span></a><span class="w">        </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Strings</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Validation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18"></a><a href="#__codelineno-6-18"><span class="linenos" data-linenos="18 "></span></a><span class="w">            </span><span class="kd">data</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="nc">IsBlank</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Strings</span><span class="p">()</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19"></a><a href="#__codelineno-6-19"><span class="linenos" data-linenos="19 "></span></a><span class="w">            </span><span class="kd">class</span><span class="w"> </span><span class="nc">Pattern</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">value</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">pattern</span><span class="p">:</span><span class="w"> </span><span class="n">Regex</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Strings</span><span class="p">()</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20"></a><a href="#__codelineno-6-20"><span class="linenos" data-linenos="20 "></span></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21"></a><a href="#__codelineno-6-21"><span class="linenos" data-linenos="21 "></span></a>
+<a id="__codelineno-6-22" name="__codelineno-6-22"></a><a href="#__codelineno-6-22"><span class="linenos" data-linenos="22 "></span></a><span class="w">        </span><span class="kd">sealed</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nc">Numbers</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Validation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23"></a><a href="#__codelineno-6-23"><span class="linenos" data-linenos="23 "></span></a><span class="w">            </span><span class="kd">class</span><span class="w"> </span><span class="nc">Min</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="kd">val</span><span class="w"> </span><span class="nv">expected</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">actual</span><span class="p">:</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Numbers</span><span class="p">()</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24"></a><a href="#__codelineno-6-24"><span class="linenos" data-linenos="24 "></span></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25"></a><a href="#__codelineno-6-25"><span class="linenos" data-linenos="25 "></span></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26"></a><a href="#__codelineno-6-26"><span class="linenos" data-linenos="26 "></span></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Define the options for the reading environment</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><a href="#__codelineno-7-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">class</span><span class="w"> </span><span class="nc">ReaderOptions</span><span class="p">(</span><span class="kd">override</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">failFast</span><span class="p">:</span><span class="w"> </span><span class="kt">Boolean</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">FailFastOption</span>
+</code></pre></div>
+<h4 id="define-readers-for-domain-types">Define readers for domain types</h4>
+<ul>
+<li>Define the generic readers</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><a href="#__codelineno-8-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="c1">// Primitive type readers</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><a href="#__codelineno-8-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">intReader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IntReader</span><span class="p">.</span><span class="na">build</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="o">&gt;</span><span class="p">()</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><a href="#__codelineno-8-3"><span class="linenos" data-linenos=" 3 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">stringReader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StringReader</span><span class="p">.</span><span class="na">build</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="o">&gt;</span><span class="p">()</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><a href="#__codelineno-8-4"><span class="linenos" data-linenos=" 4 "></span></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><a href="#__codelineno-8-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="c1">// The generic reader for the id property</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><a href="#__codelineno-8-6"><span class="linenos" data-linenos=" 6 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">positiveNumberReader</span><span class="p">:</span><span class="w"> </span><span class="n">JsReader</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">,</span><span class="w"> </span><span class="kt">Int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><a href="#__codelineno-8-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">    </span><span class="n">intReader</span><span class="p">.</span><span class="na">validation</span><span class="p">(</span><span class="n">StdNumberValidator</span><span class="p">.</span><span class="na">minimum</span><span class="p">(</span><span class="m">0</span><span class="p">))</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><a href="#__codelineno-8-8"><span class="linenos" data-linenos=" 8 "></span></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><a href="#__codelineno-8-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="c1">// The generic reader for the username property</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a><a href="#__codelineno-8-10"><span class="linenos" data-linenos="10 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">nonEmptyStringReader</span><span class="p">:</span><span class="w"> </span><span class="n">JsReader</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">,</span><span class="w"> </span><span class="kt">String</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a><a href="#__codelineno-8-11"><span class="linenos" data-linenos="11 "></span></a><span class="w">    </span><span class="n">stringReader</span><span class="p">.</span><span class="na">validation</span><span class="p">(</span><span class="n">isNotBlank</span><span class="p">)</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a><a href="#__codelineno-8-12"><span class="linenos" data-linenos="12 "></span></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a><a href="#__codelineno-8-13"><span class="linenos" data-linenos="13 "></span></a><span class="c1">// The reader for the phone number property</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a><a href="#__codelineno-8-14"><span class="linenos" data-linenos="14 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">phoneNumberReader</span><span class="p">:</span><span class="w"> </span><span class="n">JsReader</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">,</span><span class="w"> </span><span class="kt">String</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a><a href="#__codelineno-8-15"><span class="linenos" data-linenos="15 "></span></a><span class="w">    </span><span class="n">nonEmptyStringReader</span><span class="p">.</span><span class="na">validation</span><span class="p">(</span><span class="n">StdStringValidator</span><span class="p">.</span><span class="na">pattern</span><span class="p">(</span><span class="s">&quot;\\d*&quot;</span><span class="p">.</span><span class="na">toRegex</span><span class="p">()))</span>
+</code></pre></div>
+<ul>
+<li>Define the validators</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><a href="#__codelineno-9-1"><span class="linenos" data-linenos="1 "></span></a><span class="c1">//String validators</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><a href="#__codelineno-9-2"><span class="linenos" data-linenos="2 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">isNotBlank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StdStringValidator</span><span class="p">.</span><span class="na">isNotBlank</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="o">&gt;</span><span class="p">()</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><a href="#__codelineno-9-3"><span class="linenos" data-linenos="3 "></span></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><a href="#__codelineno-9-4"><span class="linenos" data-linenos="4 "></span></a><span class="c1">//Object validators</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><a href="#__codelineno-9-5"><span class="linenos" data-linenos="5 "></span></a><span class="kd">fun</span><span class="w"> </span><span class="nf">additionalProperties</span><span class="p">(</span><span class="n">properties</span><span class="p">:</span><span class="w"> </span><span class="n">JsStructProperties</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a><a href="#__codelineno-9-6"><span class="linenos" data-linenos="6 "></span></a><span class="w">    </span><span class="n">StdStructValidator</span><span class="p">.</span><span class="na">additionalProperties</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><a href="#__codelineno-9-7"><span class="linenos" data-linenos="7 "></span></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><a href="#__codelineno-9-8"><span class="linenos" data-linenos="8 "></span></a><span class="c1">//Array validators</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><a href="#__codelineno-9-9"><span class="linenos" data-linenos="9 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">isNotEmptyArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StdArrayValidator</span><span class="p">.</span><span class="na">isNotEmpty</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="o">&gt;</span><span class="p">()</span>
+</code></pre></div>
+<ul>
+<li>Define the reader for the Phone type</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><a href="#__codelineno-10-1"><span class="linenos" data-linenos=" 1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">phoneReader</span><span class="p">:</span><span class="w"> </span><span class="n">JsReader</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">,</span><span class="w"> </span><span class="n">Phone</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">structReader</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a><a href="#__codelineno-10-2"><span class="linenos" data-linenos=" 2 "></span></a><span class="w">    </span><span class="n">validation</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">additionalProperties</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><a href="#__codelineno-10-3"><span class="linenos" data-linenos=" 3 "></span></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><a href="#__codelineno-10-4"><span class="linenos" data-linenos=" 4 "></span></a><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">property</span><span class="p">(</span><span class="n">required</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;title&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nonEmptyStringReader</span><span class="p">))</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a><a href="#__codelineno-10-5"><span class="linenos" data-linenos=" 5 "></span></a><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">property</span><span class="p">(</span><span class="n">required</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;number&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">phoneNumberReader</span><span class="p">))</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><a href="#__codelineno-10-6"><span class="linenos" data-linenos=" 6 "></span></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><a href="#__codelineno-10-7"><span class="linenos" data-linenos=" 7 "></span></a><span class="w">    </span><span class="n">returns</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">location</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a><a href="#__codelineno-10-8"><span class="linenos" data-linenos=" 8 "></span></a><span class="w">        </span><span class="n">Phone</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">+</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">+</span><span class="n">number</span><span class="p">).</span><span class="na">toSuccess</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><a href="#__codelineno-10-9"><span class="linenos" data-linenos=" 9 "></span></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10"></a><a href="#__codelineno-10-10"><span class="linenos" data-linenos="10 "></span></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Define the reader for the Phones type</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><a href="#__codelineno-11-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">phonesReader</span><span class="p">:</span><span class="w"> </span><span class="n">JsReader</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">,</span><span class="w"> </span><span class="n">Phones</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arrayReader</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a><a href="#__codelineno-11-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">validation</span><span class="p">(</span><span class="n">isNotEmptyArray</span><span class="p">)</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><a href="#__codelineno-11-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="n">returns</span><span class="p">(</span><span class="n">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">phoneReader</span><span class="p">)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><a href="#__codelineno-11-4"><span class="linenos" data-linenos="4 "></span></a><span class="p">}.</span><span class="na">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">phones</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Phones</span><span class="p">(</span><span class="n">phones</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Define the reader for the User type</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><a href="#__codelineno-12-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">userReader</span><span class="p">:</span><span class="w"> </span><span class="n">JsReader</span><span class="o">&lt;</span><span class="n">ReaderErrorBuilders</span><span class="p">,</span><span class="w"> </span><span class="n">ReaderOptions</span><span class="p">,</span><span class="w"> </span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">structReader</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><a href="#__codelineno-12-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">property</span><span class="p">(</span><span class="n">required</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;id&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">positiveNumberReader</span><span class="p">))</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><a href="#__codelineno-12-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">property</span><span class="p">(</span><span class="n">required</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nonEmptyStringReader</span><span class="p">))</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><a href="#__codelineno-12-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">    </span><span class="kd">val</span><span class="w"> </span><span class="nv">phones</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">property</span><span class="p">(</span><span class="n">optional</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;phones&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">phonesReader</span><span class="p">,</span><span class="w"> </span><span class="n">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Phones</span><span class="p">()</span><span class="w"> </span><span class="p">}))</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><a href="#__codelineno-12-5"><span class="linenos" data-linenos="5 "></span></a>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><a href="#__codelineno-12-6"><span class="linenos" data-linenos="6 "></span></a><span class="w">    </span><span class="n">returns</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">location</span><span class="w"> </span><span class="o">-&gt;</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7"></a><a href="#__codelineno-12-7"><span class="linenos" data-linenos="7 "></span></a><span class="w">        </span><span class="n">User</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">+</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">+</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">phones</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">+</span><span class="n">phones</span><span class="p">).</span><span class="na">toSuccess</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8"></a><a href="#__codelineno-12-8"><span class="linenos" data-linenos="8 "></span></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9"></a><a href="#__codelineno-12-9"><span class="linenos" data-linenos="9 "></span></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="writing">Writing</h2>
+<h3 id="serialization-the-user-object">Serialization the User object</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><a href="#__codelineno-13-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">42</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;user&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">phones</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Phones</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="n">Phone</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mobil&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;123456789&quot;</span><span class="p">))))</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a><a href="#__codelineno-13-2"><span class="linenos" data-linenos="2 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="na">serialization</span><span class="p">(</span><span class="n">mapper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mapper</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">writerEnv</span><span class="p">,</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userWriter</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="define-the-environment-to-serialization-of-some-domain-type-using-the-writer">Define the environment to serialization of some domain type using the writer</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><a href="#__codelineno-14-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">writerEnv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsWriterEnv</span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a><a href="#__codelineno-14-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsWriterEnv</span><span class="p">.</span><span class="na">Config</span><span class="p">(</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a><a href="#__codelineno-14-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">        </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WriterOptions</span><span class="p">(</span><span class="n">writerActionIfResultIsEmpty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WriterActionIfResultIsEmpty</span><span class="p">.</span><span class="na">RETURN_NOTHING</span><span class="p">)</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><a href="#__codelineno-14-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a><a href="#__codelineno-14-5"><span class="linenos" data-linenos="5 "></span></a><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>Define the options for the writing environment</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><a href="#__codelineno-15-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">class</span><span class="w"> </span><span class="nc">WriterOptions</span><span class="p">(</span><span class="kd">override</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">writerActionIfResultIsEmpty</span><span class="p">:</span><span class="w"> </span><span class="n">WriterActionIfResultIsEmpty</span><span class="p">)</span><span class="w"> </span><span class="p">:</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a><a href="#__codelineno-15-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">WriterActionBuilderIfResultIsEmptyOption</span>
+</code></pre></div>
+<h4 id="define-the-writers-for-some-domain-types">Define the writers for some domain types</h4>
+<ul>
+<li>Define the generic writers</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><a href="#__codelineno-16-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">stringWriter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StringWriter</span><span class="p">.</span><span class="na">build</span><span class="o">&lt;</span><span class="n">WriterOptions</span><span class="o">&gt;</span><span class="p">()</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a><a href="#__codelineno-16-2"><span class="linenos" data-linenos="2 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">intWriter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IntWriter</span><span class="p">.</span><span class="na">build</span><span class="o">&lt;</span><span class="n">WriterOptions</span><span class="o">&gt;</span><span class="p">()</span>
+</code></pre></div>
+<ul>
+<li>Define the writer for the Phone type</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><a href="#__codelineno-17-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">phoneWriter</span><span class="p">:</span><span class="w"> </span><span class="n">JsWriter</span><span class="o">&lt;</span><span class="n">WriterOptions</span><span class="p">,</span><span class="w"> </span><span class="n">Phone</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">structWriter</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2"></a><a href="#__codelineno-17-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">property</span><span class="p">(</span><span class="n">nonNullable</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;title&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Phone</span><span class="o">::</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringWriter</span><span class="p">))</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3"></a><a href="#__codelineno-17-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="n">property</span><span class="p">(</span><span class="n">nonNullable</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;number&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Phone</span><span class="o">::</span><span class="n">number</span><span class="p">,</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringWriter</span><span class="p">))</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4"></a><a href="#__codelineno-17-4"><span class="linenos" data-linenos="4 "></span></a><span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Define the writer for the Phones type</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><a href="#__codelineno-18-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">phonesWriter</span><span class="p">:</span><span class="w"> </span><span class="n">JsWriter</span><span class="o">&lt;</span><span class="n">WriterOptions</span><span class="p">,</span><span class="w"> </span><span class="n">Iterable</span><span class="o">&lt;</span><span class="n">Phone</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arrayWriter</span><span class="p">(</span><span class="n">phoneWriter</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>Define the writer for the User type</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a><a href="#__codelineno-19-1"><span class="linenos" data-linenos="1 "></span></a><span class="kd">val</span><span class="w"> </span><span class="nv">userWriter</span><span class="p">:</span><span class="w"> </span><span class="n">JsWriter</span><span class="o">&lt;</span><span class="n">WriterOptions</span><span class="p">,</span><span class="w"> </span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">structWriter</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2"></a><a href="#__codelineno-19-2"><span class="linenos" data-linenos="2 "></span></a><span class="w">    </span><span class="n">property</span><span class="p">(</span><span class="n">nonNullable</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;id&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="o">::</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">intWriter</span><span class="p">))</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3"></a><a href="#__codelineno-19-3"><span class="linenos" data-linenos="3 "></span></a><span class="w">    </span><span class="n">property</span><span class="p">(</span><span class="n">nonNullable</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="o">::</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringWriter</span><span class="p">))</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4"></a><a href="#__codelineno-19-4"><span class="linenos" data-linenos="4 "></span></a><span class="w">    </span><span class="n">property</span><span class="p">(</span><span class="n">nonNullable</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;phones&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="o">::</span><span class="n">phones</span><span class="p">,</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">phonesWriter</span><span class="p">))</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5"></a><a href="#__codelineno-19-5"><span class="linenos" data-linenos="5 "></span></a><span class="p">}</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>
