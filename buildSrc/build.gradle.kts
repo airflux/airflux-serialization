@@ -23,4 +23,6 @@ dependencies {
     implementation(libs.gradle.plugin.pitest)
     implementation(libs.gradle.plugin.license.report)
     implementation(libs.gradle.plugin.binary.compatibility.validator)
+    implementation(libs.gradle.plugin.dokka)
+    implementation(libs.gradle.plugin.knit)
 }
