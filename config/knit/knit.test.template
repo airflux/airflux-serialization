@@ -3,7 +3,7 @@ package ${test.package}
 
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.collections.shouldContainExactly
-import kotlinx.knit.test.*
+import kotlinx.knit.test.captureOutput
 
 internal class ${test.name} : AnnotationSpec() {
 <#list cases as case><#assign method = test["mode.${case.param}"]!"custom">
