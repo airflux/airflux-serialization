@@ -28,7 +28,7 @@ public sealed class JsLookupResult {
 
     /**
      * Example:
-     * <!--- TEST_NAME JsLookupResultTest01 -->
+     * <!--- TEST_NAME JsLookupResult01Test -->
      * <!--- INCLUDE
      * import io.github.airflux.serialization.core.location.JsLocation
      * import io.github.airflux.serialization.core.lookup.lookup
@@ -61,7 +61,7 @@ public sealed class JsLookupResult {
 
     /**
      * Example:
-     * <!--- TEST_NAME JsLookupResultTest02 -->
+     * <!--- TEST_NAME JsLookupResult02Test -->
      * <!--- INCLUDE
      * import io.github.airflux.serialization.core.location.JsLocation
      * import io.github.airflux.serialization.core.lookup.lookup
@@ -128,7 +128,7 @@ public sealed class JsLookupResult {
  * Lookup a value by key.
  *
  * Example:
- * <!--- TEST_NAME JsLookupTest01 -->
+ * <!--- TEST_NAME JsLookup01Test -->
  * <!--- INCLUDE
  * import io.github.airflux.serialization.core.location.JsLocation
  * import io.github.airflux.serialization.core.lookup.lookup
@@ -168,7 +168,7 @@ public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookupResul
  * Lookup a value by index.
  *
  * Example:
- * <!--- TEST_NAME JsLookupTest02 -->
+ * <!--- TEST_NAME JsLookup02Test -->
  * <!--- INCLUDE
  * import io.github.airflux.serialization.core.location.JsLocation
  * import io.github.airflux.serialization.core.lookup.lookup
@@ -208,7 +208,7 @@ public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResul
  * Lookup a value by path.
  *
  * Example:
- * <!--- TEST_NAME JsLookupTest03 -->
+ * <!--- TEST_NAME JsLookup03Test -->
  * <!--- INCLUDE
  * import io.github.airflux.serialization.core.location.JsLocation
  * import io.github.airflux.serialization.core.lookup.lookup
