@@ -44,7 +44,7 @@ jobs:
         REPOSITORY_RELEASES_URL: ${{ secrets.REPOSITORY_RELEASES_URL }}
         REPOSITORY_USERNAME: ${{ secrets.REPOSITORY_USERNAME }}
         REPOSITORY_PASSWORD: ${{ secrets.REPOSITORY_PASSWORD }}
-      run: ./gradlew build publish koverXmlReport publish
+      run: ./gradlew knit build koverXmlReport publish
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
