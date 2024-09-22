@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("jvm")
     java
@@ -37,12 +39,14 @@ tasks {
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         .configureEach {
-            kotlinOptions {
-                jvmTarget = Configuration.JVM.targetVersion
-                suppressWarnings = false
-                freeCompilerArgs = listOf(
-                    "-Xjsr305=strict",
-                    "-Xjvm-default=all"
+            compilerOptions {
+                jvmTarget.set(JvmTarget.fromTarget(Configuration.JVM.targetVersion))
+                suppressWarnings.set(false)
+                freeCompilerArgs.set(
+                    listOf(
+                        "-Xjsr305=strict",
+                        "-Xjvm-default=all"
+                    )
                 )
             }
         }
