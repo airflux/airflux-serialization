@@ -1,21 +1,26 @@
 [versions]
-jackson = "2.16.1"
+detekt = "1.23.6"
 dokka = "1.9.20"
+jackson = "2.16.1"
 knit = "0.5.0"
+kotlin = "1.9.23"
+kover = "0.8.3"
+license-report = "2.5"
+pitest = "1.15.0"
 
 [libraries]
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 knit-test = { module = "org.jetbrains.kotlinx:kotlinx-knit-test", version.ref = "knit" }
 
-gradle-plugin-license-report = { module = "com.github.jk1:gradle-license-report", version = "2.5" }
-gradle-plugin-pitest = { module = "info.solidsoft.gradle.pitest:gradle-pitest-plugin", version = "1.15.0" }
-gradle-plugin-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version = "0.8.3" }
-gradle-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version = "1.23.6" }
-gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version = "1.9.23" }
 gradle-plugin-binary-compatibility-validator = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.16.2" }
+gradle-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 gradle-plugin-knit = { module = "org.jetbrains.kotlinx:kotlinx-knit", version.ref = "knit" }
+gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradle-plugin-kover = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
+gradle-plugin-license-report = { module = "com.github.jk1:gradle-license-report", version.ref = "license-report" }
+gradle-plugin-pitest = { module = "info.solidsoft.gradle.pitest:gradle-pitest-plugin", version.ref = "pitest" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-kotlin"]
