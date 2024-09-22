@@ -1,10 +1,12 @@
 [versions]
 jackson = "2.16.1"
 dokka = "1.9.20"
+knit = "0.5.0"
 
 [libraries]
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+knit-test = { module = "org.jetbrains.kotlinx:kotlinx-knit-test", version.ref = "knit" }
 
 gradle-plugin-license-report = { module = "com.github.jk1:gradle-license-report", version = "2.5" }
 gradle-plugin-pitest = { module = "info.solidsoft.gradle.pitest:gradle-pitest-plugin", version = "1.15.0" }
@@ -13,7 +15,7 @@ gradle-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plu
 gradle-plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version = "1.9.23" }
 gradle-plugin-binary-compatibility-validator = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.16.2" }
 gradle-plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
-gradle-plugin-knit = { module = "org.jetbrains.kotlinx:kotlinx-knit", version = "0.5.0" }
+gradle-plugin-knit = { module = "org.jetbrains.kotlinx:kotlinx-knit", version.ref = "knit" }
 
 [bundles]
 jackson = ["jackson-core", "jackson-kotlin"]

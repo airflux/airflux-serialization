@@ -1,2 +1,2 @@
 // This file was automatically generated from ${file.name} by Knit tool. Do not edit.
-package ${knit.package}
+package ${knit.package}.${knit.name}

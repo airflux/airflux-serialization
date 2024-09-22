@@ -26,8 +26,73 @@ import io.github.airflux.serialization.core.value.JsValue
 public sealed class JsLookupResult {
     public abstract val location: JsLocation
 
+    /**
+     * Example:
+     * <!--- TEST_NAME JsLookupResultTest01 -->
+     * <!--- INCLUDE
+     * import io.github.airflux.serialization.core.location.JsLocation
+     * import io.github.airflux.serialization.core.lookup.lookup
+     * import io.github.airflux.serialization.core.path.JsPath
+     * import io.github.airflux.serialization.core.value.JsString
+     * import io.github.airflux.serialization.core.value.JsStruct
+     * -->
+     * ```kotlin
+     * internal fun main() {
+     *   val source = JsStruct(
+     *      "user" to JsStruct(
+     *          "phone" to JsString("123")
+     *       )
+     *   )
+     *   val key = JsPath.Element.Key("user")
+     *   val lookup = source.lookup(location = JsLocation.Root, key = key)
+     *   val result = lookup.apply("phone")
+     *   println(result)
+     * }
+     * ```
+     *
+     * This code prints:
+     * ```text
+     * Defined(location=#/user/phone, value=JsString(123))
+     * ```
+     * <!--- KNIT example-lookup-result-01.kt -->
+     * <!--- TEST -->
+     */
     public fun apply(key: String): JsLookupResult = apply(Element.Key(key))
+
+    /**
+     * Example:
+     * <!--- TEST_NAME JsLookupResultTest02 -->
+     * <!--- INCLUDE
+     * import io.github.airflux.serialization.core.location.JsLocation
+     * import io.github.airflux.serialization.core.lookup.lookup
+     * import io.github.airflux.serialization.core.path.JsPath
+     * import io.github.airflux.serialization.core.value.JsArray
+     * import io.github.airflux.serialization.core.value.JsString
+     * import io.github.airflux.serialization.core.value.JsStruct
+     * -->
+     * ```kotlin
+     * internal fun main() {
+     *   val source = JsStruct(
+     *      "phones" to JsArray(
+     *          JsString("123")
+     *       )
+     *   )
+     *   val key = JsPath.Element.Key("phones")
+     *   val lookup = source.lookup(location = JsLocation.Root, key = key)
+     *   val result = lookup.apply(0)
+     *   println(result)
+     * }
+     * ```
+     *
+     * This code prints:
+     * ```text
+     * Defined(location=#/phones[0], value=JsString(123))
+     * ```
+     * <!--- KNIT example-lookup-result-02.kt -->
+     * <!--- TEST -->
+     */
     public fun apply(idx: Int): JsLookupResult = apply(Element.Idx(idx))
+
     public abstract fun apply(key: Element.Key): JsLookupResult
     public abstract fun apply(idx: Element.Idx): JsLookupResult
 
@@ -59,6 +124,34 @@ public sealed class JsLookupResult {
     }
 }
 
+/**
+ * Lookup a value by key.
+ *
+ * Example:
+ * <!--- TEST_NAME JsLookupTest01 -->
+ * <!--- INCLUDE
+ * import io.github.airflux.serialization.core.location.JsLocation
+ * import io.github.airflux.serialization.core.lookup.lookup
+ * import io.github.airflux.serialization.core.path.JsPath
+ * import io.github.airflux.serialization.core.value.JsString
+ * import io.github.airflux.serialization.core.value.JsStruct
+ * -->
+ * ```kotlin
+ * internal fun main() {
+ *   val source = JsStruct("id" to JsString("123"))
+ *   val key = JsPath.Element.Key("id")
+ *   val result = source.lookup(location = JsLocation.Root, key = key)
+ *   println(result)
+ * }
+ * ```
+ *
+ * This code prints:
+ * ```text
+ * Defined(location=#/id, value=JsString(123))
+ * ```
+ * <!--- KNIT example-lookup-01.kt -->
+ * <!--- TEST -->
+ */
 public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookupResult =
     if (this is JsStruct)
         this[key]
@@ -71,6 +164,34 @@ public fun JsValue.lookup(location: JsLocation, key: Element.Key): JsLookupResul
             actual = this.type
         )
 
+/**
+ * Lookup a value by index.
+ *
+ * Example:
+ * <!--- TEST_NAME JsLookupTest02 -->
+ * <!--- INCLUDE
+ * import io.github.airflux.serialization.core.location.JsLocation
+ * import io.github.airflux.serialization.core.lookup.lookup
+ * import io.github.airflux.serialization.core.path.JsPath
+ * import io.github.airflux.serialization.core.value.JsArray
+ * import io.github.airflux.serialization.core.value.JsString
+ * -->
+ * ```kotlin
+ * internal fun main() {
+ *   val source = JsArray(JsString("1"), JsString("2"), JsString("3"))
+ *   val idx = JsPath.Element.Idx(1)
+ *   val result = source.lookup(location = JsLocation.Root, idx = idx)
+ *   println(result)
+ * }
+ * ```
+ *
+ * This code prints:
+ * ```text
+ * Defined(location=#[1], value=JsString(2))
+ * ```
+ * <!--- KNIT example-lookup-02.kt -->
+ * <!--- TEST -->
+ */
 public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResult =
     if (this is JsArray)
         this[idx]
@@ -83,6 +204,41 @@ public fun JsValue.lookup(location: JsLocation, idx: Element.Idx): JsLookupResul
             actual = this.type
         )
 
+/**
+ * Lookup a value by path.
+ *
+ * Example:
+ * <!--- TEST_NAME JsLookupTest03 -->
+ * <!--- INCLUDE
+ * import io.github.airflux.serialization.core.location.JsLocation
+ * import io.github.airflux.serialization.core.lookup.lookup
+ * import io.github.airflux.serialization.core.path.JsPath
+ * import io.github.airflux.serialization.core.value.JsArray
+ * import io.github.airflux.serialization.core.value.JsString
+ * import io.github.airflux.serialization.core.value.JsStruct
+ * -->
+ * ```kotlin
+ * internal fun main() {
+ *     val source = JsStruct(
+ *         "user" to JsStruct(
+ *             "phones" to JsArray(
+ *                 JsString("123")
+ *             )
+ *         )
+ *     )
+ *     val path = JsPath("user").append("phones").append(0)
+ *     val result = source.lookup(location = JsLocation.Root, path = path)
+ *     println(result)
+ * }
+ * ```
+ *
+ * This code prints:
+ * ```text
+ * Defined(location=#/user/phones[0], value=JsString(123))
+ * ```
+ * <!--- KNIT example-lookup-03.kt -->
+ * <!--- TEST -->
+ */
 public fun JsValue.lookup(location: JsLocation, path: JsPath): JsLookupResult {
     tailrec fun lookup(location: JsLocation, path: JsPath?, source: JsValue): JsLookupResult {
         return if (path != null) {

@@ -1,0 +1,27 @@
+// This file was automatically generated from ${file.name} by Knit tool. Do not edit.
+package ${test.package}
+
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.collections.shouldContainExactly
+import kotlinx.knit.test.*
+
+internal class ${test.name} : AnnotationSpec() {
+<#list cases as case><#assign method = test["mode.${case.param}"]!"custom">
+    @Test
+    fun test${case.name}() {
+        val result = captureOutput("${case.name}") { ${case.knit.package}.${case.knit.name}.main() }
+        <#if method != "custom">
+        result shouldContainExactly listOf(
+<#list case.lines as line>
+            "${line?j_string}"<#sep>,</#sep>
+</#list>
+        )
+<#else>.also { lines ->
+            check(${case.param})
+        }
+</#if>
+    }
+<#sep>
+
+</#list>
+}

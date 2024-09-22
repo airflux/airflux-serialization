@@ -24,6 +24,7 @@ configure<DetektExtension> {
 tasks.withType<Detekt>().configureEach {
     jvmTarget = Configuration.JVM.targetVersion
     exclude("**/examples/**.kt")
+    exclude("**/examples/test/**.kt")
 
     reports {
         html.required.set(true)
