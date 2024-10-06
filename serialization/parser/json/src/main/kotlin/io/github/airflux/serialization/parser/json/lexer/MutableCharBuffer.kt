@@ -61,6 +61,12 @@ internal class MutableCharBuffer(capacity: Int = DEFAULT_CAPACITY) : CharBuffer 
         position += text.length
     }
 
+    override fun toCharArray(): CharArray {
+        val result = CharArray(length)
+        buffer.copyInto(result, startIndex = 0, endIndex = length)
+        return result
+    }
+
     private fun checkRange(startIndex: Int, endIndex: Int) {
         require(startIndex >= 0 && startIndex < position) { "Invalid the `startIndex` parameter." }
         require(endIndex > 0 && endIndex <= position) { "Invalid the `endIndex` parameter." }

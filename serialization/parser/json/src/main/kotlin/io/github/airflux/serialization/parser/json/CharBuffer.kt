@@ -19,4 +19,5 @@ package io.github.airflux.serialization.parser.json
 internal interface CharBuffer : CharSequence {
     fun buildString(): String
     fun buildString(startIndex: Int, endIndex: Int): String
+    fun toCharArray(): CharArray
 }

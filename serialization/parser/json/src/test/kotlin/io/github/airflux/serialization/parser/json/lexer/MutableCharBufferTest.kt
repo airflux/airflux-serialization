@@ -128,6 +128,15 @@ internal class MutableCharBufferTest : FreeSpec() {
                         }
                     }
                 }
+
+                "when the `toCharArray` function was called" - {
+                    val buffer = MutableCharBuffer()
+                    val result = buffer.toCharArray()
+
+                    "then the function should return an empty array" {
+                        result.size shouldBe 0
+                    }
+                }
             }
 
             "when the buffer is not empty" - {
@@ -273,6 +282,15 @@ internal class MutableCharBufferTest : FreeSpec() {
                                 buffer.buildString(startIndex, endIndex)
                             }
                         }
+                    }
+                }
+
+                "when the `toCharArray` function was called" - {
+                    val buffer = MutableCharBuffer().apply { append(STR) }
+                    val result = buffer.toCharArray()
+
+                    "then the function should return an array with all added chars" {
+                        result shouldBe STR.toCharArray()
                     }
                 }
             }

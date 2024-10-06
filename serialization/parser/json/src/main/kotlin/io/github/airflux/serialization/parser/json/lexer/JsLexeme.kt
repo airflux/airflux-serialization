@@ -32,6 +32,8 @@ internal class JsLexeme : CharBuffer {
 
     override fun buildString(startIndex: Int, endIndex: Int): String = buffer.buildString(startIndex, endIndex)
 
+    override fun toCharArray(): CharArray = buffer.toCharArray()
+
     internal var position: Int = 0
         private set
 
