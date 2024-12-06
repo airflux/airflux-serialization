@@ -20,7 +20,7 @@ import io.github.airflux.serialization.parser.json.CharBuffer
 
 @Suppress("TooManyFunctions")
 internal class MutableCharBuffer(capacity: Int = DEFAULT_CAPACITY) : CharBuffer {
-    private var buffer = CharArray(capacity)
+    private var buffer: CharArray = CharArray(capacity)
     private var position = EMPTY_POSITION
 
     val capacity: Int
@@ -35,14 +35,14 @@ internal class MutableCharBuffer(capacity: Int = DEFAULT_CAPACITY) : CharBuffer 
     }
 
     override fun subSequence(startIndex: Int, endIndex: Int): CharSequence {
-        checkRange(startIndex = startIndex, endIndex = endIndex)
+        checkRange(length = position, startIndex = startIndex, endIndex = endIndex)
         return String(buffer, startIndex, endIndex - startIndex)
     }
 
     override fun buildString(): String = buildString(0, position)
 
     override fun buildString(startIndex: Int, endIndex: Int): String {
-        checkRange(startIndex = startIndex, endIndex = endIndex)
+        checkRange(length = position, startIndex = startIndex, endIndex = endIndex)
         return String(buffer, startIndex, endIndex - startIndex)
     }
 
@@ -55,10 +55,23 @@ internal class MutableCharBuffer(capacity: Int = DEFAULT_CAPACITY) : CharBuffer 
         buffer[position++] = char
     }
 
-    fun append(text: String) {
-        checkAndResize(text.length)
-        text.toCharArray(destination = buffer, destinationOffset = position)
-        position += text.length
+    fun append(text: String, startIndex: Int = 0, endIndex: Int = text.length) {
+        checkRange(startIndex = startIndex, endIndex = endIndex)
+        checkAndResize(endIndex - startIndex)
+        text.toCharArray(
+            destination = buffer,
+            destinationOffset = position,
+            startIndex = startIndex,
+            endIndex = endIndex
+        )
+        position += endIndex - startIndex
+    }
+
+    fun append(array: CharArray, startIndex: Int = 0, endIndex: Int = array.size) {
+        checkRange(startIndex = startIndex, endIndex = endIndex)
+        checkAndResize(endIndex - startIndex)
+        array.copyInto(buffer, destinationOffset = position, startIndex = startIndex, endIndex = endIndex)
+        position += endIndex - startIndex
     }
 
     override fun toCharArray(): CharArray {
@@ -67,9 +80,19 @@ internal class MutableCharBuffer(capacity: Int = DEFAULT_CAPACITY) : CharBuffer 
         return result
     }
 
+    private fun checkRange(length: Int, startIndex: Int, endIndex: Int) {
+        checkRange(startIndex, endIndex)
+        require(startIndex < length) {
+            "Invalid the `startIndex` parameter. The parameter is greater than the `length`."
+        }
+        require(endIndex <= length) {
+            "Invalid the `endIndex` parameter. The parameter is greater than the `length`."
+        }
+    }
+
     private fun checkRange(startIndex: Int, endIndex: Int) {
-        require(startIndex >= 0 && startIndex < position) { "Invalid the `startIndex` parameter." }
-        require(endIndex > 0 && endIndex <= position) { "Invalid the `endIndex` parameter." }
+        require(startIndex >= 0) { "Invalid the `startIndex` parameter. The parameter is less than zero." }
+        require(endIndex > 0) { "Invalid the `endIndex` parameter. The parameter is less than zero." }
         require(startIndex < endIndex) { "Invalid parameters. The `endIndex` is less or equal to `startIndex`." }
     }
 

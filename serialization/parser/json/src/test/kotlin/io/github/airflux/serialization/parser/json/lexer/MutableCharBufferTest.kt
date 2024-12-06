@@ -137,6 +137,101 @@ internal class MutableCharBufferTest : FreeSpec() {
                         result.size shouldBe 0
                     }
                 }
+
+                "when characters are added to the buffer" - {
+                    val buffer = MutableCharBuffer().apply {
+                        CHARS.forEach { char -> append(char) }
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe CHARS.size
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            CHARS.charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when the whole string is added to the buffer" - {
+                    val buffer = MutableCharBuffer().apply {
+                        append(STR)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            STR.charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when part of a string is added to the buffer" - {
+                    val buffer = MutableCharBuffer().apply { append(STR, START_RANGE, END_RANGE) }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe END_RANGE - START_RANGE
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            STR.substring(START_RANGE, END_RANGE).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when the whole char array is added to the buffer" - {
+                    val array = STR.toCharArray()
+                    val buffer = MutableCharBuffer().apply {
+                        append(array)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            array.charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when part of an array is added to the buffer" - {
+                    val fullArray = STR.toCharArray()
+                    val buffer = MutableCharBuffer().apply {
+                        append(fullArray, START_RANGE, END_RANGE)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe END_RANGE - START_RANGE
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            fullArray.slice(START_RANGE..<END_RANGE).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
             }
 
             "when the buffer is not empty" - {
@@ -194,7 +289,7 @@ internal class MutableCharBufferTest : FreeSpec() {
                         nameFn = { "then the function should throw an exception for invalid parameters (startIndex: ${it.first}, endIndex: ${it.second})" },
                         listOf(
                             -1 to 0,
-                            0 to 4,
+                            0 to CHARS.size + 1,
                             2 to 1,
                             1 to -1
                         )
@@ -228,7 +323,7 @@ internal class MutableCharBufferTest : FreeSpec() {
                         nameFn = { "then the function should throw an exception for invalid parameters (startIndex: ${it.first}, endIndex: ${it.second})" },
                         listOf(
                             -1 to 0,
-                            0 to 4,
+                            0 to CHARS.size + 1,
                             2 to 1,
                             1 to -1
                         )
@@ -293,6 +388,109 @@ internal class MutableCharBufferTest : FreeSpec() {
                         result shouldBe STR.toCharArray()
                     }
                 }
+
+                "when characters are added to the buffer" - {
+                    val buffer = MutableCharBuffer().apply {
+                        append(STR)
+                        CHARS.forEach { char -> append(char) }
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length + CHARS.size
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            (STR.toCharArray() + CHARS).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when the whole string is added to the buffer" - {
+                    val buffer = MutableCharBuffer().apply {
+                        append(STR)
+                        append(STR)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length + STR.length
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            (STR + STR).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when part of a string is added to the buffer" - {
+                    val buffer = MutableCharBuffer().apply {
+                        append(STR)
+                        append(STR, START_RANGE, END_RANGE)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length + (END_RANGE - START_RANGE)
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            (STR + STR.substring(START_RANGE, END_RANGE)).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when the whole char array is added to the buffer" - {
+                    val substring = STR.substring(START_RANGE, END_RANGE)
+                    val array = substring.toCharArray()
+                    val buffer = MutableCharBuffer().apply {
+                        append(STR)
+                        append(array)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length + substring.length
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            (STR.toCharArray() + array).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
+
+                "when part of an array is added to the buffer" - {
+                    val fullArray = STR.toCharArray()
+                    val buffer = MutableCharBuffer().apply {
+                        append(STR)
+                        append(fullArray, START_RANGE, END_RANGE)
+                    }
+
+                    "then the `length` property should be equal to the number of chars added" {
+                        buffer.length shouldBe STR.length + (END_RANGE - START_RANGE)
+                    }
+
+                    "then the buffer should contain all added chars" - {
+                        withData(
+                            nameFn = { "the char `${it.second}` at the index `${it.first}`" },
+                            (STR.toCharArray() + fullArray.slice(START_RANGE..<END_RANGE)).charIndexed()
+                        ) { (index, char) ->
+                            buffer[index] shouldBe char
+                        }
+                    }
+                }
             }
 
             "when the buffer capacity is sufficient to add chars" - {
@@ -314,7 +512,7 @@ internal class MutableCharBufferTest : FreeSpec() {
                     "then the buffer should contain all added chars" - {
                         withData(
                             nameFn = { "the char `${it.second}` at the index `${it.first}`" },
-                            CHARS.mapIndexed { index, char -> index to char }
+                            CHARS.charIndexed()
                         ) { (index, char) ->
                             buffer[index] shouldBe char
                         }
@@ -337,7 +535,7 @@ internal class MutableCharBufferTest : FreeSpec() {
                     "then the buffer should contain all added chars" - {
                         withData(
                             nameFn = { "the char `${it.second}` at the index `${it.first}`" },
-                            STR.mapIndexed { index, char -> index to char }
+                            STR.charIndexed()
                         ) { (index, char) ->
                             buffer[index] shouldBe char
                         }
@@ -364,7 +562,7 @@ internal class MutableCharBufferTest : FreeSpec() {
                     "then the buffer should contain all added chars" - {
                         withData(
                             nameFn = { "the char `${it.second}` at the index `${it.first}`" },
-                            CHARS.mapIndexed { index, char -> index to char }
+                            CHARS.charIndexed()
                         ) { (index, char) ->
                             buffer[index] shouldBe char
                         }
@@ -387,7 +585,7 @@ internal class MutableCharBufferTest : FreeSpec() {
                     "then the buffer should contain all added chars" - {
                         withData(
                             nameFn = { "the char `${it.second}` at the index `${it.first}`" },
-                            STR.mapIndexed { index, char -> index to char }
+                            STR.charIndexed()
                         ) { (index, char) ->
                             buffer[index] shouldBe char
                         }
@@ -397,6 +595,10 @@ internal class MutableCharBufferTest : FreeSpec() {
         }
     }
 
+    private fun List<Char>.charIndexed() = mapIndexed { index, char -> index to char }
+    private fun CharSequence.charIndexed() = mapIndexed { index, char -> index to char }
+    private fun CharArray.charIndexed() = mapIndexed { index, char -> index to char }
+
     private companion object {
         private const val MIN_CAPACITY = 1
         private const val MAX_CAPACITY = 16
@@ -404,8 +606,12 @@ internal class MutableCharBufferTest : FreeSpec() {
         private const val FIRST_CHAR = 'a'
         private const val SECOND_CHAR = 'b'
         private const val THIRD_CHAR = 'c'
+        private const val FOUR_CHAR = 'd'
 
-        private val CHARS = listOf(FIRST_CHAR, SECOND_CHAR, THIRD_CHAR)
+        private const val START_RANGE = 1
+        private const val END_RANGE = 3
+
+        private val CHARS = listOf(FIRST_CHAR, SECOND_CHAR, THIRD_CHAR, FOUR_CHAR)
         private val STR = CHARS.joinToString(separator = "", prefix = "", postfix = "")
     }
 }
