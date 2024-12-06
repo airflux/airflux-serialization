@@ -60,12 +60,15 @@ public sealed interface JsContext {
         override val isEmpty: Boolean = false
 
         override fun <E : Element> get(key: Key<E>): E? {
-            tailrec fun <E : Element> get(key: Key<E>, element: JsContext): E? =
-                when (element) {
-                    is Empty -> element[key]
-                    is Element -> element[key]
-                    is Combined -> element.head[key] ?: get(key, element.tail)
+            tailrec fun <E : Element> get(key: Key<E>, element: JsContext): E? = when (element) {
+                is Combined -> {
+                    val value = element.head[key]
+                    if (value != null) value else get(key, element.tail)
                 }
+
+                is Empty,
+                is Element -> element[key]
+            }
 
             return get(key, this)
         }
