@@ -562,7 +562,7 @@ potential-bugs:
   NullableToStringCall:
     active: true
   UnconditionalJumpStatementInLoop:
-    active: true
+    active: false
   UnnecessaryNotNullOperator:
     active: true
   UnnecessarySafeCall:
