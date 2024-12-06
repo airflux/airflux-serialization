@@ -18,21 +18,9 @@ package io.github.airflux.serialization.parser.json.lexer
 
 import io.github.airflux.serialization.parser.json.CharBuffer
 
-internal class JsLexeme : CharBuffer {
-    private val buffer: MutableCharBuffer = MutableCharBuffer()
+internal class JsLexeme private constructor(private val buffer: MutableCharBuffer) : CharBuffer by buffer {
 
-    override val length: Int
-        get() = buffer.length
-
-    override fun get(index: Int): Char = buffer[index]
-
-    override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = buffer.subSequence(startIndex, endIndex)
-
-    override fun buildString(): String = buffer.buildString()
-
-    override fun buildString(startIndex: Int, endIndex: Int): String = buffer.buildString(startIndex, endIndex)
-
-    override fun toCharArray(): CharArray = buffer.toCharArray()
+    constructor() : this(MutableCharBuffer())
 
     internal var position: Int = 0
         private set
