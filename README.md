@@ -12,6 +12,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/53e1a68ffc064a6e8d9a01a4c3027764)](https://www.codacy.com/gh/airflux/airflux-serialization/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=airflux/airflux-serialization&amp;utm_campaign=Badge_Grade)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5511/badge)](https://bestpractices.coreinfrastructure.org/projects/5511)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/airflux/airflux-serialization.svg)](http://isitmaintained.com/project/airflux/airflux-serialization "Percentage of issues still open")
+[![codebeat badge](https://codebeat.co/badges/5b7aa123-c285-4755-9878-b065f8532462)](https://codebeat.co/projects/github-com-airflux-airflux-serialization-main)
 
 [![](https://jitpack.io/v/airflux/airflux-serialization.svg)](https://jitpack.io/#airflux/airflux-serialization)
 
