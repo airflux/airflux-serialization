@@ -31,7 +31,7 @@ internal class JsInputStringTest : FreeSpec() {
                 val input = "a"
 
                 "when there was no attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
 
                     "then isEOF should be false" {
                         source.isEOF shouldBe false
@@ -41,17 +41,17 @@ internal class JsInputStringTest : FreeSpec() {
                         source.position shouldBe -1
                     }
 
-                    "then line should be -1" {
-                        source.line shouldBe -1
+                    "then line should be 0" {
+                        source.line shouldBe 0
                     }
 
-                    "then column should be -1" {
-                        source.column shouldBe -1
+                    "then column should be 0" {
+                        source.column shouldBe 0
                     }
                 }
 
                 "when there was an attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
                     val char = source.nextChar()
 
                     "then the variable should contain the character read" {
@@ -80,7 +80,7 @@ internal class JsInputStringTest : FreeSpec() {
                 val input = "ab"
 
                 "when there was no attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
 
                     "then isEOF should be false" {
                         source.isEOF shouldBe false
@@ -90,17 +90,17 @@ internal class JsInputStringTest : FreeSpec() {
                         source.position shouldBe -1
                     }
 
-                    "then line should be -1" {
-                        source.line shouldBe -1
+                    "then line should be 0" {
+                        source.line shouldBe 0
                     }
 
-                    "then column should be -1" {
-                        source.column shouldBe -1
+                    "then column should be 0" {
+                        source.column shouldBe 0
                     }
                 }
 
                 "when there was an attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
                     val elements = source.scan()
 
                     "then the list of read elements should contain the expected elements" {
@@ -115,7 +115,7 @@ internal class JsInputStringTest : FreeSpec() {
 
             "when the input contains only newline char" - {
                 val input = '\n'.toString()
-                val source = JsInputString(input)
+                val source = createInput(input)
 
                 "when there was no attempt to read a char" - {
 
@@ -127,12 +127,12 @@ internal class JsInputStringTest : FreeSpec() {
                         source.position shouldBe -1
                     }
 
-                    "then line should be -1" {
-                        source.line shouldBe -1
+                    "then line should be 0" {
+                        source.line shouldBe 0
                     }
 
-                    "then column should be -1" {
-                        source.column shouldBe -1
+                    "then column should be 0" {
+                        source.column shouldBe 0
                     }
                 }
 
@@ -165,7 +165,7 @@ internal class JsInputStringTest : FreeSpec() {
                 val input = "a" + '\n' + "b"
 
                 "when there was no attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
 
                     "then isEOF should be false" {
                         source.isEOF shouldBe false
@@ -175,17 +175,17 @@ internal class JsInputStringTest : FreeSpec() {
                         source.position shouldBe -1
                     }
 
-                    "then line should be -1" {
-                        source.line shouldBe -1
+                    "then line should be 0" {
+                        source.line shouldBe 0
                     }
 
-                    "then column should be -1" {
-                        source.column shouldBe -1
+                    "then column should be 0" {
+                        source.column shouldBe 0
                     }
                 }
 
                 "when there was an attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
                     val elements = source.scan()
 
                     "then the list of read elements should contain the expected elements" {
@@ -203,7 +203,7 @@ internal class JsInputStringTest : FreeSpec() {
                 val input = ""
 
                 "when there was no attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
 
                     "then isEOF should be true" {
                         source.isEOF shouldBe true
@@ -213,17 +213,17 @@ internal class JsInputStringTest : FreeSpec() {
                         source.position shouldBe -1
                     }
 
-                    "then line should be -1" {
-                        source.line shouldBe -1
+                    "then line should be 0" {
+                        source.line shouldBe 0
                     }
 
-                    "then column should be -1" {
-                        source.column shouldBe -1
+                    "then column should be 0" {
+                        source.column shouldBe 0
                     }
                 }
 
                 "when there was an attempt to read a char" - {
-                    val source = JsInputString(input)
+                    val source = createInput(input)
                     val char = source.nextChar()
 
                     "then char should be null" {
@@ -238,19 +238,21 @@ internal class JsInputStringTest : FreeSpec() {
                         source.position shouldBe -1
                     }
 
-                    "then line should be -1" {
-                        source.line shouldBe -1
+                    "then line should be 0" {
+                        source.line shouldBe 0
                     }
 
-                    "then column should be -1" {
-                        source.column shouldBe -1
+                    "then column should be 0" {
+                        source.column shouldBe 0
                     }
                 }
             }
         }
     }
 
-    private fun JsInputString.scan(): List<Element> {
+    private fun createInput(input: String): JsSourceInput = JsInputString(input)
+
+    private fun JsSourceInput.scan(): List<Element> {
         val elements = mutableListOf<Element>()
         while (true) {
             val char = nextChar()

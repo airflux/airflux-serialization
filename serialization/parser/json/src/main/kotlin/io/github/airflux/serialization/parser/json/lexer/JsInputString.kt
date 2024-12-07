@@ -18,7 +18,7 @@ package io.github.airflux.serialization.parser.json.lexer
 
 public class JsInputString(private val input: String) : JsSourceInput {
 
-    override var position: Int = NONE
+    override var position: Int = -1
         private set
 
     override var line: Int = NONE
@@ -56,7 +56,7 @@ public class JsInputString(private val input: String) : JsSourceInput {
     }
 
     private companion object {
-        private const val NONE = -1
+        private const val NONE = 0
         private const val INIT_POSITION_COLUMN = 1
         private const val INIT_POSITION_LINE = 1
 

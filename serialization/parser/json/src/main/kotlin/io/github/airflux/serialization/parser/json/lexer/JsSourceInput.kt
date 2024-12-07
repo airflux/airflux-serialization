@@ -17,10 +17,32 @@
 package io.github.airflux.serialization.parser.json.lexer
 
 public interface JsSourceInput {
+    /**
+     * The current position in the input.
+     * The first character is at position 0.
+     */
     public val position: Int
+
+    /**
+     * The current line in the input.
+     * The first line is at position 1.
+     */
     public val line: Int
+
+    /**
+     * The current column in the input.
+     * The first column is at position 1.
+     */
     public val column: Int
+
+    /**
+     * Indicates whether the end of the input has been reached.
+     */
     public val isEOF: Boolean
 
+    /**
+     * Reads the next character from the input.
+     * Returns `null` if the end of the input has been reached.
+     */
     public fun nextChar(): Char?
 }
