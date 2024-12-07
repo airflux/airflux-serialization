@@ -97,24 +97,30 @@ internal class JsLexer(private val input: JsSourceInput) {
     private fun makeStringLiteralToken(): Terminal {
         tailrec fun makeStringLiteralToken(escape: Boolean): Terminal {
             val char = input.nextChar()
-            return if (char == null) {
-                peek = WHITESPACE
-                Terminal.LITERAL
-            } else if (escape) {
-                if (char.escaping())
+            return when {
+                char == null -> {
+                    peek = WHITESPACE
+                    Terminal.LITERAL
+                }
+
+                escape -> if (escaping(char))
                     makeStringLiteralToken(escape = false)
                 else
                     unrecognizedCharacterEscape(char)
-            } else if (char.isEscape()) {
-                makeStringLiteralToken(escape = true)
-            } else if (char.isQuote()) {
-                lexeme += char
-                peek = WHITESPACE
-                Terminal.LITERAL
-            } else {
-                peek = char
-                lexeme += peek
-                makeStringLiteralToken(escape = false)
+
+                char.isEscape() -> makeStringLiteralToken(escape = true)
+
+                char.isQuote() -> {
+                    lexeme += char
+                    peek = WHITESPACE
+                    Terminal.LITERAL
+                }
+
+                else -> {
+                    peek = char
+                    lexeme += peek
+                    makeStringLiteralToken(escape = false)
+                }
             }
         }
 
@@ -123,32 +129,39 @@ internal class JsLexer(private val input: JsSourceInput) {
     }
 
     private fun makeLiteralToken(): Terminal {
-        tailrec fun makeLiteralToken(char: Char?): Terminal =
-            if (char == null) {
+        tailrec fun makeLiteralToken(char: Char?): Terminal = when {
+            char == null -> {
                 peek = WHITESPACE
                 Terminal.LITERAL
-            } else if (char == '\\') {
-                unexpectedCharacter(char)
-            } else if (char.isFinal()) {
+            }
+
+            char == '\\' -> unexpectedCharacter(char)
+
+            char.isFinal() -> {
                 peek = char
                 Terminal.LITERAL
-            } else {
+            }
+
+            else -> {
                 peek = char
                 lexeme += peek
                 makeLiteralToken(input.nextChar())
             }
+        }
 
         lexeme.initialize(position = input.position, line = input.line, column = input.column)
         return makeLiteralToken(peek)
     }
 
-    private fun Char.isSkip(): Boolean =
-        this == WHITESPACE || this == TAB_CHAR || this == CARRIAGE_RETURN_CHAR || this == NEW_LINE_CHAR
+    private fun Char.isSkip(): Boolean = when (this) {
+        WHITESPACE, TAB_CHAR, CARRIAGE_RETURN_CHAR, NEW_LINE_CHAR -> true
+        else -> false
+    }
 
     private fun Char.isEscape(): Boolean = this == ESCAPE_CHAR
 
-    private fun Char.escaping(): Boolean {
-        when (this) {
+    private fun escaping(char: Char): Boolean {
+        when (char) {
             '"' -> lexeme += '"'
             '\\' -> lexeme += '\\'
             '/' -> lexeme += '/'
@@ -166,17 +179,13 @@ internal class JsLexer(private val input: JsSourceInput) {
     private fun Char.isQuote(): Boolean = this == QUOTE_CHAR
 
     private fun Char.isFinal(): Boolean =
-        this == WHITESPACE ||
-            this == TAB_CHAR ||
-            this == CARRIAGE_RETURN_CHAR ||
-            this == NEW_LINE_CHAR ||
-            this == COMMA_CHAR ||
-            this == COLON_CHAR ||
-            this == LEFT_BRACE_CHAR ||
-            this == RIGHT_BRACE_CHAR ||
-            this == LEFT_BRACKET_CHAR ||
-            this == RIGHT_BRACKET_CHAR ||
-            this == QUOTE_CHAR
+        when (this) {
+            WHITESPACE, TAB_CHAR, CARRIAGE_RETURN_CHAR, NEW_LINE_CHAR,
+            COMMA_CHAR, COLON_CHAR, LEFT_BRACE_CHAR, RIGHT_BRACE_CHAR,
+            LEFT_BRACKET_CHAR, RIGHT_BRACKET_CHAR, QUOTE_CHAR -> true
+
+            else -> false
+        }
 
     private fun JsLexeme.init() {
         initialize(position = input.position, line = input.line, column = input.column)
