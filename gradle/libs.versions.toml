@@ -4,7 +4,7 @@ dokka = "2.0.0"
 jackson = "2.16.1"
 knit = "0.5.0"
 kotlin = "2.1.0"
-kover = "0.8.3"
+kover = "0.9.1"
 license-report = "2.5"
 pitest = "1.15.0"
 
