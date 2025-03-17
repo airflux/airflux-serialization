@@ -5,6 +5,7 @@ kotest = "5.9.1"
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-junit-xml = { module = "io.kotest:kotest-extensions-junitxml-jvm", version.ref = "kotest" }
 
 [bundles]
-kotest = ["kotest-junit5", "kotest-core", "kotest-datatest"]
+kotest = ["kotest-junit5", "kotest-core", "kotest-datatest", "kotest-junit-xml"]

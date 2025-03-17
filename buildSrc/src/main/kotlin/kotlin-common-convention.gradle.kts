@@ -30,6 +30,10 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+        reports {
+            junitXml.required.set(false)
+        }
+        systemProperty("gradle.build.dir", project.rootProject.layout.buildDirectory.asFile.get())
     }
 }
 
